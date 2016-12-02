@@ -1,0 +1,370 @@
+using System;
+using System.ComponentModel;
+using GenFx.ComponentModel;
+using GenFx.Validation;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+
+namespace GenFx
+{
+    /// <summary>
+    /// Represents a collection of <see cref="GeneticEntity"/> objects which interact locally with each other.  A population is 
+    /// the unit from which the <see cref="SelectionOperator"/> selects its genetic entities.
+    /// </summary>
+    /// <remarks>
+    /// Populations can be isolated or interactive with one another through migration depending on
+    /// which <see cref="GeneticAlgorithm"/> is used.
+    /// </remarks>
+    /// <seealso cref="GeneticAlgorithm"/>
+    public class Population : GeneticComponentWithAlgorithm
+    {
+        private ObservableCollection<GeneticEntity> geneticEntities = new ObservableCollection<GeneticEntity>();
+        private int index;
+        private double rawMean;
+        private double rawStandardDeviation;
+        private double rawMax;
+        private double rawMin;
+        private double scaledMean;
+        private double scaledStandardDeviation;
+        private double scaledMax;
+        private double scaledMin;
+
+        /// <summary>
+        /// Gets the minimum <see cref="GeneticEntity.ScaledFitnessValue"/> in the entire population of genetic entities.
+        /// </summary>
+        /// <value>
+        /// The minimum <see cref="GeneticEntity.ScaledFitnessValue"/> in the entire population of genetic entities.
+        /// </value>
+        public double ScaledMin
+        {
+            get { return this.scaledMin; }
+        }
+
+        /// <summary>
+        /// Gets the maximum <see cref="GeneticEntity.ScaledFitnessValue"/> in the entire population of genetic entities.
+        /// </summary>
+        /// <value>
+        /// The maximum <see cref="GeneticEntity.ScaledFitnessValue"/> in the entire population of genetic entities.
+        /// </value>
+        public double ScaledMax
+        {
+            get { return this.scaledMax; }
+        }
+
+        /// <summary>
+        /// Gets the minimum <see cref="GeneticEntity.RawFitnessValue"/> in the entire population of genetic entities.
+        /// </summary>
+        /// <value>
+        /// The minimum <see cref="GeneticEntity.RawFitnessValue"/> in the entire population of genetic entities.
+        /// </value>
+        public double RawMin
+        {
+            get { return this.rawMin; }
+        }
+
+        /// <summary>
+        /// Gets the maximum <see cref="GeneticEntity.RawFitnessValue"/> in the entire population of genetic entities.
+        /// </summary>
+        /// <value>
+        /// The maximum <see cref="GeneticEntity.RawFitnessValue"/> in the entire population of genetic entities.
+        /// </value>
+        public double RawMax
+        {
+            get { return this.rawMax; }
+        }
+
+        /// <summary>
+        /// Gets the standard deviation of all the <see cref="GeneticEntity.ScaledFitnessValue"/> values in the entire population of genetic entities.
+        /// </summary>
+        /// <value>
+        /// The standard deviation of all the <see cref="GeneticEntity.ScaledFitnessValue"/> values in the entire population of genetic entities.
+        /// </value>
+        public double ScaledStandardDeviation
+        {
+            get { return this.scaledStandardDeviation; }
+        }
+
+        /// <summary>
+        /// Gets the mean of all the <see cref="GeneticEntity.ScaledFitnessValue"/> values in the entire population of genetic entities.
+        /// </summary>
+        /// <value>
+        /// The mean of all the <see cref="GeneticEntity.ScaledFitnessValue"/> values in the entire population of genetic entities.
+        /// </value>
+        public double ScaledMean
+        {
+            get { return this.scaledMean; }
+        }
+
+        /// <summary>
+        /// Gets the standard deviation of all the <see cref="GeneticEntity.RawFitnessValue"/> values in the entire population of genetic entities.
+        /// </summary>
+        /// <value>
+        /// The standard deviation of all the <see cref="GeneticEntity.RawFitnessValue"/> values in the entire population of genetic entities.
+        /// </value>
+        public double RawStandardDeviation
+        {
+            get { return this.rawStandardDeviation; }
+        }
+
+        /// <summary>
+        /// Gets the mean of all the <see cref="GeneticEntity.RawFitnessValue"/> values in the entire population of genetic entities.
+        /// </summary>
+        /// <value>
+        /// The mean of all the <see cref="GeneticEntity.RawFitnessValue"/> values in the entire population of genetic entities.
+        /// </value>
+        public double RawMean
+        {
+            get { return this.rawMean; }
+        }
+
+        /// <summary>
+        /// Gets the collection of <see cref="GeneticEntity"/> objects contained by the <see cref="Population"/>.
+        /// </summary>
+        [Browsable(false)]
+        public ObservableCollection<GeneticEntity> Entities
+        {
+            get { return this.geneticEntities; }
+        }
+
+        /// <summary>
+        /// Gets the index of this <see cref="Population"/> in the <see cref="GeneticEnvironment"/>.
+        /// </summary>
+        public int Index
+        {
+            get { return this.index; }
+            internal set { this.index = value; }
+        }
+
+        /// <summary>
+        /// Gets the size of the population.
+        /// </summary>
+        public int Size
+        {
+            get { return this.Entities.Count; }
+        }
+        
+        /// <summary>
+        /// Gets the <see cref="ComponentConfiguration"/> containing the configuration of this component instance.
+        /// </summary>
+        [Browsable(false)]
+        public override sealed ComponentConfiguration Configuration
+        {
+            get { return this.Algorithm.ConfigurationSet.Population; }
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Population"/> class.
+        /// </summary>
+        /// <param name="algorithm"><see cref="GeneticAlgorithm"/> using this <see cref="Population"/>.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="algorithm"/> is null.</exception>
+        /// <exception cref="ValidationException">The component's configuration is in an invalid state.</exception>
+        public Population(GeneticAlgorithm algorithm)
+            : base(algorithm)
+        {
+        }
+
+        /// <summary>
+        /// Evaluates the <see cref="GeneticEntity.RawFitnessValue"/> of all the <see cref="GeneticEntity"/> objects
+        /// within the population followed by evaluation of the <see cref="GeneticEntity.ScaledFitnessValue"/>
+        /// using the <see cref="FitnessScalingStrategy"/>.
+        /// </summary>
+        public async Task EvaluateFitnessAsync()
+        {
+            double rawSum = 0;
+
+            List<Task> fitnessEvalTasks = new List<Task>();
+            foreach (GeneticEntity entity in this.geneticEntities)
+            {
+                fitnessEvalTasks.Add(entity.EvaluateFitnessAsync());
+            }
+
+            // Wait for all entities to evaluate their fitness values
+            await Task.WhenAll(fitnessEvalTasks);
+
+            for (int i = 0; i < this.geneticEntities.Count; i++)
+            {
+                // Calculate the stats based on raw fitness value
+                rawSum += this.geneticEntities[i].RawFitnessValue;
+
+                if (i == 0 || this.geneticEntities[i].RawFitnessValue > this.rawMax)
+                {
+                    this.rawMax = this.scaledMax = this.geneticEntities[i].RawFitnessValue;
+                }
+                if (i == 0 || this.geneticEntities[i].RawFitnessValue < this.rawMin)
+                {
+                    this.rawMin = this.scaledMin = this.geneticEntities[i].RawFitnessValue;
+                }
+            }
+
+            // Calculate the stats based on raw fitness value
+            this.rawMean = this.scaledMean = rawSum / this.geneticEntities.Count;
+            this.rawStandardDeviation = this.scaledStandardDeviation = this.GetStandardDeviation(this.rawMean, false);
+
+            if (this.Algorithm.Operators.FitnessScalingStrategy != null)
+            {
+                // Scale the fitness values of the population.
+                this.Algorithm.Operators.FitnessScalingStrategy.Scale(this);
+
+                // Calculate the stats based on scaled fitness value
+                double scaledSum = 0;
+                for (int i = 0; i < this.geneticEntities.Count; i++)
+                {
+                    scaledSum += this.geneticEntities[i].ScaledFitnessValue;
+
+                    if (i == 0 || this.geneticEntities[i].ScaledFitnessValue > this.scaledMax)
+                    {
+                        this.scaledMax = this.geneticEntities[i].ScaledFitnessValue;
+                    }
+                    if (i == 0 || this.geneticEntities[i].ScaledFitnessValue < this.scaledMin)
+                    {
+                        this.scaledMin = this.geneticEntities[i].ScaledFitnessValue;
+                    }
+
+                    this.scaledMean = scaledSum / this.geneticEntities.Count;
+                    this.scaledStandardDeviation = this.GetStandardDeviation(this.scaledMean, true);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Creates the collection of <see cref="GeneticEntity"/> objects contained by this <see cref="Population"/>.
+        /// </summary>
+        public Task InitializeAsync()
+        {
+            return this.InitializeCoreAsync();
+        }
+
+        /// <summary>
+        /// Creates the collection of <see cref="GeneticEntity"/> objects contained by this <see cref="Population"/>.
+        /// </summary>
+        /// <remarks>
+        /// <para>The default implementation of this method creates X <see cref="GeneticEntity"/> objects
+        /// where X is equal to <see cref="PopulationConfiguration.PopulationSize"/>.</para>
+        /// <para><b>Notes to implementers:</b> This method can be overriden in a derived class
+        /// to customize how a <see cref="Population"/> is filled with <see cref="GeneticEntity"/> objects
+        /// or how those <see cref="GeneticEntity"/> objects are created.</para>
+        /// </remarks>
+        protected virtual Task InitializeCoreAsync()
+        {
+            for (int i = 0; i < this.Algorithm.ConfigurationSet.Population.PopulationSize; i++)
+            {
+                this.geneticEntities.Add(this.Algorithm.CreateStructureInstance<GeneticEntity>());
+            }
+
+            return Task.FromResult(true);
+        }
+
+        /// <summary>
+        /// Restores the state of this component.
+        /// </summary>
+        /// <param name="state">The state of the component to restore from.</param>
+        protected internal override void RestoreState(KeyValueMap state)
+        {
+            if (state == null)
+            {
+                throw new ArgumentNullException(nameof(state));
+            }
+
+            base.RestoreState(state);
+
+            this.index = (int)state[nameof(index)];
+            this.rawMax = (double)state[nameof(rawMax)];
+            this.rawMean = (double)state[nameof(rawMean)];
+            this.rawMin = (double)state[nameof(rawMin)];
+            this.scaledMax = (double)state[nameof(scaledMax)];
+            this.scaledMean = (double)state[nameof(scaledMean)];
+            this.scaledMin = (double)state[nameof(scaledMin)];
+            this.scaledStandardDeviation = (double)state[nameof(scaledStandardDeviation)];
+
+            this.Entities.Clear();
+
+            KeyValueMapCollection entityStates = (KeyValueMapCollection)state[nameof(this.geneticEntities)];
+
+            foreach (KeyValueMap entityState in entityStates)
+            {
+                GeneticEntity entity = this.Algorithm.CreateStructureInstance<GeneticEntity>();
+                entity.RestoreState(entityState);
+                this.Entities.Add(entity);
+            }
+        }
+
+        /// <summary>
+        /// Sets the serializable state of this component on the state object.
+        /// </summary>
+        /// <param name="state">The object containing the serializable state of this object.</param>
+        protected override void SetSaveState(KeyValueMap state)
+        {
+            if (state == null)
+            {
+                throw new ArgumentNullException(nameof(state));
+            }
+
+            base.SetSaveState(state);
+
+            state[nameof(index)] = this.index;
+            state[nameof(rawMax)] = this.rawMax;
+            state[nameof(rawMean)] = this.rawMean;
+            state[nameof(rawMin)] = this.rawMin;
+            state[nameof(rawStandardDeviation)] = this.rawStandardDeviation;
+            state[nameof(scaledMax)] = this.scaledMax;
+            state[nameof(scaledMean)] = this.scaledMean;
+            state[nameof(scaledMin)] = this.scaledMin;
+            state[nameof(scaledStandardDeviation)] = this.scaledStandardDeviation;
+            state[nameof(geneticEntities)] = new KeyValueMapCollection(this.Entities.Select(e => e.SaveStateCore()));
+        }
+
+        /// <summary>
+        /// Returns the standard deviation of the raw fitness value for the population.
+        /// </summary>
+        /// <param name="mean">Mean raw fitness value for the population.</param>
+        /// <param name="useScaledValues">Whether to use scaled fitness values as opposed to raw.</param>
+        /// <returns>The standard deviation of the raw fitness value for the population.</returns>
+        private double GetStandardDeviation(double mean, bool useScaledValues)
+        {
+            double diffSums = 0;
+            for (int i = 0; i < this.geneticEntities.Count; i++)
+            {
+                double val;
+                if (useScaledValues)
+                {
+                    val = this.geneticEntities[i].ScaledFitnessValue - mean;
+                }
+                else
+                {
+                    val = this.geneticEntities[i].RawFitnessValue - mean;
+                }
+                val = Math.Pow(val, 2);
+                diffSums += val;
+            }
+            return Math.Sqrt(diffSums / this.geneticEntities.Count);
+        }
+    }
+
+    /// <summary>
+    /// Represents the configuration of <see cref="Population"/>.
+    /// </summary>
+    [Component(typeof(Population))]
+    public class PopulationConfiguration : ComponentConfiguration
+    {
+        private const int DefaultPopulationSize = 1;
+
+        private int populationSize = PopulationConfiguration.DefaultPopulationSize;
+
+        /// <summary>
+        /// Gets or sets the number of <see cref="GeneticEntity"/> objects that are contained by a <see cref="Population"/>.
+        /// </summary>
+        /// <remarks>
+        /// This value is defaulted to 1 and must be greater or equal to 1 to be valid for executing
+        /// a genetic algorithm.
+        /// </remarks>
+        /// <exception cref="ValidationException">Value is invalid.</exception>
+        [IntegerValidator(MinValue = 1)]
+        public int PopulationSize
+        {
+            get { return this.populationSize; }
+            set { this.SetProperty(ref this.populationSize, value); }
+        }
+    }
+}

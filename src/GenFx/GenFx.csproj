@@ -1,0 +1,223 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="12.0">
+  <PropertyGroup>
+    <ProjectType>Local</ProjectType>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{919AF5AF-702B-4D89-A4A4-0C94CFAF8F95}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ApplicationIcon>
+    </ApplicationIcon>
+    <AssemblyName>GenFx</AssemblyName>
+    <DefaultClientScript>JScript</DefaultClientScript>
+    <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
+    <DefaultTargetSchema>IE50</DefaultTargetSchema>
+    <OutputType>Library</OutputType>
+    <RootNamespace>GenFx</RootNamespace>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>../../build/GenFx.snk</AssemblyOriginatorKeyFile>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DocumentationFile>bin\Debug\GenFx.xml</DocumentationFile>
+    <DebugSymbols>true</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <Optimize>false</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>full</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+    <RunCodeAnalysis>true</RunCodeAnalysis>
+    <CodeAnalysisRules>
+    </CodeAnalysisRules>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>TRACE</DefineConstants>
+    <DocumentationFile>bin\Release\GenFx.xml</DocumentationFile>
+    <DebugSymbols>true</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <Optimize>true</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>pdbonly</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+    <RunCodeAnalysis>true</RunCodeAnalysis>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System">
+      <Name>System</Name>
+    </Reference>
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data">
+      <Name>System.Data</Name>
+    </Reference>
+    <Reference Include="System.Xml">
+      <Name>System.XML</Name>
+    </Reference>
+    <Reference Include="WindowsBase">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ComponentAttribute.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ComponentConfigurationCollection.cs" />
+    <Compile Include="ComponentConfigurationSet.cs" />
+    <Compile Include="ComponentException.cs" />
+    <Compile Include="ComponentModel\ComponentHelper.cs" />
+    <Compile Include="ComponentModel\GeneticComponentWithAlgorithm.cs" />
+    <Compile Include="FitnessEvaluationMode.cs" />
+    <Compile Include="KeyValueMap.cs" />
+    <Compile Include="ListExtensions.cs" />
+    <Compile Include="Plugin.cs" />
+    <Compile Include="Validation\RequiredValidator.cs" />
+    <Compile Include="Validation\RequiredValidatorAttribute.cs" />
+    <Compile Include="Validation\CustomValidatorAttribute.cs" />
+    <Compile Include="Validation\DoubleValidator.cs" />
+    <Compile Include="Validation\DoubleValidatorAttribute.cs" />
+    <Compile Include="Validation\EnumValidator.cs" />
+    <Compile Include="Validation\ExternalValidatorAttributeHelper.cs" />
+    <Compile Include="Validation\FitnessEvaluationModeValidator.cs" />
+    <Compile Include="Validation\FitnessEvaluationModeValidatorAttribute.cs" />
+    <Compile Include="Validation\FitnessTypeValidator.cs" />
+    <Compile Include="Validation\FitnessTypeValidatorAttribute.cs" />
+    <Compile Include="Validation\GenericValidatorAttribute.cs" />
+    <Compile Include="Validation\IntegerValidator.cs" />
+    <Compile Include="Validation\IntegerValidatorAttribute.cs" />
+    <Compile Include="Validation\Validator.cs" />
+    <Compile Include="Validation\ConfigurationValidatorAttribute.cs" />
+    <Compile Include="ComponentModel\ComponentConfiguration.cs" />
+    <Compile Include="ConvertUtil.cs" />
+    <Compile Include="EnumHelper.cs" />
+    <Compile Include="FitnessEvaluator.cs" />
+    <Compile Include="FitnessScalingStrategy.cs" />
+    <Compile Include="FitnessType.cs" />
+    <Compile Include="GeneticEntity.cs" />
+    <Compile Include="GeneticEntityCollectionExtensions.cs" />
+    <Compile Include="ComponentModel\GeneticComponent.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="EnvironmentFitnessEvaluatedEventArgs.cs" />
+    <Compile Include="CrossoverOperator.cs">
+    </Compile>
+    <Compile Include="MutationOperator.cs" />
+    <Compile Include="Properties\FwkResources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>FwkResources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="ComponentModel\RequiredConfigurableTypeAttribute.cs" />
+    <Compile Include="SelectionOperator.cs" />
+    <Compile Include="Statistic.cs" />
+    <Compile Include="Environment.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="GeneticAlgorithm.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="AlgorithmOperators.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ElitismStrategy.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Population.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Random.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="StatisticResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="StringUtil.cs" />
+    <Compile Include="Terminator.cs" />
+    <Compile Include="ValidationException.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\FwkResources.resx">
+      <SubType>Designer</SubType>
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>FwkResources.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Microsoft.GenFx.Properties</CustomToolNamespace>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <CodeAnalysisDictionary Include="CustomDictionary.xml" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+</Project>

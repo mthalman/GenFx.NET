@@ -1,0 +1,187 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="12.0">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{5B7C3DF1-608D-4882-B44E-1C6DE3C54F4D}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>GenFxTests</RootNamespace>
+    <AssemblyName>GenFxTests</AssemblyName>
+    <WarningLevel>4</WarningLevel>
+    <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>.\bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <CodeAnalysisRuleSet>
+    </CodeAnalysisRuleSet>
+    <WarningLevel>0</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugSymbols>false</DebugSymbols>
+    <Optimize>true</Optimize>
+    <OutputPath>.\bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <CodeAnalysisRuleSet>
+    </CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>../../build/GenFx.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\WINNT\assembly\GAC_MSIL\Microsoft.VisualStudio.QualityTools.UnitTestFramework\8.0.0.0__b03f5f7f11d50a3a\Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Runtime.Serialization.Formatters.Soap" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ComponentConfigurationSetTest.cs" />
+    <Compile Include="BestMaxEntityTest.cs" />
+    <Compile Include="BestMaxStatisticTest.cs" />
+    <Compile Include="BestMinStatisticTest.cs" />
+    <Compile Include="BinaryStringEntityTest.cs" />
+    <Compile Include="BinaryTreeNodeTest.cs" />
+    <Compile Include="BoltzmannSelectionOperatorTest.cs" />
+    <Compile Include="ComponentSettingsBaseTest.cs" />
+    <Compile Include="BitInversionOperatorTest.cs" />
+    <Compile Include="IntegerInversionOperatorTest.cs" />
+    <Compile Include="Mocks\MockPlugin.cs" />
+    <Compile Include="StringExtensions.cs" />
+    <Compile Include="UniformIntegerMutationOperatorTest.cs" />
+    <Compile Include="IntegerListEntityTest.cs" />
+    <Compile Include="CrossoverOperatorTest.cs" />
+    <Compile Include="ElitismStrategyTest.cs" />
+    <Compile Include="ExternalValidatorAttributeHelperTest.cs" />
+    <Compile Include="GeneticEnvironmentTest.cs" />
+    <Compile Include="ExponentialScalingStrategyTest.cs" />
+    <Compile Include="FitnessEvaluatorTest.cs" />
+    <Compile Include="FitnessProportionateSelectionOperatorTest.cs" />
+    <Compile Include="FitnessScalingStrategyTest.cs" />
+    <Compile Include="FitnessSharingScalingStrategyTest.cs" />
+    <Compile Include="FitnessTargetTerminatorTest.cs" />
+    <Compile Include="FixedLengthBinaryStringGenomeTest.cs" />
+    <Compile Include="GenerationalTerminatorTest.cs" />
+    <Compile Include="GeneticAlgorithmTest.cs" />
+    <Compile Include="GeneticEntityCollectionTest.cs" />
+    <Compile Include="GeneticEntityTest.cs" />
+    <Compile Include="MaxStatisticTest.cs" />
+    <Compile Include="MeanStatisticTest.cs" />
+    <Compile Include="MeanTreeSizeTest.cs" />
+    <Compile Include="MinStatisticTest.cs" />
+    <Compile Include="Mocks\MockCrossoverOperator.cs" />
+    <Compile Include="Mocks\MockElitismStrategy.cs" />
+    <Compile Include="Mocks\MockFitnessEvaluator.cs" />
+    <Compile Include="Mocks\MockFitnessScalingStrategy.cs" />
+    <Compile Include="Mocks\MockGeneticAlgorithm.cs" />
+    <Compile Include="Mocks\MockEntity.cs" />
+    <Compile Include="Mocks\MockMutationOperator.cs" />
+    <Compile Include="Mocks\MockPopulation.cs" />
+    <Compile Include="Mocks\MockSelectionOperator.cs" />
+    <Compile Include="Mocks\MockStatistic.cs" />
+    <Compile Include="Mocks\MockTerminator.cs" />
+    <Compile Include="MultiDemeGeneticAlgorithmTest.cs" />
+    <Compile Include="MutationOperatorTest.cs" />
+    <Compile Include="PopulationTest.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RandomUtilTest.cs" />
+    <Compile Include="RankSelectionOperatorTest.cs" />
+    <Compile Include="RequiredConfigurableTypeAttributeTest.cs" />
+    <Compile Include="RouletteWheelSamplerTest.cs" />
+    <Compile Include="SelectionOperatorTest.cs" />
+    <Compile Include="SettingValidatorAttributeTest.cs" />
+    <Compile Include="SettingValidatorTest.cs" />
+    <Compile Include="SigmaScalingStrategyTest.cs" />
+    <Compile Include="SimpleGeneticAlgorithmTest.cs" />
+    <Compile Include="SingleNodeTreeCrossoverOperatorTest.cs" />
+    <Compile Include="SinglePointCrossoverOperatorTest.cs" />
+    <Compile Include="StatisticTest.cs" />
+    <Compile Include="StdDevStatisticTest.cs" />
+    <Compile Include="SteadyStateGeneticAlgorithmTest.cs" />
+    <Compile Include="StringUtilTest.cs" />
+    <Compile Include="TerminatorTest.cs" />
+    <Compile Include="TimeDurationTerminatorTest.cs" />
+    <Compile Include="TreeEntityTest.cs" />
+    <Compile Include="TreeNodeTest.cs" />
+    <Compile Include="UniformBitMutationOperatorTest.cs" />
+    <Compile Include="UniformSelectionOperatorTest.cs" />
+    <Compile Include="VariableLengthBinaryStringEntityTest.cs" />
+    <Compile Include="VariableSinglePointBitCrossoverOperatorTest.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\GenFx.ComponentLibrary\GenFx.ComponentLibrary.csproj">
+      <Project>{E4385621-4392-4C87-9EFF-DBA1CBAEA894}</Project>
+      <Name>GenFx.ComponentLibrary</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GenFx\GenFx.csproj">
+      <Project>{919af5af-702b-4d89-a4a4-0c94cfaf8f95}</Project>
+      <Name>GenFx</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.0">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />
+</Project>

@@ -1,0 +1,244 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="CrossoverCommonName" xml:space="preserve">
+    <value>Crossover Operator</value>
+  </data>
+  <data name="ElitismCommonName" xml:space="preserve">
+    <value>Elitism Strategy</value>
+  </data>
+  <data name="ErrorMsg_AlgorithmNotInitialized" xml:space="preserve">
+    <value>The '{0}' method must be called before the algorithm can be executed.</value>
+  </data>
+  <data name="ErrorMsg_EntityListEmpty" xml:space="preserve">
+    <value>Entity list cannot be empty.</value>
+  </data>
+  <data name="ErrorMsg_InvalidType" xml:space="preserve">
+    <value>Type must be derived from '{0}'.</value>
+  </data>
+  <data name="ErrorMsg_MissingOperatorType" xml:space="preserve">
+    <value>The '{0}.{1}' property must be set before initializing the algorithm.</value>
+  </data>
+  <data name="ErrorMsg_MissingComponentConfiguration" xml:space="preserve">
+    <value>The GeneticAlgorithm is missing a component configuration named '{0}' required by type '{1}'.</value>
+  </data>
+  <data name="ErrorMsg_NoRequiredConfigurableType" xml:space="preserve">
+    <value>The '{0}' type requires a {1} of type '{2}' but the algorithm is configured for type '{3}'.</value>
+  </data>
+  <data name="FitnessEvaluatorCommonName" xml:space="preserve">
+    <value>Fitness Evaluator</value>
+  </data>
+  <data name="FitnessScalingCommonName" xml:space="preserve">
+    <value>Fitness Scaling Strategy</value>
+  </data>
+  <data name="GeneticAlgorithmCommonName" xml:space="preserve">
+    <value>Genetic Algorithm</value>
+  </data>
+  <data name="EntityCommonName" xml:space="preserve">
+    <value>Entity</value>
+  </data>
+  <data name="MutationCommonName" xml:space="preserve">
+    <value>Mutation Operator</value>
+  </data>
+  <data name="PopulationCommonName" xml:space="preserve">
+    <value>Population</value>
+  </data>
+  <data name="SelectionCommonName" xml:space="preserve">
+    <value>Selection Operator</value>
+  </data>
+  <data name="StatisticCommonName" xml:space="preserve">
+    <value>Statistic</value>
+  </data>
+  <data name="TerminatorCommonName" xml:space="preserve">
+    <value>Terminator</value>
+  </data>
+  <data name="ErrorMsg_InvalidDoubleProperty" xml:space="preserve">
+    <value>Configuration property '{0}' must be a value of type Double and between {1} ({2}) and {3} ({4}).</value>
+  </data>
+  <data name="ErrorMsg_InvalidIntegerProperty" xml:space="preserve">
+    <value>Configuration property '{0}' must be an integral value between {1} and {2}.
+</value>
+  </data>
+  <data name="ErrorMsg_ConfigurationPropertyHasNoSetter" xml:space="preserve">
+    <value>Property '{0}' is defined as a configuration property but has no setter. A setter must be defined on this property.</value>
+  </data>
+  <data name="ExclusiveLabel" xml:space="preserve">
+    <value>exclusive</value>
+  </data>
+  <data name="InclusiveLabel" xml:space="preserve">
+    <value>inclusive</value>
+  </data>
+  <data name="ErrorMsg_IsValidButCannotConvert" xml:space="preserve">
+    <value>The {0} declared the configuration value as valid but the value could not be converted to the target type '{1}'.  Either fix the implementation of the validator or implement a {2}.</value>
+  </data>
+  <data name="ErrorMsg_InvalidComponentConfigurationType" xml:space="preserve">
+    <value>'{0}' is an invalid type.  It must be of type '{0}' or derived from that type.</value>
+  </data>
+  <data name="ErrorMsg_ComponentConfigurationPropertyNotFound" xml:space="preserve">
+    <value>Property '{0}' not found on type '{1}'.</value>
+  </data>
+  <data name="ErrorMsg_ComponentConfigurationTypeMismatch" xml:space="preserve">
+    <value>Configuration type '{0}' is not associated with the current component type of '{1}'.</value>
+  </data>
+  <data name="ErrorMsg_IncorrectDerivedType" xml:space="preserve">
+    <value>Type must derive from '{0}'.</value>
+  </data>
+  <data name="ErrorMsg_DuplicateConfiguration" xml:space="preserve">
+    <value>Object of type '{0}' already exists in collection.</value>
+  </data>
+  <data name="ErrorMsg_NoCorrespondingComponentConfiguration" xml:space="preserve">
+    <value>No corresponding component configuration for '{0}' was configured on the algorithm.</value>
+  </data>
+  <data name="ErrorMsg_StringNullOrEmpty" xml:space="preserve">
+    <value>String value cannot be null or empty.</value>
+  </data>
+  <data name="ErrorMsg_ExternalValidator_InvalidTargetType" xml:space="preserve">
+    <value>The type '{0}' is not derived from '{1}'.</value>
+  </data>
+  <data name="ErrorMsg_ExternalValidator_PropertyDoesNotExist" xml:space="preserve">
+    <value>A public property named '{0}' does not exist on type '{1}'.</value>
+  </data>
+  <data name="ErrorMsg_InvalidDoubleProperty_EqualMinMaxButNotInclusive" xml:space="preserve">
+    <value>When the minimum and maximum values are equal, they must also both be set to be inclusive.</value>
+  </data>
+  <data name="ErrorMsg_InvalidMinMaxRange" xml:space="preserve">
+    <value>The minimum value cannot be greater than the maximum value.</value>
+  </data>
+  <data name="ErrorMsg_InvalidProperty_Exact" xml:space="preserve">
+    <value>Configuration property '{0}' must be equal to {1}.</value>
+  </data>
+  <data name="ErrorMsg_ErrorCreatingComponent" xml:space="preserve">
+    <value>An error occurred while instantiating component of type '{0}'.\n\nException detail: {1}</value>
+  </data>
+  <data name="ErrorMsg_Component_MissingComponentAttribute" xml:space="preserve">
+    <value>Component configuration '{0}' is missing the '{1}' that specifies its corresponding component.</value>
+  </data>
+  <data name="ErrorMsg_InvalidEnum" xml:space="preserve">
+    <value>The {0} value is invalid.  Valid values are {1}.</value>
+  </data>
+  <data name="ErrorMsg_InvalidGenerationIndex" xml:space="preserve">
+    <value>Generation index must be greater than or equal to zero.</value>
+  </data>
+  <data name="ErrorMsg_InvalidPopulationID" xml:space="preserve">
+    <value>Population ID must be greater than or equal to zero.</value>
+  </data>
+  <data name="ErrorMsg_RequiredPropertyNotSet" xml:space="preserve">
+    <value>Configuration property '{0}' must be set.</value>
+  </data>
+</root>
