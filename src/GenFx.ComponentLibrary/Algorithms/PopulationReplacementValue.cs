@@ -48,7 +48,7 @@ namespace GenFx.ComponentLibrary.Algorithms
                 throw new ArgumentOutOfRangeException("value", value, StringUtil.GetFormattedString(
                   LibResources.ErrorMsg_PopulationReplacementValue_LessThanZero, value));
             }
-            
+
             if (!ReplacementValueKindHelper.IsDefined(kind))
             {
                 throw EnumHelper.CreateUndefinedEnumException(typeof(ReplacementValueKind), "kind");

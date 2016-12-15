@@ -106,7 +106,7 @@ namespace GenFx.ComponentModel
         /// </summary>
         private void LoadComponentType()
         {
-            ComponentAttribute[] attribs = TypeDescriptor.GetAttributes(this).OfType<ComponentAttribute>().ToArray();
+            ComponentAttribute[] attribs = (ComponentAttribute[])this.GetType().GetCustomAttributes(typeof(ComponentAttribute), false);
             if (attribs.Length == 0)
             {
                 throw new ComponentException(StringUtil.GetFormattedString(
