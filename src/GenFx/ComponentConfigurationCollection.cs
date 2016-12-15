@@ -10,11 +10,11 @@ using System.Diagnostics.CodeAnalysis;
 namespace GenFx
 {
     /// <summary>
-    /// Represents a collection of <see cref="ComponentConfiguration"/> objects.
+    /// Represents a collection of <see cref="IComponentConfiguration"/> objects.
     /// </summary>
-    /// <remarks>This collection can only contain unique types of <see cref="ComponentConfiguration"/>.</remarks>
+    /// <remarks>This collection can only contain unique types of <see cref="IComponentConfiguration"/>.</remarks>
     public class ComponentConfigurationCollection<T> : IList<T>
-        where T: ComponentConfiguration
+        where T : IComponentConfiguration
     {
         private List<T> configs = new List<T>();
         private Dictionary<Type, T> configsByType = new Dictionary<Type, T>();
@@ -88,7 +88,7 @@ namespace GenFx
                 }
                 else
                 {
-                    return null;
+                    return default(T);
                 }
             }
         }

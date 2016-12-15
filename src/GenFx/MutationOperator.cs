@@ -1,10 +1,32 @@
-using System;
-using System.ComponentModel;
 using GenFx.ComponentModel;
 using GenFx.Validation;
+using System;
 
 namespace GenFx
 {
+    /// <summary>
+    /// Represents a genetic algorithm mutation operator.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Mutations in genetic algorithms involve the altering of a single data component in a entity.
+    /// For example, a binary string entity has a chance of mutating one of its bits before progressing
+    /// to the next generation.  Genetic algorithm mutation is intended to be similar to gene copying 
+    /// errors in nature.  Mutations are the driver of randomness in a population.
+    /// </para>
+    /// </remarks>
+    public interface IMutationOperator : IGeneticComponent
+    {
+        /// <summary>
+        /// Attempts to mutate the <paramref name="entity"/>.
+        /// </summary>
+        /// <param name="entity"><see cref="IGeneticEntity"/> to be mutated.</param>
+        /// <returns>
+        /// A potentially mutated clone of the <paramref name="entity"/>.
+        /// </returns>
+        IGeneticEntity Mutate(IGeneticEntity entity);
+    }
+
     /// <summary>
     /// Provides the abstract base class for a genetic algorithm mutation operator.
     /// </summary>
@@ -21,54 +43,40 @@ namespace GenFx
     /// property.
     /// </para>
     /// </remarks>
-    public abstract class MutationOperator : GeneticComponentWithAlgorithm
+    public abstract class MutationOperator<TMutation, TConfiguration> : GeneticComponentWithAlgorithm<TMutation, TConfiguration>, IMutationOperator
+        where TMutation : MutationOperator<TMutation, TConfiguration>
+        where TConfiguration : MutationOperatorConfiguration<TConfiguration, TMutation>
     {
         /// <summary>
-        /// Gets the probability that a data segment within a <see cref="GeneticEntity"/> will become mutated.
+        /// Initializes a new instance of this class.
         /// </summary>
-        public double MutationRate
-        {
-            get { return this.Algorithm.ConfigurationSet.MutationOperator.MutationRate; }
-        }
-
-        /// <summary>
-        /// Gets the <see cref="ComponentConfiguration"/> containing the configuration of this component instance.
-        /// </summary>
-        public override sealed ComponentConfiguration Configuration
-        {
-            get { return this.Algorithm.ConfigurationSet.MutationOperator; }
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="MutationOperator"/> class.
-        /// </summary>
-        /// <param name="algorithm"><see cref="GeneticAlgorithm"/> using this <see cref="MutationOperator"/>.</param>
+        /// <param name="algorithm"><see cref="IGeneticAlgorithm"/> using this class.</param>
         /// <exception cref="ArgumentNullException"><paramref name="algorithm"/> is null.</exception>
         /// <exception cref="ValidationException">The component's configuration is in an invalid state.</exception>
-        protected MutationOperator(GeneticAlgorithm algorithm)
+        protected MutationOperator(IGeneticAlgorithm algorithm)
             : base(algorithm)
         {
         }
-        
+
         /// <summary>
         /// Attempts to mutate the <paramref name="entity"/>.
         /// </summary>
-        /// <param name="entity"><see cref="GeneticEntity"/> to be mutated.</param>
+        /// <param name="entity"><see cref="IGeneticEntity"/> to be mutated.</param>
         /// <returns>
         /// A potentially mutated clone of the <paramref name="entity"/>.
         /// </returns>
         /// <remarks>
-        /// If the <see cref="GeneticEntity"/> was mutated, its <see cref="GeneticEntity.Age"/> property will be set to zero.
+        /// If the <see cref="IGeneticEntity"/> was mutated, its <see cref="IGeneticEntity.Age"/> property will be set to zero.
         /// </remarks>
         /// <exception cref="ArgumentNullException"><paramref name="entity"/> is null.</exception>
-        public GeneticEntity Mutate(GeneticEntity entity)
+        public IGeneticEntity Mutate(IGeneticEntity entity)
         {
             if (entity == null)
             {
                 throw new ArgumentNullException(nameof(entity));
             }
 
-            GeneticEntity clonedEntity = entity.Clone();
+            IGeneticEntity clonedEntity = entity.Clone();
             bool isMutated = this.GenerateMutation(clonedEntity);
             if (isMutated)
             {
@@ -81,32 +89,44 @@ namespace GenFx
         /// <summary>
         /// When overriden in a derived class, attempts to mutate the <paramref name="entity"/>.
         /// </summary>
-        /// <param name="entity"><see cref="GeneticEntity"/> to be mutated.</param>
+        /// <param name="entity"><see cref="IGeneticEntity"/> to be mutated.</param>
         /// <returns>true if a mutation occurred; otherwise, false.</returns>
         /// <remarks>
         /// <b>Notes to implementers:</b> When this method is overriden, each segment of data making up the 
-        /// representation of the <see cref="GeneticEntity"/> should be attempted to be mutated.  Use the 
-        /// <see cref="MutationOperator.MutationRate"/> property to determine whether a component
-        /// of the <see cref="GeneticEntity"/> should be mutated or not.  
+        /// representation of the <see cref="IGeneticEntity"/> should be attempted to be mutated.  Use the 
+        /// <see cref="MutationOperatorConfiguration{TConfiguration, TMutation}.MutationRate"/> property to determine whether a component
+        /// of the <see cref="IGeneticEntity"/> should be mutated or not.  
         /// </remarks>
-        protected abstract bool GenerateMutation(GeneticEntity entity);
+        protected abstract bool GenerateMutation(IGeneticEntity entity);
     }
 
     /// <summary>
-    /// Represents the configuration of <see cref="MutationOperator"/>.
+    /// Represents the configuration of <see cref="IMutationOperator"/>.
     /// </summary>
-    [Component(typeof(MutationOperator))]
-    public abstract class MutationOperatorConfiguration : ComponentConfiguration
+    public interface IMutationOperatorConfiguration : IComponentConfiguration
+    {
+        /// <summary>
+        /// Gets the probability that a data segment within a <see cref="IGeneticEntity"/> will become mutated.
+        /// </summary>
+        double MutationRate { get; set; }
+    }
+
+    /// <summary>
+    /// Represents the configuration of <see cref="MutationOperator{TMutation, TConfiguration}"/>.
+    /// </summary>
+    public abstract class MutationOperatorConfiguration<TConfiguration, TMutation> : ComponentConfiguration<TConfiguration, TMutation>, IMutationOperatorConfiguration
+        where TMutation : MutationOperator<TMutation, TConfiguration>
+        where TConfiguration : MutationOperatorConfiguration<TConfiguration, TMutation>
     {
         private const double DefaultMutationRate = .001;
 
-        private double mutationRate = MutationOperatorConfiguration.DefaultMutationRate;
+        private double mutationRate = DefaultMutationRate;
 
         /// <summary>
-        /// Gets or sets the probability that a data segment within a <see cref="GeneticEntity"/> will become mutated.
+        /// Gets or sets the probability that a data segment within a <see cref="IGeneticEntity"/> will become mutated.
         /// </summary>
         /// <exception cref="ValidationException">Value is not valid.</exception>
-        [DoubleValidatorAttribute(MinValue = 0, MaxValue = 1)]
+        [DoubleValidator(MinValue = 0, MaxValue = 1)]
         public double MutationRate
         {
             get { return this.mutationRate; }

@@ -1,43 +1,43 @@
-using System;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Reflection;
 using GenFx.Properties;
 using GenFx.Validation;
-using System.Linq;
+using System;
+using System.ComponentModel;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 
 namespace GenFx.ComponentModel
 {
     /// <summary>
+    /// Represents a configuration object for a <see cref="IGeneticComponent"/>.
+    /// </summary>
+    public interface IComponentConfiguration
+    {
+        /// <summary>
+        /// Gets the type of the component this configuration is associated with.
+        /// </summary>
+        Type ComponentType { get; }
+
+        /// <summary>
+        /// Returns a new instance of the <see cref="IGeneticComponent"/> associated with this configuration.
+        /// </summary>
+        /// <param name="algorithm">The algorithm associated with the component.</param>
+        IGeneticComponent CreateComponent(IGeneticAlgorithm algorithm);
+    }
+
+    /// <summary>
     /// Base class for all classes containing configuration settings for a component.
     /// </summary>
-    public abstract class ComponentConfiguration : INotifyPropertyChanged
+    public abstract class ComponentConfiguration : IComponentConfiguration, INotifyPropertyChanged
     {
-        internal const string ComponentTypeProperty = "ComponentType";
-
-        private Type componentType;
-
         /// <summary>
         /// Occurs when a property value changes.
         /// </summary>
         public event PropertyChangedEventHandler PropertyChanged;
 
         /// <summary>
-        /// Gets the <see cref="Type"/> of the component associated with these settings.
+        /// When overriden, gets the type of the component this configuration is associated with.
         /// </summary>
-        public Type ComponentType
-        {
-            get
-            {
-                if (this.componentType == null)
-                {
-                    this.LoadComponentType();
-                }
-
-                return this.componentType;
-            }
-        }
+        public abstract Type ComponentType { get; }
 
         /// <summary>
         /// Raises the <see cref="PropertyChanged"/> event.
@@ -102,23 +102,46 @@ namespace GenFx.ComponentModel
         }
 
         /// <summary>
-        /// Loads the related component type of this configuration object.
+        /// Returns a new instance of the <see cref="GeneticComponent"/> associated with this configuration.
         /// </summary>
-        private void LoadComponentType()
+        /// <param name="algorithm">The algorithm associated with the component.</param>
+        public GeneticComponent CreateComponent(IGeneticAlgorithm algorithm)
         {
-            ComponentAttribute[] attribs = (ComponentAttribute[])this.GetType().GetCustomAttributes(typeof(ComponentAttribute), false);
-            if (attribs.Length == 0)
+            try
             {
-                throw new ComponentException(StringUtil.GetFormattedString(
-                    StringUtil.GetFormattedString(
-                        FwkResources.ErrorMsg_Component_MissingComponentAttribute,
-                        this.GetType().FullName,
-                        typeof(ComponentAttribute).FullName)));
+                return (GeneticComponent)Activator.CreateInstance(this.ComponentType, new object[] { algorithm });
             }
+            catch (TargetInvocationException ex)
+            {
+                throw ex.InnerException;
+            }
+        }
 
-            Debug.Assert(attribs.Length == 1);
+        IGeneticComponent IComponentConfiguration.CreateComponent(IGeneticAlgorithm algorithm)
+        {
+            return this.CreateComponent(algorithm);
+        }
+    }
 
-            this.componentType = attribs[0].ComponentType;
+    /// <summary>
+    /// Base class for all classes containing configuration settings for a component.
+    /// </summary>
+    public abstract class ComponentConfiguration<TConfiguration, TComponent> : ComponentConfiguration
+        where TConfiguration : ComponentConfiguration<TConfiguration, TComponent>
+        where TComponent : GeneticComponent<TComponent, TConfiguration>
+    {
+        /// <summary>
+        /// Gets the type of the component this configuration is associated with.
+        /// </summary>
+        public override Type ComponentType { get { return typeof(TComponent); } }
+
+        /// <summary>
+        /// Returns a new instance of the <typeparamref name="TComponent"/> associated with this configuration.
+        /// </summary>
+        /// <param name="algorithm">The algorithm associated with the component.</param>
+        public new TComponent CreateComponent(IGeneticAlgorithm algorithm)
+        {
+            return (TComponent)base.CreateComponent(algorithm);
         }
     }
 }

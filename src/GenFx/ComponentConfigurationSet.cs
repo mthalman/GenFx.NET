@@ -12,20 +12,20 @@ namespace GenFx
     /// <remarks>The configuration values must be appropriately set before executing the genetic algorithm.</remarks>
     public sealed class ComponentConfigurationSet
     {
-        private SelectionOperatorConfiguration selectionOperatorConfiguration;
-        private GeneticEntityConfiguration entityConfiguration;
-        private PopulationConfiguration populationConfiguration;
-        private FitnessEvaluatorConfiguration fitnessEvaluatorConfiguration;
-        private ComponentConfigurationCollection<StatisticConfiguration> statisticConfigurations = new ComponentConfigurationCollection<StatisticConfiguration>();
-        private ComponentConfigurationCollection<PluginConfiguration> pluginConfigurations = new ComponentConfigurationCollection<PluginConfiguration>();
-        private GeneticAlgorithmConfiguration geneticAlgorithmConfiguration;
+        private ISelectionOperatorConfiguration selectionOperatorConfiguration;
+        private IGeneticEntityConfiguration entityConfiguration;
+        private IPopulationConfiguration populationConfiguration;
+        private IFitnessEvaluatorConfiguration fitnessEvaluatorConfiguration;
+        private ComponentConfigurationCollection<IStatisticConfiguration> statisticConfigurations = new ComponentConfigurationCollection<IStatisticConfiguration>();
+        private ComponentConfigurationCollection<IPluginConfiguration> pluginConfigurations = new ComponentConfigurationCollection<IPluginConfiguration>();
+        private IGeneticAlgorithmConfiguration geneticAlgorithmConfiguration;
 
         /// <summary>
         /// Gets or sets the configuration of the <see cref="FitnessEvaluator"/> class that is
         /// used during execution of the genetic algorithm.
         /// </summary>
         /// <exception cref="ArgumentNullException">Value is null.</exception>
-        public FitnessEvaluatorConfiguration FitnessEvaluator
+        public IFitnessEvaluatorConfiguration FitnessEvaluator
         {
             get { return this.fitnessEvaluatorConfiguration; }
             set
@@ -40,29 +40,29 @@ namespace GenFx
         }
 
         /// <summary>
-        /// Gets the configuration for all the <see cref="Statistic"/> classes that
+        /// Gets the configuration for all the <see cref="IStatistic"/> classes that
         /// are used to calculate statistics during execution of the genetic algorithm.
         /// </summary>
-        public ComponentConfigurationCollection<StatisticConfiguration> Statistics
+        public ComponentConfigurationCollection<IStatisticConfiguration> Statistics
         {
             get { return this.statisticConfigurations; }
         }
 
         /// <summary>
-        /// Gets the configuration for all the <see cref="Plugin"/> classes that
+        /// Gets the configuration for all the <see cref="IPlugin"/> classes that
         /// are used extend functionality.
         /// </summary>
-        public ComponentConfigurationCollection<PluginConfiguration> Plugins
+        public ComponentConfigurationCollection<IPluginConfiguration> Plugins
         {
             get { return this.pluginConfigurations; }
         }
 
         /// <summary>
-        /// Gets or sets the configuration of the <see cref="GeneticEntity"/> class that is used 
+        /// Gets or sets the configuration of the <see cref="IGeneticEntity"/> class that is used 
         /// during execution of the genetic algorithm.
         /// </summary>
         /// <exception cref="ArgumentNullException">Value is null.</exception>
-        public GeneticEntityConfiguration Entity
+        public IGeneticEntityConfiguration Entity
         {
             get { return this.entityConfiguration; }
             set
@@ -81,7 +81,7 @@ namespace GenFx
         /// during execution of the genetic algorithm.
         /// </summary>
         /// <exception cref="ArgumentNullException">Value is null.</exception>
-        public PopulationConfiguration Population
+        public IPopulationConfiguration Population
         {
             get { return this.populationConfiguration; }
             set
@@ -99,32 +99,32 @@ namespace GenFx
         /// Gets or sets the configuration of the <see cref="ElitismStrategy"/> class that is
         /// used during execution of the genetic algorithm.
         /// </summary>
-        public ElitismStrategyConfiguration ElitismStrategy { get; set; }
+        public IElitismStrategyConfiguration ElitismStrategy { get; set; }
 
         /// <summary>
         /// Gets or sets the configuration of the <see cref="FitnessScalingStrategy"/> class that
         /// is used during execution of the genetic algorithm.
         /// </summary>
-        public FitnessScalingStrategyConfiguration FitnessScalingStrategy { get; set; }
+        public IFitnessScalingStrategyConfiguration FitnessScalingStrategy { get; set; }
 
         /// <summary>
         /// Gets or sets the configuration of the <see cref="CrossoverOperator"/> class that
         /// is used during execution of the genetic algorithm.
         /// </summary>
-        public CrossoverOperatorConfiguration CrossoverOperator { get; set; }
+        public ICrossoverOperatorConfiguration CrossoverOperator { get; set; }
 
         /// <summary>
         /// Gets or sets the configuration of the <see cref="MutationOperator"/> class that
         /// is used during execution of the genetic algorithm.
         /// </summary>
-        public MutationOperatorConfiguration MutationOperator { get; set; }
+        public IMutationOperatorConfiguration MutationOperator { get; set; }
 
         /// <summary>
         /// Gets or sets the configuration of the <see cref="SelectionOperator"/> class that
         /// is used during execution of the genetic algorithm.
         /// </summary>
         /// <exception cref="ArgumentNullException">Value is null.</exception>
-        public SelectionOperatorConfiguration SelectionOperator
+        public ISelectionOperatorConfiguration SelectionOperator
         {
             get { return this.selectionOperatorConfiguration; }
             set
@@ -145,13 +145,13 @@ namespace GenFx
         /// <value>
         /// If the value is null, it indicates that the genetic algorithm should run continously.
         /// </value>
-        public TerminatorConfiguration Terminator { get; set; }
+        public ITerminatorConfiguration Terminator { get; set; }
 
         /// <summary>
         /// Gets or sets the configuration of <see cref="GeneticAlgorithm"/>.
         /// </summary>
         /// <exception cref="ArgumentNullException">Value is null.</exception>
-        public GeneticAlgorithmConfiguration GeneticAlgorithm
+        public IGeneticAlgorithmConfiguration GeneticAlgorithm
         {
             get { return this.geneticAlgorithmConfiguration; }
             set
@@ -198,25 +198,25 @@ namespace GenFx
                 throw new ArgumentNullException(nameof(state));
             }
 
-            this.CrossoverOperator = (CrossoverOperatorConfiguration)RestoreComponentConfiguration((Dictionary<string, object>)state[nameof(this.CrossoverOperator)]);
-            this.ElitismStrategy = (ElitismStrategyConfiguration)RestoreComponentConfiguration((Dictionary<string, object>)state[nameof(this.ElitismStrategy)]);
-            this.entityConfiguration = (GeneticEntityConfiguration)RestoreComponentConfiguration((Dictionary<string, object>)state[nameof(this.Entity)]);
-            this.fitnessEvaluatorConfiguration = (FitnessEvaluatorConfiguration)RestoreComponentConfiguration((Dictionary<string, object>)state[nameof(this.FitnessEvaluator)]);
-            this.FitnessScalingStrategy = (FitnessScalingStrategyConfiguration)RestoreComponentConfiguration((Dictionary<string, object>)state[nameof(this.FitnessScalingStrategy)]);
-            this.geneticAlgorithmConfiguration = (GeneticAlgorithmConfiguration)RestoreComponentConfiguration((Dictionary<string, object>)state[nameof(this.GeneticAlgorithm)]);
-            this.MutationOperator = (MutationOperatorConfiguration)RestoreComponentConfiguration((Dictionary<string, object>)state[nameof(this.MutationOperator)]);
-            this.populationConfiguration = (PopulationConfiguration)RestoreComponentConfiguration((Dictionary<string, object>)state[nameof(this.Population)]);
-            this.selectionOperatorConfiguration = (SelectionOperatorConfiguration)RestoreComponentConfiguration((Dictionary<string, object>)state[nameof(this.SelectionOperator)]);
-            this.Terminator = (TerminatorConfiguration)RestoreComponentConfiguration((Dictionary<string, object>)state[nameof(this.Terminator)]);
+            this.CrossoverOperator = (ICrossoverOperatorConfiguration)RestoreComponentConfiguration((Dictionary<string, object>)state[nameof(this.CrossoverOperator)]);
+            this.ElitismStrategy = (IElitismStrategyConfiguration)RestoreComponentConfiguration((Dictionary<string, object>)state[nameof(this.ElitismStrategy)]);
+            this.entityConfiguration = (IGeneticEntityConfiguration)RestoreComponentConfiguration((Dictionary<string, object>)state[nameof(this.Entity)]);
+            this.fitnessEvaluatorConfiguration = (IFitnessEvaluatorConfiguration)RestoreComponentConfiguration((Dictionary<string, object>)state[nameof(this.FitnessEvaluator)]);
+            this.FitnessScalingStrategy = (IFitnessScalingStrategyConfiguration)RestoreComponentConfiguration((Dictionary<string, object>)state[nameof(this.FitnessScalingStrategy)]);
+            this.geneticAlgorithmConfiguration = (IGeneticAlgorithmConfiguration)RestoreComponentConfiguration((Dictionary<string, object>)state[nameof(this.GeneticAlgorithm)]);
+            this.MutationOperator = (IMutationOperatorConfiguration)RestoreComponentConfiguration((Dictionary<string, object>)state[nameof(this.MutationOperator)]);
+            this.populationConfiguration = (IPopulationConfiguration)RestoreComponentConfiguration((Dictionary<string, object>)state[nameof(this.Population)]);
+            this.selectionOperatorConfiguration = (ISelectionOperatorConfiguration)RestoreComponentConfiguration((Dictionary<string, object>)state[nameof(this.SelectionOperator)]);
+            this.Terminator = (ITerminatorConfiguration)RestoreComponentConfiguration((Dictionary<string, object>)state[nameof(this.Terminator)]);
 
-            this.pluginConfigurations = new ComponentConfigurationCollection<PluginConfiguration>();
-            this.pluginConfigurations.AddRange(((KeyValueMapCollection)state[nameof(this.Plugins)]).Select(d => RestoreComponentConfiguration(d)).Cast<PluginConfiguration>());
+            this.pluginConfigurations = new ComponentConfigurationCollection<IPluginConfiguration>();
+            this.pluginConfigurations.AddRange(((KeyValueMapCollection)state[nameof(this.Plugins)]).Select(d => RestoreComponentConfiguration(d)).Cast<IPluginConfiguration>());
 
-            this.statisticConfigurations = new ComponentConfigurationCollection<StatisticConfiguration>();
-            this.statisticConfigurations.AddRange(((KeyValueMapCollection)state[nameof(this.Statistics)]).Select(d => RestoreComponentConfiguration(d)).Cast<StatisticConfiguration>());
+            this.statisticConfigurations = new ComponentConfigurationCollection<IStatisticConfiguration>();
+            this.statisticConfigurations.AddRange(((KeyValueMapCollection)state[nameof(this.Statistics)]).Select(d => RestoreComponentConfiguration(d)).Cast<IStatisticConfiguration>());
         }
 
-        private static KeyValueMap SaveComponentConfiguration(ComponentConfiguration configuration)
+        private static KeyValueMap SaveComponentConfiguration(IComponentConfiguration configuration)
         {
             if (configuration == null)
             {

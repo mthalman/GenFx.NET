@@ -9,15 +9,42 @@ using GenFx.Validation;
 namespace GenFx
 {
     /// <summary>
+    /// Represents a strategy for calculating elitism in a genetic algorithm.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Elitism in genetic algorithms is an addition to the selection operator.  It causes the
+    /// genetic algorithm to have some number of genetic entities remain unchanged and brought forth to the
+    /// next generation.  An <see cref="IElitismStrategy"/> acts upon a <see cref="IPopulation"/> to
+    /// select those <see cref="IGeneticEntity"/> objects which are determined to be "elite".  The number
+    /// of genetic entities chosen is based on the <see cref="IElitismStrategyConfiguration.ElitistRatio"/> property value.
+    /// </para>
+    /// </remarks>
+    public interface IElitismStrategy : IGeneticComponent
+    {
+        /// <summary>
+        /// Returns the collection of <see cref="IGeneticEntity"/> objects from the <paramref name="population"/>
+        /// that are to be treated as elite and move on to the next generation unchanged.
+        /// </summary>
+        /// <param name="population"><see cref="IPopulation"/> containing the <see cref="IGeneticEntity"/> objects
+        /// from which to select.</param>
+        /// <returns>
+        /// The collection of <see cref="IGeneticEntity"/> objects from the <paramref name="population"/>
+        /// that are to be treated as elite.
+        /// </returns>
+        IList<IGeneticEntity> GetEliteGeneticEntities(IPopulation population);
+    }
+
+    /// <summary>
     /// Provides the base class for elitism in a genetic algorithm.
     /// </summary>
     /// <remarks>
     /// <para>
     /// Elitism in genetic algorithms is an addition to the selection operator.  It causes the
     /// genetic algorithm to have some number of genetic entities remain unchanged and brought forth to the
-    /// next generation.  An <see cref="ElitismStrategy"/> acts upon a <see cref="Population"/> to
-    /// select those <see cref="GeneticEntity"/> objects which are determined to be "elite".  The number
-    /// of genetic entities chosen is based on the <see cref="ElitismStrategy.ElitistRatio"/> property value.
+    /// next generation.  An <see cref="ElitismStrategy{TElitism, TConfiguration}"/> acts upon a <see cref="IPopulation"/> to
+    /// select those <see cref="IGeneticEntity"/> objects which are determined to be "elite".  The number
+    /// of genetic entities chosen is based on the <see cref="ElitismStrategy{TConfiguration, TElitism}.ElitistRatio"/> property value.
     /// </para>
     /// <para>
     /// <b>Notes to inheritors:</b> When this base class is derived, the derived class can be used by
@@ -25,49 +52,43 @@ namespace GenFx
     /// property.
     /// </para>
     /// </remarks>
-    public class ElitismStrategy : GeneticComponentWithAlgorithm
+    public class ElitismStrategy<TElitism, TConfiguration> : GeneticComponentWithAlgorithm<TElitism, TConfiguration>, IElitismStrategy
+        where TElitism : ElitismStrategy<TElitism, TConfiguration>
+        where TConfiguration : ElitismStrategyConfiguration<TConfiguration, TElitism>
     {
         /// <summary>
-        /// Gets the ratio of <see cref="GeneticEntity"/> objects that will be selected as elite and move on 
+        /// Gets the ratio of <see cref="IGeneticEntity"/> objects that will be selected as elite and move on 
         /// to the next generation unchanged.
         /// </summary>
         public double ElitistRatio
         {
             get { return this.Algorithm.ConfigurationSet.ElitismStrategy.ElitistRatio; }
         }
-
+        
         /// <summary>
-        /// Gets the <see cref="ComponentConfiguration"/> containing the configuration of this component instance.
+        /// Initializes a new instance of this class.
         /// </summary>
-        public override sealed ComponentConfiguration Configuration
-        {
-            get { return this.Algorithm.ConfigurationSet.ElitismStrategy; }
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ElitismStrategy"/> class.
-        /// </summary>
-        /// <param name="algorithm"><see cref="GeneticAlgorithm"/> using this <see cref="ElitismStrategy"/>.</param>
+        /// <param name="algorithm"><see cref="IGeneticAlgorithm"/> using this instance.</param>
         /// <exception cref="ArgumentNullException"><paramref name="algorithm"/> is null.</exception>
         /// <exception cref="ValidationException">The component's configuration is in an invalid state.</exception>
-        public ElitismStrategy(GeneticAlgorithm algorithm)
+        public ElitismStrategy(IGeneticAlgorithm algorithm)
             : base(algorithm)
         {
         }
 
         /// <summary>
-        /// Returns the collection of <see cref="GeneticEntity"/> objects from the <paramref name="population"/>
+        /// Returns the collection of <see cref="IGeneticEntity"/> objects from the <paramref name="population"/>
         /// that are to be treated as elite and move on to the next generation unchanged.
         /// </summary>
-        /// <param name="population"><see cref="Population"/> containing the <see cref="GeneticEntity"/> objects
+        /// <param name="population"><see cref="IPopulation"/> containing the <see cref="IGeneticEntity"/> objects
         /// from which to select.</param>
         /// <returns>
-        /// The collection of <see cref="GeneticEntity"/> objects from the <paramref name="population"/>
+        /// The collection of <see cref="IGeneticEntity"/> objects from the <paramref name="population"/>
         /// that are to be treated as elite.
         /// </returns>
         /// <exception cref="ArgumentNullException"><paramref name="population"/> is null.</exception>
         /// <exception cref="ArgumentException"><paramref name="population"/> contains no entities.</exception>
-        public IList<GeneticEntity> GetElitistGeneticEntities(Population population)
+        public IList<IGeneticEntity> GetEliteGeneticEntities(IPopulation population)
         {
             if (population == null)
             {
@@ -79,26 +100,26 @@ namespace GenFx
                 throw new ArgumentException(FwkResources.ErrorMsg_EntityListEmpty, nameof(population));
             }
 
-            return this.GetElitistGeneticEntitiesCore(population);
+            return this.GetEliteGeneticEntitiesCore(population);
         }
 
         /// <summary>
-        /// Returns the collection of <see cref="GeneticEntity"/> objects from the <paramref name="population"/>
+        /// Returns the collection of <see cref="IGeneticEntity"/> objects from the <paramref name="population"/>
         /// that are to be treated as elite and move on to the next generation unchanged.
         /// </summary>
-        /// <param name="population"><see cref="Population"/> containing the <see cref="GeneticEntity"/> objects
+        /// <param name="population"><see cref="IPopulation"/> containing the <see cref="IGeneticEntity"/> objects
         /// from which to select.</param>
-        /// <returns>The collection of <see cref="GeneticEntity"/> objects from the <paramref name="population"/>
+        /// <returns>The collection of <see cref="IGeneticEntity"/> objects from the <paramref name="population"/>
         /// that are to be treated as elite.</returns>
         /// <remarks>
         /// <para>
-        /// The default implementation of this method is to use the <see cref="ElitismStrategy.ElitistRatio"/>
-        /// property to determine how many <see cref="GeneticEntity"/> objects are chosen to be elite.  Those <see cref="GeneticEntity"/>
-        /// objects with the highest <see cref="GeneticEntity.ScaledFitnessValue"/> are chosen.
+        /// The default implementation of this method is to use the <see cref="ElitistRatio"/>
+        /// property to determine how many <see cref="IGeneticEntity"/> objects are chosen to be elite.  Those <see cref="IGeneticEntity"/>
+        /// objects with the highest <see cref="IGeneticEntity.ScaledFitnessValue"/> are chosen.
         /// </para>
         /// </remarks>
         /// <exception cref="ArgumentNullException"><paramref name="population"/> is null.</exception>
-        protected virtual IList<GeneticEntity> GetElitistGeneticEntitiesCore(Population population)
+        protected virtual IList<IGeneticEntity> GetEliteGeneticEntitiesCore(IPopulation population)
         {
             if (population == null)
             {
@@ -107,11 +128,10 @@ namespace GenFx
 
             int elitistCount = Convert.ToInt32(Math.Round(this.ElitistRatio * population.Entities.Count));
 
-            List<GeneticEntity> geneticEntities = new List<GeneticEntity>();
+            List<IGeneticEntity> geneticEntities = new List<IGeneticEntity>();
             if (elitistCount > 0)
             {
-
-                GeneticEntity[] sorted = population.Entities.GetEntitiesSortedByFitness(
+                IGeneticEntity[] sorted = population.Entities.GetEntitiesSortedByFitness(
                     this.Algorithm.ConfigurationSet.SelectionOperator.SelectionBasedOnFitnessType,
                     this.Algorithm.ConfigurationSet.FitnessEvaluator.EvaluationMode).ToArray();
 
@@ -126,16 +146,29 @@ namespace GenFx
     }
 
     /// <summary>
-    /// Represents the configuration of <see cref="ElitismStrategy"/>.
+    /// Represents the configuration of <see cref="IElitismStrategy"/>.
     /// </summary>
-    [Component(typeof(ElitismStrategy))]
-    public class ElitismStrategyConfiguration : ComponentConfiguration
+    public interface IElitismStrategyConfiguration : IComponentConfiguration
+    {
+        /// <summary>
+        /// Gets the ratio of <see cref="IGeneticEntity"/> objects that will be selected as elite and move on 
+        /// to the next generation unchanged.
+        /// </summary>
+        double ElitistRatio { get; }
+    }
+
+    /// <summary>
+    /// Represents the configuration of <see cref="ElitismStrategy{TElitism, TConfiguration}"/>.
+    /// </summary>
+    public class ElitismStrategyConfiguration<TConfiguration, TElitism> : ComponentConfiguration<TConfiguration, TElitism>, IElitismStrategyConfiguration
+        where TConfiguration : ElitismStrategyConfiguration<TConfiguration, TElitism>
+        where TElitism : ElitismStrategy<TElitism, TConfiguration>
     {
         private const double DefaultElitistRatio = .1;
         private double elitistRatio = DefaultElitistRatio;
 
         /// <summary>
-        /// Gets or sets the ratio of <see cref="GeneticEntity"/> objects that will be selected as elite and move on 
+        /// Gets or sets the ratio of <see cref="IGeneticEntity"/> objects that will be selected as elite and move on 
         /// to the next generation unchanged.
         /// </summary>
         /// <exception cref="ValidationException">Value is not valid.</exception>

@@ -151,7 +151,7 @@ namespace GenFx.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to An error occurred while instantiating component of type &apos;{0}&apos;.\n\nException detail: {1}.
+        ///   Looks up a localized string similar to An error occurred while instantiating component associated with configuration &apos;{0}&apos;.\n\nException detail: {1}.
         /// </summary>
         public static string ErrorMsg_ErrorCreatingComponent {
             get {

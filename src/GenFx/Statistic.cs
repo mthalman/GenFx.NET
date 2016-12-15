@@ -1,21 +1,52 @@
+using GenFx.ComponentModel;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics.CodeAnalysis;
-using GenFx.ComponentModel;
-using GenFx.Properties;
 
 namespace GenFx
 {
+    /// <summary>
+    /// Represents a component that calculates a statistic during algorithm execution.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// The <b>Statistic</b> class represents any computation of data contained by a <see cref="IPopulation"/>.
+    /// After each generation is created, <see cref="IStatistic.GetResultValue(IPopulation)"/> is
+    /// invoked with the <see cref="IPopulation"/> of that generation to calculate its data.
+    /// </para>
+    /// </remarks>
+    public interface IStatistic : IGeneticComponent
+    {
+        /// <summary>
+        /// Calculates a statistical value from <paramref name="population"/>.
+        /// </summary>
+        /// <param name="population"><see cref="IPopulation"/> from which to derive a statistic.</param>
+        /// <returns>Value of the statistic derived from <paramref name="population"/>.</returns>
+        /// <remarks>
+        /// This method is called once for each generation.
+        /// </remarks>
+        object GetResultValue(IPopulation population);
+
+        /// <summary>
+        /// Returns the statistic results of the indicated population for this statistic.
+        /// </summary>
+        /// <param name="populationId">ID of the population for which to return statistic results.</param>
+        /// <returns>Collection of <see cref="StatisticResult"/> objects.</returns>
+        /// <remarks>
+        /// Each <see cref="StatisticResult"/> object in the collection is associated
+        /// with one generation of the population.
+        /// </remarks>
+        ObservableCollection<StatisticResult> GetResults(int populationId);
+    }
+
     /// <summary>
     /// Provides the abstract base class for a statistic.
     /// </summary>
     /// <remarks>
     /// <para>
-    /// The <b>Statistic</b> class represents any computation of data contained by a <see cref="Population"/>.
-    /// After each generation is created, <see cref="Statistic.GetResultValue(Population)"/> is
-    /// invoked with the <see cref="Population"/> of that generation to calculate its data.
+    /// The <b>Statistic</b> class represents any computation of data contained by a <see cref="IPopulation"/>.
+    /// After each generation is created, <see cref="Statistic{TStatistic, TConfiguration}.GetResultValue(IPopulation)"/> is
+    /// invoked with the <see cref="IPopulation"/> of that generation to calculate its data.
     /// </para>
     /// <para>
     /// <b>Notes to implementers:</b> When this base class is derived, the derived class can be used by
@@ -23,25 +54,19 @@ namespace GenFx
     /// the type of that derived class.
     /// </para>
     /// </remarks>
-    public abstract class Statistic : GeneticComponentWithAlgorithm
+    public abstract class Statistic<TStatistic, TConfiguration> : GeneticComponentWithAlgorithm<TStatistic, TConfiguration>, IStatistic
+        where TStatistic : Statistic<TStatistic, TConfiguration>
+        where TConfiguration : StatisticConfiguration<TConfiguration, TStatistic>
     {
         private Dictionary<int, ObservableCollection<StatisticResult>> populationResults = new Dictionary<int, ObservableCollection<StatisticResult>>();
-
+        
         /// <summary>
-        /// Gets the <see cref="ComponentConfiguration"/> containing the configuration of this component instance.
+        /// Initializes a new instance of this class.
         /// </summary>
-        public override sealed ComponentConfiguration Configuration
-        {
-            get { return this.Algorithm.ConfigurationSet.Statistics[this.GetType()]; }
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Statistic"/> class.
-        /// </summary>
-        /// <param name="algorithm"><see cref="GeneticAlgorithm"/> using this <see cref="Statistic"/>.</param>
+        /// <param name="algorithm"><see cref="IGeneticAlgorithm"/> using this class.</param>
         /// <exception cref="ArgumentNullException"><paramref name="algorithm"/> is null.</exception>
         /// <exception cref="ValidationException">The component's configuration is in an invalid state.</exception>
-        protected Statistic(GeneticAlgorithm algorithm)
+        protected Statistic(IGeneticAlgorithm algorithm)
             : base(algorithm)
         {
             for (int i = 0; i < this.Algorithm.ConfigurationSet.GeneticAlgorithm.EnvironmentSize; i++)
@@ -69,18 +94,18 @@ namespace GenFx
         /// <summary>
         /// When overriden in a derived class, calculates a statistical value from <paramref name="population"/>.
         /// </summary>
-        /// <param name="population"><see cref="Population"/> from which to derive a statistic.</param>
+        /// <param name="population"><see cref="IPopulation"/> from which to derive a statistic.</param>
         /// <returns>Value of the statistic derived from <paramref name="population"/>.</returns>
         /// <remarks>
         /// This method is called once for each generation.
         /// </remarks>
-        public abstract object GetResultValue(Population population);
+        public abstract object GetResultValue(IPopulation population);
 
         /// <summary>
         /// Restores the state of this component.
         /// </summary>
         /// <param name="state">The state of the component to restore from.</param>
-        protected internal override void RestoreState(KeyValueMap state)
+        public override void RestoreState(KeyValueMap state)
         {
             if (state == null)
             {
@@ -96,7 +121,7 @@ namespace GenFx
         /// Sets the serializable state of this component on the state object.
         /// </summary>
         /// <param name="state">The object containing the serializable state of this object.</param>
-        protected override void SetSaveState(KeyValueMap state)
+        public override void SetSaveState(KeyValueMap state)
         {
             if (state == null)
             {
@@ -107,26 +132,22 @@ namespace GenFx
 
             state[nameof(this.populationResults)] = this.populationResults;
         }
-
-        /// <summary>
-        /// Calculates the stats for the <paramref name="environment"/>.
-        /// </summary>
-        internal void Calculate(GeneticEnvironment environment, int generationIndex)
-        {
-            foreach (Population population in environment.Populations)
-            {
-                ObservableCollection<StatisticResult> populationStats = this.GetResults(population.Index);
-                StatisticResult result = new StatisticResult(generationIndex, population.Index, this.GetResultValue(population), this);
-                populationStats.Add(result);
-            }
-        }
     }
 
     /// <summary>
-    /// Represents the configuration of <see cref="Statistic"/>.
+    /// Represents the configuration of <see cref="IStatistic"/>.
     /// </summary>
-    [Component(typeof(Statistic))]
-    public abstract class StatisticConfiguration : ComponentConfiguration
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1040:AvoidEmptyInterfaces")]
+    public interface IStatisticConfiguration : IComponentConfiguration
+    {
+    }
+
+    /// <summary>
+    /// Represents the configuration of <see cref="Statistic{TConfiguration, TStatistic}"/>.
+    /// </summary>
+    public abstract class StatisticConfiguration<TConfiguration, TStatistic> : ComponentConfiguration<TConfiguration, TStatistic>, IStatisticConfiguration
+        where TConfiguration : StatisticConfiguration<TConfiguration, TStatistic> 
+        where TStatistic : Statistic<TStatistic, TConfiguration>
     {
     }
 }

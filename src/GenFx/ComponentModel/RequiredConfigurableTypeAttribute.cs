@@ -53,7 +53,7 @@ namespace GenFx.ComponentModel
     }
 
     /// <summary>
-    /// Indicates that a class requires a specific <see cref="CrossoverOperator"/> type in order to function correctly.
+    /// Indicates that a class requires a specific <see cref="ICrossoverOperator"/> type in order to function correctly.
     /// </summary>
     [SuppressMessage("Microsoft.Design", "CA1019:DefineAccessorsForAttributeArguments")]
     [AttributeUsage(AttributeTargets.Class, Inherited = true)]
@@ -62,17 +62,17 @@ namespace GenFx.ComponentModel
         /// <summary>
         /// Initializes a new instance of the <see cref="RequiredCrossoverOperatorAttribute"/> class.
         /// </summary>
-        /// <param name="crossoverOperatorType"><see cref="CrossoverOperator"/> type which is required by the class.</param>
+        /// <param name="crossoverOperatorType"><see cref="ICrossoverOperator"/> type which is required by the class.</param>
         /// <exception cref="ArgumentNullException"><paramref name="crossoverOperatorType"/> is null.</exception>
-        /// <exception cref="ArgumentException"><paramref name="crossoverOperatorType"/> does not derive from <see cref="CrossoverOperator"/>.</exception>
+        /// <exception cref="ArgumentException"><paramref name="crossoverOperatorType"/> does not derive from <see cref="ICrossoverOperator"/>.</exception>
         public RequiredCrossoverOperatorAttribute(Type crossoverOperatorType)
-            : base(crossoverOperatorType, typeof(CrossoverOperator))
+            : base(crossoverOperatorType, typeof(ICrossoverOperator))
         {
         }
     }
 
     /// <summary>
-    /// Indicates that a class requires a specific <see cref="ElitismStrategy"/> type in order to function correctly.
+    /// Indicates that a class requires a specific <see cref="IElitismStrategy"/> type in order to function correctly.
     /// </summary>
     [SuppressMessage("Microsoft.Design", "CA1019:DefineAccessorsForAttributeArguments")]
     [AttributeUsage(AttributeTargets.Class, Inherited = true)]
@@ -81,17 +81,17 @@ namespace GenFx.ComponentModel
         /// <summary>
         /// Initializes a new instance of the <see cref="RequiredElitismStrategyAttribute"/> class.
         /// </summary>
-        /// <param name="elitismStrategyType"><see cref="ElitismStrategy"/> type which is required by the class.</param>
+        /// <param name="elitismStrategyType"><see cref="IElitismStrategy"/> type which is required by the class.</param>
         /// <exception cref="ArgumentNullException"><paramref name="elitismStrategyType"/> is null.</exception>
-        /// <exception cref="ArgumentException"><paramref name="elitismStrategyType"/> does not derive from <see cref="ElitismStrategy"/>.</exception>
+        /// <exception cref="ArgumentException"><paramref name="elitismStrategyType"/> does not derive from <see cref="IElitismStrategy"/>.</exception>
         public RequiredElitismStrategyAttribute(Type elitismStrategyType)
-            : base(elitismStrategyType, typeof(ElitismStrategy))
+            : base(elitismStrategyType, typeof(IElitismStrategy))
         {
         }
     }
 
     /// <summary>
-    /// Indicates that a class requires a specific <see cref="FitnessEvaluator"/> type in order to function correctly.
+    /// Indicates that a class requires a specific <see cref="IFitnessEvaluator"/> type in order to function correctly.
     /// </summary>
     [SuppressMessage("Microsoft.Design", "CA1019:DefineAccessorsForAttributeArguments")]
     [AttributeUsage(AttributeTargets.Class, Inherited = true)]
@@ -100,17 +100,17 @@ namespace GenFx.ComponentModel
         /// <summary>
         /// Initializes a new instance of the <see cref="RequiredFitnessEvaluatorAttribute"/> class.
         /// </summary>
-        /// <param name="fitnessEvaluatorType"><see cref="FitnessEvaluator"/> type which is required by the class.</param>
+        /// <param name="fitnessEvaluatorType"><see cref="IFitnessEvaluator"/> type which is required by the class.</param>
         /// <exception cref="ArgumentNullException"><paramref name="fitnessEvaluatorType"/> is null.</exception>
-        /// <exception cref="ArgumentException"><paramref name="fitnessEvaluatorType"/> does not derive from <see cref="FitnessEvaluator"/>.</exception>
+        /// <exception cref="ArgumentException"><paramref name="fitnessEvaluatorType"/> does not derive from <see cref="IFitnessEvaluator"/>.</exception>
         public RequiredFitnessEvaluatorAttribute(Type fitnessEvaluatorType)
-            : base(fitnessEvaluatorType, typeof(FitnessEvaluator))
+            : base(fitnessEvaluatorType, typeof(IFitnessEvaluator))
         {
         }
     }
 
     /// <summary>
-    /// Indicates that a class requires a specific <see cref="FitnessScalingStrategy"/> type in order to function correctly.
+    /// Indicates that a class requires a specific <see cref="IFitnessScalingStrategy"/> type in order to function correctly.
     /// </summary>
     [SuppressMessage("Microsoft.Design", "CA1019:DefineAccessorsForAttributeArguments")]
     [AttributeUsage(AttributeTargets.Class, Inherited = true)]
@@ -119,17 +119,17 @@ namespace GenFx.ComponentModel
         /// <summary>
         /// Initializes a new instance of the <see cref="RequiredFitnessScalingStrategyAttribute"/> class.
         /// </summary>
-        /// <param name="fitnessScalingStrategyType"><see cref="FitnessScalingStrategy"/> type which is required by the class.</param>
+        /// <param name="fitnessScalingStrategyType"><see cref="IFitnessScalingStrategy"/> type which is required by the class.</param>
         /// <exception cref="ArgumentNullException"><paramref name="fitnessScalingStrategyType"/> is null.</exception>
-        /// <exception cref="ArgumentException"><paramref name="fitnessScalingStrategyType"/> does not derive from <see cref="FitnessScalingStrategy"/>.</exception>
+        /// <exception cref="ArgumentException"><paramref name="fitnessScalingStrategyType"/> does not derive from <see cref="IFitnessScalingStrategy"/>.</exception>
         public RequiredFitnessScalingStrategyAttribute(Type fitnessScalingStrategyType)
-            : base(fitnessScalingStrategyType, typeof(FitnessScalingStrategy))
+            : base(fitnessScalingStrategyType, typeof(IFitnessScalingStrategy))
         {
         }
     }
 
     /// <summary>
-    /// Indicates that a class requires a specific <see cref="GeneticAlgorithm"/> type in order to function correctly.
+    /// Indicates that a class requires a specific <see cref="IGeneticAlgorithm"/> type in order to function correctly.
     /// </summary>
     [SuppressMessage("Microsoft.Design", "CA1019:DefineAccessorsForAttributeArguments")]
     [AttributeUsage(AttributeTargets.Class, Inherited = true)]
@@ -138,17 +138,17 @@ namespace GenFx.ComponentModel
         /// <summary>
         /// Initializes a new instance of the <see cref="RequiredGeneticAlgorithmAttribute"/> class.
         /// </summary>
-        /// <param name="geneticAlgorithmType"><see cref="GeneticAlgorithm"/> type which is required by the class.</param>
+        /// <param name="geneticAlgorithmType"><see cref="IGeneticAlgorithm"/> type which is required by the class.</param>
         /// <exception cref="ArgumentNullException"><paramref name="geneticAlgorithmType"/> is null.</exception>
-        /// <exception cref="ArgumentException"><paramref name="geneticAlgorithmType"/> does not derive from <see cref="GeneticAlgorithm"/>.</exception>
+        /// <exception cref="ArgumentException"><paramref name="geneticAlgorithmType"/> does not derive from <see cref="IGeneticAlgorithm"/>.</exception>
         public RequiredGeneticAlgorithmAttribute(Type geneticAlgorithmType)
-            : base(geneticAlgorithmType, typeof(GeneticAlgorithm))
+            : base(geneticAlgorithmType, typeof(IGeneticAlgorithm))
         {
         }
     }
 
     /// <summary>
-    /// Indicates that a class requires a specific <see cref="GeneticEntity"/> type in order to function correctly.
+    /// Indicates that a class requires a specific <see cref="IGeneticEntity"/> type in order to function correctly.
     /// </summary>
     [SuppressMessage("Microsoft.Design", "CA1019:DefineAccessorsForAttributeArguments")]
     [AttributeUsage(AttributeTargets.Class, Inherited = true)]
@@ -157,17 +157,17 @@ namespace GenFx.ComponentModel
         /// <summary>
         /// Initializes a new instance of the <see cref="RequiredEntityAttribute"/> class.
         /// </summary>
-        /// <param name="entityType"><see cref="GeneticEntity"/> type which is required by the class.</param>
+        /// <param name="entityType"><see cref="IGeneticEntity"/> type which is required by the class.</param>
         /// <exception cref="ArgumentNullException"><paramref name="entityType"/> is null.</exception>
-        /// <exception cref="ArgumentException"><paramref name="entityType"/> does not derive from <see cref="GeneticEntity"/>.</exception>
+        /// <exception cref="ArgumentException"><paramref name="entityType"/> does not derive from <see cref="IGeneticEntity"/>.</exception>
         public RequiredEntityAttribute(Type entityType)
-            : base(entityType, typeof(GeneticEntity))
+            : base(entityType, typeof(IGeneticEntity))
         {
         }
     }
 
     /// <summary>
-    /// Indicates that a class requires a specific <see cref="MutationOperator"/> type in order to function correctly.
+    /// Indicates that a class requires a specific <see cref="IMutationOperator"/> type in order to function correctly.
     /// </summary>
     [SuppressMessage("Microsoft.Design", "CA1019:DefineAccessorsForAttributeArguments")]
     [AttributeUsage(AttributeTargets.Class, Inherited = true)]
@@ -176,17 +176,17 @@ namespace GenFx.ComponentModel
         /// <summary>
         /// Initializes a new instance of the <see cref="RequiredMutationOperatorAttribute"/> class.
         /// </summary>
-        /// <param name="mutationOperatorType"><see cref="MutationOperator"/> type which is required by the class.</param>
+        /// <param name="mutationOperatorType"><see cref="IMutationOperator"/> type which is required by the class.</param>
         /// <exception cref="ArgumentNullException"><paramref name="mutationOperatorType"/> is null.</exception>
-        /// <exception cref="ArgumentException"><paramref name="mutationOperatorType"/> does not derive from <see cref="MutationOperator"/>.</exception>
+        /// <exception cref="ArgumentException"><paramref name="mutationOperatorType"/> does not derive from <see cref="IMutationOperator"/>.</exception>
         public RequiredMutationOperatorAttribute(Type mutationOperatorType)
-            : base(mutationOperatorType, typeof(MutationOperator))
+            : base(mutationOperatorType, typeof(IMutationOperator))
         {
         }
     }
 
     /// <summary>
-    /// Indicates that a class requires a specific <see cref="Population"/> type in order to function correctly.
+    /// Indicates that a class requires a specific <see cref="IPopulation"/> type in order to function correctly.
     /// </summary>
     [SuppressMessage("Microsoft.Design", "CA1019:DefineAccessorsForAttributeArguments")]
     [AttributeUsage(AttributeTargets.Class, Inherited = true)]
@@ -195,17 +195,17 @@ namespace GenFx.ComponentModel
         /// <summary>
         /// Initializes a new instance of the <see cref="RequiredPopulationAttribute"/> class.
         /// </summary>
-        /// <param name="populationType"><see cref="Population"/> type which is required by the class.</param>
+        /// <param name="populationType"><see cref="IPopulation"/> type which is required by the class.</param>
         /// <exception cref="ArgumentNullException"><paramref name="populationType"/> is null.</exception>
-        /// <exception cref="ArgumentException"><paramref name="populationType"/> does not derive from <see cref="Population"/>.</exception>
+        /// <exception cref="ArgumentException"><paramref name="populationType"/> does not derive from <see cref="IPopulation"/>.</exception>
         public RequiredPopulationAttribute(Type populationType)
-            : base(populationType, typeof(Population))
+            : base(populationType, typeof(IPopulation))
         {
         }
     }
 
     /// <summary>
-    /// Indicates that a class requires a specific <see cref="SelectionOperator"/> type in order to function correctly.
+    /// Indicates that a class requires a specific <see cref="ISelectionOperator"/> type in order to function correctly.
     /// </summary>
     [SuppressMessage("Microsoft.Design", "CA1019:DefineAccessorsForAttributeArguments")]
     [AttributeUsage(AttributeTargets.Class, Inherited = true)]
@@ -214,17 +214,17 @@ namespace GenFx.ComponentModel
         /// <summary>
         /// Initializes a new instance of the <see cref="RequiredSelectionOperatorAttribute"/> class.
         /// </summary>
-        /// <param name="selectionOperatorType"><see cref="SelectionOperator"/> type which is required by the class.</param>
+        /// <param name="selectionOperatorType"><see cref="ISelectionOperator"/> type which is required by the class.</param>
         /// <exception cref="ArgumentNullException"><paramref name="selectionOperatorType"/> is null.</exception>
-        /// <exception cref="ArgumentException"><paramref name="selectionOperatorType"/> does not derive from <see cref="SelectionOperator"/>.</exception>
+        /// <exception cref="ArgumentException"><paramref name="selectionOperatorType"/> does not derive from <see cref="ISelectionOperator"/>.</exception>
         public RequiredSelectionOperatorAttribute(Type selectionOperatorType)
-            : base(selectionOperatorType, typeof(SelectionOperator))
+            : base(selectionOperatorType, typeof(ISelectionOperator))
         {
         }
     }
 
     /// <summary>
-    /// Indicates that a class requires a specific <see cref="Statistic"/> type in order to function correctly.
+    /// Indicates that a class requires a specific <see cref="IStatistic"/> type in order to function correctly.
     /// </summary>
     [SuppressMessage("Microsoft.Design", "CA1019:DefineAccessorsForAttributeArguments")]
     [AttributeUsage(AttributeTargets.Class, Inherited = true, AllowMultiple = true)]
@@ -233,17 +233,17 @@ namespace GenFx.ComponentModel
         /// <summary>
         /// Initializes a new instance of the <see cref="RequiredStatisticAttribute"/> class.
         /// </summary>
-        /// <param name="statisticType"><see cref="Statistic"/> type which is required by the class.</param>
+        /// <param name="statisticType"><see cref="IStatistic"/> type which is required by the class.</param>
         /// <exception cref="ArgumentNullException"><paramref name="statisticType"/> is null.</exception>
-        /// <exception cref="ArgumentException"><paramref name="statisticType"/> does not derive from <see cref="Statistic"/>.</exception>
+        /// <exception cref="ArgumentException"><paramref name="statisticType"/> does not derive from <see cref="IStatistic"/>.</exception>
         public RequiredStatisticAttribute(Type statisticType)
-            : base(statisticType, typeof(Statistic))
+            : base(statisticType, typeof(IStatistic))
         {
         }
     }
 
     /// <summary>
-    /// Indicates that a class requires a specific <see cref="Terminator"/> type in order to function correctly.
+    /// Indicates that a class requires a specific <see cref="ITerminator"/> type in order to function correctly.
     /// </summary>
     [SuppressMessage("Microsoft.Design", "CA1019:DefineAccessorsForAttributeArguments")]
     [AttributeUsage(AttributeTargets.Class, Inherited = true)]
@@ -252,11 +252,11 @@ namespace GenFx.ComponentModel
         /// <summary>
         /// Initializes a new instance of the <see cref="RequiredTerminatorAttribute"/> class.
         /// </summary>
-        /// <param name="terminatorType"><see cref="Terminator"/> type which is required by the class.</param>
+        /// <param name="terminatorType"><see cref="ITerminator"/> type which is required by the class.</param>
         /// <exception cref="ArgumentNullException"><paramref name="terminatorType"/> is null.</exception>
-        /// <exception cref="ArgumentException"><paramref name="terminatorType"/> does not derive from <see cref="Terminator"/>.</exception>
+        /// <exception cref="ArgumentException"><paramref name="terminatorType"/> does not derive from <see cref="ITerminator"/>.</exception>
         public RequiredTerminatorAttribute(Type terminatorType)
-            : base(terminatorType, typeof(Terminator))
+            : base(terminatorType, typeof(ITerminator))
         {
         }
     }

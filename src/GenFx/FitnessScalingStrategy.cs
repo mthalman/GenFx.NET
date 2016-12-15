@@ -5,6 +5,19 @@ using GenFx.Properties;
 namespace GenFx
 {
     /// <summary>
+    /// Represents a strategy for genetic algorithms that scales fitness values.
+    /// </summary>
+    public interface IFitnessScalingStrategy : IGeneticComponent
+    {
+        /// <summary>
+        /// Updates the <see cref="IGeneticEntity.ScaledFitnessValue"/>
+        /// of the <see cref="IGeneticEntity"/> objects in the <paramref name="population"/>.
+        /// </summary>
+        /// <param name="population"><see cref="IPopulation"/> containing the <see cref="IGeneticEntity"/> objects.</param>
+        void Scale(IPopulation population);
+    }
+
+    /// <summary>
     /// Provides the abstract base class for the fitness scaling strategy of a genetic algorithm.
     /// </summary>
     /// <remarks>
@@ -20,35 +33,29 @@ namespace GenFx
     /// property.
     /// </para>
     /// </remarks>
-    public abstract class FitnessScalingStrategy : GeneticComponentWithAlgorithm
+    public abstract class FitnessScalingStrategy<TScaling, TConfiguration> : GeneticComponentWithAlgorithm<TScaling, TConfiguration>, IFitnessScalingStrategy
+        where TScaling : FitnessScalingStrategy<TScaling, TConfiguration>
+        where TConfiguration : FitnessScalingStrategyConfiguration<TConfiguration, TScaling>
     {
         /// <summary>
-        /// Gets the <see cref="ComponentConfiguration"/> containing the configuration of this component instance.
+        /// Initializes a new instance of this class.
         /// </summary>
-        public override sealed ComponentConfiguration Configuration
-        {
-            get { return this.Algorithm.ConfigurationSet.FitnessScalingStrategy; }
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="FitnessScalingStrategy"/> class.
-        /// </summary>
-        /// <param name="algorithm"><see cref="GeneticAlgorithm"/> using this <see cref="FitnessScalingStrategy"/>.</param>
+        /// <param name="algorithm"><see cref="IGeneticAlgorithm"/> using this class.</param>
         /// <exception cref="ArgumentNullException"><paramref name="algorithm"/> is null.</exception>
         /// <exception cref="ValidationException">The component's configuration is in an invalid state.</exception>
-        protected FitnessScalingStrategy(GeneticAlgorithm algorithm)
+        protected FitnessScalingStrategy(IGeneticAlgorithm algorithm)
             : base(algorithm)
         {
         }
 
         /// <summary>
-        /// Updates the <see cref="GeneticEntity.ScaledFitnessValue"/>
-        /// of the <see cref="GeneticEntity"/> objects in the <paramref name="population"/>.
+        /// Updates the <see cref="IGeneticEntity.ScaledFitnessValue"/>
+        /// of the <see cref="IGeneticEntity"/> objects in the <paramref name="population"/>.
         /// </summary>
-        /// <param name="population"><see cref="Population"/> containing the <see cref="GeneticEntity"/> objects.</param>
+        /// <param name="population"><see cref="IPopulation"/> containing the <see cref="IGeneticEntity"/> objects.</param>
         /// <exception cref="ArgumentNullException"><paramref name="population"/> is null.</exception>
         /// <exception cref="ArgumentException"><paramref name="population"/> does not contain any entities.</exception>
-        public void Scale(Population population)
+        public void Scale(IPopulation population)
         {
             if (population == null)
             {
@@ -65,18 +72,27 @@ namespace GenFx
         }
 
         /// <summary>
-        /// When overriden in a derived class, updates the <see cref="GeneticEntity.ScaledFitnessValue"/>
-        /// of the <see cref="GeneticEntity"/> objects in the <paramref name="population"/>.
+        /// When overriden in a derived class, updates the <see cref="IGeneticEntity.ScaledFitnessValue"/>
+        /// of the <see cref="IGeneticEntity"/> objects in the <paramref name="population"/>.
         /// </summary>
-        /// <param name="population"><see cref="Population"/> containing the <see cref="GeneticEntity"/> objects.</param>
-        protected abstract void UpdateScaledFitnessValues(Population population);
+        /// <param name="population"><see cref="IPopulation"/> containing the <see cref="IGeneticEntity"/> objects.</param>
+        protected abstract void UpdateScaledFitnessValues(IPopulation population);
     }
 
     /// <summary>
-    /// Represents the configuration of <see cref="FitnessScalingStrategy"/>.
+    /// Represents the configuration of <see cref="IFitnessScalingStrategy"/>.
     /// </summary>
-    [Component(typeof(FitnessScalingStrategy))]
-    public abstract class FitnessScalingStrategyConfiguration : ComponentConfiguration
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1040:AvoidEmptyInterfaces")]
+    public interface IFitnessScalingStrategyConfiguration : IComponentConfiguration
+    {
+    }
+
+    /// <summary>
+    /// Represents the configuration of <see cref="FitnessScalingStrategy{TConfiguration, TScaling}"/>.
+    /// </summary>
+    public abstract class FitnessScalingStrategyConfiguration<TConfiguration, TScaling> : ComponentConfiguration<TConfiguration, TScaling>, IFitnessScalingStrategyConfiguration
+        where TConfiguration : FitnessScalingStrategyConfiguration<TConfiguration, TScaling> 
+        where TScaling : FitnessScalingStrategy<TScaling, TConfiguration>
     {
     }
 }

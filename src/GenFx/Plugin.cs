@@ -4,34 +4,51 @@ using GenFx.ComponentModel;
 namespace GenFx
 {
     /// <summary>
-    /// Plugin component that provides custom extension functionality.
+    /// Represents a component that provides custom extension functionality.
     /// </summary>
-    public abstract class Plugin : GeneticComponentWithAlgorithm
+    public interface IPlugin : IGeneticComponent
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="Plugin"/> class.
+        /// Handles the event when a genetic algorithm is about to start execution.
         /// </summary>
-        /// <param name="algorithm"><see cref="GeneticAlgorithm"/> using this <see cref="Plugin"/>.</param>
+        void OnAlgorithmStarting();
+
+        /// <summary>
+        /// Handles the event when a genetic algorithm has finished executing.
+        /// </summary>
+        void OnAlgorithmCompleted();
+
+        /// <summary>
+        /// Handles the event when the fitness of an environment has been evaluated.
+        /// </summary>
+        /// <param name="environment">The environment which has had its fitness evaluated..</param>
+        /// <param name="generationIndex">Index value of the current generation in the environment.</param>
+        void OnFitnessEvaluated(GeneticEnvironment environment, int generationIndex);
+    }
+
+    /// <summary>
+    /// Plugin component that provides custom extension functionality.
+    /// </summary>
+    public abstract class Plugin<TPlugin, TConfiguration> : GeneticComponentWithAlgorithm<TPlugin, TConfiguration>, IPlugin
+        where TPlugin : Plugin<TPlugin, TConfiguration>
+        where TConfiguration : PluginConfiguration<TConfiguration, TPlugin>
+    {
+        /// <summary>
+        /// Initializes a new instance of this class.
+        /// </summary>
+        /// <param name="algorithm"><see cref="IGeneticAlgorithm"/> using this class.</param>
         /// <exception cref="ArgumentNullException"><paramref name="algorithm"/> is null.</exception>
         /// <exception cref="ValidationException">The component's configuration is in an invalid state.</exception>
-        protected Plugin(GeneticAlgorithm algorithm)
+        protected Plugin(IGeneticAlgorithm algorithm)
             : base(algorithm)
         {
         }
-        
-        /// <summary>
-        /// Gets the <see cref="ComponentConfiguration"/> containing the configuration of this component instance.
-        /// </summary>
-        public override sealed ComponentConfiguration Configuration
-        {
-            get { return this.Algorithm.ConfigurationSet.Plugins[this.GetType()]; }
-        }
 
         /// <summary>
-        /// Handles the event when a generation has been created.
+        /// Handles the event when the fitness of an environment has been evaluated.
         /// </summary>
-        /// <param name="environment">The environment representing the generation that was created.</param>
-        /// <param name="generationIndex">Index value of the generation that was created.</param>
+        /// <param name="environment">The environment which has had its fitness evaluated..</param>
+        /// <param name="generationIndex">Index value of the current generation in the environment.</param>
         public virtual void OnFitnessEvaluated(GeneticEnvironment environment, int generationIndex)
         {
         }
@@ -52,10 +69,19 @@ namespace GenFx
     }
 
     /// <summary>
-    /// Represents the configuration of <see cref="PluginConfiguration"/>.
+    /// Represents the configuration of <see cref="IPlugin"/>.
     /// </summary>
-    [Component(typeof(Plugin))]
-    public abstract class PluginConfiguration : ComponentConfiguration
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1040:AvoidEmptyInterfaces")]
+    public interface IPluginConfiguration : IComponentConfiguration
+    {
+    }
+
+    /// <summary>
+    /// Represents the configuration of <see cref="Plugin{TPlugin, TConfiguration}"/>.
+    /// </summary>
+    public abstract class PluginConfiguration<TConfiguration, TPlugin> : ComponentConfiguration<TConfiguration, TPlugin>, IPluginConfiguration
+        where TConfiguration : PluginConfiguration<TConfiguration, TPlugin>
+        where TPlugin : Plugin<TPlugin, TConfiguration>
     {
     }
 }

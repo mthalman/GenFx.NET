@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
@@ -17,15 +16,82 @@ using System.Threading.Tasks;
 namespace GenFx
 {
     /// <summary>
+    /// Represents the genetic algorithm responsible for execution of the algorithm logic.
+    /// </summary>
+    public interface IGeneticAlgorithm
+    {
+        /// <summary>
+        /// Occurs when the fitness of an environment has been evaluated.
+        /// </summary>
+        event EventHandler<EnvironmentFitnessEvaluatedEventArgs> FitnessEvaluated;
+
+        /// <summary>
+        /// Occurs when a new generation has been created (but its fitness has not yet been evaluated).
+        /// </summary>
+        event EventHandler GenerationCreated;
+
+        /// <summary>
+        /// Occurs when execution of the algorithm completes.
+        /// </summary>
+        event EventHandler AlgorithmCompleted;
+
+        /// <summary>
+        /// Occurs when the algorithm is about to begin execution.
+        /// </summary>
+        /// <remarks>
+        /// This event only occurs when the algorithm is first started after having been initialized.
+        /// It does not occur when resuming execution after a pause.
+        /// </remarks>
+        event EventHandler AlgorithmStarting;
+
+        /// <summary>
+        /// Gets the <see cref="ComponentConfigurationSet"/> containing the configuration for the algorithm.
+        /// </summary>
+        ComponentConfigurationSet ConfigurationSet { get; }
+
+        /// <summary>
+        /// Gets the <see cref="AlgorithmOperators"/> to be used.
+        /// </summary>
+        AlgorithmOperators Operators { get; }
+
+        /// <summary>
+        /// Executes the genetic algorithm.
+        /// </summary>
+        /// <remarks>
+        /// The execution will continue until the <see cref="ITerminator.IsComplete()"/> method returns
+        /// true or <see cref="CancelEventArgs.Cancel"/> property is set to true.
+        /// </remarks>
+        Task RunAsync();
+
+        /// <summary>
+        /// Executes one generation of the genetic algorithm.
+        /// </summary>
+        /// <returns>True if the genetic algorithm has completed its execution; otherwise, false.</returns>
+        /// <remarks>
+        /// Subsequent calls to either <see cref="RunAsync()"/> or <see cref="StepAsync()"/> will resume execution from
+        /// where the previous <see cref="StepAsync()"/> call left off.
+        /// </remarks>
+        Task<bool> StepAsync();
+
+        /// <summary>
+        /// Validates that the algorithm contains the configuration required by the <paramref name="component"/>.
+        /// </summary>
+        /// <param name="component">Component object whose configuration is to be resolved.</param>
+        void ValidateComponentConfiguration(GeneticComponent component);
+    }
+
+    /// <summary>
     /// Provides the abstract base class for a type of genetic algorithm.
     /// </summary>
     [SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
-    public abstract class GeneticAlgorithm : GeneticComponent
+    public abstract class GeneticAlgorithm<TAlgorithm, TConfiguration> : GeneticComponent<TAlgorithm, TConfiguration>, IGeneticAlgorithm
+        where TAlgorithm : GeneticAlgorithm<TAlgorithm, TConfiguration>
+        where TConfiguration : GeneticAlgorithmConfiguration<TConfiguration, TAlgorithm>
     {
         private int currentGeneration;
         private GeneticEnvironment environment;
-        private ObservableCollection<Statistic> statistics = new ObservableCollection<Statistic>();
-        private ObservableCollection<Plugin> plugins = new ObservableCollection<Plugin>();
+        private ObservableCollection<IStatistic> statistics = new ObservableCollection<IStatistic>();
+        private ObservableCollection<IPlugin> plugins = new ObservableCollection<IPlugin>();
         private ComponentConfigurationSet config = new ComponentConfigurationSet();
         private AlgorithmOperators operators = new AlgorithmOperators();
         private bool isInitialized;
@@ -56,7 +122,7 @@ namespace GenFx
         public event EventHandler AlgorithmStarting;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="GeneticAlgorithm"/> class.
+        /// Initializes a new instance of this class.
         /// </summary>
         protected GeneticAlgorithm()
         {
@@ -64,7 +130,7 @@ namespace GenFx
         }
 
         /// <summary>
-        /// Gets the <see cref="ComponentConfigurationSet"/> containing the configuration for this <see cref="GeneticAlgorithm"/>.
+        /// Gets the <see cref="ComponentConfigurationSet"/> containing the configuration for this class.
         /// </summary>
         public ComponentConfigurationSet ConfigurationSet
         {
@@ -74,7 +140,7 @@ namespace GenFx
         /// <summary>
         /// Gets the collection of statistics being calculated for the genetic algorithm.
         /// </summary>
-        public ObservableCollection<Statistic> Statistics
+        public ObservableCollection<IStatistic> Statistics
         {
             get { return this.statistics; }
         }
@@ -82,7 +148,7 @@ namespace GenFx
         /// <summary>
         /// Gets the collection of plugins being used by the genetic algorithm.
         /// </summary>
-        public ObservableCollection<Plugin> Plugins
+        public ObservableCollection<IPlugin> Plugins
         {
             get { return this.plugins; }
         }
@@ -107,7 +173,7 @@ namespace GenFx
         }
 
         /// <summary>
-        /// Gets the <see cref="AlgorithmOperators"/> to be used by the <see cref="GeneticAlgorithm"/>.
+        /// Gets the <see cref="AlgorithmOperators"/> to be used.
         /// </summary>
         public AlgorithmOperators Operators
         {
@@ -120,14 +186,6 @@ namespace GenFx
         public bool IsInitialized
         {
             get { return this.isInitialized; }
-        }
-
-        /// <summary>
-        /// Gets the <see cref="ComponentConfiguration"/> containing the configuration of this component instance.
-        /// </summary>
-        public override sealed ComponentConfiguration Configuration
-        {
-            get { return this.ConfigurationSet.GeneticAlgorithm; }
         }
 
         /// <summary>
@@ -148,7 +206,7 @@ namespace GenFx
             this.environment.Populations.Clear();
             this.CreateComponents();
 
-            foreach (Plugin plugin in this.Plugins)
+            foreach (IPlugin plugin in this.Plugins)
             {
                 plugin.OnAlgorithmStarting();
             }
@@ -169,7 +227,7 @@ namespace GenFx
             BinaryFormatter formatter = new BinaryFormatter();
             using (MemoryStream stream = new MemoryStream())
             {
-                formatter.Serialize(stream, SaveStateCore());
+                formatter.Serialize(stream, this.SaveState());
                 stream.Flush();
                 return stream.GetBuffer();
             }
@@ -191,50 +249,49 @@ namespace GenFx
 
         private void CreateComponents()
         {
-            Type componentType = null;
-
+            IComponentConfiguration componentConfig = null;
             try
             {
                 // Set optional operators
                 if (this.config.CrossoverOperator != null)
                 {
-                    componentType = this.config.CrossoverOperator.ComponentType;
-                    this.operators.CrossoverOperator = (CrossoverOperator)Activator.CreateInstance(componentType, this);
+                    componentConfig = this.config.CrossoverOperator;
+                    this.operators.CrossoverOperator = (ICrossoverOperator)componentConfig.CreateComponent(this);
                 }
                 if (this.config.ElitismStrategy != null)
                 {
-                    componentType = this.config.ElitismStrategy.ComponentType;
-                    this.operators.ElitismStrategy = (ElitismStrategy)Activator.CreateInstance(componentType, this);
+                    componentConfig = this.config.ElitismStrategy;
+                    this.operators.ElitismStrategy = (IElitismStrategy)componentConfig.CreateComponent(this);
                 }
                 if (this.config.MutationOperator != null)
                 {
-                    componentType = this.config.MutationOperator.ComponentType;
-                    this.operators.MutationOperator = (MutationOperator)Activator.CreateInstance(componentType, this);
+                    componentConfig = this.config.MutationOperator;
+                    this.operators.MutationOperator = (IMutationOperator)componentConfig.CreateComponent(this);
                 }
                 if (this.config.FitnessScalingStrategy != null)
                 {
-                    componentType = this.config.FitnessScalingStrategy.ComponentType;
-                    this.operators.FitnessScalingStrategy = (FitnessScalingStrategy)Activator.CreateInstance(componentType, this);
+                    componentConfig = this.config.FitnessScalingStrategy;
+                    this.operators.FitnessScalingStrategy = (IFitnessScalingStrategy)componentConfig.CreateComponent(this);
                 }
 
                 // Set required operators
-                componentType = this.config.SelectionOperator.ComponentType;
-                this.operators.SelectionOperator = (SelectionOperator)Activator.CreateInstance(componentType, this);
-                componentType = this.config.FitnessEvaluator.ComponentType;
-                this.operators.FitnessEvaluator = (FitnessEvaluator)Activator.CreateInstance(componentType, this);
+                componentConfig = this.config.SelectionOperator;
+                this.operators.SelectionOperator = (ISelectionOperator)componentConfig.CreateComponent(this);
+                componentConfig = this.config.FitnessEvaluator;
+                this.operators.FitnessEvaluator = (IFitnessEvaluator)componentConfig.CreateComponent(this);
 
                 if (this.config.Terminator == null)
                 {
                     // If the user doesn't want a terminator, use the EmptyTerminator instead which 
                     // never terminates.
-                    componentType = typeof(EmptyTerminator);
                     this.config.Terminator = new EmptyTerminatorConfiguration();
+                    componentConfig = this.config.Terminator;
                     this.operators.Terminator = new EmptyTerminator(this);
                 }
                 else
                 {
-                    componentType = this.config.Terminator.ComponentType;
-                    this.operators.Terminator = (Terminator)Activator.CreateInstance(componentType, this);
+                    componentConfig = this.config.Terminator;
+                    this.operators.Terminator = (ITerminator)componentConfig.CreateComponent(this);
                 }
 
                 if (this.ConfigurationSet.GeneticAlgorithm.StatisticsEnabled)
@@ -243,28 +300,28 @@ namespace GenFx
 
                     for (int i = 0; i < this.config.Statistics.Count; i++)
                     {
-                        componentType = this.config.Statistics[i].ComponentType;
-                        Statistic stat = (Statistic)Activator.CreateInstance(componentType, this);
+                        componentConfig = this.config.Statistics[i];
+                        IStatistic stat = (IStatistic)componentConfig.CreateComponent(this);
                         this.statistics.Add(stat);
                     }
                 }
 
-                foreach (PluginConfiguration pluginConfig in this.ConfigurationSet.Plugins)
+                foreach (IPluginConfiguration pluginConfig in this.ConfigurationSet.Plugins)
                 {
-                    Plugin plugin = (Plugin)Activator.CreateInstance(pluginConfig.ComponentType, this);
-                    this.plugins.Add(plugin);
+                    componentConfig = pluginConfig;
+                    this.plugins.Add((IPlugin)componentConfig.CreateComponent(this));
                 }
             }
             catch (TargetInvocationException e)
             {
-                throw new InvalidOperationException(StringUtil.GetFormattedString(FwkResources.ErrorMsg_ErrorCreatingComponent, componentType.FullName, e.InnerException.Message), e.InnerException);
+                throw new InvalidOperationException(StringUtil.GetFormattedString(FwkResources.ErrorMsg_ErrorCreatingComponent, componentConfig.GetType().FullName, e.InnerException.Message), e.InnerException);
             }
         }
 
         /// <summary>
         /// Restores the state of the algorithm.
         /// </summary>
-        protected internal override void RestoreState(KeyValueMap state)
+        public override void RestoreState(KeyValueMap state)
         {
             if (state == null)
             {
@@ -300,7 +357,7 @@ namespace GenFx
         /// Sets the serializable state of this component on the state object.
         /// </summary>
         /// <param name="state">The object containing the serializable state of this object.</param>
-        protected override void SetSaveState(KeyValueMap state)
+        public override void SetSaveState(KeyValueMap state)
         {
             if (state == null)
             {
@@ -313,23 +370,23 @@ namespace GenFx
             state[nameof(this.environment)] = this.environment.SaveState();
             state[nameof(this.currentGeneration)] = this.currentGeneration;
             state[nameof(this.isInitialized)] = this.isInitialized;
-            state[nameof(this.statistics)] = new KeyValueMapCollection(this.statistics.Select(s => s.SaveStateCore()).Cast<KeyValueMap>());
+            state[nameof(this.statistics)] = new KeyValueMapCollection(this.statistics.Select(s => s.SaveState()).Cast<KeyValueMap>());
 
-            state[nameof(this.Operators.CrossoverOperator)] = this.Operators.CrossoverOperator?.SaveStateCore();
-            state[nameof(this.Operators.ElitismStrategy)] = this.Operators.ElitismStrategy?.SaveStateCore();
-            state[nameof(this.Operators.FitnessEvaluator)] = this.Operators.FitnessEvaluator?.SaveStateCore();
-            state[nameof(this.Operators.FitnessEvaluator)] = this.Operators.FitnessEvaluator?.SaveStateCore();
-            state[nameof(this.Operators.FitnessScalingStrategy)] = this.Operators.FitnessScalingStrategy?.SaveStateCore();
-            state[nameof(this.Operators.MutationOperator)] = this.Operators.MutationOperator?.SaveStateCore();
-            state[nameof(this.Operators.SelectionOperator)] = this.Operators.SelectionOperator?.SaveStateCore();
-            state[nameof(this.Operators.Terminator)] = this.Operators.Terminator?.SaveStateCore();
+            state[nameof(this.Operators.CrossoverOperator)] = this.Operators.CrossoverOperator?.SaveState();
+            state[nameof(this.Operators.ElitismStrategy)] = this.Operators.ElitismStrategy?.SaveState();
+            state[nameof(this.Operators.FitnessEvaluator)] = this.Operators.FitnessEvaluator?.SaveState();
+            state[nameof(this.Operators.FitnessEvaluator)] = this.Operators.FitnessEvaluator?.SaveState();
+            state[nameof(this.Operators.FitnessScalingStrategy)] = this.Operators.FitnessScalingStrategy?.SaveState();
+            state[nameof(this.Operators.MutationOperator)] = this.Operators.MutationOperator?.SaveState();
+            state[nameof(this.Operators.SelectionOperator)] = this.Operators.SelectionOperator?.SaveState();
+            state[nameof(this.Operators.Terminator)] = this.Operators.Terminator?.SaveState();
         }
-        
+
         /// <summary>
         /// Executes the genetic algorithm.
         /// </summary>
         /// <remarks>
-        /// The execution will continue until the <see cref="Terminator.IsComplete()"/> method returns
+        /// The execution will continue until the <see cref="ITerminator.IsComplete()"/> method returns
         /// true or <see cref="CancelEventArgs.Cancel"/> property is set to true.
         /// </remarks>
         /// <exception cref="InvalidOperationException">The algorithm has not been initialized.</exception>
@@ -369,19 +426,19 @@ namespace GenFx
 
         /// <summary>
         /// When overriden in a derived class, modifies <paramref name="population"/> to become the next generation
-        /// of <see cref="GeneticEntity"/> objects.
+        /// of entities.
         /// </summary>
-        /// <param name="population">The current <see cref="Population"/> to be modified.</param>
-        protected abstract Task CreateNextGenerationAsync(Population population);
+        /// <param name="population">The current <see cref="IPopulation"/> to be modified.</param>
+        protected abstract Task CreateNextGenerationAsync(IPopulation population);
 
         /// <summary>
-        /// Helper method used to apply the <see cref="ElitismStrategy"/>, if one is set, to the <paramref name="currentPopulation"/>.
+        /// Helper method used to apply the <see cref="IElitismStrategy"/>, if one is set, to the <paramref name="currentPopulation"/>.
         /// </summary>
-        /// <param name="currentPopulation"><see cref="Population"/> from which to select the
-        /// elite <see cref="GeneticEntity"/> objects.</param>
-        /// <returns>The collection of <see cref="GeneticEntity"/> objects, if any, that are elite.</returns>
+        /// <param name="currentPopulation"><see cref="IPopulation"/> from which to select the
+        /// elite entities.</param>
+        /// <returns>The collection of entities, if any, that are elite.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="currentPopulation"/> is null.</exception>
-        protected IList<GeneticEntity> ApplyElitism(Population currentPopulation)
+        protected IList<IGeneticEntity> ApplyElitism(IPopulation currentPopulation)
         {
             if (currentPopulation == null)
             {
@@ -390,49 +447,49 @@ namespace GenFx
 
             if (this.operators.ElitismStrategy != null)
             {
-                return this.operators.ElitismStrategy.GetElitistGeneticEntities(currentPopulation);
+                return this.operators.ElitismStrategy.GetEliteGeneticEntities(currentPopulation);
             }
             else
             {
-                return new List<GeneticEntity>();
+                return new List<IGeneticEntity>();
             }
         }
 
         /// <summary>
-        /// Selects two <see cref="GeneticEntity"/> objects from the population and applies
-        /// the <see cref="CrossoverOperator"/> and <see cref="MutationOperator"/>, if they exist, to the selected
-        /// <see cref="GeneticEntity"/> objects.
+        /// Selects two entities from the population and applies
+        /// the <see cref="ICrossoverOperator"/> and <see cref="IMutationOperator"/>, if they exist, to the selected
+        /// entities.
         /// </summary>
-        /// <param name="population"><see cref="Population"/> from which to select the <see cref="GeneticEntity"/> objects.</param>
+        /// <param name="population"><see cref="IPopulation"/> from which to select the entities.</param>
         /// <returns>
-        /// List of <see cref="GeneticEntity"/> objects that were selected from the <paramref name="population"/>
+        /// List of entities that were selected from the <paramref name="population"/>
         /// and potentially modified through crossover and mutation.
         /// </returns>
         /// <exception cref="ArgumentNullException"><paramref name="population"/> is null.</exception>
-        protected IList<GeneticEntity> SelectGeneticEntitiesAndApplyCrossoverAndMutation(Population population)
+        protected IList<IGeneticEntity> SelectGeneticEntitiesAndApplyCrossoverAndMutation(IPopulation population)
         {
             if (population == null)
             {
                 throw new ArgumentNullException(nameof(population));
             }
 
-            GeneticEntity entity1 = this.operators.SelectionOperator.Select(population);
-            GeneticEntity entity2 = this.operators.SelectionOperator.Select(population);
+            IGeneticEntity entity1 = this.operators.SelectionOperator.SelectEntity(population);
+            IGeneticEntity entity2 = this.operators.SelectionOperator.SelectEntity(population);
 
-            IList<GeneticEntity> childGeneticEntities = this.ApplyCrossover(entity1, entity2);
+            IList<IGeneticEntity> childGeneticEntities = this.ApplyCrossover(entity1, entity2);
             childGeneticEntities = this.ApplyMutation(childGeneticEntities);
             return childGeneticEntities;
         }
 
         /// <summary>
-        /// Applies the <see cref="CrossoverOperator"/>, if one is set, to the genetic entities.
+        /// Applies the <see cref="ICrossoverOperator"/>, if one is set, to the genetic entities.
         /// </summary>
-        /// <param name="entity1"><see cref="GeneticEntity"/> to be potentially crossed over with <paramref name="entity2"/>.</param>
-        /// <param name="entity2"><see cref="GeneticEntity"/> to be potentially crossed over with <paramref name="entity1"/>.</param>
-        /// <returns>List of <see cref="GeneticEntity"/> objects after the crossover was applied.</returns>
+        /// <param name="entity1"><see cref="IGeneticEntity"/> to be potentially crossed over with <paramref name="entity2"/>.</param>
+        /// <param name="entity2"><see cref="IGeneticEntity"/> to be potentially crossed over with <paramref name="entity1"/>.</param>
+        /// <returns>List of entities after the crossover was applied.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="entity1"/> is null.</exception>
         /// <exception cref="ArgumentNullException"><paramref name="entity2"/> is null.</exception>
-        protected IList<GeneticEntity> ApplyCrossover(GeneticEntity entity1, GeneticEntity entity2)
+        protected IList<IGeneticEntity> ApplyCrossover(IGeneticEntity entity1, IGeneticEntity entity2)
         {
             if (entity1 == null)
             {
@@ -444,15 +501,15 @@ namespace GenFx
                 throw new ArgumentNullException(nameof(entity2));
             }
 
-            IList<GeneticEntity> childEntities;
-            CrossoverOperator crossoverOperator = this.operators.CrossoverOperator;
+            IList<IGeneticEntity> childEntities;
+            ICrossoverOperator crossoverOperator = this.operators.CrossoverOperator;
             if (crossoverOperator != null)
             {
                 childEntities = crossoverOperator.Crossover(entity1, entity2);
             }
             else
             {
-                childEntities = new List<GeneticEntity>();
+                childEntities = new List<IGeneticEntity>();
                 childEntities.Add(entity1);
                 childEntities.Add(entity2);
             }
@@ -460,23 +517,23 @@ namespace GenFx
         }
 
         /// <summary>
-        /// Applies the <see cref="MutationOperator"/>, if one is set, to the <paramref name="entities"/>.
+        /// Applies the <see cref="IMutationOperator"/>, if one is set, to the <paramref name="entities"/>.
         /// </summary>
-        /// <param name="entities">List of <see cref="GeneticEntity"/> objects to be potentially mutated.</param>
-        /// <returns>List of <see cref="GeneticEntity"/> objects after the mutation was applied.</returns>
+        /// <param name="entities">List of entities to be potentially mutated.</param>
+        /// <returns>List of entities after the mutation was applied.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="entities"/> is null.</exception>
-        protected IList<GeneticEntity> ApplyMutation(IList<GeneticEntity> entities)
+        protected IList<IGeneticEntity> ApplyMutation(IList<IGeneticEntity> entities)
         {
             if (entities == null)
             {
                 throw new ArgumentNullException(nameof(entities));
             }
 
-            List<GeneticEntity> mutants = new List<GeneticEntity>();
-            foreach (GeneticEntity entity in entities)
+            List<IGeneticEntity> mutants = new List<IGeneticEntity>();
+            foreach (IGeneticEntity entity in entities)
             {
-                MutationOperator mutationOperator = this.operators.MutationOperator;
-                GeneticEntity newEntity = entity;
+                IMutationOperator mutationOperator = this.operators.MutationOperator;
+                IGeneticEntity newEntity = entity;
                 if (mutationOperator != null)
                 {
                     newEntity = mutationOperator.Mutate(entity);
@@ -562,14 +619,14 @@ namespace GenFx
         }
 
         /// <summary>
-        /// Validates that the <see cref="GeneticAlgorithm"/> is configured to use all the types 
+        /// Validates that the <see cref="IGeneticAlgorithm"/> is configured to use all the types 
         /// required by <paramref name="type"/> via the <see cref="RequiredComponentAttribute"/>.
         /// </summary>
         /// <param name="type">Type whose dependencies are to be validated.</param>
         /// <exception cref="ArgumentNullException"><paramref name="type"/> is null.</exception>
         /// <exception cref="InvalidOperationException">
         /// <paramref name="type"/> has a required type defined via
-        /// the <see cref="RequiredComponentAttribute"/> that the <see cref="GeneticAlgorithm"/> is not
+        /// the <see cref="RequiredComponentAttribute"/> that the <see cref="IGeneticAlgorithm"/> is not
         /// configured to use.
         /// </exception>
         [SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity")]
@@ -706,14 +763,14 @@ namespace GenFx
         }
 
         /// <summary>
-        /// Validates that the <see cref="GeneticAlgorithm"/> contains the configuration required by the <paramref name="component"/>.
+        /// Validates that the algorithm contains the configuration required by the <paramref name="component"/>.
         /// </summary>
         /// <param name="component">Component object whose configuration is to be resolved.</param>
         /// <exception cref="ArgumentNullException"><paramref name="component"/> is null.</exception>
         /// <exception cref="ArgumentException"><paramref name="component"/> does not contain a configuration object.</exception>
         /// <exception cref="ArgumentException"><paramref name="component"/> contains a configuration object that is not associated with that component.</exception>
         /// <exception cref="ValidationException">The configuration for <paramref name="component"/> is in an invalid state.</exception>
-        protected internal void ValidateComponentConfiguration(GeneticComponent component)
+        public void ValidateComponentConfiguration(GeneticComponent component)
         {
             if (component == null)
             {
@@ -749,12 +806,12 @@ namespace GenFx
         }
 
         /// <summary>
-        /// Raises the <see cref="GeneticAlgorithm.FitnessEvaluated"/> event.
+        /// Raises the <see cref="FitnessEvaluated"/> event.
         /// </summary>
         /// <returns>True if the user has canceled continued execution of the genetic algorithm; otherwise, false.</returns>
         private bool RaiseFitnessEvaluatedEvent()
         {
-            foreach (Plugin plugin in this.Plugins)
+            foreach (IPlugin plugin in this.Plugins)
             {
                 plugin.OnFitnessEvaluated(this.environment, this.currentGeneration);
             }
@@ -765,9 +822,9 @@ namespace GenFx
         }
 
         /// <summary>
-        /// Raises the <see cref="GeneticAlgorithm.FitnessEvaluated"/> event.
+        /// Raises the <see cref="FitnessEvaluated"/> event.
         /// </summary>
-        /// <param name="e"><see cref="EnvironmentFitnessEvaluatedEventArgs"/> to be passed to the <see cref="GeneticAlgorithm.FitnessEvaluated"/> event.</param>
+        /// <param name="e"><see cref="EnvironmentFitnessEvaluatedEventArgs"/> to be passed to the <see cref="FitnessEvaluated"/> event.</param>
         private void OnFitnessEvaluated(EnvironmentFitnessEvaluatedEventArgs e)
         {
             this.CalculateStats(e.Environment, e.GenerationIndex);
@@ -805,7 +862,7 @@ namespace GenFx
             CompileExternalValidatorMapping(this.config.SelectionOperator, this.externalValidationMapping);
             CompileExternalValidatorMapping(this.config.Terminator, this.externalValidationMapping);
 
-            foreach (StatisticConfiguration stat in this.config.Statistics)
+            foreach (IStatisticConfiguration stat in this.config.Statistics)
             {
                 CompileExternalValidatorMapping(stat, this.externalValidationMapping);
             }
@@ -814,9 +871,9 @@ namespace GenFx
         /// <summary>
         /// Compiles the mapping of component configuration properties to <see cref="Validator"/> objects as described by the specified component.
         /// </summary>
-        /// <param name="componentConfiguration"><see cref="ComponentConfiguration"/> for the component to check whether it has defined validators for a configuration property.</param>
+        /// <param name="componentConfiguration"><see cref="IComponentConfiguration"/> for the component to check whether it has defined validators for a configuration property.</param>
         /// <param name="mapping">Property to validator mapping.</param>
-        private static void CompileExternalValidatorMapping(ComponentConfiguration componentConfiguration, Dictionary<PropertyInfo, List<Validator>> mapping)
+        private static void CompileExternalValidatorMapping(IComponentConfiguration componentConfiguration, Dictionary<PropertyInfo, List<Validator>> mapping)
         {
             if (componentConfiguration == null)
             {
@@ -838,7 +895,7 @@ namespace GenFx
         }
 
         /// <summary>
-        /// Executes the genetic algorithm until the <see cref="Terminator.IsComplete()"/> method returns
+        /// Executes the genetic algorithm until the <see cref="ITerminator.IsComplete()"/> method returns
         /// true or <see cref="CancelEventArgs.Cancel"/> property is set to true.
         /// </summary>
         /// <returns>true if the genetic algorithm has completed its execution; otherwise, false.</returns>
@@ -881,7 +938,7 @@ namespace GenFx
         {
             this.AlgorithmCompleted?.Invoke(this, EventArgs.Empty);
 
-            foreach (Plugin plugin in this.Plugins)
+            foreach (IPlugin plugin in this.Plugins)
             {
                 plugin.OnAlgorithmCompleted();
             }
@@ -892,42 +949,12 @@ namespace GenFx
         /// </summary>
         private void CalculateStats(GeneticEnvironment geneticEnvironment, int generationIndex)
         {
-            foreach (Statistic statistic in this.statistics)
+            foreach (IStatistic statistic in this.statistics)
             {
                 statistic.Calculate(geneticEnvironment, generationIndex);
             }
         }
-
-        /// <summary>
-        /// Returns an instance of the genetic algorithm structure type requested.
-        /// </summary>
-        /// <typeparam name="T">Type of structure.</typeparam>
-        /// <returns>An instance of the genetic algorithm structure type requested.</returns>
-        internal T CreateStructureInstance<T>()
-        {
-            Type requestedType = typeof(T);
-            try
-            {
-                if (requestedType == typeof(Population))
-                    return (T)Activator.CreateInstance(this.config.Population.ComponentType, this);
-                else if (requestedType == typeof(GeneticEntity))
-                {
-                    object entity = (GeneticEntity)Activator.CreateInstance(this.config.Entity.ComponentType, this);
-                    ((GeneticEntity)entity).Initialize();
-                    return (T)entity;
-                }
-                else
-                {
-                    Debug.Fail("Requested type is not a valid structure type.");
-                    return default(T);
-                }
-            }
-            catch (TargetInvocationException e)
-            {
-                throw e.InnerException;
-            }
-        }
-
+        
         /// <summary>
         /// Creates the next generation.
         /// </summary>
@@ -937,7 +964,7 @@ namespace GenFx
 
             for (int i = 0; i < this.environment.Populations.Count; i++)
             {
-                Population population = this.environment.Populations[i];
+                IPopulation population = this.environment.Populations[i];
 
                 // Increment the age of all the genetic entities in the population.
                 Parallel.ForEach(population.Entities, e => e.Age++);
@@ -955,19 +982,40 @@ namespace GenFx
     }
 
     /// <summary>
-    /// Represents the configuration of <see cref="GeneticAlgorithm"/>.
+    /// Represents the configuration of <see cref="IGeneticAlgorithm"/>.
     /// </summary>
-    [Component(typeof(GeneticAlgorithm))]
-    public abstract class GeneticAlgorithmConfiguration : ComponentConfiguration
+    public interface IGeneticAlgorithmConfiguration : IComponentConfiguration
+    {
+        /// <summary>
+        /// Gets the number of <see cref="IPopulation"/> objects that are contained by the <see cref="GeneticEnvironment"/>.
+        /// </summary>
+        /// <value>
+        /// The number of populations that are contained by the <see cref="GeneticEnvironment"/>.
+        /// </value>
+        int EnvironmentSize { get; }
+
+        /// <summary>
+        /// Gets whether statistics should be calculated during genetic algorithm execution.
+        /// </summary>
+        /// <value>True if statistics should be calculated; otherwise, false.</value>
+        bool StatisticsEnabled { get; }
+    }
+
+    /// <summary>
+    /// Represents the configuration of <see cref="GeneticAlgorithm{TConfiguration, TAlgorithm}"/>.
+    /// </summary>
+    public abstract class GeneticAlgorithmConfiguration<TConfiguration, TAlgorithm> : ComponentConfiguration<TConfiguration, TAlgorithm>, IGeneticAlgorithmConfiguration
+        where TConfiguration : GeneticAlgorithmConfiguration<TConfiguration, TAlgorithm>
+        where TAlgorithm : GeneticAlgorithm<TAlgorithm, TConfiguration>
     {
         private const int DefaultEnvironmentSize = 1;
         private const bool DefaultStatisticsEnabled = true;
 
-        private int environmentSize = GeneticAlgorithmConfiguration.DefaultEnvironmentSize;
-        private bool statisticsEnabled = GeneticAlgorithmConfiguration.DefaultStatisticsEnabled;
+        private int environmentSize = DefaultEnvironmentSize;
+        private bool statisticsEnabled = DefaultStatisticsEnabled;
 
         /// <summary>
-        /// Gets or sets the number of <see cref="Population"/> objects that are contained by the <see cref="GeneticEnvironment"/>.
+        /// Gets or sets the number of <see cref="IPopulation"/> objects that are contained by the <see cref="GeneticEnvironment"/>.
         /// </summary>
         /// <value>
         /// The number of populations that are contained by the <see cref="GeneticEnvironment"/>.

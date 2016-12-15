@@ -1,17 +1,31 @@
-using System;
 using GenFx.ComponentModel;
-using System.ComponentModel;
 using GenFx.Validation;
+using System;
 using System.Threading.Tasks;
 
 namespace GenFx
 {
     /// <summary>
+    /// Represents a component which evaluates the fitness of entities.
+    /// </summary>
+    public interface IFitnessEvaluator : IGeneticComponent
+    {
+        /// <summary>
+        /// Returns the calculated fitness value of the <paramref name="entity"/>.
+        /// </summary>
+        /// <param name="entity"><see cref="IGeneticEntity"/> whose calculated fitness value is to be returned.</param>
+        /// <returns>
+        /// The calculated fitness value of the <paramref name="entity"/>.
+        /// </returns>
+        Task<double> EvaluateFitnessAsync(IGeneticEntity entity);
+    }
+
+    /// <summary>
     /// Provides the abstract base class for a fitness evaluator.
     /// </summary>
     /// <remarks>
     /// <para>
-    /// The <b>FitnessEvaluator</b> calculates the <see cref="GeneticEntity.RawFitnessValue"/> of a <see cref="GeneticEntity"/>.  
+    /// The <b>FitnessEvaluator</b> calculates the <see cref="IGeneticEntity.RawFitnessValue"/> of a <see cref="IGeneticEntity"/>.  
     /// The fitness value is a relative measurement of how close a entity is to meeting the goal
     /// of the genetic algorithm.  For example, a genetic algorithm that uses binary strings to reach
     /// a goal of a entity with all ones in its string might use a <b>FitnessEvaluator</b> 
@@ -23,31 +37,17 @@ namespace GenFx
     /// property.
     /// </para>
     /// </remarks>
-    public abstract class FitnessEvaluator : GeneticComponentWithAlgorithm
+    public abstract class FitnessEvaluator<TFitness, TConfiguration> : GeneticComponentWithAlgorithm<TFitness, TConfiguration>, IFitnessEvaluator
+        where TFitness : FitnessEvaluator<TFitness, TConfiguration>
+        where TConfiguration : FitnessEvaluatorConfiguration<TConfiguration, TFitness>
     {
         /// <summary>
-        /// Gets the <see cref="ComponentConfiguration"/> containing the configuration of this component instance.
+        /// Initializes a new instance of this class.
         /// </summary>
-        public override sealed ComponentConfiguration Configuration
-        {
-            get { return this.Algorithm.ConfigurationSet.FitnessEvaluator; }
-        }
-
-        /// <summary>
-        /// Gets the mode which specifies whether to treat higher or lower fitness values as being better.
-        /// </summary>
-        public FitnessEvaluationMode EvaluationMode
-        {
-            get { return ((FitnessEvaluatorConfiguration)this.Configuration).EvaluationMode; }
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="FitnessEvaluator"/> class.
-        /// </summary>
-        /// <param name="algorithm"><see cref="GeneticAlgorithm"/> using this <see cref="GeneticEnvironment"/>.</param>
+        /// <param name="algorithm"><see cref="IGeneticAlgorithm"/> using this <see cref="GeneticEnvironment"/>.</param>
         /// <exception cref="ArgumentNullException"><paramref name="algorithm"/> is null.</exception>
         /// <exception cref="ValidationException">The component's configuration is in an invalid state.</exception>
-        protected FitnessEvaluator(GeneticAlgorithm algorithm)
+        protected FitnessEvaluator(IGeneticAlgorithm algorithm)
             : base(algorithm)
         {
         }
@@ -55,21 +55,33 @@ namespace GenFx
         /// <summary>
         /// When overriden in a derived class, returns the calculated fitness value of the <paramref name="entity"/>.
         /// </summary>
-        /// <param name="entity"><see cref="GeneticEntity"/> whose calculated fitness value is to be returned.</param>
+        /// <param name="entity"><see cref="IGeneticEntity"/> whose calculated fitness value is to be returned.</param>
         /// <returns>
         /// The calculated fitness value of the <paramref name="entity"/>.
         /// </returns>
-        public abstract Task<double> EvaluateFitnessAsync(GeneticEntity entity);
+        public abstract Task<double> EvaluateFitnessAsync(IGeneticEntity entity);
     }
 
     /// <summary>
-    /// Represents the configuration of <see cref="FitnessEvaluator"/>.
+    /// Represents the configuration of <see cref="IFitnessEvaluator"/>.
     /// </summary>
-    [Component(typeof(FitnessEvaluator))]
-    public abstract class FitnessEvaluatorConfiguration : ComponentConfiguration
+    public interface IFitnessEvaluatorConfiguration : IComponentConfiguration
+    {
+        /// <summary>
+        /// Gets the mode which specifies whether to treat higher or lower fitness values as being better.
+        /// </summary>
+        FitnessEvaluationMode EvaluationMode { get; }
+    }
+
+    /// <summary>
+    /// Represents the configuration of <see cref="FitnessEvaluator{TFitness, TConfiguration}"/>.
+    /// </summary>
+    public abstract class FitnessEvaluatorConfiguration<TConfiguration, TFitness> : ComponentConfiguration<TConfiguration, TFitness>, IFitnessEvaluatorConfiguration
+        where TConfiguration : FitnessEvaluatorConfiguration<TConfiguration, TFitness>
+        where TFitness : FitnessEvaluator<TFitness, TConfiguration>
     {
         private const FitnessEvaluationMode DefaultEvaluationMode = FitnessEvaluationMode.Maximize;
-        private FitnessEvaluationMode evaluationMode = FitnessEvaluatorConfiguration.DefaultEvaluationMode;
+        private FitnessEvaluationMode evaluationMode = DefaultEvaluationMode;
 
         /// <summary>
         /// Gets or sets the mode which specifies whether to treat higher or lower fitness values as being better.

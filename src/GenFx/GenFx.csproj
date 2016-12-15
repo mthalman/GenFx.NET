@@ -115,11 +115,13 @@
     <Compile Include="ComponentConfigurationSet.cs" />
     <Compile Include="ComponentException.cs" />
     <Compile Include="ComponentModel\ComponentHelper.cs" />
+    <Compile Include="ComponentModel\GeneticComponentExtensions.cs" />
     <Compile Include="ComponentModel\GeneticComponentWithAlgorithm.cs" />
     <Compile Include="FitnessEvaluationMode.cs" />
     <Compile Include="KeyValueMap.cs" />
     <Compile Include="ListExtensions.cs" />
     <Compile Include="Plugin.cs" />
+    <Compile Include="StatisticExtensions.cs" />
     <Compile Include="Validation\RequiredValidator.cs" />
     <Compile Include="Validation\RequiredValidatorAttribute.cs" />
     <Compile Include="Validation\CustomValidatorAttribute.cs" />
@@ -190,7 +192,7 @@
       <SubType>Designer</SubType>
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>FwkResources.Designer.cs</LastGenOutput>
-      <CustomToolNamespace>Microsoft.GenFx.Properties</CustomToolNamespace>
+      <CustomToolNamespace>GenFx.Properties</CustomToolNamespace>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
