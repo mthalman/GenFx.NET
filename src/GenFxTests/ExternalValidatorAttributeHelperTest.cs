@@ -3,6 +3,7 @@ using System.ComponentModel;
 using GenFx.ComponentModel;
 using GenFx.Validation;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using GenFxTests.Helpers;
 
 namespace GenFxTests
 {
@@ -16,50 +17,45 @@ namespace GenFxTests
         /// Tests that ValidateArgs method throws when a null target type is passed.
         /// </summary>
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void ExternalValidatorAttributeHelper_ValidateArgs_NullTargetType()
         {
-            ExternalValidatorAttributeHelper.ValidateArguments(null, "c");
+            AssertEx.Throws<ArgumentNullException>(() => ExternalValidatorAttributeHelper.ValidateArguments(null, "c"));
         }
 
         /// <summary>
         /// Tests that ValidateArgs method throws when a null target property is passed.
         /// </summary>
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
         public void ExternalValidatorAttributeHelper_ValidateArgs_NullTargetProperty()
         {
-            ExternalValidatorAttributeHelper.ValidateArguments(typeof(FakeComponentConfiguration), null);
+            AssertEx.Throws<ArgumentException>(() => ExternalValidatorAttributeHelper.ValidateArguments(typeof(FakeComponentConfiguration), null));
         }
 
         /// <summary>
         /// Tests that ValidateArgs method throws when an empty target property is passed.
         /// </summary>
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
         public void ExternalValidatorAttributeHelper_ValidateArgs_EmptyTargetProperty()
         {
-            ExternalValidatorAttributeHelper.ValidateArguments(typeof(FakeComponentConfiguration), String.Empty);
+            AssertEx.Throws<ArgumentException>(() => ExternalValidatorAttributeHelper.ValidateArguments(typeof(FakeComponentConfiguration), String.Empty));
         }
 
         /// <summary>
         /// Tests that ValidateArgs method throws when an invalid target type is passed.
         /// </summary>
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
         public void ExternalValidatorAttributeHelper_ValidateArgs_InvalidTargetType()
         {
-            ExternalValidatorAttributeHelper.ValidateArguments(typeof(InvalidComponentConfiguration), "Value");
+            AssertEx.Throws<ArgumentException>(() => ExternalValidatorAttributeHelper.ValidateArguments(typeof(InvalidComponentConfiguration), "Value"));
         }
 
         /// <summary>
         /// Tests that ValidateArgs method throws when an invalid target property is passed.
         /// </summary>
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
         public void ExternalValidatorAttributeHelper_ValidateArgs_InvalidTargetProperty()
         {
-            ExternalValidatorAttributeHelper.ValidateArguments(typeof(FakeComponentConfiguration), "boo");
+            AssertEx.Throws<ArgumentException>(() => ExternalValidatorAttributeHelper.ValidateArguments(typeof(FakeComponentConfiguration), "boo"));
         }
 
         private class FakeComponentConfiguration : ComponentConfiguration

@@ -91,6 +91,7 @@
     <Compile Include="IntegerInversionOperatorTest.cs" />
     <Compile Include="Mocks\MockPlugin.cs" />
     <Compile Include="StringExtensions.cs" />
+    <Compile Include="Helpers\AssertEx.cs" />
     <Compile Include="UniformIntegerMutationOperatorTest.cs" />
     <Compile Include="IntegerListEntityTest.cs" />
     <Compile Include="CrossoverOperatorTest.cs" />

@@ -1,5 +1,6 @@
 ﻿using GenFx;
 using GenFx.ComponentModel;
+using GenFxTests.Helpers;
 using GenFxTests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
@@ -37,21 +38,19 @@ namespace GenFxTests
         /// Tests that an exception is thrown when a required config class is missing.
         /// </summary>
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
         public void Entity_Ctor_MissingConfig()
         {
             GeneticAlgorithm algorithm = new MockGeneticAlgorithm();
-            GeneticEntity entity = new TestEntity(algorithm);
+            AssertEx.Throws<ArgumentException>(() => new TestEntity(algorithm));
         }
 
         /// <summary>
         /// Tests that an exception is thrown when a null algorithm is passed.
         /// </summary>
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void Entity_Ctor_NullAlgorithm()
         {
-            GeneticEntity entity = new MockEntity(null);
+            AssertEx.Throws<ArgumentNullException>(() => new MockEntity(null));
         }
 
         /// <summary>

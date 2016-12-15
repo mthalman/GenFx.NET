@@ -2,6 +2,7 @@
 using GenFx.ComponentLibrary.Algorithms;
 using GenFx.ComponentModel;
 using GenFx.Validation;
+using GenFxTests.Helpers;
 using GenFxTests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
@@ -133,7 +134,6 @@ namespace GenFxTests
         /// Tests that the Initialize method works correctly.
         /// </summary>
         [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
         public async Task GeneticAlgorithm_Initialize_NoFitnessEvaluator_Async()
         {
             ComponentConfigurationSet config = new ComponentConfigurationSet();
@@ -149,7 +149,7 @@ namespace GenFxTests
             config.SelectionOperator = new MockSelectionOperatorConfiguration();
             config.Statistics.Add(new MockStatisticConfiguration());
             config.Terminator = new MockTerminatorConfiguration();
-            await TestInitializeAsync(config);
+            await TestInitializeAsync(config, true);
         }
 
         /// <summary>
@@ -178,7 +178,6 @@ namespace GenFxTests
         /// Tests that the Initialize method works correctly.
         /// </summary>
         [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
         public async Task GeneticAlgorithm_Initialize_NoEntityType_Async()
         {
             ComponentConfigurationSet config = new ComponentConfigurationSet();
@@ -194,7 +193,7 @@ namespace GenFxTests
             config.SelectionOperator = new MockSelectionOperatorConfiguration();
             config.Statistics.Add(new MockStatisticConfiguration());
             config.Terminator = new MockTerminatorConfiguration();
-            await TestInitializeAsync(config);
+            await TestInitializeAsync(config, true);
         }
 
         /// <summary>
@@ -223,7 +222,6 @@ namespace GenFxTests
         /// Tests that the Initialize method works correctly.
         /// </summary>
         [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
         public async Task GeneticAlgorithm_Initialize_NoPopulationType_Async()
         {
             ComponentConfigurationSet config = new ComponentConfigurationSet();
@@ -239,14 +237,13 @@ namespace GenFxTests
             config.SelectionOperator = new MockSelectionOperatorConfiguration();
             config.Statistics.Add(new MockStatisticConfiguration());
             config.Terminator = new MockTerminatorConfiguration();
-            await TestInitializeAsync(config);
+            await TestInitializeAsync(config, true);
         }
 
         /// <summary>
         /// Tests that the Initialize method works correctly.
         /// </summary>
         [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
         public async Task GeneticAlgorithm_Initialize_NoSelectionOperatorType_Async()
         {
             ComponentConfigurationSet config = new ComponentConfigurationSet();
@@ -262,7 +259,7 @@ namespace GenFxTests
             //config.SelectionOperator = new MockSelectionOperatorConfiguration();
             config.Statistics.Add(new MockStatisticConfiguration());
             config.Terminator = new MockTerminatorConfiguration();
-            await TestInitializeAsync(config);
+            await TestInitializeAsync(config, true);
         }
 
         /// <summary>
@@ -313,7 +310,6 @@ namespace GenFxTests
         /// Tests that an exception is thrown when a required setting class is missing.
         /// </summary>
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
         public async Task GeneticAlgorithm_Initialize_ValidateRequiredSetting_Async()
         {
             GeneticAlgorithm algorithm = new RequiredSettingGeneticAlgorithm();
@@ -322,7 +318,7 @@ namespace GenFxTests
             algorithm.ConfigurationSet.GeneticAlgorithm = new MockGeneticAlgorithmConfiguration();
             algorithm.ConfigurationSet.Population = new PopulationConfiguration();
             algorithm.ConfigurationSet.Entity = new MockEntityConfiguration();
-            await algorithm.InitializeAsync();
+            AssertEx.ThrowsAsync<ArgumentException>(async () => await algorithm.InitializeAsync());
         }
 
         /// <summary>
@@ -355,26 +351,24 @@ namespace GenFxTests
         /// Tests that an exception is thrown when calling Run twice without initializing in between.
         /// </summary>
         [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
         public async Task GeneticAlgorithm_Run_Twice_NoInitialize_Async()
         {
             GeneticAlgorithm algorithm = GetAlgorithm();
 
             await algorithm.InitializeAsync();
             await algorithm.RunAsync();
-            await algorithm.RunAsync();
+            AssertEx.ThrowsAsync<InvalidOperationException>(async () => await algorithm.RunAsync());
         }
 
         /// <summary>
         /// Tests that an exception is thrown when calling Run without first calling Initialize.
         /// </summary>
         [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
         public async Task GeneticAlgorithm_Run_NoInitialize_Async()
         {
             GeneticAlgorithm algorithm = GetAlgorithm();
 
-            await algorithm.RunAsync();
+            AssertEx.ThrowsAsync<InvalidOperationException>(async () => await algorithm.RunAsync());
         }
 
         /// <summary>
@@ -424,7 +418,6 @@ namespace GenFxTests
         /// Tests that an exception is thrown when Step is called too many times with no initialize in between.
         /// </summary>
         [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
         public async Task GeneticAlgorithm_Step_Overbounds_NoInitialize_Async()
         {
             GeneticAlgorithm algorithm = GetAlgorithm();
@@ -439,19 +432,18 @@ namespace GenFxTests
             result = await algorithm.StepAsync();
             Assert.IsTrue(result, "Algorithm should be complete.");
 
-            await algorithm.StepAsync();
+            AssertEx.ThrowsAsync<InvalidOperationException>(async () => await algorithm.StepAsync());
         }
 
         /// <summary>
         /// Tests that an exception is thrown when calling Run without first calling Initialize.
         /// </summary>
         [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
         public async Task GeneticAlgorithm_Step_NoInitialize_Async()
         {
             GeneticAlgorithm algorithm = GetAlgorithm();
 
-            await algorithm.StepAsync();
+            AssertEx.ThrowsAsync<InvalidOperationException>(async () => await algorithm.StepAsync());
         }
 
         /// <summary>
@@ -610,7 +602,6 @@ namespace GenFxTests
         /// Tests that the ValidateConfiguration method works correctly.
         /// </summary>
         [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
         public void GeneticAlgorithm_ValidateConfiguration_NoGeneticAlgorithm()
         {
             ComponentConfigurationSet config = new ComponentConfigurationSet();
@@ -619,14 +610,13 @@ namespace GenFxTests
             config.FitnessEvaluator = new MockFitnessEvaluatorConfiguration();
             config.Population = new MockPopulationConfiguration();
             config.Entity = new MockEntityConfiguration();
-            TestValidateConfiguration(config);
+            TestValidateConfiguration(config, true);
         }
 
         /// <summary>
         /// Tests that the ValidateConfiguration method works correctly.
         /// </summary>
         [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
         public void GeneticAlgorithm_ValidateConfiguration_NoSelectionOperator()
         {
             ComponentConfigurationSet config = new ComponentConfigurationSet();
@@ -635,14 +625,13 @@ namespace GenFxTests
             config.FitnessEvaluator = new MockFitnessEvaluatorConfiguration();
             config.Population = new MockPopulationConfiguration();
             config.Entity = new MockEntityConfiguration();
-            TestValidateConfiguration(config);
+            TestValidateConfiguration(config, true);
         }
 
         /// <summary>
         /// Tests that the ValidateConfiguration method works correctly.
         /// </summary>
         [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
         public void GeneticAlgorithm_ValidateConfiguration_NoFitnessEvaluator()
         {
             ComponentConfigurationSet config = new ComponentConfigurationSet();
@@ -651,14 +640,13 @@ namespace GenFxTests
             //config.FitnessEvaluator = new MockFitnessEvaluatorConfiguration();
             config.Population = new MockPopulationConfiguration();
             config.Entity = new MockEntityConfiguration();
-            TestValidateConfiguration(config);
+            TestValidateConfiguration(config, true);
         }
 
         /// <summary>
         /// Tests that the ValidateConfiguration method works correctly.
         /// </summary>
         [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
         public void GeneticAlgorithm_ValidateConfiguration_NoPopulation()
         {
             ComponentConfigurationSet config = new ComponentConfigurationSet();
@@ -667,14 +655,13 @@ namespace GenFxTests
             config.FitnessEvaluator = new MockFitnessEvaluatorConfiguration();
             //config.Population = new MockPopulationConfiguration();
             config.Entity = new MockEntityConfiguration();
-            TestValidateConfiguration(config);
+            TestValidateConfiguration(config, true);
         }
 
         /// <summary>
         /// Tests that the ValidateConfiguration method works correctly.
         /// </summary>
         [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
         public void GeneticAlgorithm_ValidateConfiguration_NoEntity()
         {
             ComponentConfigurationSet config = new ComponentConfigurationSet();
@@ -683,59 +670,54 @@ namespace GenFxTests
             config.FitnessEvaluator = new MockFitnessEvaluatorConfiguration();
             config.Population = new MockPopulationConfiguration();
             //config.Entity = new MockEntityConfiguration();
-            TestValidateConfiguration(config);
+            TestValidateConfiguration(config, true);
         }
 
         /// <summary>
         /// Tests that the ValidateComponentConfiguration method throws an exception when a null argument is passed.
         /// </summary>
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void GeneticAlgorithm_ValidateComponentConfiguration_NullArg()
         {
             GeneticAlgorithm algorithm = new MockGeneticAlgorithm();
-            algorithm.ValidateComponentConfiguration(null);
+            AssertEx.Throws<ArgumentNullException>(() => algorithm.ValidateComponentConfiguration(null));
         }
 
         /// <summary>
         /// Tests that the ValidateComponentConfiguration method throws an exception when passed a component that is not configured on the algorithm.
         /// </summary>
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
         public void GeneticAlgorithm_ValidateComponentConfiguration_ConfigurationNotSet()
         {
             GeneticAlgorithm algorithm = new MockGeneticAlgorithm();
             algorithm.ConfigurationSet.MutationOperator = new MockMutationOperatorConfiguration();
             MutationOperator mutationOperator = new MockMutationOperator(algorithm);
             algorithm.ConfigurationSet.MutationOperator = null;
-            algorithm.ValidateComponentConfiguration(mutationOperator);
+            AssertEx.Throws<ArgumentException>(() => algorithm.ValidateComponentConfiguration(mutationOperator));
         }
 
         /// <summary>
         /// Tests that the ValidateComponentConfiguration method throws an exception when passed a component has a mismatch configuration configured on the algorithm.
         /// </summary>
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
         public void GeneticAlgorithm_ValidateComponentConfiguration_MismatchedConfiguration()
         {
             GeneticAlgorithm algorithm = new MockGeneticAlgorithm();
             algorithm.ConfigurationSet.MutationOperator = new MockMutationOperatorConfiguration();
             MutationOperator mutationOperator = new MockMutationOperator(algorithm);
             algorithm.ConfigurationSet.MutationOperator = new MockMutationOperator2Configuration();
-            algorithm.ValidateComponentConfiguration(mutationOperator);
+            AssertEx.Throws<ArgumentException>(() => algorithm.ValidateComponentConfiguration(mutationOperator));
         }
 
         /// <summary>
         /// Tests that the ValidateComponentConfiguration method throws an exception when a component's configuration property is determined to be invalid.
         /// </summary>
         [TestMethod]
-        [ExpectedException(typeof(ValidationException))]
         public void GeneticAlgorithm_ValidateComponentConfiguration_InvalidProperty()
         {
             GeneticAlgorithm algorithm = new MockGeneticAlgorithm();
             algorithm.ConfigurationSet.MutationOperator = new FakeValidationMutationOperatorConfiguration();
-            MutationOperator mutationOperator = new FakeValidationMutationOperator(algorithm);
-            algorithm.ValidateComponentConfiguration(mutationOperator);
+            AssertEx.Throws<ValidationException>(() => new FakeValidationMutationOperator(algorithm));
         }
 
         /// <summary>
@@ -756,7 +738,6 @@ namespace GenFxTests
         /// Tests that an exception is throw when an required configurable type has not been set on the algorithm.
         /// </summary>
         [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
         public void GeneticAlgorithm_ValidateRequiredComponents_InvalidCrossover()
         {
             GeneticAlgorithm algorithm = new MockGeneticAlgorithm();
@@ -764,7 +745,7 @@ namespace GenFxTests
             config.CrossoverRate = 1;
             algorithm.ConfigurationSet.CrossoverOperator = config;
             Type testType = typeof(CrossoverDependentClass2);
-            algorithm.ValidateRequiredComponents(testType);
+            AssertEx.Throws<InvalidOperationException>(() => algorithm.ValidateRequiredComponents(testType));
         }
 
         /// <summary>
@@ -785,7 +766,6 @@ namespace GenFxTests
         /// Tests that an exception is throw when an required configurable type has not been set on the algorithm.
         /// </summary>
         [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
         public void GeneticAlgorithm_ValidateRequiredComponents_InvalidElitism()
         {
             GeneticAlgorithm algorithm = new MockGeneticAlgorithm();
@@ -794,7 +774,7 @@ namespace GenFxTests
             config.ElitistRatio = 1;
             algorithm.ConfigurationSet.ElitismStrategy = config;
             Type testType = typeof(ElitismDependentClass2);
-            algorithm.ValidateRequiredComponents(testType);
+            AssertEx.Throws<InvalidOperationException>(() => algorithm.ValidateRequiredComponents(testType));
         }
 
         /// <summary>
@@ -814,14 +794,13 @@ namespace GenFxTests
         /// Tests that an exception is throw when an required configurable type has not been set on the algorithm.
         /// </summary>
         [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
         public void GeneticAlgorithm_ValidateRequiredComponents_InvalidFitnessEvaluator()
         {
             GeneticAlgorithm algorithm = new MockGeneticAlgorithm();
             MockFitnessEvaluatorConfiguration config = new MockFitnessEvaluatorConfiguration();
             algorithm.ConfigurationSet.FitnessEvaluator = config;
             Type testType = typeof(FitnessEvaluatorDependentClass2);
-            algorithm.ValidateRequiredComponents(testType);
+            AssertEx.Throws<InvalidOperationException>(() => algorithm.ValidateRequiredComponents(testType));
         }
 
         /// <summary>
@@ -840,13 +819,12 @@ namespace GenFxTests
         /// Tests that an exception is throw when an required configurable type has not been set on the algorithm.
         /// </summary>
         [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
         public void GeneticAlgorithm_ValidateRequiredComponents_InvalidFitnessScalingStrategy()
         {
             GeneticAlgorithm algorithm = new MockGeneticAlgorithm();
             algorithm.ConfigurationSet.FitnessScalingStrategy = new MockFitnessScalingStrategyConfiguration();
             Type testType = typeof(FitnessScalingStrategyDependentClass2);
-            algorithm.ValidateRequiredComponents(testType);
+            AssertEx.Throws<InvalidOperationException>(() => algorithm.ValidateRequiredComponents(testType));
         }
 
         /// <summary>
@@ -865,13 +843,12 @@ namespace GenFxTests
         /// Tests that an exception is throw when an required configurable type has not been set on the algorithm.
         /// </summary>
         [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
         public void GeneticAlgorithm_ValidateRequiredComponents_InvalidEntity()
         {
             GeneticAlgorithm algorithm = new MockGeneticAlgorithm();
             algorithm.ConfigurationSet.Entity = new MockEntityConfiguration();
             Type testType = typeof(EntityDependentClass2);
-            algorithm.ValidateRequiredComponents(testType);
+            AssertEx.Throws<InvalidOperationException>(() => algorithm.ValidateRequiredComponents(testType));
         }
 
         /// <summary>
@@ -892,7 +869,6 @@ namespace GenFxTests
         /// Tests that an exception is throw when an required configurable type has not been set on the algorithm.
         /// </summary>
         [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
         public void GeneticAlgorithm_ValidateRequiredComponents_InvalidMutationOperator()
         {
             GeneticAlgorithm algorithm = new MockGeneticAlgorithm();
@@ -900,7 +876,7 @@ namespace GenFxTests
             config.MutationRate = 1;
             algorithm.ConfigurationSet.MutationOperator = config;
             Type testType = typeof(MutationOperatorDependentClass2);
-            algorithm.ValidateRequiredComponents(testType);
+            AssertEx.Throws<InvalidOperationException>(() => algorithm.ValidateRequiredComponents(testType));
         }
 
         /// <summary>
@@ -919,13 +895,12 @@ namespace GenFxTests
         /// Tests that an exception is throw when an required configurable type has not been set on the algorithm.
         /// </summary>
         [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
         public void GeneticAlgorithm_ValidateRequiredComponents_InvalidPopulation()
         {
             GeneticAlgorithm algorithm = new MockGeneticAlgorithm();
             algorithm.ConfigurationSet.Population = new MockPopulationConfiguration();
             Type testType = typeof(PopulationDependentClass2);
-            algorithm.ValidateRequiredComponents(testType);
+            AssertEx.Throws<InvalidOperationException>(() => algorithm.ValidateRequiredComponents(testType));
         }
 
         /// <summary>
@@ -946,7 +921,6 @@ namespace GenFxTests
         /// Tests that an exception is throw when an required configurable type has not been set on the algorithm.
         /// </summary>
         [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
         public void GeneticAlgorithm_ValidateRequiredComponents_InvalidSelectionOperator()
         {
             GeneticAlgorithm algorithm = new MockGeneticAlgorithm();
@@ -954,7 +928,7 @@ namespace GenFxTests
             config.SelectionBasedOnFitnessType = FitnessType.Scaled;
             algorithm.ConfigurationSet.SelectionOperator = config;
             Type testType = typeof(SelectionOperatorDependentClass2);
-            algorithm.ValidateRequiredComponents(testType);
+            AssertEx.Throws<InvalidOperationException>(() => algorithm.ValidateRequiredComponents(testType));
         }
 
         /// <summary>
@@ -974,13 +948,12 @@ namespace GenFxTests
         /// Tests that an exception is throw when an required configurable type has not been set on the algorithm.
         /// </summary>
         [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
         public void GeneticAlgorithm_ValidateRequiredComponents_InvalidStatisticType()
         {
             GeneticAlgorithm algorithm = new MockGeneticAlgorithm();
             algorithm.ConfigurationSet.Statistics.Add(new MockStatisticConfiguration());
             Type testType = typeof(StatisticDependentClass2);
-            algorithm.ValidateRequiredComponents(testType);
+            AssertEx.Throws<InvalidOperationException>(() => algorithm.ValidateRequiredComponents(testType));
         }
 
         /// <summary>
@@ -999,13 +972,12 @@ namespace GenFxTests
         /// Tests that an exception is throw when an required configurable type has not been set on the algorithm.
         /// </summary>
         [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
         public void GeneticAlgorithm_ValidateRequiredComponents_InvalidTerminator()
         {
             GeneticAlgorithm algorithm = new MockGeneticAlgorithm();
             algorithm.ConfigurationSet.Terminator = new MockTerminatorConfiguration();
             Type testType = typeof(TerminatorDependentClass2);
-            algorithm.ValidateRequiredComponents(testType);
+            AssertEx.Throws<InvalidOperationException>(() => algorithm.ValidateRequiredComponents(testType));
         }
 
         /// <summary>
@@ -1050,12 +1022,11 @@ namespace GenFxTests
         /// an invalid value.
         ///</summary>
         [TestMethod()]
-        [ExpectedException(typeof(ValidationException))]
         public void EnvironmentSizeTest_Invalid()
         {
             SimpleGeneticAlgorithmConfiguration target = new SimpleGeneticAlgorithmConfiguration();
             int val = 0;
-            target.EnvironmentSize = val;
+            AssertEx.Throws<ValidationException>(() => target.EnvironmentSize = val);
         }
 
         /// <summary>
@@ -1074,15 +1045,23 @@ namespace GenFxTests
             Assert.AreEqual(val, target.StatisticsEnabled, "StatisticsEnabled was not set correctly.");
         }
 
-        private static void TestValidateConfiguration(ComponentConfigurationSet config)
+        private static void TestValidateConfiguration(ComponentConfigurationSet config, bool exceptionExpectedOnValidation = false)
         {
             GeneticAlgorithm algorithm = new MockGeneticAlgorithm();
             PrivateObject accessor = new PrivateObject(algorithm, new PrivateType(typeof(GeneticAlgorithm)));
             accessor.SetField("config", config);
-            accessor.Invoke("ValidateConfiguration");
+
+            if (exceptionExpectedOnValidation)
+            {
+                AssertEx.Throws<InvalidOperationException>(() => accessor.Invoke("ValidateConfiguration"));
+            }
+            else
+            {
+                accessor.Invoke("ValidateConfiguration");
+            }
         }
 
-        private static async Task<GeneticAlgorithm> TestInitializeAsync(ComponentConfigurationSet config)
+        private static async Task<GeneticAlgorithm> TestInitializeAsync(ComponentConfigurationSet config, bool exceptionExpectedOnInitialize = false)
         {
             MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm();
             bool eventCalled = false;
@@ -1112,7 +1091,16 @@ namespace GenFxTests
             if (config.Terminator != null)
                 algorithm.ConfigurationSet.Terminator = config.Terminator;
 
-            await algorithm.InitializeAsync();
+            if (exceptionExpectedOnInitialize)
+            {
+                AssertEx.ThrowsAsync<InvalidOperationException>(async () => await algorithm.InitializeAsync());
+                return algorithm;
+            }
+            else
+            {
+                await algorithm.InitializeAsync();
+            }
+            
 
             Assert.AreEqual(0, algorithm.CurrentGeneration, "Generation should be initialized.");
             if (config.CrossoverOperator != null)

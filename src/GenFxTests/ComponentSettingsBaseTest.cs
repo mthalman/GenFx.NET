@@ -6,6 +6,7 @@ using GenFx;
 using GenFx.ComponentModel;
 using GenFx.Validation;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using GenFxTests.Helpers;
 
 namespace GenFxTests
 {
@@ -60,11 +61,10 @@ namespace GenFxTests
         /// Tests that the ComponentType property throws when the component configuration does not have a matching component.
         /// </summary>
         [TestMethod]
-        [ExpectedException(typeof(ComponentException))]
         public void ComponentConfiguration_ComponentType_NonMatchingComponent()
         {
             ComponentConfiguration component = new FakeComponentConfiguration2();
-            Type type = component.ComponentType;
+            AssertEx.Throws<ComponentException>(() => { Type type = component.ComponentType; });
         }
         
         /// <summary>
@@ -87,40 +87,35 @@ namespace GenFxTests
         /// Tests that the ValidateProperty method throws when a config is invalid.
         /// </summary>
         [TestMethod]
-        [ExpectedException(typeof(ValidationException))]
         public void ComponentConfiguration_ValidateProperty_InvalidProperty()
         {
             FakeComponentConfiguration config = new FakeComponentConfiguration();
             int value = 3;
             isValidReturnValue = false;
             PrivateObject accessor = new PrivateObject(config);
-            accessor.Invoke("ValidateProperty", value, "Value");
-            Assert.IsTrue(isValidCalled, "IsValid should be called.");
-            Assert.AreEqual(value, isValidValue, "Incorrect value passed to IsValid.");
+            AssertEx.Throws<ValidationException>(() => accessor.Invoke("ValidateProperty", value, "Value"));
         }
 
         /// <summary>
         /// Tests that the ValidateProperty method throws when a null property name is passed.
         /// </summary>
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
         public void ComponentConfiguration_ValidateProperty_NullPropertyName()
         {
             FakeComponentConfiguration config = new FakeComponentConfiguration();
             PrivateObject accessor = new PrivateObject(config);
-            accessor.Invoke("ValidateProperty", 3, null);
+            AssertEx.Throws<ArgumentException>(() => accessor.Invoke("ValidateProperty", 3, null));
         }
 
         /// <summary>
         /// Tests that the ValidateProperty method throws when the property name that is passed doesn't exist.
         /// </summary>
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
         public void ComponentConfiguration_ValidateProperty_PropertyNameDoesNotExist()
         {
             FakeComponentConfiguration config = new FakeComponentConfiguration();
             PrivateObject accessor = new PrivateObject(config);
-            accessor.Invoke("ValidateProperty", 5, "test");
+            AssertEx.Throws<ArgumentException>(() => accessor.Invoke("ValidateProperty", 5, "test"));
         }
 
         /// <summary>

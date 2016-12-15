@@ -1,6 +1,7 @@
 ﻿using GenFx;
 using GenFx.ComponentLibrary.Algorithms;
 using GenFx.ComponentModel;
+using GenFxTests.Helpers;
 using GenFxTests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
@@ -34,22 +35,20 @@ namespace GenFxTests
         /// Tests that an exception is thrown when an invalid value is used for the PopulationReplacement setting.
         /// </summary>
         [TestMethod]
-        [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void SteadyStateGeneticAlgorithm_Initialize_InvalidPopulationReplacement()
         {
-            SteadyStateGeneticAlgorithmConfiguration config = new SteadyStateGeneticAlgorithmConfiguration();
-            config.PopulationReplacementValue = new PopulationReplacementValue(-1, ReplacementValueKind.FixedCount);
+            AssertEx.Throws<ArgumentOutOfRangeException>(() => new PopulationReplacementValue(-1, ReplacementValueKind.FixedCount));
         }
 
         /// <summary>
         /// Tests that an exception is thrown when an invalid value is used for the PopulationReplacement setting.
         /// </summary>
         [TestMethod]
-        [ExpectedException(typeof(ValidationException))]
         public void SteadyStateGeneticAlgorithm_Initialize_InvalidPopulationReplacement2()
         {
             SteadyStateGeneticAlgorithmConfiguration config = new SteadyStateGeneticAlgorithmConfiguration();
-            config.PopulationReplacementValue = new PopulationReplacementValue(101, ReplacementValueKind.Percentage);
+            PopulationReplacementValue val = new PopulationReplacementValue(101, ReplacementValueKind.Percentage);
+            AssertEx.Throws<ValidationException>(() => config.PopulationReplacementValue = val);
         }
 
         /// <summary>
@@ -99,10 +98,9 @@ namespace GenFxTests
         /// Tests that an exception is thrown when a negative value is passed to the PopulationReplacementValue.
         /// </summary>
         [TestMethod]
-        [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void PopulationReplacementValue_InvalidValue()
         {
-            PopulationReplacementValue val = new PopulationReplacementValue(-1, ReplacementValueKind.FixedCount);
+            AssertEx.Throws<ArgumentOutOfRangeException>(() => new PopulationReplacementValue(-1, ReplacementValueKind.FixedCount));
         }
 
         private static Population GetPopulation(GeneticAlgorithm algorithm)

@@ -1,5 +1,6 @@
 ﻿using GenFx;
 using GenFx.ComponentLibrary.BinaryStrings;
+using GenFxTests.Helpers;
 using GenFxTests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
@@ -43,21 +44,19 @@ namespace GenFxTests
         /// Tests that an exception is thrown when required settings are missing.
         /// </summary>
         [TestMethod()]
-        [ExpectedException(typeof(ArgumentException))]
         public void FixedLengthBinaryStringEntity_Ctor_MissingSetting()
         {
-            FixedLengthBinaryStringEntity entity = new FixedLengthBinaryStringEntity(new MockGeneticAlgorithm());
+            AssertEx.Throws<ArgumentException>(() => new FixedLengthBinaryStringEntity(new MockGeneticAlgorithm()));
         }
 
         /// <summary>
         /// Tests that an exception is thrown when an invalid binary length is used.
         /// </summary>
         [TestMethod()]
-        [ExpectedException(typeof(ValidationException))]
         public void FixedLengthBinaryStringEntity_Ctor_InvalidLength()
         {
-            GeneticAlgorithm algorithm = GetAlgorithm(0);
-            FixedLengthBinaryStringEntity entity = new FixedLengthBinaryStringEntity(algorithm);
+            FixedLengthBinaryStringEntityConfiguration config = new FixedLengthBinaryStringEntityConfiguration();
+            AssertEx.Throws<ValidationException>(() => config.Length = 0);
         }
 
         private static void CompareGeneticEntities(FixedLengthBinaryStringEntity expectedEntity, FixedLengthBinaryStringEntity actualEntity)

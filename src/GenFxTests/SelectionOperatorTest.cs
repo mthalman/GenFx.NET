@@ -1,5 +1,6 @@
 ﻿using GenFx;
 using GenFx.ComponentModel;
+using GenFxTests.Helpers;
 using GenFxTests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
@@ -29,20 +30,18 @@ namespace GenFxTests
         /// Tests that an exception is thrown when a null algorithm is passed.
         /// </summary>
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void SelectionOperator_Ctor_NullAlgorithm()
         {
-            SelectionOperator op = new MockSelectionOperator(null);
+            AssertEx.Throws<ArgumentNullException>(() => new MockSelectionOperator(null));
         }
 
         /// <summary>
         /// Tests that an exception is thrown when a required config is missing.
         /// </summary>
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
         public void SelectionOperator_Ctor_MissingConfig()
         {
-            SelectionOperator op = new MockSelectionOperator(new MockGeneticAlgorithm());
+            AssertEx.Throws<ArgumentException>(() => new MockSelectionOperator(new MockGeneticAlgorithm()));
         }
 
         /// <summary>
@@ -67,25 +66,23 @@ namespace GenFxTests
         /// Tests that an exception is thrown when an empty population is passed.
         /// </summary>
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
         public void SelectionOperator_Select_EmptyPopulation()
         {
             GeneticAlgorithm algorithm = GetAlgorithm();
             MockSelectionOperator op = new MockSelectionOperator(algorithm);
             Population population = new Population(algorithm);
-            GeneticEntity selectedEntity = op.Select(population);
+            AssertEx.Throws<ArgumentException>(() => op.Select(population));
         }
 
         /// <summary>
         /// Tests that an exception is thrown when a null population is passed.
         /// </summary>
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void SelectionOperator_Select_NullPopulation()
         {
             GeneticAlgorithm algorithm = GetAlgorithm();
             MockSelectionOperator op = new MockSelectionOperator(algorithm);
-            GeneticEntity selectedEntity = op.Select(null);
+            AssertEx.Throws<ArgumentNullException>(() => op.Select(null));
         }
 
         private GeneticAlgorithm GetAlgorithm()

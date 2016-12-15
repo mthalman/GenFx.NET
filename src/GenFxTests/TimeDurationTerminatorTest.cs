@@ -1,6 +1,7 @@
 using GenFx;
 using GenFx.ComponentLibrary.Terminators;
 using GenFx.ComponentModel;
+using GenFxTests.Helpers;
 using GenFxTests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
@@ -32,10 +33,9 @@ namespace GenFxTests
         /// Tests that an exception is thrown when a required config is missing.
         /// </summary>
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
         public void TimeDurationTerminator_Ctor_MissingConfig()
         {
-            TimeDurationTerminator terminator = new TimeDurationTerminator(new MockGeneticAlgorithm());
+            AssertEx.Throws<ArgumentException>(() => new TimeDurationTerminator(new MockGeneticAlgorithm()));
         }
 
         /// <summary>

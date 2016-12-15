@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using GenFx.ComponentLibrary.Trees;
 using GenFx;
 using GenFxTests.Mocks;
+using GenFxTests.Helpers;
 
 namespace GenFxTests
 {
@@ -38,13 +39,12 @@ namespace GenFxTests
         /// Tests that an exception is thrown when a null entity is passed.
         /// </summary>
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void TreeEntity_CopyToNullEntity()
         {
             GeneticAlgorithm algorithm = new MockGeneticAlgorithm();
             algorithm.ConfigurationSet.Entity = new TestTreeEntityConfiguration();
             TreeEntity entity = new TestTreeEntity(algorithm);
-            entity.CopyTo(null);
+            AssertEx.Throws<ArgumentNullException>(() => entity.CopyTo(null));
         }
 
         /// <summary>

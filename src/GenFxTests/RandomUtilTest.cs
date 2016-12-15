@@ -21,6 +21,13 @@ namespace GenFxTests
         {
             int num1 = RandomHelper.Instance.GetRandomValue(100);
             int num2 = RandomHelper.Instance.GetRandomValue(100);
+
+            if (num1 == num2)
+            {
+                // Try again for good measure.
+                num2 = RandomHelper.Instance.GetRandomValue(100);
+            }
+
             Assert.AreNotEqual(num1, num2, "Numbers should probably be different.");
         }
 

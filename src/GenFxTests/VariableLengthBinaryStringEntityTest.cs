@@ -1,6 +1,7 @@
 using GenFx;
 using GenFx.ComponentLibrary.BinaryStrings;
 using GenFx.ComponentModel;
+using GenFxTests.Helpers;
 using GenFxTests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
@@ -56,43 +57,40 @@ namespace GenFxTests
         /// Tests that an exception is thrown when a required config class is missing.
         /// </summary>
         [TestMethod()]
-        [ExpectedException(typeof(ArgumentException))]
         public void VariableLengthBinaryStringEntity_Ctor_MissingConfig()
         {
-            VariableLengthBinaryStringEntity entity = new VariableLengthBinaryStringEntity(new MockGeneticAlgorithm());
+            AssertEx.Throws<ArgumentException>(() => new VariableLengthBinaryStringEntity(new MockGeneticAlgorithm()));
         }
 
         /// <summary>
         /// Tests that an exception is thrown when min and max are not valid.
         /// </summary>
         [TestMethod()]
-        [ExpectedException(typeof(ValidationException))]
         public void VariableLengthBinaryStringEntity_Ctor_MismatchedMinMax()
         {
             GeneticAlgorithm algorithm = GetAlgorithm(10, 5);
-            VariableLengthBinaryStringEntity entity = new VariableLengthBinaryStringEntity(algorithm);
+            AssertEx.Throws<ValidationException>(() => new VariableLengthBinaryStringEntity(algorithm));
         }
 
         /// <summary>
         /// Tests that an exception is thrown when an invalid binary length is used.
         /// </summary>
         [TestMethod()]
-        [ExpectedException(typeof(ValidationException))]
         public void VariableLengthBinaryStringEntity_Ctor_InvalidLength1()
         {
-            GeneticAlgorithm algorithm = GetAlgorithm(0, 10);
-            VariableLengthBinaryStringEntity entity = new VariableLengthBinaryStringEntity(algorithm);
+            VariableLengthBinaryStringEntityConfiguration config = new VariableLengthBinaryStringEntityConfiguration();
+            AssertEx.Throws<ValidationException>(() => config.MinimumStartingLength = 0);
         }
 
         /// <summary>
         /// Tests that an exception is thrown when an invalid binary length is used.
         /// </summary>
         [TestMethod()]
-        [ExpectedException(typeof(ValidationException))]
         public void VariableLengthBinaryStringEntity_Ctor_InvalidLength2()
         {
-            GeneticAlgorithm algorithm = GetAlgorithm(10, 0);
-            VariableLengthBinaryStringEntity entity = new VariableLengthBinaryStringEntity(algorithm);
+            VariableLengthBinaryStringEntityConfiguration config = new VariableLengthBinaryStringEntityConfiguration();
+            config.MinimumStartingLength = 10;
+            AssertEx.Throws<ValidationException>(() => config.MaximumStartingLength = 0);
         }
 
         /// <summary>

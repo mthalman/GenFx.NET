@@ -1,5 +1,6 @@
 ﻿using GenFx;
 using GenFx.ComponentLibrary.Statistics;
+using GenFxTests.Helpers;
 using GenFxTests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
@@ -40,7 +41,6 @@ namespace GenFxTests
         /// Tests that an exception is throw when a null population is passed.
         /// </summary>
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void StdDevStatistic_GetResultValue_NullPopulation()
         {
             GeneticAlgorithm algorithm = new MockGeneticAlgorithm();
@@ -48,8 +48,7 @@ namespace GenFxTests
             algorithm.ConfigurationSet.Statistics.Add(new StandardDeviationFitnessStatisticConfiguration());
             algorithm.ConfigurationSet.Population = new PopulationConfiguration();
             StandardDeviationFitnessStatistic stat = new StandardDeviationFitnessStatistic(algorithm);
-            stat.GetResultValue(null);
+            AssertEx.Throws<ArgumentNullException>(() => stat.GetResultValue(null));
         }
-
     }
 }

@@ -3,6 +3,7 @@ using System.ComponentModel;
 using GenFx.ComponentModel;
 using GenFx.Validation;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using GenFxTests.Helpers;
 
 namespace GenFxTests
 {
@@ -78,10 +79,9 @@ namespace GenFxTests
         /// </summary>
         /// <remarks>The rest of the validation tests are handled by <see cref="ExternalValidatorAttributeHelperTest"/>.</remarks>
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void IntegerExternalValidatorAttribute_Ctor_NullArg()
         {
-            IntegerExternalValidatorAttribute attrib = new IntegerExternalValidatorAttribute(null, "b");
+            AssertEx.Throws<ArgumentNullException>(() => new IntegerExternalValidatorAttribute(null, "b"));
         }
 
         /// <summary>
@@ -140,10 +140,9 @@ namespace GenFxTests
         /// </summary>
         /// <remarks>The rest of the validation tests are handled by <see cref="ExternalValidatorAttributeHelperTest"/>.</remarks>
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void DoubleExternalValidatorAttribute_Ctor_NullArg()
         {
-            DoubleExternalValidatorAttribute attrib = new DoubleExternalValidatorAttribute(null, "b");
+            AssertEx.Throws<ArgumentNullException>(() => new DoubleExternalValidatorAttribute(null, "b"));
         }
 
         /// <summary>
@@ -179,10 +178,9 @@ namespace GenFxTests
         /// </summary>
         /// <remarks>The rest of the validation tests are handled by <see cref="ExternalValidatorAttributeHelperTest"/>.</remarks>
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void CustomExternalValidatorAttribute_Ctor_NullArg()
         {
-            CustomExternalValidatorAttribute attrib = new CustomExternalValidatorAttribute(typeof(TestConfigurationValidator), null, "b");
+            AssertEx.Throws<ArgumentNullException>(() => new CustomExternalValidatorAttribute(typeof(TestConfigurationValidator), null, "b"));
         }
 
         private class TestConfigurationValidatorAttribute : ConfigurationValidatorAttribute

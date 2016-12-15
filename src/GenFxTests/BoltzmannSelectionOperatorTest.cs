@@ -4,6 +4,7 @@ using GenFx.ComponentLibrary.SelectionOperators;
 using GenFx.ComponentModel;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using GenFxTests.Mocks;
+using GenFxTests.Helpers;
 
 namespace GenFxTests
 {
@@ -31,10 +32,9 @@ namespace GenFxTests
         /// Tests that the constructor throws an exception when the genetic algorithm is missing a setting.
         /// </summary>
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
         public void BoltzmannSelectionOperator_Ctor_MissingSetting()
         {
-            FakeBoltzmannSelectionOperator op = new FakeBoltzmannSelectionOperator(new MockGeneticAlgorithm());
+            AssertEx.Throws<ArgumentException>(() => new FakeBoltzmannSelectionOperator(new MockGeneticAlgorithm()));
         }
 
         /// <summary>
@@ -79,7 +79,6 @@ namespace GenFxTests
         /// Tests that an exception is thrown when the calculation has an overflow.
         /// </summary>
         [TestMethod]
-        [ExpectedException(typeof(OverflowException))]
         public void BoltzmannSelectionOperator_Select_Overflow()
         {
             double initialTemp = .0000001;
@@ -90,7 +89,7 @@ namespace GenFxTests
             PrivateObject accessor = new PrivateObject(entity, new PrivateType(typeof(GeneticEntity)));
             accessor.SetField("scaledFitnessValue", 1);
             population.Entities.Add(entity);
-            op.Select(population);
+            AssertEx.Throws<OverflowException>(() => op.Select(population));
         }
 
         private static MockGeneticAlgorithm GetMockAlgorithm(double initialTemp)

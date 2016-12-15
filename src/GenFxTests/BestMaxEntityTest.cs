@@ -1,5 +1,6 @@
 ﻿using GenFx;
 using GenFx.ComponentLibrary.Statistics;
+using GenFxTests.Helpers;
 using GenFxTests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
@@ -19,7 +20,6 @@ namespace GenFxTests
         /// Tests that an exception will be thrown when a null population is passed to BestMaxEntity.GetResultValue.
         /// </summary>
         [TestMethod()]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void GetResultValue_NullPopulation()
         {
             GeneticAlgorithm algorithm = new MockGeneticAlgorithm();
@@ -27,7 +27,7 @@ namespace GenFxTests
             algorithm.ConfigurationSet.Statistics.Add(new BestMaximumFitnessEntityStatisticConfiguration());
             BestMaximumFitnessEntityStatistic target = new BestMaximumFitnessEntityStatistic(algorithm);
 
-            target.GetResultValue(null);
+            AssertEx.Throws<ArgumentNullException>(() => target.GetResultValue(null));
         }
 
         /// <summary>

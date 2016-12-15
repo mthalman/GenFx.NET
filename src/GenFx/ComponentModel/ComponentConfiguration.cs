@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Reflection;
 using GenFx.Properties;
 using GenFx.Validation;
+using System.Linq;
 using System.Runtime.CompilerServices;
 
 namespace GenFx.ComponentModel
@@ -105,7 +106,7 @@ namespace GenFx.ComponentModel
         /// </summary>
         private void LoadComponentType()
         {
-            ComponentAttribute[] attribs = (ComponentAttribute[])this.GetType().GetCustomAttributes(typeof(ComponentAttribute), false);
+            ComponentAttribute[] attribs = TypeDescriptor.GetAttributes(this).OfType<ComponentAttribute>().ToArray();
             if (attribs.Length == 0)
             {
                 throw new ComponentException(StringUtil.GetFormattedString(

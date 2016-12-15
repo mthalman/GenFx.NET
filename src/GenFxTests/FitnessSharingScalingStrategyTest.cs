@@ -1,6 +1,7 @@
 ﻿using GenFx;
 using GenFx.ComponentLibrary.Scaling;
 using GenFx.ComponentModel;
+using GenFxTests.Helpers;
 using GenFxTests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
@@ -33,20 +34,23 @@ namespace GenFxTests
         /// Tests that an exception is thrown when required settings are missing.
         /// </summary>
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
         public void FitnessSharingScalingStrategy_Ctor_MissingSetting()
         {
-            FitnessSharingScalingStrategy strategy = new FakeFitnessSharingScalingStrategy(new MockGeneticAlgorithm());
+            AssertEx.Throws<ArgumentException>(() => new FakeFitnessSharingScalingStrategy(new MockGeneticAlgorithm()));
         }
 
         // <summary>
         /// Tests that an exception is thrown when an invalid value is used for the cutoff setting.
         /// </summary>
         [TestMethod]
-        [ExpectedException(typeof(ValidationException))]
         public void FitnessSharingScalingStrategy_Ctor_InvalidCutoffSetting()
         {
-            FitnessSharingScalingStrategy strategy = new FakeFitnessSharingScalingStrategy(GetAlgorithm(3, 0));
+            GeneticAlgorithm algorithm = new MockGeneticAlgorithm();
+            algorithm.ConfigurationSet.Entity = new MockEntityConfiguration();
+            algorithm.ConfigurationSet.Population = new PopulationConfiguration();
+            FakeFitnessSharingScalingStrategyConfiguration config = new FakeFitnessSharingScalingStrategyConfiguration();
+            config.ScalingCurvature = 3;
+            AssertEx.Throws<ValidationException>(() => config.ScalingDistanceCutoff = 0);
         }
 
         /// <summary>

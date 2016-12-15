@@ -1,6 +1,7 @@
 ﻿using GenFx;
 using GenFx.ComponentLibrary.Scaling;
 using GenFx.ComponentModel;
+using GenFxTests.Helpers;
 using GenFxTests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
@@ -33,20 +34,18 @@ namespace GenFxTests
         /// Tests that an exception is thrown when a null algorithm is passed.
         /// </summary>
         [TestMethod()]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void ExponentialScalingStrategy_Ctor_NullAlgorithm()
         {
-            ExponentialScalingStrategy strategy = new ExponentialScalingStrategy(null);
+            AssertEx.Throws<ArgumentNullException>(() => new ExponentialScalingStrategy(null));
         }
 
         /// <summary>
         /// Tests that an exception is thrown when a required setting is missing.
         /// </summary>
         [TestMethod()]
-        [ExpectedException(typeof(ArgumentException))]
         public void ExponentialScalingStrategy_Ctor_MissingSetting()
         {
-            ExponentialScalingStrategy strategy = new ExponentialScalingStrategy(new MockGeneticAlgorithm());
+            AssertEx.Throws<ArgumentException>(() => new ExponentialScalingStrategy(new MockGeneticAlgorithm()));
         }
 
         /// <summary>

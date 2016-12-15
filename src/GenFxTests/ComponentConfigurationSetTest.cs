@@ -1,5 +1,6 @@
 ﻿using GenFx;
 using GenFx.Properties;
+using GenFxTests.Helpers;
 using GenFxTests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
@@ -88,12 +89,10 @@ namespace GenFxTests
         /// a null value.
         ///</summary>
         [TestMethod()]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void FitnessEvaluatorTypeTest_InvalidNull()
         {
             ComponentConfigurationSet target = new ComponentConfigurationSet();
-            MockFitnessEvaluatorConfiguration val = null;
-            target.FitnessEvaluator = val;
+            AssertEx.Throws<ArgumentNullException>(() => target.FitnessEvaluator = null);
         }
 
         /// <summary>
@@ -138,12 +137,10 @@ namespace GenFxTests
         /// a null value.
         ///</summary>
         [TestMethod()]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void EntityTest_InvalidNull()
         {
             ComponentConfigurationSet target = new ComponentConfigurationSet();
-            MockEntityConfiguration val = null;
-            target.Entity = val;
+            AssertEx.Throws<ArgumentNullException>(() => target.Entity = null);
         }
 
         /// <summary>
@@ -188,13 +185,10 @@ namespace GenFxTests
         /// a null value.
         ///</summary>
         [TestMethod()]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void PopulationTest_InvalidNull()
         {
             ComponentConfigurationSet target = new ComponentConfigurationSet();
-            MockPopulationConfiguration val = null;
-            target.Population = val;
-            Assert.AreSame(val, target.Population, "Population was not set correctly.");
+            AssertEx.Throws<ArgumentNullException>(() => target.Population = null);
         }
 
         /// <summary>
@@ -214,13 +208,10 @@ namespace GenFxTests
         /// a null value.
         ///</summary>
         [TestMethod()]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void SelectionOperatorTest_InvalidNull()
         {
             ComponentConfigurationSet target = new ComponentConfigurationSet();
-            MockSelectionOperatorConfiguration val = null;
-            target.SelectionOperator = val;
-            Assert.AreSame(val, target.SelectionOperator, "SelectionOperator was not set correctly.");
+            AssertEx.Throws<ArgumentNullException>(() => target.SelectionOperator = null);
         }
 
         /// <summary>
