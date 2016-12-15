@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Reflection;
 using GenFx.Properties;
 using GenFx.Validation;
+using System.Linq;
 using System.Runtime.CompilerServices;
 
 namespace GenFx.ComponentModel

@@ -1,6 +1,7 @@
 using System;
 using GenFx.Validation;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using GenFxTests.Helpers;
 
 namespace GenFxTests
 {
@@ -27,12 +28,11 @@ namespace GenFxTests
         /// Tests that the constructor throws when invalid values are used for min/max.
         /// </summary>
         [TestMethod]
-        [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void IntegerValidator_Ctor_InvalidMinMax()
         {
             int min = 100;
             int max = 99;
-            IntegerValidator validator = new IntegerValidator(min, max);
+            AssertEx.Throws<ArgumentOutOfRangeException>(() => new IntegerValidator(min, max));
         }
 
         /// <summary>
@@ -106,36 +106,33 @@ namespace GenFxTests
         /// Tests that the constructor throws when invalid values are used for min/max.
         /// </summary>
         [TestMethod]
-        [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void DoubleValidator_Ctor_InvalidMinMax()
         {
             int min = 100;
             int max = 99;
-            DoubleValidator validator = new DoubleValidator(min, true, max, true);
+            AssertEx.Throws<ArgumentOutOfRangeException>(() => new DoubleValidator(min, true, max, true));
         }
 
         /// <summary>
         /// Tests that the constructor throws when invalid values are used for min/max.
         /// </summary>
         [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
         public void DoubleValidator_Ctor_InvalidEqualMinMax()
         {
             int min = 100;
             int max = 100;
-            DoubleValidator validator = new DoubleValidator(min, false, max, true);
+            AssertEx.Throws<InvalidOperationException>(() => new DoubleValidator(min, false, max, true));
         }
 
         /// <summary>
         /// Tests that the constructor throws when invalid values are used for min/max.
         /// </summary>
         [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
         public void DoubleValidator_Ctor_InvalidEqualMinMax2()
         {
             int min = 100;
             int max = 100;
-            DoubleValidator validator = new DoubleValidator(min, true, max, false);
+            AssertEx.Throws<InvalidOperationException>(() => new DoubleValidator(min, true, max, false));
         }
 
         /// <summary>

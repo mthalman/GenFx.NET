@@ -1,6 +1,7 @@
 ﻿using GenFx;
 using GenFx.ComponentLibrary.Scaling;
 using GenFx.ComponentModel;
+using GenFxTests.Helpers;
 using GenFxTests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
@@ -30,34 +31,29 @@ namespace GenFxTests
         /// Tests that an exception is thrown when a null algorithm is passed.
         /// </summary>
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void SigmaScalingStrategy_Ctor_NullAlgorithm()
         {
-            SigmaScalingStrategy op = new SigmaScalingStrategy(null);
+            AssertEx.Throws<ArgumentNullException>(() => new SigmaScalingStrategy(null));
         }
 
         /// <summary>
         /// Tests that an exception is thrown when a required config is missing.
         /// </summary>
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
         public void SigmaScalingStrategy_Ctor_MissingConfig()
         {
-            SigmaScalingStrategy op = new SigmaScalingStrategy(new MockGeneticAlgorithm());
+            AssertEx.Throws<ArgumentException>(() => new SigmaScalingStrategy(new MockGeneticAlgorithm()));
         }
 
         /// <summary>
         /// Tests that an exception is thrown when an invalid value is used for the SigmaScalingMultiplier setting.
         /// </summary>
         [TestMethod]
-        [ExpectedException(typeof(ValidationException))]
         public void SigmaScalingStrategy_Ctor_InvalidSetting()
         {
             GeneticAlgorithm algorithm = new MockGeneticAlgorithm();
             SigmaScalingStrategyConfiguration config = new SigmaScalingStrategyConfiguration();
-            config.Multiplier = -2;
-            algorithm.ConfigurationSet.FitnessScalingStrategy = config;
-            SigmaScalingStrategy op = new SigmaScalingStrategy(algorithm);
+            AssertEx.Throws<ValidationException>(() => config.Multiplier = -2);
         }
 
         /// <summary>
@@ -90,25 +86,23 @@ namespace GenFxTests
         /// Tests that an exception is thrown when an empty population is passed.
         /// </summary>
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
         public void SigmaScalingStrategy_Scale_EmptyPopulation()
         {
             GeneticAlgorithm algorithm = GetAlgorithm(10);
             SigmaScalingStrategy op = new SigmaScalingStrategy(algorithm);
             Population population = new Population(algorithm);
-            op.Scale(population);
+            AssertEx.Throws<ArgumentException>(() => op.Scale(population));
         }
 
         /// <summary>
         /// Tests that an exception is thrown when a null population is passed.
         /// </summary>
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void SigmaScalingStrategy_Scale_NullPopulation()
         {
             GeneticAlgorithm algorithm = GetAlgorithm(10);
             SigmaScalingStrategy op = new SigmaScalingStrategy(algorithm);
-            op.Scale(null);
+            AssertEx.Throws<ArgumentNullException>(() => op.Scale(null));
         }
 
         private void AddEntity(GeneticAlgorithm algorithm, double fitness, Population population)

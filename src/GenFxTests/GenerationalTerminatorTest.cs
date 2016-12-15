@@ -1,5 +1,6 @@
 ﻿using GenFx;
 using GenFx.ComponentLibrary.Terminators;
+using GenFxTests.Helpers;
 using GenFxTests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
@@ -31,34 +32,31 @@ namespace GenFxTests
         /// Tests that an exception is thrown when a required setting is missing.
         /// </summary>
         [TestMethod()]
-        [ExpectedException(typeof(ArgumentException))]
         public void GenerationalTerminator_Ctor_MissingSetting()
         {
-            GenerationalTerminator terminator = new GenerationalTerminator(new MockGeneticAlgorithm());
+            AssertEx.Throws<ArgumentException>(() => new GenerationalTerminator(new MockGeneticAlgorithm()));
         }
 
         /// <summary>
         /// Tests that an exception is thrown when an invalid value is used for a required setting.
         /// </summary>
         [TestMethod()]
-        [ExpectedException(typeof(ValidationException))]
         public void GenerationalTerminator_Ctor_InvalidSetting1()
         {
             GeneticAlgorithm algorithm = new MockGeneticAlgorithm();
             GenerationalTerminatorConfiguration config = new GenerationalTerminatorConfiguration();
-            config.FinalGeneration = -1;
+            AssertEx.Throws<ValidationException>(() => config.FinalGeneration = -1);
         }
 
         /// <summary>
         /// Tests that an exception is thrown when an invalid value is used for a required setting.
         /// </summary>
         [TestMethod()]
-        [ExpectedException(typeof(ValidationException))]
         public void GenerationalTerminator_Ctor_InvalidSetting2()
         {
             GeneticAlgorithm algorithm = new MockGeneticAlgorithm();
             GenerationalTerminatorConfiguration config = new GenerationalTerminatorConfiguration();
-            config.FinalGeneration = 0;
+            AssertEx.Throws<ValidationException>(() => config.FinalGeneration = 0);
         }
 
         /// <summary>

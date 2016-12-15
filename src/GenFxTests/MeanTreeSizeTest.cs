@@ -1,6 +1,7 @@
 ﻿using GenFx;
 using GenFx.ComponentLibrary.Statistics;
 using GenFx.ComponentLibrary.Trees;
+using GenFxTests.Helpers;
 using GenFxTests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
@@ -55,14 +56,13 @@ namespace GenFxTests
         /// Tests that an exception is thrown when a null population is passed.
         /// </summary>
         [TestMethod()]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void MeanTreeSize_GetResultValue_NullPopulation()
         {
             GeneticAlgorithm algorithm = new MockGeneticAlgorithm();
             algorithm.ConfigurationSet.GeneticAlgorithm = new MockGeneticAlgorithmConfiguration();
             algorithm.ConfigurationSet.Statistics.Add(new MeanTreeSizeStatisticConfiguration());
             MeanTreeSizeStatistic target = new MeanTreeSizeStatistic(algorithm);
-            object result = target.GetResultValue(null);
+            AssertEx.Throws<ArgumentNullException>(() => target.GetResultValue(null));
         }
 
         private class TestTreeEntity : TreeEntity<TreeNode>

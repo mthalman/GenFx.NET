@@ -1,5 +1,6 @@
 ﻿using GenFx;
 using GenFx.ComponentModel;
+using GenFxTests.Helpers;
 using GenFxTests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
@@ -29,44 +30,40 @@ namespace GenFxTests
         /// Tests that an exception is thrown when a null algorithm is passed.
         /// </summary>
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void MutationOperator_Ctor_NullAlgorithm()
         {
-            MockMutationOperator op = new MockMutationOperator(null);
+            AssertEx.Throws<ArgumentNullException>(() => new MockMutationOperator(null));
         }
 
         /// <summary>
         /// Tests that an exception is thrown when a required config is missing.
         /// </summary>
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
         public void MutationOperator_Ctor_MissingConfig()
         {
-            MockMutationOperator op = new MockMutationOperator(new MockGeneticAlgorithm());
+            AssertEx.Throws<ArgumentException>(() => new MockMutationOperator(new MockGeneticAlgorithm()));
         }
 
         /// <summary>
         /// Tests that an exception is thrown when an invalid value is used for the MutationRate setting.
         /// </summary>
         [TestMethod]
-        [ExpectedException(typeof(ValidationException))]
         public void MutationOperator_Ctor_InvalidSetting1()
         {
             GeneticAlgorithm algorithm = new MockGeneticAlgorithm();
             MockMutationOperatorConfiguration config = new MockMutationOperatorConfiguration();
-            config.MutationRate = 2;
+            AssertEx.Throws<ValidationException>(() => config.MutationRate = 2);
         }
 
         /// <summary>
         /// Tests that an exception is thrown when an invalid value is used for the MutationRate setting.
         /// </summary>
         [TestMethod]
-        [ExpectedException(typeof(ValidationException))]
         public void MutationOperator_Ctor_InvalidSetting2()
         {
             GeneticAlgorithm algorithm = new MockGeneticAlgorithm();
             MockMutationOperatorConfiguration config = new MockMutationOperatorConfiguration();
-            config.MutationRate = -1;
+            AssertEx.Throws<ValidationException>(() => config.MutationRate = -1);
         }
 
         /// <summary>
@@ -98,12 +95,11 @@ namespace GenFxTests
         /// Tests that an exception is thrown when a null entity is passed.
         /// </summary>
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void MutationOperator_Mutate_NullEntity()
         {
             GeneticAlgorithm algorithm = GetAlgorithm(.03);
             MockMutationOperator op = new MockMutationOperator(algorithm);
-            GeneticEntity mutant = op.Mutate(null);
+            AssertEx.Throws<ArgumentNullException>(() => op.Mutate(null));
         }
 
         private static GeneticAlgorithm GetAlgorithm(double mutationRate)

@@ -1,5 +1,6 @@
 ﻿using GenFx;
 using GenFx.ComponentModel;
+using GenFxTests.Helpers;
 using GenFxTests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
@@ -35,21 +36,19 @@ namespace GenFxTests
         /// Tests that an exception is thrown when required config class is missing.
         /// </summary>
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
         public void Population_Ctor_MissingConfig()
         {
             GeneticAlgorithm algorithm = new MockGeneticAlgorithm();
-            TestPopulation population = new TestPopulation(algorithm);
+            AssertEx.Throws<ArgumentException>(() => new TestPopulation(algorithm));
         }
 
         /// <summary>
         /// Tests that an exception is thrown when a null algorithm is passed.
         /// </summary>
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void Population_Ctor_NullAlgorithm()
         {
-            Population population = new Population(null);
+            AssertEx.Throws<ArgumentNullException>(() => new Population(null));
         }
 
         /// <summary>
@@ -122,12 +121,10 @@ namespace GenFxTests
         /// set to an invalid value.
         ///</summary>
         [TestMethod()]
-        [ExpectedException(typeof(ValidationException))]
         public void PopulationSizeTest_Invalid()
         {
             PopulationConfiguration target = new PopulationConfiguration();
-            int val = 0;
-            target.PopulationSize = val;
+            AssertEx.Throws<ValidationException>(() => target.PopulationSize = 0);
         }
 
         private static async Task TestEvaluateFitnessAsync(bool useScaling, bool useStatistics)

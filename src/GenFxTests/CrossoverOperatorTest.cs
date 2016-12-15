@@ -4,6 +4,7 @@ using GenFx;
 using GenFx.ComponentModel;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using GenFxTests.Mocks;
+using GenFxTests.Helpers;
 
 namespace GenFxTests
 {
@@ -30,44 +31,40 @@ namespace GenFxTests
         /// Tests that an exception is thrown when a null algorithm is passed.
         /// </summary>
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void CrossoverOperator_Ctor_NullAlgorithm()
         {
-            FakeCrossoverOperator op = new FakeCrossoverOperator(null);
+            AssertEx.Throws<ArgumentNullException>(() => new FakeCrossoverOperator(null));
         }
 
         /// <summary>
         /// Tests that an exception is thrown when a setting is missing.
         /// </summary>
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
         public void CrossoverOperator_Ctor_MissingSetting()
         {
-            FakeCrossoverOperator op = new FakeCrossoverOperator(new MockGeneticAlgorithm());
+            AssertEx.Throws<ArgumentException>(() => new FakeCrossoverOperator(new MockGeneticAlgorithm()));
         }
 
         /// <summary>
         /// Tests that an exception is thrown when an invalid value is used for the CrossoverRate setting.
         /// </summary>
         [TestMethod]
-        [ExpectedException(typeof(ValidationException))]
         public void CrossoverOperator_Ctor_InvalidSetting1()
         {
             GeneticAlgorithm algorithm = new MockGeneticAlgorithm();
             FakeCrossoverOperatorConfiguration config = new FakeCrossoverOperatorConfiguration();
-            config.CrossoverRate = 2;
+            AssertEx.Throws<ValidationException>(() => config.CrossoverRate = 2);
         }
 
         /// <summary>
         /// Tests that an exception is thrown when an invalid value is used for the CrossoverRate setting.
         /// </summary>
         [TestMethod]
-        [ExpectedException(typeof(ValidationException))]
         public void CrossoverOperator_Ctor_InvalidSetting2()
         {
             GeneticAlgorithm algorithm = new MockGeneticAlgorithm();
             FakeCrossoverOperatorConfiguration config = new FakeCrossoverOperatorConfiguration();
-            config.CrossoverRate = -1;
+            AssertEx.Throws<ValidationException>(()=> config.CrossoverRate = -1);
         }
 
         /// <summary>

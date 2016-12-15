@@ -5,6 +5,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using GenFx;
 using GenFx.ComponentLibrary.SelectionOperators;
 using GenFx.ComponentModel;
+using GenFxTests.Helpers;
 
 namespace GenFxTests
 {
@@ -30,33 +31,27 @@ namespace GenFxTests
         /// Tests that an exception is thrown if the required type is null.
         /// </summary>
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void RequiredConfigurableTypeAttribute_Ctor_NullRequiredType()
         {
-            TestRequiredConfigurableTypeAttribute attrib = new TestRequiredConfigurableTypeAttribute(
-              null, typeof(CrossoverOperator));
+            AssertEx.Throws<ArgumentNullException>(() => new TestRequiredConfigurableTypeAttribute(null, typeof(CrossoverOperator)));
         }
 
         /// <summary>
         /// Tests that an exception is thrown if the base type is null.
         /// </summary>
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void RequiredConfigurableTypeAttribute_Ctor_NullBaseType()
         {
-            TestRequiredConfigurableTypeAttribute attrib = new TestRequiredConfigurableTypeAttribute(
-              typeof(UniformSelectionOperator), null);
+            AssertEx.Throws<ArgumentNullException>(() => new TestRequiredConfigurableTypeAttribute(typeof(UniformSelectionOperator), null));
         }
 
         /// <summary>
         /// Tests that an exception is thrown if the required type is not a type of the base type.
         /// </summary>
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
         public void RequiredConfigurableTypeAttribute_Ctor_InvalidType()
         {
-            TestRequiredConfigurableTypeAttribute attrib = new TestRequiredConfigurableTypeAttribute(
-              typeof(UniformSelectionOperator), typeof(CrossoverOperator));
+            AssertEx.Throws<ArgumentException>(() => new TestRequiredConfigurableTypeAttribute(typeof(UniformSelectionOperator), typeof(CrossoverOperator)));
         }
 
         private class TestRequiredConfigurableTypeAttribute : RequiredComponentAttribute

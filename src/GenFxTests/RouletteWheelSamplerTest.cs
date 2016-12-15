@@ -1,5 +1,6 @@
 ﻿using GenFx;
 using GenFx.ComponentLibrary.SelectionOperators;
+using GenFxTests.Helpers;
 using GenFxTests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
@@ -107,10 +108,9 @@ namespace GenFxTests
         /// Tests that an exception is thrown when a null collection is passed.
         /// </summary>
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void RouletteWheelSampler_GetEntity_NullCollection()
         {
-            RouletteWheelSampler.GetEntity(null);
+            AssertEx.Throws<ArgumentNullException>(() => RouletteWheelSampler.GetEntity(null));
         }
 
         private class TestRandomUtil : IRandomHelper

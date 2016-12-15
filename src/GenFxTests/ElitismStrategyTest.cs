@@ -1,5 +1,6 @@
 ﻿using GenFx;
 using GenFx.ComponentModel;
+using GenFxTests.Helpers;
 using GenFxTests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
@@ -30,42 +31,38 @@ namespace GenFxTests
         /// Tests that an exception is thrown when a null algorithm is passed.
         /// </summary>
         [TestMethod()]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void ElitismStrategy_Ctor_NullAlgorithm()
         {
-            ElitismStrategy strategy = new ElitismStrategy(null);
+            AssertEx.Throws<ArgumentNullException>(() => new ElitismStrategy(null));
         }
 
         /// <summary>
         /// Tests that an exception is thrown when a required setting is missing.
         /// </summary>
         [TestMethod()]
-        [ExpectedException(typeof(ArgumentException))]
         public void ElitismStrategy_Ctor_MissingSettings()
         {
-            ElitismStrategy strategy = new ElitismStrategy(new MockGeneticAlgorithm());
+            AssertEx.Throws<ArgumentException>(() => new ElitismStrategy(new MockGeneticAlgorithm()));
         }
 
         /// <summary>
         /// Tests that an exception is thrown when an invalid value is used for the ElitistRatio setting.
         /// </summary>
         [TestMethod]
-        [ExpectedException(typeof(ValidationException))]
         public void ElitismStrategy_Ctor_InvalidSetting1()
         {
             ElitismStrategyConfiguration config = new ElitismStrategyConfiguration();
-            config.ElitistRatio = 2;
+            AssertEx.Throws<ValidationException>(() => config.ElitistRatio = 2);
         }
 
         /// <summary>
         /// Tests that an exception is thrown when an invalid value is used for the ElitistRatio setting.
         /// </summary>
         [TestMethod]
-        [ExpectedException(typeof(ValidationException))]
         public void ElitismStrategy_Ctor_InvalidSetting2()
         {
             ElitismStrategyConfiguration config = new ElitismStrategyConfiguration();
-            config.ElitistRatio = -1;
+            AssertEx.Throws<ValidationException>(() => config.ElitistRatio = -1);
         }
 
         /// <summary>
@@ -100,23 +97,21 @@ namespace GenFxTests
         /// Tests that an exception is thrown when a null population is passed.
         /// </summary>
         [TestMethod()]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void ElitismStrategy_GetElitistGeneticEntities_NullPopulation()
         {
             ElitismStrategy strategy = new ElitismStrategy(GetGeneticAlgorithm(.1));
-            strategy.GetElitistGeneticEntities(null);
+            AssertEx.Throws<ArgumentNullException>(() => strategy.GetElitistGeneticEntities(null));
         }
 
         /// <summary>
         /// Tests that an exception is thrown when an empty population is passed.
         /// </summary>
         [TestMethod()]
-        [ExpectedException(typeof(ArgumentException))]
         public void ElitismStrategy_GetElitistGeneticEntities_EmptyPopulation()
         {
             GeneticAlgorithm algorithm = GetGeneticAlgorithm(.1);
             ElitismStrategy strategy = new ElitismStrategy(algorithm);
-            strategy.GetElitistGeneticEntities(new Population(algorithm));
+            AssertEx.Throws<ArgumentException>(() => strategy.GetElitistGeneticEntities(new Population(algorithm)));
         }
 
         private static MockGeneticAlgorithm GetGeneticAlgorithm(double elitismRatio)

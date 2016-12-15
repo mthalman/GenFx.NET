@@ -1,5 +1,6 @@
 ﻿using GenFx;
 using GenFx.ComponentLibrary.Terminators;
+using GenFxTests.Helpers;
 using GenFxTests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
@@ -31,10 +32,9 @@ namespace GenFxTests
         /// Tests that an exception is thrown when a required setting is missing.
         /// </summary>
         [TestMethod()]
-        [ExpectedException(typeof(ArgumentException))]
         public void FitnessTargetTerminator_Ctor_MissingSetting()
         {
-            FitnessTargetTerminator terminator = new FitnessTargetTerminator(new MockGeneticAlgorithm());
+            AssertEx.Throws<ArgumentException>(() => new FitnessTargetTerminator(new MockGeneticAlgorithm()));
         }
 
         /// <summary>

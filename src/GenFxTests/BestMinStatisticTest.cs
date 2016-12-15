@@ -1,5 +1,6 @@
 ﻿using GenFx;
 using GenFx.ComponentLibrary.Statistics;
+using GenFxTests.Helpers;
 using GenFxTests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
@@ -118,7 +119,6 @@ namespace GenFxTests
         /// Tests that an exception will be thrown when a null population1 is passed to BestMinStatistic.GetResultValue.
         /// </summary>
         [TestMethod()]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void GetResultValue_NullPopulation()
         {
             GeneticAlgorithm algorithm = new MockGeneticAlgorithm();
@@ -126,7 +126,7 @@ namespace GenFxTests
             algorithm.ConfigurationSet.Statistics.Add(new BestMinimumFitnessStatisticConfiguration());
             BestMinimumFitnessStatistic target = new BestMinimumFitnessStatistic(algorithm);
 
-            target.GetResultValue(null);
+            AssertEx.Throws<ArgumentNullException>(() => target.GetResultValue(null));
         }
     }
 }

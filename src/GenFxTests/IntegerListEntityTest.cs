@@ -1,5 +1,6 @@
 using GenFx;
 using GenFx.ComponentLibrary.Lists;
+using GenFxTests.Helpers;
 using GenFxTests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
@@ -62,12 +63,11 @@ namespace GenFxTests
         /// Tests that an exception is thrown when a null entity is passed.
         /// </summary>
         [TestMethod()]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void BinaryStringEntity_CopyTo_NullEntity()
         {
             IntegerListEntity entity = GetEntity();
 
-            entity.CopyTo(null);
+            AssertEx.Throws<ArgumentNullException>(() => entity.CopyTo(null));
         }
 
         /// <summary>
@@ -144,13 +144,12 @@ namespace GenFxTests
         /// Tests that an exception is thrown when the Length is set to a different value.
         ///</summary>
         [TestMethod()]
-        [ExpectedException(typeof(ArgumentException))]
         public void BinaryStringEntity_Length_SetToDifferentValue()
         {
             GeneticAlgorithm algorithm = GetAlgorithm();
             int length = 50;
             IntegerListEntity entity = new TestIntegerListEntity(algorithm, length);
-            entity.Length = 51;
+            AssertEx.Throws<ArgumentException>(() => entity.Length = 51);
         }
 
         private static void CompareGeneticEntities(IntegerListEntity expectedEntity, IntegerListEntity actualEntity)

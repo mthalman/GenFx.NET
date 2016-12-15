@@ -1,5 +1,6 @@
 ﻿using GenFx;
 using GenFx.ComponentLibrary.Trees;
+using GenFxTests.Helpers;
 using GenFxTests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
@@ -61,7 +62,6 @@ namespace GenFxTests
         /// Tests that an exception is thrown when a child is inserted with a parent not assigned to a tree.
         /// </summary>
         [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
         public void TreeNode_InsertChild_NoTree()
         {
             GeneticAlgorithm algorithm = GetAlgorithm();
@@ -69,7 +69,7 @@ namespace GenFxTests
             TreeNode node = new TreeNode();
 
             TreeNode child1 = new TreeNode();
-            node.InsertChild(0, child1);
+            AssertEx.Throws<InvalidOperationException>(() => node.InsertChild(0, child1));
         }
 
         /// <summary>
