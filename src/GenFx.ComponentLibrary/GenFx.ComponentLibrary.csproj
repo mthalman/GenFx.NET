@@ -89,13 +89,49 @@
       <Link>StringUtil.cs</Link>
     </Compile>
     <Compile Include="Algorithms\MultiDemeGeneticAlgorithm.cs" />
+    <Compile Include="Algorithms\MultiDemeGeneticAlgorithmConfiguration.cs" />
+    <Compile Include="Algorithms\MultiDemeGeneticAlgorithmConfiguration.OfT2.cs" />
+    <Compile Include="Algorithms\MultiDemeGeneticAlgorithm.OfT2.cs" />
     <Compile Include="Algorithms\PopulationReplacementValue.cs" />
+    <Compile Include="Algorithms\PopulationReplacementValueValidator.cs" />
     <Compile Include="Algorithms\ReplacementValueKind.cs" />
     <Compile Include="Algorithms\ReplacementValueKindValidator.cs" />
+    <Compile Include="Algorithms\SimpleGeneticAlgorithmConfiguration.cs" />
+    <Compile Include="Algorithms\SimpleGeneticAlgorithmConfiguration.OfT2.cs" />
+    <Compile Include="Algorithms\SimpleGeneticAlgorithm.OfT2.cs" />
     <Compile Include="Algorithms\SimpleGeneticAlgorithm.cs" />
     <Compile Include="Algorithms\SteadyStateGeneticAlgorithm.cs" />
+    <Compile Include="Algorithms\SteadyStateGeneticAlgorithmConfiguration.cs" />
+    <Compile Include="Algorithms\SteadyStateGeneticAlgorithmConfiguration.OfT2.cs" />
+    <Compile Include="Algorithms\SteadyStateGeneticAlgorithm.OfT2.cs" />
+    <Compile Include="Base\CrossoverOperator.cs" />
+    <Compile Include="Base\CrossoverOperatorConfiguration.cs" />
+    <Compile Include="Base\ElitismStrategyConfiguration.cs" />
+    <Compile Include="Base\ElitismStrategy.cs" />
+    <Compile Include="Base\FitnessEvaluatorConfiguration.cs" />
+    <Compile Include="Base\FitnessEvaluator.cs" />
+    <Compile Include="Base\FitnessScalingStrategyConfiguration.cs" />
+    <Compile Include="Base\FitnessScalingStrategy.cs" />
+    <Compile Include="Base\GeneticComponentWithAlgorithm.cs" />
+    <Compile Include="Base\GeneticEntityConfiguration.cs" />
+    <Compile Include="Base\GeneticEntity.cs" />
+    <Compile Include="Base\MutationOperatorConfiguration.cs" />
+    <Compile Include="Base\MutationOperator.cs" />
+    <Compile Include="Base\PluginConfiguration.cs" />
+    <Compile Include="Base\Plugin.cs" />
+    <Compile Include="Base\PopulationConfiguration.cs" />
+    <Compile Include="Base\Population.cs" />
+    <Compile Include="Base\SelectionOperatorConfiguration.cs" />
+    <Compile Include="Base\SelectionOperator.cs" />
+    <Compile Include="Base\StatisticConfiguration.cs" />
+    <Compile Include="Base\Statistic.cs" />
+    <Compile Include="Base\TerminatorConfiguration.cs" />
+    <Compile Include="Base\Terminator.cs" />
     <Compile Include="BinaryStrings\BinaryStringEntity.cs" />
     <Compile Include="BinaryStrings\BitInversionOperator.cs" />
+    <Compile Include="BinaryStrings\BitInversionOperatorConfiguration.cs" />
+    <Compile Include="BinaryStrings\BitInversionOperatorConfiguration.OfT2.cs" />
+    <Compile Include="BinaryStrings\BitInversionOperator.OfT2.cs" />
     <Compile Include="BinaryStrings\FixedLengthBinaryStringEntity.cs" />
     <Compile Include="BinaryStrings\UniformBitMutationOperator.cs" />
     <Compile Include="BinaryStrings\VariableLengthBinaryStringEntity.cs" />
@@ -103,11 +139,18 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="GlobalSuppressions.cs" />
-    <Compile Include="Lists\IntegerInversionOperator.cs" />
-    <Compile Include="Lists\InversionOperator.cs" />
-    <Compile Include="Lists\ListEntityBase.cs" />
-    <Compile Include="Lists\ListEntityBase.OfT.cs" />
     <Compile Include="Lists\FixedLengthIntegerListEntity.cs" />
+    <Compile Include="Lists\FixedLengthIntegerListEntityConfiguration.cs" />
+    <Compile Include="Lists\FixedLengthIntegerListEntityConfiguration.OfT2.cs" />
+    <Compile Include="Lists\IntegerInversionOperator.cs" />
+    <Compile Include="Lists\IntegerListEntityConfiguration.cs" />
+    <Compile Include="Lists\InversionOperator.cs" />
+    <Compile Include="Lists\ListEntityConfiguration.cs" />
+    <Compile Include="Lists\ListEntityBaseConfiguration.OfT3.cs" />
+    <Compile Include="Lists\ListEntityBaseConfiguration.OfT2.cs" />
+    <Compile Include="Lists\ListEntityBase.OfT2.cs" />
+    <Compile Include="Lists\ListEntityBase.OfT3.cs" />
+    <Compile Include="Lists\FixedLengthIntegerListEntity.OfT2.cs" />
     <Compile Include="Lists\IntegerListEntity.cs" />
     <Compile Include="Lists\ListShiftMutationOperator.cs" />
     <Compile Include="Lists\MultiPointCrossoverOperator.cs" />
@@ -168,9 +211,9 @@
     <Compile Include="Trees\TreeUtil.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\GenFx\GenFx.csproj">
+    <ProjectReference Include="..\GenFx\GenFx.Core.csproj">
       <Project>{919AF5AF-702B-4D89-A4A4-0C94CFAF8F95}</Project>
-      <Name>GenFx</Name>
+      <Name>GenFx.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

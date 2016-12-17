@@ -157,9 +157,9 @@
       <Project>{E4385621-4392-4C87-9EFF-DBA1CBAEA894}</Project>
       <Name>GenFx.ComponentLibrary</Name>
     </ProjectReference>
-    <ProjectReference Include="..\GenFx\GenFx.csproj">
+    <ProjectReference Include="..\GenFx\GenFx.Core.csproj">
       <Project>{919af5af-702b-4d89-a4a4-0c94cfaf8f95}</Project>
-      <Name>GenFx</Name>
+      <Name>GenFx.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

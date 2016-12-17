@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenFx", "src\GenFx\GenFx.csproj", "{919AF5AF-702B-4D89-A4A4-0C94CFAF8F95}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenFx.Core", "src\GenFx\GenFx.Core.csproj", "{919AF5AF-702B-4D89-A4A4-0C94CFAF8F95}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenFx.ComponentLibrary", "src\GenFx.ComponentLibrary\GenFx.ComponentLibrary.csproj", "{E4385621-4392-4C87-9EFF-DBA1CBAEA894}"
 EndProject

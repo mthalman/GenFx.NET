@@ -15,25 +15,4 @@ namespace GenFx
         /// </summary>
         Raw
     }
-
-    /// <summary>
-    /// Contains helper methods for the <see cref="FitnessType"/> enum.
-    /// </summary>
-    internal static class FitnessTypeHelper
-    {
-        /// <summary>
-        /// Returns whether the <paramref name="fitnessType"/> is a defined value.
-        /// </summary>
-        /// <param name="fitnessType">The <see cref="FitnessType"/> to check.</param>
-        /// <returns>True if the value is defined; otherwise, false.</returns>
-        public static bool IsDefined(FitnessType fitnessType)
-        {
-            if (fitnessType < FitnessType.Scaled || fitnessType > FitnessType.Raw)
-            {
-                return false;
-            }
-
-            return true;
-        }
-    }
 }

@@ -1,6 +1,5 @@
-﻿using System;
-using System.ComponentModel;
-using GenFx.ComponentModel;
+﻿using GenFx.ComponentModel;
+using System;
 
 namespace GenFx.ComponentLibrary.Lists
 {
@@ -11,15 +10,17 @@ namespace GenFx.ComponentLibrary.Lists
     /// Inversion operates upon a list, causing the values of two list positions to become swapped.
     /// </remarks>
     [RequiredEntity(typeof(ListEntityBase))]
-    public abstract class InversionOperator : MutationOperator
+    public abstract class InversionOperator<TInversion, TConfiguration> : MutationOperator<TInversion, TConfiguration>
+        where TInversion : InversionOperator<TInversion, TConfiguration>
+        where TConfiguration : InversionOperatorConfiguration<TConfiguration, TInversion>
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="InversionOperator"/> class.
+        /// Initializes a new instance of this class.
         /// </summary>
-        /// <param name="algorithm"><see cref="GeneticAlgorithm"/> using this <see cref="InversionOperator"/>.</param>
+        /// <param name="algorithm"><see cref="IGeneticAlgorithm"/> using this class.</param>
         /// <exception cref="ArgumentNullException"><paramref name="algorithm"/> is null.</exception>
         /// <exception cref="ValidationException">The component's configuration is in an invalid state.</exception>
-        protected InversionOperator(GeneticAlgorithm algorithm)
+        protected InversionOperator(IGeneticAlgorithm algorithm)
             : base(algorithm)
         {
         }
@@ -31,7 +32,7 @@ namespace GenFx.ComponentLibrary.Lists
         /// <param name="entity"><see cref="ListEntityBase"/> to be mutated.</param>
         /// <returns>True if a mutation occurred; otherwise, false.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="entity"/> is null.</exception>
-        protected override bool GenerateMutation(GeneticEntity entity)
+        protected override bool GenerateMutation(IGeneticEntity entity)
         {
             if (entity == null)
             {
@@ -39,7 +40,7 @@ namespace GenFx.ComponentLibrary.Lists
             }
 
             ListEntityBase listEntity = (ListEntityBase)entity;
-            if (RandomHelper.Instance.GetRandomRatio() <= this.MutationRate)
+            if (RandomHelper.Instance.GetRandomRatio() <= this.Configuration.MutationRate)
             {
                 int firstPosition = RandomHelper.Instance.GetRandomValue(listEntity.Length - 1);
                 int secondPosition;
@@ -59,10 +60,11 @@ namespace GenFx.ComponentLibrary.Lists
     }
 
     /// <summary>
-    /// Represents the configuration of <see cref="InversionOperator"/>.
+    /// Represents the configuration of <see cref="InversionOperator{TInversion, TConfiguration}"/>.
     /// </summary>
-    [Component(typeof(InversionOperator))]
-    public abstract class InversionOperatorConfiguration : MutationOperatorConfiguration
+    public abstract class InversionOperatorConfiguration<TConfiguration, TInversion> : MutationOperatorConfiguration<TConfiguration, TInversion>
+        where TConfiguration : InversionOperatorConfiguration<TConfiguration, TInversion>
+        where TInversion : InversionOperator<TInversion, TConfiguration>
     {
     }
 }

@@ -19,12 +19,12 @@ namespace GenFx
         /// <exception cref="ArgumentException"><paramref name="evaluationMode"/> value is undefined.</exception>
         public static IEnumerable<IGeneticEntity> GetEntitiesSortedByFitness(this IEnumerable<IGeneticEntity> entities,  FitnessType sortBasis, FitnessEvaluationMode evaluationMode)
         {
-            if (!FitnessTypeHelper.IsDefined(sortBasis))
+            if (!Enum.IsDefined(typeof(FitnessType), sortBasis))
             {
                 throw EnumHelper.CreateUndefinedEnumException(typeof(FitnessType), "sortBasis");
             }
 
-            if (!FitnessEvaluationModeHelper.IsDefined(evaluationMode))
+            if (!Enum.IsDefined(typeof(FitnessEvaluationMode), evaluationMode))
             {
                 throw EnumHelper.CreateUndefinedEnumException(typeof(FitnessEvaluationMode), "evaluationMode");
             }

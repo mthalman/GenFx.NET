@@ -115,6 +115,15 @@ namespace GenFx.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This object is read-only while an algorithm is executing..
+        /// </summary>
+        public static string ErrorMsg_ComponentConfigurationSetIsFrozen {
+            get {
+                return ResourceManager.GetString("ErrorMsg_ComponentConfigurationSetIsFrozen", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Configuration type &apos;{0}&apos; is not associated with the current component type of &apos;{1}&apos;..
         /// </summary>
         public static string ErrorMsg_ComponentConfigurationTypeMismatch {

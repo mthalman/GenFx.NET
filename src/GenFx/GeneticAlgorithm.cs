@@ -16,71 +16,6 @@ using System.Threading.Tasks;
 namespace GenFx
 {
     /// <summary>
-    /// Represents the genetic algorithm responsible for execution of the algorithm logic.
-    /// </summary>
-    public interface IGeneticAlgorithm
-    {
-        /// <summary>
-        /// Occurs when the fitness of an environment has been evaluated.
-        /// </summary>
-        event EventHandler<EnvironmentFitnessEvaluatedEventArgs> FitnessEvaluated;
-
-        /// <summary>
-        /// Occurs when a new generation has been created (but its fitness has not yet been evaluated).
-        /// </summary>
-        event EventHandler GenerationCreated;
-
-        /// <summary>
-        /// Occurs when execution of the algorithm completes.
-        /// </summary>
-        event EventHandler AlgorithmCompleted;
-
-        /// <summary>
-        /// Occurs when the algorithm is about to begin execution.
-        /// </summary>
-        /// <remarks>
-        /// This event only occurs when the algorithm is first started after having been initialized.
-        /// It does not occur when resuming execution after a pause.
-        /// </remarks>
-        event EventHandler AlgorithmStarting;
-
-        /// <summary>
-        /// Gets the <see cref="ComponentConfigurationSet"/> containing the configuration for the algorithm.
-        /// </summary>
-        ComponentConfigurationSet ConfigurationSet { get; }
-
-        /// <summary>
-        /// Gets the <see cref="AlgorithmOperators"/> to be used.
-        /// </summary>
-        AlgorithmOperators Operators { get; }
-
-        /// <summary>
-        /// Executes the genetic algorithm.
-        /// </summary>
-        /// <remarks>
-        /// The execution will continue until the <see cref="ITerminator.IsComplete()"/> method returns
-        /// true or <see cref="CancelEventArgs.Cancel"/> property is set to true.
-        /// </remarks>
-        Task RunAsync();
-
-        /// <summary>
-        /// Executes one generation of the genetic algorithm.
-        /// </summary>
-        /// <returns>True if the genetic algorithm has completed its execution; otherwise, false.</returns>
-        /// <remarks>
-        /// Subsequent calls to either <see cref="RunAsync()"/> or <see cref="StepAsync()"/> will resume execution from
-        /// where the previous <see cref="StepAsync()"/> call left off.
-        /// </remarks>
-        Task<bool> StepAsync();
-
-        /// <summary>
-        /// Validates that the algorithm contains the configuration required by the <paramref name="component"/>.
-        /// </summary>
-        /// <param name="component">Component object whose configuration is to be resolved.</param>
-        void ValidateComponentConfiguration(GeneticComponent component);
-    }
-
-    /// <summary>
     /// Provides the abstract base class for a type of genetic algorithm.
     /// </summary>
     [SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
@@ -92,7 +27,7 @@ namespace GenFx
         private GeneticEnvironment environment;
         private ObservableCollection<IStatistic> statistics = new ObservableCollection<IStatistic>();
         private ObservableCollection<IPlugin> plugins = new ObservableCollection<IPlugin>();
-        private ComponentConfigurationSet config = new ComponentConfigurationSet();
+        private ComponentConfigurationSet config;
         private AlgorithmOperators operators = new AlgorithmOperators();
         private bool isInitialized;
         private Dictionary<PropertyInfo, List<Validator>> externalValidationMapping = new Dictionary<PropertyInfo, List<Validator>>();
@@ -195,11 +130,19 @@ namespace GenFx
         /// <exception cref="InvalidOperationException">The configuration for a required component has not been set.</exception>
         /// <exception cref="InvalidOperationException">An exception occured while instantiating a component.</exception>
         [SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
-        public async Task InitializeAsync()
+        public async Task InitializeAsync(ComponentConfigurationSet configurationSet)
         {
+            // We want to ensure the config set cannot be changed while the algorithm is in a running state; otherwise, it will screw up some of the
+            // caching that's being done.  To enforce this, we freeze the state of the config set when the algorithm is Initialized.  When the algorithm
+            // completes, we unfreeze the state.  However, if the StepAsync method is used in a way that the algorithm doesn't finish to completion and
+            // the caller wants to begin a new run of the algorithm, we need a way for the caller to be able to modify the config set prior to initializing
+            // the algorithm for a new run.  By cloning the config set that is passed in, we allow the caller to modify their unfrozen instance so
+            // it can be configured appropriately in that scenario without interference of the algorithm's copy.
+            this.config = configurationSet.Clone();
+            this.config.Freeze();
             this.ValidateConfiguration();
-            this.CompileExternalValidatorMapping();
-            this.ValidateComponentConfiguration(this);
+            this.config.CompileExternalValidatorMapping();
+            this.config.Validate(this);
 
             this.currentGeneration = 0;
 
@@ -298,9 +241,9 @@ namespace GenFx
                 {
                     this.statistics.Clear();
 
-                    for (int i = 0; i < this.config.Statistics.Count; i++)
+                    foreach (IStatisticConfiguration statConfig in this.config.Statistics)
                     {
-                        componentConfig = this.config.Statistics[i];
+                        componentConfig = statConfig;
                         IStatistic stat = (IStatistic)componentConfig.CreateComponent(this);
                         this.statistics.Add(stat);
                     }
@@ -400,6 +343,8 @@ namespace GenFx
                 cancelRun = await this.StepCoreAsync();
             }
         }
+
+
 
         /// <summary>
         /// Executes one generation of the genetic algorithm.
@@ -602,9 +547,14 @@ namespace GenFx
                 this.ValidateRequiredComponents(this.config.MutationOperator.ComponentType);
             }
 
-            for (int i = 0; i < this.config.Statistics.Count; i++)
+            foreach (IStatisticConfiguration statConfig in this.config.Statistics)
             {
-                this.ValidateRequiredComponents(this.config.Statistics[i].ComponentType);
+                this.ValidateRequiredComponents(statConfig.ComponentType);
+            }
+
+            foreach (IPluginConfiguration pluginConfig in this.config.Plugins)
+            {
+                this.ValidateRequiredComponents(pluginConfig.ComponentType);
             }
 
             if (this.config.Terminator != null)
@@ -763,37 +713,6 @@ namespace GenFx
         }
 
         /// <summary>
-        /// Validates that the algorithm contains the configuration required by the <paramref name="component"/>.
-        /// </summary>
-        /// <param name="component">Component object whose configuration is to be resolved.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="component"/> is null.</exception>
-        /// <exception cref="ArgumentException"><paramref name="component"/> does not contain a configuration object.</exception>
-        /// <exception cref="ArgumentException"><paramref name="component"/> contains a configuration object that is not associated with that component.</exception>
-        /// <exception cref="ValidationException">The configuration for <paramref name="component"/> is in an invalid state.</exception>
-        public void ValidateComponentConfiguration(GeneticComponent component)
-        {
-            if (component == null)
-            {
-                throw new ArgumentNullException(nameof(component));
-            }
-
-            ComponentConfiguration componentConfig = component.Configuration;
-            if (componentConfig == null)
-            {
-                throw new ArgumentException(StringUtil.GetFormattedString(
-                  FwkResources.ErrorMsg_NoCorrespondingComponentConfiguration, component.GetType().FullName), nameof(component));
-            }
-            else if (componentConfig.ComponentType != component.GetType())
-            {
-                throw new ArgumentException(StringUtil.GetFormattedString(
-                  FwkResources.ErrorMsg_ComponentConfigurationTypeMismatch,
-                  componentConfig.GetType().FullName, component.GetType().FullName), nameof(component));
-            }
-
-            ComponentHelper.Validate(componentConfig, this.externalValidationMapping);
-        }
-
-        /// <summary>
         /// Throws an exception if the algorithm is not initialized.
         /// </summary>
         private void CheckAlgorithmIsInitialized()
@@ -846,55 +765,6 @@ namespace GenFx
         }
 
         /// <summary>
-        /// Compiles the mapping of component configuration properties to <see cref="Validator"/> objects as described by external components.
-        /// </summary>
-        private void CompileExternalValidatorMapping()
-        {
-            this.externalValidationMapping = new Dictionary<PropertyInfo, List<Validator>>();
-            CompileExternalValidatorMapping(this.config.CrossoverOperator, this.externalValidationMapping);
-            CompileExternalValidatorMapping(this.config.ElitismStrategy, this.externalValidationMapping);
-            CompileExternalValidatorMapping(this.config.Entity, this.externalValidationMapping);
-            CompileExternalValidatorMapping(this.config.FitnessEvaluator, this.externalValidationMapping);
-            CompileExternalValidatorMapping(this.config.FitnessScalingStrategy, this.externalValidationMapping);
-            CompileExternalValidatorMapping(this.config.GeneticAlgorithm, this.externalValidationMapping);
-            CompileExternalValidatorMapping(this.config.MutationOperator, this.externalValidationMapping);
-            CompileExternalValidatorMapping(this.config.Population, this.externalValidationMapping);
-            CompileExternalValidatorMapping(this.config.SelectionOperator, this.externalValidationMapping);
-            CompileExternalValidatorMapping(this.config.Terminator, this.externalValidationMapping);
-
-            foreach (IStatisticConfiguration stat in this.config.Statistics)
-            {
-                CompileExternalValidatorMapping(stat, this.externalValidationMapping);
-            }
-        }
-
-        /// <summary>
-        /// Compiles the mapping of component configuration properties to <see cref="Validator"/> objects as described by the specified component.
-        /// </summary>
-        /// <param name="componentConfiguration"><see cref="IComponentConfiguration"/> for the component to check whether it has defined validators for a configuration property.</param>
-        /// <param name="mapping">Property to validator mapping.</param>
-        private static void CompileExternalValidatorMapping(IComponentConfiguration componentConfiguration, Dictionary<PropertyInfo, List<Validator>> mapping)
-        {
-            if (componentConfiguration == null)
-            {
-                return;
-            }
-
-            IExternalConfigurationValidatorAttribute[] attribs = (IExternalConfigurationValidatorAttribute[])componentConfiguration.ComponentType.GetCustomAttributes(typeof(IExternalConfigurationValidatorAttribute), true);
-            foreach (IExternalConfigurationValidatorAttribute attrib in attribs)
-            {
-                PropertyInfo prop = ExternalValidatorAttributeHelper.GetTargetPropertyInfo(attrib.TargetComponentConfigurationType, attrib.TargetProperty);
-                List<Validator> validators;
-                if (!mapping.TryGetValue(prop, out validators))
-                {
-                    validators = new List<Validator>();
-                    mapping.Add(prop, validators);
-                }
-                validators.Add(attrib.Validator);
-            }
-        }
-
-        /// <summary>
         /// Executes the genetic algorithm until the <see cref="ITerminator.IsComplete()"/> method returns
         /// true or <see cref="CancelEventArgs.Cancel"/> property is set to true.
         /// </summary>
@@ -918,6 +788,7 @@ namespace GenFx
                     if (isAlgorithmComplete)
                     {
                         this.isInitialized = false;
+                        this.config.Unfreeze();
                     }
                 }
             }
@@ -979,64 +850,49 @@ namespace GenFx
             await this.environment.EvaluateFitnessAsync();
             return this.RaiseFitnessEvaluatedEvent();
         }
-    }
-
-    /// <summary>
-    /// Represents the configuration of <see cref="IGeneticAlgorithm"/>.
-    /// </summary>
-    public interface IGeneticAlgorithmConfiguration : IComponentConfiguration
-    {
-        /// <summary>
-        /// Gets the number of <see cref="IPopulation"/> objects that are contained by the <see cref="GeneticEnvironment"/>.
-        /// </summary>
-        /// <value>
-        /// The number of populations that are contained by the <see cref="GeneticEnvironment"/>.
-        /// </value>
-        int EnvironmentSize { get; }
 
         /// <summary>
-        /// Gets whether statistics should be calculated during genetic algorithm execution.
+        /// Represents a <see cref="ITerminator"/> that never completes.
         /// </summary>
-        /// <value>True if statistics should be calculated; otherwise, false.</value>
-        bool StatisticsEnabled { get; }
-    }
-
-    /// <summary>
-    /// Represents the configuration of <see cref="GeneticAlgorithm{TConfiguration, TAlgorithm}"/>.
-    /// </summary>
-    public abstract class GeneticAlgorithmConfiguration<TConfiguration, TAlgorithm> : ComponentConfiguration<TConfiguration, TAlgorithm>, IGeneticAlgorithmConfiguration
-        where TConfiguration : GeneticAlgorithmConfiguration<TConfiguration, TAlgorithm>
-        where TAlgorithm : GeneticAlgorithm<TAlgorithm, TConfiguration>
-    {
-        private const int DefaultEnvironmentSize = 1;
-        private const bool DefaultStatisticsEnabled = true;
-
-        private int environmentSize = DefaultEnvironmentSize;
-        private bool statisticsEnabled = DefaultStatisticsEnabled;
-
-        /// <summary>
-        /// Gets or sets the number of <see cref="IPopulation"/> objects that are contained by the <see cref="GeneticEnvironment"/>.
-        /// </summary>
-        /// <value>
-        /// The number of populations that are contained by the <see cref="GeneticEnvironment"/>.
-        /// This value is defaulted to 1 and must be greater or equal to 1.
-        /// </value>
-        /// <exception cref="ValidationException">Value is not valid.</exception>
-        [IntegerValidator(MinValue = 1)]
-        public int EnvironmentSize
+        private class EmptyTerminator : ITerminator
         {
-            get { return this.environmentSize; }
-            set { this.SetProperty(ref this.environmentSize, value); }
+            /// <summary>
+            /// Initializes a new instance of the <see cref="EmptyTerminator"/> class.
+            /// </summary>
+            /// <param name="algorithm"><see cref="IGeneticAlgorithm"/> using this <see cref="EmptyTerminator"/>.</param>
+            public EmptyTerminator(IGeneticAlgorithm algorithm)
+            {
+            }
+
+            /// <summary>
+            /// Returns whether the genetic algorithm should stop executing.
+            /// </summary>
+            /// <returns>Always returns false.</returns>
+            public bool IsComplete()
+            {
+                return false;
+            }
+
+            public void RestoreState(KeyValueMap state)
+            {
+            }
+
+            public void SetSaveState(KeyValueMap state)
+            {
+            }
         }
 
         /// <summary>
-        /// Gets or sets whether statistics should be calculated during genetic algorithm execution.
+        /// Represents the configuration of <see cref="EmptyTerminator"/>.
         /// </summary>
-        /// <value>True if statistics should be calculated; otherwise, false.</value>
-        public bool StatisticsEnabled
+        private class EmptyTerminatorConfiguration : ITerminatorConfiguration
         {
-            get { return this.statisticsEnabled; }
-            set { this.SetProperty(ref this.statisticsEnabled, value); }
+            public Type ComponentType { get { return typeof(EmptyTerminator); } }
+
+            public IGeneticComponent CreateComponent(IGeneticAlgorithm algorithm)
+            {
+                return new EmptyTerminator(algorithm);
+            }
         }
     }
 }
