@@ -27,11 +27,18 @@ namespace GenFxTests
         [TestMethod]
         public void SingleNodeTreeCrossoverOperator_Crossover()
         {
-            GeneticAlgorithm algorithm = new MockGeneticAlgorithm();
-            algorithm.ConfigurationSet.Entity = new FakeTreeEntityConfiguration();
-            SingleNodeTreeCrossoverOperatorConfiguration config = new SingleNodeTreeCrossoverOperatorConfiguration();
-            config.CrossoverRate = 1;
-            algorithm.ConfigurationSet.CrossoverOperator = config;
+            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentConfigurationSet
+            {
+                GeneticAlgorithm = new MockGeneticAlgorithmConfiguration(),
+                FitnessEvaluator = new MockFitnessEvaluatorConfiguration(),
+                SelectionOperator = new MockSelectionOperatorConfiguration(),
+                Population = new MockPopulationConfiguration(),
+                Entity = new FakeTreeEntityConfiguration(),
+                CrossoverOperator = new SingleNodeTreeCrossoverOperatorConfiguration
+                {
+                    CrossoverRate = 1
+                }
+            });
             SingleNodeTreeCrossoverOperator op = new SingleNodeTreeCrossoverOperator(algorithm);
 
             FakeTreeEntity entity1 = new FakeTreeEntity(algorithm);
@@ -49,10 +56,10 @@ namespace GenFxTests
 
             RandomHelper.Instance = new TestRandomUtil();
 
-            IList<GeneticEntity> result = op.Crossover(entity1, entity2);
+            IList<IGeneticEntity> result = op.Crossover(entity1, entity2);
 
-            FakeTreeNode rootNode1 = (FakeTreeNode)((TreeEntity)result[0]).RootNode;
-            FakeTreeNode rootNode2 = (FakeTreeNode)((TreeEntity)result[1]).RootNode;
+            FakeTreeNode rootNode1 = (FakeTreeNode)((ITreeEntity)result[0]).RootNode;
+            FakeTreeNode rootNode2 = (FakeTreeNode)((ITreeEntity)result[1]).RootNode;
 
             Assert.AreEqual(1, rootNode1.Value, "Wrong TreeNode.");
             Assert.AreEqual(3, rootNode1.ChildNodes.Count, "Incorrect number of children.");
@@ -113,17 +120,17 @@ namespace GenFxTests
                 this.Value = id;
             }
 
-            public override TreeNode Clone(TreeEntity newTree, TreeNode newParentNode)
+            public override TreeNode Clone(ITreeEntity newTree, TreeNode newParentNode)
             {
-                FakeTreeNode node = new FakeTreeNode();
-                this.CopyTo(node, newTree, newParentNode);
-                return node;
+                FakeTreeNode clone = new FakeTreeNode();
+                this.CopyTo(clone, newTree, newParentNode);
+                return clone;
             }
         }
 
-        private class FakeTreeEntity : TreeEntity<FakeTreeNode>
+        private class FakeTreeEntity : TreeEntity<FakeTreeEntity, FakeTreeEntityConfiguration, FakeTreeNode>
         {
-            public FakeTreeEntity(GeneticAlgorithm algorithm)
+            public FakeTreeEntity(IGeneticAlgorithm algorithm)
                 : base(algorithm)
             {
             }
@@ -137,17 +144,9 @@ namespace GenFxTests
             {
                 throw new Exception("The method or operation is not implemented.");
             }
-
-            public override GeneticEntity Clone()
-            {
-                FakeTreeEntity entity = new FakeTreeEntity(Algorithm);
-                this.CopyTo(entity);
-                return entity;
-            }
         }
 
-        [Component(typeof(FakeTreeEntity))]
-        private class FakeTreeEntityConfiguration : TreeEntityConfiguration
+        private class FakeTreeEntityConfiguration : TreeEntityConfiguration<FakeTreeEntityConfiguration, FakeTreeEntity>
         {
         }
     }

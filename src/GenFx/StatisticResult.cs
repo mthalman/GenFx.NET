@@ -4,20 +4,20 @@ using System;
 namespace GenFx
 {
     /// <summary>
-    /// Represents the result of a statistical calculation for a particular generation of a <see cref="Population"/>.
+    /// Represents the result of a statistical calculation for a particular generation of a <see cref="IPopulation"/>.
     /// </summary>
     public class StatisticResult
     {
         private int generationIndex;
         private object resultValue;
         private int populationId;
-        private Statistic statistic;
+        private IStatistic statistic;
 
         /// <summary>
         /// Gets the <see cref="Statistic"/> to which this result belongs.
         /// </summary>
         /// <value>The <see cref="Statistic"/> to which this result belongs.</value>
-        public Statistic Statistic
+        public IStatistic Statistic
         {
             get { return this.statistic; }
         }
@@ -60,7 +60,7 @@ namespace GenFx
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="populationId"/> is less than zero.</exception>
         /// <exception cref="ArgumentNullException"><paramref name="resultValue"/> is null.</exception>
         /// <exception cref="ArgumentNullException"><paramref name="statistic"/> is null.</exception>
-        public StatisticResult(int generationIndex, int populationId, object resultValue, Statistic statistic)
+        public StatisticResult(int generationIndex, int populationId, object resultValue, IStatistic statistic)
         {
             if (generationIndex < 0)
             {

@@ -111,15 +111,39 @@
     <Compile Include="ComponentAttribute.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ComponentConfigurationCollection.cs" />
     <Compile Include="ComponentConfigurationSet.cs" />
     <Compile Include="ComponentException.cs" />
+    <Compile Include="ComponentModel\ComponentConfiguration.OfT2.cs" />
+    <Compile Include="ComponentModel\ComponentConfigurationHelper.cs" />
     <Compile Include="ComponentModel\ComponentHelper.cs" />
-    <Compile Include="ComponentModel\GeneticComponentWithAlgorithm.cs" />
+    <Compile Include="ComponentModel\GeneticComponent.OfT2.cs" />
+    <Compile Include="ComponentModel\GeneticComponentExtensions.cs" />
+    <Compile Include="ComponentModel\ComponentConfiguration.cs" />
+    <Compile Include="ComponentModel\GeneticComponent.cs" />
+    <Compile Include="DefaultTerminator.cs" />
+    <Compile Include="DefaultTerminatorConfiguration.cs" />
+    <Compile Include="EnumerableExtensions.cs" />
     <Compile Include="FitnessEvaluationMode.cs" />
+    <Compile Include="GeneticAlgorithmConfiguration.cs" />
+    <Compile Include="GeneticAlgorithm.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="ICrossoverOperatorConfiguration.cs" />
+    <Compile Include="IElitismStrategyConfiguration.cs" />
+    <Compile Include="IFitnessEvaluatorConfiguration.cs" />
+    <Compile Include="IFitnessScalingStrategyConfiguration.cs" />
+    <Compile Include="IGeneticAlgorithmConfiguration.cs" />
+    <Compile Include="IGeneticEntityConfiguration.cs" />
+    <Compile Include="IMutationOperatorConfiguration.cs" />
+    <Compile Include="IPluginConfiguration.cs" />
+    <Compile Include="ISelectionOperatorConfiguration.cs" />
+    <Compile Include="IStatisticConfiguration.cs" />
     <Compile Include="KeyValueMap.cs" />
-    <Compile Include="ListExtensions.cs" />
-    <Compile Include="Plugin.cs" />
+    <Compile Include="CollectionExtensions.cs" />
+    <Compile Include="IPlugin.cs" />
+    <Compile Include="IPopulationConfiguration.cs" />
+    <Compile Include="StatisticExtensions.cs" />
+    <Compile Include="StringUtil.cs" />
+    <Compile Include="ITerminatorConfiguration.cs" />
     <Compile Include="Validation\RequiredValidator.cs" />
     <Compile Include="Validation\RequiredValidatorAttribute.cs" />
     <Compile Include="Validation\CustomValidatorAttribute.cs" />
@@ -136,43 +160,43 @@
     <Compile Include="Validation\IntegerValidatorAttribute.cs" />
     <Compile Include="Validation\Validator.cs" />
     <Compile Include="Validation\ConfigurationValidatorAttribute.cs" />
-    <Compile Include="ComponentModel\ComponentConfiguration.cs" />
+    <Compile Include="ComponentModel\IComponentConfiguration.cs" />
     <Compile Include="ConvertUtil.cs" />
     <Compile Include="EnumHelper.cs" />
-    <Compile Include="FitnessEvaluator.cs" />
-    <Compile Include="FitnessScalingStrategy.cs" />
+    <Compile Include="IFitnessEvaluator.cs" />
+    <Compile Include="IFitnessScalingStrategy.cs" />
     <Compile Include="FitnessType.cs" />
-    <Compile Include="GeneticEntity.cs" />
+    <Compile Include="IGeneticEntity.cs" />
     <Compile Include="GeneticEntityCollectionExtensions.cs" />
-    <Compile Include="ComponentModel\GeneticComponent.cs" />
+    <Compile Include="ComponentModel\IGeneticComponent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="EnvironmentFitnessEvaluatedEventArgs.cs" />
-    <Compile Include="CrossoverOperator.cs">
+    <Compile Include="ICrossoverOperator.cs">
     </Compile>
-    <Compile Include="MutationOperator.cs" />
+    <Compile Include="IMutationOperator.cs" />
     <Compile Include="Properties\FwkResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>FwkResources.resx</DependentUpon>
     </Compile>
     <Compile Include="ComponentModel\RequiredConfigurableTypeAttribute.cs" />
-    <Compile Include="SelectionOperator.cs" />
-    <Compile Include="Statistic.cs" />
-    <Compile Include="Environment.cs">
+    <Compile Include="ISelectionOperator.cs" />
+    <Compile Include="IStatistic.cs" />
+    <Compile Include="GeneticEnvironment.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="GeneticAlgorithm.cs">
+    <Compile Include="IGeneticAlgorithm.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="AlgorithmOperators.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ElitismStrategy.cs">
+    <Compile Include="IElitismStrategy.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Population.cs">
+    <Compile Include="IPopulation.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Random.cs">
@@ -181,8 +205,7 @@
     <Compile Include="StatisticResult.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="StringUtil.cs" />
-    <Compile Include="Terminator.cs" />
+    <Compile Include="ITerminator.cs" />
     <Compile Include="ValidationException.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -190,7 +213,7 @@
       <SubType>Designer</SubType>
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>FwkResources.Designer.cs</LastGenOutput>
-      <CustomToolNamespace>Microsoft.GenFx.Properties</CustomToolNamespace>
+      <CustomToolNamespace>GenFx.Properties</CustomToolNamespace>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

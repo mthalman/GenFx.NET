@@ -2,10 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using GenFx;
+using GenFx.ComponentLibrary.Base;
 
 namespace GenFxTests.Mocks
 {
-    class MockEntity : GeneticEntity
+    class MockEntity : GeneticEntity<MockEntity, MockEntityConfiguration>
     {
         internal string Identifier;
 
@@ -14,7 +15,7 @@ namespace GenFxTests.Mocks
             get { return this.Identifier; }
         }
 
-        public MockEntity(GeneticAlgorithm algorithm)
+        public MockEntity(IGeneticAlgorithm algorithm)
             : base(algorithm)
         {
         }
@@ -23,34 +24,26 @@ namespace GenFxTests.Mocks
         {
             this.Identifier = "11111";
         }
-
-        public override GeneticEntity Clone()
-        {
-            MockEntity entity = new MockEntity(this.Algorithm);
-            this.CopyTo(entity);
-            return entity;
-        }
-
-        public override void CopyTo(GeneticEntity entity)
+        
+        public override void CopyTo(MockEntity entity)
         {
             base.CopyTo(entity);
             ((MockEntity)entity).Identifier = this.Identifier;
         }
     }
 
-    [Component(typeof(MockEntity))]
-    class MockEntityConfiguration : GeneticEntityConfiguration
+    class MockEntityConfiguration : GeneticEntityConfiguration<MockEntityConfiguration, MockEntity>
     {
     }
 
-    class MockEntity2 : GeneticEntity
+    class MockEntity2 : GeneticEntity<MockEntity2, MockEntity2Configuration>
     {
         public override string Representation
         {
             get { throw new Exception(); }
         }
 
-        public MockEntity2(GeneticAlgorithm algorithm)
+        public MockEntity2(IGeneticAlgorithm algorithm)
             : base(algorithm)
         {
         }
@@ -58,20 +51,14 @@ namespace GenFxTests.Mocks
         protected override void InitializeCore()
         {
         }
-
-        public override GeneticEntity Clone()
-        {
-            throw new Exception();
-        }
-
-        public override void CopyTo(GeneticEntity entity)
+        
+        public override void CopyTo(MockEntity2 entity)
         {
             throw new Exception();
         }
     }
 
-    [Component(typeof(MockEntity))]
-    class MockEntity2Configuration : GeneticEntityConfiguration
+    class MockEntity2Configuration : GeneticEntityConfiguration<MockEntity2Configuration, MockEntity2>
     {
     }
 }

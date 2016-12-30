@@ -1,7 +1,7 @@
 namespace GenFx.ComponentLibrary.Trees
 {
     /// <summary>
-    /// Represents a generic node in a <see cref="BinaryTreeEntity{T}"/> with two possible child nodes.
+    /// Represents a generic node in a binary tree with two possible child nodes.
     /// </summary>
     /// <typeparam name="T">Type of value contained by the node.</typeparam>
     public class BinaryTreeNode<T> : TreeNode<T>
@@ -10,9 +10,8 @@ namespace GenFx.ComponentLibrary.Trees
         /// Initializes a new instance of the <see cref="BinaryTreeNode{T}"/> class.
         /// </summary>
         public BinaryTreeNode()
+            : base(2)
         {
-            this.ChildNodes.Add(null);
-            this.ChildNodes.Add(null);
         }
 
         /// <summary>

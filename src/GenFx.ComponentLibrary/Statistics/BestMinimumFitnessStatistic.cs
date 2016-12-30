@@ -1,36 +1,36 @@
+using GenFx.ComponentLibrary.Base;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 
 namespace GenFx.ComponentLibrary.Statistics
 {
     /// <summary>
-    /// Provides the calculation to determine the lowest <see cref="GeneticEntity.ScaledFitnessValue"/> 
-    /// found for a <see cref="Population"/> during the entire run of the genetic algorithm.
+    /// Provides the calculation to determine the lowest <see cref="IGeneticEntity.ScaledFitnessValue"/> 
+    /// found for a <see cref="IPopulation"/> during the entire run of the genetic algorithm.
     /// </summary>
-    public class BestMinimumFitnessStatistic : Statistic
+    public sealed class BestMinimumFitnessStatistic : StatisticBase<BestMinimumFitnessStatistic, BestMinimumFitnessStatisticConfiguration>
     {
         private Dictionary<int, double?> bestMinValues = new Dictionary<int, double?>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BestMinimumFitnessStatistic"/> class.
         /// </summary>
-        /// <param name="algorithm"><see cref="GeneticAlgorithm"/> using this <see cref="BestMinimumFitnessStatistic"/>.</param>
+        /// <param name="algorithm"><see cref="IGeneticAlgorithm"/> using this <see cref="BestMinimumFitnessStatistic"/>.</param>
         /// <exception cref="ArgumentNullException"><paramref name="algorithm"/> is null.</exception>
         /// <exception cref="ValidationException">The component's configuration is in an invalid state.</exception>
-        public BestMinimumFitnessStatistic(GeneticAlgorithm algorithm)
+        public BestMinimumFitnessStatistic(IGeneticAlgorithm algorithm)
             : base(algorithm)
         {
         }
 
         /// <summary>
-        /// Calculates to determine the lowest <see cref="GeneticEntity.ScaledFitnessValue"/> 
-        /// found for a <see cref="Population"/> during the entire run of the genetic algorithm.
+        /// Calculates to determine the lowest <see cref="IGeneticEntity.ScaledFitnessValue"/> 
+        /// found for a <see cref="IPopulation"/> during the entire run of the genetic algorithm.
         /// </summary>
-        /// <param name="population"><see cref="Population"/> from which to derive the statistic.</param>
-        /// <returns>Smallest value of <see cref="GeneticEntity.ScaledFitnessValue"/> found.</returns>
+        /// <param name="population"><see cref="IPopulation"/> from which to derive the statistic.</param>
+        /// <returns>Smallest value of <see cref="IGeneticEntity.ScaledFitnessValue"/> found.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="population"/> is null.</exception>
-        public override object GetResultValue(Population population)
+        public override object GetResultValue(IPopulation population)
         {
             if (population == null)
             {
@@ -56,7 +56,7 @@ namespace GenFx.ComponentLibrary.Statistics
         /// <summary>
         /// Sets the statistic's state.
         /// </summary>
-        protected override void SetSaveState(KeyValueMap state)
+        public override void SetSaveState(KeyValueMap state)
         {
             if (state == null)
             {
@@ -71,7 +71,7 @@ namespace GenFx.ComponentLibrary.Statistics
         /// <summary>
         /// Restores the statistic's state.
         /// </summary>
-        protected override void RestoreState(KeyValueMap state)
+        public override void RestoreState(KeyValueMap state)
         {
             if (state == null)
             {
@@ -82,13 +82,5 @@ namespace GenFx.ComponentLibrary.Statistics
 
             this.bestMinValues = (Dictionary<int, double?>)state[nameof(this.bestMinValues)];
         }
-    }
-
-    /// <summary>
-    /// Represents the configuration of <see cref="BestMinimumFitnessStatistic"/>.
-    /// </summary>
-    [Component(typeof(BestMinimumFitnessStatistic))]
-    public class BestMinimumFitnessStatisticConfiguration : StatisticConfiguration
-    {
     }
 }

@@ -1,4 +1,6 @@
 ﻿using GenFx;
+using GenFx.ComponentLibrary.Base;
+using GenFx.ComponentLibrary.Populations;
 using GenFx.ComponentLibrary.Statistics;
 using GenFxTests.Helpers;
 using GenFxTests.Mocks;
@@ -23,12 +25,19 @@ namespace GenFxTests
         [TestMethod]
         public void StdDevStatistic_GetResultValue()
         {
-            GeneticAlgorithm algorithm = new MockGeneticAlgorithm();
-            algorithm.ConfigurationSet.GeneticAlgorithm = new MockGeneticAlgorithmConfiguration();
-            algorithm.ConfigurationSet.Statistics.Add(new StandardDeviationFitnessStatisticConfiguration());
-            algorithm.ConfigurationSet.Population = new PopulationConfiguration();
-            Population population = new Population(algorithm);
-            PrivateObject accessor = new PrivateObject(population);
+            ComponentConfigurationSet config = new ComponentConfigurationSet
+            {
+                GeneticAlgorithm = new MockGeneticAlgorithmConfiguration(),
+                Entity = new MockEntityConfiguration(),
+                Population = new SimplePopulationConfiguration(),
+                SelectionOperator = new MockSelectionOperatorConfiguration(),
+                FitnessEvaluator = new MockFitnessEvaluatorConfiguration(),
+            };
+            config.Statistics.Add(new StandardDeviationFitnessStatisticConfiguration());
+
+            MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm(config);
+            SimplePopulation population = new SimplePopulation(algorithm);
+            PrivateObject accessor = new PrivateObject(population, new PrivateType(typeof(PopulationBase<SimplePopulation, SimplePopulationConfiguration>)));
             accessor.SetField("scaledStandardDeviation", 1234);
 
             StandardDeviationFitnessStatistic stat = new StandardDeviationFitnessStatistic(algorithm);
@@ -43,10 +52,17 @@ namespace GenFxTests
         [TestMethod]
         public void StdDevStatistic_GetResultValue_NullPopulation()
         {
-            GeneticAlgorithm algorithm = new MockGeneticAlgorithm();
-            algorithm.ConfigurationSet.GeneticAlgorithm = new MockGeneticAlgorithmConfiguration();
-            algorithm.ConfigurationSet.Statistics.Add(new StandardDeviationFitnessStatisticConfiguration());
-            algorithm.ConfigurationSet.Population = new PopulationConfiguration();
+            ComponentConfigurationSet config = new ComponentConfigurationSet
+            {
+                GeneticAlgorithm = new MockGeneticAlgorithmConfiguration(),
+                Entity = new MockEntityConfiguration(),
+                Population = new MockPopulationConfiguration(),
+                SelectionOperator = new MockSelectionOperatorConfiguration(),
+                FitnessEvaluator = new MockFitnessEvaluatorConfiguration(),
+            };
+            config.Statistics.Add(new StandardDeviationFitnessStatisticConfiguration());
+
+            MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm(config);
             StandardDeviationFitnessStatistic stat = new StandardDeviationFitnessStatistic(algorithm);
             AssertEx.Throws<ArgumentNullException>(() => stat.GetResultValue(null));
         }

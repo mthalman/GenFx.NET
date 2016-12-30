@@ -2,47 +2,46 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using GenFx;
+using GenFx.ComponentLibrary.Base;
 
 namespace GenFxTests.Mocks
 {
-    class MockSelectionOperator : SelectionOperator
+    class MockSelectionOperator : SelectionOperatorBase<MockSelectionOperator, MockSelectionOperatorConfiguration>
     {
         internal int DoSelectCallCount;
 
-        public MockSelectionOperator(GeneticAlgorithm algorithm)
+        public MockSelectionOperator(IGeneticAlgorithm algorithm)
             : base(algorithm)
         {
 
         }
 
-        protected override GeneticEntity SelectEntityFromPopulation(Population population)
+        protected override IGeneticEntity SelectEntityFromPopulation(IPopulation population)
         {
             this.DoSelectCallCount++;
             return population.Entities[0];
         }
     }
 
-    [Component(typeof(MockSelectionOperator))]
-    class MockSelectionOperatorConfiguration : SelectionOperatorConfiguration
+    class MockSelectionOperatorConfiguration : SelectionOperatorConfigurationBase<MockSelectionOperatorConfiguration, MockSelectionOperator>
     {
     }
 
-    class MockSelectionOperator2 : SelectionOperator
+    class MockSelectionOperator2 : SelectionOperatorBase<MockSelectionOperator2, MockSelectionOperator2Configuration>
     {
-        public MockSelectionOperator2(GeneticAlgorithm algorithm)
+        public MockSelectionOperator2(IGeneticAlgorithm algorithm)
             : base(algorithm)
         {
 
         }
 
-        protected override GeneticEntity SelectEntityFromPopulation(Population population)
+        protected override IGeneticEntity SelectEntityFromPopulation(IPopulation population)
         {
             throw new Exception();
         }
     }
 
-    [Component(typeof(MockSelectionOperator2))]
-    class MockSelectionOperator2Configuration : SelectionOperatorConfiguration
+    class MockSelectionOperator2Configuration : SelectionOperatorConfigurationBase<MockSelectionOperator2Configuration, MockSelectionOperator2>
     {
     }
 }

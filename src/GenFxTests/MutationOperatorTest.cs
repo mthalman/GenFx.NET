@@ -1,4 +1,5 @@
 ﻿using GenFx;
+using GenFx.ComponentLibrary.Base;
 using GenFx.ComponentModel;
 using GenFxTests.Helpers;
 using GenFxTests.Mocks;
@@ -21,9 +22,9 @@ namespace GenFxTests
         public void MutationOperator_Ctor()
         {
             double mutationRate = .005;
-            GeneticAlgorithm algorithm = GetAlgorithm(mutationRate);
+            IGeneticAlgorithm algorithm = GetAlgorithm(mutationRate);
             MockMutationOperator op = new MockMutationOperator(algorithm);
-            Assert.AreEqual(mutationRate, op.MutationRate, "MutationRate not initialized correctly.");
+            Assert.IsInstanceOfType(op.Configuration, typeof(MockMutationOperatorConfiguration));
         }
 
         /// <summary>
@@ -41,7 +42,7 @@ namespace GenFxTests
         [TestMethod]
         public void MutationOperator_Ctor_MissingConfig()
         {
-            AssertEx.Throws<ArgumentException>(() => new MockMutationOperator(new MockGeneticAlgorithm()));
+            AssertEx.Throws<ArgumentException>(() => new MockMutationOperator(new MockGeneticAlgorithm(new ComponentConfigurationSet())));
         }
 
         /// <summary>
@@ -50,7 +51,6 @@ namespace GenFxTests
         [TestMethod]
         public void MutationOperator_Ctor_InvalidSetting1()
         {
-            GeneticAlgorithm algorithm = new MockGeneticAlgorithm();
             MockMutationOperatorConfiguration config = new MockMutationOperatorConfiguration();
             AssertEx.Throws<ValidationException>(() => config.MutationRate = 2);
         }
@@ -61,7 +61,6 @@ namespace GenFxTests
         [TestMethod]
         public void MutationOperator_Ctor_InvalidSetting2()
         {
-            GeneticAlgorithm algorithm = new MockGeneticAlgorithm();
             MockMutationOperatorConfiguration config = new MockMutationOperatorConfiguration();
             AssertEx.Throws<ValidationException>(() => config.MutationRate = -1);
         }
@@ -72,23 +71,15 @@ namespace GenFxTests
         [TestMethod]
         public void MutationOperator_Mutate()
         {
-            GeneticAlgorithm algorithm = GetAlgorithm(.03);
-            algorithm.ConfigurationSet.Entity = new MockEntityConfiguration();
+            IGeneticAlgorithm algorithm = GetAlgorithm(.03);
             MockMutationOperator op = new MockMutationOperator(algorithm);
-            GeneticEntity entity = new MockEntity(algorithm);
-            PrivateObject accessor = new PrivateObject(entity, new PrivateType(typeof(GeneticEntity)));
-            accessor.SetField("age", 10);
-            GeneticEntity mutant = op.Mutate(entity);
+            IGeneticEntity entity = new MockEntity(algorithm);
+            entity.Age = 10;
+            IGeneticEntity mutant = op.Mutate(entity);
 
             Assert.AreNotSame(entity, mutant, "Entities should not be same instance.");
             Assert.AreEqual(entity.Age, mutant.Age, "Age should be reset.");
             Assert.AreEqual(1, op.DoMutateCallCount, "Mutation not called correctly.");
-
-            algorithm.ConfigurationSet.MutationOperator = new FakeMutationOperatorConfiguration();
-            FakeMutationOperator fakeOp = new FakeMutationOperator(algorithm);
-            mutant = fakeOp.Mutate(entity);
-            Assert.AreNotSame(entity, mutant, "Entities should not be same instance.");
-            Assert.AreEqual(0, mutant.Age, "Age should be reset.");
         }
 
         /// <summary>
@@ -97,35 +88,42 @@ namespace GenFxTests
         [TestMethod]
         public void MutationOperator_Mutate_NullEntity()
         {
-            GeneticAlgorithm algorithm = GetAlgorithm(.03);
+            IGeneticAlgorithm algorithm = GetAlgorithm(.03);
             MockMutationOperator op = new MockMutationOperator(algorithm);
             AssertEx.Throws<ArgumentNullException>(() => op.Mutate(null));
         }
 
-        private static GeneticAlgorithm GetAlgorithm(double mutationRate)
+        private static IGeneticAlgorithm GetAlgorithm(double mutationRate)
         {
-            GeneticAlgorithm algorithm = new MockGeneticAlgorithm();
-            MockMutationOperatorConfiguration config = new MockMutationOperatorConfiguration();
-            config.MutationRate = mutationRate;
-            algorithm.ConfigurationSet.MutationOperator = config;
+            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentConfigurationSet
+            {
+                GeneticAlgorithm = new MockGeneticAlgorithmConfiguration(),
+                Population = new MockPopulationConfiguration(),
+                Entity = new MockEntityConfiguration(),
+                SelectionOperator = new MockSelectionOperatorConfiguration(),
+                FitnessEvaluator = new MockFitnessEvaluatorConfiguration(),
+                MutationOperator = new MockMutationOperatorConfiguration
+                {
+                    MutationRate = mutationRate
+                }
+            });
             return algorithm;
         }
 
-        private class FakeMutationOperator : MutationOperator
+        private class FakeMutationOperator : MutationOperatorBase<FakeMutationOperator, FakeMutationOperatorConfiguration>
         {
-            public FakeMutationOperator(GeneticAlgorithm algorithm)
+            public FakeMutationOperator(IGeneticAlgorithm algorithm)
                 : base(algorithm)
             {
             }
 
-            protected override bool GenerateMutation(GeneticEntity entity)
+            protected override bool GenerateMutation(IGeneticEntity entity)
             {
                 return true;
             }
         }
 
-        [Component(typeof(FakeMutationOperator))]
-        private class FakeMutationOperatorConfiguration : MutationOperatorConfiguration
+        private class FakeMutationOperatorConfiguration : MutationOperatorConfigurationBase<FakeMutationOperatorConfiguration, FakeMutationOperator>
         {
         }
     }

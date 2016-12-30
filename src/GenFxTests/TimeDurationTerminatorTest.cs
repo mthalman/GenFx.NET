@@ -23,10 +23,10 @@ namespace GenFxTests
         public void TimeDurationTerminator_Ctor()
         {
             TimeSpan timeLimit = new TimeSpan(2, 3, 5);
-            GeneticAlgorithm algorithm = GetAlgorithm(timeLimit);
+            IGeneticAlgorithm algorithm = GetAlgorithm(timeLimit);
 
             TimeDurationTerminator terminator = new TimeDurationTerminator(algorithm);
-            Assert.AreEqual(timeLimit, terminator.TimeLimit, "TimeLimit was not initialized correctly.");
+            Assert.IsInstanceOfType(terminator.Configuration, typeof(TimeDurationTerminatorConfiguration));
         }
 
         /// <summary>
@@ -35,7 +35,7 @@ namespace GenFxTests
         [TestMethod]
         public void TimeDurationTerminator_Ctor_MissingConfig()
         {
-            AssertEx.Throws<ArgumentException>(() => new TimeDurationTerminator(new MockGeneticAlgorithm()));
+            AssertEx.Throws<ArgumentException>(() => new TimeDurationTerminator(new MockGeneticAlgorithm(new ComponentConfigurationSet())));
         }
 
         /// <summary>
@@ -45,12 +45,12 @@ namespace GenFxTests
         public void TimeDurationTerminator_IsComplete()
         {
             TimeSpan timeLimit = new TimeSpan(0, 1, 0);
-            GeneticAlgorithm algorithm = GetAlgorithm(timeLimit);
+            IGeneticAlgorithm algorithm = GetAlgorithm(timeLimit);
 
             TimeDurationTerminator terminator = new TimeDurationTerminator(algorithm);
 
             // "Start" the algorithm to trigger the start time
-            PrivateObject algorithmAccessor = new PrivateObject(algorithm, new PrivateType(typeof(GeneticAlgorithm)));
+            PrivateObject algorithmAccessor = new PrivateObject(algorithm, new PrivateType(typeof(GeneticAlgorithm<MockGeneticAlgorithm, MockGeneticAlgorithmConfiguration>)));
             algorithmAccessor.Invoke("OnAlgorithmStarting");
 
             Assert.IsFalse(terminator.IsComplete(), "Time limit has not been reached.");
@@ -62,15 +62,21 @@ namespace GenFxTests
             Assert.IsTrue(terminator.IsComplete(), "Time limit has been reached.");
         }
 
-        private static GeneticAlgorithm GetAlgorithm(TimeSpan timeLimit)
+        private static IGeneticAlgorithm GetAlgorithm(TimeSpan timeLimit)
         {
-            GeneticAlgorithm algorithm = new MockGeneticAlgorithm();
-            TimeDurationTerminatorConfiguration config = new TimeDurationTerminatorConfiguration();
-            config.TimeLimit = timeLimit;
-            algorithm.ConfigurationSet.Terminator = config;
+            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentConfigurationSet
+            {
+                GeneticAlgorithm = new MockGeneticAlgorithmConfiguration(),
+                Entity = new MockEntityConfiguration(),
+                Population = new MockPopulationConfiguration(),
+                SelectionOperator = new MockSelectionOperatorConfiguration(),
+                FitnessEvaluator = new MockFitnessEvaluatorConfiguration(),
+                Terminator = new TimeDurationTerminatorConfiguration
+                {
+                    TimeLimit = timeLimit
+                }
+            });
             return algorithm;
         }
     }
-
-
 }

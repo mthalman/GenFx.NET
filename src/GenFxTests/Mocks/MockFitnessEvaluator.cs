@@ -3,19 +3,20 @@ using System.Collections.Generic;
 using System.Text;
 using GenFx;
 using System.Threading.Tasks;
+using GenFx.ComponentLibrary.Base;
 
 namespace GenFxTests.Mocks
 {
-    class MockFitnessEvaluator : FitnessEvaluator
+    class MockFitnessEvaluator : FitnessEvaluatorBase<MockFitnessEvaluator, MockFitnessEvaluatorConfiguration>
     {
         internal int DoEvaluateFitnessCallCount;
 
-        public MockFitnessEvaluator(GeneticAlgorithm algorithm)
+        public MockFitnessEvaluator(IGeneticAlgorithm algorithm)
             : base(algorithm)
         {
         }
 
-        public override Task<double> EvaluateFitnessAsync(GeneticEntity entity)
+        public override Task<double> EvaluateFitnessAsync(IGeneticEntity entity)
         {
             this.DoEvaluateFitnessCallCount++;
             MockEntity mockEntity = (MockEntity)entity;
@@ -23,26 +24,24 @@ namespace GenFxTests.Mocks
         }
     }
 
-    [Component(typeof(MockFitnessEvaluator))]
-    class MockFitnessEvaluatorConfiguration : FitnessEvaluatorConfiguration
+    class MockFitnessEvaluatorConfiguration : FitnessEvaluatorConfigurationBase<MockFitnessEvaluatorConfiguration, MockFitnessEvaluator>
     {
     }
 
-    class MockFitnessEvaluator2 : FitnessEvaluator
+    class MockFitnessEvaluator2 : FitnessEvaluatorBase<MockFitnessEvaluator2, MockFitnessEvaluator2Configuration>
     {
-        public MockFitnessEvaluator2(GeneticAlgorithm algorithm)
+        public MockFitnessEvaluator2(IGeneticAlgorithm algorithm)
             : base(algorithm)
         {
         }
 
-        public override Task<double> EvaluateFitnessAsync(GeneticEntity entity)
+        public override Task<double> EvaluateFitnessAsync(IGeneticEntity entity)
         {
             throw new Exception();
         }
     }
 
-    [Component(typeof(MockFitnessEvaluator2))]
-    class MockFitnessEvaluator2Configuration : FitnessEvaluatorConfiguration
+    class MockFitnessEvaluator2Configuration : FitnessEvaluatorConfigurationBase<MockFitnessEvaluator2Configuration, MockFitnessEvaluator2>
     {
     }
 }

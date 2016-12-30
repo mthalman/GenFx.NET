@@ -126,6 +126,9 @@
   <data name="ErrorMsg_EmptyList" xml:space="preserve">
     <value>String cannot be null or empty.</value>
   </data>
+  <data name="ErrorMsg_EntityCopyToTypeMismatch" xml:space="preserve">
+    <value>The entity must be of type '{0}'.</value>
+  </data>
   <data name="ErrorMsg_InsertChildNodeWithoutTree" xml:space="preserve">
     <value>Parent node must belong to a tree before child nodes can be added.</value>
   </data>
@@ -138,11 +141,23 @@
   <data name="ErrorMsg_InvalidWheelSliceSize" xml:space="preserve">
     <value>Size must be greater than or equal to zero.</value>
   </data>
+  <data name="ErrorMsg_ListEntityBase_FixedSize" xml:space="preserve">
+    <value>The list is a fixed size and cannot be changed.</value>
+  </data>
+  <data name="ErrorMsg_ListEntityBase_InvalidItemType" xml:space="preserve">
+    <value>The specified item of type '{0}' cannot be casted to type '{1}' that is required by the list.</value>
+  </data>
   <data name="ErrorMsg_ListEntityLengthCannotBeChanged" xml:space="preserve">
     <value>The length of this list cannot be changed.</value>
   </data>
   <data name="ErrorMsg_MismatchedMinMaxValues" xml:space="preserve">
     <value>The value of '{0}' must be less than or equal to '{1}'.</value>
+  </data>
+  <data name="ErrorMsg_MissingComponentConfiguration" xml:space="preserve">
+    <value>There does not exist a component configuration for component '{0}'.</value>
+  </data>
+  <data name="ErrorMsg_MultiPointCrossoverOperationCrossoverPointValidator_ValidationError" xml:space="preserve">
+    <value>Using partially matched crossover is only allowed for two crossover points.</value>
   </data>
   <data name="ErrorMsg_NonBinaryValueUsed" xml:space="preserve">
     <value>Only binary values (zero or one) are allowed.</value>
@@ -153,13 +168,25 @@
   <data name="ErrorMsg_PopulationReplacementValue_LessThanZero" xml:space="preserve">
     <value>Number of objects to be replaced must be a non-negative integer.  The value provided was '{0}'.</value>
   </data>
-  <data name="ErrorMsg_SwapNodeNotInTree" xml:space="preserve">
-    <value>The node does not belong to this tree.</value>
+  <data name="ErrorMsg_TreeNodeCollectionCountError" xml:space="preserve">
+    <value>The number of nodes in this collection is fixed and cannot be changed.</value>
   </data>
   <data name="ErrorMsg_VariableLengthListEntity_InsertBit_OutOfRange" xml:space="preserve">
     <value>The index must be greater or equal to zero and less than or equal to the length.</value>
   </data>
   <data name="ErrorMsg_VariableLengthListEntity_RemoveBit_OutOfRange" xml:space="preserve">
     <value>The index must be greater or equal to zero and less than the length.</value>
+  </data>
+  <data name="StatisticLogger_AlgorithmCompleted" xml:space="preserve">
+    <value>Algorithm completed.</value>
+  </data>
+  <data name="StatisticLogger_AlgorithmStarted" xml:space="preserve">
+    <value>Algorithm started.</value>
+  </data>
+  <data name="StatisticLogger_StatTrace" xml:space="preserve">
+    <value>Statistic Name: {0}
+Statistic Value: {1}
+Population Index: {2}
+Generation Index: {3}</value>
   </data>
 </root>

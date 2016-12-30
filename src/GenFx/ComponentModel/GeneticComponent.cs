@@ -1,39 +1,33 @@
-using System.ComponentModel;
-using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
-
 namespace GenFx.ComponentModel
 {
     /// <summary>
     /// Represents a customizable component within the framework.
     /// </summary>
-    public abstract class GeneticComponent
+    public abstract class GeneticComponent : IGeneticComponent
     {
-        internal const string ConfigurationProperty = "Configuration";
-
         /// <summary>
-        /// When overriden by a derived class, gets the <see cref="ComponentConfiguration"/> containing the configuration of this component instance.
+        /// Initializes a new instance of this class.
         /// </summary>
-        [Browsable(false)]
-        public abstract ComponentConfiguration Configuration
+        /// <param name="configuration">The <see cref="ComponentConfiguration"/> containing the configuration of this component.</param>
+        protected GeneticComponent(ComponentConfiguration configuration)
         {
-            get;
+            Configuration = configuration;
         }
 
         /// <summary>
-        /// Returns an objects that contains the serializable state of this component.
+        /// Gets the <see cref="ComponentConfiguration"/> containing the configuration of this component instance.
         /// </summary>
-        internal KeyValueMap SaveStateCore()
+        public IComponentConfiguration Configuration
         {
-            KeyValueMap state = new KeyValueMap();
-            SetSaveState(state);
-            return state;
+            get;
+            private set;
         }
 
         /// <summary>
         /// Restores the state of the component.
         /// </summary>
-        protected internal virtual void RestoreState(KeyValueMap state)
+        /// <param name="state">The state to restore from.</param>
+        public virtual void RestoreState(KeyValueMap state)
         {
         }
 
@@ -41,7 +35,7 @@ namespace GenFx.ComponentModel
         /// Sets the serializable state of this component on the state object.
         /// </summary>
         /// <param name="state">The object containing the serializable state of this object.</param>
-        protected virtual void SetSaveState(KeyValueMap state)
+        public virtual void SetSaveState(KeyValueMap state)
         {
         }
     }

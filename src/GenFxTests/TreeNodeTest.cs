@@ -22,8 +22,8 @@ namespace GenFxTests
         [TestMethod]
         public void TreeNode_AppendChild()
         {
-            GeneticAlgorithm algorithm = GetAlgorithm();
-            TreeEntity entity = new TestTreeEntity(algorithm);
+            IGeneticAlgorithm algorithm = GetAlgorithm();
+            TestTreeEntity entity = new TestTreeEntity(algorithm);
             TreeNode node = new TreeNode();
             entity.SetRootNode(node);
 
@@ -40,8 +40,8 @@ namespace GenFxTests
         [TestMethod]
         public void TreeNode_InsertChild()
         {
-            GeneticAlgorithm algorithm = GetAlgorithm();
-            TreeEntity entity = new TestTreeEntity(algorithm);
+            IGeneticAlgorithm algorithm = GetAlgorithm();
+            TestTreeEntity entity = new TestTreeEntity(algorithm);
             TreeNode node = new TreeNode();
             entity.SetRootNode(node);
 
@@ -64,8 +64,8 @@ namespace GenFxTests
         [TestMethod]
         public void TreeNode_InsertChild_NoTree()
         {
-            GeneticAlgorithm algorithm = GetAlgorithm();
-            TreeEntity entity = new TestTreeEntity(algorithm);
+            IGeneticAlgorithm algorithm = GetAlgorithm();
+            TestTreeEntity entity = new TestTreeEntity(algorithm);
             TreeNode node = new TreeNode();
 
             TreeNode child1 = new TreeNode();
@@ -78,13 +78,13 @@ namespace GenFxTests
         [TestMethod]
         public void TreeNode_Clone()
         {
-            GeneticAlgorithm algorithm = GetAlgorithm();
-            TreeEntity entity = new TestTreeEntity(algorithm);
+            IGeneticAlgorithm algorithm = GetAlgorithm();
+            TestTreeEntity entity = new TestTreeEntity(algorithm);
             TreeNode node = new TreeNode();
             entity.SetRootNode(node);
             node.AppendChild(new TreeNode());
             node.Value = 10;
-            TreeEntity newEntity = new TestTreeEntity(algorithm);
+            TestTreeEntity newEntity = new TestTreeEntity(algorithm);
             TreeNode newParent = new TreeNode();
             newEntity.SetRootNode(newParent);
             TreeNode clone = node.Clone(newEntity, newParent);
@@ -102,13 +102,13 @@ namespace GenFxTests
         [TestMethod]
         public void TreeNode_CopyTo()
         {
-            GeneticAlgorithm algorithm = GetAlgorithm();
-            TreeEntity entity = new TestTreeEntity(algorithm);
+            IGeneticAlgorithm algorithm = GetAlgorithm();
+            TestTreeEntity entity = new TestTreeEntity(algorithm);
             TreeNode node = new TreeNode();
             entity.SetRootNode(node);
             node.AppendChild(new TreeNode());
             node.Value = 10;
-            TreeEntity newEntity = new TestTreeEntity(algorithm);
+            TestTreeEntity newEntity = new TestTreeEntity(algorithm);
             TreeNode newParent = new TreeNode();
             newEntity.SetRootNode(newParent);
             TreeNode newNode = new TreeNode();
@@ -120,19 +120,24 @@ namespace GenFxTests
             Assert.AreEqual(node.Value, newNode.Value, "Value not set correctly.");
         }
 
-        private static GeneticAlgorithm GetAlgorithm()
+        private static IGeneticAlgorithm GetAlgorithm()
         {
-            GeneticAlgorithm algorithm = new MockGeneticAlgorithm();
-            algorithm.ConfigurationSet.Entity = new TestTreeEntityConfiguration();
+            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentConfigurationSet
+            {
+                GeneticAlgorithm = new MockGeneticAlgorithmConfiguration(),
+                Population = new MockPopulationConfiguration(),
+                SelectionOperator = new MockSelectionOperatorConfiguration(),
+                FitnessEvaluator = new MockFitnessEvaluatorConfiguration(),
+                Entity = new TestTreeEntityConfiguration()
+            });
             return algorithm;
         }
 
-        private class TestTreeEntity : TreeEntity
+        private class TestTreeEntity : TreeEntity<TestTreeEntity, TestTreeEntityConfiguration>
         {
-            public TestTreeEntity(GeneticAlgorithm algorithm)
+            public TestTreeEntity(IGeneticAlgorithm algorithm)
                 : base(algorithm)
             {
-
             }
 
             public override string Representation
@@ -144,15 +149,9 @@ namespace GenFxTests
             {
                 throw new Exception("The method or operation is not implemented.");
             }
-
-            public override GeneticEntity Clone()
-            {
-                throw new Exception("The method or operation is not implemented.");
-            }
         }
 
-        [Component(typeof(TestTreeEntity))]
-        private class TestTreeEntityConfiguration : TreeEntityConfiguration
+        private class TestTreeEntityConfiguration : TreeEntityConfiguration<TestTreeEntityConfiguration, TestTreeEntity>
         {
         }
     }

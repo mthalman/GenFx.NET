@@ -1,4 +1,5 @@
 ﻿using GenFx;
+using GenFx.ComponentLibrary.Populations;
 using GenFx.ComponentLibrary.Terminators;
 using GenFxTests.Helpers;
 using GenFxTests.Mocks;
@@ -22,10 +23,10 @@ namespace GenFxTests
         public void FitnessTargetTerminator_Ctor()
         {
             double fitnessTarget = 5;
-            GeneticAlgorithm algorithm = GetAlgorithm(fitnessTarget);
+            IGeneticAlgorithm algorithm = GetAlgorithm(fitnessTarget);
 
             FitnessTargetTerminator terminator = new FitnessTargetTerminator(algorithm);
-            Assert.AreEqual(fitnessTarget, terminator.FitnessTarget, "FitnessTarget was not initialized correctly.");
+            Assert.IsInstanceOfType(terminator.Configuration, typeof(FitnessTargetTerminatorConfiguration));
         }
 
         /// <summary>
@@ -34,7 +35,7 @@ namespace GenFxTests
         [TestMethod()]
         public void FitnessTargetTerminator_Ctor_MissingSetting()
         {
-            AssertEx.Throws<ArgumentException>(() => new FitnessTargetTerminator(new MockGeneticAlgorithm()));
+            AssertEx.Throws<ArgumentException>(() => new FitnessTargetTerminator(new MockGeneticAlgorithm(new ComponentConfigurationSet())));
         }
 
         /// <summary>
@@ -44,7 +45,7 @@ namespace GenFxTests
         public void FitnessTargetTerminator_IsComplete()
         {
             double fitnessTarget = 15;
-            GeneticAlgorithm algorithm = GetAlgorithm(fitnessTarget);
+            IGeneticAlgorithm algorithm = GetAlgorithm(fitnessTarget);
 
             FitnessTargetTerminator terminator = new FitnessTargetTerminator(algorithm);
 
@@ -52,7 +53,7 @@ namespace GenFxTests
             Assert.IsFalse(terminator.IsComplete(), "No genetic entities have the fitness target.");
 
             MockEntity entity = new MockEntity(algorithm);
-            Population population = new Population(algorithm);
+            SimplePopulation population = new SimplePopulation(algorithm);
             population.Entities.Add(entity);
             algorithm.Environment.Populations.Add(population);
 
@@ -63,14 +64,20 @@ namespace GenFxTests
             Assert.IsTrue(terminator.IsComplete(), "A entity does have the fitness target.");
         }
 
-        private static GeneticAlgorithm GetAlgorithm(double fitnessTarget)
+        private static IGeneticAlgorithm GetAlgorithm(double fitnessTarget)
         {
-            GeneticAlgorithm algorithm = new MockGeneticAlgorithm();
-            algorithm.ConfigurationSet.Population = new PopulationConfiguration();
-            algorithm.ConfigurationSet.Entity = new MockEntityConfiguration();
-            FitnessTargetTerminatorConfiguration config = new FitnessTargetTerminatorConfiguration();
-            config.FitnessTarget = fitnessTarget;
-            algorithm.ConfigurationSet.Terminator = config;
+            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentConfigurationSet
+            {
+                GeneticAlgorithm = new MockGeneticAlgorithmConfiguration(),
+                SelectionOperator = new MockSelectionOperatorConfiguration(),
+                FitnessEvaluator = new MockFitnessEvaluatorConfiguration(),
+                Population = new SimplePopulationConfiguration(),
+                Entity = new MockEntityConfiguration(),
+                Terminator = new FitnessTargetTerminatorConfiguration
+                {
+                    FitnessTarget = fitnessTarget
+                }
+            });
             return algorithm;
         }
     }

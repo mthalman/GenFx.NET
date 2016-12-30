@@ -1,4 +1,6 @@
 ﻿using GenFx;
+using GenFx.ComponentLibrary.Base;
+using GenFx.ComponentLibrary.Populations;
 using GenFx.ComponentModel;
 using GenFxTests.Helpers;
 using GenFxTests.Mocks;
@@ -23,10 +25,17 @@ namespace GenFxTests
         [TestMethod]
         public void Terminator_Ctor()
         {
-            GeneticAlgorithm algorithm = new MockGeneticAlgorithm();
-            algorithm.ConfigurationSet.Terminator = new MockTerminatorConfiguration();
-            Terminator terminator = new MockTerminator(algorithm);
-            PrivateObject accessor = new PrivateObject(terminator, new PrivateType(typeof(Terminator)));
+            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentConfigurationSet
+            {
+                GeneticAlgorithm = new MockGeneticAlgorithmConfiguration(),
+                Entity = new MockEntityConfiguration(),
+                Population = new SimplePopulationConfiguration(),
+                SelectionOperator = new MockSelectionOperatorConfiguration(),
+                FitnessEvaluator = new MockFitnessEvaluatorConfiguration(),
+                Terminator = new MockTerminatorConfiguration()
+            });
+            MockTerminator terminator = new MockTerminator(algorithm);
+            PrivateObject accessor = new PrivateObject(terminator, new PrivateType(typeof(TerminatorBase<MockTerminator, MockTerminatorConfiguration>)));
             Assert.AreSame(algorithm, accessor.GetProperty("Algorithm"), "Algorithm not set correctly.");
         }
 
@@ -45,25 +54,20 @@ namespace GenFxTests
         [TestMethod]
         public void Terminator_Ctor_MissingConfig()
         {
-            GeneticAlgorithm algorithm = new MockGeneticAlgorithm();
-            AssertEx.Throws<ArgumentException>(() => new TestTerminator(algorithm));
+            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentConfigurationSet
+            {
+                GeneticAlgorithm = new MockGeneticAlgorithmConfiguration(),
+                SelectionOperator = new MockSelectionOperatorConfiguration(),
+                FitnessEvaluator = new MockFitnessEvaluatorConfiguration(),
+                Population = new MockPopulationConfiguration(),
+                Entity = new MockEntityConfiguration()
+            });
+            AssertEx.Throws<InvalidOperationException>(() => new TestTerminator(algorithm));
         }
 
-        /// <summary>
-        /// Tests that the IsComplete method works correctly.
-        /// </summary>
-        [TestMethod]
-        public void EmptyTerminator_IsComplete()
+        private class TestTerminator : TerminatorBase<TestTerminator, TestTerminatorConfiguration>
         {
-            GeneticAlgorithm algorithm = new MockGeneticAlgorithm();
-            algorithm.ConfigurationSet.Terminator = new EmptyTerminatorConfiguration();
-            EmptyTerminator terminator = new EmptyTerminator(algorithm);
-            Assert.IsFalse(terminator.IsComplete(), "Always returns false.");
-        }
-
-        private class TestTerminator : Terminator
-        {
-            public TestTerminator(GeneticAlgorithm algorithm)
+            public TestTerminator(IGeneticAlgorithm algorithm)
                 : base(algorithm)
             {
 
@@ -72,6 +76,10 @@ namespace GenFxTests
             {
                 throw new Exception("The method or operation is not implemented.");
             }
+        }
+
+        private class TestTerminatorConfiguration : TerminatorConfigurationBase<TestTerminatorConfiguration, TestTerminator>
+        {
         }
     }
 }

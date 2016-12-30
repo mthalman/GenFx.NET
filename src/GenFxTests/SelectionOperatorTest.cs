@@ -1,4 +1,5 @@
 ﻿using GenFx;
+using GenFx.ComponentLibrary.Populations;
 using GenFx.ComponentModel;
 using GenFxTests.Helpers;
 using GenFxTests.Mocks;
@@ -21,9 +22,9 @@ namespace GenFxTests
         [TestMethod]
         public void SelectionOperator_Ctor()
         {
-            GeneticAlgorithm algorithm = GetAlgorithm();
-            SelectionOperator op = new MockSelectionOperator(algorithm);
-            Assert.AreEqual(FitnessType.Scaled, op.SelectionBasedOnFitnessType, "SelectionBasedOnFitnessType not initialized correctly.");
+            IGeneticAlgorithm algorithm = GetAlgorithm();
+            MockSelectionOperator op = new MockSelectionOperator(algorithm);
+            Assert.IsInstanceOfType(op.Configuration, typeof(MockSelectionOperatorConfiguration));
         }
 
         /// <summary>
@@ -41,7 +42,7 @@ namespace GenFxTests
         [TestMethod]
         public void SelectionOperator_Ctor_MissingConfig()
         {
-            AssertEx.Throws<ArgumentException>(() => new MockSelectionOperator(new MockGeneticAlgorithm()));
+            AssertEx.Throws<ArgumentException>(() => new MockSelectionOperator(new MockGeneticAlgorithm(new ComponentConfigurationSet())));
         }
 
         /// <summary>
@@ -50,14 +51,14 @@ namespace GenFxTests
         [TestMethod]
         public void SelectionOperator_Select()
         {
-            GeneticAlgorithm algorithm = GetAlgorithm();
+            IGeneticAlgorithm algorithm = GetAlgorithm();
             MockSelectionOperator op = new MockSelectionOperator(algorithm);
-            Population population = new Population(algorithm);
-            GeneticEntity entity1 = new MockEntity(algorithm);
-            GeneticEntity entity2 = new MockEntity(algorithm);
+            SimplePopulation population = new SimplePopulation(algorithm);
+            IGeneticEntity entity1 = new MockEntity(algorithm);
+            IGeneticEntity entity2 = new MockEntity(algorithm);
             population.Entities.Add(entity1);
             population.Entities.Add(entity2);
-            GeneticEntity selectedEntity = op.Select(population);
+            IGeneticEntity selectedEntity = op.SelectEntity(population);
             Assert.AreSame(entity1, selectedEntity, "Incorrect entity selected.");
             Assert.AreEqual(1, op.DoSelectCallCount, "Selection not called correctly.");
         }
@@ -68,10 +69,10 @@ namespace GenFxTests
         [TestMethod]
         public void SelectionOperator_Select_EmptyPopulation()
         {
-            GeneticAlgorithm algorithm = GetAlgorithm();
+            IGeneticAlgorithm algorithm = GetAlgorithm();
             MockSelectionOperator op = new MockSelectionOperator(algorithm);
-            Population population = new Population(algorithm);
-            AssertEx.Throws<ArgumentException>(() => op.Select(population));
+            SimplePopulation population = new SimplePopulation(algorithm);
+            AssertEx.Throws<ArgumentException>(() => op.SelectEntity(population));
         }
 
         /// <summary>
@@ -80,22 +81,25 @@ namespace GenFxTests
         [TestMethod]
         public void SelectionOperator_Select_NullPopulation()
         {
-            GeneticAlgorithm algorithm = GetAlgorithm();
+            IGeneticAlgorithm algorithm = GetAlgorithm();
             MockSelectionOperator op = new MockSelectionOperator(algorithm);
-            AssertEx.Throws<ArgumentNullException>(() => op.Select(null));
+            AssertEx.Throws<ArgumentNullException>(() => op.SelectEntity(null));
         }
 
-        private GeneticAlgorithm GetAlgorithm()
+        private IGeneticAlgorithm GetAlgorithm()
         {
-            GeneticAlgorithm algorithm = new MockGeneticAlgorithm();
-            algorithm.ConfigurationSet.Entity = new MockEntityConfiguration();
-            algorithm.ConfigurationSet.Population = new PopulationConfiguration();
-            MockSelectionOperatorConfiguration config = new MockSelectionOperatorConfiguration();
-            config.SelectionBasedOnFitnessType = FitnessType.Scaled;
-            algorithm.ConfigurationSet.SelectionOperator = config;
+            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentConfigurationSet
+            {
+                GeneticAlgorithm = new MockGeneticAlgorithmConfiguration(),
+                FitnessEvaluator = new MockFitnessEvaluatorConfiguration(),
+                Entity = new MockEntityConfiguration(),
+                Population = new SimplePopulationConfiguration(),
+                SelectionOperator = new MockSelectionOperatorConfiguration
+                {
+                    SelectionBasedOnFitnessType = FitnessType.Scaled
+                }
+            });
             return algorithm;
         }
     }
-
-
 }

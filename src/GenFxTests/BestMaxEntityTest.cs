@@ -1,4 +1,6 @@
 ﻿using GenFx;
+using GenFx.ComponentLibrary.Base;
+using GenFx.ComponentLibrary.Populations;
 using GenFx.ComponentLibrary.Statistics;
 using GenFxTests.Helpers;
 using GenFxTests.Mocks;
@@ -22,9 +24,16 @@ namespace GenFxTests
         [TestMethod()]
         public void GetResultValue_NullPopulation()
         {
-            GeneticAlgorithm algorithm = new MockGeneticAlgorithm();
-            algorithm.ConfigurationSet.GeneticAlgorithm = new MockGeneticAlgorithmConfiguration();
-            algorithm.ConfigurationSet.Statistics.Add(new BestMaximumFitnessEntityStatisticConfiguration());
+            ComponentConfigurationSet config = new ComponentConfigurationSet
+            {
+                GeneticAlgorithm = new MockGeneticAlgorithmConfiguration(),
+                SelectionOperator = new MockSelectionOperatorConfiguration(),
+                Entity = new MockEntityConfiguration(),
+                Population = new MockPopulationConfiguration(),
+                FitnessEvaluator = new MockFitnessEvaluatorConfiguration(),
+            };
+            config.Statistics.Add(new BestMaximumFitnessEntityStatisticConfiguration());
+            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm(config);
             BestMaximumFitnessEntityStatistic target = new BestMaximumFitnessEntityStatistic(algorithm);
 
             AssertEx.Throws<ArgumentNullException>(() => target.GetResultValue(null));
@@ -36,26 +45,38 @@ namespace GenFxTests
         [TestMethod()]
         public void GetResultValue()
         {
-            GeneticAlgorithm algorithm = new MockGeneticAlgorithm();
-            algorithm.ConfigurationSet.Entity = new MockEntityConfiguration();
-            algorithm.ConfigurationSet.Population = new PopulationConfiguration();
-            algorithm.ConfigurationSet.GeneticAlgorithm = new MockGeneticAlgorithmConfiguration();
-            algorithm.ConfigurationSet.Statistics.Add(new BestMaximumFitnessEntityStatisticConfiguration());
+            ComponentConfigurationSet config = new ComponentConfigurationSet
+            {
+                SelectionOperator = new MockSelectionOperatorConfiguration(),
+                FitnessEvaluator = new MockFitnessEvaluatorConfiguration(),
+                Entity = new MockEntityConfiguration(),
+                Population = new SimplePopulationConfiguration(),
+                GeneticAlgorithm = new MockGeneticAlgorithmConfiguration(),
+            };
+            config.Statistics.Add(new BestMaximumFitnessEntityStatisticConfiguration());
+
+            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm(config);
             BestMaximumFitnessEntityStatistic target = new BestMaximumFitnessEntityStatistic(algorithm);
 
-            Population population1 = new Population(algorithm);
+            SimplePopulation population1 = new SimplePopulation(algorithm)
+            {
+                Index = 0
+            };
 
             VerifyGetResultValue(2, target, population1, algorithm, "20");
             VerifyGetResultValue(1, target, population1, algorithm, "20");
             VerifyGetResultValue(3, target, population1, algorithm, "30");
 
-            Population population2 = new Population(algorithm);
+            SimplePopulation population2 = new SimplePopulation(algorithm)
+            {
+                Index = 1
+            };
             VerifyGetResultValue(7, target, population2, algorithm, "70");
             VerifyGetResultValue(1, target, population1, algorithm, "30");
             VerifyGetResultValue(4, target, population2, algorithm, "70");
         }
         
-        private static void VerifyGetResultValue(int multiplier, BestMaximumFitnessEntityStatistic stat, Population population, GeneticAlgorithm algorithm, string expectedReturnVal)
+        private static void VerifyGetResultValue(int multiplier, BestMaximumFitnessEntityStatistic stat, SimplePopulation population, IGeneticAlgorithm algorithm, string expectedReturnVal)
         {
             for (int i = 0; i < 5; i++)
             {
@@ -75,7 +96,7 @@ namespace GenFxTests
 
             object representation = stat.GetResultValue(population);
 
-            Assert.AreEqual(expectedReturnVal, representation);
+            Assert.AreEqual(expectedReturnVal, representation.ToString());
         }
     }
 }

@@ -24,14 +24,7 @@ namespace GenFx.Validation
 
             this.enumType = enumType;
         }
-
-        /// <summary>
-        /// When overriden by a derived class, returns whether the enum value is a defined value.
-        /// </summary>
-        /// <param name="value">Value to check.</param>
-        /// <returns>True if the enum value is defined; otherwise, false.</returns>
-        protected abstract bool IsDefined(Enum value);
-
+        
         /// <summary>
         /// Returns whether <paramref name="value"/> is valid.
         /// </summary>
@@ -56,7 +49,7 @@ namespace GenFx.Validation
             try
             {
                 Enum enumValue = (Enum)Enum.ToObject(this.enumType, value);
-                if (!this.IsDefined(enumValue))
+                if (!Enum.IsDefined(this.enumType, enumValue))
                 {
                     errorMessage = EnumHelper.GetInvalidEnumMessage(this.enumType);
                     return false;

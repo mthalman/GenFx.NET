@@ -1,5 +1,3 @@
-using System;
-
 namespace GenFx
 {
     /// <summary>
@@ -7,82 +5,74 @@ namespace GenFx
     /// </summary>
     public class AlgorithmOperators
     {
-        private SelectionOperator selectionOperator;
-        private MutationOperator mutationOperator;
-        private CrossoverOperator crossoverOperator;
-        private ElitismStrategy elitismStrategy;
-        private FitnessScalingStrategy fitnessScalingStrategy;
-        private Terminator terminator;
-        private FitnessEvaluator fitnessEvaluator;
-
         /// <summary>
         /// Gets the <see cref="FitnessEvaluator"/> object that was specified in the 
         /// <see cref="ComponentConfigurationSet.FitnessEvaluator"/> property.
         /// </summary>
-        public FitnessEvaluator FitnessEvaluator
+        public IFitnessEvaluator FitnessEvaluator
         {
-            get { return this.fitnessEvaluator; }
-            internal set { this.fitnessEvaluator = value; }
+            get;
+            internal set;
         }
 
         /// <summary>
         /// Gets the <see cref="Terminator"/> object that was specified in the 
         /// <see cref="ComponentConfigurationSet.Terminator"/> property.
         /// </summary>
-        public Terminator Terminator
+        public ITerminator Terminator
         {
-            get { return this.terminator; }
-            internal set { this.terminator = value; }
+            get;
+            internal set;
         }
 
         /// <summary>
         /// Gets the <see cref="FitnessScalingStrategy"/> object that was specified in the 
         /// <see cref="ComponentConfigurationSet.FitnessScalingStrategy"/> property.
         /// </summary>
-        public FitnessScalingStrategy FitnessScalingStrategy
+        public IFitnessScalingStrategy FitnessScalingStrategy
         {
-            get { return this.fitnessScalingStrategy; }
-            internal set { this.fitnessScalingStrategy = value; }
+            get;
+            internal set;
         }
 
         /// <summary>
         /// Gets the <see cref="SelectionOperator"/> object that was specified in the 
         /// <see cref="ComponentConfigurationSet.SelectionOperator"/> property.
         /// </summary>
-        public SelectionOperator SelectionOperator
+        public ISelectionOperator SelectionOperator
         {
-            get { return this.selectionOperator; }
-            internal set { this.selectionOperator = value; }
+            get;
+            internal set;
         }
 
         /// <summary>
         /// Gets the <see cref="MutationOperator"/> object that was specified in the 
         /// <see cref="ComponentConfigurationSet.MutationOperator"/> property.
         /// </summary>
-        public MutationOperator MutationOperator
+        public IMutationOperator MutationOperator
         {
-            get { return this.mutationOperator; }
-            internal set { this.mutationOperator = value; }
+            get;
+            internal set;
         }
 
         /// <summary>
         /// Gets the <see cref="CrossoverOperator"/> object that was specified in the 
         /// <see cref="ComponentConfigurationSet.CrossoverOperator"/> property.
         /// </summary>
-        public CrossoverOperator CrossoverOperator
+        public ICrossoverOperator CrossoverOperator
         {
-            get { return this.crossoverOperator; }
-            internal set { this.crossoverOperator = value; }
+            get;
+            internal set;
         }
 
         /// <summary>
         /// Gets the <see cref="ElitismStrategy"/> object that was specified in the 
         /// <see cref="ComponentConfigurationSet.ElitismStrategy"/> property.
         /// </summary>
-        public ElitismStrategy ElitismStrategy
+        public IElitismStrategy ElitismStrategy
         {
-            get { return this.elitismStrategy; }
-            internal set { this.elitismStrategy = value; }
+            get;
+            internal set;
         }
     }
 }

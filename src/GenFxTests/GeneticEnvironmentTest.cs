@@ -1,4 +1,5 @@
 ﻿using GenFx;
+using GenFx.ComponentLibrary.Populations;
 using GenFxTests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
@@ -21,20 +22,24 @@ namespace GenFxTests
         [TestMethod()]
         public async Task GeneticEnvironment_EvaluateFitness_Async()
         {
-            GeneticAlgorithm algorithm = new MockGeneticAlgorithm();
-            algorithm.ConfigurationSet.Population = new PopulationConfiguration();
-            algorithm.ConfigurationSet.Entity = new MockEntityConfiguration();
-            algorithm.ConfigurationSet.FitnessEvaluator = new MockFitnessEvaluatorConfiguration();
-            MockSelectionOperatorConfiguration config = new MockSelectionOperatorConfiguration();
-            config.SelectionBasedOnFitnessType = FitnessType.Scaled;
-            algorithm.ConfigurationSet.SelectionOperator = config;
+            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentConfigurationSet
+            {
+                GeneticAlgorithm = new MockGeneticAlgorithmConfiguration(),
+                Population = new SimplePopulationConfiguration(),
+                Entity = new MockEntityConfiguration(),
+                FitnessEvaluator = new MockFitnessEvaluatorConfiguration(),
+                SelectionOperator = new MockSelectionOperatorConfiguration
+                {
+                    SelectionBasedOnFitnessType = FitnessType.Scaled
+                }
+            });
             algorithm.Operators.FitnessEvaluator = new MockFitnessEvaluator(algorithm);
             algorithm.Operators.SelectionOperator = new MockSelectionOperator(algorithm);
 
             GeneticEnvironment environment = new GeneticEnvironment(algorithm);
 
-            Population population1 = GetPopulation(algorithm);
-            Population population2 = GetPopulation(algorithm);
+            SimplePopulation population1 = GetPopulation(algorithm);
+            SimplePopulation population2 = GetPopulation(algorithm);
             environment.Populations.Add(population1);
             environment.Populations.Add(population2);
 
@@ -49,19 +54,23 @@ namespace GenFxTests
         [TestMethod()]
         public async Task GeneticEnvironment_Initialize_Async()
         {
-            GeneticAlgorithm algorithm = new MockGeneticAlgorithm();
-            algorithm.ConfigurationSet.Entity = new MockEntityConfiguration();
             int environmentSize = 2;
             int populationSize = 5;
 
-            MockGeneticAlgorithmConfiguration algConfig = new MockGeneticAlgorithmConfiguration();
-            algConfig.EnvironmentSize = environmentSize;
-            algorithm.ConfigurationSet.GeneticAlgorithm = algConfig;
-
-            MockPopulationConfiguration popConfig = new MockPopulationConfiguration();
-            popConfig.PopulationSize = populationSize;
-            algorithm.ConfigurationSet.Population = popConfig;
-
+            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentConfigurationSet
+            {
+                FitnessEvaluator = new MockFitnessEvaluatorConfiguration(),
+                SelectionOperator = new MockSelectionOperatorConfiguration(),
+                Entity = new MockEntityConfiguration(),
+                GeneticAlgorithm = new MockGeneticAlgorithmConfiguration
+                {
+                    EnvironmentSize = environmentSize,
+                },
+                Population = new MockPopulationConfiguration
+                {
+                    PopulationSize = populationSize
+                }
+            });
             GeneticEnvironment environment = new GeneticEnvironment(algorithm);
 
             await environment.InitializeAsync();
@@ -76,9 +85,9 @@ namespace GenFxTests
             }
         }
 
-        private static Population GetPopulation(GeneticAlgorithm algorithm)
+        private static SimplePopulation GetPopulation(IGeneticAlgorithm algorithm)
         {
-            Population population = new Population(algorithm);
+            SimplePopulation population = new SimplePopulation(algorithm);
             MockEntity entity1 = new MockEntity(algorithm);
             entity1.Identifier = "5";
             MockEntity entity2 = new MockEntity(algorithm);
@@ -88,7 +97,7 @@ namespace GenFxTests
             return population;
         }
 
-        private static void VerifyFitnessEvaluation(Population population)
+        private static void VerifyFitnessEvaluation(SimplePopulation population)
         {
             Assert.AreEqual("5", ((MockEntity)population.Entities[0]).Identifier, "Entity was not sorted correctly.");
             Assert.AreEqual("2", ((MockEntity)population.Entities[1]).Identifier, "Entity was not sorted correctly.");

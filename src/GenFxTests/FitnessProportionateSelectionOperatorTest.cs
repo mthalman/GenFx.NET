@@ -1,4 +1,5 @@
 ﻿using GenFx;
+using GenFx.ComponentLibrary.Populations;
 using GenFx.ComponentLibrary.SelectionOperators;
 using GenFxTests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -25,9 +26,9 @@ namespace GenFxTests
         [TestMethod()]
         public void FitnessProportionateSelectionOperator_Select()
         {
-            GeneticAlgorithm algorithm = GetAlgorithm();
+            IGeneticAlgorithm algorithm = GetAlgorithm();
             FitnessProportionateSelectionOperator op = new FitnessProportionateSelectionOperator(algorithm);
-            Population population = new Population(algorithm);
+            SimplePopulation population = new SimplePopulation(algorithm);
             MockEntity entity1 = new MockEntity(algorithm);
             entity1.ScaledFitnessValue = 1;
             MockEntity entity2 = new MockEntity(algorithm);
@@ -41,27 +42,27 @@ namespace GenFxTests
             RandomHelper.Instance = randomUtil;
 
             randomUtil.RandomRatio = 0;
-            GeneticEntity selectedEntity = op.Select(population);
+            IGeneticEntity selectedEntity = op.SelectEntity(population);
             Assert.AreSame(entity1, selectedEntity, "Incorrect entity selected.");
 
             randomUtil.RandomRatio = .099999;
-            selectedEntity = op.Select(population);
+            selectedEntity = op.SelectEntity(population);
             Assert.AreSame(entity1, selectedEntity, "Incorrect entity selected.");
 
             randomUtil.RandomRatio = .1;
-            selectedEntity = op.Select(population);
+            selectedEntity = op.SelectEntity(population);
             Assert.AreSame(entity2, selectedEntity, "Incorrect entity selected.");
 
             randomUtil.RandomRatio = .599999;
-            selectedEntity = op.Select(population);
+            selectedEntity = op.SelectEntity(population);
             Assert.AreSame(entity2, selectedEntity, "Incorrect entity selected.");
 
             randomUtil.RandomRatio = .6;
-            selectedEntity = op.Select(population);
+            selectedEntity = op.SelectEntity(population);
             Assert.AreSame(entity3, selectedEntity, "Incorrect entity selected.");
 
             randomUtil.RandomRatio = 1;
-            selectedEntity = op.Select(population);
+            selectedEntity = op.SelectEntity(population);
             Assert.AreSame(entity3, selectedEntity, "Incorrect entity selected.");
         }
 
@@ -71,11 +72,11 @@ namespace GenFxTests
         [TestMethod()]
         public void FitnessProportionateSelectionOperator_Select_MinimizeFitness()
         {
-            GeneticAlgorithm algorithm = GetAlgorithm();
-            algorithm.ConfigurationSet.FitnessEvaluator.EvaluationMode = FitnessEvaluationMode.Minimize;
+            IGeneticAlgorithm algorithm = GetAlgorithm();
+            ((MockFitnessEvaluatorConfiguration)algorithm.ConfigurationSet.FitnessEvaluator).EvaluationMode = FitnessEvaluationMode.Minimize;
 
             FitnessProportionateSelectionOperator op = new FitnessProportionateSelectionOperator(algorithm);
-            Population population = new Population(algorithm);
+            SimplePopulation population = new SimplePopulation(algorithm);
             MockEntity entity1 = new MockEntity(algorithm);
             entity1.ScaledFitnessValue = 1; // Slice size: 5
             MockEntity entity2 = new MockEntity(algorithm);
@@ -89,27 +90,27 @@ namespace GenFxTests
             RandomHelper.Instance = randomUtil;
 
             randomUtil.RandomRatio = 0;
-            GeneticEntity selectedEntity = op.Select(population);
+            IGeneticEntity selectedEntity = op.SelectEntity(population);
             Assert.AreSame(entity2, selectedEntity, "Incorrect entity selected.");
 
             randomUtil.RandomRatio = .099999;
-            selectedEntity = op.Select(population);
+            selectedEntity = op.SelectEntity(population);
             Assert.AreSame(entity2, selectedEntity, "Incorrect entity selected.");
 
             randomUtil.RandomRatio = .1;
-            selectedEntity = op.Select(population);
+            selectedEntity = op.SelectEntity(population);
             Assert.AreSame(entity3, selectedEntity, "Incorrect entity selected.");
 
             randomUtil.RandomRatio = .499999;
-            selectedEntity = op.Select(population);
+            selectedEntity = op.SelectEntity(population);
             Assert.AreSame(entity3, selectedEntity, "Incorrect entity selected.");
 
             randomUtil.RandomRatio = .5;
-            selectedEntity = op.Select(population);
+            selectedEntity = op.SelectEntity(population);
             Assert.AreSame(entity1, selectedEntity, "Incorrect entity selected.");
 
             randomUtil.RandomRatio = 1;
-            selectedEntity = op.Select(population);
+            selectedEntity = op.SelectEntity(population);
             Assert.AreSame(entity1, selectedEntity, "Incorrect entity selected.");
         }
 
@@ -119,9 +120,9 @@ namespace GenFxTests
         [TestMethod()]
         public void FitnessProportionateSelectionOperator_Select_FitnessValueZero()
         {
-            GeneticAlgorithm algorithm = GetAlgorithm();
+            IGeneticAlgorithm algorithm = GetAlgorithm();
             FitnessProportionateSelectionOperator op = new FitnessProportionateSelectionOperator(algorithm);
-            Population population = new Population(algorithm);
+            SimplePopulation population = new SimplePopulation(algorithm);
             MockEntity entity1 = new MockEntity(algorithm);
             entity1.ScaledFitnessValue = 1; // Slice size: 2
             MockEntity entity2 = new MockEntity(algorithm);
@@ -135,27 +136,27 @@ namespace GenFxTests
             RandomHelper.Instance = randomUtil;
 
             randomUtil.RandomRatio = 0;
-            GeneticEntity selectedEntity = op.Select(population);
+            IGeneticEntity selectedEntity = op.SelectEntity(population);
             Assert.AreSame(entity1, selectedEntity, "Incorrect entity selected.");
 
             randomUtil.RandomRatio = .199999;
-            selectedEntity = op.Select(population);
+            selectedEntity = op.SelectEntity(population);
             Assert.AreSame(entity1, selectedEntity, "Incorrect entity selected.");
 
             randomUtil.RandomRatio = .2;
-            selectedEntity = op.Select(population);
+            selectedEntity = op.SelectEntity(population);
             Assert.AreSame(entity2, selectedEntity, "Incorrect entity selected.");
 
             randomUtil.RandomRatio = .299999;
-            selectedEntity = op.Select(population);
+            selectedEntity = op.SelectEntity(population);
             Assert.AreSame(entity2, selectedEntity, "Incorrect entity selected.");
 
             randomUtil.RandomRatio = .3;
-            selectedEntity = op.Select(population);
+            selectedEntity = op.SelectEntity(population);
             Assert.AreSame(entity3, selectedEntity, "Incorrect entity selected.");
 
             randomUtil.RandomRatio = 1;
-            selectedEntity = op.Select(population);
+            selectedEntity = op.SelectEntity(population);
             Assert.AreSame(entity3, selectedEntity, "Incorrect entity selected.");
         }
 
@@ -165,9 +166,9 @@ namespace GenFxTests
         [TestMethod()]
         public void FitnessProportionateSelectionOperator_Select_FitnessValueNegative()
         {
-            GeneticAlgorithm algorithm = GetAlgorithm();
+            IGeneticAlgorithm algorithm = GetAlgorithm();
             FitnessProportionateSelectionOperator op = new FitnessProportionateSelectionOperator(algorithm);
-            Population population = new Population(algorithm);
+            SimplePopulation population = new SimplePopulation(algorithm);
             MockEntity entity1 = new MockEntity(algorithm);
             entity1.ScaledFitnessValue = -1; // Slice size: 1
             MockEntity entity2 = new MockEntity(algorithm);
@@ -181,40 +182,43 @@ namespace GenFxTests
             RandomHelper.Instance = randomUtil;
 
             randomUtil.RandomRatio = 0;
-            GeneticEntity selectedEntity = op.Select(population);
+            IGeneticEntity selectedEntity = op.SelectEntity(population);
             Assert.AreSame(entity1, selectedEntity, "Incorrect entity selected.");
 
             randomUtil.RandomRatio = .099999;
-            selectedEntity = op.Select(population);
+            selectedEntity = op.SelectEntity(population);
             Assert.AreSame(entity1, selectedEntity, "Incorrect entity selected.");
 
             randomUtil.RandomRatio = .1;
-            selectedEntity = op.Select(population);
+            selectedEntity = op.SelectEntity(population);
             Assert.AreSame(entity2, selectedEntity, "Incorrect entity selected.");
 
             randomUtil.RandomRatio = .399999;
-            selectedEntity = op.Select(population);
+            selectedEntity = op.SelectEntity(population);
             Assert.AreSame(entity2, selectedEntity, "Incorrect entity selected.");
 
             randomUtil.RandomRatio = .4;
-            selectedEntity = op.Select(population);
+            selectedEntity = op.SelectEntity(population);
             Assert.AreSame(entity3, selectedEntity, "Incorrect entity selected.");
 
             randomUtil.RandomRatio = 1;
-            selectedEntity = op.Select(population);
+            selectedEntity = op.SelectEntity(population);
             Assert.AreSame(entity3, selectedEntity, "Incorrect entity selected.");
         }
 
-        private static GeneticAlgorithm GetAlgorithm()
+        private static IGeneticAlgorithm GetAlgorithm()
         {
-            GeneticAlgorithm algorithm = new MockGeneticAlgorithm();
-            algorithm.ConfigurationSet.Entity = new MockEntityConfiguration();
-            algorithm.ConfigurationSet.Population = new PopulationConfiguration();
-            algorithm.ConfigurationSet.FitnessEvaluator = new MockFitnessEvaluatorConfiguration();
-
-            FitnessProportionateSelectionOperatorConfiguration config = new FitnessProportionateSelectionOperatorConfiguration();
-            config.SelectionBasedOnFitnessType = FitnessType.Scaled;
-            algorithm.ConfigurationSet.SelectionOperator = config;
+            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentConfigurationSet
+            {
+                GeneticAlgorithm = new MockGeneticAlgorithmConfiguration(),
+                Entity = new MockEntityConfiguration(),
+                Population = new SimplePopulationConfiguration(),
+                FitnessEvaluator = new MockFitnessEvaluatorConfiguration(),
+                SelectionOperator = new FitnessProportionateSelectionOperatorConfiguration
+                {
+                    SelectionBasedOnFitnessType = FitnessType.Scaled
+                }
+            });
 
             algorithm.Operators.FitnessEvaluator = new MockFitnessEvaluator(algorithm);
 

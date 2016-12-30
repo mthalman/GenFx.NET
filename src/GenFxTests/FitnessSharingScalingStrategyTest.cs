@@ -1,4 +1,5 @@
 ﻿using GenFx;
+using GenFx.ComponentLibrary.Populations;
 using GenFx.ComponentLibrary.Scaling;
 using GenFx.ComponentModel;
 using GenFxTests.Helpers;
@@ -24,10 +25,9 @@ namespace GenFxTests
         {
             double scalingCurvature = .8;
             double scalingDistance = 1.5;
-            GeneticAlgorithm algorithm = GetAlgorithm(scalingCurvature, scalingDistance);
-            FitnessSharingScalingStrategy strategy = new FakeFitnessSharingScalingStrategy(algorithm);
-            Assert.IsTrue(scalingCurvature.Equals(strategy.ScalingCurvature), "ScalingCurvature not initialized correctly.");
-            Assert.IsTrue(scalingDistance.Equals(strategy.ScalingDistanceCutoff), "ScalingDistanceCutoff not initialized correctly.");
+            IGeneticAlgorithm algorithm = GetAlgorithm(scalingCurvature, scalingDistance);
+            FakeFitnessSharingScalingStrategy strategy = new FakeFitnessSharingScalingStrategy(algorithm);
+            Assert.IsInstanceOfType(strategy.Configuration, typeof(FakeFitnessSharingScalingStrategyConfiguration));
         }
 
         /// <summary>
@@ -36,7 +36,7 @@ namespace GenFxTests
         [TestMethod]
         public void FitnessSharingScalingStrategy_Ctor_MissingSetting()
         {
-            AssertEx.Throws<ArgumentException>(() => new FakeFitnessSharingScalingStrategy(new MockGeneticAlgorithm()));
+            AssertEx.Throws<ArgumentException>(() => new FakeFitnessSharingScalingStrategy(new MockGeneticAlgorithm(new ComponentConfigurationSet())));
         }
 
         // <summary>
@@ -45,9 +45,6 @@ namespace GenFxTests
         [TestMethod]
         public void FitnessSharingScalingStrategy_Ctor_InvalidCutoffSetting()
         {
-            GeneticAlgorithm algorithm = new MockGeneticAlgorithm();
-            algorithm.ConfigurationSet.Entity = new MockEntityConfiguration();
-            algorithm.ConfigurationSet.Population = new PopulationConfiguration();
             FakeFitnessSharingScalingStrategyConfiguration config = new FakeFitnessSharingScalingStrategyConfiguration();
             config.ScalingCurvature = 3;
             AssertEx.Throws<ValidationException>(() => config.ScalingDistanceCutoff = 0);
@@ -61,15 +58,15 @@ namespace GenFxTests
         {
             double scalingCurvature = .8;
             double scalingDistance = 3;
-            GeneticAlgorithm algorithm = GetAlgorithm(scalingCurvature, scalingDistance);
-            FitnessSharingScalingStrategy strategy = new FakeFitnessSharingScalingStrategy(algorithm);
-            Population population = new Population(algorithm);
-            GeneticEntity entity1 = AddEntity(algorithm, population, 5);
-            GeneticEntity entity2 = AddEntity(algorithm, population, 6);
-            GeneticEntity entity3 = AddEntity(algorithm, population, 9);
-            GeneticEntity entity4 = AddEntity(algorithm, population, 11.5);
-            GeneticEntity entity5 = AddEntity(algorithm, population, 20);
-            GeneticEntity entity6 = AddEntity(algorithm, population, 25);
+            IGeneticAlgorithm algorithm = GetAlgorithm(scalingCurvature, scalingDistance);
+            FakeFitnessSharingScalingStrategy strategy = new FakeFitnessSharingScalingStrategy(algorithm);
+            SimplePopulation population = new SimplePopulation(algorithm);
+            IGeneticEntity entity1 = AddEntity(algorithm, population, 5);
+            IGeneticEntity entity2 = AddEntity(algorithm, population, 6);
+            IGeneticEntity entity3 = AddEntity(algorithm, population, 9);
+            IGeneticEntity entity4 = AddEntity(algorithm, population, 11.5);
+            IGeneticEntity entity5 = AddEntity(algorithm, population, 20);
+            IGeneticEntity entity6 = AddEntity(algorithm, population, 25);
             strategy.Scale(population);
 
             ValidateScale(entity1, 3.16);
@@ -80,46 +77,51 @@ namespace GenFxTests
             ValidateScale(entity6, 25);
         }
 
-        private static void ValidateScale(GeneticEntity entity, double expectedValue)
+        private static void ValidateScale(IGeneticEntity entity, double expectedValue)
         {
             Assert.AreEqual(expectedValue, Math.Round(entity.ScaledFitnessValue, 2), "ScaledFitnessValue not scaled correctly.");
         }
 
-        private static GeneticEntity AddEntity(GeneticAlgorithm algorithm, Population population, double scaledFitnessValue)
+        private static IGeneticEntity AddEntity(IGeneticAlgorithm algorithm, SimplePopulation population, double scaledFitnessValue)
         {
-            GeneticEntity entity = new MockEntity(algorithm);
+            IGeneticEntity entity = new MockEntity(algorithm);
             entity.ScaledFitnessValue = scaledFitnessValue;
             population.Entities.Add(entity);
             return entity;
         }
 
-        private static GeneticAlgorithm GetAlgorithm(double scalingCurvature, double scalingDistance)
+        private static IGeneticAlgorithm GetAlgorithm(double scalingCurvature, double scalingDistance)
         {
-            GeneticAlgorithm algorithm = new MockGeneticAlgorithm();
-            algorithm.ConfigurationSet.Entity = new MockEntityConfiguration();
-            algorithm.ConfigurationSet.Population = new PopulationConfiguration();
-            FakeFitnessSharingScalingStrategyConfiguration config = new FakeFitnessSharingScalingStrategyConfiguration();
-            config.ScalingCurvature = scalingCurvature;
-            config.ScalingDistanceCutoff = scalingDistance;
-            algorithm.ConfigurationSet.FitnessScalingStrategy = config;
+            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentConfigurationSet
+            {
+                GeneticAlgorithm = new MockGeneticAlgorithmConfiguration(),
+                SelectionOperator = new MockSelectionOperatorConfiguration(),
+                FitnessEvaluator = new MockFitnessEvaluatorConfiguration(),
+                Entity = new MockEntityConfiguration(),
+                Population = new SimplePopulationConfiguration(),
+                FitnessScalingStrategy = new FakeFitnessSharingScalingStrategyConfiguration
+                {
+                    ScalingCurvature = scalingCurvature,
+                    ScalingDistanceCutoff = scalingDistance
+                }
+            });
             return algorithm;
         }
 
-        private class FakeFitnessSharingScalingStrategy : FitnessSharingScalingStrategy
+        private class FakeFitnessSharingScalingStrategy : FitnessSharingScalingStrategy<FakeFitnessSharingScalingStrategy, FakeFitnessSharingScalingStrategyConfiguration>
         {
-            public FakeFitnessSharingScalingStrategy(GeneticAlgorithm algorithm)
+            public FakeFitnessSharingScalingStrategy(IGeneticAlgorithm algorithm)
                 : base(algorithm)
             {
             }
 
-            public override double EvaluateFitnessDistance(GeneticEntity entity1, GeneticEntity entity2)
+            public override double EvaluateFitnessDistance(IGeneticEntity entity1, IGeneticEntity entity2)
             {
                 return Math.Abs(entity1.ScaledFitnessValue - entity2.ScaledFitnessValue);
             }
         }
 
-        [Component(typeof(FakeFitnessSharingScalingStrategy))]
-        private class FakeFitnessSharingScalingStrategyConfiguration : FitnessSharingScalingStrategyConfiguration
+        private class FakeFitnessSharingScalingStrategyConfiguration : FitnessSharingScalingStrategyConfiguration<FakeFitnessSharingScalingStrategyConfiguration, FakeFitnessSharingScalingStrategy>
         {
         }
     }

@@ -5,7 +5,9 @@ using GenFxTests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace GenFxTests
 {
@@ -237,15 +239,14 @@ namespace GenFxTests
         }
 
         /// <summary>
-        /// Tests that ComponentConfigurationSet.Terminator can be set to a null value.
+        /// Tests that ComponentConfigurationSet.Terminator cannot be set to a null value.
         ///</summary>
         [TestMethod()]
         public void TerminatorTest_ValidNull()
         {
             ComponentConfigurationSet target = new ComponentConfigurationSet();
-            MockTerminatorConfiguration val = null;
-            target.Terminator = val;
-            Assert.AreSame(val, target.Terminator, "Terminator was not set correctly.");
+            target.Terminator = null;
+            Assert.IsNotNull(target.Terminator, "Terminator was not set correctly.");
         }
 
         /// <summary>
@@ -322,12 +323,12 @@ namespace GenFxTests
             KeyValueMap crossoverState = (KeyValueMap)state[nameof(ComponentConfigurationSet.CrossoverOperator)];
             Assert.AreEqual(2, crossoverState.Count);
             Assert.AreEqual(crossoverConfig.GetType().AssemblyQualifiedName, crossoverState["$type"]);
-            Assert.AreEqual(crossoverConfig.CrossoverRate, crossoverState[nameof(CrossoverOperatorConfiguration.CrossoverRate)]);
+            Assert.AreEqual(crossoverConfig.CrossoverRate, crossoverState[nameof(ICrossoverOperatorConfiguration.CrossoverRate)]);
 
             KeyValueMap elitismState = (KeyValueMap)state[nameof(ComponentConfigurationSet.ElitismStrategy)];
             Assert.AreEqual(2, elitismState.Count);
             Assert.AreEqual(elitismConfig.GetType().AssemblyQualifiedName, elitismState["$type"]);
-            Assert.AreEqual(elitismConfig.ElitistRatio, elitismState[nameof(ElitismStrategyConfiguration.ElitistRatio)]);
+            Assert.AreEqual(elitismConfig.ElitistRatio, elitismState[nameof(IElitismStrategyConfiguration.ElitistRatio)]);
 
             KeyValueMap entityState = (KeyValueMap)state[nameof(ComponentConfigurationSet.Entity)];
             Assert.AreEqual(1, entityState.Count);
@@ -336,7 +337,7 @@ namespace GenFxTests
             KeyValueMap fitnessEvalState = (KeyValueMap)state[nameof(ComponentConfigurationSet.FitnessEvaluator)];
             Assert.AreEqual(2, fitnessEvalState.Count);
             Assert.AreEqual(fitnessEvalConfig.GetType().AssemblyQualifiedName, fitnessEvalState["$type"]);
-            Assert.AreEqual(fitnessEvalConfig.EvaluationMode.ToString(), fitnessEvalState[nameof(FitnessEvaluatorConfiguration.EvaluationMode)]);
+            Assert.AreEqual(fitnessEvalConfig.EvaluationMode.ToString(), fitnessEvalState[nameof(IFitnessEvaluatorConfiguration.EvaluationMode)]);
 
             KeyValueMap fitnessScalingState = (KeyValueMap)state[nameof(ComponentConfigurationSet.FitnessScalingStrategy)];
             Assert.AreEqual(1, fitnessScalingState.Count);
@@ -345,13 +346,13 @@ namespace GenFxTests
             KeyValueMap geneticAlgorithmState = (KeyValueMap)state[nameof(ComponentConfigurationSet.GeneticAlgorithm)];
             Assert.AreEqual(3, geneticAlgorithmState.Count);
             Assert.AreEqual(geneticAlgorithmConfig.GetType().AssemblyQualifiedName, geneticAlgorithmState["$type"]);
-            Assert.AreEqual(geneticAlgorithmConfig.EnvironmentSize, geneticAlgorithmState[nameof(GeneticAlgorithmConfiguration.EnvironmentSize)]);
-            Assert.AreEqual(geneticAlgorithmConfig.StatisticsEnabled, geneticAlgorithmState[nameof(GeneticAlgorithmConfiguration.StatisticsEnabled)]);
+            Assert.AreEqual(geneticAlgorithmConfig.EnvironmentSize, geneticAlgorithmState[nameof(IGeneticAlgorithmConfiguration.EnvironmentSize)]);
+            Assert.AreEqual(geneticAlgorithmConfig.StatisticsEnabled, geneticAlgorithmState[nameof(IGeneticAlgorithmConfiguration.StatisticsEnabled)]);
 
             KeyValueMap mutationState = (KeyValueMap)state[nameof(ComponentConfigurationSet.MutationOperator)];
             Assert.AreEqual(2, mutationState.Count);
             Assert.AreEqual(mutationConfig.GetType().AssemblyQualifiedName, mutationState["$type"]);
-            Assert.AreEqual(mutationConfig.MutationRate, mutationState[nameof(MutationOperatorConfiguration.MutationRate)]);
+            Assert.AreEqual(mutationConfig.MutationRate, mutationState[nameof(IMutationOperatorConfiguration.MutationRate)]);
 
             KeyValueMapCollection pluginsState = (KeyValueMapCollection)state[nameof(ComponentConfigurationSet.Plugins)];
             Assert.AreEqual(2, pluginsState.Count);
@@ -363,12 +364,12 @@ namespace GenFxTests
             KeyValueMap populationState = (KeyValueMap)state[nameof(ComponentConfigurationSet.Population)];
             Assert.AreEqual(2, populationState.Count);
             Assert.AreEqual(populationConfig.GetType().AssemblyQualifiedName, populationState["$type"]);
-            Assert.AreEqual(populationConfig.PopulationSize, populationState[nameof(PopulationConfiguration.PopulationSize)]);
+            Assert.AreEqual(populationConfig.PopulationSize, populationState[nameof(IPopulationConfiguration.PopulationSize)]);
 
             KeyValueMap selectionState = (KeyValueMap)state[nameof(ComponentConfigurationSet.SelectionOperator)];
             Assert.AreEqual(2, selectionState.Count);
             Assert.AreEqual(selectionConfig.GetType().AssemblyQualifiedName, selectionState["$type"]);
-            Assert.AreEqual(selectionConfig.SelectionBasedOnFitnessType.ToString(), selectionState[nameof(SelectionOperatorConfiguration.SelectionBasedOnFitnessType)]);
+            Assert.AreEqual(selectionConfig.SelectionBasedOnFitnessType.ToString(), selectionState[nameof(ISelectionOperatorConfiguration.SelectionBasedOnFitnessType)]);
 
             KeyValueMapCollection statsState = (KeyValueMapCollection)state[nameof(ComponentConfigurationSet.Statistics)];
             Assert.AreEqual(2, statsState.Count);
@@ -377,7 +378,7 @@ namespace GenFxTests
             KeyValueMap stat2State = statsState[1];
             Assert.AreEqual(stat2Config.GetType().AssemblyQualifiedName, stat2State["$type"]);
 
-            Assert.IsNull(state[nameof(ComponentConfigurationSet.Terminator)]);
+            Assert.IsNotNull(state[nameof(ComponentConfigurationSet.Terminator)]); // always defaults to non-null
         }
 
         /// <summary>
@@ -402,6 +403,7 @@ namespace GenFxTests
                 { nameof(ComponentConfigurationSet.SelectionOperator), null },
                 { nameof(ComponentConfigurationSet.Statistics), new KeyValueMapCollection() },
                 { nameof(ComponentConfigurationSet.Terminator), null },
+                { "isFrozen", true },
             };
 
             target.RestoreState(state);
@@ -416,7 +418,10 @@ namespace GenFxTests
             Assert.IsNull(target.Population);
             Assert.IsNull(target.SelectionOperator);
             Assert.AreEqual(0, target.Statistics.Count);
-            Assert.IsNull(target.Terminator);
+            Assert.IsNotNull(target.Terminator); // always defaults to non-null
+
+            PrivateObject configAccessor = new PrivateObject(target);
+            Assert.IsTrue((bool)configAccessor.GetField("isFrozen"));
         }
 
         /// <summary>
@@ -511,6 +516,7 @@ namespace GenFxTests
                         { "$type", typeof(MockTerminatorConfiguration).AssemblyQualifiedName },
                     }
                 },
+                { "isFrozen", true }
             };
 
             target.RestoreState(state);
@@ -538,9 +544,9 @@ namespace GenFxTests
             Assert.AreEqual(0.7, mutationConfig.MutationRate);
 
             Assert.AreEqual(2, target.Plugins.Count);
-            MockPluginConfiguration plugin1Config = (MockPluginConfiguration)target.Plugins[0];
+            MockPluginConfiguration plugin1Config = (MockPluginConfiguration)target.Plugins.OfType<MockPluginConfiguration>().FirstOrDefault();
             Assert.IsNotNull(plugin1Config);
-            MockPlugin2Configuration plugin2Config = (MockPlugin2Configuration)target.Plugins[1];
+            MockPlugin2Configuration plugin2Config = (MockPlugin2Configuration)target.Plugins.OfType<MockPlugin2Configuration>().FirstOrDefault();
             Assert.IsNotNull(plugin2Config);
 
             MockPopulationConfiguration populationConfig = (MockPopulationConfiguration)target.Population;
@@ -550,13 +556,47 @@ namespace GenFxTests
             Assert.AreEqual(FitnessType.Raw, selectionConfig.SelectionBasedOnFitnessType);
 
             Assert.AreEqual(2, target.Statistics.Count);
-            MockStatisticConfiguration statistic1Config = (MockStatisticConfiguration)target.Statistics[0];
+            MockStatisticConfiguration statistic1Config = (MockStatisticConfiguration)target.Statistics.OfType<MockStatisticConfiguration>().FirstOrDefault();
             Assert.IsNotNull(statistic1Config);
-            MockStatistic2Configuration statistic2Config = (MockStatistic2Configuration)target.Statistics[1];
+            MockStatistic2Configuration statistic2Config = (MockStatistic2Configuration)target.Statistics.OfType<MockStatistic2Configuration>().FirstOrDefault();
             Assert.IsNotNull(statistic2Config);
 
             MockTerminatorConfiguration terminatorConfig = (MockTerminatorConfiguration)target.Terminator;
             Assert.IsNotNull(terminatorConfig);
+
+            PrivateObject configAccessor = new PrivateObject(target);
+            Assert.IsTrue((bool)configAccessor.GetField("isFrozen"));
+        }
+
+
+        /// <summary>
+        /// Tests that the Validate method throws an exception when a null argument is passed.
+        /// </summary>
+        [TestMethod]
+        public void ComponentConfigurationSet_Validate_NullArg()
+        {
+            ComponentConfigurationSet config = new ComponentConfigurationSet();
+            AssertEx.Throws<ArgumentNullException>(() => config.Validate(null));
+        }
+
+        /// <summary>
+        /// Tests that the ValidateComponentConfiguration method throws an exception when passed a component has a mismatch configuration configured on the algorithm.
+        /// </summary>
+        [TestMethod]
+        public async Task ComponentConfigurationSet_ValidateComponentConfiguration_MismatchedConfigurationAsync()
+        {
+            ComponentConfigurationSet config = new ComponentConfigurationSet
+            {
+                GeneticAlgorithm = new MockGeneticAlgorithmConfiguration(),
+                SelectionOperator = new MockSelectionOperatorConfiguration(),
+                Population = new MockPopulationConfiguration(),
+                FitnessEvaluator = new MockFitnessEvaluatorConfiguration(),
+                Entity = new MockEntityConfiguration(),
+                MutationOperator = new MockMutationOperatorConfiguration()
+            };
+            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm(config);
+            await algorithm.InitializeAsync();
+            AssertEx.Throws<InvalidOperationException>(() => new MockMutationOperator2(algorithm));
         }
     }
 }

@@ -1,41 +1,29 @@
 using System;
-using System.ComponentModel;
-using GenFx.ComponentLibrary.Lists;
-using GenFx.ComponentModel;
 
-namespace GenFx.ComponentLibrary.BinaryStrings
+namespace GenFx.ComponentLibrary.Lists
 {
     /// <summary>
-    /// Provides the <see cref="VariableLengthIntegerListEntity"/> with variable single-point bit crossover support.
+    /// Provides the variable length types of <see cref="IListEntityBase"/> with variable single-point crossover support.
     /// </summary>
     /// <remarks>
-    /// Variable single-point bit crossover chooses a bit position -- potentially different -- within both of the 
-    /// <see cref="VariableLengthIntegerListEntity"/> objects and swaps the bits on either side of those
+    /// Variable single-point crossover chooses an element position -- potentially different -- within both of the 
+    /// <see cref="IListEntityBase"/> objects and swaps the elements on either side of those
     /// points.  For example, if
-    /// two <see cref="VariableLengthIntegerListEntity"/> objects represented by 1,2,3,4 and 5,6,7,8,9 were to
+    /// two <see cref="IListEntityBase"/> objects represented by 00110101 and 100011 were to
     /// be crossed over at position 2 in the first entity and position 4 in the second entity, the resulting offspring
-    /// would be 1,2,9 and 5,6,7,8,3,4.
+    /// would be 0011 and 1000110101.
     /// </remarks>
-    [RequiredEntity(typeof(VariableLengthIntegerListEntity))]
-    public class VariableSinglePointListElementCrossoverOperator : VariableSinglePointCrossoverOperator
+    public sealed class VariableSinglePointListElementCrossoverOperator : VariableSinglePointCrossoverOperator<VariableSinglePointListElementCrossoverOperator, VariableSinglePointListElementCrossoverOperatorConfiguration>
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="VariableSinglePointListElementCrossoverOperator"/> class.
+        /// Initializes a new instance of this class.
         /// </summary>
-        /// <param name="algorithm"><see cref="GeneticAlgorithm"/> using this <see cref="VariableSinglePointListElementCrossoverOperator"/>.</param>
+        /// <param name="algorithm"><see cref="IGeneticAlgorithm"/> using this object.</param>
         /// <exception cref="ArgumentNullException"><paramref name="algorithm"/> is null.</exception>
         /// <exception cref="ValidationException">The component's configuration is in an invalid state.</exception>
-        public VariableSinglePointListElementCrossoverOperator(GeneticAlgorithm algorithm)
+        public VariableSinglePointListElementCrossoverOperator(IGeneticAlgorithm algorithm)
             : base(algorithm)
         {
         }
-    }
-
-    /// <summary>
-    /// Represents the configuration of <see cref="VariableSinglePointListElementCrossoverOperator"/>.
-    /// </summary>
-    [Component(typeof(VariableSinglePointListElementCrossoverOperator))]
-    public class VariableSinglePointListElementCrossoverOperatorConfiguration : VariableSinglePointCrossoverOperatorConfiguration
-    {
     }
 }

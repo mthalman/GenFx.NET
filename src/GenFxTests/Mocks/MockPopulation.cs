@@ -2,32 +2,31 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using GenFx;
+using GenFx.ComponentLibrary.Base;
 
 namespace GenFxTests.Mocks
 {
-    class MockPopulation : Population
+    class MockPopulation : PopulationBase<MockPopulation, MockPopulationConfiguration>
     {
-        public MockPopulation(GeneticAlgorithm algorithm)
+        public MockPopulation(IGeneticAlgorithm algorithm)
             : base(algorithm)
         {
         }
     }
 
-    [Component(typeof(MockPopulation))]
-    class MockPopulationConfiguration : PopulationConfiguration
+    class MockPopulationConfiguration : PopulationConfigurationBase<MockPopulationConfiguration, MockPopulation>
     {
     }
 
-    class MockPopulation2 : Population
+    class MockPopulation2 : PopulationBase<MockPopulation2, MockPopulation2Configuration>
     {
-        public MockPopulation2(GeneticAlgorithm algorithm)
+        public MockPopulation2(IGeneticAlgorithm algorithm)
             : base(algorithm)
         {
         }
     }
 
-    [Component(typeof(MockPopulation2))]
-    class MockPopulation2Configuration : PopulationConfiguration
+    class MockPopulation2Configuration : PopulationConfigurationBase<MockPopulation2Configuration, MockPopulation2>
     {
     }
 }

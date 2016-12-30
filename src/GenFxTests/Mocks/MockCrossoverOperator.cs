@@ -2,48 +2,47 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using GenFx;
+using GenFx.ComponentLibrary.Base;
 
 namespace GenFxTests.Mocks
 {
-    class MockCrossoverOperator : CrossoverOperator
+    class MockCrossoverOperator : CrossoverOperatorBase<MockCrossoverOperator, MockCrossoverOperatorConfiguration>
     {
         internal int DoCrossoverCallCount;
 
-        public MockCrossoverOperator(GeneticAlgorithm algorithm)
+        public MockCrossoverOperator(IGeneticAlgorithm algorithm)
             : base(algorithm)
         {
         }
 
-        protected override IList<GeneticEntity> GenerateCrossover(GeneticEntity entity1, GeneticEntity entity2)
+        protected override IList<IGeneticEntity> GenerateCrossover(IGeneticEntity entity1, IGeneticEntity entity2)
         {
             this.DoCrossoverCallCount++;
-            List<GeneticEntity> geneticEntities = new List<GeneticEntity>();
+            List<IGeneticEntity> geneticEntities = new List<IGeneticEntity>();
             geneticEntities.Add(entity1);
             geneticEntities.Add(entity2);
             return geneticEntities;
         }
     }
 
-    [Component(typeof(MockCrossoverOperator))]
-    class MockCrossoverOperatorConfiguration : CrossoverOperatorConfiguration
+    class MockCrossoverOperatorConfiguration : CrossoverOperatorConfigurationBase<MockCrossoverOperatorConfiguration, MockCrossoverOperator>
     {
     }
 
-    class MockCrossoverOperator2 : CrossoverOperator
+    class MockCrossoverOperator2 : CrossoverOperatorBase<MockCrossoverOperator2, MockCrossoverOperator2Configuration>
     {
-        public MockCrossoverOperator2(GeneticAlgorithm algorithm)
+        public MockCrossoverOperator2(IGeneticAlgorithm algorithm)
             : base(algorithm)
         {
         }
 
-        protected override IList<GeneticEntity> GenerateCrossover(GeneticEntity entity1, GeneticEntity entity2)
+        protected override IList<IGeneticEntity> GenerateCrossover(IGeneticEntity entity1, IGeneticEntity entity2)
         {
             throw new Exception();
         }
     }
 
-    [Component(typeof(MockCrossoverOperator2))]
-    class MockCrossoverOperator2Configuration : CrossoverOperatorConfiguration
+    class MockCrossoverOperator2Configuration : CrossoverOperatorConfigurationBase<MockCrossoverOperator2Configuration, MockCrossoverOperator2>
     {
     }
 }

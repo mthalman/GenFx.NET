@@ -2,44 +2,43 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using GenFx;
+using GenFx.ComponentLibrary.Base;
 
 namespace GenFxTests.Mocks
 {
-    class MockElitismStrategy : ElitismStrategy
+    class MockElitismStrategy : ElitismStrategyBase<MockElitismStrategy, MockElitismStrategyConfiguration>
     {
         internal int GetElitistGeneticEntitiesCallCount;
-        public MockElitismStrategy(GeneticAlgorithm algorithm)
+        public MockElitismStrategy(IGeneticAlgorithm algorithm)
             : base(algorithm)
         {
         }
 
-        protected override IList<GeneticEntity> GetElitistGeneticEntitiesCore(Population population)
+        protected override IList<IGeneticEntity> GetEliteGeneticEntitiesCore(IPopulation population)
         {
             this.GetElitistGeneticEntitiesCallCount++;
-            return base.GetElitistGeneticEntitiesCore(population);
+            return base.GetEliteGeneticEntitiesCore(population);
         }
     }
 
-    [Component(typeof(MockElitismStrategy))]
-    class MockElitismStrategyConfiguration : ElitismStrategyConfiguration
+    class MockElitismStrategyConfiguration : ElitismStrategyConfigurationBase<MockElitismStrategyConfiguration, MockElitismStrategy>
     {
     }
 
-    class MockElitismStrategy2 : ElitismStrategy
+    class MockElitismStrategy2 : ElitismStrategyBase<MockElitismStrategy2, MockElitismStrategy2Configuration>
     {
-        public MockElitismStrategy2(GeneticAlgorithm algorithm)
+        public MockElitismStrategy2(IGeneticAlgorithm algorithm)
             : base(algorithm)
         {
         }
 
-        protected override IList<GeneticEntity> GetElitistGeneticEntitiesCore(Population population)
+        protected override IList<IGeneticEntity> GetEliteGeneticEntitiesCore(IPopulation population)
         {
             throw new Exception();
         }
     }
 
-    [Component(typeof(MockElitismStrategy2))]
-    class MockElitismStrategy2Configuration : ElitismStrategyConfiguration
+    class MockElitismStrategy2Configuration : ElitismStrategyConfigurationBase<MockElitismStrategy2Configuration, MockElitismStrategy2>
     {
     }
 }

@@ -22,7 +22,7 @@ namespace GenFxTests
         public void GenerationalTerminator_Ctor()
         {
             int finalGeneration = 12;
-            GeneticAlgorithm algorithm = GetAlgorithm(finalGeneration);
+            IGeneticAlgorithm algorithm = GetAlgorithm(finalGeneration);
 
             GenerationalTerminator terminator = new GenerationalTerminator(algorithm);
             Assert.AreEqual(finalGeneration, terminator.FinalGeneration, "FinalGeneration not initialized correctly.");
@@ -34,7 +34,7 @@ namespace GenFxTests
         [TestMethod()]
         public void GenerationalTerminator_Ctor_MissingSetting()
         {
-            AssertEx.Throws<ArgumentException>(() => new GenerationalTerminator(new MockGeneticAlgorithm()));
+            AssertEx.Throws<ArgumentException>(() => new GenerationalTerminator(new MockGeneticAlgorithm(new ComponentConfigurationSet())));
         }
 
         /// <summary>
@@ -43,7 +43,6 @@ namespace GenFxTests
         [TestMethod()]
         public void GenerationalTerminator_Ctor_InvalidSetting1()
         {
-            GeneticAlgorithm algorithm = new MockGeneticAlgorithm();
             GenerationalTerminatorConfiguration config = new GenerationalTerminatorConfiguration();
             AssertEx.Throws<ValidationException>(() => config.FinalGeneration = -1);
         }
@@ -54,7 +53,6 @@ namespace GenFxTests
         [TestMethod()]
         public void GenerationalTerminator_Ctor_InvalidSetting2()
         {
-            GeneticAlgorithm algorithm = new MockGeneticAlgorithm();
             GenerationalTerminatorConfiguration config = new GenerationalTerminatorConfiguration();
             AssertEx.Throws<ValidationException>(() => config.FinalGeneration = 0);
         }
@@ -66,8 +64,8 @@ namespace GenFxTests
         public void GenerationalTerminator_IsComplete()
         {
             int finalGeneration = 10;
-            GeneticAlgorithm algorithm = GetAlgorithm(finalGeneration);
-            PrivateObject accessor = new PrivateObject(algorithm, new PrivateType(typeof(GeneticAlgorithm)));
+            IGeneticAlgorithm algorithm = GetAlgorithm(finalGeneration);
+            PrivateObject accessor = new PrivateObject(algorithm, new PrivateType(typeof(GeneticAlgorithm<MockGeneticAlgorithm, MockGeneticAlgorithmConfiguration>)));
             GenerationalTerminator terminator = new GenerationalTerminator(algorithm);
             Assert.IsFalse(terminator.IsComplete(), "Should not be complete at generation 0.");
             accessor.SetField("currentGeneration", (int)accessor.GetField("currentGeneration") + 1);
@@ -76,16 +74,21 @@ namespace GenFxTests
             Assert.IsTrue(terminator.IsComplete(), "Should be complete.");
         }
 
-        private static GeneticAlgorithm GetAlgorithm(int finalGeneration)
+        private static IGeneticAlgorithm GetAlgorithm(int finalGeneration)
         {
-            GeneticAlgorithm algorithm = new MockGeneticAlgorithm();
-            GenerationalTerminatorConfiguration config = new GenerationalTerminatorConfiguration();
-            config.FinalGeneration = finalGeneration;
-            algorithm.ConfigurationSet.Terminator = config;
+            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentConfigurationSet
+            {
+                GeneticAlgorithm = new MockGeneticAlgorithmConfiguration(),
+                Population = new MockPopulationConfiguration(),
+                Entity = new MockEntityConfiguration(),
+                SelectionOperator = new MockSelectionOperatorConfiguration(),
+                FitnessEvaluator = new MockFitnessEvaluatorConfiguration(),
+                Terminator = new GenerationalTerminatorConfiguration
+                {
+                    FinalGeneration = finalGeneration
+                }
+            });
             return algorithm;
         }
-
     }
-
-
 }

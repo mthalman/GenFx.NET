@@ -22,9 +22,15 @@ namespace GenFxTests
         [TestMethod()]
         public void EntityCollection_SortByFitness()
         {
-            ObservableCollection<GeneticEntity> geneticEntities = new ObservableCollection<GeneticEntity>();
-            MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm();
-            algorithm.ConfigurationSet.Entity = new MockEntityConfiguration();
+            ObservableCollection<IGeneticEntity> geneticEntities = new ObservableCollection<IGeneticEntity>();
+            MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentConfigurationSet
+            {
+                GeneticAlgorithm = new MockGeneticAlgorithmConfiguration(),
+                SelectionOperator = new MockSelectionOperatorConfiguration(),
+                FitnessEvaluator = new MockFitnessEvaluatorConfiguration(),
+                Population = new MockPopulationConfiguration(),
+                Entity = new MockEntityConfiguration()
+            });
 
             for (int i = 9; i >= 0; i--)
             {
@@ -33,7 +39,7 @@ namespace GenFxTests
                 geneticEntities.Add(entity);
             }
 
-            GeneticEntity[] sortedEntities = geneticEntities.GetEntitiesSortedByFitness(FitnessType.Scaled, FitnessEvaluationMode.Maximize).ToArray();
+            IGeneticEntity[] sortedEntities = geneticEntities.GetEntitiesSortedByFitness(FitnessType.Scaled, FitnessEvaluationMode.Maximize).ToArray();
             for (int i = 0; i < 10; i++)
             {
                 Assert.AreEqual(Convert.ToDouble(i), sortedEntities[i].ScaledFitnessValue, "Index {0}: Entity is not in correct position of list.", i.ToString());

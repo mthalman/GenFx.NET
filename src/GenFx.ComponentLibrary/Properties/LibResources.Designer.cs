@@ -88,6 +88,15 @@ namespace GenFx.ComponentLibrary.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The entity must be of type &apos;{0}&apos;..
+        /// </summary>
+        internal static string ErrorMsg_EntityCopyToTypeMismatch {
+            get {
+                return ResourceManager.GetString("ErrorMsg_EntityCopyToTypeMismatch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Parent node must belong to a tree before child nodes can be added..
         /// </summary>
         internal static string ErrorMsg_InsertChildNodeWithoutTree {
@@ -124,6 +133,24 @@ namespace GenFx.ComponentLibrary.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The list is a fixed size and cannot be changed..
+        /// </summary>
+        internal static string ErrorMsg_ListEntityBase_FixedSize {
+            get {
+                return ResourceManager.GetString("ErrorMsg_ListEntityBase_FixedSize", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The specified item of type &apos;{0}&apos; cannot be casted to type &apos;{1}&apos; that is required by the list..
+        /// </summary>
+        internal static string ErrorMsg_ListEntityBase_InvalidItemType {
+            get {
+                return ResourceManager.GetString("ErrorMsg_ListEntityBase_InvalidItemType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The length of this list cannot be changed..
         /// </summary>
         internal static string ErrorMsg_ListEntityLengthCannotBeChanged {
@@ -138,6 +165,24 @@ namespace GenFx.ComponentLibrary.Properties {
         internal static string ErrorMsg_MismatchedMinMaxValues {
             get {
                 return ResourceManager.GetString("ErrorMsg_MismatchedMinMaxValues", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There does not exist a component configuration for component &apos;{0}&apos;..
+        /// </summary>
+        internal static string ErrorMsg_MissingComponentConfiguration {
+            get {
+                return ResourceManager.GetString("ErrorMsg_MissingComponentConfiguration", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Using partially matched crossover is only allowed for two crossover points..
+        /// </summary>
+        internal static string ErrorMsg_MultiPointCrossoverOperationCrossoverPointValidator_ValidationError {
+            get {
+                return ResourceManager.GetString("ErrorMsg_MultiPointCrossoverOperationCrossoverPointValidator_ValidationError", resourceCulture);
             }
         }
         
@@ -169,11 +214,11 @@ namespace GenFx.ComponentLibrary.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The node does not belong to this tree..
+        ///   Looks up a localized string similar to The number of nodes in this collection is fixed and cannot be changed..
         /// </summary>
-        internal static string ErrorMsg_SwapNodeNotInTree {
+        internal static string ErrorMsg_TreeNodeCollectionCountError {
             get {
-                return ResourceManager.GetString("ErrorMsg_SwapNodeNotInTree", resourceCulture);
+                return ResourceManager.GetString("ErrorMsg_TreeNodeCollectionCountError", resourceCulture);
             }
         }
         
@@ -192,6 +237,36 @@ namespace GenFx.ComponentLibrary.Properties {
         internal static string ErrorMsg_VariableLengthListEntity_RemoveBit_OutOfRange {
             get {
                 return ResourceManager.GetString("ErrorMsg_VariableLengthListEntity_RemoveBit_OutOfRange", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Algorithm completed..
+        /// </summary>
+        internal static string StatisticLogger_AlgorithmCompleted {
+            get {
+                return ResourceManager.GetString("StatisticLogger_AlgorithmCompleted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Algorithm started..
+        /// </summary>
+        internal static string StatisticLogger_AlgorithmStarted {
+            get {
+                return ResourceManager.GetString("StatisticLogger_AlgorithmStarted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Statistic Name: {0}
+        ///Statistic Value: {1}
+        ///Population Index: {2}
+        ///Generation Index: {3}.
+        /// </summary>
+        internal static string StatisticLogger_StatTrace {
+            get {
+                return ResourceManager.GetString("StatisticLogger_StatTrace", resourceCulture);
             }
         }
     }

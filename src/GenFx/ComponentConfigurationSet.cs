@@ -1,4 +1,6 @@
 using GenFx.ComponentModel;
+using GenFx.Properties;
+using GenFx.Validation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,24 +14,34 @@ namespace GenFx
     /// <remarks>The configuration values must be appropriately set before executing the genetic algorithm.</remarks>
     public sealed class ComponentConfigurationSet
     {
-        private SelectionOperatorConfiguration selectionOperatorConfiguration;
-        private GeneticEntityConfiguration entityConfiguration;
-        private PopulationConfiguration populationConfiguration;
-        private FitnessEvaluatorConfiguration fitnessEvaluatorConfiguration;
-        private ComponentConfigurationCollection<StatisticConfiguration> statisticConfigurations = new ComponentConfigurationCollection<StatisticConfiguration>();
-        private ComponentConfigurationCollection<PluginConfiguration> pluginConfigurations = new ComponentConfigurationCollection<PluginConfiguration>();
-        private GeneticAlgorithmConfiguration geneticAlgorithmConfiguration;
+        private ISelectionOperatorConfiguration selectionOperatorConfiguration;
+        private IGeneticEntityConfiguration entityConfiguration;
+        private IPopulationConfiguration populationConfiguration;
+        private IFitnessEvaluatorConfiguration fitnessEvaluatorConfiguration;
+        private HashSet<IStatisticConfiguration> statisticConfigurations = new HashSet<IStatisticConfiguration>(new ConfigurationComparer<IStatisticConfiguration>());
+        private HashSet<IPluginConfiguration> pluginConfigurations = new HashSet<IPluginConfiguration>(new ConfigurationComparer<IPluginConfiguration>());
+        private IGeneticAlgorithmConfiguration geneticAlgorithmConfiguration;
+        private IElitismStrategyConfiguration elitismStrategyConfiguration;
+        private IFitnessScalingStrategyConfiguration fitnessScalingStrategyConfiguration;
+        private ICrossoverOperatorConfiguration crossoverOperatorConfiguration;
+        private IMutationOperatorConfiguration mutationOperatorConfiguration;
+        private ITerminatorConfiguration terminatorConfiguration = new DefaultTerminatorConfiguration();
+        private bool isFrozen;
+
+        // Mapping of component configuration properties to Validator objects as described by external components.
+        private Dictionary<PropertyInfo, List<Validator>> externalValidationMapping;
 
         /// <summary>
         /// Gets or sets the configuration of the <see cref="FitnessEvaluator"/> class that is
         /// used during execution of the genetic algorithm.
         /// </summary>
         /// <exception cref="ArgumentNullException">Value is null.</exception>
-        public FitnessEvaluatorConfiguration FitnessEvaluator
+        public IFitnessEvaluatorConfiguration FitnessEvaluator
         {
             get { return this.fitnessEvaluatorConfiguration; }
             set
             {
+                this.EnsureNotFrozen();
                 if (value == null)
                 {
                     throw new ArgumentNullException(nameof(value));
@@ -40,33 +52,54 @@ namespace GenFx
         }
 
         /// <summary>
-        /// Gets the configuration for all the <see cref="Statistic"/> classes that
+        /// Gets the configuration for all the <see cref="IStatistic"/> classes that
         /// are used to calculate statistics during execution of the genetic algorithm.
         /// </summary>
-        public ComponentConfigurationCollection<StatisticConfiguration> Statistics
+        public ICollection<IStatisticConfiguration> Statistics
         {
-            get { return this.statisticConfigurations; }
+            get
+            {
+                if (this.isFrozen)
+                {
+                    return this.statisticConfigurations.AsReadOnly();
+                }
+                else
+                {
+                    return this.statisticConfigurations;
+                }
+            }
         }
 
         /// <summary>
-        /// Gets the configuration for all the <see cref="Plugin"/> classes that
+        /// Gets the configuration for all the <see cref="IPlugin"/> classes that
         /// are used extend functionality.
         /// </summary>
-        public ComponentConfigurationCollection<PluginConfiguration> Plugins
+        public ICollection<IPluginConfiguration> Plugins
         {
-            get { return this.pluginConfigurations; }
+            get
+            {
+                if (this.isFrozen)
+                {
+                    return this.pluginConfigurations.AsReadOnly();
+                }
+                else
+                {
+                    return this.pluginConfigurations;
+                }
+            }
         }
 
         /// <summary>
-        /// Gets or sets the configuration of the <see cref="GeneticEntity"/> class that is used 
+        /// Gets or sets the configuration of the <see cref="IGeneticEntity"/> class that is used 
         /// during execution of the genetic algorithm.
         /// </summary>
         /// <exception cref="ArgumentNullException">Value is null.</exception>
-        public GeneticEntityConfiguration Entity
+        public IGeneticEntityConfiguration Entity
         {
             get { return this.entityConfiguration; }
             set
             {
+                this.EnsureNotFrozen();
                 if (value == null)
                 {
                     throw new ArgumentNullException(nameof(value));
@@ -81,11 +114,12 @@ namespace GenFx
         /// during execution of the genetic algorithm.
         /// </summary>
         /// <exception cref="ArgumentNullException">Value is null.</exception>
-        public PopulationConfiguration Population
+        public IPopulationConfiguration Population
         {
             get { return this.populationConfiguration; }
             set
             {
+                this.EnsureNotFrozen();
                 if (value == null)
                 {
                     throw new ArgumentNullException(nameof(value));
@@ -99,36 +133,69 @@ namespace GenFx
         /// Gets or sets the configuration of the <see cref="ElitismStrategy"/> class that is
         /// used during execution of the genetic algorithm.
         /// </summary>
-        public ElitismStrategyConfiguration ElitismStrategy { get; set; }
+        public IElitismStrategyConfiguration ElitismStrategy
+        {
+            get { return this.elitismStrategyConfiguration; }
+            set
+            {
+                this.EnsureNotFrozen();
+                this.elitismStrategyConfiguration = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the configuration of the <see cref="FitnessScalingStrategy"/> class that
         /// is used during execution of the genetic algorithm.
         /// </summary>
-        public FitnessScalingStrategyConfiguration FitnessScalingStrategy { get; set; }
+        public IFitnessScalingStrategyConfiguration FitnessScalingStrategy
+        {
+            get { return this.fitnessScalingStrategyConfiguration; }
+            set
+            {
+                this.EnsureNotFrozen();
+                this.fitnessScalingStrategyConfiguration = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the configuration of the <see cref="CrossoverOperator"/> class that
         /// is used during execution of the genetic algorithm.
         /// </summary>
-        public CrossoverOperatorConfiguration CrossoverOperator { get; set; }
+        public ICrossoverOperatorConfiguration CrossoverOperator
+        {
+            get { return this.crossoverOperatorConfiguration; }
+            set
+            {
+                this.EnsureNotFrozen();
+                this.crossoverOperatorConfiguration = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the configuration of the <see cref="MutationOperator"/> class that
         /// is used during execution of the genetic algorithm.
         /// </summary>
-        public MutationOperatorConfiguration MutationOperator { get; set; }
+        public IMutationOperatorConfiguration MutationOperator
+        {
+            get { return this.mutationOperatorConfiguration; }
+            set
+            {
+                this.EnsureNotFrozen();
+                this.mutationOperatorConfiguration = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the configuration of the <see cref="SelectionOperator"/> class that
         /// is used during execution of the genetic algorithm.
         /// </summary>
         /// <exception cref="ArgumentNullException">Value is null.</exception>
-        public SelectionOperatorConfiguration SelectionOperator
+        public ISelectionOperatorConfiguration SelectionOperator
         {
             get { return this.selectionOperatorConfiguration; }
             set
             {
+                this.EnsureNotFrozen();
                 if (value == null)
                 {
                     throw new ArgumentNullException(nameof(value));
@@ -145,17 +212,31 @@ namespace GenFx
         /// <value>
         /// If the value is null, it indicates that the genetic algorithm should run continously.
         /// </value>
-        public TerminatorConfiguration Terminator { get; set; }
+        public ITerminatorConfiguration Terminator
+        {
+            get { return this.terminatorConfiguration; }
+            set
+            {
+                this.EnsureNotFrozen();
+                if (value == null)
+                {
+                    value = new DefaultTerminatorConfiguration();
+                }
+
+                this.terminatorConfiguration = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the configuration of <see cref="GeneticAlgorithm"/>.
         /// </summary>
         /// <exception cref="ArgumentNullException">Value is null.</exception>
-        public GeneticAlgorithmConfiguration GeneticAlgorithm
+        public IGeneticAlgorithmConfiguration GeneticAlgorithm
         {
             get { return this.geneticAlgorithmConfiguration; }
             set
             {
+                this.EnsureNotFrozen();
                 if (value == null)
                 {
                     throw new ArgumentNullException(nameof(value));
@@ -171,19 +252,22 @@ namespace GenFx
         internal KeyValueMap SaveState()
         {
             KeyValueMap state = new KeyValueMap();
-            state[nameof(this.CrossoverOperator)] = SaveComponentConfiguration(this.CrossoverOperator);
-            state[nameof(this.ElitismStrategy)] = SaveComponentConfiguration(this.ElitismStrategy);
-            state[nameof(this.Entity)] = SaveComponentConfiguration(this.entityConfiguration);
-            state[nameof(this.FitnessEvaluator)] = SaveComponentConfiguration(this.fitnessEvaluatorConfiguration);
-            state[nameof(this.FitnessScalingStrategy)] = SaveComponentConfiguration(this.FitnessScalingStrategy);
-            state[nameof(this.GeneticAlgorithm)] = SaveComponentConfiguration(this.geneticAlgorithmConfiguration);
-            state[nameof(this.MutationOperator)] = SaveComponentConfiguration(this.MutationOperator);
-            state[nameof(this.Population)] = SaveComponentConfiguration(this.populationConfiguration);
-            state[nameof(this.SelectionOperator)] = SaveComponentConfiguration(this.selectionOperatorConfiguration);
-            state[nameof(this.Terminator)] = SaveComponentConfiguration(this.Terminator);
+            state[nameof(this.CrossoverOperator)] = ComponentConfigurationHelper.SaveComponentConfiguration(this.CrossoverOperator);
+            state[nameof(this.ElitismStrategy)] = ComponentConfigurationHelper.SaveComponentConfiguration(this.ElitismStrategy);
+            state[nameof(this.Entity)] = ComponentConfigurationHelper.SaveComponentConfiguration(this.entityConfiguration);
+            state[nameof(this.FitnessEvaluator)] = ComponentConfigurationHelper.SaveComponentConfiguration(this.fitnessEvaluatorConfiguration);
+            state[nameof(this.FitnessScalingStrategy)] = ComponentConfigurationHelper.SaveComponentConfiguration(this.FitnessScalingStrategy);
+            state[nameof(this.GeneticAlgorithm)] = ComponentConfigurationHelper.SaveComponentConfiguration(this.geneticAlgorithmConfiguration);
+            state[nameof(this.MutationOperator)] = ComponentConfigurationHelper.SaveComponentConfiguration(this.MutationOperator);
+            state[nameof(this.Population)] = ComponentConfigurationHelper.SaveComponentConfiguration(this.populationConfiguration);
+            state[nameof(this.SelectionOperator)] = ComponentConfigurationHelper.SaveComponentConfiguration(this.selectionOperatorConfiguration);
+            state[nameof(this.Terminator)] = ComponentConfigurationHelper.SaveComponentConfiguration(this.Terminator);
 
-            state[nameof(this.Plugins)] = new KeyValueMapCollection(this.pluginConfigurations.Select(c => SaveComponentConfiguration(c)));
-            state[nameof(this.Statistics)] = new KeyValueMapCollection(this.statisticConfigurations.Select(c => SaveComponentConfiguration(c)));
+            state[nameof(this.Plugins)] = new KeyValueMapCollection(this.pluginConfigurations.Select(c => ComponentConfigurationHelper.SaveComponentConfiguration(c)));
+            state[nameof(this.Statistics)] = new KeyValueMapCollection(this.statisticConfigurations.Select(c => ComponentConfigurationHelper.SaveComponentConfiguration(c)));
+
+            state[nameof(this.isFrozen)] = this.isFrozen;
+
             return state;
         }
 
@@ -193,77 +277,184 @@ namespace GenFx
         /// <param name="state">State from which to restore.</param>
         internal void RestoreState(KeyValueMap state)
         {
+            this.EnsureNotFrozen();
             if (state == null)
             {
                 throw new ArgumentNullException(nameof(state));
             }
 
-            this.CrossoverOperator = (CrossoverOperatorConfiguration)RestoreComponentConfiguration((Dictionary<string, object>)state[nameof(this.CrossoverOperator)]);
-            this.ElitismStrategy = (ElitismStrategyConfiguration)RestoreComponentConfiguration((Dictionary<string, object>)state[nameof(this.ElitismStrategy)]);
-            this.entityConfiguration = (GeneticEntityConfiguration)RestoreComponentConfiguration((Dictionary<string, object>)state[nameof(this.Entity)]);
-            this.fitnessEvaluatorConfiguration = (FitnessEvaluatorConfiguration)RestoreComponentConfiguration((Dictionary<string, object>)state[nameof(this.FitnessEvaluator)]);
-            this.FitnessScalingStrategy = (FitnessScalingStrategyConfiguration)RestoreComponentConfiguration((Dictionary<string, object>)state[nameof(this.FitnessScalingStrategy)]);
-            this.geneticAlgorithmConfiguration = (GeneticAlgorithmConfiguration)RestoreComponentConfiguration((Dictionary<string, object>)state[nameof(this.GeneticAlgorithm)]);
-            this.MutationOperator = (MutationOperatorConfiguration)RestoreComponentConfiguration((Dictionary<string, object>)state[nameof(this.MutationOperator)]);
-            this.populationConfiguration = (PopulationConfiguration)RestoreComponentConfiguration((Dictionary<string, object>)state[nameof(this.Population)]);
-            this.selectionOperatorConfiguration = (SelectionOperatorConfiguration)RestoreComponentConfiguration((Dictionary<string, object>)state[nameof(this.SelectionOperator)]);
-            this.Terminator = (TerminatorConfiguration)RestoreComponentConfiguration((Dictionary<string, object>)state[nameof(this.Terminator)]);
+            this.CrossoverOperator = (ICrossoverOperatorConfiguration)ComponentConfigurationHelper.RestoreComponentConfiguration(
+                (KeyValueMap)state[nameof(this.CrossoverOperator)]);
+            this.ElitismStrategy = (IElitismStrategyConfiguration)ComponentConfigurationHelper.RestoreComponentConfiguration(
+                (KeyValueMap)state[nameof(this.ElitismStrategy)]);
+            this.entityConfiguration = (IGeneticEntityConfiguration)ComponentConfigurationHelper.RestoreComponentConfiguration((KeyValueMap)state[nameof(this.Entity)]);
+            this.fitnessEvaluatorConfiguration = (IFitnessEvaluatorConfiguration)ComponentConfigurationHelper.RestoreComponentConfiguration(
+                (KeyValueMap)state[nameof(this.FitnessEvaluator)]);
+            this.FitnessScalingStrategy = (IFitnessScalingStrategyConfiguration)ComponentConfigurationHelper.RestoreComponentConfiguration(
+                (KeyValueMap)state[nameof(this.FitnessScalingStrategy)]);
+            this.geneticAlgorithmConfiguration = (IGeneticAlgorithmConfiguration)ComponentConfigurationHelper.RestoreComponentConfiguration(
+                (KeyValueMap)state[nameof(this.GeneticAlgorithm)]);
+            this.MutationOperator = (IMutationOperatorConfiguration)ComponentConfigurationHelper.RestoreComponentConfiguration(
+                (KeyValueMap)state[nameof(this.MutationOperator)]);
+            this.populationConfiguration = (IPopulationConfiguration)ComponentConfigurationHelper.RestoreComponentConfiguration(
+                (KeyValueMap)state[nameof(this.Population)]);
+            this.selectionOperatorConfiguration = (ISelectionOperatorConfiguration)ComponentConfigurationHelper.RestoreComponentConfiguration(
+                (KeyValueMap)state[nameof(this.SelectionOperator)]);
+            this.Terminator = (ITerminatorConfiguration)ComponentConfigurationHelper.RestoreComponentConfiguration(
+                (KeyValueMap)state[nameof(this.Terminator)]);
 
-            this.pluginConfigurations = new ComponentConfigurationCollection<PluginConfiguration>();
-            this.pluginConfigurations.AddRange(((KeyValueMapCollection)state[nameof(this.Plugins)]).Select(d => RestoreComponentConfiguration(d)).Cast<PluginConfiguration>());
+            this.pluginConfigurations = new HashSet<IPluginConfiguration>();
+            this.pluginConfigurations.AddRange(((KeyValueMapCollection)state[nameof(this.Plugins)]).Select(d => ComponentConfigurationHelper.RestoreComponentConfiguration(d)).Cast<IPluginConfiguration>());
 
-            this.statisticConfigurations = new ComponentConfigurationCollection<StatisticConfiguration>();
-            this.statisticConfigurations.AddRange(((KeyValueMapCollection)state[nameof(this.Statistics)]).Select(d => RestoreComponentConfiguration(d)).Cast<StatisticConfiguration>());
+            this.statisticConfigurations = new HashSet<IStatisticConfiguration>();
+            this.statisticConfigurations.AddRange(((KeyValueMapCollection)state[nameof(this.Statistics)]).Select(d => ComponentConfigurationHelper.RestoreComponentConfiguration(d)).Cast<IStatisticConfiguration>());
+
+            this.isFrozen = (bool)state[nameof(this.isFrozen)];
         }
 
-        private static KeyValueMap SaveComponentConfiguration(ComponentConfiguration configuration)
+        internal void Freeze()
         {
-            if (configuration == null)
-            {
-                return null;
-            }
-
-            KeyValueMap state = new KeyValueMap();
-            state["$type"] = configuration.GetType().AssemblyQualifiedName;
-
-            IEnumerable<PropertyInfo> properties = configuration.GetType().GetProperties().Where(p => p.CanRead && p.CanWrite);
-            foreach (PropertyInfo property in properties)
-            {
-                object val = property.GetValue(configuration);
-                if (val is Enum)
-                {
-                    val = val.ToString();
-                }
-
-                state[property.Name] = val;
-            }
-
-            return state;
+            this.isFrozen = true;
         }
 
-        private static ComponentConfiguration RestoreComponentConfiguration(Dictionary<string, object> state)
+        private void EnsureNotFrozen()
         {
-            if (state == null)
+            if (this.isFrozen)
             {
-                return null;
+                throw new InvalidOperationException(FwkResources.ErrorMsg_ComponentConfigurationSetIsFrozen);
+            }
+        }
+
+        /// <summary>
+        /// Validates the component.
+        /// </summary>
+        /// <param name="component">The <see cref="IGeneticComponent"/> to validate.</param>
+        public void Validate(IGeneticComponent component)
+        {
+            if (component == null)
+            {
+                throw new ArgumentNullException(nameof(component));
             }
 
-            ComponentConfiguration config = (ComponentConfiguration)Activator.CreateInstance(Type.GetType((string)state["$type"]));
-
-            IEnumerable<PropertyInfo> properties = config.GetType().GetProperties().Where(p => p.CanRead && p.CanWrite);
-            foreach (PropertyInfo property in properties)
+            IComponentConfiguration componentConfig = component.Configuration;
+            if (componentConfig == null)
             {
-                object val = state[property.Name];
+                throw new ArgumentException(StringUtil.GetFormattedString(
+                  FwkResources.ErrorMsg_NoCorrespondingComponentConfiguration, component.GetType().FullName), nameof(component));
+            }
+            else if (componentConfig.ComponentType != component.GetType())
+            {
+                throw new ArgumentException(StringUtil.GetFormattedString(
+                  FwkResources.ErrorMsg_ComponentConfigurationTypeMismatch,
+                  componentConfig.GetType().FullName, component.GetType().FullName), nameof(component));
+            }
 
-                if (property.PropertyType.IsEnum)
+            componentConfig.Validate();
+
+            IEnumerable<PropertyInfo> properties = componentConfig.GetType()
+                .GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.FlattenHierarchy)
+                .Where(p => p.DeclaringType != typeof(ComponentConfiguration));
+            foreach (PropertyInfo propertyInfo in properties)
+            {
+                // Check that the property is valid using the validators described by external components.
+                List<Validator> externalValidators;
+                if (externalValidationMapping.TryGetValue(propertyInfo, out externalValidators))
                 {
-                    val = Enum.Parse(property.PropertyType, (string)val);
+                    object propValue = propertyInfo.GetValue(this, null);
+                    foreach (Validator validator in externalValidators)
+                    {
+                        ComponentHelper.CheckValidation(validator, componentConfig.GetType().Name + Type.Delimiter + propertyInfo.Name, propValue, componentConfig);
+                    }
                 }
+            }
+        }
 
-                property.SetValue(config, val);
+        /// <summary>
+        /// Compiles the mapping of component configuration properties to <see cref="Validator"/> objects as described by external components.
+        /// </summary>
+        internal void CompileExternalValidatorMapping()
+        {
+            this.externalValidationMapping = new Dictionary<PropertyInfo, List<Validator>>();
+            this.CompileExternalValidatorMapping(this.CrossoverOperator);
+            this.CompileExternalValidatorMapping(this.ElitismStrategy);
+            this.CompileExternalValidatorMapping(this.Entity);
+            this.CompileExternalValidatorMapping(this.FitnessEvaluator);
+            this.CompileExternalValidatorMapping(this.FitnessScalingStrategy);
+            this.CompileExternalValidatorMapping(this.GeneticAlgorithm);
+            this.CompileExternalValidatorMapping(this.MutationOperator);
+            this.CompileExternalValidatorMapping(this.Population);
+            this.CompileExternalValidatorMapping(this.SelectionOperator);
+            this.CompileExternalValidatorMapping(this.Terminator);
+
+            foreach (IStatisticConfiguration stat in this.Statistics)
+            {
+                this.CompileExternalValidatorMapping(stat);
             }
 
-            return config;
+            foreach (IStatisticConfiguration plugin in this.Plugins)
+            {
+                this.CompileExternalValidatorMapping(plugin);
+            }
+        }
+
+        internal ComponentConfigurationSet Clone()
+        {
+            ComponentConfigurationSet clone = new ComponentConfigurationSet();
+            clone.crossoverOperatorConfiguration = this.crossoverOperatorConfiguration;
+            clone.elitismStrategyConfiguration = this.elitismStrategyConfiguration;
+            clone.entityConfiguration = this.entityConfiguration;
+            clone.externalValidationMapping = this.externalValidationMapping;
+            clone.fitnessEvaluatorConfiguration = this.fitnessEvaluatorConfiguration;
+            clone.fitnessScalingStrategyConfiguration = this.fitnessScalingStrategyConfiguration;
+            clone.geneticAlgorithmConfiguration = this.geneticAlgorithmConfiguration;
+            clone.isFrozen = this.isFrozen;
+            clone.mutationOperatorConfiguration = this.mutationOperatorConfiguration;
+            clone.pluginConfigurations = new HashSet<IPluginConfiguration>(this.pluginConfigurations);
+            clone.populationConfiguration = this.populationConfiguration;
+            clone.selectionOperatorConfiguration = this.selectionOperatorConfiguration;
+            clone.statisticConfigurations = new HashSet<IStatisticConfiguration>(this.statisticConfigurations);
+            clone.terminatorConfiguration = this.terminatorConfiguration;
+
+            return clone;
+        }
+
+        /// <summary>
+        /// Compiles the mapping of component configuration properties to <see cref="Validator"/> objects as described by the specified component.
+        /// </summary>
+        /// <param name="componentConfiguration"><see cref="IComponentConfiguration"/> for the component to check whether it has defined validators for a configuration property.</param>
+        private void CompileExternalValidatorMapping(IComponentConfiguration componentConfiguration)
+        {
+            if (componentConfiguration == null)
+            {
+                return;
+            }
+
+            IExternalConfigurationValidatorAttribute[] attribs = (IExternalConfigurationValidatorAttribute[])componentConfiguration.ComponentType.GetCustomAttributes(typeof(IExternalConfigurationValidatorAttribute), true);
+            foreach (IExternalConfigurationValidatorAttribute attrib in attribs)
+            {
+                PropertyInfo prop = ExternalValidatorAttributeHelper.GetTargetPropertyInfo(attrib.TargetComponentConfigurationType, attrib.TargetProperty);
+                List<Validator> validators;
+                if (!this.externalValidationMapping.TryGetValue(prop, out validators))
+                {
+                    validators = new List<Validator>();
+                    this.externalValidationMapping.Add(prop, validators);
+                }
+                validators.Add(attrib.Validator);
+            }
+        }
+
+        private class ConfigurationComparer<T> : IEqualityComparer<T>
+            where T : IComponentConfiguration
+        {
+            public bool Equals(T x, T y)
+            {
+                return x.ComponentType == y.ComponentType;
+            }
+
+            public int GetHashCode(T obj)
+            {
+                return obj.ComponentType.GetHashCode();
+            }
         }
     }
 }

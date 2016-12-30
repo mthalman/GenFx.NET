@@ -1,4 +1,5 @@
 ﻿using GenFx;
+using GenFx.ComponentLibrary.Populations;
 using GenFx.ComponentLibrary.SelectionOperators;
 using GenFxTests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -28,10 +29,9 @@ namespace GenFxTests
         [TestMethod]
         public void RankSelectionOperator_Select()
         {
-            GeneticAlgorithm algorithm = GetAlgorithm();
-            algorithm.ConfigurationSet.Population = new PopulationConfiguration();
+            IGeneticAlgorithm algorithm = GetAlgorithm();
             RankSelectionOperator op = new RankSelectionOperator(algorithm);
-            Population population = new Population(algorithm);
+            SimplePopulation population = new SimplePopulation(algorithm);
             MockEntity entity1 = new MockEntity(algorithm);
             MockEntity entity2 = new MockEntity(algorithm);
             MockEntity entity3 = new MockEntity(algorithm);
@@ -49,46 +49,51 @@ namespace GenFxTests
             RandomHelper.Instance = randomUtil;
 
             randomUtil.Ratio = 0;
-            GeneticEntity selectedEntity = op.Select(population);
+            IGeneticEntity selectedEntity = op.SelectEntity(population);
             Assert.AreSame(entity1, selectedEntity, "Incorrect entity seleceted.");
 
             randomUtil.Ratio = .099999;
-            selectedEntity = op.Select(population);
+            selectedEntity = op.SelectEntity(population);
             Assert.AreSame(entity1, selectedEntity, "Incorrect entity seleceted.");
 
             randomUtil.Ratio = .1;
-            selectedEntity = op.Select(population);
+            selectedEntity = op.SelectEntity(population);
             Assert.AreSame(entity3, selectedEntity, "Incorrect entity seleceted.");
 
             randomUtil.Ratio = .299999;
-            selectedEntity = op.Select(population);
+            selectedEntity = op.SelectEntity(population);
             Assert.AreSame(entity3, selectedEntity, "Incorrect entity seleceted.");
 
             randomUtil.Ratio = .3;
-            selectedEntity = op.Select(population);
+            selectedEntity = op.SelectEntity(population);
             Assert.AreSame(entity4, selectedEntity, "Incorrect entity seleceted.");
 
             randomUtil.Ratio = .599999;
-            selectedEntity = op.Select(population);
+            selectedEntity = op.SelectEntity(population);
             Assert.AreSame(entity4, selectedEntity, "Incorrect entity seleceted.");
 
             randomUtil.Ratio = .6;
-            selectedEntity = op.Select(population);
+            selectedEntity = op.SelectEntity(population);
             Assert.AreSame(entity2, selectedEntity, "Incorrect entity seleceted.");
 
             randomUtil.Ratio = 1;
-            selectedEntity = op.Select(population);
+            selectedEntity = op.SelectEntity(population);
             Assert.AreSame(entity2, selectedEntity, "Incorrect entity seleceted.");
         }
 
-        private static GeneticAlgorithm GetAlgorithm()
+        private static IGeneticAlgorithm GetAlgorithm()
         {
-            GeneticAlgorithm algorithm = new MockGeneticAlgorithm();
-            algorithm.ConfigurationSet.Entity = new MockEntityConfiguration();
-            RankSelectionOperatorConfiguration config = new RankSelectionOperatorConfiguration();
-            config.SelectionBasedOnFitnessType = FitnessType.Scaled;
-            algorithm.ConfigurationSet.SelectionOperator = config;
-            algorithm.ConfigurationSet.FitnessEvaluator = new MockFitnessEvaluatorConfiguration();
+            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentConfigurationSet
+            {
+                GeneticAlgorithm = new MockGeneticAlgorithmConfiguration(),
+                Population = new SimplePopulationConfiguration(),
+                Entity = new MockEntityConfiguration(),
+                SelectionOperator = new RankSelectionOperatorConfiguration
+                {
+                    SelectionBasedOnFitnessType = FitnessType.Scaled
+                },
+                FitnessEvaluator = new MockFitnessEvaluatorConfiguration()
+            });
 
             algorithm.Operators.FitnessEvaluator = new MockFitnessEvaluator(algorithm);
 

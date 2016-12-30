@@ -5,6 +5,7 @@ using GenFx.ComponentModel;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using GenFxTests.Mocks;
 using GenFxTests.Helpers;
+using GenFx.ComponentLibrary.Base;
 
 namespace GenFxTests
 {
@@ -24,7 +25,7 @@ namespace GenFxTests
             double crossoverRate = .8;
             MockGeneticAlgorithm algorithm = GetGeneticAlgorithm(crossoverRate);
             FakeCrossoverOperator op = new FakeCrossoverOperator(algorithm);
-            Assert.IsTrue(op.CrossoverRate.Equals(crossoverRate), "Crossover rate was not initialized correctly.");
+            Assert.IsInstanceOfType(op.Configuration, typeof(FakeCrossoverOperatorConfiguration));
         }
 
         /// <summary>
@@ -42,7 +43,7 @@ namespace GenFxTests
         [TestMethod]
         public void CrossoverOperator_Ctor_MissingSetting()
         {
-            AssertEx.Throws<ArgumentException>(() => new FakeCrossoverOperator(new MockGeneticAlgorithm()));
+            AssertEx.Throws<ArgumentException>(() => new FakeCrossoverOperator(new MockGeneticAlgorithm(new ComponentConfigurationSet())));
         }
 
         /// <summary>
@@ -51,7 +52,6 @@ namespace GenFxTests
         [TestMethod]
         public void CrossoverOperator_Ctor_InvalidSetting1()
         {
-            GeneticAlgorithm algorithm = new MockGeneticAlgorithm();
             FakeCrossoverOperatorConfiguration config = new FakeCrossoverOperatorConfiguration();
             AssertEx.Throws<ValidationException>(() => config.CrossoverRate = 2);
         }
@@ -62,7 +62,6 @@ namespace GenFxTests
         [TestMethod]
         public void CrossoverOperator_Ctor_InvalidSetting2()
         {
-            GeneticAlgorithm algorithm = new MockGeneticAlgorithm();
             FakeCrossoverOperatorConfiguration config = new FakeCrossoverOperatorConfiguration();
             AssertEx.Throws<ValidationException>(()=> config.CrossoverRate = -1);
         }
@@ -77,14 +76,12 @@ namespace GenFxTests
             MockGeneticAlgorithm algorithm = GetGeneticAlgorithm(crossoverRate);
             FakeCrossoverOperator op = new FakeCrossoverOperator(algorithm);
             MockEntity entity1 = new MockEntity(algorithm);
-            PrivateObject entAccessor = new PrivateObject(entity1, new PrivateType(typeof(GeneticEntity)));
-            entAccessor.SetField("age", 2);
+            entity1.Age = 2;
             entity1.Identifier = "1";
             MockEntity entity2 = new MockEntity(algorithm);
-            entAccessor = new PrivateObject(entity2, new PrivateType(typeof(GeneticEntity)));
-            entAccessor.SetField("age", 5);
+            entity2.Age = 5;
             entity2.Identifier = "3";
-            IList<GeneticEntity> geneticEntities = op.Crossover(entity1, entity2);
+            IList<IGeneticEntity> geneticEntities = op.Crossover(entity1, entity2);
             Assert.AreNotSame(entity1, geneticEntities[1], "Clone was not called correctly.");
             Assert.AreNotSame(entity2, geneticEntities[0], "Clone was not called correctly.");
             Assert.AreEqual(entity1.Identifier, ((MockEntity)geneticEntities[1]).Identifier, "Entity value was not swapped.");
@@ -107,41 +104,47 @@ namespace GenFxTests
             entity1.Identifier = "1";
             MockEntity entity2 = new MockEntity(algorithm);
             entity2.Identifier = "3";
-            IList<GeneticEntity> geneticEntities = op.Crossover(entity1, entity2);
+            IList<IGeneticEntity> geneticEntities = op.Crossover(entity1, entity2);
             Assert.AreSame(entity1, geneticEntities[0], "Different entity was returned.");
             Assert.AreSame(entity2, geneticEntities[1], "Different entity was returned.");
         }
 
         private static MockGeneticAlgorithm GetGeneticAlgorithm(double crossoverRate)
         {
-            MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm();
-            algorithm.ConfigurationSet.Entity = new MockEntityConfiguration();
-            FakeCrossoverOperatorConfiguration config = new FakeCrossoverOperatorConfiguration();
-            config.CrossoverRate = crossoverRate;
-            algorithm.ConfigurationSet.CrossoverOperator = config;
+            MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentConfigurationSet
+            {
+                GeneticAlgorithm = new MockGeneticAlgorithmConfiguration(),
+                Population = new MockPopulationConfiguration(),
+                FitnessEvaluator = new MockFitnessEvaluatorConfiguration(),
+                SelectionOperator = new MockSelectionOperatorConfiguration(),
+                Entity = new MockEntityConfiguration(),
+                CrossoverOperator = new FakeCrossoverOperatorConfiguration
+                {
+                    CrossoverRate = crossoverRate
+                }
+            });
             return algorithm;
         }
 
-        private class FakeCrossoverOperator : CrossoverOperator
+        private class FakeCrossoverOperator : CrossoverOperatorBase<FakeCrossoverOperator, FakeCrossoverOperatorConfiguration>
         {
-            public FakeCrossoverOperator(GeneticAlgorithm algorithm)
+            public FakeCrossoverOperator(IGeneticAlgorithm algorithm)
                 : base(algorithm)
             {
             }
 
-            protected override IList<GeneticEntity> GenerateCrossover(GeneticEntity entity1, GeneticEntity entity2)
+            protected override IList<IGeneticEntity> GenerateCrossover(IGeneticEntity entity1, IGeneticEntity entity2)
             {
                 MockEntity mockEntity1 = (MockEntity)entity1;
                 MockEntity mockEntity2 = (MockEntity)entity2;
-                List<GeneticEntity> geneticEntities = new List<GeneticEntity>();
+                List<IGeneticEntity> geneticEntities = new List<IGeneticEntity>();
                 geneticEntities.Add(mockEntity2);
                 geneticEntities.Add(mockEntity1);
                 return geneticEntities;
             }
         }
 
-        [Component(typeof(FakeCrossoverOperator))]
-        private class FakeCrossoverOperatorConfiguration : CrossoverOperatorConfiguration
+        private class FakeCrossoverOperatorConfiguration : CrossoverOperatorConfigurationBase<FakeCrossoverOperatorConfiguration, FakeCrossoverOperator>
         {
         }
     }

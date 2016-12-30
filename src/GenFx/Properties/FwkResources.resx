@@ -224,7 +224,7 @@
     <value>Configuration property '{0}' must be equal to {1}.</value>
   </data>
   <data name="ErrorMsg_ErrorCreatingComponent" xml:space="preserve">
-    <value>An error occurred while instantiating component of type '{0}'.\n\nException detail: {1}</value>
+    <value>An error occurred while instantiating component associated with configuration '{0}'.\n\nException detail: {1}</value>
   </data>
   <data name="ErrorMsg_Component_MissingComponentAttribute" xml:space="preserve">
     <value>Component configuration '{0}' is missing the '{1}' that specifies its corresponding component.</value>
@@ -240,5 +240,8 @@
   </data>
   <data name="ErrorMsg_RequiredPropertyNotSet" xml:space="preserve">
     <value>Configuration property '{0}' must be set.</value>
+  </data>
+  <data name="ErrorMsg_ComponentConfigurationSetIsFrozen" xml:space="preserve">
+    <value>This object is read-only while an algorithm is executing.</value>
   </data>
 </root>

@@ -86,9 +86,8 @@
     <Compile Include="BinaryStringEntityTest.cs" />
     <Compile Include="BinaryTreeNodeTest.cs" />
     <Compile Include="BoltzmannSelectionOperatorTest.cs" />
-    <Compile Include="ComponentSettingsBaseTest.cs" />
-    <Compile Include="BitInversionOperatorTest.cs" />
-    <Compile Include="IntegerInversionOperatorTest.cs" />
+    <Compile Include="ComponentConfigurationTest.cs" />
+    <Compile Include="InversionOperatorTest.cs" />
     <Compile Include="Mocks\MockPlugin.cs" />
     <Compile Include="StringExtensions.cs" />
     <Compile Include="Helpers\AssertEx.cs" />
@@ -150,7 +149,7 @@
     <Compile Include="UniformBitMutationOperatorTest.cs" />
     <Compile Include="UniformSelectionOperatorTest.cs" />
     <Compile Include="VariableLengthBinaryStringEntityTest.cs" />
-    <Compile Include="VariableSinglePointBitCrossoverOperatorTest.cs" />
+    <Compile Include="VariableSinglePointListElementCrossoverOperatorTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GenFx.ComponentLibrary\GenFx.ComponentLibrary.csproj">
