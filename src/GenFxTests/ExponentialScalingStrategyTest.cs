@@ -1,4 +1,6 @@
 ﻿using GenFx;
+using GenFx.ComponentLibrary.Base;
+using GenFx.ComponentLibrary.Populations;
 using GenFx.ComponentLibrary.Scaling;
 using GenFx.ComponentModel;
 using GenFxTests.Helpers;
@@ -23,11 +25,10 @@ namespace GenFxTests
         public void ExponentialScalingStrategy_Ctor()
         {
             double scalingPower = 2;
-            GeneticAlgorithm algorithm = GetAlgorithm(2);
+            IGeneticAlgorithm algorithm = GetAlgorithm(2);
 
             ExponentialScalingStrategy strategy = new ExponentialScalingStrategy(algorithm);
-
-            Assert.AreEqual(scalingPower, strategy.ScalingPower, "Scaling power not initialized correctly.");
+            Assert.IsInstanceOfType(strategy.Configuration, typeof(ExponentialScalingStrategyConfiguration));
         }
 
         /// <summary>
@@ -45,7 +46,7 @@ namespace GenFxTests
         [TestMethod()]
         public void ExponentialScalingStrategy_Ctor_MissingSetting()
         {
-            AssertEx.Throws<ArgumentException>(() => new ExponentialScalingStrategy(new MockGeneticAlgorithm()));
+            AssertEx.Throws<ArgumentException>(() => new ExponentialScalingStrategy(new MockGeneticAlgorithm(new ComponentConfigurationSet())));
         }
 
         /// <summary>
@@ -54,15 +55,15 @@ namespace GenFxTests
         [TestMethod()]
         public void ExponentialScalingStrategy_Scale()
         {
-            GeneticAlgorithm algorithm = GetAlgorithm(2);
+            IGeneticAlgorithm algorithm = GetAlgorithm(2);
 
             ExponentialScalingStrategy target = new ExponentialScalingStrategy(algorithm);
-            Population population = new Population(algorithm);
+            SimplePopulation population = new SimplePopulation(algorithm);
             MockEntity entity1 = new MockEntity(algorithm);
-            PrivateObject entity1Accessor = new PrivateObject(entity1, new PrivateType(typeof(GeneticEntity)));
+            PrivateObject entity1Accessor = new PrivateObject(entity1, new PrivateType(typeof(GeneticEntity<MockEntity, MockEntityConfiguration>)));
             entity1Accessor.SetField("rawFitnessValue", 5);
             MockEntity entity2 = new MockEntity(algorithm);
-            PrivateObject entity2Accessor = new PrivateObject(entity2, new PrivateType(typeof(GeneticEntity)));
+            PrivateObject entity2Accessor = new PrivateObject(entity2, new PrivateType(typeof(GeneticEntity<MockEntity, MockEntityConfiguration>)));
             entity2Accessor.SetField("rawFitnessValue", 7);
             population.Entities.Add(entity1);
             population.Entities.Add(entity2);
@@ -72,14 +73,20 @@ namespace GenFxTests
             Assert.AreEqual((double)49, entity2.ScaledFitnessValue, "ScaledFitnessValue not set correctly.");
         }
 
-        private static GeneticAlgorithm GetAlgorithm(double scalingPower)
+        private static IGeneticAlgorithm GetAlgorithm(double scalingPower)
         {
-            GeneticAlgorithm algorithm = new MockGeneticAlgorithm();
-            algorithm.ConfigurationSet.Entity = new MockEntityConfiguration();
-            algorithm.ConfigurationSet.Population = new PopulationConfiguration();
-            ExponentialScalingStrategyConfiguration config = new ExponentialScalingStrategyConfiguration();
-            config.ScalingPower = scalingPower;
-            algorithm.ConfigurationSet.FitnessScalingStrategy = config;
+            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentConfigurationSet
+            {
+                GeneticAlgorithm = new MockGeneticAlgorithmConfiguration(),
+                SelectionOperator = new MockSelectionOperatorConfiguration(),
+                FitnessEvaluator = new MockFitnessEvaluatorConfiguration(),
+                Entity = new MockEntityConfiguration(),
+                Population = new SimplePopulationConfiguration(),
+                FitnessScalingStrategy = new ExponentialScalingStrategyConfiguration
+                {
+                    ScalingPower = scalingPower
+                }
+            });
             return algorithm;
         }
     }

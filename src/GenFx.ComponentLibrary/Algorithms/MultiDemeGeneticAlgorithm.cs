@@ -16,5 +16,13 @@ namespace GenFx.ComponentLibrary.Algorithms
     [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Multi")]
     public sealed class MultiDemeGeneticAlgorithm : MultiDemeGeneticAlgorithm<MultiDemeGeneticAlgorithm, MultiDemeGeneticAlgorithmConfiguration>
     {
+        /// <summary>
+        /// Initializes a new instance of this class.
+        /// </summary>
+        /// <param name="configurationSet">Contains the component configuration for the algorithm.</param>
+        public MultiDemeGeneticAlgorithm(ComponentConfigurationSet configurationSet)
+            : base(configurationSet)
+        {
+        }
     }
 }

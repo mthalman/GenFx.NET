@@ -17,6 +17,15 @@ namespace GenFx.ComponentLibrary.Algorithms
         where TConfiguration : GeneticAlgorithmConfiguration<TConfiguration, TAlgorithm>
     {
         /// <summary>
+        /// Initializes a new instance of this class.
+        /// </summary>
+        /// <param name="configurationSet">Contains the component configuration for the algorithm.</param>
+        protected SimpleGeneticAlgorithm(ComponentConfigurationSet configurationSet)
+            : base(configurationSet)
+        {
+        }
+
+        /// <summary>
         /// Modifies <paramref name="population"/> to become the next generation of <see cref="IGeneticEntity"/> objects.
         /// </summary>
         /// <param name="population">The current <see cref="IPopulation"/> to be modified.</param>

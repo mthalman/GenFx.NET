@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Threading.Tasks;
 
@@ -42,6 +43,34 @@ namespace GenFx
         /// Gets the <see cref="AlgorithmOperators"/> to be used.
         /// </summary>
         AlgorithmOperators Operators { get; }
+
+        /// <summary>
+        /// Gets the <see cref="GeneticEnvironment"/> being used by this object.
+        /// </summary>
+        GeneticEnvironment Environment { get; }
+
+        /// <summary>
+        /// Gets the index of the generation reached so far during execution of the genetic algorithm.
+        /// </summary>
+        /// <value>
+        /// The index of the generation reached so far during execution of the genetic algorithm.
+        /// </value>
+        int CurrentGeneration { get; }
+
+        /// <summary>
+        /// Gets the collection of statistics being calculated for the genetic algorithm.
+        /// </summary>
+        IEnumerable<IStatistic> Statistics { get; }
+
+        /// <summary>
+        /// Gets the collection of plugins being used by the genetic algorithm.
+        /// </summary>
+        IEnumerable<IPlugin> Plugins { get; }
+
+        /// <summary>
+        /// Initializes the genetic algorithm with a starting <see cref="GeneticEnvironment"/>.
+        /// </summary>
+        Task InitializeAsync();
 
         /// <summary>
         /// Executes the genetic algorithm.

@@ -7,42 +7,42 @@ using System.Threading.Tasks;
 
 namespace GenFxTests.Mocks
 {
-    class MockGeneticAlgorithm : GeneticAlgorithm
+    class MockGeneticAlgorithm : GeneticAlgorithm<MockGeneticAlgorithm, MockGeneticAlgorithmConfiguration>
     {
-        public MockGeneticAlgorithm()
+        public MockGeneticAlgorithm(ComponentConfigurationSet config)
+            : base(config)
         {
         }
 
-        protected override Task CreateNextGenerationAsync(Population population)
+        protected override Task CreateNextGenerationAsync(IPopulation population)
         {
             throw new Exception("The method or operation is not implemented.");
         }
 
-        public void RaiseFitnessEvaluatedEvent()
+        public void RaiseGenerationCreatedEvent()
         {
-            typeof(GeneticAlgorithm).GetMethod("RaiseFitnessEvaluatedEvent", BindingFlags.NonPublic | BindingFlags.Instance).Invoke(this, null);
+            typeof(GeneticAlgorithm<MockGeneticAlgorithm, MockGeneticAlgorithmConfiguration>).GetMethod("OnGenerationCreated", BindingFlags.NonPublic | BindingFlags.Instance).Invoke(this, null);
         }
     }
 
-    [Component(typeof(MockGeneticAlgorithm))]
-    class MockGeneticAlgorithmConfiguration : GeneticAlgorithmConfiguration
+    class MockGeneticAlgorithmConfiguration : GeneticAlgorithmConfiguration<MockGeneticAlgorithmConfiguration, MockGeneticAlgorithm>
     {
     }
 
-    class MockGeneticAlgorithm2 : GeneticAlgorithm
+    class MockGeneticAlgorithm2 : GeneticAlgorithm<MockGeneticAlgorithm2, MockGeneticAlgorithm2Configuration>
     {
-        public MockGeneticAlgorithm2()
+        public MockGeneticAlgorithm2(ComponentConfigurationSet config)
+            : base(config)
         {
         }
 
-        protected override Task CreateNextGenerationAsync(Population population)
+        protected override Task CreateNextGenerationAsync(IPopulation population)
         {
             throw new Exception("The method or operation is not implemented.");
         }
     }
 
-    [Component(typeof(MockGeneticAlgorithm2))]
-    class MockGeneticAlgorithm2Configuration : GeneticAlgorithmConfiguration
+    class MockGeneticAlgorithm2Configuration : GeneticAlgorithmConfiguration<MockGeneticAlgorithm2Configuration, MockGeneticAlgorithm2>
     {
     }
 }

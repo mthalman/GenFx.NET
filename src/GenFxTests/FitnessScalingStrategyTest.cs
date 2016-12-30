@@ -1,4 +1,6 @@
 ﻿using GenFx;
+using GenFx.ComponentLibrary.Base;
+using GenFx.ComponentLibrary.Populations;
 using GenFx.ComponentModel;
 using GenFxTests.Helpers;
 using GenFxTests.Mocks;
@@ -33,7 +35,7 @@ namespace GenFxTests
         [TestMethod]
         public void FitnessScalingStrategy_Ctor_MissingSetting()
         {
-            AssertEx.Throws<ArgumentException>(() => new FakeFitnessScalingStrategy(new MockGeneticAlgorithm()));
+            AssertEx.Throws<ArgumentException>(() => new FakeFitnessScalingStrategy(new MockGeneticAlgorithm(new ComponentConfigurationSet())));
         }
 
         /// <summary>
@@ -42,9 +44,9 @@ namespace GenFxTests
         [TestMethod]
         public void FitnessScalingStrategy_Scale()
         {
-            GeneticAlgorithm algorithm = GetAlgorithm();
+            IGeneticAlgorithm algorithm = GetAlgorithm();
             FakeFitnessScalingStrategy2 strategy = new FakeFitnessScalingStrategy2(algorithm);
-            Population population = new Population(algorithm);
+            SimplePopulation population = new SimplePopulation(algorithm);
             population.Entities.Add(new MockEntity(algorithm));
             strategy.Scale(population);
 
@@ -57,7 +59,7 @@ namespace GenFxTests
         [TestMethod]
         public void FitnessScalingStrategy_Scale_NullPopulation()
         {
-            GeneticAlgorithm algorithm = GetAlgorithm();
+            IGeneticAlgorithm algorithm = GetAlgorithm();
             FakeFitnessScalingStrategy2 strategy = new FakeFitnessScalingStrategy2(algorithm);
             AssertEx.Throws<ArgumentNullException>(() => strategy.Scale(null));
         }
@@ -68,55 +70,58 @@ namespace GenFxTests
         [TestMethod]
         public void FitnessScalingStrategy_Scale_EmptyPopulation()
         {
-            GeneticAlgorithm algorithm = GetAlgorithm();
+            IGeneticAlgorithm algorithm = GetAlgorithm();
             FakeFitnessScalingStrategy2 strategy = new FakeFitnessScalingStrategy2(algorithm);
-            Population population = new Population(algorithm);
+            SimplePopulation population = new SimplePopulation(algorithm);
             AssertEx.Throws<ArgumentException>(() => strategy.Scale(population));
         }
 
-        private static GeneticAlgorithm GetAlgorithm()
+        private static IGeneticAlgorithm GetAlgorithm()
         {
-            MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm();
-            algorithm.ConfigurationSet.Entity = new MockEntityConfiguration();
-            algorithm.ConfigurationSet.Population = new PopulationConfiguration();
-            algorithm.ConfigurationSet.FitnessScalingStrategy = new FakeFitnessScalingStrategy2Configuration();
+            MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentConfigurationSet
+            {
+                GeneticAlgorithm = new MockGeneticAlgorithmConfiguration(),
+                SelectionOperator = new MockSelectionOperatorConfiguration(),
+                FitnessEvaluator = new MockFitnessEvaluatorConfiguration(),
+                Entity = new MockEntityConfiguration(),
+                Population = new SimplePopulationConfiguration(),
+                FitnessScalingStrategy = new FakeFitnessScalingStrategy2Configuration()
+            });
             return algorithm;
         }
 
-        private class FakeFitnessScalingStrategy : FitnessScalingStrategy
+        private class FakeFitnessScalingStrategy : FitnessScalingStrategyBase<FakeFitnessScalingStrategy, FakeFitnessScalingStrategyConfiguration>
         {
-            public FakeFitnessScalingStrategy(GeneticAlgorithm algorithm)
+            public FakeFitnessScalingStrategy(IGeneticAlgorithm algorithm)
                 : base(algorithm)
             {
             }
 
-            protected override void UpdateScaledFitnessValues(Population population)
+            protected override void UpdateScaledFitnessValues(IPopulation population)
             {
             }
         }
 
-        [Component(typeof(FakeFitnessScalingStrategy))]
-        private class FakeFitnessScalingStrategyConfiguration : FitnessScalingStrategyConfiguration
+        private class FakeFitnessScalingStrategyConfiguration : FitnessScalingStrategyConfigurationBase<FakeFitnessScalingStrategyConfiguration, FakeFitnessScalingStrategy>
         {
         }
 
-        private class FakeFitnessScalingStrategy2 : FitnessScalingStrategy
+        private class FakeFitnessScalingStrategy2 : FitnessScalingStrategyBase<FakeFitnessScalingStrategy2, FakeFitnessScalingStrategy2Configuration>
         {
             public bool OnScaleCalled;
 
-            public FakeFitnessScalingStrategy2(GeneticAlgorithm algorithm)
+            public FakeFitnessScalingStrategy2(IGeneticAlgorithm algorithm)
                 : base(algorithm)
             {
             }
 
-            protected override void UpdateScaledFitnessValues(Population population)
+            protected override void UpdateScaledFitnessValues(IPopulation population)
             {
                 this.OnScaleCalled = true;
             }
         }
 
-        [Component(typeof(FakeFitnessScalingStrategy2))]
-        private class FakeFitnessScalingStrategy2Configuration : FitnessScalingStrategyConfiguration
+        private class FakeFitnessScalingStrategy2Configuration : FitnessScalingStrategyConfigurationBase<FakeFitnessScalingStrategy2Configuration, FakeFitnessScalingStrategy2>
         {
         }
     }

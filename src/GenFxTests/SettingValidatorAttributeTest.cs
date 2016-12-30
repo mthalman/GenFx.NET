@@ -199,7 +199,15 @@ namespace GenFxTests
             }
         }
 
-        private class FakeComponentConfiguration : ComponentConfiguration
+        private class FakeComponent : GeneticComponent<FakeComponent, FakeComponentConfiguration>
+        {
+            public FakeComponent()
+                : base(null)
+            {
+            }
+        }
+
+        private class FakeComponentConfiguration : ComponentConfiguration<FakeComponentConfiguration, FakeComponent>
         {
             private int value;
 

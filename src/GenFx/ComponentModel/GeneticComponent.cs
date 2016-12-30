@@ -15,19 +15,12 @@ namespace GenFx.ComponentModel
         }
 
         /// <summary>
-        /// Initializes a new instance of this class.
-        /// </summary>
-        internal GeneticComponent()
-        {
-        }
-
-        /// <summary>
         /// Gets the <see cref="ComponentConfiguration"/> containing the configuration of this component instance.
         /// </summary>
-        public ComponentConfiguration Configuration
+        public IComponentConfiguration Configuration
         {
             get;
-            internal set;
+            private set;
         }
 
         /// <summary>

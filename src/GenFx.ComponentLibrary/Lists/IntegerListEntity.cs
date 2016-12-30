@@ -6,7 +6,8 @@ namespace GenFx.ComponentLibrary.Lists
     /// <summary>
     /// Entity made up of a list of integers.
     /// </summary>
-    public abstract class IntegerListEntity<TEntity, TConfiguration> : ListEntity<TEntity, TConfiguration, int>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix")]
+    public abstract class IntegerListEntity<TEntity, TConfiguration> : ListEntity<TEntity, TConfiguration, int>, IIntegerListEntity
         where TEntity : IntegerListEntity<TEntity, TConfiguration>
         where TConfiguration : IntegerListEntityConfiguration<TConfiguration, TEntity>
     {
@@ -28,7 +29,7 @@ namespace GenFx.ComponentLibrary.Lists
         /// </summary>
         /// <remarks>
         /// <b>Notes to inheritors:</b> When overriding this method, you must either call the <b>InitializeCore</b>
-        /// method of the base class or call <see cref="ListEntityBase{TEntity, TConfiguration}.UpdateStringRepresentation"/>
+        /// method of the base class or call <see cref="ListEntityBase{TEntity, TConfiguration, TItem}.UpdateStringRepresentation"/>
         /// after the list has been initialized.  This is necessary in order to sync the 
         /// string representation of this object with the initialized data.
         /// </remarks>

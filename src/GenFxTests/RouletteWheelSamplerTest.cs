@@ -28,13 +28,19 @@ namespace GenFxTests
         [TestMethod]
         public void RouletteWheelSampler_GetEntity()
         {
-            GeneticAlgorithm algorithm = new MockGeneticAlgorithm();
-            algorithm.ConfigurationSet.Entity = new MockEntityConfiguration();
+            MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentConfigurationSet
+            {
+                GeneticAlgorithm = new MockGeneticAlgorithmConfiguration(),
+                Entity = new MockEntityConfiguration(),
+                SelectionOperator = new MockSelectionOperatorConfiguration(),
+                FitnessEvaluator = new MockFitnessEvaluatorConfiguration(),
+                Population = new MockPopulationConfiguration()
+            });
             List<WheelSlice> slices = new List<WheelSlice>();
-            GeneticEntity entity1 = new MockEntity(algorithm);
-            GeneticEntity entity2 = new MockEntity(algorithm);
-            GeneticEntity entity3 = new MockEntity(algorithm);
-            GeneticEntity entity4 = new MockEntity(algorithm);
+            MockEntity entity1 = new MockEntity(algorithm);
+            MockEntity entity2 = new MockEntity(algorithm);
+            MockEntity entity3 = new MockEntity(algorithm);
+            MockEntity entity4 = new MockEntity(algorithm);
 
             slices.Add(new WheelSlice(entity1, 4));
             slices.Add(new WheelSlice(entity2, 2));
@@ -45,7 +51,7 @@ namespace GenFxTests
             RandomHelper.Instance = randomUtil;
 
             randomUtil.Ratio = 0;
-            GeneticEntity sampledEntity = RouletteWheelSampler.GetEntity(slices);
+            IGeneticEntity sampledEntity = RouletteWheelSampler.GetEntity(slices);
             Assert.AreSame(entity1, sampledEntity, "Incorrect entity instance returned.");
 
             randomUtil.Ratio = .39999;
@@ -83,13 +89,19 @@ namespace GenFxTests
         [TestMethod]
         public void RouletteWheelSampler_GetEntity_NoSizes()
         {
-            GeneticAlgorithm algorithm = new MockGeneticAlgorithm();
-            algorithm.ConfigurationSet.Entity = new MockEntityConfiguration();
+            MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentConfigurationSet
+            {
+                GeneticAlgorithm = new MockGeneticAlgorithmConfiguration(),
+                Entity = new MockEntityConfiguration(),
+                SelectionOperator = new MockSelectionOperatorConfiguration(),
+                FitnessEvaluator = new MockFitnessEvaluatorConfiguration(),
+                Population = new MockPopulationConfiguration()
+            });
             List<WheelSlice> slices = new List<WheelSlice>();
-            GeneticEntity entity1 = new MockEntity(algorithm);
-            GeneticEntity entity2 = new MockEntity(algorithm);
-            GeneticEntity entity3 = new MockEntity(algorithm);
-            GeneticEntity entity4 = new MockEntity(algorithm);
+            MockEntity entity1 = new MockEntity(algorithm);
+            MockEntity entity2 = new MockEntity(algorithm);
+            MockEntity entity3 = new MockEntity(algorithm);
+            MockEntity entity4 = new MockEntity(algorithm);
 
             slices.Add(new WheelSlice(entity1, 0));
             slices.Add(new WheelSlice(entity2, 0));
@@ -99,7 +111,7 @@ namespace GenFxTests
             TestRandomUtil randomUtil = new TestRandomUtil();
             RandomHelper.Instance = randomUtil;
             randomUtil.RandomValue = 2;
-            GeneticEntity sampledEntity = RouletteWheelSampler.GetEntity(slices);
+            IGeneticEntity sampledEntity = RouletteWheelSampler.GetEntity(slices);
             Assert.AreEqual(randomUtil.MaxValuePassed, 4, "Incorrect max value passed.");
             Assert.AreSame(entity3, sampledEntity, "Incorrect entity returned.");
         }

@@ -15,9 +15,9 @@ namespace GenFx
         int Age { get; set; }
 
         /// <summary>
-        /// Gets the fitness value of the entity after it has been scaled by the <see cref="IFitnessScalingStrategy"/>.
+        /// Gets or sets the fitness value of the entity after it has been scaled by the <see cref="IFitnessScalingStrategy"/>.
         /// </summary>
-        double ScaledFitnessValue { get; }
+        double ScaledFitnessValue { get; set; }
 
         /// <summary>
         /// Gets the fitness value of the entity before being scaled by the <see cref="IFitnessScalingStrategy"/>.
@@ -25,10 +25,37 @@ namespace GenFx
         double RawFitnessValue { get; }
 
         /// <summary>
+        /// Gets the string representation of the entity.
+        /// </summary>
+        string Representation { get; }
+
+        /// <summary>
+        /// Initializes the entity with its default data.
+        /// </summary>
+        void Initialize();
+
+        /// <summary>
         /// Returns a clone of this entity.
         /// </summary>
         IGeneticEntity Clone();
-        
+
+        /// <summary>
+        /// Copies the state from this instance to <paramref name="entity"/>.
+        /// </summary>
+        /// <param name="entity"><see cref="IGeneticEntity"/> to which state is to be copied.</param>
+        /// <remarks>
+        /// <para>
+        /// The default implementation of this method is to copy the state of this instance
+        /// to the entity passed in.
+        /// </para>
+        /// <para>
+        /// <b>Notes to inheritors:</b> When overriding this method, it is necessary to call the
+        /// <b>CopyTo</b> method of the base class.
+        /// </para>
+        /// </remarks>
+        /// <exception cref="ArgumentNullException"><paramref name="entity"/> is null.</exception>
+        void CopyTo(IGeneticEntity entity);
+
         /// <summary>
         /// Evaluates the <see cref="IGeneticEntity.RawFitnessValue"/> of the entity.
         /// </summary>

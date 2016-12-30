@@ -14,24 +14,14 @@ namespace GenFx.ComponentModel
         protected GeneticComponent(TConfiguration configuration)
             : base(configuration)
         {
-            Configuration = configuration;
         }
-
-        /// <summary>
-        /// Initializes a new instance of this class.
-        /// </summary>
-        internal GeneticComponent()
-            : base()
-        {
-        }
-
+        
         /// <summary>
         /// Gets the <typeparamref name="TConfiguration"/> containing the configuration of this component instance.
         /// </summary>
         public new TConfiguration Configuration
         {
             get { return (TConfiguration)base.Configuration; }
-            internal set { base.Configuration = value; }
         }
     }
 }

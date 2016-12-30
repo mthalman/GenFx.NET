@@ -9,5 +9,13 @@ namespace GenFx.ComponentLibrary.Algorithms
     /// </remarks>
     public sealed class SimpleGeneticAlgorithm : SimpleGeneticAlgorithm<SimpleGeneticAlgorithm, SimpleGeneticAlgorithmConfiguration>
     {
+        /// <summary>
+        /// Initializes a new instance of this class.
+        /// </summary>
+        /// <param name="configurationSet">Contains the component configuration for the algorithm.</param>
+        public SimpleGeneticAlgorithm(ComponentConfigurationSet configurationSet)
+            : base(configurationSet)
+        {
+        }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using GenFx;
 using GenFx.ComponentLibrary.Algorithms;
+using GenFx.ComponentLibrary.Populations;
 using GenFxTests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
@@ -22,24 +23,27 @@ namespace GenFxTests
         [TestMethod]
         public async Task MultiDemeGeneticAlgorithm_CreateNextGeneration_Async()
         {
-            TestMultiDemeGeneticAlgorithm algorithm = new TestMultiDemeGeneticAlgorithm();
-            algorithm.ConfigurationSet.Entity = new MockEntityConfiguration();
-            algorithm.ConfigurationSet.Population = new PopulationConfiguration();
-            TestMultiDemeGeneticAlgorithmConfiguration algConfig = new TestMultiDemeGeneticAlgorithmConfiguration();
-            algConfig.MigrantCount = 1;
-            algorithm.ConfigurationSet.GeneticAlgorithm = algConfig;
-
-            MockSelectionOperatorConfiguration opConfig = new MockSelectionOperatorConfiguration();
-            opConfig.SelectionBasedOnFitnessType = FitnessType.Raw;
-            algorithm.ConfigurationSet.SelectionOperator = opConfig;
-
+            TestMultiDemeGeneticAlgorithm algorithm = new TestMultiDemeGeneticAlgorithm(new ComponentConfigurationSet
+            {
+                FitnessEvaluator = new MockFitnessEvaluatorConfiguration(),
+                Entity = new MockEntityConfiguration(),
+                Population = new SimplePopulationConfiguration(),
+                GeneticAlgorithm = new TestMultiDemeGeneticAlgorithmConfiguration
+                {
+                    MigrantCount = 1
+                },
+                SelectionOperator = new MockSelectionOperatorConfiguration
+                {
+                    SelectionBasedOnFitnessType = FitnessType.Raw
+                }
+            });
             MockSelectionOperator selectionOp = new MockSelectionOperator(algorithm);
             algorithm.Operators.SelectionOperator = selectionOp;
             PrivateObject accessor = new PrivateObject(algorithm);
 
             algorithm.Environment.Populations.Add(GetPopulation(algorithm));
             algorithm.Environment.Populations.Add(GetPopulation(algorithm));
-            Population population = GetPopulation(algorithm);
+            SimplePopulation population = GetPopulation(algorithm);
             algorithm.Environment.Populations.Add(population);
 
             int prevPopCount = population.Entities.Count;
@@ -55,23 +59,25 @@ namespace GenFxTests
         [TestMethod]
         public void MultiDemeGeneticAlgorithm_Migrate()
         {
-            MultiDemeGeneticAlgorithm algorithm = new MultiDemeGeneticAlgorithm();
-            algorithm.ConfigurationSet.Entity = new MockEntityConfiguration();
-            algorithm.ConfigurationSet.Population = new PopulationConfiguration();
-            algorithm.ConfigurationSet.FitnessEvaluator = new MockFitnessEvaluatorConfiguration();
-
-            MultiDemeGeneticAlgorithmConfiguration algConfig = new MultiDemeGeneticAlgorithmConfiguration();
-            algConfig.MigrantCount = 2;
-            algorithm.ConfigurationSet.GeneticAlgorithm = algConfig;
-
-            MockSelectionOperatorConfiguration opConfig = new MockSelectionOperatorConfiguration();
-            opConfig.SelectionBasedOnFitnessType = FitnessType.Scaled;
-            algorithm.ConfigurationSet.SelectionOperator = opConfig;
+            MultiDemeGeneticAlgorithm algorithm = new MultiDemeGeneticAlgorithm(new ComponentConfigurationSet
+            {
+                Entity = new MockEntityConfiguration(),
+                Population = new SimplePopulationConfiguration(),
+                FitnessEvaluator = new MockFitnessEvaluatorConfiguration(),
+                GeneticAlgorithm = new MultiDemeGeneticAlgorithmConfiguration
+                {
+                    MigrantCount = 2
+                },
+                SelectionOperator = new MockSelectionOperatorConfiguration
+                {
+                    SelectionBasedOnFitnessType = FitnessType.Scaled
+                },
+            });
 
             algorithm.Operators.SelectionOperator = new MockSelectionOperator(algorithm);
             algorithm.Operators.FitnessEvaluator = new MockFitnessEvaluator(algorithm);
 
-            Population population1 = new Population(algorithm);
+            SimplePopulation population1 = new SimplePopulation(algorithm);
             population1.Entities.Add(new MockEntity(algorithm));
             population1.Entities.Add(new MockEntity(algorithm));
             population1.Entities.Add(new MockEntity(algorithm));
@@ -81,7 +87,7 @@ namespace GenFxTests
             population1.Entities[2].ScaledFitnessValue = 2;
             population1.Entities[3].ScaledFitnessValue = 4;
 
-            Population population2 = new Population(algorithm);
+            SimplePopulation population2 = new SimplePopulation(algorithm);
             population2.Entities.Add(new MockEntity(algorithm));
             population2.Entities.Add(new MockEntity(algorithm));
             population2.Entities.Add(new MockEntity(algorithm));
@@ -91,7 +97,7 @@ namespace GenFxTests
             population2.Entities[2].ScaledFitnessValue = 8;
             population2.Entities[3].ScaledFitnessValue = 7;
 
-            Population population3 = new Population(algorithm);
+            SimplePopulation population3 = new SimplePopulation(algorithm);
             population3.Entities.Add(new MockEntity(algorithm));
             population3.Entities.Add(new MockEntity(algorithm));
             population3.Entities.Add(new MockEntity(algorithm));
@@ -123,18 +129,23 @@ namespace GenFxTests
             Assert.AreEqual((double)7, population3.Entities[3].ScaledFitnessValue, "Incorrect entity.");
         }
 
-        private static Population GetPopulation(GeneticAlgorithm algorithm)
+        private static SimplePopulation GetPopulation(IGeneticAlgorithm algorithm)
         {
-            Population population = new Population(algorithm);
+            SimplePopulation population = new SimplePopulation(algorithm);
             population.Entities.Add(new MockEntity(algorithm));
             population.Entities.Add(new MockEntity(algorithm));
             population.Entities.Add(new MockEntity(algorithm));
             return population;
         }
 
-        private class TestMultiDemeGeneticAlgorithm : MultiDemeGeneticAlgorithm
+        private class TestMultiDemeGeneticAlgorithm : MultiDemeGeneticAlgorithm<TestMultiDemeGeneticAlgorithm, TestMultiDemeGeneticAlgorithmConfiguration>
         {
             internal bool OnMigrateCalled;
+
+            public TestMultiDemeGeneticAlgorithm(ComponentConfigurationSet configurationSet)
+            : base(configurationSet)
+        {
+            }
 
             protected override void OnMigrate()
             {
@@ -142,8 +153,7 @@ namespace GenFxTests
             }
         }
 
-        [Component(typeof(TestMultiDemeGeneticAlgorithm))]
-        private class TestMultiDemeGeneticAlgorithmConfiguration : MultiDemeGeneticAlgorithmConfiguration
+        private class TestMultiDemeGeneticAlgorithmConfiguration : MultiDemeGeneticAlgorithmConfiguration<TestMultiDemeGeneticAlgorithmConfiguration, TestMultiDemeGeneticAlgorithm>
         {
         }
     }

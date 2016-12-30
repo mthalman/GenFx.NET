@@ -7,6 +7,8 @@ namespace GenFx.ComponentLibrary.Lists
     /// <summary>
     /// Entity made up of a fixed-length list of integers.
     /// </summary>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix")]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1501:AvoidExcessiveInheritance")]
     public abstract class FixedLengthIntegerListEntity<TEntity, TConfiguration> : IntegerListEntity<TEntity, TConfiguration>
         where TEntity : FixedLengthIntegerListEntity<TEntity, TConfiguration>
         where TConfiguration : FixedLengthIntegerListEntityConfiguration<TConfiguration, TEntity>
@@ -38,14 +40,9 @@ namespace GenFx.ComponentLibrary.Lists
         }
 
         /// <summary>
-        /// Returns a clone of this object.
+        /// Gets a value indicating whether the list is a fixed size.
         /// </summary>
-        /// <returns>A clone of this object.</returns>
-        public override GeneticEntity<TEntity, TConfiguration> Clone()
-        {
-            FixedLengthIntegerListEntity<TEntity, TConfiguration> binaryEntity = new FixedLengthIntegerListEntity<TEntity, TConfiguration>(this.Algorithm);
-            this.CopyTo(binaryEntity);
-            return binaryEntity;
-        }
+        public override bool IsFixedSize { get { return true; } }
+        
     }
 }

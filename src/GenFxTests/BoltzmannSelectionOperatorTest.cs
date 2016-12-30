@@ -5,6 +5,7 @@ using GenFx.ComponentModel;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using GenFxTests.Mocks;
 using GenFxTests.Helpers;
+using GenFx.ComponentLibrary.Base;
 
 namespace GenFxTests
 {
@@ -22,7 +23,7 @@ namespace GenFxTests
         public void BoltzmannSelectionOperator_Ctor()
         {
             double initialTemp = 10;
-            GeneticAlgorithm algorithm = GetMockAlgorithm(initialTemp);
+            IGeneticAlgorithm algorithm = GetMockAlgorithm(initialTemp);
 
             FakeBoltzmannSelectionOperator op = new FakeBoltzmannSelectionOperator(algorithm);
             Assert.AreEqual(initialTemp, op.GetTemp(), "Initial temperature was not initialized correctly.");
@@ -34,7 +35,7 @@ namespace GenFxTests
         [TestMethod]
         public void BoltzmannSelectionOperator_Ctor_MissingSetting()
         {
-            AssertEx.Throws<ArgumentException>(() => new FakeBoltzmannSelectionOperator(new MockGeneticAlgorithm()));
+            AssertEx.Throws<ArgumentException>(() => new FakeBoltzmannSelectionOperator(new MockGeneticAlgorithm(new ComponentConfigurationSet())));
         }
 
         /// <summary>
@@ -44,13 +45,13 @@ namespace GenFxTests
         public void BoltzmannSelectionOperator_Select()
         {
             double initialTemp = 10;
-            GeneticAlgorithm algorithm = GetMockAlgorithm(initialTemp);
+            IGeneticAlgorithm algorithm = GetMockAlgorithm(initialTemp);
 
             FakeBoltzmannSelectionOperator op = new FakeBoltzmannSelectionOperator(algorithm);
             MockPopulation population = new MockPopulation(algorithm);
             population.Entities.Add(new MockEntity(algorithm));
             population.Entities.Add(new MockEntity(algorithm));
-            GeneticEntity entity = op.Select(population);
+            IGeneticEntity entity = op.SelectEntity(population);
             Assert.IsNotNull(entity, "An entity should have been selected.");
         }
 
@@ -69,8 +70,8 @@ namespace GenFxTests
 
             for (int i = 0; i < 10; i++)
             {
-                algorithm.RaiseFitnessEvaluatedEvent();
-                Assert.IsTrue(op.GetTemp().Equals(currentTemp + 1), "Loop index {0}: Temperature was not adjusted correctly.", i);
+                algorithm.RaiseGenerationCreatedEvent();
+                Assert.AreEqual(op.GetTemp(), currentTemp + 1, "Loop index {0}: Temperature was not adjusted correctly.", i);
                 currentTemp++;
             }
         }
@@ -86,27 +87,31 @@ namespace GenFxTests
             FakeBoltzmannSelectionOperator op = new FakeBoltzmannSelectionOperator(algorithm);
             MockPopulation population = new MockPopulation(algorithm);
             MockEntity entity = new MockEntity(algorithm);
-            PrivateObject accessor = new PrivateObject(entity, new PrivateType(typeof(GeneticEntity)));
-            accessor.SetField("scaledFitnessValue", 1);
+            entity.ScaledFitnessValue = 1;
             population.Entities.Add(entity);
-            AssertEx.Throws<OverflowException>(() => op.Select(population));
+            AssertEx.Throws<OverflowException>(() => op.SelectEntity(population));
         }
 
         private static MockGeneticAlgorithm GetMockAlgorithm(double initialTemp)
         {
-            MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm();
-            algorithm.ConfigurationSet.Entity = new MockEntityConfiguration();
-            algorithm.ConfigurationSet.Population = new MockPopulationConfiguration();
-            FakeBoltzmannSelectionOperatorConfiguration config = new FakeBoltzmannSelectionOperatorConfiguration();
-            config.SelectionBasedOnFitnessType = FitnessType.Scaled;
-            config.Temperature = initialTemp;
-            algorithm.ConfigurationSet.SelectionOperator = config;
+            MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentConfigurationSet
+            {
+                GeneticAlgorithm = new MockGeneticAlgorithmConfiguration(),
+                FitnessEvaluator = new MockFitnessEvaluatorConfiguration(),
+                Entity = new MockEntityConfiguration(),
+                Population = new MockPopulationConfiguration(),
+                SelectionOperator = new FakeBoltzmannSelectionOperatorConfiguration
+                {
+                    SelectionBasedOnFitnessType = FitnessType.Scaled,
+                    InitialTemperature = initialTemp
+                }
+            });
             return algorithm;
         }
 
-        private class FakeBoltzmannSelectionOperator : BoltzmannSelectionOperator
+        private class FakeBoltzmannSelectionOperator : BoltzmannSelectionOperator<FakeBoltzmannSelectionOperator, FakeBoltzmannSelectionOperatorConfiguration>
         {
-            public FakeBoltzmannSelectionOperator(GeneticAlgorithm algorithm)
+            public FakeBoltzmannSelectionOperator(IGeneticAlgorithm algorithm)
                 : base(algorithm)
             {
             }
@@ -122,8 +127,7 @@ namespace GenFxTests
             }
         }
 
-        [Component(typeof(FakeBoltzmannSelectionOperator))]
-        private class FakeBoltzmannSelectionOperatorConfiguration : BoltzmannSelectionOperatorConfiguration
+        private class FakeBoltzmannSelectionOperatorConfiguration : BoltzmannSelectionOperatorConfiguration<FakeBoltzmannSelectionOperatorConfiguration, FakeBoltzmannSelectionOperator>
         {
         }
     }

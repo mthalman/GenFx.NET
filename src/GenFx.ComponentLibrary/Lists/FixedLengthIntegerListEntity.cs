@@ -1,4 +1,3 @@
-using GenFx.ComponentLibrary.Base;
 using System;
 
 namespace GenFx.ComponentLibrary.Lists
@@ -6,6 +5,8 @@ namespace GenFx.ComponentLibrary.Lists
     /// <summary>
     /// Entity made up of a fixed-length list of integers.
     /// </summary>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix")]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1501:AvoidExcessiveInheritance")]
     public sealed class FixedLengthIntegerListEntity : FixedLengthIntegerListEntity<FixedLengthIntegerListEntity, FixedLengthIntegerListEntityConfiguration>
     {
         /// <summary>
@@ -17,17 +18,6 @@ namespace GenFx.ComponentLibrary.Lists
         public FixedLengthIntegerListEntity(IGeneticAlgorithm algorithm)
             : base(algorithm)
         {
-        }
-
-        /// <summary>
-        /// Returns a clone of this object.
-        /// </summary>
-        /// <returns>A clone of this object.</returns>
-        public override GeneticEntity<FixedLengthIntegerListEntity, FixedLengthIntegerListEntityConfiguration> Clone()
-        {
-            FixedLengthIntegerListEntity entity = new FixedLengthIntegerListEntity(this.Algorithm);
-            this.CopyTo(entity);
-            return entity;
         }
     }
 }

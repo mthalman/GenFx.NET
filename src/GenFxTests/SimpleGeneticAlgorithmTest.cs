@@ -1,5 +1,6 @@
 ﻿using GenFx;
 using GenFx.ComponentLibrary.Algorithms;
+using GenFx.ComponentLibrary.Populations;
 using GenFxTests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
@@ -22,24 +23,29 @@ namespace GenFxTests
         [TestMethod]
         public async Task SimpleGeneticAlgorithm_CreateNextGeneration_Async()
         {
-            SimpleGeneticAlgorithm algorithm = new SimpleGeneticAlgorithm();
-            algorithm.ConfigurationSet.Entity = new MockEntityConfiguration();
-            algorithm.ConfigurationSet.Population = new PopulationConfiguration();
-            MockElitismStrategyConfiguration eliteConfig = new MockElitismStrategyConfiguration();
-            eliteConfig.ElitistRatio = .1;
-            algorithm.ConfigurationSet.ElitismStrategy = eliteConfig;
-
-            MockSelectionOperatorConfiguration selConfig = new MockSelectionOperatorConfiguration();
-            selConfig.SelectionBasedOnFitnessType = FitnessType.Scaled;
-            algorithm.ConfigurationSet.SelectionOperator = selConfig;
-
-            MockCrossoverOperatorConfiguration crossConfig = new MockCrossoverOperatorConfiguration();
-            crossConfig.CrossoverRate = 1;
-            algorithm.ConfigurationSet.CrossoverOperator = crossConfig;
-
-            MockMutationOperatorConfiguration mutConfig = new MockMutationOperatorConfiguration();
-            mutConfig.MutationRate = 1;
-            algorithm.ConfigurationSet.MutationOperator = mutConfig;
+            SimpleGeneticAlgorithm algorithm = new SimpleGeneticAlgorithm(new ComponentConfigurationSet
+            {
+                GeneticAlgorithm = new SimpleGeneticAlgorithmConfiguration(),
+                FitnessEvaluator = new MockFitnessEvaluatorConfiguration(),
+                Entity = new MockEntityConfiguration(),
+                Population = new SimplePopulationConfiguration(),
+                ElitismStrategy = new MockElitismStrategyConfiguration
+                {
+                    ElitistRatio = .1
+                },
+                SelectionOperator = new MockSelectionOperatorConfiguration
+                {
+                    SelectionBasedOnFitnessType = FitnessType.Scaled
+                },
+                CrossoverOperator = new MockCrossoverOperatorConfiguration
+                {
+                    CrossoverRate = 1
+                },
+                MutationOperator = new MockMutationOperatorConfiguration
+                {
+                    MutationRate = 1
+                }
+            });
 
             algorithm.Operators.ElitismStrategy = new MockElitismStrategy(algorithm);
             algorithm.Operators.SelectionOperator = new MockSelectionOperator(algorithm);
@@ -47,7 +53,7 @@ namespace GenFxTests
             algorithm.Operators.MutationOperator = new MockMutationOperator(algorithm);
             PrivateObject accessor = new PrivateObject(algorithm);
 
-            Population population = GetPopulation(algorithm);
+            SimplePopulation population = GetPopulation(algorithm);
 
             int prevPopCount = population.Entities.Count;
             await (Task)accessor.Invoke("CreateNextGenerationAsync", population);
@@ -59,9 +65,9 @@ namespace GenFxTests
             Assert.AreEqual(prevPopCount, population.Entities.Count, "New population not created correctly.");
         }
 
-        private static Population GetPopulation(GeneticAlgorithm algorithm)
+        private static SimplePopulation GetPopulation(IGeneticAlgorithm algorithm)
         {
-            Population population = new Population(algorithm);
+            SimplePopulation population = new SimplePopulation(algorithm);
             population.Entities.Add(new MockEntity(algorithm));
             population.Entities.Add(new MockEntity(algorithm));
             population.Entities.Add(new MockEntity(algorithm));

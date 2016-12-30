@@ -22,9 +22,11 @@ namespace GenFx.ComponentLibrary.Algorithms
         where TConfiguration : MultiDemeGeneticAlgorithmConfiguration<TConfiguration, TAlgorithm>
     {
         /// <summary>
-        /// Creates a new instance of this class.
+        /// Initializes a new instance of this class.
         /// </summary>
-        public MultiDemeGeneticAlgorithm()
+        /// <param name="configurationSet">Contains the component configuration for the algorithm.</param>
+        protected MultiDemeGeneticAlgorithm(ComponentConfigurationSet configurationSet)
+            : base(configurationSet)
         {
             this.GenerationCreated += this.MultiDemeGeneticAlgorithm_GenerationCreated;
         }

@@ -17,5 +17,10 @@ namespace GenFx.ComponentModel
         /// </summary>
         /// <param name="algorithm">The algorithm associated with the component.</param>
         IGeneticComponent CreateComponent(IGeneticAlgorithm algorithm);
+
+        /// <summary>
+        /// Validates the state of the configuration.
+        /// </summary>
+        void Validate();
     }
 }

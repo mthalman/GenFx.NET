@@ -1,4 +1,6 @@
 ﻿using GenFx;
+using GenFx.ComponentLibrary.Base;
+using GenFx.ComponentLibrary.Populations;
 using GenFx.ComponentModel;
 using GenFxTests.Helpers;
 using GenFxTests.Mocks;
@@ -25,11 +27,20 @@ namespace GenFxTests
         [TestMethod]
         public void Statistic_Ctor()
         {
-            GeneticAlgorithm algorithm = new MockGeneticAlgorithm();
-            algorithm.ConfigurationSet.GeneticAlgorithm = new MockGeneticAlgorithmConfiguration();
-            algorithm.ConfigurationSet.Statistics.Add(new MockStatisticConfiguration());
-            Statistic stat = new MockStatistic(algorithm);
-            PrivateObject accessor = new PrivateObject(stat, new PrivateType(typeof(Statistic)));
+            ComponentConfigurationSet config = new ComponentConfigurationSet
+            {
+                GeneticAlgorithm = new MockGeneticAlgorithmConfiguration(),
+                Entity = new MockEntityConfiguration(),
+                Population = new MockPopulationConfiguration(),
+                SelectionOperator = new MockSelectionOperatorConfiguration(),
+                FitnessEvaluator = new MockFitnessEvaluatorConfiguration(),
+            };
+            config.Statistics.Add(new MockStatisticConfiguration());
+
+            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm(config);
+
+            IStatistic stat = new MockStatistic(algorithm);
+            PrivateObject accessor = new PrivateObject(stat, new PrivateType(typeof(StatisticBase<MockStatistic, MockStatisticConfiguration>)));
             Assert.AreSame(accessor.GetProperty("Algorithm"), algorithm, "Algorithm not set correctly.");
         }
 
@@ -48,9 +59,15 @@ namespace GenFxTests
         [TestMethod]
         public void Statistic_Ctor_MissingConfig()
         {
-            GeneticAlgorithm algorithm = new MockGeneticAlgorithm();
-            algorithm.ConfigurationSet.GeneticAlgorithm = new MockGeneticAlgorithmConfiguration();
-            AssertEx.Throws<ArgumentException>(() => new TestStat(algorithm));
+            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentConfigurationSet
+            {
+                GeneticAlgorithm = new MockGeneticAlgorithmConfiguration(),
+                Entity = new MockEntityConfiguration(),
+                Population = new MockPopulationConfiguration(),
+                SelectionOperator = new MockSelectionOperatorConfiguration(),
+                FitnessEvaluator = new MockFitnessEvaluatorConfiguration(),
+            });
+            AssertEx.Throws<InvalidOperationException>(() => new TestStat(algorithm));
         }
 
         /// <summary>
@@ -59,18 +76,26 @@ namespace GenFxTests
         [TestMethod]
         public void Statistic_Calculate()
         {
-            GeneticAlgorithm algorithm = new MockGeneticAlgorithm();
-            algorithm.ConfigurationSet.GeneticAlgorithm = new MockGeneticAlgorithmConfiguration();
-            algorithm.ConfigurationSet.GeneticAlgorithm.EnvironmentSize = 2;
-            algorithm.ConfigurationSet.Population = new PopulationConfiguration();
-            algorithm.ConfigurationSet.Statistics.Add(new FakeStatisticConfiguration());
+            ComponentConfigurationSet config = new ComponentConfigurationSet
+            {
+                GeneticAlgorithm = new MockGeneticAlgorithmConfiguration
+                {
+                    EnvironmentSize = 2
+                },
+                Entity = new MockEntityConfiguration(),
+                FitnessEvaluator = new MockFitnessEvaluatorConfiguration(),
+                SelectionOperator = new MockSelectionOperatorConfiguration(),
+                Population = new SimplePopulationConfiguration()
+            };
+            config.Statistics.Add(new FakeStatisticConfiguration());
+
+            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm(config);
+
             FakeStatistic stat = new FakeStatistic(algorithm);
-            algorithm.Environment.Populations.Add(new Population(algorithm));
-            PrivateObject popAccessor = new PrivateObject(algorithm.Environment.Populations[0]);
-            popAccessor.SetField("index", 0);
-            algorithm.Environment.Populations.Add(new Population(algorithm));
-            popAccessor = new PrivateObject(algorithm.Environment.Populations[1]);
-            popAccessor.SetField("index", 1);
+            algorithm.Environment.Populations.Add(new SimplePopulation(algorithm));
+            algorithm.Environment.Populations[0].Index = 0;
+            algorithm.Environment.Populations.Add(new SimplePopulation(algorithm));
+            algorithm.Environment.Populations[1].Index = 1;
             stat.Calculate(algorithm.Environment, 1);
 
             Assert.AreEqual(2, stat.GetResultValueCallCount, "Statistic not called correctly.");
@@ -89,44 +114,42 @@ namespace GenFxTests
             Assert.AreSame(stat, results[0].Statistic, "Result's Statistic not set correctly.");
         }
 
-        private class FakeStatistic : Statistic
+        private class FakeStatistic : StatisticBase<FakeStatistic, FakeStatisticConfiguration>
         {
             internal int GetResultValueCallCount;
 
-            public FakeStatistic(GeneticAlgorithm algorithm)
+            public FakeStatistic(IGeneticAlgorithm algorithm)
                 : base(algorithm)
             {
 
             }
 
-            public override object GetResultValue(Population population)
+            public override object GetResultValue(IPopulation population)
             {
                 this.GetResultValueCallCount++;
                 return this.GetResultValueCallCount;
             }
         }
 
-        [Component(typeof(FakeStatistic))]
-        private class FakeStatisticConfiguration : StatisticConfiguration
+        private class FakeStatisticConfiguration : StatisticConfigurationBase<FakeStatisticConfiguration, FakeStatistic>
         {
         }
 
-        private class TestStat : Statistic
+        private class TestStat : StatisticBase<TestStat, TestStatConfiguration>
         {
-            public TestStat(GeneticAlgorithm algorithm)
+            public TestStat(IGeneticAlgorithm algorithm)
                 : base(algorithm)
             {
 
             }
 
-            public override object GetResultValue(Population population)
+            public override object GetResultValue(IPopulation population)
             {
                 throw new Exception("The method or operation is not implemented.");
             }
         }
 
-        [Component(typeof(TestStat))]
-        private class TestStatConfiguration : StatisticConfiguration
+        private class TestStatConfiguration : StatisticConfigurationBase<TestStatConfiguration, TestStat>
         {
         }
     }

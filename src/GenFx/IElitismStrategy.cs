@@ -27,6 +27,6 @@ namespace GenFx
         /// The collection of <see cref="IGeneticEntity"/> objects from the <paramref name="population"/>
         /// that are to be treated as elite.
         /// </returns>
-        IList<IGeneticEntity> GetEliteGeneticEntities(IPopulation population);
+        IList<IGeneticEntity> GetEliteEntities(IPopulation population);
     }
 }

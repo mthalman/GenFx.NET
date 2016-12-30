@@ -1,5 +1,5 @@
 ﻿using GenFx;
-using GenFx.ComponentLibrary.BinaryStrings;
+using GenFx.ComponentLibrary.Lists.BinaryStrings;
 using GenFx.ComponentLibrary.Lists;
 using GenFxTests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -27,35 +27,42 @@ namespace GenFxTests
         [TestMethod]
         public void SinglePointCrossoverOperator_Crossover()
         {
-            GeneticAlgorithm algorithm = new MockGeneticAlgorithm();
-            SinglePointCrossoverOperatorConfiguration opConfig = new SinglePointCrossoverOperatorConfiguration();
-            opConfig.CrossoverRate = 1;
-            algorithm.ConfigurationSet.CrossoverOperator = opConfig;
-
-            FixedLengthBinaryStringEntityConfiguration entityConfig = new FixedLengthBinaryStringEntityConfiguration();
-            entityConfig.Length = 4;
-            algorithm.ConfigurationSet.Entity = entityConfig;
+            MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentConfigurationSet
+            {
+                GeneticAlgorithm = new MockGeneticAlgorithmConfiguration(),
+                Population = new MockPopulationConfiguration(),
+                SelectionOperator = new MockSelectionOperatorConfiguration(),
+                FitnessEvaluator = new MockFitnessEvaluatorConfiguration(),
+                CrossoverOperator = new SinglePointCrossoverOperatorConfiguration
+                {
+                    CrossoverRate = 1
+                },
+                Entity = new FixedLengthBinaryStringEntityConfiguration
+                {
+                    Length = 4
+                }
+            });
 
             SinglePointCrossoverOperator op = new SinglePointCrossoverOperator(algorithm);
             FixedLengthBinaryStringEntity entity1 = new FixedLengthBinaryStringEntity(algorithm);
             entity1.Initialize();
-            entity1[0] = 1;
-            entity1[1] = 0;
-            entity1[2] = 0;
-            entity1[3] = 1;
+            entity1[0] = true;
+            entity1[1] = false;
+            entity1[2] = false;
+            entity1[3] = true;
 
             FixedLengthBinaryStringEntity entity2 = new FixedLengthBinaryStringEntity(algorithm);
             entity2.Initialize();
-            entity2[0] = 1;
-            entity2[1] = 1;
-            entity2[2] = 0;
-            entity2[3] = 0;
+            entity2[0] = true;
+            entity2[1] = true;
+            entity2[2] = false;
+            entity2[3] = false;
 
             TestRandomUtil randomUtil = new TestRandomUtil();
             RandomHelper.Instance = randomUtil;
 
             randomUtil.RandomVal = 1;
-            IList<GeneticEntity> result = op.Crossover(entity1, entity2);
+            IList<IGeneticEntity> result = op.Crossover(entity1, entity2);
 
             FixedLengthBinaryStringEntity resultEntity1 = (FixedLengthBinaryStringEntity)result[0];
             FixedLengthBinaryStringEntity resultEntity2 = (FixedLengthBinaryStringEntity)result[1];

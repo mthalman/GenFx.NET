@@ -1,4 +1,6 @@
 ﻿using GenFx;
+using GenFx.ComponentLibrary.Base;
+using GenFx.ComponentLibrary.Populations;
 using GenFx.ComponentLibrary.Statistics;
 using GenFxTests.Helpers;
 using GenFxTests.Mocks;
@@ -22,13 +24,20 @@ namespace GenFxTests
         [TestMethod()]
         public void MinStatistic_GetResultValue()
         {
-            GeneticAlgorithm algorithm = new MockGeneticAlgorithm();
-            algorithm.ConfigurationSet.GeneticAlgorithm = new MockGeneticAlgorithmConfiguration();
-            algorithm.ConfigurationSet.Population = new PopulationConfiguration();
-            algorithm.ConfigurationSet.Statistics.Add(new MinimumFitnessStatisticConfiguration());
+            ComponentConfigurationSet config = new ComponentConfigurationSet
+            {
+                SelectionOperator = new MockSelectionOperatorConfiguration(),
+                FitnessEvaluator = new MockFitnessEvaluatorConfiguration(),
+                GeneticAlgorithm = new MockGeneticAlgorithmConfiguration(),
+                Entity = new MockEntityConfiguration(),
+                Population = new SimplePopulationConfiguration(),
+            };
+            config.Statistics.Add(new MinimumFitnessStatisticConfiguration());
+
+            MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm(config);
             MinimumFitnessStatistic target = new MinimumFitnessStatistic(algorithm);
-            Population population = new Population(algorithm);
-            PrivateObject accessor = new PrivateObject(population);
+            SimplePopulation population = new SimplePopulation(algorithm);
+            PrivateObject accessor = new PrivateObject(population, new PrivateType(typeof(PopulationBase<SimplePopulation, SimplePopulationConfiguration>)));
             accessor.SetField("scaledMin", 21);
             object result = target.GetResultValue(population);
 
@@ -41,9 +50,17 @@ namespace GenFxTests
         [TestMethod()]
         public void MinStatistic_GetResultValue_NullPopulation()
         {
-            GeneticAlgorithm algorithm = new MockGeneticAlgorithm();
-            algorithm.ConfigurationSet.GeneticAlgorithm = new MockGeneticAlgorithmConfiguration();
-            algorithm.ConfigurationSet.Statistics.Add(new MinimumFitnessStatisticConfiguration());
+            ComponentConfigurationSet config = new ComponentConfigurationSet
+            {
+                SelectionOperator = new MockSelectionOperatorConfiguration(),
+                FitnessEvaluator = new MockFitnessEvaluatorConfiguration(),
+                GeneticAlgorithm = new MockGeneticAlgorithmConfiguration(),
+                Entity = new MockEntityConfiguration(),
+                Population = new SimplePopulationConfiguration(),
+            };
+            config.Statistics.Add(new MinimumFitnessStatisticConfiguration());
+
+            MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm(config);
             MinimumFitnessStatistic target = new MinimumFitnessStatistic(algorithm);
             AssertEx.Throws<ArgumentNullException>(() => target.GetResultValue(null));
         }

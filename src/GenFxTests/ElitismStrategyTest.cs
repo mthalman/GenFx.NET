@@ -1,4 +1,6 @@
 ﻿using GenFx;
+using GenFx.ComponentLibrary.Base;
+using GenFx.ComponentLibrary.Populations;
 using GenFx.ComponentModel;
 using GenFxTests.Helpers;
 using GenFxTests.Mocks;
@@ -24,7 +26,7 @@ namespace GenFxTests
             double elitistRatio = .1;
             MockGeneticAlgorithm algorithm = GetGeneticAlgorithm(elitistRatio);
             ElitismStrategy strategy = new ElitismStrategy(algorithm);
-            Assert.AreEqual(elitistRatio, strategy.ElitistRatio, "ElitistRatio was not set correctly.");
+            Assert.IsInstanceOfType(strategy.Configuration, typeof(ElitismStrategyConfiguration));
         }
 
         /// <summary>
@@ -42,7 +44,7 @@ namespace GenFxTests
         [TestMethod()]
         public void ElitismStrategy_Ctor_MissingSettings()
         {
-            AssertEx.Throws<ArgumentException>(() => new ElitismStrategy(new MockGeneticAlgorithm()));
+            AssertEx.Throws<ArgumentException>(() => new ElitismStrategy(new MockGeneticAlgorithm(new ComponentConfigurationSet())));
         }
 
         /// <summary>
@@ -73,8 +75,8 @@ namespace GenFxTests
         {
             double elitismRatio = .1;
             int totalGeneticEntities = 100;
-            GeneticAlgorithm algorithm = GetGeneticAlgorithm(elitismRatio);
-            Population population = new Population(algorithm);
+            IGeneticAlgorithm algorithm = GetGeneticAlgorithm(elitismRatio);
+            SimplePopulation population = new SimplePopulation(algorithm);
             for (int i = 0; i < totalGeneticEntities; i++)
             {
                 population.Entities.Add(new MockEntity(algorithm));
@@ -82,13 +84,7 @@ namespace GenFxTests
             algorithm.Environment.Populations.Add(population);
             ElitismStrategy strategy = new ElitismStrategy(algorithm);
 
-            MockSelectionOperatorConfiguration selectionConfig = new MockSelectionOperatorConfiguration();
-            algorithm.ConfigurationSet.SelectionOperator = selectionConfig;
-
-            MockFitnessEvaluatorConfiguration fitnessConfig = new MockFitnessEvaluatorConfiguration();
-            algorithm.ConfigurationSet.FitnessEvaluator = fitnessConfig;
-
-            IList<GeneticEntity> geneticEntities = strategy.GetElitistGeneticEntities(population);
+            IList<IGeneticEntity> geneticEntities = strategy.GetEliteEntities(population);
 
             Assert.AreEqual(Convert.ToInt32(Math.Round(elitismRatio * totalGeneticEntities)), geneticEntities.Count, "Incorrect number of elitist genetic entities.");
         }
@@ -100,7 +96,7 @@ namespace GenFxTests
         public void ElitismStrategy_GetElitistGeneticEntities_NullPopulation()
         {
             ElitismStrategy strategy = new ElitismStrategy(GetGeneticAlgorithm(.1));
-            AssertEx.Throws<ArgumentNullException>(() => strategy.GetElitistGeneticEntities(null));
+            AssertEx.Throws<ArgumentNullException>(() => strategy.GetEliteEntities(null));
         }
 
         /// <summary>
@@ -109,23 +105,26 @@ namespace GenFxTests
         [TestMethod()]
         public void ElitismStrategy_GetElitistGeneticEntities_EmptyPopulation()
         {
-            GeneticAlgorithm algorithm = GetGeneticAlgorithm(.1);
+            IGeneticAlgorithm algorithm = GetGeneticAlgorithm(.1);
             ElitismStrategy strategy = new ElitismStrategy(algorithm);
-            AssertEx.Throws<ArgumentException>(() => strategy.GetElitistGeneticEntities(new Population(algorithm)));
+            AssertEx.Throws<ArgumentException>(() => strategy.GetEliteEntities(new SimplePopulation(algorithm)));
         }
 
         private static MockGeneticAlgorithm GetGeneticAlgorithm(double elitismRatio)
         {
-            MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm();
-            algorithm.ConfigurationSet.Entity = new MockEntityConfiguration();
-            algorithm.ConfigurationSet.Population = new PopulationConfiguration();
-            ElitismStrategyConfiguration config = new ElitismStrategyConfiguration();
-            config.ElitistRatio = elitismRatio;
-            algorithm.ConfigurationSet.ElitismStrategy = config;
+            MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentConfigurationSet
+            {
+                GeneticAlgorithm = new MockGeneticAlgorithmConfiguration(),
+                SelectionOperator = new MockSelectionOperatorConfiguration(),
+                FitnessEvaluator = new MockFitnessEvaluatorConfiguration(),
+                Entity = new MockEntityConfiguration(),
+                Population = new SimplePopulationConfiguration(),
+                ElitismStrategy = new ElitismStrategyConfiguration
+                {
+                    ElitistRatio = elitismRatio
+                }
+            });
             return algorithm;
         }
-
     }
-
-
 }

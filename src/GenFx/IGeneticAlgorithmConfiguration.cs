@@ -8,17 +8,17 @@ namespace GenFx
     public interface IGeneticAlgorithmConfiguration : IComponentConfiguration
     {
         /// <summary>
-        /// Gets the number of <see cref="IPopulation"/> objects that are contained by the <see cref="GeneticEnvironment"/>.
+        /// Gets or sets the number of <see cref="IPopulation"/> objects that are contained by the <see cref="GeneticEnvironment"/>.
         /// </summary>
         /// <value>
         /// The number of populations that are contained by the <see cref="GeneticEnvironment"/>.
         /// </value>
-        int EnvironmentSize { get; }
+        int EnvironmentSize { get; set; }
 
         /// <summary>
-        /// Gets whether statistics should be calculated during genetic algorithm execution.
+        /// Gets or sets whether statistics should be calculated during genetic algorithm execution.
         /// </summary>
         /// <value>True if statistics should be calculated; otherwise, false.</value>
-        bool StatisticsEnabled { get; }
+        bool StatisticsEnabled { get; set; }
     }
 }

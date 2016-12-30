@@ -1,4 +1,5 @@
 using GenFx;
+using GenFx.ComponentLibrary.Base;
 using GenFx.ComponentLibrary.Lists;
 using GenFxTests.Helpers;
 using GenFxTests.Mocks;
@@ -27,7 +28,7 @@ namespace GenFxTests
         [TestMethod()]
         public void IntegerListEntity_UpdateStringRepresentation()
         {
-            IntegerListEntity entity = GetEntity();
+            IIntegerListEntity entity = GetEntity();
             PrivateObject accessor = new PrivateObject(entity);
             accessor.Invoke("UpdateStringRepresentation");
 
@@ -40,8 +41,8 @@ namespace GenFxTests
         [TestMethod()]
         public void BinaryStringEntity_Clone()
         {
-            IntegerListEntity entity = GetEntity();
-            IntegerListEntity clone = (IntegerListEntity)entity.Clone();
+            IIntegerListEntity entity = GetEntity();
+            IIntegerListEntity clone = (IIntegerListEntity)entity.Clone();
             CompareGeneticEntities(entity, clone);
         }
 
@@ -51,8 +52,8 @@ namespace GenFxTests
         [TestMethod()]
         public void BinaryStringEntity_CopyTo()
         {
-            IntegerListEntity entity = GetEntity();
-            IntegerListEntity entity2 = new TestIntegerListEntity(GetAlgorithm(), 4);
+            IIntegerListEntity entity = GetEntity();
+            IIntegerListEntity entity2 = new TestIntegerListEntity(GetAlgorithm(4));
 
             entity.CopyTo(entity2);
 
@@ -65,7 +66,7 @@ namespace GenFxTests
         [TestMethod()]
         public void BinaryStringEntity_CopyTo_NullEntity()
         {
-            IntegerListEntity entity = GetEntity();
+            IIntegerListEntity entity = GetEntity();
 
             AssertEx.Throws<ArgumentNullException>(() => entity.CopyTo(null));
         }
@@ -77,9 +78,9 @@ namespace GenFxTests
         public void BinaryStringEntity_Ctor()
         {
             int size = 3;
-            GeneticAlgorithm algorithm = GetAlgorithm();
-            IntegerListEntity entity = new TestIntegerListEntity(algorithm, size);
-            PrivateObject accessor = new PrivateObject(entity, new PrivateType(typeof(ListEntity<int>)));
+            IGeneticAlgorithm algorithm = GetAlgorithm(size);
+            IIntegerListEntity entity = new TestIntegerListEntity(algorithm);
+            PrivateObject accessor = new PrivateObject(entity, new PrivateType(typeof(ListEntity<TestIntegerListEntity, TestIntegerListEntityConfiguration, int>)));
             Assert.AreEqual(size, entity.Length, "Length not initialized correctly.");
             Assert.AreEqual(size, ((List<int>)accessor.GetField("genes")).Count, "Genes not initialized correctly.");
         }
@@ -90,8 +91,8 @@ namespace GenFxTests
         [TestMethod()]
         public void BinaryStringEntity_Initialize()
         {
-            GeneticAlgorithm algorithm = GetAlgorithm();
-            IntegerListEntity entity = new TestIntegerListEntity(algorithm, 4);
+            IGeneticAlgorithm algorithm = GetAlgorithm(4);
+            IIntegerListEntity entity = new TestIntegerListEntity(algorithm);
             RandomHelper.Instance = new TestRandomUtil();
             entity.Initialize();
             Assert.AreEqual("0, 1, 2, 3", entity.Representation, "Entity not initialized correctly.");
@@ -103,9 +104,9 @@ namespace GenFxTests
         [TestMethod()]
         public void BinaryStringEntity_Indexer()
         {
-            GeneticAlgorithm algorithm = GetAlgorithm();
-            IntegerListEntity entity = new TestIntegerListEntity(algorithm, 3);
-            PrivateObject accessor = new PrivateObject(entity, new PrivateType(typeof(ListEntity<int>)));
+            IGeneticAlgorithm algorithm = GetAlgorithm(3);
+            IIntegerListEntity entity = new TestIntegerListEntity(algorithm);
+            PrivateObject accessor = new PrivateObject(entity, new PrivateType(typeof(ListEntity<TestIntegerListEntity, TestIntegerListEntityConfiguration, int>)));
             List<int> genes = (List<int>)accessor.GetField("genes");
 
             entity[0] = 1;
@@ -131,9 +132,10 @@ namespace GenFxTests
         [TestMethod()]
         public void BinaryStringEntity_Length()
         {
-            GeneticAlgorithm algorithm = GetAlgorithm();
             int length = 50;
-            IntegerListEntity entity = new TestIntegerListEntity(algorithm, length);
+            IGeneticAlgorithm algorithm = GetAlgorithm(length);
+            
+            IIntegerListEntity entity = new TestIntegerListEntity(algorithm);
             Assert.AreEqual(length, entity.Length, "Length not set correctly.");
 
             entity.Length = length;
@@ -146,13 +148,14 @@ namespace GenFxTests
         [TestMethod()]
         public void BinaryStringEntity_Length_SetToDifferentValue()
         {
-            GeneticAlgorithm algorithm = GetAlgorithm();
             int length = 50;
-            IntegerListEntity entity = new TestIntegerListEntity(algorithm, length);
+            IGeneticAlgorithm algorithm = GetAlgorithm(length);
+            
+            TestIntegerListEntity entity = new TestIntegerListEntity(algorithm);
             AssertEx.Throws<ArgumentException>(() => entity.Length = 51);
         }
 
-        private static void CompareGeneticEntities(IntegerListEntity expectedEntity, IntegerListEntity actualEntity)
+        private static void CompareGeneticEntities(IIntegerListEntity expectedEntity, IIntegerListEntity actualEntity)
         {
             Assert.AreNotSame(expectedEntity, actualEntity, "Objects should not be the same instance.");
             Assert.AreEqual(expectedEntity.Representation, actualEntity.Representation, "Representation not cloned correctly.");
@@ -160,24 +163,22 @@ namespace GenFxTests
             Assert.AreEqual(expectedEntity[1], actualEntity[1], "Binary value not set correctly.");
             Assert.AreEqual(expectedEntity[2], actualEntity[2], "Binary value not set correctly.");
             Assert.AreEqual(expectedEntity[3], actualEntity[3], "Binary value not set correctly.");
-            Assert.AreSame(expectedEntity.Algorithm, actualEntity.Algorithm, "Algorithms should be the same instance.");
             Assert.AreEqual(expectedEntity.Age, actualEntity.Age, "Age not set correctly.");
             Assert.AreEqual(expectedEntity.RawFitnessValue, actualEntity.RawFitnessValue, "Raw fitness not set correctly.");
             Assert.AreEqual(expectedEntity.ScaledFitnessValue, actualEntity.ScaledFitnessValue, "Scaled fitness not set correctly.");
         }
 
-        private static IntegerListEntity GetEntity()
+        private static IIntegerListEntity GetEntity()
         {
-            GeneticAlgorithm algorithm = GetAlgorithm();
+            IGeneticAlgorithm algorithm = GetAlgorithm(4);
 
-            algorithm.ConfigurationSet.Entity = new TestIntegerListEntityConfiguration();
-            IntegerListEntity entity = new TestIntegerListEntity(algorithm, 4);
+            TestIntegerListEntity entity = new TestIntegerListEntity(algorithm);
             entity[0] = 5;
             entity[1] = 3;
             entity[2] = 10;
             entity[3] = 127;
 
-            PrivateObject accessor = new PrivateObject(entity, new PrivateType(typeof(GeneticEntity)));
+            PrivateObject accessor = new PrivateObject(entity, new PrivateType(typeof(GeneticEntity<TestIntegerListEntity, TestIntegerListEntityConfiguration>)));
             entity.Age = 3;
             accessor.SetField("rawFitnessValue", 1);
             entity.ScaledFitnessValue = 2;
@@ -185,32 +186,42 @@ namespace GenFxTests
             return entity;
         }
 
-        private static GeneticAlgorithm GetAlgorithm()
+        private static IGeneticAlgorithm GetAlgorithm(int entityLength)
         {
-            GeneticAlgorithm algorithm = new MockGeneticAlgorithm();
-            algorithm.ConfigurationSet.Entity = new TestIntegerListEntityConfiguration();
+            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentConfigurationSet
+            {
+                GeneticAlgorithm = new MockGeneticAlgorithmConfiguration(),
+                SelectionOperator = new MockSelectionOperatorConfiguration(),
+                FitnessEvaluator = new MockFitnessEvaluatorConfiguration(),
+                Population = new MockPopulationConfiguration(),
+                Entity = new TestIntegerListEntityConfiguration
+                {
+                    Length = entityLength
+                }
+            });
             return algorithm;
         }
 
-        private class TestIntegerListEntity : IntegerListEntity
+        private class TestIntegerListEntity : IntegerListEntity<TestIntegerListEntity, TestIntegerListEntityConfiguration>
         {
-            public TestIntegerListEntity(GeneticAlgorithm algorithm, int initialStringLength)
-                : base(algorithm, initialStringLength)
+            public TestIntegerListEntity(IGeneticAlgorithm algorithm)
+                : base(algorithm, ((TestIntegerListEntityConfiguration)algorithm.ConfigurationSet.Entity).Length)
             {
 
             }
 
-            public override GeneticEntity Clone()
+            public override bool IsFixedSize
             {
-                TestIntegerListEntity entity = new TestIntegerListEntity(this.Algorithm, this.Length);
-                this.CopyTo(entity);
-                return entity;
+                get
+                {
+                    throw new NotImplementedException();
+                }
             }
         }
 
-        [Component(typeof(TestIntegerListEntity))]
-        private class TestIntegerListEntityConfiguration : IntegerListEntityConfiguration
+        private class TestIntegerListEntityConfiguration : IntegerListEntityConfiguration<TestIntegerListEntityConfiguration, TestIntegerListEntity>
         {
+            public int Length { get; set; }
         }
 
         private class TestRandomUtil : IRandomHelper

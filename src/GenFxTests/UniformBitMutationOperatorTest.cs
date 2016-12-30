@@ -1,5 +1,6 @@
 ﻿using GenFx;
-using GenFx.ComponentLibrary.BinaryStrings;
+using GenFx.ComponentLibrary.Base;
+using GenFx.ComponentLibrary.Lists.BinaryStrings;
 using GenFxTests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
@@ -21,23 +22,30 @@ namespace GenFxTests
         [TestMethod]
         public void UniformBitMutationOperator_Mutate()
         {
-            GeneticAlgorithm algorithm = new MockGeneticAlgorithm();
-            FixedLengthBinaryStringEntityConfiguration entityConfig = new FixedLengthBinaryStringEntityConfiguration();
-            entityConfig.Length = 4;
-            algorithm.ConfigurationSet.Entity = entityConfig;
-            UniformBitMutationOperatorConfiguration opConfig = new UniformBitMutationOperatorConfiguration();
-            opConfig.MutationRate = 1;
-            algorithm.ConfigurationSet.MutationOperator = opConfig;
+            MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentConfigurationSet
+            {
+                GeneticAlgorithm = new MockGeneticAlgorithmConfiguration(),
+                Population = new MockPopulationConfiguration(),
+                SelectionOperator = new MockSelectionOperatorConfiguration(),
+                FitnessEvaluator = new MockFitnessEvaluatorConfiguration(),
+                Entity = new FixedLengthBinaryStringEntityConfiguration
+                {
+                    Length = 4
+                },
+                MutationOperator = new UniformBitMutationOperatorConfiguration
+                {
+                    MutationRate = 1
+                }
+            });
             UniformBitMutationOperator op = new UniformBitMutationOperator(algorithm);
             FixedLengthBinaryStringEntity entity = new FixedLengthBinaryStringEntity(algorithm);
-            PrivateObject accessor = new PrivateObject(entity, new PrivateType(typeof(GeneticEntity)));
-            accessor.SetField("age", 10);
+            entity.Age = 10;
             entity.Initialize();
-            entity[0] = 1;
-            entity[1] = 1;
-            entity[2] = 0;
-            entity[3] = 1;
-            GeneticEntity mutant = op.Mutate(entity);
+            entity[0] = true;
+            entity[1] = true;
+            entity[2] = false;
+            entity[3] = true;
+            IGeneticEntity mutant = op.Mutate(entity);
 
             Assert.AreEqual("0010", mutant.Representation, "Mutation not called correctly.");
             Assert.AreEqual(0, mutant.Age, "Age should have been reset.");

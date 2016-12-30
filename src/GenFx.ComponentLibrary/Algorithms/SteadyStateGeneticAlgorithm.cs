@@ -12,5 +12,13 @@ namespace GenFx.ComponentLibrary.Algorithms
     /// </remarks>
     public sealed class SteadyStateGeneticAlgorithm : SteadyStateGeneticAlgorithm<SteadyStateGeneticAlgorithm, SteadyStateGeneticAlgorithmConfiguration>
     {
+        /// <summary>
+        /// Initializes a new instance of this class.
+        /// </summary>
+        /// <param name="configurationSet">Contains the component configuration for the algorithm.</param>
+        public SteadyStateGeneticAlgorithm(ComponentConfigurationSet configurationSet)
+            : base(configurationSet)
+        {
+        }
     }
 }

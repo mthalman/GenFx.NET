@@ -6,6 +6,11 @@ namespace GenFx.ComponentModel
     public interface IGeneticComponent
     {
         /// <summary>
+        /// Gets the <see cref="ComponentConfiguration"/> containing the configuration of this component instance.
+        /// </summary>
+        IComponentConfiguration Configuration { get; }
+
+        /// <summary>
         /// Restores the state of the component.
         /// </summary>
         /// <param name="state">The state to restore from.</param>

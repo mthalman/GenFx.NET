@@ -1,4 +1,6 @@
 ﻿using GenFx;
+using GenFx.ComponentLibrary.Base;
+using GenFx.ComponentLibrary.Populations;
 using GenFx.ComponentLibrary.Statistics;
 using GenFxTests.Helpers;
 using GenFxTests.Mocks;
@@ -22,14 +24,22 @@ namespace GenFxTests
         [TestMethod()]
         public void GetResultValue()
         {
-            GeneticAlgorithm algorithm = new MockGeneticAlgorithm();
-            algorithm.ConfigurationSet.GeneticAlgorithm = new MockGeneticAlgorithmConfiguration();
-            algorithm.ConfigurationSet.Population = new PopulationConfiguration();
-            algorithm.ConfigurationSet.Statistics.Add(new BestMinimumFitnessStatisticConfiguration());
+            ComponentConfigurationSet config = new ComponentConfigurationSet
+            {
+                GeneticAlgorithm = new MockGeneticAlgorithmConfiguration(),
+                Entity = new MockEntityConfiguration(),
+                FitnessEvaluator = new MockFitnessEvaluatorConfiguration(),
+                SelectionOperator = new MockSelectionOperatorConfiguration(),
+                Population = new SimplePopulationConfiguration()
+            };
+            config.Statistics.Add(new BestMinimumFitnessStatisticConfiguration());
+
+            MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm(config);
+            
             BestMinimumFitnessStatistic target = new BestMinimumFitnessStatistic(algorithm);
 
-            Population population1 = new Population(algorithm);
-            PrivateObject accessor1 = new PrivateObject(population1);
+            SimplePopulation population1 = new SimplePopulation(algorithm);
+            PrivateObject accessor1 = new PrivateObject(population1, new PrivateType(typeof(PopulationBase<SimplePopulation, SimplePopulationConfiguration>)));
 
             double expectedValue1 = 3;
             accessor1.SetField("scaledMin", expectedValue1);
@@ -46,8 +56,8 @@ namespace GenFxTests
             actualValue = target.GetResultValue(population1);
             Assert.AreEqual(expectedValue3, actualValue);
 
-            Population population2 = new Population(algorithm);
-            PrivateObject accessor2 = new PrivateObject(population2);
+            SimplePopulation population2 = new SimplePopulation(algorithm);
+            PrivateObject accessor2 = new PrivateObject(population2, new PrivateType(typeof(PopulationBase<SimplePopulation, SimplePopulationConfiguration>)));
             accessor2.SetField("index",  1);
 
             double expectedValue4 = 8;
@@ -72,14 +82,21 @@ namespace GenFxTests
         [TestMethod()]
         public void GetResultValue_AllNegative()
         {
-            GeneticAlgorithm algorithm = new MockGeneticAlgorithm();
-            algorithm.ConfigurationSet.GeneticAlgorithm = new MockGeneticAlgorithmConfiguration();
-            algorithm.ConfigurationSet.Population = new PopulationConfiguration();
-            algorithm.ConfigurationSet.Statistics.Add(new BestMinimumFitnessStatisticConfiguration());
+            ComponentConfigurationSet config = new ComponentConfigurationSet
+            {
+                GeneticAlgorithm = new MockGeneticAlgorithmConfiguration(),
+                Population = new SimplePopulationConfiguration(),
+                SelectionOperator = new MockSelectionOperatorConfiguration(),
+                FitnessEvaluator = new MockFitnessEvaluatorConfiguration(),
+                Entity = new MockEntityConfiguration()
+            };
+            config.Statistics.Add(new BestMinimumFitnessStatisticConfiguration());
+
+            MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm(config);
             BestMinimumFitnessStatistic target = new BestMinimumFitnessStatistic(algorithm);
 
-            Population population1 = new Population(algorithm);
-            PrivateObject accessor1 = new PrivateObject(population1);
+            SimplePopulation population1 = new SimplePopulation(algorithm);
+            PrivateObject accessor1 = new PrivateObject(population1, new PrivateType(typeof(PopulationBase<SimplePopulation, SimplePopulationConfiguration>)));
 
             double expectedValue1 = -7;
             accessor1.SetField("scaledMin", expectedValue1);
@@ -96,8 +113,8 @@ namespace GenFxTests
             actualValue = target.GetResultValue(population1);
             Assert.AreEqual(expectedValue3, actualValue);
 
-            Population population2 = new Population(algorithm);
-            PrivateObject accessor2 = new PrivateObject(population2);
+            SimplePopulation population2 = new SimplePopulation(algorithm);
+            PrivateObject accessor2 = new PrivateObject(population2, new PrivateType(typeof(PopulationBase<SimplePopulation, SimplePopulationConfiguration>)));
             accessor2.SetField("index", 1);
 
             double expectedValue4 = -9;
@@ -121,9 +138,17 @@ namespace GenFxTests
         [TestMethod()]
         public void GetResultValue_NullPopulation()
         {
-            GeneticAlgorithm algorithm = new MockGeneticAlgorithm();
-            algorithm.ConfigurationSet.GeneticAlgorithm = new MockGeneticAlgorithmConfiguration();
-            algorithm.ConfigurationSet.Statistics.Add(new BestMinimumFitnessStatisticConfiguration());
+            ComponentConfigurationSet config = new ComponentConfigurationSet
+            {
+                GeneticAlgorithm = new MockGeneticAlgorithmConfiguration(),
+                SelectionOperator = new MockSelectionOperatorConfiguration(),
+                Entity = new MockEntityConfiguration(),
+                Population = new MockPopulationConfiguration(),
+                FitnessEvaluator = new MockFitnessEvaluatorConfiguration(),
+            };
+            config.Statistics.Add(new BestMinimumFitnessStatisticConfiguration());
+
+            MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm(config);
             BestMinimumFitnessStatistic target = new BestMinimumFitnessStatistic(algorithm);
 
             AssertEx.Throws<ArgumentNullException>(() => target.GetResultValue(null));

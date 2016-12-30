@@ -5,7 +5,7 @@ namespace GenFx.ComponentLibrary.Lists
     /// <summary>
     /// Represents the configuration of <see cref="IntegerListEntity{TEntity, TConfiguration}"/>.
     /// </summary>
-    public abstract class IntegerListEntityConfiguration<TConfiguration, TEntity> : ListEntityConfiguration<TConfiguration, TEntity, int>
+    public abstract class IntegerListEntityConfiguration<TConfiguration, TEntity> : ListEntityConfiguration<TConfiguration, TEntity, int>, IIntegerListEntityConfiguration
         where TConfiguration : IntegerListEntityConfiguration<TConfiguration, TEntity>
         where TEntity : IntegerListEntity<TEntity, TConfiguration>
     {

@@ -1,4 +1,5 @@
-﻿using GenFx.ComponentModel;
+﻿using GenFx.ComponentLibrary.Properties;
+using GenFx.ComponentModel;
 using System;
 
 namespace GenFx.ComponentLibrary.Base
@@ -36,6 +37,25 @@ namespace GenFx.ComponentLibrary.Base
         internal void SetAlgorithm(IGeneticAlgorithm algorithm)
         {
             this.Algorithm = algorithm;
+        }
+
+        internal static TConfiguration GetConfiguration(IGeneticAlgorithm algorithm, Func<ComponentConfigurationSet, IComponentConfiguration> getConfiguration)
+        {
+            if (algorithm == null)
+            {
+                throw new ArgumentNullException("algorithm");
+            }
+
+            IComponentConfiguration config = getConfiguration(algorithm.ConfigurationSet);
+
+            if (!(config is TConfiguration))
+            {
+                throw new InvalidOperationException(StringUtil.GetFormattedString(
+                  LibResources.ErrorMsg_MissingComponentConfiguration,
+                  typeof(TComponent).FullName));
+            }
+
+            return (TConfiguration)config;
         }
     }
 }

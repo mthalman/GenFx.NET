@@ -1,4 +1,5 @@
 ﻿using GenFx;
+using GenFx.ComponentLibrary.Populations;
 using GenFx.ComponentLibrary.SelectionOperators;
 using GenFxTests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -27,14 +28,19 @@ namespace GenFxTests
         [TestMethod]
         public void UniformSelectionOperator_Select()
         {
-            GeneticAlgorithm algorithm = new MockGeneticAlgorithm();
-            algorithm.ConfigurationSet.Entity = new MockEntityConfiguration();
-            algorithm.ConfigurationSet.Population = new PopulationConfiguration();
-            UniformSelectionOperatorConfiguration config = new UniformSelectionOperatorConfiguration();
-            config.SelectionBasedOnFitnessType = FitnessType.Scaled;
-            algorithm.ConfigurationSet.SelectionOperator = config;
+            MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentConfigurationSet
+            {
+                GeneticAlgorithm = new MockGeneticAlgorithmConfiguration(),
+                FitnessEvaluator = new MockFitnessEvaluatorConfiguration(),
+                Entity = new MockEntityConfiguration(),
+                Population = new SimplePopulationConfiguration(),
+                SelectionOperator = new UniformSelectionOperatorConfiguration
+                {
+                    SelectionBasedOnFitnessType = FitnessType.Scaled
+                }
+            });
             UniformSelectionOperator op = new UniformSelectionOperator(algorithm);
-            Population population = new Population(algorithm);
+            SimplePopulation population = new SimplePopulation(algorithm);
             population.Entities.Add(new MockEntity(algorithm));
             population.Entities.Add(new MockEntity(algorithm));
             population.Entities.Add(new MockEntity(algorithm));
@@ -44,19 +50,19 @@ namespace GenFxTests
             RandomHelper.Instance = randomUtil;
 
             randomUtil.Value = 3;
-            GeneticEntity selectedEntity = op.Select(population);
+            IGeneticEntity selectedEntity = op.SelectEntity(population);
             Assert.AreSame(population.Entities[randomUtil.Value], selectedEntity, "Incorrect selected entity.");
 
             randomUtil.Value = 2;
-            selectedEntity = op.Select(population);
+            selectedEntity = op.SelectEntity(population);
             Assert.AreSame(population.Entities[randomUtil.Value], selectedEntity, "Incorrect selected entity.");
 
             randomUtil.Value = 1;
-            selectedEntity = op.Select(population);
+            selectedEntity = op.SelectEntity(population);
             Assert.AreSame(population.Entities[randomUtil.Value], selectedEntity, "Incorrect selected entity.");
 
             randomUtil.Value = 0;
-            selectedEntity = op.Select(population);
+            selectedEntity = op.SelectEntity(population);
             Assert.AreSame(population.Entities[randomUtil.Value], selectedEntity, "Incorrect selected entity.");
         }
 

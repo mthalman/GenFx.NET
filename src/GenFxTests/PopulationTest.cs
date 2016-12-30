@@ -1,4 +1,6 @@
 ﻿using GenFx;
+using GenFx.ComponentLibrary.Base;
+using GenFx.ComponentLibrary.Populations;
 using GenFx.ComponentModel;
 using GenFxTests.Helpers;
 using GenFxTests.Mocks;
@@ -24,22 +26,18 @@ namespace GenFxTests
         [TestMethod]
         public void Population_Ctor()
         {
-            GeneticAlgorithm algorithm = new MockGeneticAlgorithm();
-            algorithm.ConfigurationSet.Population = new PopulationConfiguration();
-            Population population = new Population(algorithm);
+            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentConfigurationSet
+            {
+                SelectionOperator = new MockSelectionOperatorConfiguration(),
+                FitnessEvaluator = new MockFitnessEvaluatorConfiguration(),
+                GeneticAlgorithm = new MockGeneticAlgorithmConfiguration(),
+                Entity = new MockEntityConfiguration(),
+                Population = new SimplePopulationConfiguration(),
+            });
+            IPopulation population = new SimplePopulation(algorithm);
             PrivateObject accessor = new PrivateObject(population);
 
             Assert.AreSame(algorithm, accessor.GetProperty("Algorithm"), "Algorithm not initialized correctly.");
-        }
-
-        /// <summary>
-        /// Tests that an exception is thrown when required config class is missing.
-        /// </summary>
-        [TestMethod]
-        public void Population_Ctor_MissingConfig()
-        {
-            GeneticAlgorithm algorithm = new MockGeneticAlgorithm();
-            AssertEx.Throws<ArgumentException>(() => new TestPopulation(algorithm));
         }
 
         /// <summary>
@@ -48,7 +46,7 @@ namespace GenFxTests
         [TestMethod]
         public void Population_Ctor_NullAlgorithm()
         {
-            AssertEx.Throws<ArgumentNullException>(() => new Population(null));
+            AssertEx.Throws<ArgumentNullException>(() => new SimplePopulation(null));
         }
 
         /// <summary>
@@ -93,15 +91,20 @@ namespace GenFxTests
         [TestMethod]
         public async Task Population_Initialize_Async()
         {
-            GeneticAlgorithm algorithm = new MockGeneticAlgorithm();
-            MockEntityConfiguration entConfig = new MockEntityConfiguration();
-            algorithm.ConfigurationSet.Entity = entConfig;
-            PopulationConfiguration popConfig = new PopulationConfiguration();
-            popConfig.PopulationSize = 10;
-            algorithm.ConfigurationSet.Population = popConfig;
-            Population population = new Population(algorithm);
+            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentConfigurationSet
+            {
+                GeneticAlgorithm = new MockGeneticAlgorithmConfiguration(),
+                FitnessEvaluator = new MockFitnessEvaluatorConfiguration(),
+                SelectionOperator = new MockSelectionOperatorConfiguration(),
+                Entity = new MockEntityConfiguration(),
+                Population = new SimplePopulationConfiguration
+                {
+                    PopulationSize = 10
+                }
+            });
+            SimplePopulation population = new SimplePopulation(algorithm);
             await population.InitializeAsync();
-            Assert.AreEqual(popConfig.PopulationSize, population.Entities.Count, "Population not generated correctly.");
+            Assert.AreEqual(algorithm.ConfigurationSet.Population.PopulationSize, population.Entities.Count, "Population not generated correctly.");
         }
 
         /// <summary>
@@ -110,7 +113,7 @@ namespace GenFxTests
         [TestMethod()]
         public void PopulationSizeTest_Valid()
         {
-            PopulationConfiguration target = new PopulationConfiguration();
+            SimplePopulationConfiguration target = new SimplePopulationConfiguration();
             int val = 100;
             target.PopulationSize = val;
             Assert.AreEqual(val, target.PopulationSize, "PopulationSize was not set correctly.");
@@ -123,27 +126,38 @@ namespace GenFxTests
         [TestMethod()]
         public void PopulationSizeTest_Invalid()
         {
-            PopulationConfiguration target = new PopulationConfiguration();
+            SimplePopulationConfiguration target = new SimplePopulationConfiguration();
             AssertEx.Throws<ValidationException>(() => target.PopulationSize = 0);
         }
 
         private static async Task TestEvaluateFitnessAsync(bool useScaling, bool useStatistics)
         {
-            GeneticAlgorithm algorithm = new MockGeneticAlgorithm();
-            algorithm.ConfigurationSet.Entity = new MockEntityConfiguration();
-            algorithm.ConfigurationSet.Population = new PopulationConfiguration();
-            algorithm.ConfigurationSet.FitnessEvaluator = new MockFitnessEvaluatorConfiguration();
-            MockGeneticAlgorithmConfiguration config = new MockGeneticAlgorithmConfiguration();
-            config.StatisticsEnabled = useStatistics;
-            algorithm.ConfigurationSet.GeneticAlgorithm = config;
+            ComponentConfigurationSet config = new ComponentConfigurationSet
+            {
+                SelectionOperator = new MockSelectionOperatorConfiguration(),
+                Entity = new MockEntityConfiguration(),
+                Population = new SimplePopulationConfiguration(),
+                FitnessEvaluator = new MockFitnessEvaluatorConfiguration(),
+                GeneticAlgorithm = new MockGeneticAlgorithmConfiguration
+                {
+                    StatisticsEnabled = useStatistics
+                }
+            };
+            
+            if (useScaling)
+            {
+                config.FitnessScalingStrategy = new FakeFitnessScalingStrategyConfiguration();
+            }
+
+            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm(config);
+
             algorithm.Operators.FitnessEvaluator = new MockFitnessEvaluator(algorithm);
             if (useScaling)
             {
-                algorithm.ConfigurationSet.FitnessScalingStrategy = new FakeFitnessScalingStrategyConfiguration();
                 algorithm.Operators.FitnessScalingStrategy = new FakeFitnessScalingStrategy(algorithm);
             }
 
-            Population population = new Population(algorithm);
+            SimplePopulation population = new SimplePopulation(algorithm);
             MockEntity entity1 = new MockEntity(algorithm);
             entity1.Identifier = "123";
             population.Entities.Add(entity1);
@@ -180,14 +194,14 @@ namespace GenFxTests
             }
         }
 
-        private class FakeFitnessScalingStrategy : FitnessScalingStrategy
+        private class FakeFitnessScalingStrategy : FitnessScalingStrategyBase<FakeFitnessScalingStrategy, FakeFitnessScalingStrategyConfiguration>
         {
-            public FakeFitnessScalingStrategy(GeneticAlgorithm algorithm)
+            public FakeFitnessScalingStrategy(IGeneticAlgorithm algorithm)
                 : base(algorithm)
             {
             }
 
-            protected override void UpdateScaledFitnessValues(Population population)
+            protected override void UpdateScaledFitnessValues(IPopulation population)
             {
                 for (int i = 0; i < population.Entities.Count; i++)
                 {
@@ -196,17 +210,20 @@ namespace GenFxTests
             }
         }
 
-        [Component(typeof(FakeFitnessScalingStrategy))]
-        private class FakeFitnessScalingStrategyConfiguration : FitnessScalingStrategyConfiguration
+        private class FakeFitnessScalingStrategyConfiguration : FitnessScalingStrategyConfigurationBase<FakeFitnessScalingStrategyConfiguration, FakeFitnessScalingStrategy>
         {
         }
 
-        private class TestPopulation : Population
+        private class TestPopulation : PopulationBase<TestPopulation, TestPopulationConfiguration>
         {
-            public TestPopulation(GeneticAlgorithm algorithm)
+            public TestPopulation(IGeneticAlgorithm algorithm)
                 : base(algorithm)
             {
             }
+        }
+
+        private class TestPopulationConfiguration : PopulationConfigurationBase<TestPopulationConfiguration, TestPopulation>
+        {
         }
     }
 }

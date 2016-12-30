@@ -1,66 +1,71 @@
+using GenFx.ComponentLibrary.Base;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 
 namespace GenFx.ComponentLibrary.Statistics
 {
     /// <summary>
-    /// Provides the calculation to determine the <see cref="GeneticEntity"/> object with the highest
-    /// <see cref="GeneticEntity.ScaledFitnessValue"/> found for a <see cref="Population"/> during the entire run of the genetic algorithm.
+    /// Provides the calculation to determine the <see cref="IGeneticEntity"/> object with the highest
+    /// <see cref="IGeneticEntity.ScaledFitnessValue"/> found for a <see cref="IPopulation"/> during the entire run of the genetic algorithm.
     /// </summary>
-    public class BestMaximumFitnessEntityStatistic : Statistic
+    public sealed class BestMaximumFitnessEntityStatistic : StatisticBase<BestMaximumFitnessEntityStatistic, BestMaximumFitnessEntityStatisticConfiguration>
     {
-        private Dictionary<int, BestEntity> bestEntities = new Dictionary<int, BestEntity>();
+        private Dictionary<int, IGeneticEntity> bestEntities = new Dictionary<int, IGeneticEntity>();
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="BestMaximumFitnessEntityStatistic"/> class.
+        /// Initializes a new instance of this class.
         /// </summary>
-        /// <param name="algorithm"><see cref="GeneticAlgorithm"/> using this <see cref="BestMaximumFitnessEntityStatistic"/>.</param>
+        /// <param name="algorithm"><see cref="IGeneticAlgorithm"/> using this object.</param>
         /// <exception cref="ArgumentNullException"><paramref name="algorithm"/> is null.</exception>
         /// <exception cref="ValidationException">The component's configuration is in an invalid state.</exception>
-        public BestMaximumFitnessEntityStatistic(GeneticAlgorithm algorithm)
+        public BestMaximumFitnessEntityStatistic(IGeneticAlgorithm algorithm)
             : base(algorithm)
         {
         }
 
         /// <summary>
-        /// Calculates to determine the <see cref="GeneticEntity"/> object with the highest
-        /// <see cref="GeneticEntity.ScaledFitnessValue"/> found for a <see cref="Population"/> during the entire run of the genetic algorithm.
+        /// Calculates to determine the <see cref="IGeneticEntity"/> object with the highest
+        /// <see cref="IGeneticEntity.ScaledFitnessValue"/> found for a <see cref="IPopulation"/> during the entire run of the genetic algorithm.
         /// </summary>
-        /// <param name="population"><see cref="Population"/> from which to derive the statistic.</param>
-        /// <returns>String representation of the <see cref="GeneticEntity"/> with the highest <see cref="GeneticEntity.ScaledFitnessValue"/>.</returns>
+        /// <param name="population"><see cref="IPopulation"/> from which to derive the statistic.</param>
+        /// <returns>String representation of the <see cref="IGeneticEntity"/> with the highest <see cref="IGeneticEntity.ScaledFitnessValue"/>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="population"/> is null.</exception>
-        public override object GetResultValue(Population population)
+        public override object GetResultValue(IPopulation population)
         {
             if (population == null)
             {
                 throw new ArgumentNullException(nameof(population));
             }
 
-            BestEntity bestEntity;
+            int startIndex = 0;
+            IGeneticEntity bestEntity;
             if (!this.bestEntities.TryGetValue(population.Index, out bestEntity))
             {
-                bestEntity = new BestEntity();
-                this.bestEntities.Add(population.Index, bestEntity);
-            }
-
-            for (int i = 0; i < population.Entities.Count; i++)
-            {
-                double currentFitness = population.Entities[i].ScaledFitnessValue;
-                if (i == 0 || currentFitness > bestEntity.Fitness)
+                if (population.Entities.Count > 0)
                 {
-                    bestEntity.Fitness = currentFitness;
-                    bestEntity.EntityRepresentation = population.Entities[i].Representation;
+                    bestEntity = population.Entities[0].Clone();
+                    this.bestEntities.Add(population.Index, bestEntity);
+                    startIndex = 1;
                 }
             }
 
-            return bestEntity.EntityRepresentation;
+            for (int i = startIndex; i < population.Entities.Count; i++)
+            {
+                double currentFitness = population.Entities[i].ScaledFitnessValue;
+                if (currentFitness > bestEntity.ScaledFitnessValue)
+                {
+                    bestEntity = population.Entities[i].Clone();
+                    this.bestEntities[population.Index] = bestEntity;
+                }
+            }
+
+            return bestEntity;
         }
 
         /// <summary>
         /// Sets the statistic's state.
         /// </summary>
-        protected override void SetSaveState(KeyValueMap state)
+        public override void SetSaveState(KeyValueMap state)
         {
             if (state == null)
             {
@@ -69,13 +74,21 @@ namespace GenFx.ComponentLibrary.Statistics
 
             base.SetSaveState(state);
 
-            state[nameof(this.bestEntities)] = this.bestEntities;
+            Dictionary<int, KeyValueMap> savedEntitiesByPopulation = new Dictionary<int, KeyValueMap>();
+            foreach (KeyValuePair<int, IGeneticEntity> kvp in this.bestEntities)
+            {
+                KeyValueMap keyValueMap = new KeyValueMap();
+                kvp.Value.SetSaveState(keyValueMap);
+                savedEntitiesByPopulation.Add(kvp.Key, keyValueMap);
+            }
+
+            state[nameof(this.bestEntities)] = savedEntitiesByPopulation;
         }
 
         /// <summary>
         /// Restores the statistic's state.
         /// </summary>
-        protected override void RestoreState(KeyValueMap state)
+        public override void RestoreState(KeyValueMap state)
         {
             if (state == null)
             {
@@ -84,31 +97,14 @@ namespace GenFx.ComponentLibrary.Statistics
 
             base.RestoreState(state);
 
-            this.bestEntities = (Dictionary<int, BestEntity>)state[nameof(this.bestEntities)];
+            Dictionary<int, KeyValueMap> savedEntitiesByPopulation = (Dictionary<int, KeyValueMap>)state[nameof(this.bestEntities)];
+            this.bestEntities = new Dictionary<int, IGeneticEntity>();
+            foreach (KeyValuePair<int, KeyValueMap> kvp in savedEntitiesByPopulation)
+            {
+                IGeneticEntity entity = (IGeneticEntity)this.Algorithm.ConfigurationSet.Entity.CreateComponent(this.Algorithm);
+                entity.RestoreState(kvp.Value);
+                this.bestEntities.Add(kvp.Key, entity);
+            }
         }
-    }
-
-    /// <summary>
-    /// Represents the statistic data of the best <see cref="GeneticEntity"/> in the <see cref="Population"/>.
-    /// </summary>
-    public class BestEntity
-    {
-        /// <summary>
-        /// Gets or sets the fitness value of the best entity.
-        /// </summary>
-        public double Fitness { get; set; }
-
-        /// <summary>
-        /// Gets or sets the representation of the entity.
-        /// </summary>
-        public string EntityRepresentation { get; set; }
-    }
-
-    /// <summary>
-    /// Represents the configuration of <see cref="BestMaximumFitnessEntityStatistic"/>.
-    /// </summary>
-    [Component(typeof(BestMaximumFitnessEntityStatistic))]
-    public class BestMaximumFitnessEntityStatisticConfiguration : StatisticConfiguration
-    {
     }
 }

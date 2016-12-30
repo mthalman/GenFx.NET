@@ -1,7 +1,9 @@
 using GenFx.Properties;
 using GenFx.Validation;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 
@@ -55,6 +57,23 @@ namespace GenFx.ComponentModel
         }
 
         /// <summary>
+        /// Validates the state of the configuration.
+        /// </summary>
+        public void Validate()
+        {
+            IEnumerable<PropertyInfo> properties = this.GetType()
+                .GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.FlattenHierarchy)
+                .Where(p => p.DeclaringType != typeof(ComponentConfiguration));
+            foreach (PropertyInfo propertyInfo in properties)
+            {
+                object propValue = propertyInfo.GetValue(this, null);
+
+                // Check that the property is valid using the validators attached directly to the property.
+                this.ValidateProperty(propValue, propertyInfo.Name);
+            }
+        }
+
+        /// <summary>
         /// Verifies that the value is a valid value for the property.
         /// </summary>
         /// <param name="value">Value being set to the property.</param>
@@ -92,7 +111,7 @@ namespace GenFx.ComponentModel
         {
             try
             {
-                return (GeneticComponent)Activator.CreateInstance(this.ComponentType, new object[] { algorithm, this });
+                return (GeneticComponent)Activator.CreateInstance(this.ComponentType, new object[] { algorithm });
             }
             catch (TargetInvocationException ex)
             {

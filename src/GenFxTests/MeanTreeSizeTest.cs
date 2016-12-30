@@ -1,4 +1,5 @@
 ﻿using GenFx;
+using GenFx.ComponentLibrary.Populations;
 using GenFx.ComponentLibrary.Statistics;
 using GenFx.ComponentLibrary.Trees;
 using GenFxTests.Helpers;
@@ -23,15 +24,21 @@ namespace GenFxTests
         [TestMethod()]
         public void MeanTreeSize_GetResultValue()
         {
-            GeneticAlgorithm algorithm = new MockGeneticAlgorithm();
-            algorithm.ConfigurationSet.GeneticAlgorithm = new MockGeneticAlgorithmConfiguration();
-            algorithm.ConfigurationSet.Entity = new TestTreeEntityConfiguration();
-            algorithm.ConfigurationSet.Population = new PopulationConfiguration();
-            algorithm.ConfigurationSet.Statistics.Add(new MeanTreeSizeStatisticConfiguration());
-            MeanTreeSizeStatistic target = new MeanTreeSizeStatistic(algorithm);
-            Population population = new Population(algorithm);
+            ComponentConfigurationSet config = new ComponentConfigurationSet
+            {
+                SelectionOperator = new MockSelectionOperatorConfiguration(),
+                FitnessEvaluator = new MockFitnessEvaluatorConfiguration(),
+                GeneticAlgorithm = new MockGeneticAlgorithmConfiguration(),
+                Entity = new TestTreeEntityConfiguration(),
+                Population = new SimplePopulationConfiguration(),
+            };
+            config.Statistics.Add(new MeanTreeSizeStatisticConfiguration());
 
-            TreeEntity entity = new TestTreeEntity(algorithm);
+            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm(config);
+            MeanTreeSizeStatistic target = new MeanTreeSizeStatistic(algorithm);
+            SimplePopulation population = new SimplePopulation(algorithm);
+
+            ITreeEntity entity = new TestTreeEntity(algorithm);
             entity.SetRootNode(new TreeNode());
             entity.RootNode.ChildNodes.Add(new TreeNode());
             entity.RootNode.ChildNodes.Add(new TreeNode());
@@ -58,16 +65,24 @@ namespace GenFxTests
         [TestMethod()]
         public void MeanTreeSize_GetResultValue_NullPopulation()
         {
-            GeneticAlgorithm algorithm = new MockGeneticAlgorithm();
-            algorithm.ConfigurationSet.GeneticAlgorithm = new MockGeneticAlgorithmConfiguration();
-            algorithm.ConfigurationSet.Statistics.Add(new MeanTreeSizeStatisticConfiguration());
+            ComponentConfigurationSet config = new ComponentConfigurationSet
+            {
+                SelectionOperator = new MockSelectionOperatorConfiguration(),
+                FitnessEvaluator = new MockFitnessEvaluatorConfiguration(),
+                GeneticAlgorithm = new MockGeneticAlgorithmConfiguration(),
+                Entity = new TestTreeEntityConfiguration(),
+                Population = new SimplePopulationConfiguration(),
+            };
+            config.Statistics.Add(new MeanTreeSizeStatisticConfiguration());
+
+            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm(config);
             MeanTreeSizeStatistic target = new MeanTreeSizeStatistic(algorithm);
             AssertEx.Throws<ArgumentNullException>(() => target.GetResultValue(null));
         }
 
-        private class TestTreeEntity : TreeEntity<TreeNode>
+        private class TestTreeEntity : TreeEntity<TestTreeEntity, TestTreeEntityConfiguration, TreeNode>
         {
-            public TestTreeEntity(GeneticAlgorithm algorithm)
+            public TestTreeEntity(IGeneticAlgorithm algorithm)
                 : base(algorithm)
             {
             }
@@ -81,15 +96,9 @@ namespace GenFxTests
             {
                 throw new Exception("The method or operation is not implemented.");
             }
-
-            public override GeneticEntity Clone()
-            {
-                throw new Exception("The method or operation is not implemented.");
-            }
         }
 
-        [Component(typeof(TestTreeEntity))]
-        private class TestTreeEntityConfiguration : TreeEntityConfiguration
+        private class TestTreeEntityConfiguration : TreeEntityConfiguration<TestTreeEntityConfiguration, TestTreeEntity, TreeNode>
         {
         }
     }

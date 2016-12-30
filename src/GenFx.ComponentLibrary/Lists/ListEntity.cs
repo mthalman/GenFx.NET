@@ -9,10 +9,13 @@ namespace GenFx.ComponentLibrary.Lists
     /// <summary>
     /// Default implementation of a list-based entity.
     /// </summary>
+    /// <remarks>This class uses a <see cref="List{TItem}"/> data structure to represent the list.</remarks>
     /// <typeparam name="TEntity">Type of the deriving entity class.</typeparam>
     /// <typeparam name="TConfiguration">Type of the entity's configuration class.</typeparam>
     /// <typeparam name="TItem">Type of the values contained in the list.</typeparam>
-    public abstract class ListEntity<TEntity, TConfiguration, TItem> : ListEntityBase<TEntity, TConfiguration, TItem>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix")]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1005:AvoidExcessiveParametersOnGenericTypes")]
+    public abstract class ListEntity<TEntity, TConfiguration, TItem> : ListEntityBase<TEntity, TConfiguration, TItem>, IListEntity<TItem>
         where TEntity : ListEntity<TEntity, TConfiguration, TItem>
         where TConfiguration : ListEntityConfiguration<TConfiguration, TEntity, TItem>
     {
@@ -58,14 +61,6 @@ namespace GenFx.ComponentLibrary.Lists
         }
 
         /// <summary>
-        /// Gets the list containing the values.
-        /// </summary>
-        protected IList<TItem> Genes
-        {
-            get { return this.genes; }
-        }
-
-        /// <summary>
         /// Gets or sets the list element at the specified index.
         /// </summary>
         /// <param name="index">The zero-based index of the list element to get or set.</param>
@@ -84,14 +79,14 @@ namespace GenFx.ComponentLibrary.Lists
         /// </summary>
         /// <param name="entity"><see cref="ListEntity{TEntity, TConfiguration, TItem}"/> to which state is to be copied.</param>
         /// <exception cref="ArgumentNullException"><paramref name="entity"/> is null.</exception>
-        public override void CopyTo(GeneticEntity<TEntity, TConfiguration> entity)
+        public override void CopyTo(TEntity entity)
         {
             base.CopyTo(entity);
 
-            ListEntity<TEntity, TConfiguration, TItem> listEntity = (ListEntity<TEntity, TConfiguration, TItem>)entity;
             TItem[] values = new TItem[this.genes.Count];
             this.genes.CopyTo(values);
-            listEntity.genes = values.ToList();
+            entity.genes = values.ToList();
+            entity.UpdateStringRepresentation();
         }
 
         /// <summary>

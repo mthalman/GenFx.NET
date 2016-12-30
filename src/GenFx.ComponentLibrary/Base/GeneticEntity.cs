@@ -1,5 +1,7 @@
+using GenFx.ComponentLibrary.Properties;
 using GenFx.ComponentModel;
 using System;
+using System.Globalization;
 using System.Threading.Tasks;
 
 namespace GenFx.ComponentLibrary.Base
@@ -36,7 +38,7 @@ namespace GenFx.ComponentLibrary.Base
         }
 
         /// <summary>
-        /// Gets the number of generations this entity has survived without being altered.
+        /// Gets or sets the number of generations this entity has survived without being altered.
         /// </summary>
         /// <value>The number of generations this entity has survived without being altered.</value>
         public int Age
@@ -88,14 +90,12 @@ namespace GenFx.ComponentLibrary.Base
         /// <exception cref="ValidationException">The component's configuration is in an invalid state.</exception>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         protected GeneticEntity(IGeneticAlgorithm algorithm)
-            : base(algorithm)
+            : base(algorithm, GetConfiguration(algorithm, c => c.Entity))
         {
             if (algorithm == null)
             {
                 throw new ArgumentNullException(nameof(algorithm));
             }
-
-            this.Initialize();
         }
 
         /// <summary>
@@ -151,7 +151,7 @@ namespace GenFx.ComponentLibrary.Base
         /// <exception cref="ArgumentException"><paramref name="fitnessType"/> value is undefined.</exception>
         public double GetFitnessValue(FitnessType fitnessType)
         {
-            if (Enum.IsDefined(typeof(FitnessType), fitnessType))
+            if (!Enum.IsDefined(typeof(FitnessType), fitnessType))
             {
                 throw EnumHelper.CreateUndefinedEnumException(typeof(FitnessType), "fitnessType");
             }
@@ -198,27 +198,15 @@ namespace GenFx.ComponentLibrary.Base
         }
         
         /// <summary>
-        /// When overriden by a derived class, returns a clone of this entity.
+        /// Returns a clone of this entity.
         /// </summary>
         /// <returns>A clone of this entity.</returns>
-        /// <remarks>
-        /// The <see cref="GeneticComponentWithAlgorithm{TComponent, TConfiguration}.Algorithm"/> reference is maintained in the returned entity.
-        /// For all other state of the entity, a deep clone is used.
-        /// <b>Notes to implementers:</b> When this method is overriden, it is suggested that the
-        /// <see cref="CopyTo(GeneticEntity{TEntity, TConfiguration})"/> method is also overriden.  In that case, the 
-        /// suggested implementation of this method is the following:
-        /// <code>
-        /// <![CDATA[
-        /// protected override GeneticEntity Clone()
-        /// {
-        ///     MyEntity myEntity = new MyEntity(this.Algorithm);
-        ///     this.CopyTo(myEntity);
-        ///     return myEntity;
-        /// }
-        /// ]]>
-        /// </code>
-        /// </remarks>
-        public abstract GeneticEntity<TEntity, TConfiguration> Clone();
+        public TEntity Clone()
+        {
+            TEntity clone = this.Configuration.CreateComponent(this.Algorithm);
+            this.CopyTo(clone);
+            return clone;
+        }
 
         IGeneticEntity IGeneticEntity.Clone()
         {
@@ -228,7 +216,7 @@ namespace GenFx.ComponentLibrary.Base
         /// <summary>
         /// Copies the state from this instance to <paramref name="entity"/>.
         /// </summary>
-        /// <param name="entity"><see cref="GeneticEntity{TEntity, TConfiguration}"/> to which state is to be copied.</param>
+        /// <param name="entity"><typeparamref name="TEntity"/> to which state is to be copied.</param>
         /// <remarks>
         /// <para>
         /// The default implementation of this method is to copy the state of this instance
@@ -236,12 +224,11 @@ namespace GenFx.ComponentLibrary.Base
         /// </para>
         /// <para>
         /// <b>Notes to inheritors:</b> When overriding this method, it is necessary to call the
-        /// <b>CopyTo</b> method of the base class.  This method should be used in conjunction with
-        /// the <see cref="Clone()"/> method.
+        /// <b>CopyTo</b> method of the base class.
         /// </para>
         /// </remarks>
         /// <exception cref="ArgumentNullException"><paramref name="entity"/> is null.</exception>
-        public virtual void CopyTo(GeneticEntity<TEntity, TConfiguration> entity)
+        public virtual void CopyTo(TEntity entity)
         {
             if (entity == null)
             {
@@ -253,6 +240,21 @@ namespace GenFx.ComponentLibrary.Base
             entity.Age = this.Age;
             entity.rawFitnessValue = this.rawFitnessValue;
             entity.scaledFitnessValue = this.scaledFitnessValue;
+        }
+
+        void IGeneticEntity.CopyTo(IGeneticEntity entity)
+        {
+            if (entity == null)
+            {
+                throw new ArgumentNullException(nameof(entity));
+            }
+
+            if (!(entity is TEntity))
+            {
+                throw new ArgumentException(nameof(entity), String.Format(CultureInfo.CurrentCulture, LibResources.ErrorMsg_EntityCopyToTypeMismatch, typeof(TEntity)));
+            }
+
+            this.CopyTo((TEntity)entity);
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using GenFx;
 using GenFx.ComponentLibrary.Algorithms;
+using GenFx.ComponentLibrary.Populations;
 using GenFx.ComponentModel;
 using GenFxTests.Helpers;
 using GenFxTests.Mocks;
@@ -16,21 +17,6 @@ namespace GenFxTests
     [TestClass()]
     public class SteadyStateGeneticAlgorithmTest
     {
-        /// <summary>
-        /// Tests that the PopulationReplacementValue property works correctly.
-        /// </summary>
-        [TestMethod]
-        public void SteadyStateGeneticAlgorithm_PopulationReplacementValue()
-        {
-            SteadyStateGeneticAlgorithm algorithm = new SteadyStateGeneticAlgorithm();
-            SteadyStateGeneticAlgorithmConfiguration config = new SteadyStateGeneticAlgorithmConfiguration();
-            config.PopulationReplacementValue = new PopulationReplacementValue(20, ReplacementValueKind.FixedCount);
-            algorithm.ConfigurationSet.GeneticAlgorithm = config;
-
-            Assert.AreEqual(20, algorithm.PopulationReplacementValue.Value, "PopulationReplacementValue set incorrectly.");
-            Assert.AreEqual(ReplacementValueKind.FixedCount, algorithm.PopulationReplacementValue.Kind, "ReplacementValueKind set incorrectly.");
-        }
-
         /// <summary>
         /// Tests that an exception is thrown when an invalid value is used for the PopulationReplacement setting.
         /// </summary>
@@ -57,25 +43,28 @@ namespace GenFxTests
         [TestMethod]
         public async Task SteadyStateGeneticAlgorithm_CreateNextGeneration_Async()
         {
-            SteadyStateGeneticAlgorithm algorithm = new SteadyStateGeneticAlgorithm();
-            algorithm.ConfigurationSet.Entity = new MockEntityConfiguration();
-            algorithm.ConfigurationSet.Population = new PopulationConfiguration();
-            algorithm.ConfigurationSet.FitnessEvaluator = new MockFitnessEvaluatorConfiguration();
-            SteadyStateGeneticAlgorithmConfiguration algConfig = new SteadyStateGeneticAlgorithmConfiguration();
-            algConfig.PopulationReplacementValue = new PopulationReplacementValue(2, ReplacementValueKind.FixedCount);
-            algorithm.ConfigurationSet.GeneticAlgorithm = algConfig;
-
-            MockSelectionOperatorConfiguration selConfig = new MockSelectionOperatorConfiguration();
-            selConfig.SelectionBasedOnFitnessType = FitnessType.Scaled;
-            algorithm.ConfigurationSet.SelectionOperator = selConfig;
-
-            MockCrossoverOperatorConfiguration crossConfig = new MockCrossoverOperatorConfiguration();
-            crossConfig.CrossoverRate = 1;
-            algorithm.ConfigurationSet.CrossoverOperator = crossConfig;
-
-            MockMutationOperatorConfiguration mutConfig = new MockMutationOperatorConfiguration();
-            mutConfig.MutationRate = 1;
-            algorithm.ConfigurationSet.MutationOperator = mutConfig;
+            SteadyStateGeneticAlgorithm algorithm = new SteadyStateGeneticAlgorithm(new ComponentConfigurationSet
+            {
+                Entity = new MockEntityConfiguration(),
+                Population = new SimplePopulationConfiguration(),
+                FitnessEvaluator = new MockFitnessEvaluatorConfiguration(),
+                GeneticAlgorithm = new SteadyStateGeneticAlgorithmConfiguration
+                {
+                    PopulationReplacementValue = new PopulationReplacementValue(2, ReplacementValueKind.FixedCount)
+                },
+                SelectionOperator = new MockSelectionOperatorConfiguration
+                {
+                    SelectionBasedOnFitnessType = FitnessType.Scaled
+                },
+                CrossoverOperator = new MockCrossoverOperatorConfiguration
+                {
+                    CrossoverRate = 1
+                },
+                MutationOperator = new MockMutationOperatorConfiguration
+                {
+                    MutationRate = 1
+                }
+            });
 
             algorithm.Operators.SelectionOperator = new MockSelectionOperator(algorithm);
             algorithm.Operators.CrossoverOperator = new MockCrossoverOperator(algorithm);
@@ -83,7 +72,7 @@ namespace GenFxTests
             algorithm.Operators.FitnessEvaluator = new MockFitnessEvaluator(algorithm);
 
             PrivateObject ssAccessor = new PrivateObject(algorithm);
-            Population population = GetPopulation(algorithm);
+            SimplePopulation population = GetPopulation(algorithm);
 
             int prevPopCount = population.Entities.Count;
             await (Task)ssAccessor.Invoke("CreateNextGenerationAsync", population);
@@ -103,9 +92,9 @@ namespace GenFxTests
             AssertEx.Throws<ArgumentOutOfRangeException>(() => new PopulationReplacementValue(-1, ReplacementValueKind.FixedCount));
         }
 
-        private static Population GetPopulation(GeneticAlgorithm algorithm)
+        private static SimplePopulation GetPopulation(IGeneticAlgorithm algorithm)
         {
-            Population population = new Population(algorithm);
+            SimplePopulation population = new SimplePopulation(algorithm);
             population.Entities.Add(new MockEntity(algorithm));
             population.Entities.Add(new MockEntity(algorithm));
             population.Entities.Add(new MockEntity(algorithm));

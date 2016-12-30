@@ -1,36 +1,36 @@
+using GenFx.ComponentLibrary.Base;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 
 namespace GenFx.ComponentLibrary.Statistics
 {
     /// <summary>
-    /// Provides the calculation to determine the highest <see cref="GeneticEntity.ScaledFitnessValue"/> 
-    /// found for a <see cref="Population"/> during the entire run of the genetic algorithm.
+    /// Provides the calculation to determine the highest <see cref="IGeneticEntity.ScaledFitnessValue"/> 
+    /// found for a <see cref="IPopulation"/> during the entire run of the genetic algorithm.
     /// </summary>
-    public class BestMaximumFitnessStatistic : Statistic
+    public sealed class BestMaximumFitnessStatistic : StatisticBase<BestMaximumFitnessStatistic, BestMaximumFitnessStatisticConfiguration>
     {
         private Dictionary<int, double> bestMaxValues = new Dictionary<int, double>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BestMaximumFitnessStatistic"/> class.
         /// </summary>
-        /// <param name="algorithm"><see cref="GeneticAlgorithm"/> using this <see cref="BestMaximumFitnessStatistic"/>.</param>
+        /// <param name="algorithm"><see cref="IGeneticAlgorithm"/> using this <see cref="BestMaximumFitnessStatistic"/>.</param>
         /// <exception cref="ArgumentNullException"><paramref name="algorithm"/> is null.</exception>
         /// <exception cref="ValidationException">The component's configuration is in an invalid state.</exception>
-        public BestMaximumFitnessStatistic(GeneticAlgorithm algorithm)
+        public BestMaximumFitnessStatistic(IGeneticAlgorithm algorithm)
             : base(algorithm)
         {
         }
 
         /// <summary>
-        /// Calculates to determine the highest <see cref="GeneticEntity.ScaledFitnessValue"/> 
-        /// found for a <see cref="Population"/> during the entire run of the genetic algorithm.
+        /// Calculates to determine the highest <see cref="IGeneticEntity.ScaledFitnessValue"/> 
+        /// found for a <see cref="IPopulation"/> during the entire run of the genetic algorithm.
         /// </summary>
-        /// <param name="population"><see cref="Population"/> from which to derive the statistic.</param>
-        /// <returns>Largest value of <see cref="GeneticEntity.ScaledFitnessValue"/> found.</returns>
+        /// <param name="population"><see cref="IPopulation"/> from which to derive the statistic.</param>
+        /// <returns>Largest value of <see cref="IGeneticEntity.ScaledFitnessValue"/> found.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="population"/> is null.</exception>
-        public override object GetResultValue(Population population)
+        public override object GetResultValue(IPopulation population)
         {
             if (population == null)
             {
@@ -56,7 +56,7 @@ namespace GenFx.ComponentLibrary.Statistics
         /// <summary>
         /// Sets the statistic's state.
         /// </summary>
-        protected override void SetSaveState(KeyValueMap state)
+        public override void SetSaveState(KeyValueMap state)
         {
             if (state == null)
             {
@@ -71,7 +71,7 @@ namespace GenFx.ComponentLibrary.Statistics
         /// <summary>
         /// Restores the statistic's state.
         /// </summary>
-        protected override void RestoreState(KeyValueMap state)
+        public override void RestoreState(KeyValueMap state)
         {
             if (state == null)
             {
@@ -82,13 +82,5 @@ namespace GenFx.ComponentLibrary.Statistics
 
             this.bestMaxValues = (Dictionary<int, double>)state[nameof(this.bestMaxValues)];
         }
-    }
-
-    /// <summary>
-    /// Represents the configuration of <see cref="BestMaximumFitnessStatistic"/>.
-    /// </summary>
-    [Component(typeof(BestMaximumFitnessStatistic))]
-    public class BestMaximumFitnessStatisticConfiguration : StatisticConfiguration
-    {
     }
 }

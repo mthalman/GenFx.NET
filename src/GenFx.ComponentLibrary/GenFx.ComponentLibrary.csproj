@@ -104,116 +104,184 @@
     <Compile Include="Algorithms\SteadyStateGeneticAlgorithmConfiguration.cs" />
     <Compile Include="Algorithms\SteadyStateGeneticAlgorithmConfiguration.OfT2.cs" />
     <Compile Include="Algorithms\SteadyStateGeneticAlgorithm.OfT2.cs" />
-    <Compile Include="Base\CrossoverOperator.cs" />
-    <Compile Include="Base\CrossoverOperatorConfiguration.cs" />
-    <Compile Include="Base\ElitismStrategyConfiguration.cs" />
-    <Compile Include="Base\ElitismStrategy.cs" />
-    <Compile Include="Base\FitnessEvaluatorConfiguration.cs" />
-    <Compile Include="Base\FitnessEvaluator.cs" />
-    <Compile Include="Base\FitnessScalingStrategyConfiguration.cs" />
-    <Compile Include="Base\FitnessScalingStrategy.cs" />
+    <Compile Include="Base\CrossoverOperatorBase.cs" />
+    <Compile Include="Base\CrossoverOperatorConfigurationBase.cs" />
+    <Compile Include="Base\ElitismStrategyConfigurationBase.cs" />
+    <Compile Include="Base\ElitismStrategyBase.cs" />
+    <Compile Include="Base\FitnessEvaluatorConfigurationBase.cs" />
+    <Compile Include="Base\FitnessEvaluatorBase.cs" />
+    <Compile Include="Base\FitnessScalingStrategyConfigurationBase.cs" />
+    <Compile Include="Base\FitnessScalingStrategyBase.cs" />
     <Compile Include="Base\GeneticComponentWithAlgorithm.cs" />
     <Compile Include="Base\GeneticEntityConfiguration.cs" />
     <Compile Include="Base\GeneticEntity.cs" />
-    <Compile Include="Base\MutationOperatorConfiguration.cs" />
-    <Compile Include="Base\MutationOperator.cs" />
-    <Compile Include="Base\PluginConfiguration.cs" />
-    <Compile Include="Base\Plugin.cs" />
-    <Compile Include="Base\PopulationConfiguration.cs" />
-    <Compile Include="Base\Population.cs" />
-    <Compile Include="Base\SelectionOperatorConfiguration.cs" />
-    <Compile Include="Base\SelectionOperator.cs" />
-    <Compile Include="Base\StatisticConfiguration.cs" />
-    <Compile Include="Base\Statistic.cs" />
-    <Compile Include="Base\TerminatorConfiguration.cs" />
-    <Compile Include="Base\Terminator.cs" />
-    <Compile Include="BinaryStrings\BinaryStringEntity.cs" />
-    <Compile Include="BinaryStrings\BitInversionOperator.cs" />
-    <Compile Include="BinaryStrings\BitInversionOperatorConfiguration.cs" />
-    <Compile Include="BinaryStrings\BitInversionOperatorConfiguration.OfT2.cs" />
-    <Compile Include="BinaryStrings\BitInversionOperator.OfT2.cs" />
-    <Compile Include="BinaryStrings\FixedLengthBinaryStringEntity.cs" />
-    <Compile Include="BinaryStrings\UniformBitMutationOperator.cs" />
-    <Compile Include="BinaryStrings\VariableLengthBinaryStringEntity.cs" />
-    <Compile Include="BinaryStrings\VariableSinglePointBitCrossoverOperator.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Base\MutationOperatorConfigurationBase.cs" />
+    <Compile Include="Base\MutationOperatorBase.cs" />
+    <Compile Include="Base\PluginConfigurationBase.cs" />
+    <Compile Include="Base\PluginBase.cs" />
+    <Compile Include="Base\PopulationConfigurationBase.cs" />
+    <Compile Include="Base\PopulationBase.cs" />
+    <Compile Include="Base\SelectionOperatorConfigurationBase.cs" />
+    <Compile Include="Base\SelectionOperatorBase.cs" />
+    <Compile Include="Base\StatisticConfigurationBase.cs" />
+    <Compile Include="Base\StatisticBase.cs" />
+    <Compile Include="Base\TerminatorConfigurationBase.cs" />
+    <Compile Include="Base\TerminatorBase.cs" />
+    <Compile Include="Elitism\ElitismStrategy.cs" />
+    <Compile Include="Elitism\ElitismStrategyConfiguration.cs" />
+    <Compile Include="Lists\BinaryStrings\BinaryStringEntityConfiguration.OfT2.cs" />
+    <Compile Include="Lists\BinaryStrings\BinaryStringEntity.OfT2.cs" />
+    <Compile Include="Lists\BinaryStrings\FixedLengthBinaryStringEntity.cs" />
+    <Compile Include="Lists\BinaryStrings\FixedLengthBinaryStringEntityConfiguration.cs" />
+    <Compile Include="Lists\BinaryStrings\FixedLengthBinaryStringEntityConfiguration.OfT2.cs" />
+    <Compile Include="Lists\BinaryStrings\FixedLengthBinaryStringEntity.OfT2.cs" />
+    <Compile Include="Lists\BinaryStrings\UniformBitMutationOperator.cs" />
+    <Compile Include="Lists\BinaryStrings\UniformBitMutationOperatorConfiguration.cs" />
+    <Compile Include="Lists\BinaryStrings\UniformBitMutationOperatorConfiguration.OfT2.cs" />
+    <Compile Include="Lists\BinaryStrings\UniformBitMutationOperator.OfT2.cs" />
+    <Compile Include="Lists\BinaryStrings\VariableLengthBinaryStringEntity.cs" />
+    <Compile Include="Lists\BinaryStrings\VariableLengthBinaryStringEntityConfiguration.cs" />
+    <Compile Include="Lists\BinaryStrings\VariableLengthBinaryStringEntityConfiguration.OfT2.cs" />
+    <Compile Include="Lists\BinaryStrings\VariableLengthBinaryStringEntity.OfT2.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Lists\FixedLengthIntegerListEntity.cs" />
     <Compile Include="Lists\FixedLengthIntegerListEntityConfiguration.cs" />
     <Compile Include="Lists\FixedLengthIntegerListEntityConfiguration.OfT2.cs" />
-    <Compile Include="Lists\IntegerInversionOperator.cs" />
+    <Compile Include="Lists\IIntegerListEntity.cs" />
+    <Compile Include="Lists\IListEntityBase.OfT.cs" />
+    <Compile Include="Lists\IListEntityBaseConfiguration.cs" />
+    <Compile Include="Lists\IListEntityConfiguration.cs" />
+    <Compile Include="Lists\IListEntity.cs" />
+    <Compile Include="Lists\IListEntityBase.cs" />
+    <Compile Include="Lists\IMultiPointCrossoverOperatorConfiguration.cs" />
+    <Compile Include="Lists\IIntegerListEntityConfiguration.cs" />
     <Compile Include="Lists\IntegerListEntityConfiguration.cs" />
     <Compile Include="Lists\InversionOperator.cs" />
+    <Compile Include="Lists\InversionOperatorConfiguration.cs" />
+    <Compile Include="Lists\InversionOperatorConfiguration.OfT2.cs" />
+    <Compile Include="Lists\InversionOperator.OfT2.cs" />
     <Compile Include="Lists\ListEntityConfiguration.cs" />
-    <Compile Include="Lists\ListEntityBaseConfiguration.OfT3.cs" />
-    <Compile Include="Lists\ListEntityBaseConfiguration.OfT2.cs" />
-    <Compile Include="Lists\ListEntityBase.OfT2.cs" />
-    <Compile Include="Lists\ListEntityBase.OfT3.cs" />
+    <Compile Include="Lists\ListEntityBaseConfiguration.cs" />
+    <Compile Include="Lists\ListEntityBase.cs" />
     <Compile Include="Lists\FixedLengthIntegerListEntity.OfT2.cs" />
     <Compile Include="Lists\IntegerListEntity.cs" />
     <Compile Include="Lists\ListShiftMutationOperator.cs" />
+    <Compile Include="Lists\ListShiftMutationOperatorConfiguration.cs" />
+    <Compile Include="Lists\ListShiftMutationOperatorConfiguration.OfT2.cs" />
+    <Compile Include="Lists\ListShiftMutationOperator.OfT2.cs" />
     <Compile Include="Lists\MultiPointCrossoverOperator.cs" />
+    <Compile Include="Lists\MultiPointCrossoverOperator.OfT2.cs" />
+    <Compile Include="Lists\MultiPointCrossoverOperatorConfiguration.cs" />
+    <Compile Include="Lists\MultiPointCrossoverOperatorConfiguration.OfT2.cs" />
+    <Compile Include="Lists\MultiPointCrossoverOperatorCrossoverPointValidator.cs" />
     <Compile Include="Lists\SinglePointCrossoverOperator.cs" />
+    <Compile Include="Lists\SinglePointCrossoverOperatorConfiguration.cs" />
+    <Compile Include="Lists\SinglePointCrossoverOperatorConfiguration.OfT2.cs" />
+    <Compile Include="Lists\SinglePointCrossoverOperator.OfT2.cs" />
     <Compile Include="Lists\ListEntity.cs" />
     <Compile Include="Lists\UniformIntegerMutationOperator.cs" />
+    <Compile Include="Lists\UniformIntegerMutationOperatorConfiguration.cs" />
+    <Compile Include="Lists\UniformIntegerMutationOperatorConfiguration.OfT2.cs" />
+    <Compile Include="Lists\UniformIntegerMutationOperator.OfT2.cs" />
     <Compile Include="Lists\VariableLengthIntegerListEntity.cs" />
-    <Compile Include="Lists\VariableSinglePointListElementCrossoverOperator.cs" />
+    <Compile Include="Lists\VariableLengthIntegerListEntityConfiguration.cs" />
+    <Compile Include="Lists\VariableLengthIntegerListEntityConfiguration.OfT2.cs" />
+    <Compile Include="Lists\VariableLengthIntegerListEntity.OfT2.cs" />
     <Compile Include="Lists\VariableSinglePointCrossoverOperator.cs" />
+    <Compile Include="Lists\VariableSinglePointCrossoverOperatorConfiguration.cs" />
+    <Compile Include="Lists\VariableSinglePointCrossoverOperatorConfiguration.OfT2.cs" />
+    <Compile Include="Lists\VariableSinglePointListElementCrossoverOperatorConfiguration.cs" />
+    <Compile Include="Lists\VariableSinglePointListElementCrossoverOperator.cs" />
+    <Compile Include="Lists\VariableSinglePointCrossoverOperator.OfT2.cs" />
     <Compile Include="Plugins\StatisticLogger.cs" />
+    <Compile Include="Plugins\StatisticLoggerConfiguration.cs" />
+    <Compile Include="Plugins\StatisticLoggerConfiguration.OfT2.cs" />
+    <Compile Include="Plugins\StatisticLogger.OfT2.cs" />
+    <Compile Include="Populations\SimplePopulation.cs" />
+    <Compile Include="Populations\SimplePopulationConfiguration.cs" />
     <Compile Include="Properties\LibResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>LibResources.resx</DependentUpon>
     </Compile>
     <Compile Include="Scaling\ExponentialScalingStrategy.cs" />
-    <Compile Include="Scaling\FitnessSharingScalingStrategy.cs" />
-    <Compile Include="SelectionOperators\BoltzmannSelectionOperator.cs" />
+    <Compile Include="Scaling\ExponentialScalingStrategyConfiguration.cs" />
+    <Compile Include="Scaling\ExponentialScalingStrategyConfiguration.OfT2.cs" />
+    <Compile Include="Scaling\ExponentialScalingStrategy.OfT2.cs" />
+    <Compile Include="Scaling\FitnessSharingScalingStrategyConfiguration.OfT2.cs" />
+    <Compile Include="Scaling\FitnessSharingScalingStrategy.OfT2.cs" />
+    <Compile Include="Scaling\SigmaScalingStrategy.cs" />
+    <Compile Include="Scaling\SigmaScalingStrategyConfiguration.cs" />
+    <Compile Include="Scaling\SigmaScalingStrategyConfiguration.OfT2.cs" />
+    <Compile Include="SelectionOperators\BoltzmannSelectionOperatorConfiguration.OfT2.cs" />
+    <Compile Include="SelectionOperators\BoltzmannSelectionOperator.OfT2.cs" />
     <Compile Include="SelectionOperators\FitnessProportionateSelectionOperator.cs" />
+    <Compile Include="SelectionOperators\FitnessProportionateSelectionOperatorConfiguration.cs" />
+    <Compile Include="SelectionOperators\FitnessProportionateSelectionOperatorConfiguration.OfT2.cs" />
+    <Compile Include="SelectionOperators\FitnessProportionateSelectionOperator.OfT2.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SelectionOperators\RankSelectionOperator.cs" />
+    <Compile Include="SelectionOperators\RankSelectionOperatorConfiguration.cs" />
+    <Compile Include="SelectionOperators\RankSelectionOperatorConfiguration.OfT2.cs" />
+    <Compile Include="SelectionOperators\RankSelectionOperator.OfT2.cs" />
     <Compile Include="SelectionOperators\RouletteWheelSampler.cs" />
-    <Compile Include="Scaling\SigmaScalingStrategy.cs" />
+    <Compile Include="Scaling\SigmaScalingStrategy.OfT2.cs" />
     <Compile Include="SelectionOperators\UniformSelectionOperator.cs" />
-    <Compile Include="StatisticModel.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>StatisticModel.edmx</DependentUpon>
-    </Compile>
+    <Compile Include="SelectionOperators\UniformSelectionOperatorConfiguration.cs" />
+    <Compile Include="SelectionOperators\UniformSelectionOperatorConfiguration.OfT2.cs" />
+    <Compile Include="SelectionOperators\UniformSelectionOperator.OfT2.cs" />
+    <Compile Include="Statistics\BestMaximumFitnessEntityStatisticConfiguration.cs" />
     <Compile Include="Statistics\BestMaximumFitnessEntityStatistic.cs" />
+    <Compile Include="Statistics\BestMaximumFitnessStatisticConfiguration.cs" />
     <Compile Include="Statistics\BestMaximumFitnessStatistic.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Statistics\BestMinimumFitnessStatisticConfiguration.cs" />
     <Compile Include="Statistics\BestMinimumFitnessStatistic.cs" />
+    <Compile Include="Statistics\MaximumFitnessStatisticConfiguration.cs" />
     <Compile Include="Statistics\MaximumFitnessStatistic.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Statistics\MeanFitnessStatisticConfiguration.cs" />
     <Compile Include="Statistics\MeanFitnessStatistic.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Statistics\MeanTreeSizeStatisticConfiguration.cs" />
     <Compile Include="Statistics\MeanTreeSizeStatistic.cs" />
+    <Compile Include="Statistics\MinimumFitnessStatisticConfiguration.cs" />
     <Compile Include="Statistics\MinimumFitnessStatistic.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Statistics\StandardDeviationFitnessStatisticConfiguration.cs" />
     <Compile Include="Statistics\StandardDeviationFitnessStatistic.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Terminators\FitnessTargetTerminatorConfiguration.cs" />
     <Compile Include="Terminators\FitnessTargetTerminator.cs" />
+    <Compile Include="Terminators\GenerationalTerminatorConfiguration.cs" />
     <Compile Include="Terminators\GenerationalTerminator.cs" />
+    <Compile Include="Terminators\TimeDurationTerminatorConfiguration.cs" />
     <Compile Include="Terminators\TimeDurationTerminator.cs" />
     <Compile Include="Trees\BinaryTreeEntity.cs" />
     <Compile Include="Trees\BinaryTreeNode.cs" />
-    <Compile Include="Trees\TreeEntity.cs" />
-    <Compile Include="Trees\NAryTreeEntity.cs" />
+    <Compile Include="Trees\ITreeEntity.cs" />
     <Compile Include="Trees\SingleNodeTreeCrossoverOperator.cs" />
+    <Compile Include="Trees\SingleNodeTreeCrossoverOperatorConfiguration.cs" />
+    <Compile Include="Trees\SingleNodeTreeCrossoverOperatorConfiguration.OfT2.cs" />
+    <Compile Include="Trees\TreeEntityConfiguration.OfT3.cs" />
+    <Compile Include="Trees\TreeEntityConfiguration.OfT2.cs" />
+    <Compile Include="Trees\TreeEntity.OfT3.cs" />
+    <Compile Include="Trees\TreeEntity.OfT2.cs" />
+    <Compile Include="Trees\SingleNodeTreeCrossoverOperator.OfT2.cs" />
+    <Compile Include="Trees\TreeEntityExtensions.cs" />
     <Compile Include="Trees\TreeNode.cs" />
     <Compile Include="Trees\TreeNodeCollection.cs" />
-    <Compile Include="Trees\TreeUtil.cs" />
+    <Compile Include="Trees\TreeHelper.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\GenFx\GenFx.Core.csproj">
+    <ProjectReference Include="..\GenFx\GenFx.csproj">
       <Project>{919AF5AF-702B-4D89-A4A4-0C94CFAF8F95}</Project>
-      <Name>GenFx.Core</Name>
+      <Name>GenFx</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -227,10 +295,6 @@
     <None Include="App.Config">
       <SubType>Designer</SubType>
     </None>
-    <EntityDeploy Include="StatisticModel.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>StatisticModel.Designer.cs</LastGenOutput>
-    </EntityDeploy>
   </ItemGroup>
   <ItemGroup>
     <CodeAnalysisDictionary Include="CustomDictionary.xml" />
@@ -252,6 +316,7 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

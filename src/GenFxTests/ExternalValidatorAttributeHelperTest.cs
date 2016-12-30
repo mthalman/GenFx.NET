@@ -62,6 +62,14 @@ namespace GenFxTests
         {
             private int value;
 
+            public override Type ComponentType
+            {
+                get
+                {
+                    throw new NotImplementedException();
+                }
+            }
+
             public int Value
             {
                 get { return this.value; }

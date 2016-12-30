@@ -1,9 +1,7 @@
 using GenFx.ComponentModel;
 using GenFx.Properties;
-using GenFx.Validation;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
@@ -25,12 +23,11 @@ namespace GenFx
     {
         private int currentGeneration;
         private GeneticEnvironment environment;
-        private ObservableCollection<IStatistic> statistics = new ObservableCollection<IStatistic>();
-        private ObservableCollection<IPlugin> plugins = new ObservableCollection<IPlugin>();
+        private List<IStatistic> statistics = new List<IStatistic>();
+        private List<IPlugin> plugins = new List<IPlugin>();
         private ComponentConfigurationSet config;
         private AlgorithmOperators operators = new AlgorithmOperators();
         private bool isInitialized;
-        private Dictionary<PropertyInfo, List<Validator>> externalValidationMapping = new Dictionary<PropertyInfo, List<Validator>>();
 
         /// <summary>
         /// Occurs when the fitness of an environment has been evaluated.
@@ -59,9 +56,45 @@ namespace GenFx
         /// <summary>
         /// Initializes a new instance of this class.
         /// </summary>
-        protected GeneticAlgorithm()
+        /// <param name="configurationSet">Contains the component configuration for the algorithm.</param>
+        [SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        protected GeneticAlgorithm(ComponentConfigurationSet configurationSet)
+            : base(GetAlgorithmConfiguration(configurationSet))
         {
+            if (configurationSet == null)
+            {
+                throw new ArgumentNullException(nameof(configurationSet));
+            }
+
             this.environment = new GeneticEnvironment(this);
+
+            // We want to ensure the config set cannot be changed once it's being used by an algorithm.  To enforce this, we
+            // freeze the state of the config set when the algorithm is created.  By cloning the config set that is passed in, we allow
+            // the caller to modify their unfrozen instance so it can be configured appropriately between instantiations of an algorithm.
+            this.config = configurationSet.Clone();
+            this.config.Freeze();
+            this.ValidateConfiguration();
+            this.config.CompileExternalValidatorMapping();
+            this.config.Validate(this);
+
+            this.CreateComponents();
+        }
+
+        private static TConfiguration GetAlgorithmConfiguration(ComponentConfigurationSet configurationSet)
+        {
+            if (configurationSet == null)
+            {
+                throw new ArgumentNullException(nameof(configurationSet));
+            }
+
+            if (!(configurationSet.GeneticAlgorithm is TConfiguration))
+            {
+                throw new ArgumentException(StringUtil.GetFormattedString(
+                  FwkResources.ErrorMsg_ComponentConfigurationTypeMismatch,
+                  typeof(TConfiguration).FullName, typeof(TAlgorithm).FullName), nameof(configurationSet));
+            }
+
+            return (TConfiguration)configurationSet.GeneticAlgorithm;
         }
 
         /// <summary>
@@ -75,7 +108,7 @@ namespace GenFx
         /// <summary>
         /// Gets the collection of statistics being calculated for the genetic algorithm.
         /// </summary>
-        public ObservableCollection<IStatistic> Statistics
+        public IEnumerable<IStatistic> Statistics
         {
             get { return this.statistics; }
         }
@@ -83,13 +116,13 @@ namespace GenFx
         /// <summary>
         /// Gets the collection of plugins being used by the genetic algorithm.
         /// </summary>
-        public ObservableCollection<IPlugin> Plugins
+        public IEnumerable<IPlugin> Plugins
         {
             get { return this.plugins; }
         }
 
         /// <summary>
-        /// Gets the <see cref="GeneticEnvironment"/> being used by this <see cref="GeneticEnvironment"/>.
+        /// Gets the <see cref="GeneticEnvironment"/> being used by this object.
         /// </summary>
         public GeneticEnvironment Environment
         {
@@ -130,24 +163,11 @@ namespace GenFx
         /// <exception cref="InvalidOperationException">The configuration for a required component has not been set.</exception>
         /// <exception cref="InvalidOperationException">An exception occured while instantiating a component.</exception>
         [SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
-        public async Task InitializeAsync(ComponentConfigurationSet configurationSet)
+        public async Task InitializeAsync()
         {
-            // We want to ensure the config set cannot be changed while the algorithm is in a running state; otherwise, it will screw up some of the
-            // caching that's being done.  To enforce this, we freeze the state of the config set when the algorithm is Initialized.  When the algorithm
-            // completes, we unfreeze the state.  However, if the StepAsync method is used in a way that the algorithm doesn't finish to completion and
-            // the caller wants to begin a new run of the algorithm, we need a way for the caller to be able to modify the config set prior to initializing
-            // the algorithm for a new run.  By cloning the config set that is passed in, we allow the caller to modify their unfrozen instance so
-            // it can be configured appropriately in that scenario without interference of the algorithm's copy.
-            this.config = configurationSet.Clone();
-            this.config.Freeze();
-            this.ValidateConfiguration();
-            this.config.CompileExternalValidatorMapping();
-            this.config.Validate(this);
+            this.environment.Populations.Clear();
 
             this.currentGeneration = 0;
-
-            this.environment.Populations.Clear();
-            this.CreateComponents();
 
             foreach (IPlugin plugin in this.Plugins)
             {
@@ -223,19 +243,8 @@ namespace GenFx
                 componentConfig = this.config.FitnessEvaluator;
                 this.operators.FitnessEvaluator = (IFitnessEvaluator)componentConfig.CreateComponent(this);
 
-                if (this.config.Terminator == null)
-                {
-                    // If the user doesn't want a terminator, use the EmptyTerminator instead which 
-                    // never terminates.
-                    this.config.Terminator = new EmptyTerminatorConfiguration();
-                    componentConfig = this.config.Terminator;
-                    this.operators.Terminator = new EmptyTerminator(this);
-                }
-                else
-                {
-                    componentConfig = this.config.Terminator;
-                    this.operators.Terminator = (ITerminator)componentConfig.CreateComponent(this);
-                }
+                componentConfig = this.config.Terminator;
+                this.operators.Terminator = (ITerminator)componentConfig.CreateComponent(this);
 
                 if (this.ConfigurationSet.GeneticAlgorithm.StatisticsEnabled)
                 {
@@ -392,7 +401,7 @@ namespace GenFx
 
             if (this.operators.ElitismStrategy != null)
             {
-                return this.operators.ElitismStrategy.GetEliteGeneticEntities(currentPopulation);
+                return this.operators.ElitismStrategy.GetEliteEntities(currentPopulation);
             }
             else
             {
@@ -579,6 +588,7 @@ namespace GenFx
         /// the <see cref="RequiredComponentAttribute"/> that the <see cref="IGeneticAlgorithm"/> is not
         /// configured to use.
         /// </exception>
+        [SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
         [SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity")]
         protected internal void ValidateRequiredComponents(Type type)
         {
@@ -670,9 +680,9 @@ namespace GenFx
                 else if (attribs[i] is RequiredStatisticAttribute)
                 {
                     bool foundRequiredType = false;
-                    for (int statIndex = 0; statIndex < this.config.Statistics.Count; statIndex++)
+                    foreach (IStatisticConfiguration statConfig in this.config.Statistics)
                     {
-                        if (!attribs[i].RequiredType.IsAssignableFrom(this.config.Statistics[statIndex].ComponentType))
+                        if (!attribs[i].RequiredType.IsAssignableFrom(statConfig.ComponentType))
                         {
                             foundRequiredType = true;
                             break;
@@ -681,14 +691,8 @@ namespace GenFx
 
                     if (!foundRequiredType)
                     {
-                        Type[] statTypes = new Type[this.config.Statistics.Count];
-                        for (int statIndex = 0; statIndex < statTypes.Length; statIndex++)
-                        {
-                            statTypes[statIndex] = this.config.Statistics[statIndex].ComponentType;
-                        }
-
-                        configuredType = statTypes
-                            .Select(statType => statType.FullName)
+                        configuredType = this.config.Statistics
+                            .Select(s => s.ComponentType.FullName)
                             .Aggregate((type1, type2) => type1 + ", " + type2);
 
                         configurableTypeCommonName = FwkResources.StatisticCommonName;
@@ -788,7 +792,6 @@ namespace GenFx
                     if (isAlgorithmComplete)
                     {
                         this.isInitialized = false;
-                        this.config.Unfreeze();
                     }
                 }
             }
@@ -849,50 +852,6 @@ namespace GenFx
 
             await this.environment.EvaluateFitnessAsync();
             return this.RaiseFitnessEvaluatedEvent();
-        }
-
-        /// <summary>
-        /// Represents a <see cref="ITerminator"/> that never completes.
-        /// </summary>
-        private class EmptyTerminator : ITerminator
-        {
-            /// <summary>
-            /// Initializes a new instance of the <see cref="EmptyTerminator"/> class.
-            /// </summary>
-            /// <param name="algorithm"><see cref="IGeneticAlgorithm"/> using this <see cref="EmptyTerminator"/>.</param>
-            public EmptyTerminator(IGeneticAlgorithm algorithm)
-            {
-            }
-
-            /// <summary>
-            /// Returns whether the genetic algorithm should stop executing.
-            /// </summary>
-            /// <returns>Always returns false.</returns>
-            public bool IsComplete()
-            {
-                return false;
-            }
-
-            public void RestoreState(KeyValueMap state)
-            {
-            }
-
-            public void SetSaveState(KeyValueMap state)
-            {
-            }
-        }
-
-        /// <summary>
-        /// Represents the configuration of <see cref="EmptyTerminator"/>.
-        /// </summary>
-        private class EmptyTerminatorConfiguration : ITerminatorConfiguration
-        {
-            public Type ComponentType { get { return typeof(EmptyTerminator); } }
-
-            public IGeneticComponent CreateComponent(IGeneticAlgorithm algorithm)
-            {
-                return new EmptyTerminator(algorithm);
-            }
         }
     }
 }
