@@ -1,5 +1,4 @@
 ﻿using System;
-using GenFx.Properties;
 
 namespace GenFx.Validation
 {
@@ -8,15 +7,13 @@ namespace GenFx.Validation
     /// </summary>
     public sealed class IntegerValidator : Validator
     {
-        private int minValue;
-        private int maxValue;
-
         /// <summary>
         /// Gets the maximum value the integer can have in order to be valid.
         /// </summary>
         public int MaxValue
         {
-            get { return this.maxValue; }
+            get;
+            private set;
         }
 
         /// <summary>
@@ -24,7 +21,8 @@ namespace GenFx.Validation
         /// </summary>
         public int MinValue
         {
-            get { return this.minValue; }
+            get;
+            private set;
         }
 
         /// <summary>
@@ -37,11 +35,11 @@ namespace GenFx.Validation
         {
             if (minValue > maxValue)
             {
-                throw new ArgumentOutOfRangeException(FwkResources.ErrorMsg_InvalidMinMaxRange);
+                throw new ArgumentOutOfRangeException(Resources.ErrorMsg_InvalidMinMaxRange);
             }
 
-            this.minValue = minValue;
-            this.maxValue = maxValue;
+            this.MinValue = minValue;
+            this.MaxValue = maxValue;
         }
 
         /// <summary>
@@ -57,7 +55,7 @@ namespace GenFx.Validation
         {
             if (String.IsNullOrEmpty(propertyName))
             {
-                throw new ArgumentException(FwkResources.ErrorMsg_StringNullOrEmpty, nameof(propertyName));
+                throw new ArgumentException(Resources.ErrorMsg_StringNullOrEmpty, nameof(propertyName));
             }
 
             bool isValid;
@@ -68,7 +66,7 @@ namespace GenFx.Validation
                 isValid = false;
             }
 
-            if (intValue >= this.minValue && intValue <= this.maxValue)
+            if (intValue >= this.MinValue && intValue <= this.MaxValue)
             {
                 isValid = true;
             }
@@ -79,14 +77,14 @@ namespace GenFx.Validation
 
             if (!isValid)
             {
-                if (this.minValue == this.maxValue)
+                if (this.MinValue == this.MaxValue)
                 {
-                    errorMessage = StringUtil.GetFormattedString(FwkResources.ErrorMsg_InvalidProperty_Exact, propertyName, this.minValue);
+                    errorMessage = StringUtil.GetFormattedString(Resources.ErrorMsg_InvalidProperty_Exact, propertyName, this.MinValue);
                 }
                 else
                 {
-                    errorMessage = StringUtil.GetFormattedString(FwkResources.ErrorMsg_InvalidIntegerProperty,
-                      propertyName, this.minValue, this.maxValue);
+                    errorMessage = StringUtil.GetFormattedString(Resources.ErrorMsg_InvalidIntegerProperty,
+                      propertyName, this.MinValue, this.MaxValue);
                 }
             }
             else

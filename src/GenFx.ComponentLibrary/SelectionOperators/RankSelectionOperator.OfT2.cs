@@ -18,6 +18,8 @@ namespace GenFx.ComponentLibrary.SelectionOperators
     /// when <b>RankSelectionOperator</b> is being used since absolute differences in fitness are ignored.
     /// </para>
     /// </remarks>
+    /// <typeparam name="TSelection">Type of the deriving selection operator class.</typeparam>
+    /// <typeparam name="TConfiguration">Type of the associated configuration class.</typeparam>
     public abstract class RankSelectionOperator<TSelection, TConfiguration> : SelectionOperatorBase<TSelection, TConfiguration>
         where TSelection : RankSelectionOperator<TSelection, TConfiguration>
         where TConfiguration : RankSelectionOperatorConfiguration<TConfiguration, TSelection>

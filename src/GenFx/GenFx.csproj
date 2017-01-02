@@ -108,18 +108,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ComponentAttribute.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="ComponentConfigurationSet.cs" />
-    <Compile Include="ComponentException.cs" />
-    <Compile Include="ComponentModel\ComponentConfiguration.OfT2.cs" />
-    <Compile Include="ComponentModel\ComponentConfigurationHelper.cs" />
-    <Compile Include="ComponentModel\ComponentHelper.cs" />
-    <Compile Include="ComponentModel\GeneticComponent.OfT2.cs" />
-    <Compile Include="ComponentModel\GeneticComponentExtensions.cs" />
     <Compile Include="ComponentModel\ComponentConfiguration.cs" />
+    <Compile Include="ComponentModel\ComponentConfigurationExtensions.cs" />
     <Compile Include="ComponentModel\GeneticComponent.cs" />
+    <Compile Include="ComponentModel\GeneticComponentExtensions.cs" />
+    <Compile Include="ComponentModel\IConfigurationForComponentWithAlgorithm.cs" />
     <Compile Include="DefaultTerminator.cs" />
     <Compile Include="DefaultTerminatorConfiguration.cs" />
     <Compile Include="EnumerableExtensions.cs" />
@@ -155,7 +149,6 @@
     <Compile Include="Validation\FitnessEvaluationModeValidatorAttribute.cs" />
     <Compile Include="Validation\FitnessTypeValidator.cs" />
     <Compile Include="Validation\FitnessTypeValidatorAttribute.cs" />
-    <Compile Include="Validation\GenericValidatorAttribute.cs" />
     <Compile Include="Validation\IntegerValidator.cs" />
     <Compile Include="Validation\IntegerValidatorAttribute.cs" />
     <Compile Include="Validation\Validator.cs" />
@@ -176,12 +169,12 @@
     <Compile Include="ICrossoverOperator.cs">
     </Compile>
     <Compile Include="IMutationOperator.cs" />
-    <Compile Include="Properties\FwkResources.Designer.cs">
+    <Compile Include="Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>FwkResources.resx</DependentUpon>
+      <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="ComponentModel\RequiredConfigurableTypeAttribute.cs" />
+    <Compile Include="Validation\RequiredConfigurableTypeAttribute.cs" />
     <Compile Include="ISelectionOperator.cs" />
     <Compile Include="IStatistic.cs" />
     <Compile Include="GeneticEnvironment.cs">
@@ -199,7 +192,7 @@
     <Compile Include="IPopulation.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Random.cs">
+    <Compile Include="RandomNumberService.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="StatisticResult.cs">
@@ -207,13 +200,13 @@
     </Compile>
     <Compile Include="ITerminator.cs" />
     <Compile Include="ValidationException.cs" />
+    <Compile Include="Validation\ValidatorExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Properties\FwkResources.resx">
+    <EmbeddedResource Include="Resources.resx">
       <SubType>Designer</SubType>
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>FwkResources.Designer.cs</LastGenOutput>
-      <CustomToolNamespace>GenFx.Properties</CustomToolNamespace>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

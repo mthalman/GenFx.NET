@@ -8,6 +8,8 @@ namespace GenFx.ComponentLibrary.Scaling
     /// objects which are common have a degraded fitness while rare <see cref="IGeneticEntity"/> objects are given a boost in
     /// fitness.
     /// </summary>
+    /// <typeparam name="TScaling">Type of the deriving fitness scaling strategy class.</typeparam>
+    /// <typeparam name="TConfiguration">Type of the associated configuration class.</typeparam>
     public abstract class FitnessSharingScalingStrategy<TScaling, TConfiguration> : FitnessScalingStrategyBase<TScaling, TConfiguration>
         where TScaling : FitnessSharingScalingStrategy<TScaling, TConfiguration>
         where TConfiguration : FitnessSharingScalingStrategyConfiguration<TConfiguration, TScaling>

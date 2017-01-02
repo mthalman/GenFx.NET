@@ -1,7 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Globalization;
-using GenFx.ComponentLibrary.Properties;
 
 namespace GenFx.ComponentLibrary.Algorithms
 {
@@ -46,10 +45,10 @@ namespace GenFx.ComponentLibrary.Algorithms
             if (value < 0)
             {
                 throw new ArgumentOutOfRangeException("value", value, StringUtil.GetFormattedString(
-                  LibResources.ErrorMsg_PopulationReplacementValue_LessThanZero, value));
+                  Resources.ErrorMsg_PopulationReplacementValue_LessThanZero, value));
             }
 
-            if (!ReplacementValueKindHelper.IsDefined(kind))
+            if (!Enum.IsDefined(typeof(ReplacementValueKind), kind))
             {
                 throw EnumHelper.CreateUndefinedEnumException(typeof(ReplacementValueKind), "kind");
             }

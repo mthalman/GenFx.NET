@@ -7,6 +7,8 @@ namespace GenFx.ComponentLibrary.Lists
     /// <summary>
     /// Represents the configuration of <see cref="MultiPointCrossoverOperator{TCrossover, TConfiguration}"/>.
     /// </summary>
+    /// <typeparam name="TConfiguration">Type of the deriving configuration class.</typeparam>
+    /// <typeparam name="TCrossover">Type of the associated crossover operator class.</typeparam>
     [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Multi")]
     [SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "MultiPoint")]
     public abstract class MultiPointCrossoverOperatorConfiguration<TConfiguration, TCrossover> : CrossoverOperatorConfigurationBase<TConfiguration, TCrossover>, IMultiPointCrossoverOperatorConfiguration
@@ -24,7 +26,7 @@ namespace GenFx.ComponentLibrary.Lists
         /// </summary>
         /// <exception cref="ValidationException">Value is not valid.</exception>
         [IntegerValidator(MinValue = CrossoverRateMin)]
-        [CustomValidator(typeof(MultiPointCrossoverOperationCrossoverPointValidator))]
+        [CustomValidator(typeof(MultiPointCrossoverOperatorCrossoverPointValidator))]
         public int CrossoverPointCount
         {
             get { return this.crossoverPointCount; }
@@ -34,7 +36,7 @@ namespace GenFx.ComponentLibrary.Lists
         /// <summary>
         /// Gets or sets a value indicating whether to use partially matched crossover.
         /// </summary>
-        [CustomValidator(typeof(MultiPointCrossoverOperationCrossoverPointValidator))]
+        [CustomValidator(typeof(MultiPointCrossoverOperatorCrossoverPointValidator))]
         public bool UsePartiallyMatchedCrossover
         {
             get { return this.usePartiallyMatchedCrossover; }

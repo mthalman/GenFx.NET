@@ -1,6 +1,4 @@
-﻿using GenFx.ComponentLibrary.Base;
-using GenFx.ComponentLibrary.Properties;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -55,7 +53,7 @@ namespace GenFx.ComponentLibrary.Lists
             {
                 if (value != this.genes.Count)
                 {
-                    throw new ArgumentException(LibResources.ErrorMsg_ListEntityLengthCannotBeChanged, nameof(value));
+                    throw new ArgumentException(Resources.ErrorMsg_ListEntityLengthCannotBeChanged, nameof(value));
                 }
             }
         }

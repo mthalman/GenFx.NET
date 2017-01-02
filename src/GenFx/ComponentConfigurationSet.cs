@@ -1,5 +1,4 @@
 using GenFx.ComponentModel;
-using GenFx.Properties;
 using GenFx.Validation;
 using System;
 using System.Collections.Generic;
@@ -252,19 +251,19 @@ namespace GenFx
         internal KeyValueMap SaveState()
         {
             KeyValueMap state = new KeyValueMap();
-            state[nameof(this.CrossoverOperator)] = ComponentConfigurationHelper.SaveComponentConfiguration(this.CrossoverOperator);
-            state[nameof(this.ElitismStrategy)] = ComponentConfigurationHelper.SaveComponentConfiguration(this.ElitismStrategy);
-            state[nameof(this.Entity)] = ComponentConfigurationHelper.SaveComponentConfiguration(this.entityConfiguration);
-            state[nameof(this.FitnessEvaluator)] = ComponentConfigurationHelper.SaveComponentConfiguration(this.fitnessEvaluatorConfiguration);
-            state[nameof(this.FitnessScalingStrategy)] = ComponentConfigurationHelper.SaveComponentConfiguration(this.FitnessScalingStrategy);
-            state[nameof(this.GeneticAlgorithm)] = ComponentConfigurationHelper.SaveComponentConfiguration(this.geneticAlgorithmConfiguration);
-            state[nameof(this.MutationOperator)] = ComponentConfigurationHelper.SaveComponentConfiguration(this.MutationOperator);
-            state[nameof(this.Population)] = ComponentConfigurationHelper.SaveComponentConfiguration(this.populationConfiguration);
-            state[nameof(this.SelectionOperator)] = ComponentConfigurationHelper.SaveComponentConfiguration(this.selectionOperatorConfiguration);
-            state[nameof(this.Terminator)] = ComponentConfigurationHelper.SaveComponentConfiguration(this.Terminator);
+            state[nameof(this.CrossoverOperator)] = this.CrossoverOperator.SaveState();
+            state[nameof(this.ElitismStrategy)] = this.ElitismStrategy.SaveState();
+            state[nameof(this.Entity)] = this.entityConfiguration.SaveState();
+            state[nameof(this.FitnessEvaluator)] = this.fitnessEvaluatorConfiguration.SaveState();
+            state[nameof(this.FitnessScalingStrategy)] = this.FitnessScalingStrategy.SaveState();
+            state[nameof(this.GeneticAlgorithm)] = this.geneticAlgorithmConfiguration.SaveState();
+            state[nameof(this.MutationOperator)] = this.MutationOperator.SaveState();
+            state[nameof(this.Population)] = this.populationConfiguration.SaveState();
+            state[nameof(this.SelectionOperator)] = this.selectionOperatorConfiguration.SaveState();
+            state[nameof(this.Terminator)] = this.Terminator.SaveState();
 
-            state[nameof(this.Plugins)] = new KeyValueMapCollection(this.pluginConfigurations.Select(c => ComponentConfigurationHelper.SaveComponentConfiguration(c)));
-            state[nameof(this.Statistics)] = new KeyValueMapCollection(this.statisticConfigurations.Select(c => ComponentConfigurationHelper.SaveComponentConfiguration(c)));
+            state[nameof(this.Plugins)] = new KeyValueMapCollection(this.pluginConfigurations.Select(c => c.SaveState()));
+            state[nameof(this.Statistics)] = new KeyValueMapCollection(this.statisticConfigurations.Select(c => c.SaveState()));
 
             state[nameof(this.isFrozen)] = this.isFrozen;
 
@@ -283,31 +282,31 @@ namespace GenFx
                 throw new ArgumentNullException(nameof(state));
             }
 
-            this.CrossoverOperator = (ICrossoverOperatorConfiguration)ComponentConfigurationHelper.RestoreComponentConfiguration(
+            this.CrossoverOperator = (ICrossoverOperatorConfiguration)ComponentConfigurationExtensions.RestoreComponentConfiguration(
                 (KeyValueMap)state[nameof(this.CrossoverOperator)]);
-            this.ElitismStrategy = (IElitismStrategyConfiguration)ComponentConfigurationHelper.RestoreComponentConfiguration(
+            this.ElitismStrategy = (IElitismStrategyConfiguration)ComponentConfigurationExtensions.RestoreComponentConfiguration(
                 (KeyValueMap)state[nameof(this.ElitismStrategy)]);
-            this.entityConfiguration = (IGeneticEntityConfiguration)ComponentConfigurationHelper.RestoreComponentConfiguration((KeyValueMap)state[nameof(this.Entity)]);
-            this.fitnessEvaluatorConfiguration = (IFitnessEvaluatorConfiguration)ComponentConfigurationHelper.RestoreComponentConfiguration(
+            this.entityConfiguration = (IGeneticEntityConfiguration)ComponentConfigurationExtensions.RestoreComponentConfiguration((KeyValueMap)state[nameof(this.Entity)]);
+            this.fitnessEvaluatorConfiguration = (IFitnessEvaluatorConfiguration)ComponentConfigurationExtensions.RestoreComponentConfiguration(
                 (KeyValueMap)state[nameof(this.FitnessEvaluator)]);
-            this.FitnessScalingStrategy = (IFitnessScalingStrategyConfiguration)ComponentConfigurationHelper.RestoreComponentConfiguration(
+            this.FitnessScalingStrategy = (IFitnessScalingStrategyConfiguration)ComponentConfigurationExtensions.RestoreComponentConfiguration(
                 (KeyValueMap)state[nameof(this.FitnessScalingStrategy)]);
-            this.geneticAlgorithmConfiguration = (IGeneticAlgorithmConfiguration)ComponentConfigurationHelper.RestoreComponentConfiguration(
+            this.geneticAlgorithmConfiguration = (IGeneticAlgorithmConfiguration)ComponentConfigurationExtensions.RestoreComponentConfiguration(
                 (KeyValueMap)state[nameof(this.GeneticAlgorithm)]);
-            this.MutationOperator = (IMutationOperatorConfiguration)ComponentConfigurationHelper.RestoreComponentConfiguration(
+            this.MutationOperator = (IMutationOperatorConfiguration)ComponentConfigurationExtensions.RestoreComponentConfiguration(
                 (KeyValueMap)state[nameof(this.MutationOperator)]);
-            this.populationConfiguration = (IPopulationConfiguration)ComponentConfigurationHelper.RestoreComponentConfiguration(
+            this.populationConfiguration = (IPopulationConfiguration)ComponentConfigurationExtensions.RestoreComponentConfiguration(
                 (KeyValueMap)state[nameof(this.Population)]);
-            this.selectionOperatorConfiguration = (ISelectionOperatorConfiguration)ComponentConfigurationHelper.RestoreComponentConfiguration(
+            this.selectionOperatorConfiguration = (ISelectionOperatorConfiguration)ComponentConfigurationExtensions.RestoreComponentConfiguration(
                 (KeyValueMap)state[nameof(this.SelectionOperator)]);
-            this.Terminator = (ITerminatorConfiguration)ComponentConfigurationHelper.RestoreComponentConfiguration(
+            this.Terminator = (ITerminatorConfiguration)ComponentConfigurationExtensions.RestoreComponentConfiguration(
                 (KeyValueMap)state[nameof(this.Terminator)]);
 
             this.pluginConfigurations = new HashSet<IPluginConfiguration>();
-            this.pluginConfigurations.AddRange(((KeyValueMapCollection)state[nameof(this.Plugins)]).Select(d => ComponentConfigurationHelper.RestoreComponentConfiguration(d)).Cast<IPluginConfiguration>());
+            this.pluginConfigurations.AddRange(((KeyValueMapCollection)state[nameof(this.Plugins)]).Select(d => ComponentConfigurationExtensions.RestoreComponentConfiguration(d)).Cast<IPluginConfiguration>());
 
             this.statisticConfigurations = new HashSet<IStatisticConfiguration>();
-            this.statisticConfigurations.AddRange(((KeyValueMapCollection)state[nameof(this.Statistics)]).Select(d => ComponentConfigurationHelper.RestoreComponentConfiguration(d)).Cast<IStatisticConfiguration>());
+            this.statisticConfigurations.AddRange(((KeyValueMapCollection)state[nameof(this.Statistics)]).Select(d => ComponentConfigurationExtensions.RestoreComponentConfiguration(d)).Cast<IStatisticConfiguration>());
 
             this.isFrozen = (bool)state[nameof(this.isFrozen)];
         }
@@ -317,11 +316,14 @@ namespace GenFx
             this.isFrozen = true;
         }
 
+        /// <summary>
+        /// Throws an exception if the object is currently frozen.
+        /// </summary>
         private void EnsureNotFrozen()
         {
             if (this.isFrozen)
             {
-                throw new InvalidOperationException(FwkResources.ErrorMsg_ComponentConfigurationSetIsFrozen);
+                throw new InvalidOperationException(Resources.ErrorMsg_ComponentConfigurationSetIsFrozen);
             }
         }
 
@@ -340,20 +342,19 @@ namespace GenFx
             if (componentConfig == null)
             {
                 throw new ArgumentException(StringUtil.GetFormattedString(
-                  FwkResources.ErrorMsg_NoCorrespondingComponentConfiguration, component.GetType().FullName), nameof(component));
+                  Resources.ErrorMsg_NoCorrespondingComponentConfiguration, component.GetType().FullName), nameof(component));
             }
             else if (componentConfig.ComponentType != component.GetType())
             {
                 throw new ArgumentException(StringUtil.GetFormattedString(
-                  FwkResources.ErrorMsg_ComponentConfigurationTypeMismatch,
+                  Resources.ErrorMsg_ComponentConfigurationTypeMismatch,
                   componentConfig.GetType().FullName, component.GetType().FullName), nameof(component));
             }
 
             componentConfig.Validate();
 
             IEnumerable<PropertyInfo> properties = componentConfig.GetType()
-                .GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.FlattenHierarchy)
-                .Where(p => p.DeclaringType != typeof(ComponentConfiguration));
+                .GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.FlattenHierarchy);
             foreach (PropertyInfo propertyInfo in properties)
             {
                 // Check that the property is valid using the validators described by external components.
@@ -363,7 +364,7 @@ namespace GenFx
                     object propValue = propertyInfo.GetValue(this, null);
                     foreach (Validator validator in externalValidators)
                     {
-                        ComponentHelper.CheckValidation(validator, componentConfig.GetType().Name + Type.Delimiter + propertyInfo.Name, propValue, componentConfig);
+                        validator.EnsureIsValid(componentConfig.GetType().Name + Type.Delimiter + propertyInfo.Name, propValue, componentConfig);
                     }
                 }
             }

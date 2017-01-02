@@ -19,25 +19,4 @@
         /// </summary>
         Percentage
     }
-
-    /// <summary>
-    /// Contains helper methods for the <see cref="ReplacementValueKind"/> enum.
-    /// </summary>
-    internal static class ReplacementValueKindHelper
-    {
-        /// <summary>
-        /// Returns whether the <paramref name="valueKind"/> is a defined value.
-        /// </summary>
-        /// <param name="valueKind">The <see cref="ReplacementValueKind"/> to check.</param>
-        /// <returns>True if the value is defined; otherwise, false.</returns>
-        public static bool IsDefined(ReplacementValueKind valueKind)
-        {
-            if (valueKind < ReplacementValueKind.FixedCount || valueKind > ReplacementValueKind.Percentage)
-            {
-                return false;
-            }
-
-            return true;
-        }
-    }
 }

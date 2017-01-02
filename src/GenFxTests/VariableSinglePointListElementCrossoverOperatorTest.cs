@@ -19,7 +19,7 @@ namespace GenFxTests
         [TestCleanup]
         public void Cleanup()
         {
-            RandomHelper.Instance = new RandomHelper();
+            RandomNumberService.Instance = new RandomNumberService();
         }
 
         /// <summary>
@@ -65,7 +65,7 @@ namespace GenFxTests
             entity2[5] = true;
 
             TestRandomUtil randomUtil = new TestRandomUtil();
-            RandomHelper.Instance = randomUtil;
+            RandomNumberService.Instance = randomUtil;
 
             randomUtil.RandomVal1 = 1;
             randomUtil.RandomVal2 = 5;
@@ -78,7 +78,7 @@ namespace GenFxTests
             Assert.AreEqual("11000001", resultEntity2.Representation, "Crossover not correct.");
 
             randomUtil = new TestRandomUtil();
-            RandomHelper.Instance = randomUtil;
+            RandomNumberService.Instance = randomUtil;
             randomUtil.RandomVal1 = 3;
             randomUtil.RandomVal2 = 2;
             result = op.Crossover(entity1, entity2);
@@ -90,7 +90,7 @@ namespace GenFxTests
             Assert.AreEqual("111", resultEntity2.Representation, "Crossover not correct.");
         }
 
-        private class TestRandomUtil : IRandomHelper
+        private class TestRandomUtil : IRandomNumberService
         {
             internal int RandomVal1;
             internal int RandomVal2;
@@ -107,9 +107,9 @@ namespace GenFxTests
                 return RandomVal2;
             }
 
-            public double GetRandomRatio()
+            public double GetRandomPercentRatio()
             {
-                return new RandomHelper().GetRandomRatio();
+                return new RandomNumberService().GetRandomPercentRatio();
             }
 
             public int GetRandomValue(int minValue, int maxValue)

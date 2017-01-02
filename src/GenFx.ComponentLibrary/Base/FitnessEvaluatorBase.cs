@@ -1,3 +1,4 @@
+using GenFx.ComponentLibrary.ComponentModel;
 using GenFx.ComponentModel;
 using System;
 using System.Threading.Tasks;
@@ -21,6 +22,8 @@ namespace GenFx.ComponentLibrary.Base
     /// property.
     /// </para>
     /// </remarks>
+    /// <typeparam name="TFitness">Type of the deriving fitness evaluator class.</typeparam>
+    /// <typeparam name="TConfiguration">Type of the associated configuration class.</typeparam>
     public abstract class FitnessEvaluatorBase<TFitness, TConfiguration> : GeneticComponentWithAlgorithm<TFitness, TConfiguration>, IFitnessEvaluator
         where TFitness : FitnessEvaluatorBase<TFitness, TConfiguration>
         where TConfiguration : FitnessEvaluatorConfigurationBase<TConfiguration, TFitness>

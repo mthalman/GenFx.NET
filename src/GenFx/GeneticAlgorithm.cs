@@ -1,5 +1,5 @@
 using GenFx.ComponentModel;
-using GenFx.Properties;
+using GenFx.Validation;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -16,6 +16,8 @@ namespace GenFx
     /// <summary>
     /// Provides the abstract base class for a type of genetic algorithm.
     /// </summary>
+    /// <typeparam name="TAlgorithm">Type of the deriving algorithm class.</typeparam>
+    /// <typeparam name="TConfiguration">Type of the associated configuration class.</typeparam>
     [SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
     public abstract class GeneticAlgorithm<TAlgorithm, TConfiguration> : GeneticComponent<TAlgorithm, TConfiguration>, IGeneticAlgorithm
         where TAlgorithm : GeneticAlgorithm<TAlgorithm, TConfiguration>
@@ -90,7 +92,7 @@ namespace GenFx
             if (!(configurationSet.GeneticAlgorithm is TConfiguration))
             {
                 throw new ArgumentException(StringUtil.GetFormattedString(
-                  FwkResources.ErrorMsg_ComponentConfigurationTypeMismatch,
+                  Resources.ErrorMsg_ComponentConfigurationTypeMismatch,
                   typeof(TConfiguration).FullName, typeof(TAlgorithm).FullName), nameof(configurationSet));
             }
 
@@ -212,7 +214,7 @@ namespace GenFx
 
         private void CreateComponents()
         {
-            IComponentConfiguration componentConfig = null;
+            IConfigurationForComponentWithAlgorithm componentConfig = null;
             try
             {
                 // Set optional operators
@@ -246,17 +248,16 @@ namespace GenFx
                 componentConfig = this.config.Terminator;
                 this.operators.Terminator = (ITerminator)componentConfig.CreateComponent(this);
 
-                if (this.ConfigurationSet.GeneticAlgorithm.StatisticsEnabled)
-                {
-                    this.statistics.Clear();
+                this.statistics.Clear();
 
-                    foreach (IStatisticConfiguration statConfig in this.config.Statistics)
-                    {
-                        componentConfig = statConfig;
-                        IStatistic stat = (IStatistic)componentConfig.CreateComponent(this);
-                        this.statistics.Add(stat);
-                    }
+                foreach (IStatisticConfiguration statConfig in this.config.Statistics)
+                {
+                    componentConfig = statConfig;
+                    IStatistic stat = (IStatistic)componentConfig.CreateComponent(this);
+                    this.statistics.Add(stat);
                 }
+
+                this.plugins.Clear();
 
                 foreach (IPluginConfiguration pluginConfig in this.ConfigurationSet.Plugins)
                 {
@@ -266,7 +267,7 @@ namespace GenFx
             }
             catch (TargetInvocationException e)
             {
-                throw new InvalidOperationException(StringUtil.GetFormattedString(FwkResources.ErrorMsg_ErrorCreatingComponent, componentConfig.GetType().FullName, e.InnerException.Message), e.InnerException);
+                throw new InvalidOperationException(StringUtil.GetFormattedString(Resources.ErrorMsg_ErrorCreatingComponent, componentConfig.GetType().FullName, e.InnerException.Message), e.InnerException);
             }
         }
 
@@ -532,7 +533,7 @@ namespace GenFx
             if (missingComponent != null)
             {
                 throw new InvalidOperationException(
-                  StringUtil.GetFormattedString(FwkResources.ErrorMsg_MissingOperatorType,
+                  StringUtil.GetFormattedString(Resources.ErrorMsg_MissingOperatorType,
                     typeof(ComponentConfigurationSet).FullName, missingComponent));
             }
 
@@ -609,7 +610,7 @@ namespace GenFx
                 {
                     if (!attribs[i].RequiredType.IsAssignableFrom(this.config.CrossoverOperator.ComponentType))
                     {
-                        configurableTypeCommonName = FwkResources.CrossoverCommonName;
+                        configurableTypeCommonName = Resources.CrossoverCommonName;
                         configuredType = this.config.CrossoverOperator.ComponentType.FullName;
                     }
                 }
@@ -617,7 +618,7 @@ namespace GenFx
                 {
                     if (!attribs[i].RequiredType.IsAssignableFrom(this.config.ElitismStrategy.ComponentType))
                     {
-                        configurableTypeCommonName = FwkResources.ElitismCommonName;
+                        configurableTypeCommonName = Resources.ElitismCommonName;
                         configuredType = this.config.ElitismStrategy.ComponentType.FullName;
                     }
                 }
@@ -625,7 +626,7 @@ namespace GenFx
                 {
                     if (!attribs[i].RequiredType.IsAssignableFrom(this.config.FitnessEvaluator.ComponentType))
                     {
-                        configurableTypeCommonName = FwkResources.FitnessEvaluatorCommonName;
+                        configurableTypeCommonName = Resources.FitnessEvaluatorCommonName;
                         configuredType = this.config.FitnessEvaluator.ComponentType.FullName;
                     }
                 }
@@ -633,7 +634,7 @@ namespace GenFx
                 {
                     if (!attribs[i].RequiredType.IsAssignableFrom(this.config.FitnessScalingStrategy.ComponentType))
                     {
-                        configurableTypeCommonName = FwkResources.FitnessScalingCommonName;
+                        configurableTypeCommonName = Resources.FitnessScalingCommonName;
                         configuredType = this.config.FitnessScalingStrategy.ComponentType.FullName;
                     }
                 }
@@ -641,7 +642,7 @@ namespace GenFx
                 {
                     if (!attribs[i].RequiredType.IsAssignableFrom(this.GetType()))
                     {
-                        configurableTypeCommonName = FwkResources.GeneticAlgorithmCommonName;
+                        configurableTypeCommonName = Resources.GeneticAlgorithmCommonName;
                         configuredType = this.GetType().FullName;
                     }
                 }
@@ -649,7 +650,7 @@ namespace GenFx
                 {
                     if (!attribs[i].RequiredType.IsAssignableFrom(this.config.Entity.ComponentType))
                     {
-                        configurableTypeCommonName = FwkResources.EntityCommonName;
+                        configurableTypeCommonName = Resources.EntityCommonName;
                         configuredType = this.config.Entity.ComponentType.FullName;
                     }
                 }
@@ -657,7 +658,7 @@ namespace GenFx
                 {
                     if (!attribs[i].RequiredType.IsAssignableFrom(this.config.MutationOperator.ComponentType))
                     {
-                        configurableTypeCommonName = FwkResources.MutationCommonName;
+                        configurableTypeCommonName = Resources.MutationCommonName;
                         configuredType = this.config.MutationOperator.ComponentType.FullName;
                     }
                 }
@@ -665,7 +666,7 @@ namespace GenFx
                 {
                     if (!attribs[i].RequiredType.IsAssignableFrom(this.config.Population.ComponentType))
                     {
-                        configurableTypeCommonName = FwkResources.PopulationCommonName;
+                        configurableTypeCommonName = Resources.PopulationCommonName;
                         configuredType = this.config.Population.ComponentType.FullName;
                     }
                 }
@@ -673,7 +674,7 @@ namespace GenFx
                 {
                     if (!attribs[i].RequiredType.IsAssignableFrom(this.config.SelectionOperator.ComponentType))
                     {
-                        configurableTypeCommonName = FwkResources.SelectionCommonName;
+                        configurableTypeCommonName = Resources.SelectionCommonName;
                         configuredType = this.config.SelectionOperator.ComponentType.FullName;
                     }
                 }
@@ -695,14 +696,14 @@ namespace GenFx
                             .Select(s => s.ComponentType.FullName)
                             .Aggregate((type1, type2) => type1 + ", " + type2);
 
-                        configurableTypeCommonName = FwkResources.StatisticCommonName;
+                        configurableTypeCommonName = Resources.StatisticCommonName;
                     }
                 }
                 else if (attribs[i] is RequiredTerminatorAttribute)
                 {
                     if (!attribs[i].RequiredType.IsAssignableFrom(this.config.Terminator.ComponentType))
                     {
-                        configurableTypeCommonName = FwkResources.TerminatorCommonName;
+                        configurableTypeCommonName = Resources.TerminatorCommonName;
                         configuredType = this.config.Terminator.ComponentType.FullName;
                     }
                 }
@@ -710,7 +711,7 @@ namespace GenFx
                 if (configurableTypeCommonName != null)
                 {
                     throw new InvalidOperationException(
-                        StringUtil.GetFormattedString(FwkResources.ErrorMsg_NoRequiredConfigurableType,
+                        StringUtil.GetFormattedString(Resources.ErrorMsg_NoRequiredConfigurableType,
                           type.FullName, configurableTypeCommonName.ToLower(CultureInfo.CurrentCulture), attribs[i].RequiredType.FullName, configuredType));
                 }
             }
@@ -724,7 +725,7 @@ namespace GenFx
             if (!this.isInitialized)
             {
                 throw new InvalidOperationException(
-                  StringUtil.GetFormattedString(FwkResources.ErrorMsg_AlgorithmNotInitialized, "Initialize"));
+                  StringUtil.GetFormattedString(Resources.ErrorMsg_AlgorithmNotInitialized, "Initialize"));
             }
         }
 

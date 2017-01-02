@@ -1,5 +1,6 @@
 ﻿using GenFx.ComponentLibrary.Base;
 using GenFx.ComponentModel;
+using GenFx.Validation;
 using System;
 
 namespace GenFx.ComponentLibrary.Lists
@@ -10,6 +11,8 @@ namespace GenFx.ComponentLibrary.Lists
     /// <remarks>
     /// Inversion operates upon a list, causing the values of two list positions to become swapped.
     /// </remarks>
+    /// <typeparam name="TInversion">Type of the deriving mutation operator class.</typeparam>
+    /// <typeparam name="TConfiguration">Type of the associated configuration class.</typeparam>
     [RequiredEntity(typeof(IListEntityBase))]
     public abstract class InversionOperator<TInversion, TConfiguration> : MutationOperatorBase<TInversion, TConfiguration>
         where TInversion : InversionOperator<TInversion, TConfiguration>
@@ -41,13 +44,13 @@ namespace GenFx.ComponentLibrary.Lists
             }
 
             IListEntityBase listEntity = (IListEntityBase)entity;
-            if (RandomHelper.Instance.GetRandomRatio() <= this.Configuration.MutationRate)
+            if (RandomNumberService.Instance.GetRandomPercentRatio() <= this.Configuration.MutationRate)
             {
-                int firstPosition = RandomHelper.Instance.GetRandomValue(listEntity.Length - 1);
+                int firstPosition = RandomNumberService.Instance.GetRandomValue(listEntity.Length - 1);
                 int secondPosition;
                 do
                 {
-                    secondPosition = RandomHelper.Instance.GetRandomValue(listEntity.Length - 1);
+                    secondPosition = RandomNumberService.Instance.GetRandomValue(listEntity.Length - 1);
                 } while (secondPosition == firstPosition);
 
                 object firstValue = listEntity[firstPosition];

@@ -1,4 +1,3 @@
-using GenFx.ComponentLibrary.Properties;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -167,7 +166,7 @@ namespace GenFx.ComponentLibrary.Trees
         {
             if (this.fixedSizeCount.HasValue)
             {
-                throw new InvalidOperationException(LibResources.ErrorMsg_TreeNodeCollectionCountError);
+                throw new InvalidOperationException(Resources.ErrorMsg_TreeNodeCollectionCountError);
             }
         }
     }

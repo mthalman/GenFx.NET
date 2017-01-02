@@ -1,3 +1,4 @@
+using GenFx.ComponentLibrary.ComponentModel;
 using GenFx.ComponentModel;
 using System;
 using System.Collections.Generic;
@@ -17,6 +18,8 @@ namespace GenFx.ComponentLibrary.Base
     /// which <see cref="IGeneticAlgorithm"/> is used.
     /// </remarks>
     /// <seealso cref="IGeneticAlgorithm"/>
+    /// <typeparam name="TPopulation">Type of the deriving population class.</typeparam>
+    /// <typeparam name="TConfiguration">Type of the associated configuration class.</typeparam>
     public abstract class PopulationBase<TPopulation, TConfiguration> : GeneticComponentWithAlgorithm<TPopulation, TConfiguration>, IPopulation
         where TPopulation : PopulationBase<TPopulation, TConfiguration>
         where TConfiguration : PopulationConfigurationBase<TConfiguration, TPopulation>

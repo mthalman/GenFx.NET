@@ -7,7 +7,6 @@ namespace GenFx.ComponentLibrary.Terminators
     /// <summary>
     /// Represents the configuration of <see cref="FitnessTargetTerminator"/>.
     /// </summary>
-    [Component(typeof(FitnessTargetTerminator))]
     public sealed class FitnessTargetTerminatorConfiguration : TerminatorConfigurationBase<FitnessTargetTerminatorConfiguration, FitnessTargetTerminator>
     {
         private const FitnessType DefaultFitnessValueType = FitnessType.Scaled;

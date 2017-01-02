@@ -1,5 +1,4 @@
 ﻿using GenFx.ComponentLibrary.Base;
-using GenFx.ComponentLibrary.Properties;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -59,7 +58,7 @@ namespace GenFx.ComponentLibrary.Lists
             {
                 if (!(value is TItem))
                 {
-                    throw new ArgumentException(StringUtil.GetFormattedString(LibResources.ErrorMsg_ListEntityBase_InvalidItemType, value?.GetType(), typeof(TItem)), nameof(value));
+                    throw new ArgumentException(StringUtil.GetFormattedString(Resources.ErrorMsg_ListEntityBase_InvalidItemType, value?.GetType(), typeof(TItem)), nameof(value));
                 }
 
                 this[index] = (TItem)value;
@@ -98,7 +97,7 @@ namespace GenFx.ComponentLibrary.Lists
         {
             if (IsFixedSize)
             {
-                throw new NotSupportedException(StringUtil.GetFormattedString(LibResources.ErrorMsg_ListEntityBase_FixedSize));
+                throw new NotSupportedException(StringUtil.GetFormattedString(Resources.ErrorMsg_ListEntityBase_FixedSize));
             }
 
             int index = this.Length++;

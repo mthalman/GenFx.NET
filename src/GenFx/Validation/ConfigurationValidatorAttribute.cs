@@ -4,7 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 namespace GenFx.Validation
 {
     /// <summary>
-    /// Indicates how a property should be validated when set.
+    /// Indicates how a configuration property should be validated when set.
     /// </summary>
     public abstract class ConfigurationValidatorAttribute : Attribute
     {
@@ -49,7 +49,7 @@ namespace GenFx.Validation
     /// have a specific length.<br />
     /// Note to developers: if creating your own <see cref="ConfigurationValidatorAttribute"/>, it is a best
     /// practice to also create a version of the attribute that implements the <see cref="IExternalConfigurationValidatorAttribute"/>
-    /// interface.  This allows third-party developers to use your attribute like they would a GenFx attribute.
+    /// interface.  This allows third-party developers to use your attribute like they would a built-in GenFx attribute.
     /// </remarks>
     [SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix")]
     public interface IExternalConfigurationValidatorAttribute

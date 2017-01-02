@@ -14,11 +14,5 @@ namespace GenFx
         /// The number of populations that are contained by the <see cref="GeneticEnvironment"/>.
         /// </value>
         int EnvironmentSize { get; set; }
-
-        /// <summary>
-        /// Gets or sets whether statistics should be calculated during genetic algorithm execution.
-        /// </summary>
-        /// <value>True if statistics should be calculated; otherwise, false.</value>
-        bool StatisticsEnabled { get; set; }
     }
 }

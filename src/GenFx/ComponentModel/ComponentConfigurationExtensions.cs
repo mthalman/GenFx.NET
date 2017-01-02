@@ -6,16 +6,16 @@ using System.Reflection;
 namespace GenFx.ComponentModel
 {
     /// <summary>
-    /// Contains helper methods for <see cref="IComponentConfiguration"/>.
+    /// Contains extension methods for <see cref="IComponentConfiguration"/>.
     /// </summary>
-    public static class ComponentConfigurationHelper
+    public static class ComponentConfigurationExtensions
     {
         /// <summary>
         /// Saves the state of <paramref name="configuration"/> into a <see cref="KeyValueMap"/>.
         /// </summary>
         /// <param name="configuration">The <see cref="IComponentConfiguration"/> whose state should be saved.</param>
         /// <returns>A <see cref="KeyValueMap"/> containing the state of the <paramref name="configuration"/>.</returns>
-        public static KeyValueMap SaveComponentConfiguration(IComponentConfiguration configuration)
+        public static KeyValueMap SaveState(this IComponentConfiguration configuration)
         {
             if (configuration == null)
             {
@@ -52,7 +52,7 @@ namespace GenFx.ComponentModel
                 return null;
             }
 
-            ComponentConfiguration config = (ComponentConfiguration)Activator.CreateInstance(Type.GetType((string)state["$type"]));
+            IComponentConfiguration config = (IComponentConfiguration)Activator.CreateInstance(Type.GetType((string)state["$type"]));
 
             IEnumerable<PropertyInfo> properties = config.GetType().GetProperties().Where(p => p.CanRead && p.CanWrite);
             foreach (PropertyInfo property in properties)

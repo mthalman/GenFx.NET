@@ -7,6 +7,8 @@ namespace GenFx.ComponentLibrary.Scaling
     /// Provides fitness scaling by raising the fitness of a <see cref="IGeneticEntity"/> to the power of the
     /// value of the <see cref="ExponentialScalingStrategyConfiguration{TConfiguration, TScaling}.ScalingPower"/> property.
     /// </summary>
+    /// <typeparam name="TScaling">Type of the deriving fitness scaling strategy class.</typeparam>
+    /// <typeparam name="TConfiguration">Type of the associated configuration class.</typeparam>
     public abstract class ExponentialScalingStrategy<TScaling, TConfiguration> : FitnessScalingStrategyBase<TScaling, TConfiguration>
         where TScaling : ExponentialScalingStrategy<TScaling, TConfiguration>
         where TConfiguration : ExponentialScalingStrategyConfiguration<TConfiguration, TScaling>

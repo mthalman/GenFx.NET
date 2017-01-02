@@ -6,7 +6,7 @@ namespace GenFx
     /// Represents the configuration of <see cref="IPlugin"/>.
     /// </summary>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1040:AvoidEmptyInterfaces")]
-    public interface IPluginConfiguration : IComponentConfiguration
+    public interface IPluginConfiguration : IConfigurationForComponentWithAlgorithm
     {
     }
 }

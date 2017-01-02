@@ -1179,22 +1179,6 @@ namespace GenFxTests
             AssertEx.Throws<ValidationException>(() => target.EnvironmentSize = val);
         }
 
-        /// <summary>
-        /// Tests that GeneticAlgorithmConfiguration.StatisticsEnabled can be set to a valid value.
-        ///</summary>
-        [TestMethod()]
-        public void StatisticsEnabledTest()
-        {
-            SimpleGeneticAlgorithmConfiguration target = new SimpleGeneticAlgorithmConfiguration();
-            bool val = true;
-            target.StatisticsEnabled = val;
-            Assert.AreEqual(val, target.StatisticsEnabled, "StatisticsEnabled was not set correctly.");
-
-            val = false;
-            target.StatisticsEnabled = val;
-            Assert.AreEqual(val, target.StatisticsEnabled, "StatisticsEnabled was not set correctly.");
-        }
-
         private static void TestValidateConfiguration(ComponentConfigurationSet config, bool exceptionExpectedOnValidation = false)
         {
             if (exceptionExpectedOnValidation)

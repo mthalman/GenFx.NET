@@ -1,6 +1,6 @@
 using GenFx.ComponentLibrary.Base;
 using GenFx.ComponentLibrary.Trees;
-using GenFx.ComponentModel;
+using GenFx.Validation;
 using System;
 
 namespace GenFx.ComponentLibrary.Statistics

@@ -10,6 +10,8 @@ namespace GenFx.ComponentLibrary.SelectionOperators
     /// selected is directly proportional to its fitness value compared to the rest of the <see cref="IPopulation"/>
     /// to which it belongs.
     /// </summary>
+    /// <typeparam name="TSelection">Type of the deriving selection operator class.</typeparam>
+    /// <typeparam name="TConfiguration">Type of the associated configuration class.</typeparam>
     public abstract class FitnessProportionateSelectionOperator<TSelection, TConfiguration> : SelectionOperatorBase<TSelection, TConfiguration>
         where TSelection : FitnessProportionateSelectionOperator<TSelection, TConfiguration>
         where TConfiguration : FitnessProportionateSelectionOperatorConfiguration<TConfiguration, TSelection>

@@ -27,7 +27,7 @@ namespace GenFx
     }
 
     /// <summary>
-    /// 
+    /// List of <see cref="KeyValueMap"/> objects.
     /// </summary>
     public class KeyValueMapCollection : List<KeyValueMap>
     {

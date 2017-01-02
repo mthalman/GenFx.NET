@@ -53,36 +53,18 @@ namespace GenFxTests
         /// Tests that the EvaluateFitness method works correctly.
         /// </summary>
         [TestMethod]
-        public async Task Population_EvaluateFitness_NoScaling_NoStatistics_Async()
+        public async Task Population_EvaluateFitness_NoScaling_Async()
         {
-            await TestEvaluateFitnessAsync(false, false);
+            await TestEvaluateFitnessAsync(false);
         }
 
         /// <summary>
         /// Tests that the EvaluateFitness method works correctly.
         /// </summary>
         [TestMethod]
-        public async Task Population_EvaluateFitness_Scaling_NoStatistics_Async()
+        public async Task Population_EvaluateFitness_Scaling_Async()
         {
-            await TestEvaluateFitnessAsync(true, false);
-        }
-
-        /// <summary>
-        /// Tests that the EvaluateFitness method works correctly.
-        /// </summary>
-        [TestMethod]
-        public async Task Population_EvaluateFitness_NoScaling_Statistics_Async()
-        {
-            await TestEvaluateFitnessAsync(false, true);
-        }
-
-        /// <summary>
-        /// Tests that the EvaluateFitness method works correctly.
-        /// </summary>
-        [TestMethod]
-        public async Task Population_EvaluateFitness_Scaling_Statistics_Async()
-        {
-            await TestEvaluateFitnessAsync(true, true);
+            await TestEvaluateFitnessAsync(true);
         }
 
         /// <summary>
@@ -130,7 +112,7 @@ namespace GenFxTests
             AssertEx.Throws<ValidationException>(() => target.PopulationSize = 0);
         }
 
-        private static async Task TestEvaluateFitnessAsync(bool useScaling, bool useStatistics)
+        private static async Task TestEvaluateFitnessAsync(bool useScaling)
         {
             ComponentConfigurationSet config = new ComponentConfigurationSet
             {
@@ -138,10 +120,7 @@ namespace GenFxTests
                 Entity = new MockEntityConfiguration(),
                 Population = new SimplePopulationConfiguration(),
                 FitnessEvaluator = new MockFitnessEvaluatorConfiguration(),
-                GeneticAlgorithm = new MockGeneticAlgorithmConfiguration
-                {
-                    StatisticsEnabled = useStatistics
-                }
+                GeneticAlgorithm = new MockGeneticAlgorithmConfiguration()
             };
             
             if (useScaling)
@@ -182,16 +161,13 @@ namespace GenFxTests
                 Assert.AreEqual(entity2.RawFitnessValue, entity2.ScaledFitnessValue, "ScaledFitnessValue not set correctly.");
             }
 
-            if (useStatistics)
-            {
-                Assert.AreEqual(entity2.RawFitnessValue, population.RawMax, "RawMax not set correctly.");
-                Assert.AreEqual(entity1.RawFitnessValue, population.RawMin, "RawMax not set correctly.");
-                Assert.AreEqual((entity1.RawFitnessValue + entity2.RawFitnessValue) / 2, population.RawMean, "RawMean not set correctly.");
+            Assert.AreEqual(entity2.RawFitnessValue, population.RawMax, "RawMax not set correctly.");
+            Assert.AreEqual(entity1.RawFitnessValue, population.RawMin, "RawMax not set correctly.");
+            Assert.AreEqual((entity1.RawFitnessValue + entity2.RawFitnessValue) / 2, population.RawMean, "RawMean not set correctly.");
 
-                Assert.AreEqual(entity2.ScaledFitnessValue, population.ScaledMax, "ScaledMax not set correctly.");
-                Assert.AreEqual(entity1.ScaledFitnessValue, population.ScaledMin, "ScaledMin not set correctly.");
-                Assert.AreEqual((entity1.ScaledFitnessValue + entity2.ScaledFitnessValue) / 2, population.ScaledMean, "ScaledMean not set correctly.");
-            }
+            Assert.AreEqual(entity2.ScaledFitnessValue, population.ScaledMax, "ScaledMax not set correctly.");
+            Assert.AreEqual(entity1.ScaledFitnessValue, population.ScaledMin, "ScaledMin not set correctly.");
+            Assert.AreEqual((entity1.ScaledFitnessValue + entity2.ScaledFitnessValue) / 2, population.ScaledMean, "ScaledMean not set correctly.");
         }
 
         private class FakeFitnessScalingStrategy : FitnessScalingStrategyBase<FakeFitnessScalingStrategy, FakeFitnessScalingStrategyConfiguration>

@@ -82,9 +82,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\GenFx\EnumHelper.cs">
-      <Link>EnumHelper.cs</Link>
-    </Compile>
     <Compile Include="..\GenFx\StringUtil.cs">
       <Link>StringUtil.cs</Link>
     </Compile>
@@ -112,7 +109,7 @@
     <Compile Include="Base\FitnessEvaluatorBase.cs" />
     <Compile Include="Base\FitnessScalingStrategyConfigurationBase.cs" />
     <Compile Include="Base\FitnessScalingStrategyBase.cs" />
-    <Compile Include="Base\GeneticComponentWithAlgorithm.cs" />
+    <Compile Include="ComponentModel\GeneticComponentWithAlgorithm.cs" />
     <Compile Include="Base\GeneticEntityConfiguration.cs" />
     <Compile Include="Base\GeneticEntity.cs" />
     <Compile Include="Base\MutationOperatorConfigurationBase.cs" />
@@ -127,6 +124,7 @@
     <Compile Include="Base\StatisticBase.cs" />
     <Compile Include="Base\TerminatorConfigurationBase.cs" />
     <Compile Include="Base\TerminatorBase.cs" />
+    <Compile Include="ComponentModel\ConfigurationForComponentWithAlgorithm.cs" />
     <Compile Include="Elitism\ElitismStrategy.cs" />
     <Compile Include="Elitism\ElitismStrategyConfiguration.cs" />
     <Compile Include="Lists\BinaryStrings\BinaryStringEntityConfiguration.OfT2.cs" />
@@ -199,10 +197,10 @@
     <Compile Include="Plugins\StatisticLogger.OfT2.cs" />
     <Compile Include="Populations\SimplePopulation.cs" />
     <Compile Include="Populations\SimplePopulationConfiguration.cs" />
-    <Compile Include="Properties\LibResources.Designer.cs">
+    <Compile Include="Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>LibResources.resx</DependentUpon>
+      <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Scaling\ExponentialScalingStrategy.cs" />
     <Compile Include="Scaling\ExponentialScalingStrategyConfiguration.cs" />
@@ -285,10 +283,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Properties\LibResources.resx">
+    <EmbeddedResource Include="Resources.resx">
       <SubType>Designer</SubType>
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>LibResources.Designer.cs</LastGenOutput>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

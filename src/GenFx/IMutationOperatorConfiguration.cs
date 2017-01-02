@@ -5,7 +5,7 @@ namespace GenFx
     /// <summary>
     /// Represents the configuration of <see cref="IMutationOperator"/>.
     /// </summary>
-    public interface IMutationOperatorConfiguration : IComponentConfiguration
+    public interface IMutationOperatorConfiguration : IConfigurationForComponentWithAlgorithm
     {
         /// <summary>
         /// Gets the probability that a data segment within a <see cref="IGeneticEntity"/> will become mutated.

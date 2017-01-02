@@ -6,6 +6,8 @@ namespace GenFx.ComponentLibrary.Scaling
     /// <summary>
     /// Represents the configuration of <see cref="ExponentialScalingStrategy{TScaling, TConfiguration}"/>.
     /// </summary>
+    /// <typeparam name="TConfiguration">Type of the deriving configuration class.</typeparam>
+    /// <typeparam name="TScaling">Type of the associated fitness scaling strategy class.</typeparam>
     public abstract class ExponentialScalingStrategyConfiguration<TConfiguration, TScaling> : FitnessScalingStrategyConfigurationBase<TConfiguration, TScaling>
         where TConfiguration : ExponentialScalingStrategyConfiguration<TConfiguration, TScaling> 
         where TScaling : ExponentialScalingStrategy<TScaling, TConfiguration>

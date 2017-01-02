@@ -1,4 +1,4 @@
-using GenFx.ComponentModel;
+using GenFx.ComponentLibrary.ComponentModel;
 using GenFx.Validation;
 
 namespace GenFx.ComponentLibrary.Base
@@ -6,9 +6,11 @@ namespace GenFx.ComponentLibrary.Base
     /// <summary>
     /// Represents the configuration of <see cref="SelectionOperatorBase{TSelection, TConfiguration}"/>.
     /// </summary>
-    public abstract class SelectionOperatorConfigurationBase<TConfiguration, TSelection> : ComponentConfiguration<TConfiguration, TSelection>, ISelectionOperatorConfiguration
+    /// <typeparam name="TConfiguration">Type of the deriving configuration class.</typeparam>
+    /// <typeparam name="TSelection">Type of the associated selection operator class.</typeparam>
+    public abstract class SelectionOperatorConfigurationBase<TConfiguration, TSelection> : ConfigurationForComponentWithAlgorithm<TConfiguration, TSelection>, ISelectionOperatorConfiguration
+        where TConfiguration : SelectionOperatorConfigurationBase<TConfiguration, TSelection> 
         where TSelection : SelectionOperatorBase<TSelection, TConfiguration>
-        where TConfiguration : SelectionOperatorConfigurationBase<TConfiguration, TSelection>
     {
         private const FitnessType DefaultSelectionBasedOnFitnessType = FitnessType.Scaled;
 

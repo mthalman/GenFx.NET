@@ -1,6 +1,3 @@
-using GenFx.ComponentModel;
-using System;
-
 namespace GenFx.ComponentLibrary.Lists
 {
     /// <summary>

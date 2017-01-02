@@ -1,5 +1,4 @@
-using GenFx.ComponentLibrary.Properties;
-using GenFx.ComponentModel;
+using GenFx.ComponentLibrary.ComponentModel;
 using System;
 using System.Globalization;
 using System.Threading.Tasks;
@@ -21,6 +20,8 @@ namespace GenFx.ComponentLibrary.Base
     /// property.
     /// </para>
     /// </remarks>
+    /// <typeparam name="TEntity">Type of the deriving entity class.</typeparam>
+    /// <typeparam name="TConfiguration">Type of the associated configuration class.</typeparam>
     public abstract class GeneticEntity<TEntity, TConfiguration> : GeneticComponentWithAlgorithm<TEntity, TConfiguration>, IGeneticEntity
         where TEntity : GeneticEntity<TEntity, TConfiguration>
         where TConfiguration : GeneticEntityConfiguration<TConfiguration, TEntity>
@@ -251,7 +252,7 @@ namespace GenFx.ComponentLibrary.Base
 
             if (!(entity is TEntity))
             {
-                throw new ArgumentException(nameof(entity), String.Format(CultureInfo.CurrentCulture, LibResources.ErrorMsg_EntityCopyToTypeMismatch, typeof(TEntity)));
+                throw new ArgumentException(nameof(entity), String.Format(CultureInfo.CurrentCulture, Resources.ErrorMsg_EntityCopyToTypeMismatch, typeof(TEntity)));
             }
 
             this.CopyTo((TEntity)entity);

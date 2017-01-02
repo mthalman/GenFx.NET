@@ -1,5 +1,4 @@
-using GenFx.ComponentModel;
-using GenFx.Properties;
+using GenFx.ComponentLibrary.ComponentModel;
 using System;
 
 namespace GenFx.ComponentLibrary.Base
@@ -20,6 +19,8 @@ namespace GenFx.ComponentLibrary.Base
     /// property.
     /// </para>
     /// </remarks>
+    /// <typeparam name="TScaling">Type of the deriving fitness scaling strategy class.</typeparam>
+    /// <typeparam name="TConfiguration">Type of the associated configuration class.</typeparam>
     public abstract class FitnessScalingStrategyBase<TScaling, TConfiguration> : GeneticComponentWithAlgorithm<TScaling, TConfiguration>, IFitnessScalingStrategy
         where TScaling : FitnessScalingStrategyBase<TScaling, TConfiguration>
         where TConfiguration : FitnessScalingStrategyConfigurationBase<TConfiguration, TScaling>
@@ -52,7 +53,7 @@ namespace GenFx.ComponentLibrary.Base
             if (population.Entities.Count == 0)
             {
                 throw new ArgumentException(
-                  StringUtil.GetFormattedString(FwkResources.ErrorMsg_EntityListEmpty), nameof(population));
+                  StringUtil.GetFormattedString(Resources.ErrorMsg_EntityListEmpty), nameof(population));
             }
 
             this.UpdateScaledFitnessValues(population);

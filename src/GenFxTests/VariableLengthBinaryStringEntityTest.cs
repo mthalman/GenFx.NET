@@ -20,7 +20,7 @@ namespace GenFxTests
         [TestCleanup]
         public void Cleanup()
         {
-            RandomHelper.Instance = new RandomHelper();
+            RandomNumberService.Instance = new RandomNumberService();
         }
 
         /// <summary>
@@ -43,7 +43,7 @@ namespace GenFxTests
             int minSize = 3;
             int maxSize = 5;
             TestRandomUtil randomUtil = new TestRandomUtil();
-            RandomHelper.Instance = randomUtil;
+            RandomNumberService.Instance = randomUtil;
             randomUtil.MinValue = minSize;
             randomUtil.MaxValue = maxSize;
 
@@ -103,7 +103,7 @@ namespace GenFxTests
             int minLength = 10;
             int maxLength = 20;
             TestRandomUtil randomUtil = new TestRandomUtil();
-            RandomHelper.Instance = randomUtil;
+            RandomNumberService.Instance = randomUtil;
             randomUtil.MinValue = minLength;
             randomUtil.MaxValue = maxLength;
 
@@ -132,7 +132,7 @@ namespace GenFxTests
             int minLength = 2;
             int maxLength = 4;
             TestRandomUtil randomUtil = new TestRandomUtil();
-            RandomHelper.Instance = randomUtil;
+            RandomNumberService.Instance = randomUtil;
             randomUtil.MinValue = minLength;
             randomUtil.MaxValue = maxLength;
             IGeneticAlgorithm algorithm = GetAlgorithm(minLength, maxLength);
@@ -166,7 +166,7 @@ namespace GenFxTests
             int minLength = 10;
             int maxLength = 20;
             TestRandomUtil randomUtil = new TestRandomUtil();
-            RandomHelper.Instance = randomUtil;
+            RandomNumberService.Instance = randomUtil;
             randomUtil.MinValue = minLength;
             randomUtil.MaxValue = maxLength;
             IGeneticAlgorithm algorithm = GetAlgorithm(minLength, maxLength);
@@ -237,7 +237,7 @@ namespace GenFxTests
             return algorithm;
         }
 
-        private class TestRandomUtil : IRandomHelper
+        private class TestRandomUtil : IRandomNumberService
         {
             private bool switcher;
             internal int MinValue;
@@ -249,7 +249,7 @@ namespace GenFxTests
                 return (switcher) ? 1 : 0;
             }
 
-            public double GetRandomRatio()
+            public double GetRandomPercentRatio()
             {
                 throw new Exception("The method or operation is not implemented.");
             }

@@ -18,7 +18,7 @@ namespace GenFxTests
         [TestCleanup]
         public void Cleanup()
         {
-            RandomHelper.Instance = new RandomHelper();
+            RandomNumberService.Instance = new RandomNumberService();
         }
 
         /// <summary>
@@ -54,7 +54,7 @@ namespace GenFxTests
             entity2.RootNode.ChildNodes[0].ChildNodes.Add(new FakeTreeNode(8));
             entity2.RootNode.ChildNodes[0].ChildNodes[0].ChildNodes.Add(new FakeTreeNode(9));
 
-            RandomHelper.Instance = new TestRandomUtil();
+            RandomNumberService.Instance = new TestRandomUtil();
 
             IList<IGeneticEntity> result = op.Crossover(entity1, entity2);
 
@@ -78,7 +78,7 @@ namespace GenFxTests
             Assert.AreEqual(4, rootNode2.ChildNodes[0].ChildNodes[0].Value, "Wrong TreeNode.");
         }
 
-        private class TestRandomUtil : IRandomHelper
+        private class TestRandomUtil : IRandomNumberService
         {
             private int callCount;
             public int GetRandomValue(int maxValue)
@@ -99,9 +99,9 @@ namespace GenFxTests
                 }
             }
 
-            public double GetRandomRatio()
+            public double GetRandomPercentRatio()
             {
-                return new RandomHelper().GetRandomRatio();
+                return new RandomNumberService().GetRandomPercentRatio();
             }
 
             public int GetRandomValue(int minValue, int maxValue)

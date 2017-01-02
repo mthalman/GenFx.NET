@@ -1,5 +1,4 @@
-﻿using GenFx.ComponentLibrary.Properties;
-using GenFx.Validation;
+﻿using GenFx.Validation;
 using System;
 
 namespace GenFx.ComponentLibrary.Algorithms
@@ -45,7 +44,7 @@ namespace GenFx.ComponentLibrary.Algorithms
 
             if (!isValid)
             {
-                errorMessage = StringUtil.GetFormattedString(LibResources.ErrorMsg_InvalidPopulationReplacementValue, propertyName);
+                errorMessage = StringUtil.GetFormattedString(Resources.ErrorMsg_InvalidPopulationReplacementValue, propertyName);
             }
             else
             {

@@ -16,6 +16,8 @@ namespace GenFx.ComponentLibrary.Algorithms
     /// objects with the highest fitness value are the ones chosen to be migrated.
     /// </para>
     /// </remarks>
+    /// <typeparam name="TAlgorithm">Type of the deriving algorithm class.</typeparam>
+    /// <typeparam name="TConfiguration">Type of the associated configuration class.</typeparam>
     [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Multi")]
     public abstract class MultiDemeGeneticAlgorithm<TAlgorithm, TConfiguration> : SimpleGeneticAlgorithm<TAlgorithm, TConfiguration>
         where TAlgorithm : MultiDemeGeneticAlgorithm<TAlgorithm, TConfiguration>

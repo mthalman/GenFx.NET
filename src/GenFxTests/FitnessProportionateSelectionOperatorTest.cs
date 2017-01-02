@@ -17,7 +17,7 @@ namespace GenFxTests
         [TestCleanup]
         public void Cleanup()
         {
-            RandomHelper.Instance = new RandomHelper();
+            RandomNumberService.Instance = new RandomNumberService();
         }
 
         /// <summary>
@@ -39,7 +39,7 @@ namespace GenFxTests
             population.Entities.Add(entity2);
             population.Entities.Add(entity3);
             FakeRandomUtil randomUtil = new FakeRandomUtil();
-            RandomHelper.Instance = randomUtil;
+            RandomNumberService.Instance = randomUtil;
 
             randomUtil.RandomRatio = 0;
             IGeneticEntity selectedEntity = op.SelectEntity(population);
@@ -87,7 +87,7 @@ namespace GenFxTests
             population.Entities.Add(entity2);
             population.Entities.Add(entity3);
             FakeRandomUtil randomUtil = new FakeRandomUtil();
-            RandomHelper.Instance = randomUtil;
+            RandomNumberService.Instance = randomUtil;
 
             randomUtil.RandomRatio = 0;
             IGeneticEntity selectedEntity = op.SelectEntity(population);
@@ -133,7 +133,7 @@ namespace GenFxTests
             population.Entities.Add(entity2);
             population.Entities.Add(entity3);
             FakeRandomUtil randomUtil = new FakeRandomUtil();
-            RandomHelper.Instance = randomUtil;
+            RandomNumberService.Instance = randomUtil;
 
             randomUtil.RandomRatio = 0;
             IGeneticEntity selectedEntity = op.SelectEntity(population);
@@ -179,7 +179,7 @@ namespace GenFxTests
             population.Entities.Add(entity2);
             population.Entities.Add(entity3);
             FakeRandomUtil randomUtil = new FakeRandomUtil();
-            RandomHelper.Instance = randomUtil;
+            RandomNumberService.Instance = randomUtil;
 
             randomUtil.RandomRatio = 0;
             IGeneticEntity selectedEntity = op.SelectEntity(population);
@@ -225,7 +225,7 @@ namespace GenFxTests
             return algorithm;
         }
 
-        private class FakeRandomUtil : IRandomHelper
+        private class FakeRandomUtil : IRandomNumberService
         {
             public double RandomRatio;
 
@@ -234,7 +234,7 @@ namespace GenFxTests
                 throw new Exception("The method or operation is not implemented.");
             }
 
-            public double GetRandomRatio()
+            public double GetRandomPercentRatio()
             {
                 return RandomRatio;
             }

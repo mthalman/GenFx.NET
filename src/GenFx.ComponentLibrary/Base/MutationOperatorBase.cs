@@ -1,3 +1,4 @@
+using GenFx.ComponentLibrary.ComponentModel;
 using GenFx.ComponentModel;
 using System;
 
@@ -19,6 +20,8 @@ namespace GenFx.ComponentLibrary.Base
     /// property.
     /// </para>
     /// </remarks>
+    /// <typeparam name="TMutation">Type of the deriving mutation operator class.</typeparam>
+    /// <typeparam name="TConfiguration">Type of the associated configuration class.</typeparam>
     public abstract class MutationOperatorBase<TMutation, TConfiguration> : GeneticComponentWithAlgorithm<TMutation, TConfiguration>, IMutationOperator
         where TMutation : MutationOperatorBase<TMutation, TConfiguration>
         where TConfiguration : MutationOperatorConfigurationBase<TConfiguration, TMutation>

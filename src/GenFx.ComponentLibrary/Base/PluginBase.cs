@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GenFx.ComponentLibrary.ComponentModel;
+using System;
 using System.Linq;
 
 namespace GenFx.ComponentLibrary.Base
@@ -6,6 +7,8 @@ namespace GenFx.ComponentLibrary.Base
     /// <summary>
     /// Plugin component that provides custom extension functionality.
     /// </summary>
+    /// <typeparam name="TPlugin">Type of the deriving plugin class.</typeparam>
+    /// <typeparam name="TConfiguration">Type of the associated configuration class.</typeparam>
     public abstract class PluginBase<TPlugin, TConfiguration> : GeneticComponentWithAlgorithm<TPlugin, TConfiguration>, IPlugin
         where TPlugin : PluginBase<TPlugin, TConfiguration>
         where TConfiguration : PluginConfigurationBase<TConfiguration, TPlugin>

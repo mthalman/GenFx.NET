@@ -1,9 +1,10 @@
-using System;
-using System.ComponentModel;
+using GenFx.ComponentLibrary.ComponentModel;
 using GenFx.ComponentModel;
 using GenFx.Validation;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using GenFxTests.Helpers;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
+using System.ComponentModel;
 
 namespace GenFxTests
 {
@@ -58,18 +59,17 @@ namespace GenFxTests
             AssertEx.Throws<ArgumentException>(() => ExternalValidatorAttributeHelper.ValidateArguments(typeof(FakeComponentConfiguration), "boo"));
         }
 
-        private class FakeComponentConfiguration : ComponentConfiguration
+        private class FakeComponent : GeneticComponent<FakeComponent, FakeComponentConfiguration>
+        {
+            public FakeComponent(FakeComponentConfiguration configuration) : base(configuration)
+            {
+            }
+        }
+
+        private class FakeComponentConfiguration : ComponentConfiguration<FakeComponentConfiguration, FakeComponent>
         {
             private int value;
-
-            public override Type ComponentType
-            {
-                get
-                {
-                    throw new NotImplementedException();
-                }
-            }
-
+            
             public int Value
             {
                 get { return this.value; }

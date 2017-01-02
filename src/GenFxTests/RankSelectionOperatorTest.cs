@@ -20,7 +20,7 @@ namespace GenFxTests
         [TestCleanup]
         public void Cleanup()
         {
-            RandomHelper.Instance = new RandomHelper();
+            RandomNumberService.Instance = new RandomNumberService();
         }
 
         /// <summary>
@@ -46,7 +46,7 @@ namespace GenFxTests
             population.Entities.Add(entity4);
 
             TestRandomUtil randomUtil = new TestRandomUtil();
-            RandomHelper.Instance = randomUtil;
+            RandomNumberService.Instance = randomUtil;
 
             randomUtil.Ratio = 0;
             IGeneticEntity selectedEntity = op.SelectEntity(population);
@@ -100,7 +100,7 @@ namespace GenFxTests
             return algorithm;
         }
 
-        private class TestRandomUtil : IRandomHelper
+        private class TestRandomUtil : IRandomNumberService
         {
             internal double Ratio;
 
@@ -109,7 +109,7 @@ namespace GenFxTests
                 throw new Exception("The method or operation is not implemented.");
             }
 
-            public double GetRandomRatio()
+            public double GetRandomPercentRatio()
             {
                 return Ratio;
             }

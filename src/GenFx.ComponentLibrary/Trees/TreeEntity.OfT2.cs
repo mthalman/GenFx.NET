@@ -18,6 +18,8 @@ namespace GenFx.ComponentLibrary.Trees
     /// property.
     /// </para>
     /// </remarks>
+    /// <typeparam name="TEntity">Type of the deriving entity class.</typeparam>
+    /// <typeparam name="TConfiguration">Type of the associated configuration class.</typeparam>
     public abstract class TreeEntity<TEntity, TConfiguration> : GeneticEntity<TEntity, TConfiguration>, ITreeEntity
         where TEntity : TreeEntity<TEntity, TConfiguration>
         where TConfiguration : TreeEntityConfiguration<TConfiguration, TEntity>

@@ -1,4 +1,4 @@
-using GenFx.ComponentModel;
+using GenFx.ComponentLibrary.ComponentModel;
 using GenFx.Validation;
 
 namespace GenFx.ComponentLibrary.Base
@@ -6,7 +6,9 @@ namespace GenFx.ComponentLibrary.Base
     /// <summary>
     /// Represents the configuration of <see cref="PopulationBase{TConfiguration, TPopulation}"/>.
     /// </summary>
-    public abstract class PopulationConfigurationBase<TConfiguration, TPopulation> : ComponentConfiguration<TConfiguration, TPopulation>, IPopulationConfiguration
+    /// <typeparam name="TConfiguration">Type of the deriving configuration class.</typeparam>
+    /// <typeparam name="TPopulation">Type of the associated population class.</typeparam>
+    public abstract class PopulationConfigurationBase<TConfiguration, TPopulation> : ConfigurationForComponentWithAlgorithm<TConfiguration, TPopulation>, IPopulationConfiguration
         where TConfiguration : PopulationConfigurationBase<TConfiguration, TPopulation>
         where TPopulation : PopulationBase<TPopulation, TConfiguration>
     {

@@ -1,5 +1,5 @@
 ﻿using GenFx.ComponentLibrary.Base;
-using GenFx.ComponentModel;
+using GenFx.Validation;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -24,6 +24,8 @@ namespace GenFx.ComponentLibrary.Lists
     /// So for the example above, this would result in the following offspring: AFEDBC and BDCAEF.  This option is only
     /// available when using two crossover points.
     /// </remarks>
+    /// <typeparam name="TCrossover">Type of the deriving crossover operator class.</typeparam>
+    /// <typeparam name="TConfiguration">Type of the associated configuration class.</typeparam>
     [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Multi")]
     [SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "MultiPoint")]
     [RequiredEntity(typeof(IListEntityBase))]
@@ -80,7 +82,7 @@ namespace GenFx.ComponentLibrary.Lists
                 int crossoverLocus;
                 do
                 {
-                    crossoverLocus = RandomHelper.Instance.GetRandomValue(Math.Min(entity1Length, entity2Length));
+                    crossoverLocus = RandomNumberService.Instance.GetRandomValue(Math.Min(entity1Length, entity2Length));
                 } while (crossoverLoci.Contains(crossoverLocus));
 
                 crossoverLoci.Add(crossoverLocus);

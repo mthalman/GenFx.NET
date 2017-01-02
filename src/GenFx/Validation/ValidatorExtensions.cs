@@ -1,11 +1,11 @@
-﻿using GenFx.Validation;
+﻿using System;
 
-namespace GenFx.ComponentModel
+namespace GenFx.Validation
 {
     /// <summary>
-    /// Contains helper methods for the component model.
+    /// Contains extension methods for the <see cref="Validator"/> class.
     /// </summary>
-    internal static class ComponentHelper
+    public static class ValidatorExtensions
     {
         /// <summary>
         /// Checks whether the property is valid.
@@ -14,8 +14,13 @@ namespace GenFx.ComponentModel
         /// <param name="propertyName">Name of the property being validated.</param>
         /// <param name="value">Property value to check.</param>
         /// <param name="owner">The object that owns the property being validated.</param>
-        internal static void CheckValidation(Validator validator, string propertyName, object value, object owner)
+        public static void EnsureIsValid(this Validator validator, string propertyName, object value, object owner)
         {
+            if (validator == null)
+            {
+                throw new ArgumentNullException(nameof(validator));
+            }
+
             string errorMessage;
             if (!validator.IsValid(value, propertyName, owner, out errorMessage))
             {

@@ -1,11 +1,10 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
-using GenFx.Properties;
 
-namespace GenFx.ComponentModel
+namespace GenFx.Validation
 {
     /// <summary>
-    /// Indicates that a class requires a specific component type in order to function correctly.
+    /// Indicates that a component class requires a specific component type in order to function correctly.
     /// </summary>
     [SuppressMessage("Microsoft.Design", "CA1019:DefineAccessorsForAttributeArguments")]
     [AttributeUsage(AttributeTargets.Class, Inherited = true)]
@@ -14,7 +13,7 @@ namespace GenFx.ComponentModel
         private Type requiredType;
 
         /// <summary>
-        /// Gets the type which is required by the class.
+        /// Gets the component type which is required by the class.
         /// </summary>
         public Type RequiredType
         {
@@ -46,7 +45,7 @@ namespace GenFx.ComponentModel
             if (!baseType.IsAssignableFrom(requiredType))
             {
                 throw new ArgumentException(
-                  StringUtil.GetFormattedString(FwkResources.ErrorMsg_InvalidType, baseType.FullName),
+                  StringUtil.GetFormattedString(Resources.ErrorMsg_InvalidType, baseType.FullName),
                   nameof(requiredType));
             }
         }

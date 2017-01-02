@@ -1,5 +1,4 @@
 ﻿using GenFx.ComponentLibrary.Base;
-using GenFx.ComponentLibrary.Properties;
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -10,6 +9,8 @@ namespace GenFx.ComponentLibrary.Plugins
     /// <summary>
     /// Logs statistics for each generation.
     /// </summary>
+    /// <typeparam name="TPlugin">Type of the deriving plugin class.</typeparam>
+    /// <typeparam name="TConfiguration">Type of the associated configuration class.</typeparam>
     public abstract class StatisticLogger<TPlugin, TConfiguration> : PluginBase<TPlugin, TConfiguration>
         where TPlugin : StatisticLogger<TPlugin, TConfiguration>
         where TConfiguration : StatisticLoggerConfiguration<TConfiguration, TPlugin>
@@ -30,7 +31,7 @@ namespace GenFx.ComponentLibrary.Plugins
         /// </summary>
         public override void OnAlgorithmStarting()
         {
-            this.WriteTrace(LibResources.StatisticLogger_AlgorithmStarted);
+            this.WriteTrace(Resources.StatisticLogger_AlgorithmStarted);
         }
 
         /// <summary>
@@ -38,7 +39,7 @@ namespace GenFx.ComponentLibrary.Plugins
         /// </summary>
         public override void OnAlgorithmCompleted()
         {
-            this.WriteTrace(LibResources.StatisticLogger_AlgorithmCompleted);
+            this.WriteTrace(Resources.StatisticLogger_AlgorithmCompleted);
         }
 
         /// <summary>
@@ -70,7 +71,7 @@ namespace GenFx.ComponentLibrary.Plugins
                         statName = stat.ToString();
                     }
 
-                    this.WriteTrace(String.Format(CultureInfo.CurrentCulture, LibResources.StatisticLogger_StatTrace,
+                    this.WriteTrace(String.Format(CultureInfo.CurrentCulture, Resources.StatisticLogger_StatTrace,
                         statName, statVal, population.Index, generationIndex));
                 }
             }

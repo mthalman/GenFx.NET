@@ -6,6 +6,7 @@ using GenFx;
 using GenFx.ComponentLibrary.SelectionOperators;
 using GenFx.ComponentModel;
 using GenFxTests.Helpers;
+using GenFx.Validation;
 
 namespace GenFxTests
 {

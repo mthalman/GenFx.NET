@@ -1,4 +1,3 @@
-using GenFx.ComponentLibrary.Properties;
 using System;
 
 namespace GenFx.ComponentLibrary.Lists
@@ -6,6 +5,8 @@ namespace GenFx.ComponentLibrary.Lists
     /// <summary>
     /// Entity made up of a variable-length list of integers.
     /// </summary>
+    /// <typeparam name="TEntity">Type of the deriving entity class.</typeparam>
+    /// <typeparam name="TConfiguration">Type of the entity's configuration class.</typeparam>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix")]
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1501:AvoidExcessiveInheritance")]
     public abstract class VariableLengthIntegerListEntity<TEntity, TConfiguration> : IntegerListEntity<TEntity, TConfiguration>
@@ -80,12 +81,12 @@ namespace GenFx.ComponentLibrary.Lists
             {
                 throw new ValidationException(
                     StringUtil.GetFormattedString(
-                    LibResources.ErrorMsg_MismatchedMinMaxValues,
+                    Resources.ErrorMsg_MismatchedMinMaxValues,
                     nameof(config.MinimumStartingLength),
                     nameof(config.MaximumStartingLength)));
             }
 
-            return RandomHelper.Instance.GetRandomValue(minLength, maxLength + 1);
+            return RandomNumberService.Instance.GetRandomValue(minLength, maxLength + 1);
         }
     }
 }

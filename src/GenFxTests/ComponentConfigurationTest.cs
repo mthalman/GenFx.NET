@@ -1,12 +1,13 @@
+using GenFx;
+using GenFx.ComponentLibrary.ComponentModel;
+using GenFx.ComponentModel;
+using GenFx.Validation;
+using GenFxTests.Helpers;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Reflection;
-using GenFx;
-using GenFx.ComponentModel;
-using GenFx.Validation;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using GenFxTests.Helpers;
 
 namespace GenFxTests
 {
@@ -53,61 +54,10 @@ namespace GenFxTests
         [TestMethod]
         public void ComponentConfiguration_ComponentType()
         {
-            ComponentConfiguration component = new FakeComponentConfiguration();
+            IComponentConfiguration component = new FakeComponentConfiguration();
             Assert.AreSame(typeof(FakeComponent), component.ComponentType, "Incorrect type returned.");
         }
         
-        /// <summary>
-        /// Tests that the ValidateProperty method works correctly.
-        /// </summary>
-        [TestMethod]
-        public void ComponentConfiguration_ValidateProperty()
-        {
-            FakeComponentConfiguration config = new FakeComponentConfiguration();
-            int value = 2;
-            isValidReturnValue = true;
-            PrivateObject accessor = new PrivateObject(config);
-            accessor.Invoke("ValidateProperty", value, "Value");
-            Assert.IsTrue(isValidCalled, "IsValid should be called.");
-            Assert.IsTrue(isValid2Called, "IsValid should be called.");
-            Assert.AreEqual(value, isValidValue, "Incorrect value passed to IsValid.");
-        }
-
-        /// <summary>
-        /// Tests that the ValidateProperty method throws when a config is invalid.
-        /// </summary>
-        [TestMethod]
-        public void ComponentConfiguration_ValidateProperty_InvalidProperty()
-        {
-            FakeComponentConfiguration config = new FakeComponentConfiguration();
-            int value = 3;
-            isValidReturnValue = false;
-            PrivateObject accessor = new PrivateObject(config);
-            AssertEx.Throws<ValidationException>(() => accessor.Invoke("ValidateProperty", value, "Value"));
-        }
-
-        /// <summary>
-        /// Tests that the ValidateProperty method throws when a null property name is passed.
-        /// </summary>
-        [TestMethod]
-        public void ComponentConfiguration_ValidateProperty_NullPropertyName()
-        {
-            FakeComponentConfiguration config = new FakeComponentConfiguration();
-            PrivateObject accessor = new PrivateObject(config);
-            AssertEx.Throws<ArgumentException>(() => accessor.Invoke("ValidateProperty", 3, null));
-        }
-
-        /// <summary>
-        /// Tests that the ValidateProperty method throws when the property name that is passed doesn't exist.
-        /// </summary>
-        [TestMethod]
-        public void ComponentConfiguration_ValidateProperty_PropertyNameDoesNotExist()
-        {
-            FakeComponentConfiguration config = new FakeComponentConfiguration();
-            PrivateObject accessor = new PrivateObject(config);
-            AssertEx.Throws<ArgumentException>(() => accessor.Invoke("ValidateProperty", 5, "test"));
-        }
-
         /// <summary>
         /// Tests that the Validate method works correctly.
         /// </summary>
@@ -130,7 +80,7 @@ namespace GenFxTests
             Assert.AreEqual(config.Value, isValidValue, "Incorrect value passed to IsValid.");
         }
 
-        private class FakeComponent : GeneticComponent
+        private class FakeComponent : GeneticComponent<FakeComponent, FakeComponentConfiguration>
         {
             public FakeComponent()
                 : base(null)
@@ -138,15 +88,10 @@ namespace GenFxTests
             }
         }
 
-        private class FakeComponentConfiguration : ComponentConfiguration
+        private class FakeComponentConfiguration : ComponentConfiguration<FakeComponentConfiguration, FakeComponent>
         {
             private int value;
-
-            public override Type ComponentType
-            {
-                get { return typeof(FakeComponent); }
-            }
-
+            
             [CustomValidator(typeof(CustomValidator))]
             [CustomValidator(typeof(CustomValidator2))]
             public int Value

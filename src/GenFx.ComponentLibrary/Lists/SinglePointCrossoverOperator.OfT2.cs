@@ -1,5 +1,5 @@
 using GenFx.ComponentLibrary.Base;
-using GenFx.ComponentModel;
+using GenFx.Validation;
 using System;
 using System.Collections.Generic;
 
@@ -14,6 +14,8 @@ namespace GenFx.ComponentLibrary.Lists
     /// by 001101 and 100011 were to be crossed over at position 2, the resulting offspring would
     /// be 000011 and 101101.
     /// </remarks>
+    /// <typeparam name="TCrossover">Type of the deriving crossover operator class.</typeparam>
+    /// <typeparam name="TConfiguration">Type of the associated configuration class.</typeparam>
     [RequiredEntity(typeof(IListEntityBase))]
     public abstract class SinglePointCrossoverOperator<TCrossover, TConfiguration> : CrossoverOperatorBase<TCrossover, TConfiguration>
         where TCrossover : SinglePointCrossoverOperator<TCrossover, TConfiguration>
@@ -60,7 +62,7 @@ namespace GenFx.ComponentLibrary.Lists
             int entity1Length = listEntity1.Length;
             int entity2Length = listEntity2.Length;
 
-            int crossoverLocus = RandomHelper.Instance.GetRandomValue(Math.Min(entity1Length, entity2Length));
+            int crossoverLocus = RandomNumberService.Instance.GetRandomValue(Math.Min(entity1Length, entity2Length));
 
             IList<IGeneticEntity> crossoverOffspring = new List<IGeneticEntity>();
 

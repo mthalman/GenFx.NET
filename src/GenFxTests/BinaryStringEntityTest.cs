@@ -22,7 +22,7 @@ namespace GenFxTests
         [TestCleanup]
         public void Cleanup()
         {
-            RandomHelper.Instance = new RandomHelper();
+            RandomNumberService.Instance = new RandomNumberService();
         }
 
         /// <summary>
@@ -96,7 +96,7 @@ namespace GenFxTests
         {
             IGeneticAlgorithm algorithm = GetAlgorithm(4);
             TestBinaryStringEntity entity = new TestBinaryStringEntity(algorithm);
-            RandomHelper.Instance = new TestRandomUtil();
+            RandomNumberService.Instance = new TestRandomUtil();
             entity.Initialize();
             Assert.AreEqual("1010", entity.Representation, "Entity not initialized correctly.");
         }
@@ -228,7 +228,7 @@ namespace GenFxTests
             public int Length { get; set; }
         }
 
-        private class TestRandomUtil : IRandomHelper
+        private class TestRandomUtil : IRandomNumberService
         {
             private bool switcher;
 
@@ -238,7 +238,7 @@ namespace GenFxTests
                 return (this.switcher) ? 1 : 0;
             }
 
-            public double GetRandomRatio()
+            public double GetRandomPercentRatio()
             {
                 throw new Exception("The method or operation is not implemented.");
             }

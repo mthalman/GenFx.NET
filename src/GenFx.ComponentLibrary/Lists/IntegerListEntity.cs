@@ -6,6 +6,8 @@ namespace GenFx.ComponentLibrary.Lists
     /// <summary>
     /// Entity made up of a list of integers.
     /// </summary>
+    /// <typeparam name="TEntity">Type of the deriving entity class.</typeparam>
+    /// <typeparam name="TConfiguration">Type of the entity's configuration class.</typeparam>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix")]
     public abstract class IntegerListEntity<TEntity, TConfiguration> : ListEntity<TEntity, TConfiguration, int>, IIntegerListEntity
         where TEntity : IntegerListEntity<TEntity, TConfiguration>
@@ -48,7 +50,7 @@ namespace GenFx.ComponentLibrary.Lists
                 while (n > 1)
                 {
                     n--;
-                    int k = RandomHelper.Instance.GetRandomValue(n);
+                    int k = RandomNumberService.Instance.GetRandomValue(n);
                     int value = availableInts[k];
                     availableInts[k] = availableInts[n];
                     availableInts[n] = value;
@@ -65,7 +67,7 @@ namespace GenFx.ComponentLibrary.Lists
             {
                 for (int i = 0; i < this.Length; i++)
                 {
-                    this[i] = RandomHelper.Instance.GetRandomValue(this.Configuration.MinElementValue, this.Configuration.MaxElementValue + 1);
+                    this[i] = RandomNumberService.Instance.GetRandomValue(this.Configuration.MinElementValue, this.Configuration.MaxElementValue + 1);
                 }
             }
 

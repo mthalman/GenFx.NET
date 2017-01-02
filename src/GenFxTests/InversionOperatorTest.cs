@@ -18,7 +18,7 @@ namespace GenFxTests
         [TestCleanup]
         public void Cleanup()
         {
-            RandomHelper.Instance = new RandomHelper();
+            RandomNumberService.Instance = new RandomNumberService();
         }
 
         /// <summary>
@@ -52,7 +52,7 @@ namespace GenFxTests
             entity[3] = true;
 
             FakeRandomUtil randomUtil = new FakeRandomUtil();
-            RandomHelper.Instance = randomUtil;
+            RandomNumberService.Instance = randomUtil;
             randomUtil.RandomValue = 1;
 
             IGeneticEntity mutant = op.Mutate(entity);
@@ -61,7 +61,7 @@ namespace GenFxTests
             Assert.AreEqual(0, mutant.Age, "Age should have been reset.");
         }
 
-        private class FakeRandomUtil : IRandomHelper
+        private class FakeRandomUtil : IRandomNumberService
         {
             public int RandomValue;
 
@@ -70,7 +70,7 @@ namespace GenFxTests
                 return this.RandomValue++;
             }
 
-            public double GetRandomRatio()
+            public double GetRandomPercentRatio()
             {
                 return 1;
             }

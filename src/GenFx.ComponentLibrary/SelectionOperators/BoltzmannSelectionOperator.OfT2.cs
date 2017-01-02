@@ -1,5 +1,4 @@
 using GenFx.ComponentLibrary.Base;
-using GenFx.ComponentLibrary.Properties;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -26,6 +25,8 @@ namespace GenFx.ComponentLibrary.SelectionOperators
     /// property.
     /// </para>
     /// </remarks>
+    /// <typeparam name="TSelection">Type of the deriving selection operator class.</typeparam>
+    /// <typeparam name="TConfiguration">Type of the associated configuration class.</typeparam>
     public abstract class BoltzmannSelectionOperator<TSelection, TConfiguration> : SelectionOperatorBase<TSelection, TConfiguration>
         where TSelection : BoltzmannSelectionOperator<TSelection, TConfiguration>
         where TConfiguration : BoltzmannSelectionOperatorConfiguration<TConfiguration, TSelection>
@@ -80,7 +81,7 @@ namespace GenFx.ComponentLibrary.SelectionOperators
 
                 if (Double.IsInfinity(totalSubVals))
                 {
-                    throw new OverflowException(StringUtil.GetFormattedString(LibResources.ErrorMsg_BoltzmannTotalOverflow, this.GetType().Name));
+                    throw new OverflowException(StringUtil.GetFormattedString(Resources.ErrorMsg_BoltzmannTotalOverflow, this.GetType().Name));
                 }
             }
 
