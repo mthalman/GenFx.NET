@@ -9,6 +9,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenFx.ComponentLibrary", "s
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenFxTests", "src\GenFxTests\GenFxTests.csproj", "{5B7C3DF1-608D-4882-B44E-1C6DE3C54F4D}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{FF0BE9FF-5D06-41D2-A5AC-3718B5040FEC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleBinaryString", "samples\SimpleBinaryString\SimpleBinaryString.csproj", "{7C79A3C9-CB37-4E4D-95D4-2CF0AF3FD393}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,8 +31,15 @@ Global
 		{5B7C3DF1-608D-4882-B44E-1C6DE3C54F4D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5B7C3DF1-608D-4882-B44E-1C6DE3C54F4D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5B7C3DF1-608D-4882-B44E-1C6DE3C54F4D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7C79A3C9-CB37-4E4D-95D4-2CF0AF3FD393}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7C79A3C9-CB37-4E4D-95D4-2CF0AF3FD393}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7C79A3C9-CB37-4E4D-95D4-2CF0AF3FD393}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7C79A3C9-CB37-4E4D-95D4-2CF0AF3FD393}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{7C79A3C9-CB37-4E4D-95D4-2CF0AF3FD393} = {FF0BE9FF-5D06-41D2-A5AC-3718B5040FEC}
 	EndGlobalSection
 EndGlobal
