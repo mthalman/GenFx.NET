@@ -5,6 +5,8 @@ namespace GenFx.ComponentLibrary.Lists.BinaryStrings
     /// <summary>
     /// Represents the configuration of <see cref="VariableLengthBinaryStringEntity{TEntity, TConfiguration}"/>.
     /// </summary>
+    /// <typeparam name="TConfiguration">Type of the deriving configuration class.</typeparam>
+    /// <typeparam name="TEntity">Type of the associated entity class.</typeparam>
     public abstract class VariableLengthBinaryStringEntityConfiguration<TConfiguration, TEntity> : BinaryStringEntityConfiguration<TConfiguration, TEntity>
         where TConfiguration : VariableLengthBinaryStringEntityConfiguration<TConfiguration, TEntity>
         where TEntity : VariableLengthBinaryStringEntity<TEntity, TConfiguration>

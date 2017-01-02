@@ -1,5 +1,4 @@
 ﻿using GenFx;
-using GenFx.Properties;
 using GenFxTests.Helpers;
 using GenFxTests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -284,7 +283,6 @@ namespace GenFxTests
             MockGeneticAlgorithmConfiguration geneticAlgorithmConfig = new MockGeneticAlgorithmConfiguration
             {
                 EnvironmentSize = 5,
-                StatisticsEnabled = false
             };
             target.GeneticAlgorithm = geneticAlgorithmConfig;
 
@@ -344,10 +342,9 @@ namespace GenFxTests
             Assert.AreEqual(fitnessScalingConfig.GetType().AssemblyQualifiedName, fitnessScalingState["$type"]);
 
             KeyValueMap geneticAlgorithmState = (KeyValueMap)state[nameof(ComponentConfigurationSet.GeneticAlgorithm)];
-            Assert.AreEqual(3, geneticAlgorithmState.Count);
+            Assert.AreEqual(2, geneticAlgorithmState.Count);
             Assert.AreEqual(geneticAlgorithmConfig.GetType().AssemblyQualifiedName, geneticAlgorithmState["$type"]);
             Assert.AreEqual(geneticAlgorithmConfig.EnvironmentSize, geneticAlgorithmState[nameof(IGeneticAlgorithmConfiguration.EnvironmentSize)]);
-            Assert.AreEqual(geneticAlgorithmConfig.StatisticsEnabled, geneticAlgorithmState[nameof(IGeneticAlgorithmConfiguration.StatisticsEnabled)]);
 
             KeyValueMap mutationState = (KeyValueMap)state[nameof(ComponentConfigurationSet.MutationOperator)];
             Assert.AreEqual(2, mutationState.Count);
@@ -538,7 +535,6 @@ namespace GenFxTests
 
             MockGeneticAlgorithmConfiguration mockGeneticAlgorithmConfig = (MockGeneticAlgorithmConfiguration)target.GeneticAlgorithm;
             Assert.AreEqual(10, mockGeneticAlgorithmConfig.EnvironmentSize);
-            Assert.IsFalse(mockGeneticAlgorithmConfig.StatisticsEnabled);
 
             MockMutationOperatorConfiguration mutationConfig = (MockMutationOperatorConfiguration)target.MutationOperator;
             Assert.AreEqual(0.7, mutationConfig.MutationRate);

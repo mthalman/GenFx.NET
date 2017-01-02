@@ -1,6 +1,5 @@
 using System;
 using System.ComponentModel;
-using GenFx.Properties;
 
 namespace GenFx
 {
@@ -48,7 +47,7 @@ namespace GenFx
 
             if (generationIndex < 0)
             {
-                throw new ArgumentOutOfRangeException(nameof(generationIndex), generationIndex, FwkResources.ErrorMsg_InvalidGenerationIndex);
+                throw new ArgumentOutOfRangeException(nameof(generationIndex), generationIndex, Resources.ErrorMsg_InvalidGenerationIndex);
             }
 
             this.environment = environment;

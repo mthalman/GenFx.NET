@@ -5,6 +5,8 @@ namespace GenFx.ComponentLibrary.Lists
     /// <summary>
     /// Represents the configuration of <see cref="IntegerListEntity{TEntity, TConfiguration}"/>.
     /// </summary>
+    /// <typeparam name="TConfiguration">Type of the deriving configuration class.</typeparam>
+    /// <typeparam name="TEntity">Type of the associated entity class.</typeparam>
     public abstract class IntegerListEntityConfiguration<TConfiguration, TEntity> : ListEntityConfiguration<TConfiguration, TEntity, int>, IIntegerListEntityConfiguration
         where TConfiguration : IntegerListEntityConfiguration<TConfiguration, TEntity>
         where TEntity : IntegerListEntity<TEntity, TConfiguration>

@@ -1,3 +1,4 @@
+using GenFx.ComponentLibrary.ComponentModel;
 using System;
 
 namespace GenFx.ComponentLibrary.Base
@@ -14,6 +15,8 @@ namespace GenFx.ComponentLibrary.Base
     /// the genetic algorithm by using the <see cref="ComponentConfigurationSet.Terminator"/> property
     /// </para>
     /// </remarks>
+    /// <typeparam name="TTerminator">Type of the deriving terminator class.</typeparam>
+    /// <typeparam name="TConfiguration">Type of the associated configuration class.</typeparam>
     public abstract class TerminatorBase<TTerminator, TConfiguration> : GeneticComponentWithAlgorithm<TTerminator, TConfiguration>, ITerminator
         where TTerminator : TerminatorBase<TTerminator, TConfiguration>
         where TConfiguration : TerminatorConfigurationBase<TConfiguration, TTerminator>

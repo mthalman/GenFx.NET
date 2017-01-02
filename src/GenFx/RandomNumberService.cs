@@ -4,23 +4,23 @@ using System.Diagnostics.CodeAnalysis;
 namespace GenFx
 {
     /// <summary>
-    /// Helper class to produce random numbers.
+    /// Service class that produces random numbers.
     /// </summary>
-    public class RandomHelper : IRandomHelper
+    public class RandomNumberService : IRandomNumberService
     {
-        private static IRandomHelper instance = new RandomHelper();
+        private static IRandomNumberService instance = new RandomNumberService();
 
         private Random randomizer = new Random();
 
         /// <summary>
-        /// Gets or sets the <see cref="IRandomHelper"/> object used to produce random numbers.
+        /// Gets or sets the <see cref="IRandomNumberService"/> object used to produce random numbers.
         /// </summary>
         /// <remarks>
         /// This field can be set for testing purposes to a custom class that implements the
-        /// <see cref="IRandomHelper"/> interface.  This allows tests to run with known "random" values.
+        /// <see cref="IRandomNumberService"/> interface.  This allows tests to run with known "random" values.
         /// </remarks>
         /// <exception cref="ArgumentNullException">Value is null.</exception>
-        public static IRandomHelper Instance
+        public static IRandomNumberService Instance
         {
             get { return instance; }
             set
@@ -63,7 +63,7 @@ namespace GenFx
         /// </summary>
         /// <returns>A number between 0 and 1.</returns>
         [SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate")]
-        public double GetRandomRatio()
+        public double GetRandomPercentRatio()
         {
             return this.randomizer.NextDouble();
         }
@@ -73,10 +73,10 @@ namespace GenFx
     /// Interface that defines the methods for a helper class that produces random numbers.
     /// </summary>
     /// <remarks>
-    /// This interface can be implemented for testing purposes and set on <see cref="RandomHelper.Instance"/>
+    /// This interface can be implemented for testing purposes and set on <see cref="RandomNumberService.Instance"/>
     /// to produce known "random" values for tests.
     /// </remarks>
-    public interface IRandomHelper
+    public interface IRandomNumberService
     {
         /// <summary>
         /// Returns a nonnegative random integer less than the specified maximum.
@@ -101,6 +101,6 @@ namespace GenFx
         /// </summary>
         /// <returns>A number between 0 and 1.</returns>
         [SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate")]
-        double GetRandomRatio();
+        double GetRandomPercentRatio();
     }
 }

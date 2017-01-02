@@ -1,4 +1,3 @@
-using GenFx.ComponentLibrary.Properties;
 using System;
 
 namespace GenFx.ComponentLibrary.Lists.BinaryStrings
@@ -6,6 +5,8 @@ namespace GenFx.ComponentLibrary.Lists.BinaryStrings
     /// <summary>
     /// Entity made up of a variable-length string of bits.
     /// </summary>
+    /// <typeparam name="TEntity">Type of the deriving entity class.</typeparam>
+    /// <typeparam name="TConfiguration">Type of the entity's configuration class.</typeparam>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix")]
     public abstract class VariableLengthBinaryStringEntity<TEntity, TConfiguration> : BinaryStringEntity<TEntity, TConfiguration>
         where TEntity : VariableLengthBinaryStringEntity<TEntity, TConfiguration>
@@ -66,12 +67,12 @@ namespace GenFx.ComponentLibrary.Lists.BinaryStrings
                 {
                     throw new ValidationException(
                       StringUtil.GetFormattedString(
-                        LibResources.ErrorMsg_MismatchedMinMaxValues,
+                        Resources.ErrorMsg_MismatchedMinMaxValues,
                         nameof(config.MinimumStartingLength),
                         nameof(config.MaximumStartingLength)));
                 }
 
-                return RandomHelper.Instance.GetRandomValue(minLength, maxLength + 1);
+                return RandomNumberService.Instance.GetRandomValue(minLength, maxLength + 1);
             }
             else
             {

@@ -16,6 +16,8 @@ namespace GenFx.ComponentLibrary.Algorithms
     /// since all high-fitness <see cref="IGeneticEntity"/> objects will be moved to the next generation anyways.
     /// </para>
     /// </remarks>
+    /// <typeparam name="TAlgorithm">Type of the deriving algorithm class.</typeparam>
+    /// <typeparam name="TConfiguration">Type of the associated configuration class.</typeparam>
     public abstract class SteadyStateGeneticAlgorithm<TAlgorithm, TConfiguration> : GeneticAlgorithm<TAlgorithm, TConfiguration>
         where TAlgorithm : SteadyStateGeneticAlgorithm<TAlgorithm, TConfiguration>
         where TConfiguration : SteadyStateGeneticAlgorithmConfiguration<TConfiguration, TAlgorithm>

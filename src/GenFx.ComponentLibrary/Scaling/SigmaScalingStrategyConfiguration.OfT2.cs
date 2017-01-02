@@ -6,6 +6,8 @@ namespace GenFx.ComponentLibrary.Scaling
     /// <summary>
     /// Represents the configuration of <see cref="SigmaScalingStrategy{TScaling, TConfiguration}"/>.
     /// </summary>
+    /// <typeparam name="TConfiguration">Type of the deriving configuration class.</typeparam>
+    /// <typeparam name="TScaling">Type of the associated fitness scaling strategy class.</typeparam>
     public abstract class SigmaScalingStrategyConfiguration<TConfiguration, TScaling> : FitnessScalingStrategyConfigurationBase<TConfiguration, TScaling>
         where TConfiguration : SigmaScalingStrategyConfiguration<TConfiguration, TScaling>
         where TScaling : SigmaScalingStrategy<TScaling, TConfiguration>

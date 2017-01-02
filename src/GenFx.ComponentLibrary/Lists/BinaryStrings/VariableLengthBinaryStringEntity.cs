@@ -1,4 +1,3 @@
-using GenFx.ComponentLibrary.Properties;
 using System;
 
 namespace GenFx.ComponentLibrary.Lists.BinaryStrings

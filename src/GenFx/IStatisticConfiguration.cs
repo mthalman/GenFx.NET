@@ -6,7 +6,7 @@ namespace GenFx
     /// Represents the configuration of <see cref="IStatistic"/>.
     /// </summary>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1040:AvoidEmptyInterfaces")]
-    public interface IStatisticConfiguration : IComponentConfiguration
+    public interface IStatisticConfiguration : IConfigurationForComponentWithAlgorithm
     {
     }
 }

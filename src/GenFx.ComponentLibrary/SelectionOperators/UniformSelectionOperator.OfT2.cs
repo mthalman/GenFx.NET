@@ -7,6 +7,8 @@ namespace GenFx.ComponentLibrary.SelectionOperators
     /// Provides a selection technique whereby all <see cref="IGeneticEntity"/> objects have an equal
     /// probability of being selected regardless of fitness.
     /// </summary>
+    /// <typeparam name="TSelection">Type of the deriving selection operator class.</typeparam>
+    /// <typeparam name="TConfiguration">Type of the associated configuration class.</typeparam>
     public abstract class UniformSelectionOperator<TSelection, TConfiguration> : SelectionOperatorBase<TSelection, TConfiguration>
         where TSelection : UniformSelectionOperator<TSelection, TConfiguration>
         where TConfiguration : UniformSelectionOperatorConfiguration<TConfiguration, TSelection>
@@ -37,7 +39,7 @@ namespace GenFx.ComponentLibrary.SelectionOperators
                 throw new ArgumentNullException(nameof(population));
             }
 
-            int selectedEntityIndex = RandomHelper.Instance.GetRandomValue(population.Entities.Count);
+            int selectedEntityIndex = RandomNumberService.Instance.GetRandomValue(population.Entities.Count);
             return population.Entities[selectedEntityIndex];
         }
     }

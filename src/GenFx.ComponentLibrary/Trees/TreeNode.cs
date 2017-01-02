@@ -1,5 +1,4 @@
 using System;
-using GenFx.ComponentLibrary.Properties;
 
 namespace GenFx.ComponentLibrary.Trees
 {
@@ -148,7 +147,7 @@ namespace GenFx.ComponentLibrary.Trees
             if (this.tree == null)
             {
                 throw new InvalidOperationException(
-                  StringUtil.GetFormattedString(LibResources.ErrorMsg_InsertChildNodeWithoutTree));
+                  StringUtil.GetFormattedString(Resources.ErrorMsg_InsertChildNodeWithoutTree));
             }
 
             this.childNodes.Insert(index, node);

@@ -5,6 +5,9 @@ namespace GenFx.ComponentLibrary.Lists
     /// <summary>
     /// Represents the configuration of <see cref="VariableLengthIntegerListEntity{TEntity, TConfiguration}"/>.
     /// </summary>
+    /// <typeparam name="TConfiguration">Type of the deriving configuration class.</typeparam>
+    /// <typeparam name="TEntity">Type of the associated entity class.</typeparam>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1501:AvoidExcessiveInheritance")]
     public abstract class VariableLengthIntegerListEntityConfiguration<TConfiguration, TEntity> : IntegerListEntityConfiguration<TConfiguration, TEntity>
         where TConfiguration : VariableLengthIntegerListEntityConfiguration<TConfiguration, TEntity> 
         where TEntity : VariableLengthIntegerListEntity<TEntity, TConfiguration>

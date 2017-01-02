@@ -1,5 +1,3 @@
-using GenFx.ComponentLibrary.Base;
-using GenFx.Validation;
 using System;
 
 namespace GenFx.ComponentLibrary.Lists
@@ -7,6 +5,8 @@ namespace GenFx.ComponentLibrary.Lists
     /// <summary>
     /// Entity made up of a fixed-length list of integers.
     /// </summary>
+    /// <typeparam name="TEntity">Type of the deriving entity class.</typeparam>
+    /// <typeparam name="TConfiguration">Type of the entity's configuration class.</typeparam>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix")]
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1501:AvoidExcessiveInheritance")]
     public abstract class FixedLengthIntegerListEntity<TEntity, TConfiguration> : IntegerListEntity<TEntity, TConfiguration>

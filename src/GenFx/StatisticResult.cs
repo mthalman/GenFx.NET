@@ -1,4 +1,3 @@
-using GenFx.Properties;
 using System;
 
 namespace GenFx
@@ -64,12 +63,12 @@ namespace GenFx
         {
             if (generationIndex < 0)
             {
-                throw new ArgumentOutOfRangeException(nameof(generationIndex), generationIndex, FwkResources.ErrorMsg_InvalidGenerationIndex);
+                throw new ArgumentOutOfRangeException(nameof(generationIndex), generationIndex, Resources.ErrorMsg_InvalidGenerationIndex);
             }
 
             if (populationId < 0)
             {
-                throw new ArgumentOutOfRangeException(nameof(populationId), populationId, FwkResources.ErrorMsg_InvalidPopulationID);
+                throw new ArgumentOutOfRangeException(nameof(populationId), populationId, Resources.ErrorMsg_InvalidPopulationID);
             }
 
             if (resultValue == null)

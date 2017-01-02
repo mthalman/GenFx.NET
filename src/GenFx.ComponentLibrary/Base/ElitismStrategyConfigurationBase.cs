@@ -1,4 +1,4 @@
-using GenFx.ComponentModel;
+using GenFx.ComponentLibrary.ComponentModel;
 using GenFx.Validation;
 
 namespace GenFx.ComponentLibrary.Base
@@ -6,7 +6,9 @@ namespace GenFx.ComponentLibrary.Base
     /// <summary>
     /// Represents the configuration of <see cref="ElitismStrategyBase{TElitism, TConfiguration}"/>.
     /// </summary>
-    public abstract class ElitismStrategyConfigurationBase<TConfiguration, TElitism> : ComponentConfiguration<TConfiguration, TElitism>, IElitismStrategyConfiguration
+    /// <typeparam name="TConfiguration">Type of the deriving configuration class.</typeparam>
+    /// <typeparam name="TElitism">Type of the associated elitism strategy class.</typeparam>
+    public abstract class ElitismStrategyConfigurationBase<TConfiguration, TElitism> : ConfigurationForComponentWithAlgorithm<TConfiguration, TElitism>, IElitismStrategyConfiguration
         where TConfiguration : ElitismStrategyConfigurationBase<TConfiguration, TElitism>
         where TElitism : ElitismStrategyBase<TElitism, TConfiguration>
     {

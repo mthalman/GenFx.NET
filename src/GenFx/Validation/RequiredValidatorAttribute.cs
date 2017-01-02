@@ -4,7 +4,7 @@ using GenFx.ComponentModel;
 namespace GenFx.Validation
 {
     /// <summary>
-    /// Base class for classes that indicate that a configuration property is required to be set.
+    /// Base class for configuration classes that indicate that a configuration property is required to be set.
     /// </summary>
     public abstract class RequiredValidatorBaseAttribute : ConfigurationValidatorAttribute
     {
@@ -67,11 +67,11 @@ namespace GenFx.Validation
         /// <summary>
         /// Initializes a new instance of the <see cref="RequiredExternalValidatorAttribute"/> class.
         /// </summary>
-        /// <param name="targetComponentConfigurationType"><see cref="Type"/> of the component configuration containing the property to be validated. This type must be a derivative of <see cref="ComponentConfiguration"/>.</param>
+        /// <param name="targetComponentConfigurationType"><see cref="Type"/> of the component configuration containing the property to be validated. This type must implement <see cref="IComponentConfiguration"/>.</param>
         /// <param name="targetProperty">Property of the <paramref name="targetComponentConfigurationType"/> to be validated.</param>
         /// <exception cref="ArgumentNullException"><paramref name="targetComponentConfigurationType"/> is null.</exception>
         /// <exception cref="ArgumentException"><paramref name="targetProperty"/> is null or empty.</exception>
-        /// <exception cref="ArgumentException"><paramref name="targetComponentConfigurationType"/> does not derive from <see cref="ComponentConfiguration"/>.</exception>
+        /// <exception cref="ArgumentException"><paramref name="targetComponentConfigurationType"/> does not implement <see cref="IComponentConfiguration"/>.</exception>
         /// <exception cref="ArgumentException"><paramref name="targetProperty"/> does not exist on <paramref name="targetComponentConfigurationType"/>.</exception>
         public RequiredExternalValidatorAttribute(Type targetComponentConfigurationType, string targetProperty)
         {

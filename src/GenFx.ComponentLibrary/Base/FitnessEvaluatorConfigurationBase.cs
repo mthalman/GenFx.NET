@@ -1,3 +1,4 @@
+using GenFx.ComponentLibrary.ComponentModel;
 using GenFx.ComponentModel;
 using GenFx.Validation;
 
@@ -6,7 +7,9 @@ namespace GenFx.ComponentLibrary.Base
     /// <summary>
     /// Represents the configuration of <see cref="FitnessEvaluatorBase{TFitness, TConfiguration}"/>.
     /// </summary>
-    public abstract class FitnessEvaluatorConfigurationBase<TConfiguration, TFitness> : ComponentConfiguration<TConfiguration, TFitness>, IFitnessEvaluatorConfiguration
+    /// <typeparam name="TConfiguration">Type of the deriving configuration class.</typeparam>
+    /// <typeparam name="TFitness">Type of the associated fitness evaluator class.</typeparam>
+    public abstract class FitnessEvaluatorConfigurationBase<TConfiguration, TFitness> : ConfigurationForComponentWithAlgorithm<TConfiguration, TFitness>, IFitnessEvaluatorConfiguration
         where TConfiguration : FitnessEvaluatorConfigurationBase<TConfiguration, TFitness>
         where TFitness : FitnessEvaluatorBase<TFitness, TConfiguration>
     {

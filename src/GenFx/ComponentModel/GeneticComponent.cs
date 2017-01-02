@@ -3,25 +3,31 @@ namespace GenFx.ComponentModel
     /// <summary>
     /// Represents a customizable component within the framework.
     /// </summary>
-    public abstract class GeneticComponent : IGeneticComponent
+    /// <typeparam name="TComponent">Type of the deriving component class.</typeparam>
+    /// <typeparam name="TConfiguration">Type of the associated configuration class.</typeparam>
+    public abstract class GeneticComponent<TComponent, TConfiguration> : IGeneticComponent
+        where TComponent : GeneticComponent<TComponent, TConfiguration>
+        where TConfiguration : ComponentConfiguration<TConfiguration, TComponent>
     {
         /// <summary>
         /// Initializes a new instance of this class.
         /// </summary>
-        /// <param name="configuration">The <see cref="ComponentConfiguration"/> containing the configuration of this component.</param>
-        protected GeneticComponent(ComponentConfiguration configuration)
+        /// <param name="configuration">The <typeparamref name="TConfiguration"/> containing the configuration of this component.</param>
+        protected GeneticComponent(TConfiguration configuration)
         {
-            Configuration = configuration;
+            this.Configuration = configuration;
         }
 
         /// <summary>
-        /// Gets the <see cref="ComponentConfiguration"/> containing the configuration of this component instance.
+        /// Gets the <typeparamref name="TConfiguration"/> containing the configuration of this component instance.
         /// </summary>
-        public IComponentConfiguration Configuration
+        public TConfiguration Configuration
         {
             get;
             private set;
         }
+
+        IComponentConfiguration IGeneticComponent.Configuration { get { return this.Configuration; } }
 
         /// <summary>
         /// Restores the state of the component.

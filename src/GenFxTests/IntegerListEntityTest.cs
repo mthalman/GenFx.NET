@@ -19,7 +19,7 @@ namespace GenFxTests
         [TestCleanup]
         public void Cleanup()
         {
-            RandomHelper.Instance = new RandomHelper();
+            RandomNumberService.Instance = new RandomNumberService();
         }
 
         /// <summary>
@@ -93,7 +93,7 @@ namespace GenFxTests
         {
             IGeneticAlgorithm algorithm = GetAlgorithm(4);
             IIntegerListEntity entity = new TestIntegerListEntity(algorithm);
-            RandomHelper.Instance = new TestRandomUtil();
+            RandomNumberService.Instance = new TestRandomUtil();
             entity.Initialize();
             Assert.AreEqual("0, 1, 2, 3", entity.Representation, "Entity not initialized correctly.");
         }
@@ -224,7 +224,7 @@ namespace GenFxTests
             public int Length { get; set; }
         }
 
-        private class TestRandomUtil : IRandomHelper
+        private class TestRandomUtil : IRandomNumberService
         {
             private int increment;
 
@@ -233,7 +233,7 @@ namespace GenFxTests
                 throw new Exception("The method or operation is not implemented.");
             }
 
-            public double GetRandomRatio()
+            public double GetRandomPercentRatio()
             {
                 throw new Exception("The method or operation is not implemented.");
             }

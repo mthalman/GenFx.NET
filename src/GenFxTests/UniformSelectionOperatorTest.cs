@@ -19,7 +19,7 @@ namespace GenFxTests
         [TestCleanup]
         public void Cleanup()
         {
-            RandomHelper.Instance = new RandomHelper();
+            RandomNumberService.Instance = new RandomNumberService();
         }
 
         /// <summary>
@@ -47,7 +47,7 @@ namespace GenFxTests
             population.Entities.Add(new MockEntity(algorithm));
 
             TestRandomUtil randomUtil = new TestRandomUtil();
-            RandomHelper.Instance = randomUtil;
+            RandomNumberService.Instance = randomUtil;
 
             randomUtil.Value = 3;
             IGeneticEntity selectedEntity = op.SelectEntity(population);
@@ -66,7 +66,7 @@ namespace GenFxTests
             Assert.AreSame(population.Entities[randomUtil.Value], selectedEntity, "Incorrect selected entity.");
         }
 
-        private class TestRandomUtil : IRandomHelper
+        private class TestRandomUtil : IRandomNumberService
         {
             internal int Value;
 
@@ -75,7 +75,7 @@ namespace GenFxTests
                 return Value;
             }
 
-            public double GetRandomRatio()
+            public double GetRandomPercentRatio()
             {
                 throw new Exception("The method or operation is not implemented.");
             }

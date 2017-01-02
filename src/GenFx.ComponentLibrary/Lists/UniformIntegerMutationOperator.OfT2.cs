@@ -1,5 +1,5 @@
 using GenFx.ComponentLibrary.Base;
-using GenFx.ComponentModel;
+using GenFx.Validation;
 using System;
 
 namespace GenFx.ComponentLibrary.Lists
@@ -11,6 +11,8 @@ namespace GenFx.ComponentLibrary.Lists
     /// Uniform integer mutation operates upon an integer list, causing each integer of the list to
     /// mutate if it meets a certain probability.
     /// </remarks>
+    /// <typeparam name="TMutation">Type of the deriving mutation operator class.</typeparam>
+    /// <typeparam name="TConfiguration">Type of the associated configuration class.</typeparam>
     [RequiredEntity(typeof(IIntegerListEntity))]
     public abstract class UniformIntegerMutationOperator<TMutation, TConfiguration> : MutationOperatorBase<TMutation, TConfiguration>
         where TMutation : UniformIntegerMutationOperator<TMutation, TConfiguration>
@@ -45,7 +47,7 @@ namespace GenFx.ComponentLibrary.Lists
             IIntegerListEntity listEntity = (IIntegerListEntity)entity;
             for (int i = 0; i < listEntity.Length; i++)
             {
-                if (RandomHelper.Instance.GetRandomRatio() <= this.Configuration.MutationRate)
+                if (RandomNumberService.Instance.GetRandomPercentRatio() <= this.Configuration.MutationRate)
                 {
                     IIntegerListEntityConfiguration config = (IIntegerListEntityConfiguration)this.Algorithm.ConfigurationSet.Entity;
                     int currentValue = listEntity[i];
@@ -53,7 +55,7 @@ namespace GenFx.ComponentLibrary.Lists
 
                     while (randomValue == currentValue)
                     {
-                        randomValue = RandomHelper.Instance.GetRandomValue(config.MinElementValue, config.MaxElementValue + 1);
+                        randomValue = RandomNumberService.Instance.GetRandomValue(config.MinElementValue, config.MaxElementValue + 1);
                     }
 
                     listEntity[i] = randomValue;

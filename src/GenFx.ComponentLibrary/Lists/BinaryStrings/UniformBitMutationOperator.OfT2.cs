@@ -1,5 +1,5 @@
 using GenFx.ComponentLibrary.Base;
-using GenFx.ComponentModel;
+using GenFx.Validation;
 using System;
 
 namespace GenFx.ComponentLibrary.Lists.BinaryStrings
@@ -11,6 +11,8 @@ namespace GenFx.ComponentLibrary.Lists.BinaryStrings
     /// Uniform bit mutation operates upon a binary string, causing each bit of the string to
     /// mutate if it meets a certain probability.
     /// </remarks>
+    /// <typeparam name="TMutation">Type of the deriving mutation operator class.</typeparam>
+    /// <typeparam name="TConfiguration">Type of the associated configuration class.</typeparam>
     [RequiredEntity(typeof(IListEntityBase<bool>))]
     public abstract class UniformBitMutationOperator<TMutation, TConfiguration> : MutationOperatorBase<TMutation, TConfiguration>
         where TMutation : UniformBitMutationOperator<TMutation, TConfiguration>
@@ -45,7 +47,7 @@ namespace GenFx.ComponentLibrary.Lists.BinaryStrings
             IListEntityBase<bool> bsEntity = (IListEntityBase<bool>)entity;
             for (int i = 0; i < bsEntity.Length; i++)
             {
-                if (RandomHelper.Instance.GetRandomRatio() <= this.Configuration.MutationRate)
+                if (RandomNumberService.Instance.GetRandomPercentRatio() <= this.Configuration.MutationRate)
                 {
                     isMutated = true;
                     if (!bsEntity[i])

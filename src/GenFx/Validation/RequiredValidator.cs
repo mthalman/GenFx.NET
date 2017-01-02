@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
-using GenFx.Properties;
 
 namespace GenFx.Validation
 {
@@ -30,14 +29,14 @@ namespace GenFx.Validation
         {
             if (String.IsNullOrEmpty(propertyName))
             {
-                throw new ArgumentException(FwkResources.ErrorMsg_StringNullOrEmpty, nameof(propertyName));
+                throw new ArgumentException(Resources.ErrorMsg_StringNullOrEmpty, nameof(propertyName));
             }
 
             errorMessage = null;
 
             if ((value is string && String.IsNullOrEmpty((string)value) || value == null))
             {
-                errorMessage = StringUtil.GetFormattedString(FwkResources.ErrorMsg_RequiredPropertyNotSet, propertyName);
+                errorMessage = StringUtil.GetFormattedString(Resources.ErrorMsg_RequiredPropertyNotSet, propertyName);
             }
 
             return errorMessage == null;

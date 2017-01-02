@@ -1,12 +1,14 @@
-﻿using System;
-using GenFx.ComponentModel;
-using GenFx.ComponentLibrary.Base;
+﻿using GenFx.ComponentLibrary.Base;
+using GenFx.Validation;
+using System;
 
 namespace GenFx.ComponentLibrary.Lists
 {
     /// <summary>
     /// Operates upon a <see cref="IListEntityBase"/> by shifting a random segment of the list to the left or right by one position.
     /// </summary>
+    /// <typeparam name="TMutation">Type of the deriving mutation operator class.</typeparam>
+    /// <typeparam name="TConfiguration">Type of the associated configuration class.</typeparam>
     [RequiredEntity(typeof(IListEntityBase))]
     public abstract class ListShiftMutationOperator<TMutation, TConfiguration> : MutationOperatorBase<TMutation, TConfiguration>
         where TMutation : ListShiftMutationOperator<TMutation, TConfiguration>
@@ -38,13 +40,13 @@ namespace GenFx.ComponentLibrary.Lists
             }
 
             IListEntityBase listEntity = (IListEntityBase)entity;
-            if (RandomHelper.Instance.GetRandomRatio() <= this.Configuration.MutationRate)
+            if (RandomNumberService.Instance.GetRandomPercentRatio() <= this.Configuration.MutationRate)
             {
-                int firstPosition = RandomHelper.Instance.GetRandomValue(listEntity.Length);
+                int firstPosition = RandomNumberService.Instance.GetRandomValue(listEntity.Length);
                 int secondPosition;
                 do
                 {
-                    secondPosition = RandomHelper.Instance.GetRandomValue(listEntity.Length);
+                    secondPosition = RandomNumberService.Instance.GetRandomValue(listEntity.Length);
                 } while (secondPosition == firstPosition);
 
                 if (firstPosition < secondPosition)

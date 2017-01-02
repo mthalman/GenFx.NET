@@ -1,4 +1,3 @@
-using GenFx.ComponentLibrary.Properties;
 using System;
 using System.Collections;
 using System.Linq;
@@ -10,6 +9,8 @@ namespace GenFx.ComponentLibrary.Lists.BinaryStrings
     /// <see cref="IGeneticEntity"/> made up of a string of bits.
     /// </summary>
     /// <remarks>This class uses a <see cref="BitArray"/> data structure to represent the list.</remarks>
+    /// <typeparam name="TEntity">Type of the deriving entity class.</typeparam>
+    /// <typeparam name="TConfiguration">Type of the entity's configuration class.</typeparam>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix")]
     public abstract class BinaryStringEntity<TEntity, TConfiguration> : ListEntityBase<TEntity, TConfiguration, bool>
         where TEntity : BinaryStringEntity<TEntity, TConfiguration>
@@ -46,7 +47,7 @@ namespace GenFx.ComponentLibrary.Lists.BinaryStrings
             {
                 if (value != this.genes.Length)
                 {
-                    throw new ArgumentException(LibResources.ErrorMsg_BinaryStringEntityLengthCannotBeChanged, nameof(value));
+                    throw new ArgumentException(Resources.ErrorMsg_BinaryStringEntityLengthCannotBeChanged, nameof(value));
                 }
             }
         }
@@ -87,7 +88,7 @@ namespace GenFx.ComponentLibrary.Lists.BinaryStrings
         {
             for (int i = 0; i < this.Length; i++)
             {
-                this[i] = RandomHelper.Instance.GetRandomValue(2) == 1 ? true : false;
+                this[i] = RandomNumberService.Instance.GetRandomValue(2) == 1 ? true : false;
             }
 
             this.UpdateStringRepresentation();

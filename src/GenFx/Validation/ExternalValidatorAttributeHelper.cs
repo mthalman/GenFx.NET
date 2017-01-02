@@ -1,7 +1,6 @@
+using GenFx.ComponentModel;
 using System;
 using System.Reflection;
-using GenFx.ComponentModel;
-using GenFx.Properties;
 
 namespace GenFx.Validation
 {
@@ -17,7 +16,7 @@ namespace GenFx.Validation
         /// <param name="targetProperty">Property of the <paramref name="targetComponentConfigurationType"/> to be validated.</param>
         /// <exception cref="ArgumentNullException"><paramref name="targetComponentConfigurationType"/> is null.</exception>
         /// <exception cref="ArgumentException"><paramref name="targetProperty"/> is null or empty.</exception>
-        /// <exception cref="ArgumentException"><paramref name="targetComponentConfigurationType"/> does not derive from <see cref="ComponentConfiguration"/>.</exception>
+        /// <exception cref="ArgumentException"><paramref name="targetComponentConfigurationType"/> does not implement <see cref="IComponentConfiguration"/>.</exception>
         /// <exception cref="ArgumentException"><paramref name="targetProperty"/> does not exist on <paramref name="targetComponentConfigurationType"/>.</exception>
         public static void ValidateArguments(Type targetComponentConfigurationType, string targetProperty)
         {
@@ -28,19 +27,19 @@ namespace GenFx.Validation
 
             if (String.IsNullOrEmpty(targetProperty))
             {
-                throw new ArgumentException(FwkResources.ErrorMsg_StringNullOrEmpty, nameof(targetProperty));
+                throw new ArgumentException(Resources.ErrorMsg_StringNullOrEmpty, nameof(targetProperty));
             }
 
-            if (!typeof(ComponentConfiguration).IsAssignableFrom(targetComponentConfigurationType))
+            if (!typeof(IComponentConfiguration).IsAssignableFrom(targetComponentConfigurationType))
             {
                 throw new ArgumentException(StringUtil.GetFormattedString(
-                    FwkResources.ErrorMsg_ExternalValidator_InvalidTargetType, targetComponentConfigurationType.FullName, typeof(ComponentConfiguration).FullName), nameof(targetComponentConfigurationType));
+                    Resources.ErrorMsg_ExternalValidator_InvalidTargetType, targetComponentConfigurationType.FullName, typeof(IComponentConfiguration).FullName), nameof(targetComponentConfigurationType));
             }
 
             if (ExternalValidatorAttributeHelper.GetTargetPropertyInfo(targetComponentConfigurationType, targetProperty) == null)
             {
                 throw new ArgumentException(StringUtil.GetFormattedString(
-                    FwkResources.ErrorMsg_ExternalValidator_PropertyDoesNotExist, targetProperty, targetComponentConfigurationType.FullName), nameof(targetProperty));
+                    Resources.ErrorMsg_ExternalValidator_PropertyDoesNotExist, targetProperty, targetComponentConfigurationType.FullName), nameof(targetProperty));
             }
         }
 

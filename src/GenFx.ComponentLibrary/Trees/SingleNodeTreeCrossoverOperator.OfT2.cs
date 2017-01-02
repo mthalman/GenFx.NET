@@ -1,5 +1,5 @@
 using GenFx.ComponentLibrary.Base;
-using GenFx.ComponentModel;
+using GenFx.Validation;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -15,6 +15,8 @@ namespace GenFx.ComponentLibrary.Trees
     /// "B OR C" were to be crossed over at the "OR" node in the first tree and the "C" node in the second tree,
     /// the resulting offspring would be "C AND C" and "B OR (A OR B)".
     /// </remarks>
+    /// <typeparam name="TCrossover">Type of the deriving crossover operator class.</typeparam>
+    /// <typeparam name="TConfiguration">Type of the associated configuration class.</typeparam>
     [RequiredEntity(typeof(ITreeEntity))]
     public abstract class SingleNodeTreeCrossoverOperator<TCrossover, TConfiguration> : CrossoverOperatorBase<TCrossover, TConfiguration>
         where TCrossover : SingleNodeTreeCrossoverOperator<TCrossover, TConfiguration>
@@ -58,8 +60,8 @@ namespace GenFx.ComponentLibrary.Trees
             ITreeEntity tree1 = (ITreeEntity)entity1;
             ITreeEntity tree2 = (ITreeEntity)entity2;
 
-            int crossoverLocation1 = RandomHelper.Instance.GetRandomValue(tree1.GetSize());
-            int crossoverLocation2 = RandomHelper.Instance.GetRandomValue(tree2.GetSize());
+            int crossoverLocation1 = RandomNumberService.Instance.GetRandomValue(tree1.GetSize());
+            int crossoverLocation2 = RandomNumberService.Instance.GetRandomValue(tree2.GetSize());
 
             TreeNode swapNode1 = GetSwapNode(tree1, crossoverLocation1);
             TreeNode swapNode2 = GetSwapNode(tree2, crossoverLocation2);

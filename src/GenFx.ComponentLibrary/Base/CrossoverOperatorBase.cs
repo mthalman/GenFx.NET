@@ -1,3 +1,4 @@
+using GenFx.ComponentLibrary.ComponentModel;
 using System;
 using System.Collections.Generic;
 
@@ -19,6 +20,8 @@ namespace GenFx.ComponentLibrary.Base
     /// property.
     /// </para>
     /// </remarks>
+    /// <typeparam name="TCrossover">Type of the deriving crossover operator class.</typeparam>
+    /// <typeparam name="TConfiguration">Type of the associated configuration class.</typeparam>
     public abstract class CrossoverOperatorBase<TCrossover, TConfiguration> : GeneticComponentWithAlgorithm<TCrossover, TConfiguration>, ICrossoverOperator
         where TCrossover : CrossoverOperatorBase<TCrossover, TConfiguration>
         where TConfiguration : CrossoverOperatorConfigurationBase<TConfiguration, TCrossover>
@@ -58,7 +61,7 @@ namespace GenFx.ComponentLibrary.Base
             }
 
             IList<IGeneticEntity> crossoverOffspring;
-            if (RandomHelper.Instance.GetRandomRatio() <= this.Configuration.CrossoverRate)
+            if (RandomNumberService.Instance.GetRandomPercentRatio() <= this.Configuration.CrossoverRate)
             {
                 IGeneticEntity clonedEntity1 = entity1.Clone();
                 IGeneticEntity clonedEntity2 = entity2.Clone();

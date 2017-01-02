@@ -5,6 +5,8 @@ namespace GenFx.ComponentLibrary.Lists.BinaryStrings
     /// <summary>
     /// Entity made up of a fixed-length string of bits.
     /// </summary>
+    /// <typeparam name="TEntity">Type of the deriving entity class.</typeparam>
+    /// <typeparam name="TConfiguration">Type of the entity's configuration class.</typeparam>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix")]
     public abstract class FixedLengthBinaryStringEntity<TEntity, TConfiguration> : BinaryStringEntity<TEntity, TConfiguration>
         where TEntity : FixedLengthBinaryStringEntity<TEntity, TConfiguration>

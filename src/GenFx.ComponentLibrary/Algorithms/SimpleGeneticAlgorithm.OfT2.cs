@@ -12,6 +12,8 @@ namespace GenFx.ComponentLibrary.Algorithms
     /// <b>SimpleGeneticAlgorithm</b> can operate multiple <see cref="IPopulation"/> objects but
     /// they run isolated from one another.
     /// </remarks>
+    /// <typeparam name="TAlgorithm">Type of the deriving algorithm class.</typeparam>
+    /// <typeparam name="TConfiguration">Type of the associated configuration class.</typeparam>
     public abstract class SimpleGeneticAlgorithm<TAlgorithm, TConfiguration> : GeneticAlgorithm<TAlgorithm, TConfiguration>
         where TAlgorithm : GeneticAlgorithm<TAlgorithm, TConfiguration>
         where TConfiguration : GeneticAlgorithmConfiguration<TConfiguration, TAlgorithm>

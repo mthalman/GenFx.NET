@@ -19,13 +19,13 @@ namespace GenFxTests
         [TestMethod]
         public void RandomUtil_GetRandomValue()
         {
-            int num1 = RandomHelper.Instance.GetRandomValue(100);
-            int num2 = RandomHelper.Instance.GetRandomValue(100);
+            int num1 = RandomNumberService.Instance.GetRandomValue(100);
+            int num2 = RandomNumberService.Instance.GetRandomValue(100);
 
             if (num1 == num2)
             {
                 // Try again for good measure.
-                num2 = RandomHelper.Instance.GetRandomValue(100);
+                num2 = RandomNumberService.Instance.GetRandomValue(100);
             }
 
             Assert.AreNotEqual(num1, num2, "Numbers should probably be different.");
@@ -37,8 +37,8 @@ namespace GenFxTests
         [TestMethod]
         public void RandomUtil_GetRandomRatio()
         {
-            double num1 = RandomHelper.Instance.GetRandomRatio();
-            double num2 = RandomHelper.Instance.GetRandomRatio();
+            double num1 = RandomNumberService.Instance.GetRandomPercentRatio();
+            double num2 = RandomNumberService.Instance.GetRandomPercentRatio();
             Assert.AreNotEqual(num1, num2, "Numbers should probably be different.");
         }
     }

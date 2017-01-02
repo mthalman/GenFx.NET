@@ -1,4 +1,3 @@
-using GenFx.ComponentLibrary.Properties;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -39,7 +38,7 @@ namespace GenFx.ComponentLibrary.SelectionOperators
             if (wheelSlices.Count == 0)
             {
                 throw new ArgumentException(
-                  StringUtil.GetFormattedString(LibResources.ErrorMsg_EmptyList), nameof(wheelSlices));
+                  StringUtil.GetFormattedString(Resources.ErrorMsg_EmptyList), nameof(wheelSlices));
             }
 
             double totalSize = 0;
@@ -47,7 +46,7 @@ namespace GenFx.ComponentLibrary.SelectionOperators
             {
                 if (wheelSlice == null)
                 {
-                    throw new ArgumentException(LibResources.ErrorMsg_NullItemInList, nameof(wheelSlices));
+                    throw new ArgumentException(Resources.ErrorMsg_NullItemInList, nameof(wheelSlices));
                 }
 
                 totalSize += wheelSlice.Size;
@@ -56,7 +55,7 @@ namespace GenFx.ComponentLibrary.SelectionOperators
             if (totalSize == 0)
             {
                 // none of the wheel slices have a size.  default to selecting a random entity
-                return wheelSlices[RandomHelper.Instance.GetRandomValue(wheelSlices.Count)].Entity;
+                return wheelSlices[RandomNumberService.Instance.GetRandomValue(wheelSlices.Count)].Entity;
             }
 
             List<EntityPercentageRange> percentageRanges = new List<EntityPercentageRange>();
@@ -76,7 +75,7 @@ namespace GenFx.ComponentLibrary.SelectionOperators
         /// </summary>
         private static IGeneticEntity SpinWheel(List<EntityPercentageRange> percentageRanges)
         {
-            double percentTarget = RandomHelper.Instance.GetRandomRatio() * 100;
+            double percentTarget = RandomNumberService.Instance.GetRandomPercentRatio() * 100;
 
             foreach (EntityPercentageRange range in percentageRanges)
             {
@@ -181,7 +180,7 @@ namespace GenFx.ComponentLibrary.SelectionOperators
 
             if (size < 0)
             {
-                throw new ArgumentException(LibResources.ErrorMsg_InvalidWheelSliceSize, nameof(size));
+                throw new ArgumentException(Resources.ErrorMsg_InvalidWheelSliceSize, nameof(size));
             }
 
             this.entity = entity;

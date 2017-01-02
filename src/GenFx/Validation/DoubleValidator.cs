@@ -1,5 +1,4 @@
 ﻿using System;
-using GenFx.Properties;
 
 namespace GenFx.Validation
 {
@@ -69,11 +68,11 @@ namespace GenFx.Validation
         {
             if (minValue > maxValue)
             {
-                throw new ArgumentOutOfRangeException(FwkResources.ErrorMsg_InvalidMinMaxRange);
+                throw new ArgumentOutOfRangeException(Resources.ErrorMsg_InvalidMinMaxRange);
             }
             else if (minValue == maxValue && (!isMinValueInclusive || !isMaxValueInclusive))
             {
-                throw new InvalidOperationException(FwkResources.ErrorMsg_InvalidDoubleProperty_EqualMinMaxButNotInclusive);
+                throw new InvalidOperationException(Resources.ErrorMsg_InvalidDoubleProperty_EqualMinMaxButNotInclusive);
             }
 
             this.minValue = minValue;
@@ -95,7 +94,7 @@ namespace GenFx.Validation
         {
             if (String.IsNullOrEmpty(propertyName))
             {
-                throw new ArgumentException(FwkResources.ErrorMsg_StringNullOrEmpty, nameof(propertyName));
+                throw new ArgumentException(Resources.ErrorMsg_StringNullOrEmpty, nameof(propertyName));
             }
 
             bool isValid = true;
@@ -140,11 +139,11 @@ namespace GenFx.Validation
             {
                 if (this.minValue == this.maxValue)
                 {
-                    errorMessage = StringUtil.GetFormattedString(FwkResources.ErrorMsg_InvalidProperty_Exact, propertyName, this.minValue);
+                    errorMessage = StringUtil.GetFormattedString(Resources.ErrorMsg_InvalidProperty_Exact, propertyName, this.minValue);
                 }
                 else
                 {
-                    errorMessage = StringUtil.GetFormattedString(FwkResources.ErrorMsg_InvalidDoubleProperty,
+                    errorMessage = StringUtil.GetFormattedString(Resources.ErrorMsg_InvalidDoubleProperty,
                       propertyName, this.minValue, GetInclusiveLabel(this.isMinValueInclusive), this.maxValue, GetInclusiveLabel(this.isMaxValueInclusive));
                 }
             }
@@ -165,11 +164,11 @@ namespace GenFx.Validation
         {
             if (isInclusive)
             {
-                return FwkResources.InclusiveLabel;
+                return Resources.InclusiveLabel;
             }
             else
             {
-                return FwkResources.ExclusiveLabel;
+                return Resources.ExclusiveLabel;
             }
         }
     }

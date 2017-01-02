@@ -1,5 +1,4 @@
 ﻿using System;
-using GenFx.Properties;
 
 namespace GenFx.Validation
 {
@@ -37,7 +36,7 @@ namespace GenFx.Validation
         {
             if (String.IsNullOrEmpty(propertyName))
             {
-                throw new ArgumentException(FwkResources.ErrorMsg_StringNullOrEmpty, nameof(propertyName));
+                throw new ArgumentException(Resources.ErrorMsg_StringNullOrEmpty, nameof(propertyName));
             }
 
             if (value == null)

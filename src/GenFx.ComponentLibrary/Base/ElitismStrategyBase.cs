@@ -1,4 +1,4 @@
-using GenFx.Properties;
+using GenFx.ComponentLibrary.ComponentModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,6 +22,8 @@ namespace GenFx.ComponentLibrary.Base
     /// property.
     /// </para>
     /// </remarks>
+    /// <typeparam name="TElitism">Type of the deriving elitism strategy class.</typeparam>
+    /// <typeparam name="TConfiguration">Type of the associated configuration class.</typeparam>
     public abstract class ElitismStrategyBase<TElitism, TConfiguration> : GeneticComponentWithAlgorithm<TElitism, TConfiguration>, IElitismStrategy
         where TElitism : ElitismStrategyBase<TElitism, TConfiguration>
         where TConfiguration : ElitismStrategyConfigurationBase<TConfiguration, TElitism>
@@ -58,7 +60,7 @@ namespace GenFx.ComponentLibrary.Base
 
             if (population.Entities.Count == 0)
             {
-                throw new ArgumentException(FwkResources.ErrorMsg_EntityListEmpty, nameof(population));
+                throw new ArgumentException(Resources.ErrorMsg_EntityListEmpty, nameof(population));
             }
 
             return this.GetEliteGeneticEntitiesCore(population);

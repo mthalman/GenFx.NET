@@ -43,21 +43,6 @@ namespace GenFxTests
         }
 
         /// <summary>
-        /// Tests that the Min/Max-Value properties work correctly.
-        /// </summary>
-        [TestMethod]
-        public void IntegerValidatorAttribute_MinMax()
-        {
-            IntegerValidatorAttribute attrib = new IntegerValidatorAttribute();
-            attrib.MinValue = 10;
-            attrib.MaxValue = 20;
-
-            PrivateObject accessor = new PrivateObject(attrib.Validator);
-            Assert.AreEqual(attrib.MinValue, accessor.GetField("minValue"), "MinValue not set correctly on Validator.");
-            Assert.AreEqual(attrib.MaxValue, accessor.GetField("maxValue"), "MaxValue not set correctly on Validator.");
-        }
-
-        /// <summary>
         /// Tests that the constructor initializes the state correctly.
         /// </summary>
         [TestMethod]

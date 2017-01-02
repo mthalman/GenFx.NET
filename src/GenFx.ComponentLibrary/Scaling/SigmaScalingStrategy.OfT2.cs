@@ -12,6 +12,8 @@ namespace GenFx.ComponentLibrary.Scaling
     /// The sigma scaling algorithm is based on the one defined by Goldberg (1989).
     /// </para>
     /// </remarks>
+    /// <typeparam name="TScaling">Type of the deriving fitness scaling strategy class.</typeparam>
+    /// <typeparam name="TConfiguration">Type of the associated configuration class.</typeparam>
     public abstract class SigmaScalingStrategy<TScaling, TConfiguration> : FitnessScalingStrategyBase<TScaling, TConfiguration>
         where TScaling : SigmaScalingStrategy<TScaling, TConfiguration>
         where TConfiguration : SigmaScalingStrategyConfiguration<TConfiguration, TScaling>

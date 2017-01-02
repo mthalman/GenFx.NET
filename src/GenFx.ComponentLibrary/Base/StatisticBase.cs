@@ -1,4 +1,4 @@
-using GenFx.ComponentModel;
+using GenFx.ComponentLibrary.ComponentModel;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -21,6 +21,8 @@ namespace GenFx.ComponentLibrary.Base
     /// the type of that derived class.
     /// </para>
     /// </remarks>
+    /// <typeparam name="TStatistic">Type of the deriving statistic class.</typeparam>
+    /// <typeparam name="TConfiguration">Type of the associated configuration class.</typeparam>
     public abstract class StatisticBase<TStatistic, TConfiguration> : GeneticComponentWithAlgorithm<TStatistic, TConfiguration>, IStatistic
         where TStatistic : StatisticBase<TStatistic, TConfiguration>
         where TConfiguration : StatisticConfigurationBase<TConfiguration, TStatistic>

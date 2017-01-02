@@ -19,7 +19,7 @@ namespace GenFxTests
         [TestCleanup]
         public void Cleanup()
         {
-            RandomHelper.Instance = new RandomHelper();
+            RandomNumberService.Instance = new RandomNumberService();
         }
 
         /// <summary>
@@ -48,7 +48,7 @@ namespace GenFxTests
             slices.Add(new WheelSlice(entity4, 3));
 
             TestRandomUtil randomUtil = new TestRandomUtil();
-            RandomHelper.Instance = randomUtil;
+            RandomNumberService.Instance = randomUtil;
 
             randomUtil.Ratio = 0;
             IGeneticEntity sampledEntity = RouletteWheelSampler.GetEntity(slices);
@@ -109,7 +109,7 @@ namespace GenFxTests
             slices.Add(new WheelSlice(entity4, 0));
 
             TestRandomUtil randomUtil = new TestRandomUtil();
-            RandomHelper.Instance = randomUtil;
+            RandomNumberService.Instance = randomUtil;
             randomUtil.RandomValue = 2;
             IGeneticEntity sampledEntity = RouletteWheelSampler.GetEntity(slices);
             Assert.AreEqual(randomUtil.MaxValuePassed, 4, "Incorrect max value passed.");
@@ -125,7 +125,7 @@ namespace GenFxTests
             AssertEx.Throws<ArgumentNullException>(() => RouletteWheelSampler.GetEntity(null));
         }
 
-        private class TestRandomUtil : IRandomHelper
+        private class TestRandomUtil : IRandomNumberService
         {
             internal double Ratio;
             internal int RandomValue;
@@ -137,7 +137,7 @@ namespace GenFxTests
                 return RandomValue;
             }
 
-            public double GetRandomRatio()
+            public double GetRandomPercentRatio()
             {
                 return Ratio;
             }

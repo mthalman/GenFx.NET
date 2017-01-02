@@ -129,8 +129,14 @@
   <data name="ErrorMsg_EntityCopyToTypeMismatch" xml:space="preserve">
     <value>The entity must be of type '{0}'.</value>
   </data>
+  <data name="ErrorMsg_EntityListEmpty" xml:space="preserve">
+    <value>Entity list cannot be empty.</value>
+  </data>
   <data name="ErrorMsg_InsertChildNodeWithoutTree" xml:space="preserve">
     <value>Parent node must belong to a tree before child nodes can be added.</value>
+  </data>
+  <data name="ErrorMsg_InvalidEnum" xml:space="preserve">
+    <value>The {0} value is invalid.  Valid values are {1}.</value>
   </data>
   <data name="ErrorMsg_InvalidPopulationReplacementValue" xml:space="preserve">
     <value>Setting '{0}' must be a fixed integer count greater than 0 or an integral percentage between 1 and 100.</value>
