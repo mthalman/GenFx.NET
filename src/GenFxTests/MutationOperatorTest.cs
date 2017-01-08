@@ -1,6 +1,6 @@
 ﻿using GenFx;
 using GenFx.ComponentLibrary.Base;
-using GenFx.ComponentModel;
+using GenFx.Contracts;
 using GenFxTests.Helpers;
 using GenFxTests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -24,7 +24,7 @@ namespace GenFxTests
             double mutationRate = .005;
             IGeneticAlgorithm algorithm = GetAlgorithm(mutationRate);
             MockMutationOperator op = new MockMutationOperator(algorithm);
-            Assert.IsInstanceOfType(op.Configuration, typeof(MockMutationOperatorConfiguration));
+            Assert.IsInstanceOfType(op.Configuration, typeof(MockMutationOperatorFactoryConfig));
         }
 
         /// <summary>
@@ -42,7 +42,7 @@ namespace GenFxTests
         [TestMethod]
         public void MutationOperator_Ctor_MissingConfig()
         {
-            AssertEx.Throws<ArgumentException>(() => new MockMutationOperator(new MockGeneticAlgorithm(new ComponentConfigurationSet())));
+            AssertEx.Throws<ArgumentException>(() => new MockMutationOperator(new MockGeneticAlgorithm(new ComponentFactoryConfigSet())));
         }
 
         /// <summary>
@@ -51,7 +51,7 @@ namespace GenFxTests
         [TestMethod]
         public void MutationOperator_Ctor_InvalidSetting1()
         {
-            MockMutationOperatorConfiguration config = new MockMutationOperatorConfiguration();
+            MockMutationOperatorFactoryConfig config = new MockMutationOperatorFactoryConfig();
             AssertEx.Throws<ValidationException>(() => config.MutationRate = 2);
         }
 
@@ -61,7 +61,7 @@ namespace GenFxTests
         [TestMethod]
         public void MutationOperator_Ctor_InvalidSetting2()
         {
-            MockMutationOperatorConfiguration config = new MockMutationOperatorConfiguration();
+            MockMutationOperatorFactoryConfig config = new MockMutationOperatorFactoryConfig();
             AssertEx.Throws<ValidationException>(() => config.MutationRate = -1);
         }
 
@@ -95,14 +95,14 @@ namespace GenFxTests
 
         private static IGeneticAlgorithm GetAlgorithm(double mutationRate)
         {
-            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentConfigurationSet
+            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentFactoryConfigSet
             {
-                GeneticAlgorithm = new MockGeneticAlgorithmConfiguration(),
-                Population = new MockPopulationConfiguration(),
-                Entity = new MockEntityConfiguration(),
-                SelectionOperator = new MockSelectionOperatorConfiguration(),
-                FitnessEvaluator = new MockFitnessEvaluatorConfiguration(),
-                MutationOperator = new MockMutationOperatorConfiguration
+                GeneticAlgorithm = new MockGeneticAlgorithmFactoryConfig(),
+                Population = new MockPopulationFactoryConfig(),
+                Entity = new MockEntityFactoryConfig(),
+                SelectionOperator = new MockSelectionOperatorFactoryConfig(),
+                FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig(),
+                MutationOperator = new MockMutationOperatorFactoryConfig
                 {
                     MutationRate = mutationRate
                 }
@@ -110,7 +110,7 @@ namespace GenFxTests
             return algorithm;
         }
 
-        private class FakeMutationOperator : MutationOperatorBase<FakeMutationOperator, FakeMutationOperatorConfiguration>
+        private class FakeMutationOperator : MutationOperatorBase<FakeMutationOperator, FakeMutationOperatorFactoryConfig>
         {
             public FakeMutationOperator(IGeneticAlgorithm algorithm)
                 : base(algorithm)
@@ -123,7 +123,7 @@ namespace GenFxTests
             }
         }
 
-        private class FakeMutationOperatorConfiguration : MutationOperatorConfigurationBase<FakeMutationOperatorConfiguration, FakeMutationOperator>
+        private class FakeMutationOperatorFactoryConfig : MutationOperatorFactoryConfigBase<FakeMutationOperatorFactoryConfig, FakeMutationOperator>
         {
         }
     }

@@ -1,5 +1,4 @@
-using GenFx.ComponentLibrary.ComponentModel;
-using GenFx.ComponentModel;
+using GenFx;
 using GenFx.Validation;
 using GenFxTests.Helpers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -29,7 +28,7 @@ namespace GenFxTests
         [TestMethod]
         public void ExternalValidatorAttributeHelper_ValidateArgs_NullTargetProperty()
         {
-            AssertEx.Throws<ArgumentException>(() => ExternalValidatorAttributeHelper.ValidateArguments(typeof(FakeComponentConfiguration), null));
+            AssertEx.Throws<ArgumentException>(() => ExternalValidatorAttributeHelper.ValidateArguments(typeof(FakeComponentFactoryConfig), null));
         }
 
         /// <summary>
@@ -38,7 +37,7 @@ namespace GenFxTests
         [TestMethod]
         public void ExternalValidatorAttributeHelper_ValidateArgs_EmptyTargetProperty()
         {
-            AssertEx.Throws<ArgumentException>(() => ExternalValidatorAttributeHelper.ValidateArguments(typeof(FakeComponentConfiguration), String.Empty));
+            AssertEx.Throws<ArgumentException>(() => ExternalValidatorAttributeHelper.ValidateArguments(typeof(FakeComponentFactoryConfig), String.Empty));
         }
 
         /// <summary>
@@ -47,7 +46,7 @@ namespace GenFxTests
         [TestMethod]
         public void ExternalValidatorAttributeHelper_ValidateArgs_InvalidTargetType()
         {
-            AssertEx.Throws<ArgumentException>(() => ExternalValidatorAttributeHelper.ValidateArguments(typeof(InvalidComponentConfiguration), "Value"));
+            AssertEx.Throws<ArgumentException>(() => ExternalValidatorAttributeHelper.ValidateArguments(typeof(InvalidComponentFactoryConfig), "Value"));
         }
 
         /// <summary>
@@ -56,17 +55,17 @@ namespace GenFxTests
         [TestMethod]
         public void ExternalValidatorAttributeHelper_ValidateArgs_InvalidTargetProperty()
         {
-            AssertEx.Throws<ArgumentException>(() => ExternalValidatorAttributeHelper.ValidateArguments(typeof(FakeComponentConfiguration), "boo"));
+            AssertEx.Throws<ArgumentException>(() => ExternalValidatorAttributeHelper.ValidateArguments(typeof(FakeComponentFactoryConfig), "boo"));
         }
 
-        private class FakeComponent : GeneticComponent<FakeComponent, FakeComponentConfiguration>
+        private class FakeComponent : GeneticComponent<FakeComponent, FakeComponentFactoryConfig>
         {
-            public FakeComponent(FakeComponentConfiguration configuration) : base(configuration)
+            public FakeComponent(FakeComponentFactoryConfig configuration) : base(configuration)
             {
             }
         }
 
-        private class FakeComponentConfiguration : ComponentConfiguration<FakeComponentConfiguration, FakeComponent>
+        private class FakeComponentFactoryConfig : ComponentFactoryConfig<FakeComponentFactoryConfig, FakeComponent>
         {
             private int value;
             
@@ -77,7 +76,7 @@ namespace GenFxTests
             }
         }
 
-        private class InvalidComponentConfiguration
+        private class InvalidComponentFactoryConfig
         {
             private int value;
 

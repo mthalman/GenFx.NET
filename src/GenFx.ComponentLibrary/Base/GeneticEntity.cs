@@ -1,4 +1,4 @@
-using GenFx.ComponentLibrary.ComponentModel;
+using GenFx.Contracts;
 using System;
 using System.Globalization;
 using System.Threading.Tasks;
@@ -16,7 +16,7 @@ namespace GenFx.ComponentLibrary.Base
     /// </para>
     /// <para>
     /// <b>Notes to implementers:</b> When this base class is derived, the derived class can be used by
-    /// the genetic algorithm by using the <see cref="ComponentConfigurationSet.Entity"/> 
+    /// the genetic algorithm by using the <see cref="ComponentFactoryConfigSet.Entity"/> 
     /// property.
     /// </para>
     /// </remarks>
@@ -24,7 +24,7 @@ namespace GenFx.ComponentLibrary.Base
     /// <typeparam name="TConfiguration">Type of the associated configuration class.</typeparam>
     public abstract class GeneticEntity<TEntity, TConfiguration> : GeneticComponentWithAlgorithm<TEntity, TConfiguration>, IGeneticEntity
         where TEntity : GeneticEntity<TEntity, TConfiguration>
-        where TConfiguration : GeneticEntityConfiguration<TConfiguration, TEntity>
+        where TConfiguration : GeneticEntityFactoryConfig<TConfiguration, TEntity>
     {
         private double rawFitnessValue;
         private double scaledFitnessValue;

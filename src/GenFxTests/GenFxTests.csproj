@@ -79,7 +79,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ComponentConfigurationSetTest.cs" />
+    <Compile Include="ComponentFactoryConfigSetTest.cs" />
     <Compile Include="BestMaxEntityTest.cs" />
     <Compile Include="BestMaxStatisticTest.cs" />
     <Compile Include="BestMinStatisticTest.cs" />

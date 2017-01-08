@@ -1,3 +1,4 @@
+using GenFx.Contracts;
 using System;
 
 namespace GenFx.ComponentLibrary.Lists
@@ -13,7 +14,7 @@ namespace GenFx.ComponentLibrary.Lists
     /// be crossed over at position 2 in the first entity and position 4 in the second entity, the resulting offspring
     /// would be 0011 and 1000110101.
     /// </remarks>
-    public sealed class VariableSinglePointCrossoverOperator : VariableSinglePointCrossoverOperator<VariableSinglePointCrossoverOperator, VariableSinglePointCrossoverOperatorConfiguration>
+    public sealed class VariableSinglePointCrossoverOperator : VariableSinglePointCrossoverOperator<VariableSinglePointCrossoverOperator, VariableSinglePointCrossoverOperatorFactoryConfig>
     {
         /// <summary>
         /// Initializes a new instance of this class.

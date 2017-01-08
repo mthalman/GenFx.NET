@@ -1,3 +1,4 @@
+using GenFx.Contracts;
 using System;
 
 namespace GenFx.ComponentLibrary.Base
@@ -11,11 +12,11 @@ namespace GenFx.ComponentLibrary.Base
     /// genetic algorithm to have some number of genetic entities remain unchanged and brought forth to the
     /// next generation.  An <see cref="ElitismStrategy"/> acts upon a <see cref="IPopulation"/> to
     /// select those <see cref="IGeneticEntity"/> objects which are determined to be "elite".  The number
-    /// of genetic entities chosen is based on the <see cref="ElitismStrategyConfigurationBase{TConfiguration, TElitism}.ElitistRatio"/> property value.
+    /// of genetic entities chosen is based on the <see cref="ElitismStrategyFactoryConfigBase{TConfiguration, TElitism}.ElitistRatio"/> property value.
     /// </para>
     /// <para>
     /// <b>Notes to inheritors:</b> When this base class is derived, the derived class can be used by
-    /// the genetic algorithm by using the <see cref="ComponentConfigurationSet.ElitismStrategy"/> 
+    /// the genetic algorithm by using the <see cref="ComponentFactoryConfigSet.ElitismStrategy"/> 
     /// property.
     /// </para>
     /// </remarks>

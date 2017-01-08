@@ -1,4 +1,5 @@
 using GenFx.ComponentLibrary.Base;
+using GenFx.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -21,7 +22,7 @@ namespace GenFx.ComponentLibrary.SelectionOperators
     /// </para>
     /// <para>
     /// <b>Notes to implementers:</b> When this base class is derived, the derived class can be used by
-    /// the genetic algorithm by using the <see cref="ComponentConfigurationSet.SelectionOperator"/> 
+    /// the genetic algorithm by using the <see cref="ComponentFactoryConfigSet.SelectionOperator"/> 
     /// property.
     /// </para>
     /// </remarks>
@@ -29,7 +30,7 @@ namespace GenFx.ComponentLibrary.SelectionOperators
     /// <typeparam name="TConfiguration">Type of the associated configuration class.</typeparam>
     public abstract class BoltzmannSelectionOperator<TSelection, TConfiguration> : SelectionOperatorBase<TSelection, TConfiguration>
         where TSelection : BoltzmannSelectionOperator<TSelection, TConfiguration>
-        where TConfiguration : BoltzmannSelectionOperatorConfiguration<TConfiguration, TSelection>
+        where TConfiguration : BoltzmannSelectionOperatorFactoryConfig<TConfiguration, TSelection>
     {
         /// <summary>
         /// Initializes a new instance of this class.
@@ -99,7 +100,7 @@ namespace GenFx.ComponentLibrary.SelectionOperators
         }
 
         /// <summary>
-        /// When overriden in a derived class, sets the <see cref="BoltzmannSelectionOperatorConfiguration{TConfiguration, TSelection}.InitialTemperature"/>
+        /// When overriden in a derived class, sets the <see cref="BoltzmannSelectionOperatorFactoryConfig{TConfiguration, TSelection}.InitialTemperature"/>
         /// property according to an annealing schedule.
         /// </summary>
         /// <remarks>

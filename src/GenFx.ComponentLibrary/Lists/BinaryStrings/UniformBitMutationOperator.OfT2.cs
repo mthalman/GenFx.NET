@@ -1,4 +1,5 @@
 using GenFx.ComponentLibrary.Base;
+using GenFx.Contracts;
 using GenFx.Validation;
 using System;
 
@@ -16,7 +17,7 @@ namespace GenFx.ComponentLibrary.Lists.BinaryStrings
     [RequiredEntity(typeof(IListEntityBase<bool>))]
     public abstract class UniformBitMutationOperator<TMutation, TConfiguration> : MutationOperatorBase<TMutation, TConfiguration>
         where TMutation : UniformBitMutationOperator<TMutation, TConfiguration>
-        where TConfiguration : UniformBitMutationOperatorConfiguration<TConfiguration, TMutation>
+        where TConfiguration : UniformBitMutationOperatorFactoryConfig<TConfiguration, TMutation>
     {
         /// <summary>
         /// Initializes a new instance of this class.

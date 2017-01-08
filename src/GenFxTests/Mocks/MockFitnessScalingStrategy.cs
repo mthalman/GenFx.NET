@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Text;
 using GenFx;
 using GenFx.ComponentLibrary.Base;
+using GenFx.Contracts;
 
 namespace GenFxTests.Mocks
 {
-    class MockFitnessScalingStrategy : FitnessScalingStrategyBase<MockFitnessScalingStrategy, MockFitnessScalingStrategyConfiguration>
+    class MockFitnessScalingStrategy : FitnessScalingStrategyBase<MockFitnessScalingStrategy, MockFitnessScalingStrategyFactoryConfig>
     {
         internal int OnScaleCallCount;
 
@@ -21,11 +22,11 @@ namespace GenFxTests.Mocks
         }
     }
 
-    class MockFitnessScalingStrategyConfiguration : FitnessScalingStrategyConfigurationBase<MockFitnessScalingStrategyConfiguration, MockFitnessScalingStrategy>
+    class MockFitnessScalingStrategyFactoryConfig : FitnessScalingStrategyFactoryConfigBase<MockFitnessScalingStrategyFactoryConfig, MockFitnessScalingStrategy>
     {
     }
 
-    class MockFitnessScalingStrategy2 : FitnessScalingStrategyBase<MockFitnessScalingStrategy2, MockFitnessScalingStrategy2Configuration>
+    class MockFitnessScalingStrategy2 : FitnessScalingStrategyBase<MockFitnessScalingStrategy2, MockFitnessScalingStrategy2FactoryConfig>
     {
         public MockFitnessScalingStrategy2(IGeneticAlgorithm algorithm)
             : base(algorithm)
@@ -37,7 +38,7 @@ namespace GenFxTests.Mocks
         }
     }
 
-    class MockFitnessScalingStrategy2Configuration : FitnessScalingStrategyConfigurationBase<MockFitnessScalingStrategy2Configuration, MockFitnessScalingStrategy2>
+    class MockFitnessScalingStrategy2FactoryConfig : FitnessScalingStrategyFactoryConfigBase<MockFitnessScalingStrategy2FactoryConfig, MockFitnessScalingStrategy2>
     {
     }
 }

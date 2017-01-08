@@ -1,4 +1,5 @@
 ﻿using GenFx;
+using GenFx.Contracts;
 using GenFxTests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
@@ -23,13 +24,13 @@ namespace GenFxTests
         public void EntityCollection_SortByFitness()
         {
             ObservableCollection<IGeneticEntity> geneticEntities = new ObservableCollection<IGeneticEntity>();
-            MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentConfigurationSet
+            MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentFactoryConfigSet
             {
-                GeneticAlgorithm = new MockGeneticAlgorithmConfiguration(),
-                SelectionOperator = new MockSelectionOperatorConfiguration(),
-                FitnessEvaluator = new MockFitnessEvaluatorConfiguration(),
-                Population = new MockPopulationConfiguration(),
-                Entity = new MockEntityConfiguration()
+                GeneticAlgorithm = new MockGeneticAlgorithmFactoryConfig(),
+                SelectionOperator = new MockSelectionOperatorFactoryConfig(),
+                FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig(),
+                Population = new MockPopulationFactoryConfig(),
+                Entity = new MockEntityFactoryConfig()
             });
 
             for (int i = 9; i >= 0; i--)

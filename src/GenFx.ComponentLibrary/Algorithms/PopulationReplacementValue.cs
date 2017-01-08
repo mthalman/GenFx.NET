@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GenFx.Contracts;
+using System;
 using System.ComponentModel;
 using System.Globalization;
 

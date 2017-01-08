@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using GenFx;
-using GenFx.ComponentModel;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using GenFxTests.Mocks;
 using GenFxTests.Helpers;
 using GenFx.ComponentLibrary.Base;
+using GenFx.Contracts;
 
 namespace GenFxTests
 {
@@ -25,7 +25,7 @@ namespace GenFxTests
             double crossoverRate = .8;
             MockGeneticAlgorithm algorithm = GetGeneticAlgorithm(crossoverRate);
             FakeCrossoverOperator op = new FakeCrossoverOperator(algorithm);
-            Assert.IsInstanceOfType(op.Configuration, typeof(FakeCrossoverOperatorConfiguration));
+            Assert.IsInstanceOfType(op.Configuration, typeof(FakeCrossoverOperatorFactoryConfig));
         }
 
         /// <summary>
@@ -43,7 +43,7 @@ namespace GenFxTests
         [TestMethod]
         public void CrossoverOperator_Ctor_MissingSetting()
         {
-            AssertEx.Throws<ArgumentException>(() => new FakeCrossoverOperator(new MockGeneticAlgorithm(new ComponentConfigurationSet())));
+            AssertEx.Throws<ArgumentException>(() => new FakeCrossoverOperator(new MockGeneticAlgorithm(new ComponentFactoryConfigSet())));
         }
 
         /// <summary>
@@ -52,7 +52,7 @@ namespace GenFxTests
         [TestMethod]
         public void CrossoverOperator_Ctor_InvalidSetting1()
         {
-            FakeCrossoverOperatorConfiguration config = new FakeCrossoverOperatorConfiguration();
+            FakeCrossoverOperatorFactoryConfig config = new FakeCrossoverOperatorFactoryConfig();
             AssertEx.Throws<ValidationException>(() => config.CrossoverRate = 2);
         }
 
@@ -62,7 +62,7 @@ namespace GenFxTests
         [TestMethod]
         public void CrossoverOperator_Ctor_InvalidSetting2()
         {
-            FakeCrossoverOperatorConfiguration config = new FakeCrossoverOperatorConfiguration();
+            FakeCrossoverOperatorFactoryConfig config = new FakeCrossoverOperatorFactoryConfig();
             AssertEx.Throws<ValidationException>(()=> config.CrossoverRate = -1);
         }
 
@@ -111,14 +111,14 @@ namespace GenFxTests
 
         private static MockGeneticAlgorithm GetGeneticAlgorithm(double crossoverRate)
         {
-            MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentConfigurationSet
+            MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentFactoryConfigSet
             {
-                GeneticAlgorithm = new MockGeneticAlgorithmConfiguration(),
-                Population = new MockPopulationConfiguration(),
-                FitnessEvaluator = new MockFitnessEvaluatorConfiguration(),
-                SelectionOperator = new MockSelectionOperatorConfiguration(),
-                Entity = new MockEntityConfiguration(),
-                CrossoverOperator = new FakeCrossoverOperatorConfiguration
+                GeneticAlgorithm = new MockGeneticAlgorithmFactoryConfig(),
+                Population = new MockPopulationFactoryConfig(),
+                FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig(),
+                SelectionOperator = new MockSelectionOperatorFactoryConfig(),
+                Entity = new MockEntityFactoryConfig(),
+                CrossoverOperator = new FakeCrossoverOperatorFactoryConfig
                 {
                     CrossoverRate = crossoverRate
                 }
@@ -126,7 +126,7 @@ namespace GenFxTests
             return algorithm;
         }
 
-        private class FakeCrossoverOperator : CrossoverOperatorBase<FakeCrossoverOperator, FakeCrossoverOperatorConfiguration>
+        private class FakeCrossoverOperator : CrossoverOperatorBase<FakeCrossoverOperator, FakeCrossoverOperatorFactoryConfig>
         {
             public FakeCrossoverOperator(IGeneticAlgorithm algorithm)
                 : base(algorithm)
@@ -144,7 +144,7 @@ namespace GenFxTests
             }
         }
 
-        private class FakeCrossoverOperatorConfiguration : CrossoverOperatorConfigurationBase<FakeCrossoverOperatorConfiguration, FakeCrossoverOperator>
+        private class FakeCrossoverOperatorFactoryConfig : CrossoverOperatorFactoryConfigBase<FakeCrossoverOperatorFactoryConfig, FakeCrossoverOperator>
         {
         }
     }

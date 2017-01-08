@@ -1,3 +1,4 @@
+using GenFx.Contracts;
 using System;
 
 namespace GenFx.ComponentLibrary.Lists
@@ -11,7 +12,7 @@ namespace GenFx.ComponentLibrary.Lists
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1501:AvoidExcessiveInheritance")]
     public abstract class FixedLengthIntegerListEntity<TEntity, TConfiguration> : IntegerListEntity<TEntity, TConfiguration>
         where TEntity : FixedLengthIntegerListEntity<TEntity, TConfiguration>
-        where TConfiguration : FixedLengthIntegerListEntityConfiguration<TConfiguration, TEntity>
+        where TConfiguration : FixedLengthIntegerListEntityFactoryConfig<TConfiguration, TEntity>
     {
         /// <summary>
         /// Initializes a new instance of this class.
@@ -36,7 +37,7 @@ namespace GenFx.ComponentLibrary.Lists
                 throw new ArgumentNullException(nameof(algorithm));
             }
 
-            return ((FixedLengthIntegerListEntityConfiguration<TConfiguration, TEntity>)algorithm.ConfigurationSet.Entity).Length;
+            return ((FixedLengthIntegerListEntityFactoryConfig<TConfiguration, TEntity>)algorithm.ConfigurationSet.Entity).Length;
         }
 
         /// <summary>

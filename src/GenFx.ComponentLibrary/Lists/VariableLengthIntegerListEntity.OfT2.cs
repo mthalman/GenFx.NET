@@ -1,3 +1,4 @@
+using GenFx.Contracts;
 using System;
 
 namespace GenFx.ComponentLibrary.Lists
@@ -11,7 +12,7 @@ namespace GenFx.ComponentLibrary.Lists
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1501:AvoidExcessiveInheritance")]
     public abstract class VariableLengthIntegerListEntity<TEntity, TConfiguration> : IntegerListEntity<TEntity, TConfiguration>
         where TEntity : VariableLengthIntegerListEntity<TEntity, TConfiguration>
-        where TConfiguration : VariableLengthIntegerListEntityConfiguration<TConfiguration, TEntity>
+        where TConfiguration : VariableLengthIntegerListEntityFactoryConfig<TConfiguration, TEntity>
     {
         /// <summary>
         /// Initializes a new instance of this class.
@@ -71,8 +72,8 @@ namespace GenFx.ComponentLibrary.Lists
         /// <returns>Length to use for this object.</returns>
         private static int GetLength(IGeneticAlgorithm algorithm)
         {
-            VariableLengthIntegerListEntityConfiguration<TConfiguration, TEntity> config =
-                (VariableLengthIntegerListEntityConfiguration<TConfiguration, TEntity>)algorithm.ConfigurationSet.Entity;
+            VariableLengthIntegerListEntityFactoryConfig<TConfiguration, TEntity> config =
+                (VariableLengthIntegerListEntityFactoryConfig<TConfiguration, TEntity>)algorithm.ConfigurationSet.Entity;
 
             int minLength = config.MinimumStartingLength;
             int maxLength = config.MaximumStartingLength;

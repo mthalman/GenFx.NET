@@ -1,4 +1,5 @@
 using GenFx.ComponentLibrary.Base;
+using GenFx.Contracts;
 using System;
 using System.Linq;
 
@@ -7,9 +8,9 @@ namespace GenFx.ComponentLibrary.Terminators
     /// <summary>
     /// Represents a genetic algorithm terminator that stops the algorithm once a generation
     /// contains a <see cref="IGeneticEntity"/> whose <see cref="IGeneticEntity.ScaledFitnessValue"/> property value
-    /// matches the <see cref="FitnessTargetTerminatorConfiguration.FitnessTarget"/> property value.
+    /// matches the <see cref="FitnessTargetTerminatorFactoryConfig.FitnessTarget"/> property value.
     /// </summary>
-    public sealed class FitnessTargetTerminator : TerminatorBase<FitnessTargetTerminator, FitnessTargetTerminatorConfiguration>
+    public sealed class FitnessTargetTerminator : TerminatorBase<FitnessTargetTerminator, FitnessTargetTerminatorFactoryConfig>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="FitnessTargetTerminator"/> class.
@@ -24,7 +25,7 @@ namespace GenFx.ComponentLibrary.Terminators
 
         /// <summary>
         /// Calculates whether a <see cref="IGeneticEntity"/> exists whose <see cref="IGeneticEntity.ScaledFitnessValue"/> property value
-        /// matches the <see cref="FitnessTargetTerminatorConfiguration.FitnessTarget"/> property value.
+        /// matches the <see cref="FitnessTargetTerminatorFactoryConfig.FitnessTarget"/> property value.
         /// </summary>
         /// <returns>True if the genetic algorithm is to stop executing; otherwise, false.</returns>
         public override bool IsComplete()

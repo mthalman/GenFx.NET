@@ -1,5 +1,4 @@
-using GenFx.ComponentLibrary.ComponentModel;
-using GenFx.ComponentModel;
+using GenFx.Contracts;
 using System;
 using System.Threading.Tasks;
 
@@ -18,7 +17,7 @@ namespace GenFx.ComponentLibrary.Base
     /// </para>
     /// <para>
     /// <b>Notes to implementers:</b> When this base class is derived, the derived class can be used by
-    /// the genetic algorithm by using the <see cref="ComponentConfigurationSet.FitnessEvaluator"/> 
+    /// the genetic algorithm by using the <see cref="ComponentFactoryConfigSet.FitnessEvaluator"/> 
     /// property.
     /// </para>
     /// </remarks>
@@ -26,7 +25,7 @@ namespace GenFx.ComponentLibrary.Base
     /// <typeparam name="TConfiguration">Type of the associated configuration class.</typeparam>
     public abstract class FitnessEvaluatorBase<TFitness, TConfiguration> : GeneticComponentWithAlgorithm<TFitness, TConfiguration>, IFitnessEvaluator
         where TFitness : FitnessEvaluatorBase<TFitness, TConfiguration>
-        where TConfiguration : FitnessEvaluatorConfigurationBase<TConfiguration, TFitness>
+        where TConfiguration : FitnessEvaluatorFactoryConfigBase<TConfiguration, TFitness>
     {
         /// <summary>
         /// Initializes a new instance of this class.

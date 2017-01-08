@@ -1,3 +1,4 @@
+using GenFx.Contracts;
 using System;
 
 namespace GenFx.ComponentLibrary.Lists
@@ -9,7 +10,7 @@ namespace GenFx.ComponentLibrary.Lists
     /// Uniform integer mutation operates upon an integer list, causing each integer of the list to
     /// mutate if it meets a certain probability.
     /// </remarks>
-    public sealed class UniformIntegerMutationOperator : UniformIntegerMutationOperator<UniformIntegerMutationOperator, UniformIntegerMutationOperatorConfiguration>
+    public sealed class UniformIntegerMutationOperator : UniformIntegerMutationOperator<UniformIntegerMutationOperator, UniformIntegerMutationOperatorFactoryConfig>
     {
         /// <summary>
         /// Initializes a new instance of this class.

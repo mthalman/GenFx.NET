@@ -1,5 +1,6 @@
 ﻿using GenFx;
 using GenFx.ComponentLibrary.Populations;
+using GenFx.Contracts;
 using GenFxTests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
@@ -22,13 +23,13 @@ namespace GenFxTests
         [TestMethod()]
         public async Task GeneticEnvironment_EvaluateFitness_Async()
         {
-            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentConfigurationSet
+            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentFactoryConfigSet
             {
-                GeneticAlgorithm = new MockGeneticAlgorithmConfiguration(),
-                Population = new SimplePopulationConfiguration(),
-                Entity = new MockEntityConfiguration(),
-                FitnessEvaluator = new MockFitnessEvaluatorConfiguration(),
-                SelectionOperator = new MockSelectionOperatorConfiguration
+                GeneticAlgorithm = new MockGeneticAlgorithmFactoryConfig(),
+                Population = new SimplePopulationFactoryConfig(),
+                Entity = new MockEntityFactoryConfig(),
+                FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig(),
+                SelectionOperator = new MockSelectionOperatorFactoryConfig
                 {
                     SelectionBasedOnFitnessType = FitnessType.Scaled
                 }
@@ -57,16 +58,16 @@ namespace GenFxTests
             int environmentSize = 2;
             int populationSize = 5;
 
-            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentConfigurationSet
+            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentFactoryConfigSet
             {
-                FitnessEvaluator = new MockFitnessEvaluatorConfiguration(),
-                SelectionOperator = new MockSelectionOperatorConfiguration(),
-                Entity = new MockEntityConfiguration(),
-                GeneticAlgorithm = new MockGeneticAlgorithmConfiguration
+                FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig(),
+                SelectionOperator = new MockSelectionOperatorFactoryConfig(),
+                Entity = new MockEntityFactoryConfig(),
+                GeneticAlgorithm = new MockGeneticAlgorithmFactoryConfig
                 {
                     EnvironmentSize = environmentSize,
                 },
-                Population = new MockPopulationConfiguration
+                Population = new MockPopulationFactoryConfig
                 {
                     PopulationSize = populationSize
                 }

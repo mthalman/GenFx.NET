@@ -1,4 +1,5 @@
 using GenFx.ComponentLibrary.Base;
+using GenFx.Contracts;
 using System;
 using System.Diagnostics.CodeAnalysis;
 
@@ -14,7 +15,7 @@ namespace GenFx.ComponentLibrary.Trees
     /// </para>
     /// <para>
     /// <b>Notes to implementers:</b> When this base class is derived, the derived class can be used by
-    /// the genetic algorithm by using the <see cref="ComponentConfigurationSet.Entity"/> 
+    /// the genetic algorithm by using the <see cref="ComponentFactoryConfigSet.Entity"/> 
     /// property.
     /// </para>
     /// </remarks>
@@ -22,7 +23,7 @@ namespace GenFx.ComponentLibrary.Trees
     /// <typeparam name="TConfiguration">Type of the associated configuration class.</typeparam>
     public abstract class TreeEntity<TEntity, TConfiguration> : GeneticEntity<TEntity, TConfiguration>, ITreeEntity
         where TEntity : TreeEntity<TEntity, TConfiguration>
-        where TConfiguration : TreeEntityConfiguration<TConfiguration, TEntity>
+        where TConfiguration : TreeEntityFactoryConfig<TConfiguration, TEntity>
     {
         private TreeNode rootNode;
 

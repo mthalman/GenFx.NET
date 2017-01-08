@@ -1,17 +1,18 @@
 using GenFx.ComponentLibrary.Base;
+using GenFx.Contracts;
 using System;
 
 namespace GenFx.ComponentLibrary.Scaling
 {
     /// <summary>
     /// Provides fitness scaling by raising the fitness of a <see cref="IGeneticEntity"/> to the power of the
-    /// value of the <see cref="ExponentialScalingStrategyConfiguration{TConfiguration, TScaling}.ScalingPower"/> property.
+    /// value of the <see cref="ExponentialScalingStrategyFactoryConfig{TConfiguration, TScaling}.ScalingPower"/> property.
     /// </summary>
     /// <typeparam name="TScaling">Type of the deriving fitness scaling strategy class.</typeparam>
     /// <typeparam name="TConfiguration">Type of the associated configuration class.</typeparam>
     public abstract class ExponentialScalingStrategy<TScaling, TConfiguration> : FitnessScalingStrategyBase<TScaling, TConfiguration>
         where TScaling : ExponentialScalingStrategy<TScaling, TConfiguration>
-        where TConfiguration : ExponentialScalingStrategyConfiguration<TConfiguration, TScaling>
+        where TConfiguration : ExponentialScalingStrategyFactoryConfig<TConfiguration, TScaling>
     {
         /// <summary>
         /// Initializes a new instance of this class.
@@ -26,7 +27,7 @@ namespace GenFx.ComponentLibrary.Scaling
 
         /// <summary>
         /// Sets the <see cref="IGeneticEntity.ScaledFitnessValue"/> property of each entity
-        /// in the <paramref name="population"/> by raising it to the power of <see cref="ExponentialScalingStrategyConfiguration{TConfiguration, TScaling}.ScalingPower"/>.
+        /// in the <paramref name="population"/> by raising it to the power of <see cref="ExponentialScalingStrategyFactoryConfig{TConfiguration, TScaling}.ScalingPower"/>.
         /// </summary>
         /// <param name="population"><see cref="IPopulation"/> containing the <see cref="IGeneticEntity"/> objects.</param>
         /// <exception cref="ArgumentNullException"><paramref name="population"/> is null.</exception>

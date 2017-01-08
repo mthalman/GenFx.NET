@@ -1,4 +1,5 @@
 using GenFx.ComponentLibrary.Base;
+using GenFx.Contracts;
 using System;
 
 namespace GenFx.ComponentLibrary.Statistics
@@ -7,7 +8,7 @@ namespace GenFx.ComponentLibrary.Statistics
     /// Provides the calculation to determine the mean of the values of the <see cref="IGeneticEntity.ScaledFitnessValue"/> 
     /// property in a <see cref="IPopulation"/>.
     /// </summary>
-    public sealed class MeanFitnessStatistic : StatisticBase<MeanFitnessStatistic, MeanFitnessStatisticConfiguration>
+    public sealed class MeanFitnessStatistic : StatisticBase<MeanFitnessStatistic, MeanFitnessStatisticFactoryConfig>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="MeanFitnessStatistic"/> class.

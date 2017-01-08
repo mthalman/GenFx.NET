@@ -1,4 +1,5 @@
 using GenFx.ComponentLibrary.Base;
+using GenFx.Contracts;
 using GenFx.Validation;
 using System;
 
@@ -16,7 +17,7 @@ namespace GenFx.ComponentLibrary.Lists
     [RequiredEntity(typeof(IIntegerListEntity))]
     public abstract class UniformIntegerMutationOperator<TMutation, TConfiguration> : MutationOperatorBase<TMutation, TConfiguration>
         where TMutation : UniformIntegerMutationOperator<TMutation, TConfiguration>
-        where TConfiguration : UniformIntegerMutationOperatorConfiguration<TConfiguration, TMutation>
+        where TConfiguration : UniformIntegerMutationOperatorFactoryConfig<TConfiguration, TMutation>
     {
         /// <summary>
         /// Initializes a new instance of this class.
@@ -49,7 +50,7 @@ namespace GenFx.ComponentLibrary.Lists
             {
                 if (RandomNumberService.Instance.GetRandomPercentRatio() <= this.Configuration.MutationRate)
                 {
-                    IIntegerListEntityConfiguration config = (IIntegerListEntityConfiguration)this.Algorithm.ConfigurationSet.Entity;
+                    IIntegerListEntityFactoryConfig config = (IIntegerListEntityFactoryConfig)this.Algorithm.ConfigurationSet.Entity;
                     int currentValue = listEntity[i];
                     int randomValue = currentValue;
 

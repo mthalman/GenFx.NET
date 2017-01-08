@@ -1,3 +1,4 @@
+using GenFx.Contracts;
 using System;
 using System.Collections;
 using System.Linq;
@@ -14,7 +15,7 @@ namespace GenFx.ComponentLibrary.Lists.BinaryStrings
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix")]
     public abstract class BinaryStringEntity<TEntity, TConfiguration> : ListEntityBase<TEntity, TConfiguration, bool>
         where TEntity : BinaryStringEntity<TEntity, TConfiguration>
-        where TConfiguration : BinaryStringEntityConfiguration<TConfiguration, TEntity>
+        where TConfiguration : BinaryStringEntityFactoryConfig<TConfiguration, TEntity>
     {
         private BitArray genes;
 

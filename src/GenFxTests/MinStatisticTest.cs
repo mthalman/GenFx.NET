@@ -24,20 +24,20 @@ namespace GenFxTests
         [TestMethod()]
         public void MinStatistic_GetResultValue()
         {
-            ComponentConfigurationSet config = new ComponentConfigurationSet
+            ComponentFactoryConfigSet config = new ComponentFactoryConfigSet
             {
-                SelectionOperator = new MockSelectionOperatorConfiguration(),
-                FitnessEvaluator = new MockFitnessEvaluatorConfiguration(),
-                GeneticAlgorithm = new MockGeneticAlgorithmConfiguration(),
-                Entity = new MockEntityConfiguration(),
-                Population = new SimplePopulationConfiguration(),
+                SelectionOperator = new MockSelectionOperatorFactoryConfig(),
+                FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig(),
+                GeneticAlgorithm = new MockGeneticAlgorithmFactoryConfig(),
+                Entity = new MockEntityFactoryConfig(),
+                Population = new SimplePopulationFactoryConfig(),
             };
-            config.Statistics.Add(new MinimumFitnessStatisticConfiguration());
+            config.Statistics.Add(new MinimumFitnessStatisticFactoryConfig());
 
             MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm(config);
             MinimumFitnessStatistic target = new MinimumFitnessStatistic(algorithm);
             SimplePopulation population = new SimplePopulation(algorithm);
-            PrivateObject accessor = new PrivateObject(population, new PrivateType(typeof(PopulationBase<SimplePopulation, SimplePopulationConfiguration>)));
+            PrivateObject accessor = new PrivateObject(population, new PrivateType(typeof(PopulationBase<SimplePopulation, SimplePopulationFactoryConfig>)));
             accessor.SetField("scaledMin", 21);
             object result = target.GetResultValue(population);
 
@@ -50,15 +50,15 @@ namespace GenFxTests
         [TestMethod()]
         public void MinStatistic_GetResultValue_NullPopulation()
         {
-            ComponentConfigurationSet config = new ComponentConfigurationSet
+            ComponentFactoryConfigSet config = new ComponentFactoryConfigSet
             {
-                SelectionOperator = new MockSelectionOperatorConfiguration(),
-                FitnessEvaluator = new MockFitnessEvaluatorConfiguration(),
-                GeneticAlgorithm = new MockGeneticAlgorithmConfiguration(),
-                Entity = new MockEntityConfiguration(),
-                Population = new SimplePopulationConfiguration(),
+                SelectionOperator = new MockSelectionOperatorFactoryConfig(),
+                FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig(),
+                GeneticAlgorithm = new MockGeneticAlgorithmFactoryConfig(),
+                Entity = new MockEntityFactoryConfig(),
+                Population = new SimplePopulationFactoryConfig(),
             };
-            config.Statistics.Add(new MinimumFitnessStatisticConfiguration());
+            config.Statistics.Add(new MinimumFitnessStatisticFactoryConfig());
 
             MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm(config);
             MinimumFitnessStatistic target = new MinimumFitnessStatistic(algorithm);

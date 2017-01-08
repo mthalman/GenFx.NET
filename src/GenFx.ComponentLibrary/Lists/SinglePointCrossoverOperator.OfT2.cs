@@ -1,4 +1,5 @@
 using GenFx.ComponentLibrary.Base;
+using GenFx.Contracts;
 using GenFx.Validation;
 using System;
 using System.Collections.Generic;
@@ -19,7 +20,7 @@ namespace GenFx.ComponentLibrary.Lists
     [RequiredEntity(typeof(IListEntityBase))]
     public abstract class SinglePointCrossoverOperator<TCrossover, TConfiguration> : CrossoverOperatorBase<TCrossover, TConfiguration>
         where TCrossover : SinglePointCrossoverOperator<TCrossover, TConfiguration>
-        where TConfiguration : SinglePointCrossoverOperatorConfiguration<TConfiguration, TCrossover>
+        where TConfiguration : SinglePointCrossoverOperatorFactoryConfig<TConfiguration, TCrossover>
     {
         /// <summary>
         /// Initializes a new instance of this class.

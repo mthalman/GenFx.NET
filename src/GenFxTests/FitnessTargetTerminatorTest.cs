@@ -1,6 +1,7 @@
 ﻿using GenFx;
 using GenFx.ComponentLibrary.Populations;
 using GenFx.ComponentLibrary.Terminators;
+using GenFx.Contracts;
 using GenFxTests.Helpers;
 using GenFxTests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -26,7 +27,7 @@ namespace GenFxTests
             IGeneticAlgorithm algorithm = GetAlgorithm(fitnessTarget);
 
             FitnessTargetTerminator terminator = new FitnessTargetTerminator(algorithm);
-            Assert.IsInstanceOfType(terminator.Configuration, typeof(FitnessTargetTerminatorConfiguration));
+            Assert.IsInstanceOfType(terminator.Configuration, typeof(FitnessTargetTerminatorFactoryConfig));
         }
 
         /// <summary>
@@ -35,7 +36,7 @@ namespace GenFxTests
         [TestMethod()]
         public void FitnessTargetTerminator_Ctor_MissingSetting()
         {
-            AssertEx.Throws<ArgumentException>(() => new FitnessTargetTerminator(new MockGeneticAlgorithm(new ComponentConfigurationSet())));
+            AssertEx.Throws<ArgumentException>(() => new FitnessTargetTerminator(new MockGeneticAlgorithm(new ComponentFactoryConfigSet())));
         }
 
         /// <summary>
@@ -66,14 +67,14 @@ namespace GenFxTests
 
         private static IGeneticAlgorithm GetAlgorithm(double fitnessTarget)
         {
-            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentConfigurationSet
+            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentFactoryConfigSet
             {
-                GeneticAlgorithm = new MockGeneticAlgorithmConfiguration(),
-                SelectionOperator = new MockSelectionOperatorConfiguration(),
-                FitnessEvaluator = new MockFitnessEvaluatorConfiguration(),
-                Population = new SimplePopulationConfiguration(),
-                Entity = new MockEntityConfiguration(),
-                Terminator = new FitnessTargetTerminatorConfiguration
+                GeneticAlgorithm = new MockGeneticAlgorithmFactoryConfig(),
+                SelectionOperator = new MockSelectionOperatorFactoryConfig(),
+                FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig(),
+                Population = new SimplePopulationFactoryConfig(),
+                Entity = new MockEntityFactoryConfig(),
+                Terminator = new FitnessTargetTerminatorFactoryConfig
                 {
                     FitnessTarget = fitnessTarget
                 }

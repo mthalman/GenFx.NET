@@ -1,3 +1,4 @@
+using GenFx.Contracts;
 using System;
 using System.ComponentModel;
 

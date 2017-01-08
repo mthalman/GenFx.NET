@@ -1,4 +1,4 @@
-using GenFx.ComponentLibrary.ComponentModel;
+using GenFx.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,11 +14,11 @@ namespace GenFx.ComponentLibrary.Base
     /// genetic algorithm to have some number of genetic entities remain unchanged and brought forth to the
     /// next generation.  An <see cref="ElitismStrategyBase{TElitism, TConfiguration}"/> acts upon a <see cref="IPopulation"/> to
     /// select those <see cref="IGeneticEntity"/> objects which are determined to be "elite".  The number
-    /// of genetic entities chosen is based on the <see cref="ElitismStrategyConfigurationBase{TConfiguration, TElitism}.ElitistRatio"/> property value.
+    /// of genetic entities chosen is based on the <see cref="ElitismStrategyFactoryConfigBase{TConfiguration, TElitism}.ElitistRatio"/> property value.
     /// </para>
     /// <para>
     /// <b>Notes to inheritors:</b> When this base class is derived, the derived class can be used by
-    /// the genetic algorithm by using the <see cref="ComponentConfigurationSet.ElitismStrategy"/> 
+    /// the genetic algorithm by using the <see cref="ComponentFactoryConfigSet.ElitismStrategy"/> 
     /// property.
     /// </para>
     /// </remarks>
@@ -26,7 +26,7 @@ namespace GenFx.ComponentLibrary.Base
     /// <typeparam name="TConfiguration">Type of the associated configuration class.</typeparam>
     public abstract class ElitismStrategyBase<TElitism, TConfiguration> : GeneticComponentWithAlgorithm<TElitism, TConfiguration>, IElitismStrategy
         where TElitism : ElitismStrategyBase<TElitism, TConfiguration>
-        where TConfiguration : ElitismStrategyConfigurationBase<TConfiguration, TElitism>
+        where TConfiguration : ElitismStrategyFactoryConfigBase<TConfiguration, TElitism>
     {
         /// <summary>
         /// Initializes a new instance of this class.
@@ -76,7 +76,7 @@ namespace GenFx.ComponentLibrary.Base
         /// that are to be treated as elite.</returns>
         /// <remarks>
         /// <para>
-        /// The default implementation of this method is to use the <see cref="ElitismStrategyConfigurationBase{TConfiguration, TElitism}.ElitistRatio"/>
+        /// The default implementation of this method is to use the <see cref="ElitismStrategyFactoryConfigBase{TConfiguration, TElitism}.ElitistRatio"/>
         /// property to determine how many <see cref="IGeneticEntity"/> objects are chosen to be elite.  Those <see cref="IGeneticEntity"/>
         /// objects with the highest <see cref="IGeneticEntity.ScaledFitnessValue"/> are chosen.
         /// </para>

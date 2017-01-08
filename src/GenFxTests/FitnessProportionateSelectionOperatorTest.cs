@@ -1,6 +1,7 @@
 ﻿using GenFx;
 using GenFx.ComponentLibrary.Populations;
 using GenFx.ComponentLibrary.SelectionOperators;
+using GenFx.Contracts;
 using GenFxTests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
@@ -73,7 +74,7 @@ namespace GenFxTests
         public void FitnessProportionateSelectionOperator_Select_MinimizeFitness()
         {
             IGeneticAlgorithm algorithm = GetAlgorithm();
-            ((MockFitnessEvaluatorConfiguration)algorithm.ConfigurationSet.FitnessEvaluator).EvaluationMode = FitnessEvaluationMode.Minimize;
+            ((MockFitnessEvaluatorFactoryConfig)algorithm.ConfigurationSet.FitnessEvaluator).EvaluationMode = FitnessEvaluationMode.Minimize;
 
             FitnessProportionateSelectionOperator op = new FitnessProportionateSelectionOperator(algorithm);
             SimplePopulation population = new SimplePopulation(algorithm);
@@ -208,13 +209,13 @@ namespace GenFxTests
 
         private static IGeneticAlgorithm GetAlgorithm()
         {
-            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentConfigurationSet
+            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentFactoryConfigSet
             {
-                GeneticAlgorithm = new MockGeneticAlgorithmConfiguration(),
-                Entity = new MockEntityConfiguration(),
-                Population = new SimplePopulationConfiguration(),
-                FitnessEvaluator = new MockFitnessEvaluatorConfiguration(),
-                SelectionOperator = new FitnessProportionateSelectionOperatorConfiguration
+                GeneticAlgorithm = new MockGeneticAlgorithmFactoryConfig(),
+                Entity = new MockEntityFactoryConfig(),
+                Population = new SimplePopulationFactoryConfig(),
+                FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig(),
+                SelectionOperator = new FitnessProportionateSelectionOperatorFactoryConfig
                 {
                     SelectionBasedOnFitnessType = FitnessType.Scaled
                 }

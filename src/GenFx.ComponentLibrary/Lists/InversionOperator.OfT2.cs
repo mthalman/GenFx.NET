@@ -1,5 +1,5 @@
 ﻿using GenFx.ComponentLibrary.Base;
-using GenFx.ComponentModel;
+using GenFx.Contracts;
 using GenFx.Validation;
 using System;
 
@@ -16,7 +16,7 @@ namespace GenFx.ComponentLibrary.Lists
     [RequiredEntity(typeof(IListEntityBase))]
     public abstract class InversionOperator<TInversion, TConfiguration> : MutationOperatorBase<TInversion, TConfiguration>
         where TInversion : InversionOperator<TInversion, TConfiguration>
-        where TConfiguration : InversionOperatorConfiguration<TConfiguration, TInversion>
+        where TConfiguration : InversionOperatorFactoryConfig<TConfiguration, TInversion>
     {
         /// <summary>
         /// Initializes a new instance of this class.

@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using GenFx.Contracts;
+using System.Collections.ObjectModel;
 
 namespace GenFx
 {

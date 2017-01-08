@@ -1,3 +1,4 @@
+using GenFx.Contracts;
 using System;
 
 namespace GenFx.ComponentLibrary.Lists.BinaryStrings
@@ -10,7 +11,7 @@ namespace GenFx.ComponentLibrary.Lists.BinaryStrings
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix")]
     public abstract class VariableLengthBinaryStringEntity<TEntity, TConfiguration> : BinaryStringEntity<TEntity, TConfiguration>
         where TEntity : VariableLengthBinaryStringEntity<TEntity, TConfiguration>
-        where TConfiguration : VariableLengthBinaryStringEntityConfiguration<TConfiguration, TEntity>
+        where TConfiguration : VariableLengthBinaryStringEntityFactoryConfig<TConfiguration, TEntity>
     {
         /// <summary>
         /// Initializes a new instance of this class.
@@ -56,8 +57,8 @@ namespace GenFx.ComponentLibrary.Lists.BinaryStrings
         /// <returns>Length to use for the entity.</returns>
         private static int GetLength(IGeneticAlgorithm algorithm)
         {
-            VariableLengthBinaryStringEntityConfiguration<TConfiguration, TEntity> config = 
-                (VariableLengthBinaryStringEntityConfiguration<TConfiguration, TEntity>)algorithm.ConfigurationSet.Entity;
+            VariableLengthBinaryStringEntityFactoryConfig<TConfiguration, TEntity> config = 
+                (VariableLengthBinaryStringEntityFactoryConfig<TConfiguration, TEntity>)algorithm.ConfigurationSet.Entity;
             if (config != null)
             {
                 int minLength = config.MinimumStartingLength;

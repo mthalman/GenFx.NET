@@ -1,5 +1,6 @@
 ﻿using GenFx;
 using GenFx.ComponentLibrary.Trees;
+using GenFx.Contracts;
 using GenFxTests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
@@ -27,14 +28,14 @@ namespace GenFxTests
         [TestMethod]
         public void SingleNodeTreeCrossoverOperator_Crossover()
         {
-            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentConfigurationSet
+            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentFactoryConfigSet
             {
-                GeneticAlgorithm = new MockGeneticAlgorithmConfiguration(),
-                FitnessEvaluator = new MockFitnessEvaluatorConfiguration(),
-                SelectionOperator = new MockSelectionOperatorConfiguration(),
-                Population = new MockPopulationConfiguration(),
-                Entity = new FakeTreeEntityConfiguration(),
-                CrossoverOperator = new SingleNodeTreeCrossoverOperatorConfiguration
+                GeneticAlgorithm = new MockGeneticAlgorithmFactoryConfig(),
+                FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig(),
+                SelectionOperator = new MockSelectionOperatorFactoryConfig(),
+                Population = new MockPopulationFactoryConfig(),
+                Entity = new FakeTreeEntityFactoryConfig(),
+                CrossoverOperator = new SingleNodeTreeCrossoverOperatorFactoryConfig
                 {
                     CrossoverRate = 1
                 }
@@ -128,7 +129,7 @@ namespace GenFxTests
             }
         }
 
-        private class FakeTreeEntity : TreeEntity<FakeTreeEntity, FakeTreeEntityConfiguration, FakeTreeNode>
+        private class FakeTreeEntity : TreeEntity<FakeTreeEntity, FakeTreeEntityFactoryConfig, FakeTreeNode>
         {
             public FakeTreeEntity(IGeneticAlgorithm algorithm)
                 : base(algorithm)
@@ -146,7 +147,7 @@ namespace GenFxTests
             }
         }
 
-        private class FakeTreeEntityConfiguration : TreeEntityConfiguration<FakeTreeEntityConfiguration, FakeTreeEntity>
+        private class FakeTreeEntityFactoryConfig : TreeEntityFactoryConfig<FakeTreeEntityFactoryConfig, FakeTreeEntity>
         {
         }
     }

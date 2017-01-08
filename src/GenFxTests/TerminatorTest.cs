@@ -1,7 +1,7 @@
 ﻿using GenFx;
 using GenFx.ComponentLibrary.Base;
 using GenFx.ComponentLibrary.Populations;
-using GenFx.ComponentModel;
+using GenFx.Contracts;
 using GenFxTests.Helpers;
 using GenFxTests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -25,17 +25,17 @@ namespace GenFxTests
         [TestMethod]
         public void Terminator_Ctor()
         {
-            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentConfigurationSet
+            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentFactoryConfigSet
             {
-                GeneticAlgorithm = new MockGeneticAlgorithmConfiguration(),
-                Entity = new MockEntityConfiguration(),
-                Population = new SimplePopulationConfiguration(),
-                SelectionOperator = new MockSelectionOperatorConfiguration(),
-                FitnessEvaluator = new MockFitnessEvaluatorConfiguration(),
-                Terminator = new MockTerminatorConfiguration()
+                GeneticAlgorithm = new MockGeneticAlgorithmFactoryConfig(),
+                Entity = new MockEntityFactoryConfig(),
+                Population = new SimplePopulationFactoryConfig(),
+                SelectionOperator = new MockSelectionOperatorFactoryConfig(),
+                FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig(),
+                Terminator = new MockTerminatorFactoryConfig()
             });
             MockTerminator terminator = new MockTerminator(algorithm);
-            PrivateObject accessor = new PrivateObject(terminator, new PrivateType(typeof(TerminatorBase<MockTerminator, MockTerminatorConfiguration>)));
+            PrivateObject accessor = new PrivateObject(terminator, new PrivateType(typeof(TerminatorBase<MockTerminator, MockTerminatorFactoryConfig>)));
             Assert.AreSame(algorithm, accessor.GetProperty("Algorithm"), "Algorithm not set correctly.");
         }
 
@@ -54,18 +54,18 @@ namespace GenFxTests
         [TestMethod]
         public void Terminator_Ctor_MissingConfig()
         {
-            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentConfigurationSet
+            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentFactoryConfigSet
             {
-                GeneticAlgorithm = new MockGeneticAlgorithmConfiguration(),
-                SelectionOperator = new MockSelectionOperatorConfiguration(),
-                FitnessEvaluator = new MockFitnessEvaluatorConfiguration(),
-                Population = new MockPopulationConfiguration(),
-                Entity = new MockEntityConfiguration()
+                GeneticAlgorithm = new MockGeneticAlgorithmFactoryConfig(),
+                SelectionOperator = new MockSelectionOperatorFactoryConfig(),
+                FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig(),
+                Population = new MockPopulationFactoryConfig(),
+                Entity = new MockEntityFactoryConfig()
             });
             AssertEx.Throws<InvalidOperationException>(() => new TestTerminator(algorithm));
         }
 
-        private class TestTerminator : TerminatorBase<TestTerminator, TestTerminatorConfiguration>
+        private class TestTerminator : TerminatorBase<TestTerminator, TestTerminatorFactoryConfig>
         {
             public TestTerminator(IGeneticAlgorithm algorithm)
                 : base(algorithm)
@@ -78,7 +78,7 @@ namespace GenFxTests
             }
         }
 
-        private class TestTerminatorConfiguration : TerminatorConfigurationBase<TestTerminatorConfiguration, TestTerminator>
+        private class TestTerminatorFactoryConfig : TerminatorFactoryConfigBase<TestTerminatorFactoryConfig, TestTerminator>
         {
         }
     }

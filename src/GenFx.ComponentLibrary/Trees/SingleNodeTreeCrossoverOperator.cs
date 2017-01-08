@@ -1,3 +1,4 @@
+using GenFx.Contracts;
 using System;
 
 namespace GenFx.ComponentLibrary.Trees
@@ -11,7 +12,7 @@ namespace GenFx.ComponentLibrary.Trees
     /// "B OR C" were to be crossed over at the "OR" node in the first tree and the "C" node in the second tree,
     /// the resulting offspring would be "C AND C" and "B OR (A OR B)".
     /// </remarks>
-    public sealed class SingleNodeTreeCrossoverOperator : SingleNodeTreeCrossoverOperator<SingleNodeTreeCrossoverOperator, SingleNodeTreeCrossoverOperatorConfiguration>
+    public sealed class SingleNodeTreeCrossoverOperator : SingleNodeTreeCrossoverOperator<SingleNodeTreeCrossoverOperator, SingleNodeTreeCrossoverOperatorFactoryConfig>
     {
         /// <summary>
         /// Initializes a new instance of this class.

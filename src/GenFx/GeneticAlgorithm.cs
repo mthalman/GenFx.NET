@@ -1,4 +1,4 @@
-using GenFx.ComponentModel;
+using GenFx.Contracts;
 using GenFx.Validation;
 using System;
 using System.Collections.Generic;
@@ -21,13 +21,13 @@ namespace GenFx
     [SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
     public abstract class GeneticAlgorithm<TAlgorithm, TConfiguration> : GeneticComponent<TAlgorithm, TConfiguration>, IGeneticAlgorithm
         where TAlgorithm : GeneticAlgorithm<TAlgorithm, TConfiguration>
-        where TConfiguration : GeneticAlgorithmConfiguration<TConfiguration, TAlgorithm>
+        where TConfiguration : GeneticAlgorithmFactoryConfig<TConfiguration, TAlgorithm>
     {
         private int currentGeneration;
         private GeneticEnvironment environment;
         private List<IStatistic> statistics = new List<IStatistic>();
         private List<IPlugin> plugins = new List<IPlugin>();
-        private ComponentConfigurationSet config;
+        private ComponentFactoryConfigSet config;
         private AlgorithmOperators operators = new AlgorithmOperators();
         private bool isInitialized;
 
@@ -60,7 +60,7 @@ namespace GenFx
         /// </summary>
         /// <param name="configurationSet">Contains the component configuration for the algorithm.</param>
         [SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        protected GeneticAlgorithm(ComponentConfigurationSet configurationSet)
+        protected GeneticAlgorithm(ComponentFactoryConfigSet configurationSet)
             : base(GetAlgorithmConfiguration(configurationSet))
         {
             if (configurationSet == null)
@@ -82,7 +82,7 @@ namespace GenFx
             this.CreateComponents();
         }
 
-        private static TConfiguration GetAlgorithmConfiguration(ComponentConfigurationSet configurationSet)
+        private static TConfiguration GetAlgorithmConfiguration(ComponentFactoryConfigSet configurationSet)
         {
             if (configurationSet == null)
             {
@@ -100,9 +100,9 @@ namespace GenFx
         }
 
         /// <summary>
-        /// Gets the <see cref="ComponentConfigurationSet"/> containing the configuration for this class.
+        /// Gets the <see cref="ComponentFactoryConfigSet"/> containing the configuration for this class.
         /// </summary>
-        public ComponentConfigurationSet ConfigurationSet
+        public ComponentFactoryConfigSet ConfigurationSet
         {
             get { return this.config; }
         }
@@ -214,7 +214,7 @@ namespace GenFx
 
         private void CreateComponents()
         {
-            IConfigurationForComponentWithAlgorithm componentConfig = null;
+            IFactoryConfigForComponentWithAlgorithm componentConfig = null;
             try
             {
                 // Set optional operators
@@ -250,7 +250,7 @@ namespace GenFx
 
                 this.statistics.Clear();
 
-                foreach (IStatisticConfiguration statConfig in this.config.Statistics)
+                foreach (IStatisticFactoryConfig statConfig in this.config.Statistics)
                 {
                     componentConfig = statConfig;
                     IStatistic stat = (IStatistic)componentConfig.CreateComponent(this);
@@ -259,7 +259,7 @@ namespace GenFx
 
                 this.plugins.Clear();
 
-                foreach (IPluginConfiguration pluginConfig in this.ConfigurationSet.Plugins)
+                foreach (IPluginFactoryConfig pluginConfig in this.ConfigurationSet.Plugins)
                 {
                     componentConfig = pluginConfig;
                     this.plugins.Add((IPlugin)componentConfig.CreateComponent(this));
@@ -499,11 +499,11 @@ namespace GenFx
         }
 
         /// <summary>
-        /// Validates that the <see cref="ComponentConfigurationSet"/> is properly set.
+        /// Validates that the <see cref="ComponentFactoryConfigSet"/> is properly set.
         /// </summary>
         /// <exception cref="InvalidOperationException">The configuration for a required component has been set.</exception>
         /// <remarks>
-        /// This only validates that the <see cref="ComponentConfigurationSet"/> is correct as a whole.  It does not validate the state
+        /// This only validates that the <see cref="ComponentFactoryConfigSet"/> is correct as a whole.  It does not validate the state
         /// of each of the configuration objects.
         /// </remarks>
         protected virtual void ValidateConfiguration()
@@ -511,30 +511,30 @@ namespace GenFx
             string missingComponent = null;
             if (this.config.GeneticAlgorithm == null)
             {
-                missingComponent = nameof(ComponentConfigurationSet.GeneticAlgorithm);
+                missingComponent = nameof(ComponentFactoryConfigSet.GeneticAlgorithm);
             }
             else if (this.config.SelectionOperator == null)
             {
-                missingComponent = nameof(ComponentConfigurationSet.SelectionOperator);
+                missingComponent = nameof(ComponentFactoryConfigSet.SelectionOperator);
             }
             else if (this.config.FitnessEvaluator == null)
             {
-                missingComponent = nameof(ComponentConfigurationSet.FitnessEvaluator);
+                missingComponent = nameof(ComponentFactoryConfigSet.FitnessEvaluator);
             }
             else if (this.config.Population == null)
             {
-                missingComponent = nameof(ComponentConfigurationSet.Population);
+                missingComponent = nameof(ComponentFactoryConfigSet.Population);
             }
             else if (this.config.Entity == null)
             {
-                missingComponent = nameof(ComponentConfigurationSet.Entity);
+                missingComponent = nameof(ComponentFactoryConfigSet.Entity);
             }
 
             if (missingComponent != null)
             {
                 throw new InvalidOperationException(
                   StringUtil.GetFormattedString(Resources.ErrorMsg_MissingOperatorType,
-                    typeof(ComponentConfigurationSet).FullName, missingComponent));
+                    typeof(ComponentFactoryConfigSet).FullName, missingComponent));
             }
 
             if (this.config.CrossoverOperator != null)
@@ -557,12 +557,12 @@ namespace GenFx
                 this.ValidateRequiredComponents(this.config.MutationOperator.ComponentType);
             }
 
-            foreach (IStatisticConfiguration statConfig in this.config.Statistics)
+            foreach (IStatisticFactoryConfig statConfig in this.config.Statistics)
             {
                 this.ValidateRequiredComponents(statConfig.ComponentType);
             }
 
-            foreach (IPluginConfiguration pluginConfig in this.config.Plugins)
+            foreach (IPluginFactoryConfig pluginConfig in this.config.Plugins)
             {
                 this.ValidateRequiredComponents(pluginConfig.ComponentType);
             }
@@ -681,7 +681,7 @@ namespace GenFx
                 else if (attribs[i] is RequiredStatisticAttribute)
                 {
                     bool foundRequiredType = false;
-                    foreach (IStatisticConfiguration statConfig in this.config.Statistics)
+                    foreach (IStatisticFactoryConfig statConfig in this.config.Statistics)
                     {
                         if (!attribs[i].RequiredType.IsAssignableFrom(statConfig.ComponentType))
                         {

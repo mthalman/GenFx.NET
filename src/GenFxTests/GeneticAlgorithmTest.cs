@@ -2,7 +2,7 @@
 using GenFx.ComponentLibrary.Algorithms;
 using GenFx.ComponentLibrary.Base;
 using GenFx.ComponentLibrary.Populations;
-using GenFx.ComponentModel;
+using GenFx.Contracts;
 using GenFx.Validation;
 using GenFxTests.Helpers;
 using GenFxTests.Mocks;
@@ -28,13 +28,13 @@ namespace GenFxTests
         [TestMethod]
         public void GeneticAlgorithm_Ctor()
         {
-            MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentConfigurationSet
+            MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentFactoryConfigSet
             {
-                GeneticAlgorithm = new MockGeneticAlgorithmConfiguration(),
-                SelectionOperator = new MockSelectionOperatorConfiguration(),
-                FitnessEvaluator = new MockFitnessEvaluatorConfiguration(),
-                Population = new MockPopulationConfiguration(),
-                Entity = new MockEntityConfiguration()
+                GeneticAlgorithm = new MockGeneticAlgorithmFactoryConfig(),
+                SelectionOperator = new MockSelectionOperatorFactoryConfig(),
+                FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig(),
+                Population = new MockPopulationFactoryConfig(),
+                Entity = new MockEntityFactoryConfig()
             });
             Assert.IsNotNull(algorithm.Environment, "Environment not initialized.");
             PrivateObject accessor = new PrivateObject(algorithm.Environment);
@@ -47,19 +47,19 @@ namespace GenFxTests
         [TestMethod]
         public async Task GeneticAlgorithm_Initialize_Async()
         {
-            ComponentConfigurationSet config = new ComponentConfigurationSet();
+            ComponentFactoryConfigSet config = new ComponentFactoryConfigSet();
 
-            config.GeneticAlgorithm = new MockGeneticAlgorithmConfiguration();
-            config.CrossoverOperator = new MockCrossoverOperatorConfiguration();
-            config.ElitismStrategy = new MockElitismStrategyConfiguration();
-            config.FitnessEvaluator = new MockFitnessEvaluatorConfiguration();
-            config.FitnessScalingStrategy = new MockFitnessScalingStrategyConfiguration();
-            config.Entity = new MockEntityConfiguration();
-            config.MutationOperator = new MockMutationOperatorConfiguration();
-            config.Population = new MockPopulationConfiguration();
-            config.SelectionOperator = new MockSelectionOperatorConfiguration();
-            config.Statistics.Add(new MockStatisticConfiguration());
-            config.Terminator = new MockTerminatorConfiguration();
+            config.GeneticAlgorithm = new MockGeneticAlgorithmFactoryConfig();
+            config.CrossoverOperator = new MockCrossoverOperatorFactoryConfig();
+            config.ElitismStrategy = new MockElitismStrategyFactoryConfig();
+            config.FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig();
+            config.FitnessScalingStrategy = new MockFitnessScalingStrategyFactoryConfig();
+            config.Entity = new MockEntityFactoryConfig();
+            config.MutationOperator = new MockMutationOperatorFactoryConfig();
+            config.Population = new MockPopulationFactoryConfig();
+            config.SelectionOperator = new MockSelectionOperatorFactoryConfig();
+            config.Statistics.Add(new MockStatisticFactoryConfig());
+            config.Terminator = new MockTerminatorFactoryConfig();
             await TestInitializeAsync(config);
         }
 
@@ -69,19 +69,19 @@ namespace GenFxTests
         [TestMethod]
         public async Task GeneticAlgorithm_Initialize_NoCrossover_Async()
         {
-            ComponentConfigurationSet config = new ComponentConfigurationSet();
+            ComponentFactoryConfigSet config = new ComponentFactoryConfigSet();
 
-            config.GeneticAlgorithm = new MockGeneticAlgorithmConfiguration();
+            config.GeneticAlgorithm = new MockGeneticAlgorithmFactoryConfig();
             //config.CrossoverOperator = new MockCrossoverOperatorConfiguration();
-            config.ElitismStrategy = new MockElitismStrategyConfiguration();
-            config.FitnessEvaluator = new MockFitnessEvaluatorConfiguration();
-            config.FitnessScalingStrategy = new MockFitnessScalingStrategyConfiguration();
-            config.Entity = new MockEntityConfiguration();
-            config.MutationOperator = new MockMutationOperatorConfiguration();
-            config.Population = new MockPopulationConfiguration();
-            config.SelectionOperator = new MockSelectionOperatorConfiguration();
-            config.Statistics.Add(new MockStatisticConfiguration());
-            config.Terminator = new MockTerminatorConfiguration();
+            config.ElitismStrategy = new MockElitismStrategyFactoryConfig();
+            config.FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig();
+            config.FitnessScalingStrategy = new MockFitnessScalingStrategyFactoryConfig();
+            config.Entity = new MockEntityFactoryConfig();
+            config.MutationOperator = new MockMutationOperatorFactoryConfig();
+            config.Population = new MockPopulationFactoryConfig();
+            config.SelectionOperator = new MockSelectionOperatorFactoryConfig();
+            config.Statistics.Add(new MockStatisticFactoryConfig());
+            config.Terminator = new MockTerminatorFactoryConfig();
             await TestInitializeAsync(config);
         }
 
@@ -91,19 +91,19 @@ namespace GenFxTests
         [TestMethod]
         public async Task GeneticAlgorithm_Initialize_NoElitism_Async()
         {
-            ComponentConfigurationSet config = new ComponentConfigurationSet();
+            ComponentFactoryConfigSet config = new ComponentFactoryConfigSet();
 
-            config.GeneticAlgorithm = new MockGeneticAlgorithmConfiguration();
-            config.CrossoverOperator = new MockCrossoverOperatorConfiguration();
+            config.GeneticAlgorithm = new MockGeneticAlgorithmFactoryConfig();
+            config.CrossoverOperator = new MockCrossoverOperatorFactoryConfig();
             //config.ElitismStrategy = new MockElitismStrategyConfiguration();
-            config.FitnessEvaluator = new MockFitnessEvaluatorConfiguration();
-            config.FitnessScalingStrategy = new MockFitnessScalingStrategyConfiguration();
-            config.Entity = new MockEntityConfiguration();
-            config.MutationOperator = new MockMutationOperatorConfiguration();
-            config.Population = new MockPopulationConfiguration();
-            config.SelectionOperator = new MockSelectionOperatorConfiguration();
-            config.Statistics.Add(new MockStatisticConfiguration());
-            config.Terminator = new MockTerminatorConfiguration();
+            config.FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig();
+            config.FitnessScalingStrategy = new MockFitnessScalingStrategyFactoryConfig();
+            config.Entity = new MockEntityFactoryConfig();
+            config.MutationOperator = new MockMutationOperatorFactoryConfig();
+            config.Population = new MockPopulationFactoryConfig();
+            config.SelectionOperator = new MockSelectionOperatorFactoryConfig();
+            config.Statistics.Add(new MockStatisticFactoryConfig());
+            config.Terminator = new MockTerminatorFactoryConfig();
             await TestInitializeAsync(config);
         }
 
@@ -113,19 +113,19 @@ namespace GenFxTests
         [TestMethod]
         public async Task GeneticAlgorithm_Initialize_NoFitnessEvaluator_Async()
         {
-            ComponentConfigurationSet config = new ComponentConfigurationSet();
+            ComponentFactoryConfigSet config = new ComponentFactoryConfigSet();
 
-            config.GeneticAlgorithm = new MockGeneticAlgorithmConfiguration();
-            config.CrossoverOperator = new MockCrossoverOperatorConfiguration();
-            config.ElitismStrategy = new MockElitismStrategyConfiguration();
+            config.GeneticAlgorithm = new MockGeneticAlgorithmFactoryConfig();
+            config.CrossoverOperator = new MockCrossoverOperatorFactoryConfig();
+            config.ElitismStrategy = new MockElitismStrategyFactoryConfig();
             //config.FitnessEvaluator = new MockFitnessEvaluatorConfiguration();
-            config.FitnessScalingStrategy = new MockFitnessScalingStrategyConfiguration();
-            config.Entity = new MockEntityConfiguration();
-            config.MutationOperator = new MockMutationOperatorConfiguration();
-            config.Population = new MockPopulationConfiguration();
-            config.SelectionOperator = new MockSelectionOperatorConfiguration();
-            config.Statistics.Add(new MockStatisticConfiguration());
-            config.Terminator = new MockTerminatorConfiguration();
+            config.FitnessScalingStrategy = new MockFitnessScalingStrategyFactoryConfig();
+            config.Entity = new MockEntityFactoryConfig();
+            config.MutationOperator = new MockMutationOperatorFactoryConfig();
+            config.Population = new MockPopulationFactoryConfig();
+            config.SelectionOperator = new MockSelectionOperatorFactoryConfig();
+            config.Statistics.Add(new MockStatisticFactoryConfig());
+            config.Terminator = new MockTerminatorFactoryConfig();
             await TestInitializeAsync(config, true);
         }
 
@@ -135,19 +135,19 @@ namespace GenFxTests
         [TestMethod]
         public async Task GeneticAlgorithm_Initialize_NoFitnessScalingStrategy_Async()
         {
-            ComponentConfigurationSet config = new ComponentConfigurationSet();
+            ComponentFactoryConfigSet config = new ComponentFactoryConfigSet();
 
-            config.GeneticAlgorithm = new MockGeneticAlgorithmConfiguration();
-            config.CrossoverOperator = new MockCrossoverOperatorConfiguration();
-            config.ElitismStrategy = new MockElitismStrategyConfiguration();
-            config.FitnessEvaluator = new MockFitnessEvaluatorConfiguration();
+            config.GeneticAlgorithm = new MockGeneticAlgorithmFactoryConfig();
+            config.CrossoverOperator = new MockCrossoverOperatorFactoryConfig();
+            config.ElitismStrategy = new MockElitismStrategyFactoryConfig();
+            config.FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig();
             //config.FitnessScalingStrategy = new MockFitnessScalingStrategyConfiguration();
-            config.Entity = new MockEntityConfiguration();
-            config.MutationOperator = new MockMutationOperatorConfiguration();
-            config.Population = new MockPopulationConfiguration();
-            config.SelectionOperator = new MockSelectionOperatorConfiguration();
-            config.Statistics.Add(new MockStatisticConfiguration());
-            config.Terminator = new MockTerminatorConfiguration();
+            config.Entity = new MockEntityFactoryConfig();
+            config.MutationOperator = new MockMutationOperatorFactoryConfig();
+            config.Population = new MockPopulationFactoryConfig();
+            config.SelectionOperator = new MockSelectionOperatorFactoryConfig();
+            config.Statistics.Add(new MockStatisticFactoryConfig());
+            config.Terminator = new MockTerminatorFactoryConfig();
             await TestInitializeAsync(config);
         }
 
@@ -157,19 +157,19 @@ namespace GenFxTests
         [TestMethod]
         public async Task GeneticAlgorithm_Initialize_NoEntityType_Async()
         {
-            ComponentConfigurationSet config = new ComponentConfigurationSet();
+            ComponentFactoryConfigSet config = new ComponentFactoryConfigSet();
 
-            config.GeneticAlgorithm = new MockGeneticAlgorithmConfiguration();
-            config.CrossoverOperator = new MockCrossoverOperatorConfiguration();
-            config.ElitismStrategy = new MockElitismStrategyConfiguration();
-            config.FitnessEvaluator = new MockFitnessEvaluatorConfiguration();
-            config.FitnessScalingStrategy = new MockFitnessScalingStrategyConfiguration();
+            config.GeneticAlgorithm = new MockGeneticAlgorithmFactoryConfig();
+            config.CrossoverOperator = new MockCrossoverOperatorFactoryConfig();
+            config.ElitismStrategy = new MockElitismStrategyFactoryConfig();
+            config.FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig();
+            config.FitnessScalingStrategy = new MockFitnessScalingStrategyFactoryConfig();
             //config.Entity = new MockEntityConfiguration();
-            config.MutationOperator = new MockMutationOperatorConfiguration();
-            config.Population = new MockPopulationConfiguration();
-            config.SelectionOperator = new MockSelectionOperatorConfiguration();
-            config.Statistics.Add(new MockStatisticConfiguration());
-            config.Terminator = new MockTerminatorConfiguration();
+            config.MutationOperator = new MockMutationOperatorFactoryConfig();
+            config.Population = new MockPopulationFactoryConfig();
+            config.SelectionOperator = new MockSelectionOperatorFactoryConfig();
+            config.Statistics.Add(new MockStatisticFactoryConfig());
+            config.Terminator = new MockTerminatorFactoryConfig();
             await TestInitializeAsync(config, true);
         }
 
@@ -179,19 +179,19 @@ namespace GenFxTests
         [TestMethod]
         public async Task GeneticAlgorithm_Initialize_NoMutationOperatorType_Async()
         {
-            ComponentConfigurationSet config = new ComponentConfigurationSet();
+            ComponentFactoryConfigSet config = new ComponentFactoryConfigSet();
 
-            config.GeneticAlgorithm = new MockGeneticAlgorithmConfiguration();
-            config.CrossoverOperator = new MockCrossoverOperatorConfiguration();
-            config.ElitismStrategy = new MockElitismStrategyConfiguration();
-            config.FitnessEvaluator = new MockFitnessEvaluatorConfiguration();
-            config.FitnessScalingStrategy = new MockFitnessScalingStrategyConfiguration();
-            config.Entity = new MockEntityConfiguration();
+            config.GeneticAlgorithm = new MockGeneticAlgorithmFactoryConfig();
+            config.CrossoverOperator = new MockCrossoverOperatorFactoryConfig();
+            config.ElitismStrategy = new MockElitismStrategyFactoryConfig();
+            config.FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig();
+            config.FitnessScalingStrategy = new MockFitnessScalingStrategyFactoryConfig();
+            config.Entity = new MockEntityFactoryConfig();
             //config.MutationOperator = new MockMutationOperatorConfiguration();
-            config.Population = new MockPopulationConfiguration();
-            config.SelectionOperator = new MockSelectionOperatorConfiguration();
-            config.Statistics.Add(new MockStatisticConfiguration());
-            config.Terminator = new MockTerminatorConfiguration();
+            config.Population = new MockPopulationFactoryConfig();
+            config.SelectionOperator = new MockSelectionOperatorFactoryConfig();
+            config.Statistics.Add(new MockStatisticFactoryConfig());
+            config.Terminator = new MockTerminatorFactoryConfig();
             await TestInitializeAsync(config);
         }
 
@@ -201,19 +201,19 @@ namespace GenFxTests
         [TestMethod]
         public async Task GeneticAlgorithm_Initialize_NoPopulationType_Async()
         {
-            ComponentConfigurationSet config = new ComponentConfigurationSet();
+            ComponentFactoryConfigSet config = new ComponentFactoryConfigSet();
 
-            config.GeneticAlgorithm = new MockGeneticAlgorithmConfiguration();
-            config.CrossoverOperator = new MockCrossoverOperatorConfiguration();
-            config.ElitismStrategy = new MockElitismStrategyConfiguration();
-            config.FitnessEvaluator = new MockFitnessEvaluatorConfiguration();
-            config.FitnessScalingStrategy = new MockFitnessScalingStrategyConfiguration();
-            config.Entity = new MockEntityConfiguration();
-            config.MutationOperator = new MockMutationOperatorConfiguration();
+            config.GeneticAlgorithm = new MockGeneticAlgorithmFactoryConfig();
+            config.CrossoverOperator = new MockCrossoverOperatorFactoryConfig();
+            config.ElitismStrategy = new MockElitismStrategyFactoryConfig();
+            config.FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig();
+            config.FitnessScalingStrategy = new MockFitnessScalingStrategyFactoryConfig();
+            config.Entity = new MockEntityFactoryConfig();
+            config.MutationOperator = new MockMutationOperatorFactoryConfig();
             //config.Population = new MockPopulationConfiguration();
-            config.SelectionOperator = new MockSelectionOperatorConfiguration();
-            config.Statistics.Add(new MockStatisticConfiguration());
-            config.Terminator = new MockTerminatorConfiguration();
+            config.SelectionOperator = new MockSelectionOperatorFactoryConfig();
+            config.Statistics.Add(new MockStatisticFactoryConfig());
+            config.Terminator = new MockTerminatorFactoryConfig();
             await TestInitializeAsync(config, true);
         }
 
@@ -223,19 +223,19 @@ namespace GenFxTests
         [TestMethod]
         public async Task GeneticAlgorithm_Initialize_NoSelectionOperatorType_Async()
         {
-            ComponentConfigurationSet config = new ComponentConfigurationSet();
+            ComponentFactoryConfigSet config = new ComponentFactoryConfigSet();
 
-            config.GeneticAlgorithm = new MockGeneticAlgorithmConfiguration();
-            config.CrossoverOperator = new MockCrossoverOperatorConfiguration();
-            config.ElitismStrategy = new MockElitismStrategyConfiguration();
-            config.FitnessEvaluator = new MockFitnessEvaluatorConfiguration();
-            config.FitnessScalingStrategy = new MockFitnessScalingStrategyConfiguration();
-            config.Entity = new MockEntityConfiguration();
-            config.MutationOperator = new MockMutationOperatorConfiguration();
-            config.Population = new MockPopulationConfiguration();
+            config.GeneticAlgorithm = new MockGeneticAlgorithmFactoryConfig();
+            config.CrossoverOperator = new MockCrossoverOperatorFactoryConfig();
+            config.ElitismStrategy = new MockElitismStrategyFactoryConfig();
+            config.FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig();
+            config.FitnessScalingStrategy = new MockFitnessScalingStrategyFactoryConfig();
+            config.Entity = new MockEntityFactoryConfig();
+            config.MutationOperator = new MockMutationOperatorFactoryConfig();
+            config.Population = new MockPopulationFactoryConfig();
             //config.SelectionOperator = new MockSelectionOperatorConfiguration();
-            config.Statistics.Add(new MockStatisticConfiguration());
-            config.Terminator = new MockTerminatorConfiguration();
+            config.Statistics.Add(new MockStatisticFactoryConfig());
+            config.Terminator = new MockTerminatorFactoryConfig();
             await TestInitializeAsync(config, true);
         }
 
@@ -245,19 +245,19 @@ namespace GenFxTests
         [TestMethod]
         public async Task GeneticAlgorithm_Initialize_NoStatisticType_Async()
         {
-            ComponentConfigurationSet config = new ComponentConfigurationSet();
+            ComponentFactoryConfigSet config = new ComponentFactoryConfigSet();
 
-            config.GeneticAlgorithm = new MockGeneticAlgorithmConfiguration();
-            config.CrossoverOperator = new MockCrossoverOperatorConfiguration();
-            config.ElitismStrategy = new MockElitismStrategyConfiguration();
-            config.FitnessEvaluator = new MockFitnessEvaluatorConfiguration();
-            config.FitnessScalingStrategy = new MockFitnessScalingStrategyConfiguration();
-            config.Entity = new MockEntityConfiguration();
-            config.MutationOperator = new MockMutationOperatorConfiguration();
-            config.Population = new MockPopulationConfiguration();
-            config.SelectionOperator = new MockSelectionOperatorConfiguration();
+            config.GeneticAlgorithm = new MockGeneticAlgorithmFactoryConfig();
+            config.CrossoverOperator = new MockCrossoverOperatorFactoryConfig();
+            config.ElitismStrategy = new MockElitismStrategyFactoryConfig();
+            config.FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig();
+            config.FitnessScalingStrategy = new MockFitnessScalingStrategyFactoryConfig();
+            config.Entity = new MockEntityFactoryConfig();
+            config.MutationOperator = new MockMutationOperatorFactoryConfig();
+            config.Population = new MockPopulationFactoryConfig();
+            config.SelectionOperator = new MockSelectionOperatorFactoryConfig();
             //config.Statistics.Add(new MockStatisticConfiguration());
-            config.Terminator = new MockTerminatorConfiguration();
+            config.Terminator = new MockTerminatorFactoryConfig();
             await TestInitializeAsync(config);
         }
 
@@ -267,18 +267,18 @@ namespace GenFxTests
         [TestMethod]
         public async Task GeneticAlgorithm_Initialize_NoTerminatorType_Async()
         {
-            ComponentConfigurationSet config = new ComponentConfigurationSet();
+            ComponentFactoryConfigSet config = new ComponentFactoryConfigSet();
 
-            config.GeneticAlgorithm = new MockGeneticAlgorithmConfiguration();
-            config.CrossoverOperator = new MockCrossoverOperatorConfiguration();
-            config.ElitismStrategy = new MockElitismStrategyConfiguration();
-            config.FitnessEvaluator = new MockFitnessEvaluatorConfiguration();
-            config.FitnessScalingStrategy = new MockFitnessScalingStrategyConfiguration();
-            config.Entity = new MockEntityConfiguration();
-            config.MutationOperator = new MockMutationOperatorConfiguration();
-            config.Population = new MockPopulationConfiguration();
-            config.SelectionOperator = new MockSelectionOperatorConfiguration();
-            config.Statistics.Add(new MockStatisticConfiguration());
+            config.GeneticAlgorithm = new MockGeneticAlgorithmFactoryConfig();
+            config.CrossoverOperator = new MockCrossoverOperatorFactoryConfig();
+            config.ElitismStrategy = new MockElitismStrategyFactoryConfig();
+            config.FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig();
+            config.FitnessScalingStrategy = new MockFitnessScalingStrategyFactoryConfig();
+            config.Entity = new MockEntityFactoryConfig();
+            config.MutationOperator = new MockMutationOperatorFactoryConfig();
+            config.Population = new MockPopulationFactoryConfig();
+            config.SelectionOperator = new MockSelectionOperatorFactoryConfig();
+            config.Statistics.Add(new MockStatisticFactoryConfig());
             //config.Terminator = new MockTerminatorConfiguration();
             await TestInitializeAsync(config);
         }
@@ -289,12 +289,12 @@ namespace GenFxTests
         [TestMethod]
         public async Task GeneticAlgorithm_Initialize_ValidateRequiredSetting_Async()
         {
-            ComponentConfigurationSet configurationSet = new ComponentConfigurationSet();
-            configurationSet.SelectionOperator = new MockSelectionOperatorConfiguration();
-            configurationSet.FitnessEvaluator = new MockFitnessEvaluatorConfiguration();
-            configurationSet.GeneticAlgorithm = new MockGeneticAlgorithmConfiguration();
-            configurationSet.Population = new SimplePopulationConfiguration();
-            configurationSet.Entity = new MockEntityConfiguration();
+            ComponentFactoryConfigSet configurationSet = new ComponentFactoryConfigSet();
+            configurationSet.SelectionOperator = new MockSelectionOperatorFactoryConfig();
+            configurationSet.FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig();
+            configurationSet.GeneticAlgorithm = new MockGeneticAlgorithmFactoryConfig();
+            configurationSet.Population = new SimplePopulationFactoryConfig();
+            configurationSet.Entity = new MockEntityFactoryConfig();
 
             AssertEx.Throws<ArgumentException>(() => new RequiredSettingGeneticAlgorithm(configurationSet));
         }
@@ -305,7 +305,7 @@ namespace GenFxTests
         [TestMethod]
         public async Task GeneticAlgorithm_Run_Async()
         {
-            ComponentConfigurationSet config = GetConfiguration();
+            ComponentFactoryConfigSet config = GetConfiguration();
 
             int eventHandlerCallCount = 0;
             TestGeneticAlgorithm algorithm = new TestGeneticAlgorithm(config);
@@ -332,7 +332,7 @@ namespace GenFxTests
         [TestMethod]
         public async Task GeneticAlgorithm_Run_Twice_NoInitialize_Async()
         {
-            ComponentConfigurationSet config = GetConfiguration();
+            ComponentFactoryConfigSet config = GetConfiguration();
             TestGeneticAlgorithm algorithm = new TestGeneticAlgorithm(config);
 
             await algorithm.InitializeAsync();
@@ -346,13 +346,13 @@ namespace GenFxTests
         [TestMethod]
         public async Task GeneticAlgorithm_Run_NoInitialize_Async()
         {
-            TestGeneticAlgorithm algorithm = new TestGeneticAlgorithm(new ComponentConfigurationSet
+            TestGeneticAlgorithm algorithm = new TestGeneticAlgorithm(new ComponentFactoryConfigSet
             {
-                GeneticAlgorithm = new TestGeneticAlgorithmConfiguration(),
-                SelectionOperator = new MockSelectionOperatorConfiguration(),
-                FitnessEvaluator = new MockFitnessEvaluatorConfiguration(),
-                Entity = new MockEntityConfiguration(),
-                Population = new MockPopulationConfiguration()
+                GeneticAlgorithm = new TestGeneticAlgorithmFactoryConfig(),
+                SelectionOperator = new MockSelectionOperatorFactoryConfig(),
+                FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig(),
+                Entity = new MockEntityFactoryConfig(),
+                Population = new MockPopulationFactoryConfig()
             });
 
             AssertEx.ThrowsAsync<InvalidOperationException>(async () => await algorithm.RunAsync());
@@ -364,7 +364,7 @@ namespace GenFxTests
         [TestMethod]
         public async Task GeneticAlgorithm_Step_Async()
         {
-            ComponentConfigurationSet config = GetConfiguration();
+            ComponentFactoryConfigSet config = GetConfiguration();
             TestGeneticAlgorithm algorithm = new TestGeneticAlgorithm(config);
 
             int eventHandlerCallCount = 0;
@@ -408,7 +408,7 @@ namespace GenFxTests
         [TestMethod]
         public async Task GeneticAlgorithm_Step_Overbounds_NoInitialize_Async()
         {
-            ComponentConfigurationSet config = GetConfiguration();
+            ComponentFactoryConfigSet config = GetConfiguration();
             TestGeneticAlgorithm algorithm = new TestGeneticAlgorithm(config);
 
             await algorithm.InitializeAsync();
@@ -430,13 +430,13 @@ namespace GenFxTests
         [TestMethod]
         public async Task GeneticAlgorithm_Step_NoInitialize_Async()
         {
-            TestGeneticAlgorithm algorithm = new TestGeneticAlgorithm(new ComponentConfigurationSet
+            TestGeneticAlgorithm algorithm = new TestGeneticAlgorithm(new ComponentFactoryConfigSet
             {
-                GeneticAlgorithm = new TestGeneticAlgorithmConfiguration(),
-                SelectionOperator = new MockSelectionOperatorConfiguration(),
-                FitnessEvaluator = new MockFitnessEvaluatorConfiguration(),
-                Entity = new MockEntityConfiguration(),
-                Population = new MockPopulationConfiguration()
+                GeneticAlgorithm = new TestGeneticAlgorithmFactoryConfig(),
+                SelectionOperator = new MockSelectionOperatorFactoryConfig(),
+                FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig(),
+                Entity = new MockEntityFactoryConfig(),
+                Population = new MockPopulationFactoryConfig()
             });
 
             AssertEx.ThrowsAsync<InvalidOperationException>(async () => await algorithm.StepAsync());
@@ -448,31 +448,31 @@ namespace GenFxTests
         [TestMethod]
         public void GeneticAlgorithm_ApplyElitism()
         {
-            ComponentConfigurationSet config = new ComponentConfigurationSet
+            ComponentFactoryConfigSet config = new ComponentFactoryConfigSet
             {
-                GeneticAlgorithm = new TestGeneticAlgorithmConfiguration(),
-                FitnessEvaluator = new MockFitnessEvaluatorConfiguration
+                GeneticAlgorithm = new TestGeneticAlgorithmFactoryConfig(),
+                FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig
                 {
                     EvaluationMode = FitnessEvaluationMode.Maximize
                 },
-                SelectionOperator = new MockSelectionOperatorConfiguration
+                SelectionOperator = new MockSelectionOperatorFactoryConfig
                 {
                     SelectionBasedOnFitnessType = FitnessType.Scaled
                 },
-                Entity = new MockEntityConfiguration(),
-                Population = new SimplePopulationConfiguration()
+                Entity = new MockEntityFactoryConfig(),
+                Population = new SimplePopulationFactoryConfig()
             };
 
             TestApplyElitism(config, 0);
 
-            config.ElitismStrategy = new MockElitismStrategyConfiguration
+            config.ElitismStrategy = new MockElitismStrategyFactoryConfig
             {
                 ElitistRatio = .1
             };
             TestApplyElitism(config, 1);
         }
 
-        private void TestApplyElitism(ComponentConfigurationSet config, int expectedEliteCount)
+        private void TestApplyElitism(ComponentFactoryConfigSet config, int expectedEliteCount)
         {
             TestGeneticAlgorithm algorithm = new TestGeneticAlgorithm(config);
             PrivateObject accessor = new PrivateObject(algorithm);
@@ -491,21 +491,21 @@ namespace GenFxTests
         [TestMethod]
         public void GeneticAlgorithm_SelectGeneticEntitiesAndApplyCrossoverAndMutation()
         {
-            IGeneticAlgorithm algorithm = new TestGeneticAlgorithm(new ComponentConfigurationSet
+            IGeneticAlgorithm algorithm = new TestGeneticAlgorithm(new ComponentFactoryConfigSet
             {
-                GeneticAlgorithm = new TestGeneticAlgorithmConfiguration(),
-                FitnessEvaluator = new MockFitnessEvaluatorConfiguration(),
-                Entity = new MockEntityConfiguration(),
-                Population = new SimplePopulationConfiguration(),
-                CrossoverOperator = new MockCrossoverOperatorConfiguration
+                GeneticAlgorithm = new TestGeneticAlgorithmFactoryConfig(),
+                FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig(),
+                Entity = new MockEntityFactoryConfig(),
+                Population = new SimplePopulationFactoryConfig(),
+                CrossoverOperator = new MockCrossoverOperatorFactoryConfig
                 {
                     CrossoverRate = 1
                 },
-                MutationOperator = new MockMutationOperatorConfiguration
+                MutationOperator = new MockMutationOperatorFactoryConfig
                 {
                     MutationRate = 1
                 },
-                SelectionOperator = new MockSelectionOperatorConfiguration
+                SelectionOperator = new MockSelectionOperatorFactoryConfig
                 {
                     SelectionBasedOnFitnessType = FitnessType.Scaled
                 }
@@ -540,14 +540,14 @@ namespace GenFxTests
         [TestMethod]
         public void GeneticAlgorithm_ApplyCrossover()
         {
-            IGeneticAlgorithm algorithm = new TestGeneticAlgorithm(new ComponentConfigurationSet
+            IGeneticAlgorithm algorithm = new TestGeneticAlgorithm(new ComponentFactoryConfigSet
             {
-                GeneticAlgorithm = new TestGeneticAlgorithmConfiguration(),
-                Population = new MockPopulationConfiguration(),
-                FitnessEvaluator = new MockFitnessEvaluatorConfiguration(),
-                SelectionOperator = new MockSelectionOperatorConfiguration(),
-                Entity = new MockEntityConfiguration(),
-                CrossoverOperator = new MockCrossoverOperatorConfiguration
+                GeneticAlgorithm = new TestGeneticAlgorithmFactoryConfig(),
+                Population = new MockPopulationFactoryConfig(),
+                FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig(),
+                SelectionOperator = new MockSelectionOperatorFactoryConfig(),
+                Entity = new MockEntityFactoryConfig(),
+                CrossoverOperator = new MockCrossoverOperatorFactoryConfig
                 {
                     CrossoverRate = 1
                 }
@@ -570,25 +570,25 @@ namespace GenFxTests
         [TestMethod]
         public void GeneticAlgorithm_ApplyMutation()
         {
-            ComponentConfigurationSet config = new ComponentConfigurationSet
+            ComponentFactoryConfigSet config = new ComponentFactoryConfigSet
             {
-                GeneticAlgorithm = new TestGeneticAlgorithmConfiguration(),
-                Population = new MockPopulationConfiguration(),
-                SelectionOperator = new MockSelectionOperatorConfiguration(),
-                FitnessEvaluator = new MockFitnessEvaluatorConfiguration(),
-                Entity = new MockEntityConfiguration()
+                GeneticAlgorithm = new TestGeneticAlgorithmFactoryConfig(),
+                Population = new MockPopulationFactoryConfig(),
+                SelectionOperator = new MockSelectionOperatorFactoryConfig(),
+                FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig(),
+                Entity = new MockEntityFactoryConfig()
             };
 
             TestApplyMutation(config, 0);
 
-            config.MutationOperator = new MockMutationOperatorConfiguration
+            config.MutationOperator = new MockMutationOperatorFactoryConfig
             {
                 MutationRate = .01
             };
             TestApplyMutation(config, 3);
         }
 
-        private void TestApplyMutation(ComponentConfigurationSet config, int expectedMutationCount)
+        private void TestApplyMutation(ComponentFactoryConfigSet config, int expectedMutationCount)
         {
             IGeneticAlgorithm algorithm = new TestGeneticAlgorithm(config);
             PrivateObject accessor = new PrivateObject(algorithm);
@@ -613,12 +613,12 @@ namespace GenFxTests
         [TestMethod]
         public void GeneticAlgorithm_ValidateConfiguration()
         {
-            ComponentConfigurationSet config = new ComponentConfigurationSet();
-            config.GeneticAlgorithm = new MockGeneticAlgorithmConfiguration();
-            config.SelectionOperator = new MockSelectionOperatorConfiguration();
-            config.FitnessEvaluator = new MockFitnessEvaluatorConfiguration();
-            config.Population = new MockPopulationConfiguration();
-            config.Entity = new MockEntityConfiguration();
+            ComponentFactoryConfigSet config = new ComponentFactoryConfigSet();
+            config.GeneticAlgorithm = new MockGeneticAlgorithmFactoryConfig();
+            config.SelectionOperator = new MockSelectionOperatorFactoryConfig();
+            config.FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig();
+            config.Population = new MockPopulationFactoryConfig();
+            config.Entity = new MockEntityFactoryConfig();
             TestValidateConfiguration(config);
         }
 
@@ -628,12 +628,12 @@ namespace GenFxTests
         [TestMethod]
         public void GeneticAlgorithm_ValidateConfiguration_NoGeneticAlgorithm()
         {
-            ComponentConfigurationSet config = new ComponentConfigurationSet();
+            ComponentFactoryConfigSet config = new ComponentFactoryConfigSet();
             //config.GeneticAlgorithm = new MockGeneticAlgorithmConfiguration();
-            config.SelectionOperator = new MockSelectionOperatorConfiguration();
-            config.FitnessEvaluator = new MockFitnessEvaluatorConfiguration();
-            config.Population = new MockPopulationConfiguration();
-            config.Entity = new MockEntityConfiguration();
+            config.SelectionOperator = new MockSelectionOperatorFactoryConfig();
+            config.FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig();
+            config.Population = new MockPopulationFactoryConfig();
+            config.Entity = new MockEntityFactoryConfig();
             TestValidateConfiguration(config, true);
         }
 
@@ -643,12 +643,12 @@ namespace GenFxTests
         [TestMethod]
         public void GeneticAlgorithm_ValidateConfiguration_NoSelectionOperator()
         {
-            ComponentConfigurationSet config = new ComponentConfigurationSet();
-            config.GeneticAlgorithm = new MockGeneticAlgorithmConfiguration();
+            ComponentFactoryConfigSet config = new ComponentFactoryConfigSet();
+            config.GeneticAlgorithm = new MockGeneticAlgorithmFactoryConfig();
             //config.SelectionOperator = new MockSelectionOperatorConfiguration();
-            config.FitnessEvaluator = new MockFitnessEvaluatorConfiguration();
-            config.Population = new MockPopulationConfiguration();
-            config.Entity = new MockEntityConfiguration();
+            config.FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig();
+            config.Population = new MockPopulationFactoryConfig();
+            config.Entity = new MockEntityFactoryConfig();
             TestValidateConfiguration(config, true);
         }
 
@@ -658,12 +658,12 @@ namespace GenFxTests
         [TestMethod]
         public void GeneticAlgorithm_ValidateConfiguration_NoFitnessEvaluator()
         {
-            ComponentConfigurationSet config = new ComponentConfigurationSet();
-            config.GeneticAlgorithm = new MockGeneticAlgorithmConfiguration();
-            config.SelectionOperator = new MockSelectionOperatorConfiguration();
+            ComponentFactoryConfigSet config = new ComponentFactoryConfigSet();
+            config.GeneticAlgorithm = new MockGeneticAlgorithmFactoryConfig();
+            config.SelectionOperator = new MockSelectionOperatorFactoryConfig();
             //config.FitnessEvaluator = new MockFitnessEvaluatorConfiguration();
-            config.Population = new MockPopulationConfiguration();
-            config.Entity = new MockEntityConfiguration();
+            config.Population = new MockPopulationFactoryConfig();
+            config.Entity = new MockEntityFactoryConfig();
             TestValidateConfiguration(config, true);
         }
 
@@ -673,12 +673,12 @@ namespace GenFxTests
         [TestMethod]
         public void GeneticAlgorithm_ValidateConfiguration_NoPopulation()
         {
-            ComponentConfigurationSet config = new ComponentConfigurationSet();
-            config.GeneticAlgorithm = new MockGeneticAlgorithmConfiguration();
-            config.SelectionOperator = new MockSelectionOperatorConfiguration();
-            config.FitnessEvaluator = new MockFitnessEvaluatorConfiguration();
+            ComponentFactoryConfigSet config = new ComponentFactoryConfigSet();
+            config.GeneticAlgorithm = new MockGeneticAlgorithmFactoryConfig();
+            config.SelectionOperator = new MockSelectionOperatorFactoryConfig();
+            config.FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig();
             //config.Population = new MockPopulationConfiguration();
-            config.Entity = new MockEntityConfiguration();
+            config.Entity = new MockEntityFactoryConfig();
             TestValidateConfiguration(config, true);
         }
 
@@ -688,11 +688,11 @@ namespace GenFxTests
         [TestMethod]
         public void GeneticAlgorithm_ValidateConfiguration_NoEntity()
         {
-            ComponentConfigurationSet config = new ComponentConfigurationSet();
-            config.GeneticAlgorithm = new MockGeneticAlgorithmConfiguration();
-            config.SelectionOperator = new MockSelectionOperatorConfiguration();
-            config.FitnessEvaluator = new MockFitnessEvaluatorConfiguration();
-            config.Population = new MockPopulationConfiguration();
+            ComponentFactoryConfigSet config = new ComponentFactoryConfigSet();
+            config.GeneticAlgorithm = new MockGeneticAlgorithmFactoryConfig();
+            config.SelectionOperator = new MockSelectionOperatorFactoryConfig();
+            config.FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig();
+            config.Population = new MockPopulationFactoryConfig();
             //config.Entity = new MockEntityConfiguration();
             TestValidateConfiguration(config, true);
         }
@@ -703,14 +703,14 @@ namespace GenFxTests
         [TestMethod]
         public void GeneticAlgorithm_ValidateComponentConfiguration_InvalidProperty()
         {
-            ComponentConfigurationSet config = new ComponentConfigurationSet
+            ComponentFactoryConfigSet config = new ComponentFactoryConfigSet
             {
-                GeneticAlgorithm = new MockGeneticAlgorithmConfiguration(),
-                SelectionOperator = new MockSelectionOperatorConfiguration(),
-                FitnessEvaluator = new MockFitnessEvaluatorConfiguration(),
-                Entity = new MockEntityConfiguration(),
-                Population = new MockPopulationConfiguration(),
-                MutationOperator = new FakeValidationMutationOperatorConfiguration()
+                GeneticAlgorithm = new MockGeneticAlgorithmFactoryConfig(),
+                SelectionOperator = new MockSelectionOperatorFactoryConfig(),
+                FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig(),
+                Entity = new MockEntityFactoryConfig(),
+                Population = new MockPopulationFactoryConfig(),
+                MutationOperator = new FakeValidationMutationOperatorFactoryConfig()
             };
 
             AssertEx.Throws<ValidationException>(() => new MockGeneticAlgorithm(config));
@@ -722,14 +722,14 @@ namespace GenFxTests
         [TestMethod]
         public void GeneticAlgorithm_ValidateRequiredComponents_ValidCrossover()
         {
-            MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentConfigurationSet
+            MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentFactoryConfigSet
             {
-                GeneticAlgorithm = new MockGeneticAlgorithmConfiguration(),
-                SelectionOperator = new MockSelectionOperatorConfiguration(),
-                FitnessEvaluator = new MockFitnessEvaluatorConfiguration(),
-                Entity = new MockEntityConfiguration(),
-                Population = new MockPopulationConfiguration(),
-                CrossoverOperator = new MockCrossoverOperatorConfiguration
+                GeneticAlgorithm = new MockGeneticAlgorithmFactoryConfig(),
+                SelectionOperator = new MockSelectionOperatorFactoryConfig(),
+                FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig(),
+                Entity = new MockEntityFactoryConfig(),
+                Population = new MockPopulationFactoryConfig(),
+                CrossoverOperator = new MockCrossoverOperatorFactoryConfig
                 {
                     CrossoverRate = 1
                 }
@@ -744,14 +744,14 @@ namespace GenFxTests
         [TestMethod]
         public void GeneticAlgorithm_ValidateRequiredComponents_InvalidCrossover()
         {
-            MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentConfigurationSet
+            MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentFactoryConfigSet
             {
-                GeneticAlgorithm = new MockGeneticAlgorithmConfiguration(),
-                SelectionOperator = new MockSelectionOperatorConfiguration(),
-                FitnessEvaluator = new MockFitnessEvaluatorConfiguration(),
-                Entity = new MockEntityConfiguration(),
-                Population = new MockPopulationConfiguration(),
-                CrossoverOperator = new MockCrossoverOperatorConfiguration
+                GeneticAlgorithm = new MockGeneticAlgorithmFactoryConfig(),
+                SelectionOperator = new MockSelectionOperatorFactoryConfig(),
+                FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig(),
+                Entity = new MockEntityFactoryConfig(),
+                Population = new MockPopulationFactoryConfig(),
+                CrossoverOperator = new MockCrossoverOperatorFactoryConfig
                 {
                     CrossoverRate = 1
                 }
@@ -766,14 +766,14 @@ namespace GenFxTests
         [TestMethod]
         public void GeneticAlgorithm_ValidateRequiredComponents_ValidElitism()
         {
-            MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentConfigurationSet
+            MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentFactoryConfigSet
             {
-                GeneticAlgorithm = new MockGeneticAlgorithmConfiguration(),
-                SelectionOperator = new MockSelectionOperatorConfiguration(),
-                FitnessEvaluator = new MockFitnessEvaluatorConfiguration(),
-                Entity = new MockEntityConfiguration(),
-                Population = new MockPopulationConfiguration(),
-                ElitismStrategy = new MockElitismStrategyConfiguration
+                GeneticAlgorithm = new MockGeneticAlgorithmFactoryConfig(),
+                SelectionOperator = new MockSelectionOperatorFactoryConfig(),
+                FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig(),
+                Entity = new MockEntityFactoryConfig(),
+                Population = new MockPopulationFactoryConfig(),
+                ElitismStrategy = new MockElitismStrategyFactoryConfig
                 {
                     ElitistRatio = 1
                 }
@@ -788,14 +788,14 @@ namespace GenFxTests
         [TestMethod]
         public void GeneticAlgorithm_ValidateRequiredComponents_InvalidElitism()
         {
-            MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentConfigurationSet
+            MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentFactoryConfigSet
             {
-                GeneticAlgorithm = new MockGeneticAlgorithmConfiguration(),
-                SelectionOperator = new MockSelectionOperatorConfiguration(),
-                FitnessEvaluator = new MockFitnessEvaluatorConfiguration(),
-                Entity = new MockEntityConfiguration(),
-                Population = new MockPopulationConfiguration(),
-                ElitismStrategy = new MockElitismStrategyConfiguration
+                GeneticAlgorithm = new MockGeneticAlgorithmFactoryConfig(),
+                SelectionOperator = new MockSelectionOperatorFactoryConfig(),
+                FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig(),
+                Entity = new MockEntityFactoryConfig(),
+                Population = new MockPopulationFactoryConfig(),
+                ElitismStrategy = new MockElitismStrategyFactoryConfig
                 {
                     ElitistRatio = 1
                 }
@@ -811,13 +811,13 @@ namespace GenFxTests
         [TestMethod]
         public void GeneticAlgorithm_ValidateRequiredComponents_ValidFitnessEvaluator()
         {
-            MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentConfigurationSet
+            MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentFactoryConfigSet
             {
-                GeneticAlgorithm = new MockGeneticAlgorithmConfiguration(),
-                SelectionOperator = new MockSelectionOperatorConfiguration(),
-                Entity = new MockEntityConfiguration(),
-                Population = new MockPopulationConfiguration(),
-                FitnessEvaluator = new MockFitnessEvaluatorConfiguration()
+                GeneticAlgorithm = new MockGeneticAlgorithmFactoryConfig(),
+                SelectionOperator = new MockSelectionOperatorFactoryConfig(),
+                Entity = new MockEntityFactoryConfig(),
+                Population = new MockPopulationFactoryConfig(),
+                FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig()
             });
             Type testType = typeof(FitnessEvaluatorDependentClass);
             algorithm.ValidateRequiredComponents(testType);
@@ -829,13 +829,13 @@ namespace GenFxTests
         [TestMethod]
         public void GeneticAlgorithm_ValidateRequiredComponents_InvalidFitnessEvaluator()
         {
-            MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentConfigurationSet
+            MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentFactoryConfigSet
             {
-                GeneticAlgorithm = new MockGeneticAlgorithmConfiguration(),
-                SelectionOperator = new MockSelectionOperatorConfiguration(),
-                FitnessEvaluator = new MockFitnessEvaluatorConfiguration(),
-                Entity = new MockEntityConfiguration(),
-                Population = new MockPopulationConfiguration(),
+                GeneticAlgorithm = new MockGeneticAlgorithmFactoryConfig(),
+                SelectionOperator = new MockSelectionOperatorFactoryConfig(),
+                FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig(),
+                Entity = new MockEntityFactoryConfig(),
+                Population = new MockPopulationFactoryConfig(),
             });
             Type testType = typeof(FitnessEvaluatorDependentClass2);
             AssertEx.Throws<InvalidOperationException>(() => algorithm.ValidateRequiredComponents(testType));
@@ -847,14 +847,14 @@ namespace GenFxTests
         [TestMethod]
         public void GeneticAlgorithm_ValidateRequiredComponents_ValidFitnessScalingStrategy()
         {
-            MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentConfigurationSet
+            MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentFactoryConfigSet
             {
-                GeneticAlgorithm = new MockGeneticAlgorithmConfiguration(),
-                SelectionOperator = new MockSelectionOperatorConfiguration(),
-                FitnessEvaluator = new MockFitnessEvaluatorConfiguration(),
-                Entity = new MockEntityConfiguration(),
-                Population = new MockPopulationConfiguration(),
-                FitnessScalingStrategy = new MockFitnessScalingStrategyConfiguration()
+                GeneticAlgorithm = new MockGeneticAlgorithmFactoryConfig(),
+                SelectionOperator = new MockSelectionOperatorFactoryConfig(),
+                FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig(),
+                Entity = new MockEntityFactoryConfig(),
+                Population = new MockPopulationFactoryConfig(),
+                FitnessScalingStrategy = new MockFitnessScalingStrategyFactoryConfig()
             });
             Type testType = typeof(FitnessScalingStrategyDependentClass);
             algorithm.ValidateRequiredComponents(testType);
@@ -866,14 +866,14 @@ namespace GenFxTests
         [TestMethod]
         public void GeneticAlgorithm_ValidateRequiredComponents_InvalidFitnessScalingStrategy()
         {
-            MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentConfigurationSet
+            MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentFactoryConfigSet
             {
-                GeneticAlgorithm = new MockGeneticAlgorithmConfiguration(),
-                SelectionOperator = new MockSelectionOperatorConfiguration(),
-                FitnessEvaluator = new MockFitnessEvaluatorConfiguration(),
-                Entity = new MockEntityConfiguration(),
-                Population = new MockPopulationConfiguration(),
-                FitnessScalingStrategy = new MockFitnessScalingStrategyConfiguration()
+                GeneticAlgorithm = new MockGeneticAlgorithmFactoryConfig(),
+                SelectionOperator = new MockSelectionOperatorFactoryConfig(),
+                FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig(),
+                Entity = new MockEntityFactoryConfig(),
+                Population = new MockPopulationFactoryConfig(),
+                FitnessScalingStrategy = new MockFitnessScalingStrategyFactoryConfig()
             });
             Type testType = typeof(FitnessScalingStrategyDependentClass2);
             AssertEx.Throws<InvalidOperationException>(() => algorithm.ValidateRequiredComponents(testType));
@@ -885,13 +885,13 @@ namespace GenFxTests
         [TestMethod]
         public void GeneticAlgorithm_ValidateRequiredComponents_ValidEntity()
         {
-            MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentConfigurationSet
+            MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentFactoryConfigSet
             {
-                GeneticAlgorithm = new MockGeneticAlgorithmConfiguration(),
-                SelectionOperator = new MockSelectionOperatorConfiguration(),
-                FitnessEvaluator = new MockFitnessEvaluatorConfiguration(),
-                Population = new MockPopulationConfiguration(),
-                Entity = new MockEntityConfiguration()
+                GeneticAlgorithm = new MockGeneticAlgorithmFactoryConfig(),
+                SelectionOperator = new MockSelectionOperatorFactoryConfig(),
+                FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig(),
+                Population = new MockPopulationFactoryConfig(),
+                Entity = new MockEntityFactoryConfig()
             });
             Type testType = typeof(EntityDependentClass);
             algorithm.ValidateRequiredComponents(testType);
@@ -903,13 +903,13 @@ namespace GenFxTests
         [TestMethod]
         public void GeneticAlgorithm_ValidateRequiredComponents_InvalidEntity()
         {
-            MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentConfigurationSet
+            MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentFactoryConfigSet
             {
-                GeneticAlgorithm = new MockGeneticAlgorithmConfiguration(),
-                SelectionOperator = new MockSelectionOperatorConfiguration(),
-                FitnessEvaluator = new MockFitnessEvaluatorConfiguration(),
-                Entity = new MockEntityConfiguration(),
-                Population = new MockPopulationConfiguration()
+                GeneticAlgorithm = new MockGeneticAlgorithmFactoryConfig(),
+                SelectionOperator = new MockSelectionOperatorFactoryConfig(),
+                FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig(),
+                Entity = new MockEntityFactoryConfig(),
+                Population = new MockPopulationFactoryConfig()
             });
             Type testType = typeof(EntityDependentClass2);
             AssertEx.Throws<InvalidOperationException>(() => algorithm.ValidateRequiredComponents(testType));
@@ -921,14 +921,14 @@ namespace GenFxTests
         [TestMethod]
         public void GeneticAlgorithm_ValidateRequiredComponents_ValidMutationOperator()
         {
-            MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentConfigurationSet
+            MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentFactoryConfigSet
             {
-                GeneticAlgorithm = new MockGeneticAlgorithmConfiguration(),
-                SelectionOperator = new MockSelectionOperatorConfiguration(),
-                FitnessEvaluator = new MockFitnessEvaluatorConfiguration(),
-                Entity = new MockEntityConfiguration(),
-                Population = new MockPopulationConfiguration(),
-                MutationOperator = new MockMutationOperatorConfiguration
+                GeneticAlgorithm = new MockGeneticAlgorithmFactoryConfig(),
+                SelectionOperator = new MockSelectionOperatorFactoryConfig(),
+                FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig(),
+                Entity = new MockEntityFactoryConfig(),
+                Population = new MockPopulationFactoryConfig(),
+                MutationOperator = new MockMutationOperatorFactoryConfig
                 {
                     MutationRate = 1
                 }
@@ -943,14 +943,14 @@ namespace GenFxTests
         [TestMethod]
         public void GeneticAlgorithm_ValidateRequiredComponents_InvalidMutationOperator()
         {
-            MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentConfigurationSet
+            MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentFactoryConfigSet
             {
-                GeneticAlgorithm = new MockGeneticAlgorithmConfiguration(),
-                SelectionOperator = new MockSelectionOperatorConfiguration(),
-                FitnessEvaluator = new MockFitnessEvaluatorConfiguration(),
-                Entity = new MockEntityConfiguration(),
-                Population = new MockPopulationConfiguration(),
-                MutationOperator = new MockMutationOperatorConfiguration
+                GeneticAlgorithm = new MockGeneticAlgorithmFactoryConfig(),
+                SelectionOperator = new MockSelectionOperatorFactoryConfig(),
+                FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig(),
+                Entity = new MockEntityFactoryConfig(),
+                Population = new MockPopulationFactoryConfig(),
+                MutationOperator = new MockMutationOperatorFactoryConfig
                 {
                     MutationRate = 1
                 }
@@ -965,13 +965,13 @@ namespace GenFxTests
         [TestMethod]
         public void GeneticAlgorithm_ValidateRequiredComponents_ValidPopulation()
         {
-            MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentConfigurationSet
+            MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentFactoryConfigSet
             {
-                GeneticAlgorithm = new MockGeneticAlgorithmConfiguration(),
-                SelectionOperator = new MockSelectionOperatorConfiguration(),
-                FitnessEvaluator = new MockFitnessEvaluatorConfiguration(),
-                Entity = new MockEntityConfiguration(),
-                Population = new MockPopulationConfiguration()
+                GeneticAlgorithm = new MockGeneticAlgorithmFactoryConfig(),
+                SelectionOperator = new MockSelectionOperatorFactoryConfig(),
+                FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig(),
+                Entity = new MockEntityFactoryConfig(),
+                Population = new MockPopulationFactoryConfig()
             });
             Type testType = typeof(PopulationDependentClass);
             algorithm.ValidateRequiredComponents(testType);
@@ -983,13 +983,13 @@ namespace GenFxTests
         [TestMethod]
         public void GeneticAlgorithm_ValidateRequiredComponents_InvalidPopulation()
         {
-            MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentConfigurationSet
+            MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentFactoryConfigSet
             {
-                GeneticAlgorithm = new MockGeneticAlgorithmConfiguration(),
-                SelectionOperator = new MockSelectionOperatorConfiguration(),
-                FitnessEvaluator = new MockFitnessEvaluatorConfiguration(),
-                Entity = new MockEntityConfiguration(),
-                Population = new MockPopulationConfiguration()
+                GeneticAlgorithm = new MockGeneticAlgorithmFactoryConfig(),
+                SelectionOperator = new MockSelectionOperatorFactoryConfig(),
+                FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig(),
+                Entity = new MockEntityFactoryConfig(),
+                Population = new MockPopulationFactoryConfig()
             });
             Type testType = typeof(PopulationDependentClass2);
             AssertEx.Throws<InvalidOperationException>(() => algorithm.ValidateRequiredComponents(testType));
@@ -1001,13 +1001,13 @@ namespace GenFxTests
         [TestMethod]
         public void GeneticAlgorithm_ValidateRequiredComponents_ValidSelectionOperator()
         {
-            MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentConfigurationSet
+            MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentFactoryConfigSet
             {
-                GeneticAlgorithm = new MockGeneticAlgorithmConfiguration(),
-                FitnessEvaluator = new MockFitnessEvaluatorConfiguration(),
-                Entity = new MockEntityConfiguration(),
-                Population = new MockPopulationConfiguration(),
-                SelectionOperator = new MockSelectionOperatorConfiguration
+                GeneticAlgorithm = new MockGeneticAlgorithmFactoryConfig(),
+                FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig(),
+                Entity = new MockEntityFactoryConfig(),
+                Population = new MockPopulationFactoryConfig(),
+                SelectionOperator = new MockSelectionOperatorFactoryConfig
                 {
                     SelectionBasedOnFitnessType = FitnessType.Scaled
                 }
@@ -1022,13 +1022,13 @@ namespace GenFxTests
         [TestMethod]
         public void GeneticAlgorithm_ValidateRequiredComponents_InvalidSelectionOperator()
         {
-            MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentConfigurationSet
+            MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentFactoryConfigSet
             {
-                GeneticAlgorithm = new MockGeneticAlgorithmConfiguration(),
-                FitnessEvaluator = new MockFitnessEvaluatorConfiguration(),
-                Entity = new MockEntityConfiguration(),
-                Population = new MockPopulationConfiguration(),
-                SelectionOperator = new MockSelectionOperatorConfiguration
+                GeneticAlgorithm = new MockGeneticAlgorithmFactoryConfig(),
+                FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig(),
+                Entity = new MockEntityFactoryConfig(),
+                Population = new MockPopulationFactoryConfig(),
+                SelectionOperator = new MockSelectionOperatorFactoryConfig
                 {
                     SelectionBasedOnFitnessType = FitnessType.Scaled
                 }
@@ -1043,16 +1043,16 @@ namespace GenFxTests
         [TestMethod]
         public void GeneticAlgorithm_ValidateRequiredComponents_ValidStatisticType()
         {
-            ComponentConfigurationSet config = new ComponentConfigurationSet
+            ComponentFactoryConfigSet config = new ComponentFactoryConfigSet
             {
-                GeneticAlgorithm = new MockGeneticAlgorithmConfiguration(),
-                SelectionOperator = new MockSelectionOperatorConfiguration(),
-                FitnessEvaluator = new MockFitnessEvaluatorConfiguration(),
-                Entity = new MockEntityConfiguration(),
-                Population = new MockPopulationConfiguration(),
+                GeneticAlgorithm = new MockGeneticAlgorithmFactoryConfig(),
+                SelectionOperator = new MockSelectionOperatorFactoryConfig(),
+                FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig(),
+                Entity = new MockEntityFactoryConfig(),
+                Population = new MockPopulationFactoryConfig(),
             };
-            config.Statistics.Add(new MockStatisticConfiguration());
-            config.Statistics.Add(new MockStatistic2Configuration());
+            config.Statistics.Add(new MockStatisticFactoryConfig());
+            config.Statistics.Add(new MockStatistic2FactoryConfig());
             MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm(config);
             Type testType = typeof(StatisticDependentClass);
             algorithm.ValidateRequiredComponents(testType);
@@ -1064,15 +1064,15 @@ namespace GenFxTests
         [TestMethod]
         public void GeneticAlgorithm_ValidateRequiredComponents_InvalidStatisticType()
         {
-            ComponentConfigurationSet config = new ComponentConfigurationSet
+            ComponentFactoryConfigSet config = new ComponentFactoryConfigSet
             {
-                GeneticAlgorithm = new MockGeneticAlgorithmConfiguration(),
-                SelectionOperator = new MockSelectionOperatorConfiguration(),
-                FitnessEvaluator = new MockFitnessEvaluatorConfiguration(),
-                Entity = new MockEntityConfiguration(),
-                Population = new MockPopulationConfiguration(),
+                GeneticAlgorithm = new MockGeneticAlgorithmFactoryConfig(),
+                SelectionOperator = new MockSelectionOperatorFactoryConfig(),
+                FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig(),
+                Entity = new MockEntityFactoryConfig(),
+                Population = new MockPopulationFactoryConfig(),
             };
-            config.Statistics.Add(new MockStatisticConfiguration());
+            config.Statistics.Add(new MockStatisticFactoryConfig());
             MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm(config);
             Type testType = typeof(StatisticDependentClass2);
             AssertEx.Throws<InvalidOperationException>(() => algorithm.ValidateRequiredComponents(testType));
@@ -1084,14 +1084,14 @@ namespace GenFxTests
         [TestMethod]
         public void GeneticAlgorithm_ValidateRequiredComponents_ValidTerminator()
         {
-            MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentConfigurationSet
+            MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentFactoryConfigSet
             {
-                GeneticAlgorithm = new MockGeneticAlgorithmConfiguration(),
-                SelectionOperator = new MockSelectionOperatorConfiguration(),
-                FitnessEvaluator = new MockFitnessEvaluatorConfiguration(),
-                Entity = new MockEntityConfiguration(),
-                Population = new MockPopulationConfiguration(),
-                Terminator = new MockTerminatorConfiguration()
+                GeneticAlgorithm = new MockGeneticAlgorithmFactoryConfig(),
+                SelectionOperator = new MockSelectionOperatorFactoryConfig(),
+                FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig(),
+                Entity = new MockEntityFactoryConfig(),
+                Population = new MockPopulationFactoryConfig(),
+                Terminator = new MockTerminatorFactoryConfig()
             });
             Type testType = typeof(TerminatorDependentClass);
             algorithm.ValidateRequiredComponents(testType);
@@ -1103,14 +1103,14 @@ namespace GenFxTests
         [TestMethod]
         public void GeneticAlgorithm_ValidateRequiredComponents_InvalidTerminator()
         {
-            MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentConfigurationSet
+            MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentFactoryConfigSet
             {
-                GeneticAlgorithm = new MockGeneticAlgorithmConfiguration(),
-                SelectionOperator = new MockSelectionOperatorConfiguration(),
-                FitnessEvaluator = new MockFitnessEvaluatorConfiguration(),
-                Entity = new MockEntityConfiguration(),
-                Population = new MockPopulationConfiguration(),
-                Terminator = new MockTerminatorConfiguration()
+                GeneticAlgorithm = new MockGeneticAlgorithmFactoryConfig(),
+                SelectionOperator = new MockSelectionOperatorFactoryConfig(),
+                FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig(),
+                Entity = new MockEntityFactoryConfig(),
+                Population = new MockPopulationFactoryConfig(),
+                Terminator = new MockTerminatorFactoryConfig()
             });
             Type testType = typeof(TerminatorDependentClass2);
             AssertEx.Throws<InvalidOperationException>(() => algorithm.ValidateRequiredComponents(testType));
@@ -1122,14 +1122,14 @@ namespace GenFxTests
         [TestMethod]
         public void GeneticAlgorithm_ValidateRequiredComponents_OverrideRequiredType()
         {
-            MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentConfigurationSet
+            MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentFactoryConfigSet
             {
-                GeneticAlgorithm = new MockGeneticAlgorithmConfiguration(),
-                SelectionOperator = new MockSelectionOperatorConfiguration(),
-                FitnessEvaluator = new MockFitnessEvaluatorConfiguration(),
-                Entity = new MockEntityConfiguration(),
-                Population = new MockPopulationConfiguration(),
-                Terminator = new MockTerminator2Configuration()
+                GeneticAlgorithm = new MockGeneticAlgorithmFactoryConfig(),
+                SelectionOperator = new MockSelectionOperatorFactoryConfig(),
+                FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig(),
+                Entity = new MockEntityFactoryConfig(),
+                Population = new MockPopulationFactoryConfig(),
+                Terminator = new MockTerminator2FactoryConfig()
             });
             Type testType = typeof(TerminatorDependentDerivedClass);
             algorithm.ValidateRequiredComponents(testType);
@@ -1141,14 +1141,14 @@ namespace GenFxTests
         [TestMethod]
         public void GeneticAlgorithm_ValidateRequiredComponents_UsingBaseTypeAsRequiredType()
         {
-            MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentConfigurationSet
+            MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentFactoryConfigSet
             {
-                GeneticAlgorithm = new MockGeneticAlgorithmConfiguration(),
-                SelectionOperator = new MockSelectionOperatorConfiguration(),
-                FitnessEvaluator = new MockFitnessEvaluatorConfiguration(),
-                Entity = new MockEntityConfiguration(),
-                Population = new MockPopulationConfiguration(),
-                Terminator = new MockTerminator3Configuration() // uses derived type of the required type
+                GeneticAlgorithm = new MockGeneticAlgorithmFactoryConfig(),
+                SelectionOperator = new MockSelectionOperatorFactoryConfig(),
+                FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig(),
+                Entity = new MockEntityFactoryConfig(),
+                Population = new MockPopulationFactoryConfig(),
+                Terminator = new MockTerminator3FactoryConfig() // uses derived type of the required type
             });
             Type testType = typeof(TerminatorDependentClass3);
             algorithm.ValidateRequiredComponents(testType);
@@ -1160,7 +1160,7 @@ namespace GenFxTests
         [TestMethod()]
         public void EnvironmentSizeTest_Valid()
         {
-            SimpleGeneticAlgorithmConfiguration target = new SimpleGeneticAlgorithmConfiguration();
+            SimpleGeneticAlgorithmFactoryConfig target = new SimpleGeneticAlgorithmFactoryConfig();
             int val = 2;
             target.EnvironmentSize = val;
 
@@ -1174,12 +1174,12 @@ namespace GenFxTests
         [TestMethod()]
         public void EnvironmentSizeTest_Invalid()
         {
-            SimpleGeneticAlgorithmConfiguration target = new SimpleGeneticAlgorithmConfiguration();
+            SimpleGeneticAlgorithmFactoryConfig target = new SimpleGeneticAlgorithmFactoryConfig();
             int val = 0;
             AssertEx.Throws<ValidationException>(() => target.EnvironmentSize = val);
         }
 
-        private static void TestValidateConfiguration(ComponentConfigurationSet config, bool exceptionExpectedOnValidation = false)
+        private static void TestValidateConfiguration(ComponentFactoryConfigSet config, bool exceptionExpectedOnValidation = false)
         {
             if (exceptionExpectedOnValidation)
             {
@@ -1198,7 +1198,7 @@ namespace GenFxTests
             }
         }
 
-        private static async Task<IGeneticAlgorithm> TestInitializeAsync(ComponentConfigurationSet config, bool exceptionExpectedOnConstructor = false)
+        private static async Task<IGeneticAlgorithm> TestInitializeAsync(ComponentFactoryConfigSet config, bool exceptionExpectedOnConstructor = false)
         {
             if (exceptionExpectedOnConstructor)
             {
@@ -1251,42 +1251,42 @@ namespace GenFxTests
             return algorithm;
         }
 
-        private ComponentConfigurationSet GetConfiguration()
+        private ComponentFactoryConfigSet GetConfiguration()
         {
-            ComponentConfigurationSet config = new ComponentConfigurationSet();
+            ComponentFactoryConfigSet config = new ComponentFactoryConfigSet();
 
             int environmentSize = 2;
             int populationSize = 100;
 
-            TestGeneticAlgorithmConfiguration algConfig = new TestGeneticAlgorithmConfiguration();
+            TestGeneticAlgorithmFactoryConfig algConfig = new TestGeneticAlgorithmFactoryConfig();
             algConfig.EnvironmentSize = environmentSize;
             config.GeneticAlgorithm = algConfig;
 
-            MockPopulationConfiguration popConfig = new MockPopulationConfiguration();
+            MockPopulationFactoryConfig popConfig = new MockPopulationFactoryConfig();
             popConfig.PopulationSize = populationSize;
             config.Population = popConfig;
 
-            MockCrossoverOperatorConfiguration crossConfig = new MockCrossoverOperatorConfiguration();
+            MockCrossoverOperatorFactoryConfig crossConfig = new MockCrossoverOperatorFactoryConfig();
             crossConfig.CrossoverRate = .7;
             config.CrossoverOperator = crossConfig;
 
-            MockElitismStrategyConfiguration eliteConfig = new MockElitismStrategyConfiguration();
+            MockElitismStrategyFactoryConfig eliteConfig = new MockElitismStrategyFactoryConfig();
             eliteConfig.ElitistRatio = .1;
             config.ElitismStrategy = eliteConfig;
 
-            MockMutationOperatorConfiguration mutConfig = new MockMutationOperatorConfiguration();
+            MockMutationOperatorFactoryConfig mutConfig = new MockMutationOperatorFactoryConfig();
             mutConfig.MutationRate = .01;
             config.MutationOperator = mutConfig;
 
-            MockSelectionOperatorConfiguration selConfig = new MockSelectionOperatorConfiguration();
+            MockSelectionOperatorFactoryConfig selConfig = new MockSelectionOperatorFactoryConfig();
             selConfig.SelectionBasedOnFitnessType = FitnessType.Scaled;
             config.SelectionOperator = selConfig;
 
-            config.FitnessEvaluator = new MockFitnessEvaluatorConfiguration();
-            config.FitnessScalingStrategy = new MockFitnessScalingStrategyConfiguration();
-            config.Entity = new MockEntityConfiguration();
-            config.Statistics.Add(new MockStatisticConfiguration());
-            config.Terminator = new TestTerminatorConfiguration();
+            config.FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig();
+            config.FitnessScalingStrategy = new MockFitnessScalingStrategyFactoryConfig();
+            config.Entity = new MockEntityFactoryConfig();
+            config.Statistics.Add(new MockStatisticFactoryConfig());
+            config.Terminator = new TestTerminatorFactoryConfig();
             return config;
         }
 
@@ -1415,9 +1415,9 @@ namespace GenFxTests
         {
         }
 
-        private class RequiredSettingGeneticAlgorithm : GeneticAlgorithm<RequiredSettingGeneticAlgorithm, RequiredSettingGeneticAlgorithmConfiguration>
+        private class RequiredSettingGeneticAlgorithm : GeneticAlgorithm<RequiredSettingGeneticAlgorithm, RequiredSettingGeneticAlgorithmFactoryConfig>
         {
-            public RequiredSettingGeneticAlgorithm(ComponentConfigurationSet configurationSet)
+            public RequiredSettingGeneticAlgorithm(ComponentFactoryConfigSet configurationSet)
                 : base(configurationSet)
             {
             }
@@ -1428,11 +1428,11 @@ namespace GenFxTests
             }
         }
 
-        private class RequiredSettingGeneticAlgorithmConfiguration : GeneticAlgorithmConfiguration<RequiredSettingGeneticAlgorithmConfiguration, RequiredSettingGeneticAlgorithm>
+        private class RequiredSettingGeneticAlgorithmFactoryConfig : GeneticAlgorithmFactoryConfig<RequiredSettingGeneticAlgorithmFactoryConfig, RequiredSettingGeneticAlgorithm>
         {
         }
 
-        private class TestTerminator : TerminatorBase<TestTerminator, TestTerminatorConfiguration>
+        private class TestTerminator : TerminatorBase<TestTerminator, TestTerminatorFactoryConfig>
         {
             public TestTerminator(IGeneticAlgorithm algorithm)
                 : base(algorithm)
@@ -1445,13 +1445,13 @@ namespace GenFxTests
             }
         }
 
-        private class TestTerminatorConfiguration : TerminatorConfigurationBase<TestTerminatorConfiguration, TestTerminator>
+        private class TestTerminatorFactoryConfig : TerminatorFactoryConfigBase<TestTerminatorFactoryConfig, TestTerminator>
         {
         }
 
-        private class TestGeneticAlgorithm : GeneticAlgorithm<TestGeneticAlgorithm, TestGeneticAlgorithmConfiguration>
+        private class TestGeneticAlgorithm : GeneticAlgorithm<TestGeneticAlgorithm, TestGeneticAlgorithmFactoryConfig>
         {
-            public TestGeneticAlgorithm(ComponentConfigurationSet config)
+            public TestGeneticAlgorithm(ComponentFactoryConfigSet config)
                 : base(config)
             {
             }
@@ -1462,11 +1462,11 @@ namespace GenFxTests
             }
         }
 
-        private class TestGeneticAlgorithmConfiguration : GeneticAlgorithmConfiguration<TestGeneticAlgorithmConfiguration, TestGeneticAlgorithm>
+        private class TestGeneticAlgorithmFactoryConfig : GeneticAlgorithmFactoryConfig<TestGeneticAlgorithmFactoryConfig, TestGeneticAlgorithm>
         {
         }
 
-        private class FakeValidationMutationOperator : MutationOperatorBase<FakeValidationMutationOperator, FakeValidationMutationOperatorConfiguration>
+        private class FakeValidationMutationOperator : MutationOperatorBase<FakeValidationMutationOperator, FakeValidationMutationOperatorFactoryConfig>
         {
             public FakeValidationMutationOperator(IGeneticAlgorithm algorithm)
                 : base(algorithm)
@@ -1479,7 +1479,7 @@ namespace GenFxTests
             }
         }
 
-        private class FakeValidationMutationOperatorConfiguration : MutationOperatorConfigurationBase<FakeValidationMutationOperatorConfiguration, FakeValidationMutationOperator>
+        private class FakeValidationMutationOperatorFactoryConfig : MutationOperatorFactoryConfigBase<FakeValidationMutationOperatorFactoryConfig, FakeValidationMutationOperator>
         {
             private int value = -1;
 
@@ -1491,7 +1491,7 @@ namespace GenFxTests
             }
         }
 
-        private class FakeMutationOperator : MutationOperatorBase<FakeMutationOperator, FakeMutationOperatorConfiguration>
+        private class FakeMutationOperator : MutationOperatorBase<FakeMutationOperator, FakeMutationOperatorFactoryConfig>
         {
             public FakeMutationOperator(IGeneticAlgorithm algorithm)
                 : base(algorithm)
@@ -1504,7 +1504,7 @@ namespace GenFxTests
             }
         }
 
-        private class FakeMutationOperatorConfiguration : MutationOperatorConfigurationBase<FakeMutationOperatorConfiguration, FakeMutationOperator>
+        private class FakeMutationOperatorFactoryConfig : MutationOperatorFactoryConfigBase<FakeMutationOperatorFactoryConfig, FakeMutationOperator>
         {
             private int value;
             private double value2;
@@ -1522,10 +1522,10 @@ namespace GenFxTests
             }
         }
 
-        [IntegerExternalValidator(typeof(FakeMutationOperatorConfiguration), "Value")]
-        [CustomExternalValidator(typeof(FakeValidator), typeof(FakeMutationOperatorConfiguration), "Value")]
-        [DoubleExternalValidator(typeof(FakeMutationOperatorConfiguration), "Value2")]
-        private class FakeExternalValidatorTerminator : TerminatorBase<FakeExternalValidatorTerminator, FakeExternalValidatorTerminatorConfiguration>
+        [IntegerExternalValidator(typeof(FakeMutationOperatorFactoryConfig), "Value")]
+        [CustomExternalValidator(typeof(FakeValidator), typeof(FakeMutationOperatorFactoryConfig), "Value")]
+        [DoubleExternalValidator(typeof(FakeMutationOperatorFactoryConfig), "Value2")]
+        private class FakeExternalValidatorTerminator : TerminatorBase<FakeExternalValidatorTerminator, FakeExternalValidatorTerminatorFactoryConfig>
         {
             public FakeExternalValidatorTerminator(IGeneticAlgorithm algorithm)
                 : base(algorithm)
@@ -1538,7 +1538,7 @@ namespace GenFxTests
             }
         }
 
-        private class FakeExternalValidatorTerminatorConfiguration : TerminatorConfigurationBase<FakeExternalValidatorTerminatorConfiguration, FakeExternalValidatorTerminator>
+        private class FakeExternalValidatorTerminatorFactoryConfig : TerminatorFactoryConfigBase<FakeExternalValidatorTerminatorFactoryConfig, FakeExternalValidatorTerminator>
         {
         }
 

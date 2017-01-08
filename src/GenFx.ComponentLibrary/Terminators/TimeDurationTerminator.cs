@@ -1,14 +1,15 @@
 using GenFx.ComponentLibrary.Base;
+using GenFx.Contracts;
 using System;
 using System.Diagnostics.CodeAnalysis;
 
 namespace GenFx.ComponentLibrary.Terminators
 {
     /// <summary>
-    /// Represents a genetic algorithm terminator that stops the algorithm once the specified <see cref="TimeDurationTerminatorConfiguration.TimeLimit"/>
+    /// Represents a genetic algorithm terminator that stops the algorithm once the specified <see cref="TimeDurationTerminatorFactoryConfig.TimeLimit"/>
     /// has been reached.
     /// </summary> 
-    public sealed class TimeDurationTerminator : TerminatorBase<TimeDurationTerminator, TimeDurationTerminatorConfiguration>
+    public sealed class TimeDurationTerminator : TerminatorBase<TimeDurationTerminator, TimeDurationTerminatorFactoryConfig>
     {
         private DateTime timeStarted;
         

@@ -1,11 +1,12 @@
-﻿using System;
+﻿using GenFx.Contracts;
+using System;
 
 namespace GenFx.ComponentLibrary.Plugins
 {
     /// <summary>
     /// Logs statistics for each generation.
     /// </summary>
-    public sealed class StatisticLogger : StatisticLogger<StatisticLogger, StatisticLoggerConfiguration>
+    public sealed class StatisticLogger : StatisticLogger<StatisticLogger, StatisticLoggerFactoryConfig>
     {
         /// <summary>
         /// Initializes a new instance of this class.

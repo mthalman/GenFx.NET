@@ -1,3 +1,4 @@
+using GenFx.Contracts;
 using System;
 
 namespace GenFx.ComponentLibrary.SelectionOperators
@@ -15,7 +16,7 @@ namespace GenFx.ComponentLibrary.SelectionOperators
     /// when <b>RankSelectionOperator</b> is being used since absolute differences in fitness are ignored.
     /// </para>
     /// </remarks>
-    public sealed class RankSelectionOperator : RankSelectionOperator<RankSelectionOperator, RankSelectionOperatorConfiguration>
+    public sealed class RankSelectionOperator : RankSelectionOperator<RankSelectionOperator, RankSelectionOperatorFactoryConfig>
     {
         /// <summary>
         /// Initializes a new instance of this class.

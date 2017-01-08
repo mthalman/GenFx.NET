@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Text;
 using GenFx;
 using GenFx.ComponentLibrary.Base;
+using GenFx.Contracts;
 
 namespace GenFxTests.Mocks
 {
-    public class MockStatistic : StatisticBase<MockStatistic, MockStatisticConfiguration>
+    public class MockStatistic : StatisticBase<MockStatistic, MockStatisticFactoryConfig>
     {
         internal bool StatisticEvaluated;
 
@@ -22,11 +23,11 @@ namespace GenFxTests.Mocks
         }
     }
 
-    public class MockStatisticConfiguration : StatisticConfigurationBase<MockStatisticConfiguration, MockStatistic>
+    public class MockStatisticFactoryConfig : StatisticFactoryConfigBase<MockStatisticFactoryConfig, MockStatistic>
     {
     }
 
-    public class MockStatistic2 : StatisticBase<MockStatistic2, MockStatistic2Configuration>
+    public class MockStatistic2 : StatisticBase<MockStatistic2, MockStatistic2FactoryConfig>
     {
         public MockStatistic2(IGeneticAlgorithm algorithm)
             : base(algorithm)
@@ -39,7 +40,7 @@ namespace GenFxTests.Mocks
         }
     }
 
-    public class MockStatistic2Configuration : StatisticConfigurationBase<MockStatistic2Configuration, MockStatistic2>
+    public class MockStatistic2FactoryConfig : StatisticFactoryConfigBase<MockStatistic2FactoryConfig, MockStatistic2>
     {
     }
 }

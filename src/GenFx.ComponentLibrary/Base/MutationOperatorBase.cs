@@ -1,5 +1,4 @@
-using GenFx.ComponentLibrary.ComponentModel;
-using GenFx.ComponentModel;
+using GenFx.Contracts;
 using System;
 
 namespace GenFx.ComponentLibrary.Base
@@ -16,7 +15,7 @@ namespace GenFx.ComponentLibrary.Base
     /// </para>
     /// <para>
     /// <b>Notes to implementers:</b> When this base class is derived, the derived class can be used by
-    /// the genetic algorithm by setting the <see cref="ComponentConfigurationSet.MutationOperator"/> 
+    /// the genetic algorithm by setting the <see cref="ComponentFactoryConfigSet.MutationOperator"/> 
     /// property.
     /// </para>
     /// </remarks>
@@ -24,7 +23,7 @@ namespace GenFx.ComponentLibrary.Base
     /// <typeparam name="TConfiguration">Type of the associated configuration class.</typeparam>
     public abstract class MutationOperatorBase<TMutation, TConfiguration> : GeneticComponentWithAlgorithm<TMutation, TConfiguration>, IMutationOperator
         where TMutation : MutationOperatorBase<TMutation, TConfiguration>
-        where TConfiguration : MutationOperatorConfigurationBase<TConfiguration, TMutation>
+        where TConfiguration : MutationOperatorFactoryConfigBase<TConfiguration, TMutation>
     {
         /// <summary>
         /// Initializes a new instance of this class.
@@ -73,7 +72,7 @@ namespace GenFx.ComponentLibrary.Base
         /// <remarks>
         /// <b>Notes to implementers:</b> When this method is overriden, each segment of data making up the 
         /// representation of the <see cref="IGeneticEntity"/> should be attempted to be mutated.  Use the 
-        /// <see cref="MutationOperatorConfigurationBase{TConfiguration, TMutation}.MutationRate"/> property to determine whether a component
+        /// <see cref="MutationOperatorFactoryConfigBase{TConfiguration, TMutation}.MutationRate"/> property to determine whether a component
         /// of the <see cref="IGeneticEntity"/> should be mutated or not.  
         /// </remarks>
         protected abstract bool GenerateMutation(IGeneticEntity entity);

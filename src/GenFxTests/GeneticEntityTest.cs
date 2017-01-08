@@ -1,6 +1,6 @@
 ﻿using GenFx;
 using GenFx.ComponentLibrary.Base;
-using GenFx.ComponentModel;
+using GenFx.Contracts;
 using GenFxTests.Helpers;
 using GenFxTests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -34,13 +34,13 @@ namespace GenFxTests
         [TestMethod]
         public async Task Entity_EvaluateFitness_Async()
         {
-            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentConfigurationSet
+            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentFactoryConfigSet
             {
-                GeneticAlgorithm = new MockGeneticAlgorithmConfiguration(),
-                Population = new MockPopulationConfiguration(),
-                SelectionOperator = new MockSelectionOperatorConfiguration(),
-                Entity = new MockEntityConfiguration(),
-                FitnessEvaluator = new MockFitnessEvaluatorConfiguration(),
+                GeneticAlgorithm = new MockGeneticAlgorithmFactoryConfig(),
+                Population = new MockPopulationFactoryConfig(),
+                SelectionOperator = new MockSelectionOperatorFactoryConfig(),
+                Entity = new MockEntityFactoryConfig(),
+                FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig(),
             });
             algorithm.Operators.FitnessEvaluator = new MockFitnessEvaluator(algorithm);
             MockEntity entity = new MockEntity(algorithm);
@@ -56,16 +56,16 @@ namespace GenFxTests
         [TestMethod]
         public void Entity_GetFitnessValue()
         {
-            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentConfigurationSet
+            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentFactoryConfigSet
             {
-                GeneticAlgorithm = new MockGeneticAlgorithmConfiguration(),
-                Population = new MockPopulationConfiguration(),
-                SelectionOperator = new MockSelectionOperatorConfiguration(),
-                FitnessEvaluator = new MockFitnessEvaluatorConfiguration(),
-                Entity = new MockEntityConfiguration()
+                GeneticAlgorithm = new MockGeneticAlgorithmFactoryConfig(),
+                Population = new MockPopulationFactoryConfig(),
+                SelectionOperator = new MockSelectionOperatorFactoryConfig(),
+                FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig(),
+                Entity = new MockEntityFactoryConfig()
             });
             MockEntity entity = new MockEntity(algorithm);
-            PrivateObject accessor = new PrivateObject(entity, new PrivateType(typeof(GeneticEntity<MockEntity, MockEntityConfiguration>)));
+            PrivateObject accessor = new PrivateObject(entity, new PrivateType(typeof(GeneticEntity<MockEntity, MockEntityFactoryConfig>)));
             entity.ScaledFitnessValue = 12;
             accessor.SetField("rawFitnessValue", 10);
             Assert.AreEqual(entity.ScaledFitnessValue, entity.GetFitnessValue(FitnessType.Scaled), "Incorrect fitness value returned.");
@@ -78,13 +78,13 @@ namespace GenFxTests
         [TestMethod]
         public void Entity_Initialize()
         {
-            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentConfigurationSet
+            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentFactoryConfigSet
             {
-                GeneticAlgorithm = new MockGeneticAlgorithmConfiguration(),
-                Population = new MockPopulationConfiguration(),
-                SelectionOperator = new MockSelectionOperatorConfiguration(),
-                FitnessEvaluator = new MockFitnessEvaluatorConfiguration(),
-                Entity = new MockEntityConfiguration()
+                GeneticAlgorithm = new MockGeneticAlgorithmFactoryConfig(),
+                Population = new MockPopulationFactoryConfig(),
+                SelectionOperator = new MockSelectionOperatorFactoryConfig(),
+                FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig(),
+                Entity = new MockEntityFactoryConfig()
             });
             MockEntity entity = new MockEntity(algorithm);
             entity.Initialize();
@@ -97,18 +97,18 @@ namespace GenFxTests
         [TestMethod]
         public void Entity_CopyTo()
         {
-            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentConfigurationSet
+            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentFactoryConfigSet
             {
-                GeneticAlgorithm = new MockGeneticAlgorithmConfiguration(),
-                Population = new MockPopulationConfiguration(),
-                SelectionOperator = new MockSelectionOperatorConfiguration(),
-                FitnessEvaluator = new MockFitnessEvaluatorConfiguration(),
-                Entity = new MockEntityConfiguration()
+                GeneticAlgorithm = new MockGeneticAlgorithmFactoryConfig(),
+                Population = new MockPopulationFactoryConfig(),
+                SelectionOperator = new MockSelectionOperatorFactoryConfig(),
+                FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig(),
+                Entity = new MockEntityFactoryConfig()
             });
             MockEntity entity = new MockEntity(algorithm);
             entity.Age = 10;
             entity.ScaledFitnessValue = 10;
-            PrivateObject accessor = new PrivateObject(entity, new PrivateType(typeof(GeneticEntity<MockEntity, MockEntityConfiguration>)));
+            PrivateObject accessor = new PrivateObject(entity, new PrivateType(typeof(GeneticEntity<MockEntity, MockEntityFactoryConfig>)));
             accessor.SetField("rawFitnessValue", 123);
 
             MockEntity newEntity = new MockEntity(algorithm);
@@ -119,7 +119,7 @@ namespace GenFxTests
             Assert.AreEqual(entity.ScaledFitnessValue, newEntity.ScaledFitnessValue, "RawFitnessValue not copied correctly.");
         }
 
-        private class TestEntity : GeneticEntity<TestEntity, TestEntityConfiguration>
+        private class TestEntity : GeneticEntity<TestEntity, TestEntityFactoryConfig>
         {
             public TestEntity(IGeneticAlgorithm algorithm)
                 : base(algorithm)
@@ -137,7 +137,7 @@ namespace GenFxTests
             }
         }
 
-        private class TestEntityConfiguration : GeneticEntityConfiguration<TestEntityConfiguration, TestEntity>
+        private class TestEntityFactoryConfig : GeneticEntityFactoryConfig<TestEntityFactoryConfig, TestEntity>
         {
             public int Test { get; set; }
         }

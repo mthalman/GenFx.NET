@@ -1,3 +1,4 @@
+using GenFx.Contracts;
 using System;
 
 namespace GenFx.ComponentLibrary.Trees
@@ -14,7 +15,7 @@ namespace GenFx.ComponentLibrary.Trees
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1005:AvoidExcessiveParametersOnGenericTypes")]
     public abstract class TreeEntity<TEntity, TConfiguration, TNode> : TreeEntity<TEntity, TConfiguration>
         where TEntity : TreeEntity<TEntity, TConfiguration, TNode>
-        where TConfiguration : TreeEntityConfiguration<TConfiguration, TEntity>
+        where TConfiguration : TreeEntityFactoryConfig<TConfiguration, TEntity>
         where TNode : TreeNode, new()
     {
         /// <summary>

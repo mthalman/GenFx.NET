@@ -1,4 +1,5 @@
 using GenFx.ComponentLibrary.Base;
+using GenFx.Contracts;
 using System;
 
 namespace GenFx.ComponentLibrary.Scaling
@@ -16,7 +17,7 @@ namespace GenFx.ComponentLibrary.Scaling
     /// <typeparam name="TConfiguration">Type of the associated configuration class.</typeparam>
     public abstract class SigmaScalingStrategy<TScaling, TConfiguration> : FitnessScalingStrategyBase<TScaling, TConfiguration>
         where TScaling : SigmaScalingStrategy<TScaling, TConfiguration>
-        where TConfiguration : SigmaScalingStrategyConfiguration<TConfiguration, TScaling>
+        where TConfiguration : SigmaScalingStrategyFactoryConfig<TConfiguration, TScaling>
     {
 
         /// <summary>

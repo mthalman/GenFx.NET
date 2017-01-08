@@ -1,7 +1,7 @@
 ﻿using GenFx;
 using GenFx.ComponentLibrary.Populations;
 using GenFx.ComponentLibrary.Scaling;
-using GenFx.ComponentModel;
+using GenFx.Contracts;
 using GenFxTests.Helpers;
 using GenFxTests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -27,7 +27,7 @@ namespace GenFxTests
             double scalingDistance = 1.5;
             IGeneticAlgorithm algorithm = GetAlgorithm(scalingCurvature, scalingDistance);
             FakeFitnessSharingScalingStrategy strategy = new FakeFitnessSharingScalingStrategy(algorithm);
-            Assert.IsInstanceOfType(strategy.Configuration, typeof(FakeFitnessSharingScalingStrategyConfiguration));
+            Assert.IsInstanceOfType(strategy.Configuration, typeof(FakeFitnessSharingScalingStrategyFactoryConfig));
         }
 
         /// <summary>
@@ -36,7 +36,7 @@ namespace GenFxTests
         [TestMethod]
         public void FitnessSharingScalingStrategy_Ctor_MissingSetting()
         {
-            AssertEx.Throws<ArgumentException>(() => new FakeFitnessSharingScalingStrategy(new MockGeneticAlgorithm(new ComponentConfigurationSet())));
+            AssertEx.Throws<ArgumentException>(() => new FakeFitnessSharingScalingStrategy(new MockGeneticAlgorithm(new ComponentFactoryConfigSet())));
         }
 
         // <summary>
@@ -45,7 +45,7 @@ namespace GenFxTests
         [TestMethod]
         public void FitnessSharingScalingStrategy_Ctor_InvalidCutoffSetting()
         {
-            FakeFitnessSharingScalingStrategyConfiguration config = new FakeFitnessSharingScalingStrategyConfiguration();
+            FakeFitnessSharingScalingStrategyFactoryConfig config = new FakeFitnessSharingScalingStrategyFactoryConfig();
             config.ScalingCurvature = 3;
             AssertEx.Throws<ValidationException>(() => config.ScalingDistanceCutoff = 0);
         }
@@ -92,14 +92,14 @@ namespace GenFxTests
 
         private static IGeneticAlgorithm GetAlgorithm(double scalingCurvature, double scalingDistance)
         {
-            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentConfigurationSet
+            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentFactoryConfigSet
             {
-                GeneticAlgorithm = new MockGeneticAlgorithmConfiguration(),
-                SelectionOperator = new MockSelectionOperatorConfiguration(),
-                FitnessEvaluator = new MockFitnessEvaluatorConfiguration(),
-                Entity = new MockEntityConfiguration(),
-                Population = new SimplePopulationConfiguration(),
-                FitnessScalingStrategy = new FakeFitnessSharingScalingStrategyConfiguration
+                GeneticAlgorithm = new MockGeneticAlgorithmFactoryConfig(),
+                SelectionOperator = new MockSelectionOperatorFactoryConfig(),
+                FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig(),
+                Entity = new MockEntityFactoryConfig(),
+                Population = new SimplePopulationFactoryConfig(),
+                FitnessScalingStrategy = new FakeFitnessSharingScalingStrategyFactoryConfig
                 {
                     ScalingCurvature = scalingCurvature,
                     ScalingDistanceCutoff = scalingDistance
@@ -108,7 +108,7 @@ namespace GenFxTests
             return algorithm;
         }
 
-        private class FakeFitnessSharingScalingStrategy : FitnessSharingScalingStrategy<FakeFitnessSharingScalingStrategy, FakeFitnessSharingScalingStrategyConfiguration>
+        private class FakeFitnessSharingScalingStrategy : FitnessSharingScalingStrategy<FakeFitnessSharingScalingStrategy, FakeFitnessSharingScalingStrategyFactoryConfig>
         {
             public FakeFitnessSharingScalingStrategy(IGeneticAlgorithm algorithm)
                 : base(algorithm)
@@ -121,7 +121,7 @@ namespace GenFxTests
             }
         }
 
-        private class FakeFitnessSharingScalingStrategyConfiguration : FitnessSharingScalingStrategyConfiguration<FakeFitnessSharingScalingStrategyConfiguration, FakeFitnessSharingScalingStrategy>
+        private class FakeFitnessSharingScalingStrategyFactoryConfig : FitnessSharingScalingStrategyFactoryConfig<FakeFitnessSharingScalingStrategyFactoryConfig, FakeFitnessSharingScalingStrategy>
         {
         }
     }

@@ -1,4 +1,4 @@
-﻿using GenFx.ComponentLibrary.ComponentModel;
+﻿using GenFx.Contracts;
 using System;
 using System.Linq;
 
@@ -11,7 +11,7 @@ namespace GenFx.ComponentLibrary.Base
     /// <typeparam name="TConfiguration">Type of the associated configuration class.</typeparam>
     public abstract class PluginBase<TPlugin, TConfiguration> : GeneticComponentWithAlgorithm<TPlugin, TConfiguration>, IPlugin
         where TPlugin : PluginBase<TPlugin, TConfiguration>
-        where TConfiguration : PluginConfigurationBase<TConfiguration, TPlugin>
+        where TConfiguration : PluginFactoryConfigBase<TConfiguration, TPlugin>
     {
         /// <summary>
         /// Initializes a new instance of this class.

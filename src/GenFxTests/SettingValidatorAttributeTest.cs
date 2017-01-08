@@ -1,9 +1,9 @@
 using System;
 using System.ComponentModel;
-using GenFx.ComponentModel;
 using GenFx.Validation;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using GenFxTests.Helpers;
+using GenFx;
 
 namespace GenFxTests
 {
@@ -48,7 +48,7 @@ namespace GenFxTests
         [TestMethod]
         public void IntegerExternalValidatorAttribute_Ctor()
         {
-            Type configType = typeof(FakeComponentConfiguration);
+            Type configType = typeof(FakeComponentFactoryConfig);
             string targetProperty = "Value";
             IntegerExternalValidatorAttribute attrib = new IntegerExternalValidatorAttribute(configType, targetProperty);
 
@@ -109,7 +109,7 @@ namespace GenFxTests
         [TestMethod]
         public void DoubleExternalValidatorAttribute_Ctor()
         {
-            Type configType = typeof(FakeComponentConfiguration);
+            Type configType = typeof(FakeComponentFactoryConfig);
             string targetProperty = "Value";
             DoubleExternalValidatorAttribute attrib = new DoubleExternalValidatorAttribute(configType, targetProperty);
 
@@ -148,7 +148,7 @@ namespace GenFxTests
         [TestMethod]
         public void CustomExternalValidatorAttribute_Ctor()
         {
-            Type configType = typeof(FakeComponentConfiguration);
+            Type configType = typeof(FakeComponentFactoryConfig);
             string targetProperty = "Value";
             CustomExternalValidatorAttribute attrib = new CustomExternalValidatorAttribute(typeof(TestConfigurationValidator), configType, targetProperty);
 
@@ -184,7 +184,7 @@ namespace GenFxTests
             }
         }
 
-        private class FakeComponent : GeneticComponent<FakeComponent, FakeComponentConfiguration>
+        private class FakeComponent : GeneticComponent<FakeComponent, FakeComponentFactoryConfig>
         {
             public FakeComponent()
                 : base(null)
@@ -192,7 +192,7 @@ namespace GenFxTests
             }
         }
 
-        private class FakeComponentConfiguration : ComponentConfiguration<FakeComponentConfiguration, FakeComponent>
+        private class FakeComponentFactoryConfig : ComponentFactoryConfig<FakeComponentFactoryConfig, FakeComponent>
         {
             private int value;
 

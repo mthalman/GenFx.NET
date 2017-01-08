@@ -1,5 +1,6 @@
 ﻿using GenFx;
 using GenFx.ComponentLibrary.SelectionOperators;
+using GenFx.Contracts;
 using GenFxTests.Helpers;
 using GenFxTests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -28,13 +29,13 @@ namespace GenFxTests
         [TestMethod]
         public void RouletteWheelSampler_GetEntity()
         {
-            MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentConfigurationSet
+            MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentFactoryConfigSet
             {
-                GeneticAlgorithm = new MockGeneticAlgorithmConfiguration(),
-                Entity = new MockEntityConfiguration(),
-                SelectionOperator = new MockSelectionOperatorConfiguration(),
-                FitnessEvaluator = new MockFitnessEvaluatorConfiguration(),
-                Population = new MockPopulationConfiguration()
+                GeneticAlgorithm = new MockGeneticAlgorithmFactoryConfig(),
+                Entity = new MockEntityFactoryConfig(),
+                SelectionOperator = new MockSelectionOperatorFactoryConfig(),
+                FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig(),
+                Population = new MockPopulationFactoryConfig()
             });
             List<WheelSlice> slices = new List<WheelSlice>();
             MockEntity entity1 = new MockEntity(algorithm);
@@ -89,13 +90,13 @@ namespace GenFxTests
         [TestMethod]
         public void RouletteWheelSampler_GetEntity_NoSizes()
         {
-            MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentConfigurationSet
+            MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentFactoryConfigSet
             {
-                GeneticAlgorithm = new MockGeneticAlgorithmConfiguration(),
-                Entity = new MockEntityConfiguration(),
-                SelectionOperator = new MockSelectionOperatorConfiguration(),
-                FitnessEvaluator = new MockFitnessEvaluatorConfiguration(),
-                Population = new MockPopulationConfiguration()
+                GeneticAlgorithm = new MockGeneticAlgorithmFactoryConfig(),
+                Entity = new MockEntityFactoryConfig(),
+                SelectionOperator = new MockSelectionOperatorFactoryConfig(),
+                FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig(),
+                Population = new MockPopulationFactoryConfig()
             });
             List<WheelSlice> slices = new List<WheelSlice>();
             MockEntity entity1 = new MockEntity(algorithm);

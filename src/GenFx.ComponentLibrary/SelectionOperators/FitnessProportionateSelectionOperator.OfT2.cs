@@ -1,4 +1,5 @@
 using GenFx.ComponentLibrary.Base;
+using GenFx.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +15,7 @@ namespace GenFx.ComponentLibrary.SelectionOperators
     /// <typeparam name="TConfiguration">Type of the associated configuration class.</typeparam>
     public abstract class FitnessProportionateSelectionOperator<TSelection, TConfiguration> : SelectionOperatorBase<TSelection, TConfiguration>
         where TSelection : FitnessProportionateSelectionOperator<TSelection, TConfiguration>
-        where TConfiguration : FitnessProportionateSelectionOperatorConfiguration<TConfiguration, TSelection>
+        where TConfiguration : FitnessProportionateSelectionOperatorFactoryConfig<TConfiguration, TSelection>
     {
         /// <summary>
         /// Initializes a new instance of this class.

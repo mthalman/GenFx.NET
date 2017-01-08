@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GenFx.Contracts;
+using System;
 using System.Collections.Generic;
 
 namespace GenFx.ComponentLibrary.Lists
@@ -11,7 +12,7 @@ namespace GenFx.ComponentLibrary.Lists
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix")]
     public abstract class IntegerListEntity<TEntity, TConfiguration> : ListEntity<TEntity, TConfiguration, int>, IIntegerListEntity
         where TEntity : IntegerListEntity<TEntity, TConfiguration>
-        where TConfiguration : IntegerListEntityConfiguration<TConfiguration, TEntity>
+        where TConfiguration : IntegerListEntityFactoryConfig<TConfiguration, TEntity>
     {
         /// <summary>
         /// Initializes a new instance of this class.

@@ -25,19 +25,19 @@ namespace GenFxTests
         [TestMethod]
         public void StdDevStatistic_GetResultValue()
         {
-            ComponentConfigurationSet config = new ComponentConfigurationSet
+            ComponentFactoryConfigSet config = new ComponentFactoryConfigSet
             {
-                GeneticAlgorithm = new MockGeneticAlgorithmConfiguration(),
-                Entity = new MockEntityConfiguration(),
-                Population = new SimplePopulationConfiguration(),
-                SelectionOperator = new MockSelectionOperatorConfiguration(),
-                FitnessEvaluator = new MockFitnessEvaluatorConfiguration(),
+                GeneticAlgorithm = new MockGeneticAlgorithmFactoryConfig(),
+                Entity = new MockEntityFactoryConfig(),
+                Population = new SimplePopulationFactoryConfig(),
+                SelectionOperator = new MockSelectionOperatorFactoryConfig(),
+                FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig(),
             };
-            config.Statistics.Add(new StandardDeviationFitnessStatisticConfiguration());
+            config.Statistics.Add(new StandardDeviationFitnessStatisticFactoryConfig());
 
             MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm(config);
             SimplePopulation population = new SimplePopulation(algorithm);
-            PrivateObject accessor = new PrivateObject(population, new PrivateType(typeof(PopulationBase<SimplePopulation, SimplePopulationConfiguration>)));
+            PrivateObject accessor = new PrivateObject(population, new PrivateType(typeof(PopulationBase<SimplePopulation, SimplePopulationFactoryConfig>)));
             accessor.SetField("scaledStandardDeviation", 1234);
 
             StandardDeviationFitnessStatistic stat = new StandardDeviationFitnessStatistic(algorithm);
@@ -52,15 +52,15 @@ namespace GenFxTests
         [TestMethod]
         public void StdDevStatistic_GetResultValue_NullPopulation()
         {
-            ComponentConfigurationSet config = new ComponentConfigurationSet
+            ComponentFactoryConfigSet config = new ComponentFactoryConfigSet
             {
-                GeneticAlgorithm = new MockGeneticAlgorithmConfiguration(),
-                Entity = new MockEntityConfiguration(),
-                Population = new MockPopulationConfiguration(),
-                SelectionOperator = new MockSelectionOperatorConfiguration(),
-                FitnessEvaluator = new MockFitnessEvaluatorConfiguration(),
+                GeneticAlgorithm = new MockGeneticAlgorithmFactoryConfig(),
+                Entity = new MockEntityFactoryConfig(),
+                Population = new MockPopulationFactoryConfig(),
+                SelectionOperator = new MockSelectionOperatorFactoryConfig(),
+                FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig(),
             };
-            config.Statistics.Add(new StandardDeviationFitnessStatisticConfiguration());
+            config.Statistics.Add(new StandardDeviationFitnessStatisticFactoryConfig());
 
             MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm(config);
             StandardDeviationFitnessStatistic stat = new StandardDeviationFitnessStatistic(algorithm);

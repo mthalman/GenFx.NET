@@ -1,4 +1,5 @@
 using GenFx.ComponentLibrary.Base;
+using GenFx.Contracts;
 using GenFx.Validation;
 using System;
 using System.Collections.Generic;
@@ -20,7 +21,7 @@ namespace GenFx.ComponentLibrary.Trees
     [RequiredEntity(typeof(ITreeEntity))]
     public abstract class SingleNodeTreeCrossoverOperator<TCrossover, TConfiguration> : CrossoverOperatorBase<TCrossover, TConfiguration>
         where TCrossover : SingleNodeTreeCrossoverOperator<TCrossover, TConfiguration>
-        where TConfiguration : SingleNodeTreeCrossoverOperatorConfiguration<TConfiguration, TCrossover>
+        where TConfiguration : SingleNodeTreeCrossoverOperatorFactoryConfig<TConfiguration, TCrossover>
     {
         /// <summary>
         /// Initializes a new instance of this class.

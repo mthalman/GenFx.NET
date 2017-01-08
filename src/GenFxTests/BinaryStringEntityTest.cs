@@ -1,6 +1,7 @@
 using GenFx;
 using GenFx.ComponentLibrary.Base;
 using GenFx.ComponentLibrary.Lists.BinaryStrings;
+using GenFx.Contracts;
 using GenFxTests.Helpers;
 using GenFxTests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -83,7 +84,7 @@ namespace GenFxTests
             int size = 3;
             IGeneticAlgorithm algorithm = GetAlgorithm(size);
             TestBinaryStringEntity entity = new TestBinaryStringEntity(algorithm);
-            PrivateObject accessor = new PrivateObject(entity, new PrivateType(typeof(BinaryStringEntity<TestBinaryStringEntity, TestBinaryStringEntityConfiguration>)));
+            PrivateObject accessor = new PrivateObject(entity, new PrivateType(typeof(BinaryStringEntity<TestBinaryStringEntity, TestBinaryStringEntityFactoryConfig>)));
             Assert.AreEqual(size, entity.Length, "Length not initialized correctly.");
             Assert.AreEqual(size, ((BitArray)accessor.GetField("genes")).Length, "Genes not initialized correctly.");
         }
@@ -109,7 +110,7 @@ namespace GenFxTests
         {
             IGeneticAlgorithm algorithm = GetAlgorithm(3);
             TestBinaryStringEntity entity = new TestBinaryStringEntity(algorithm);
-            PrivateObject accessor = new PrivateObject(entity, new PrivateType(typeof(BinaryStringEntity<TestBinaryStringEntity, TestBinaryStringEntityConfiguration>)));
+            PrivateObject accessor = new PrivateObject(entity, new PrivateType(typeof(BinaryStringEntity<TestBinaryStringEntity, TestBinaryStringEntityFactoryConfig>)));
             entity[0] = true;
 
             BitArray genes = (BitArray)accessor.GetField("genes");
@@ -160,8 +161,8 @@ namespace GenFxTests
 
         private static void CompareGeneticEntities(TestBinaryStringEntity expectedEntity, TestBinaryStringEntity actualEntity)
         {
-            PrivateObject accessor = new PrivateObject(expectedEntity, new PrivateType(typeof(GeneticEntity<TestBinaryStringEntity, TestBinaryStringEntityConfiguration>)));
-            PrivateObject actualEntityAccessor = new PrivateObject(actualEntity, new PrivateType(typeof(GeneticEntity<TestBinaryStringEntity, TestBinaryStringEntityConfiguration>)));
+            PrivateObject accessor = new PrivateObject(expectedEntity, new PrivateType(typeof(GeneticEntity<TestBinaryStringEntity, TestBinaryStringEntityFactoryConfig>)));
+            PrivateObject actualEntityAccessor = new PrivateObject(actualEntity, new PrivateType(typeof(GeneticEntity<TestBinaryStringEntity, TestBinaryStringEntityFactoryConfig>)));
             Assert.AreNotSame(expectedEntity, actualEntity, "Objects should not be the same instance.");
             Assert.AreEqual(expectedEntity.Representation, actualEntity.Representation, "Representation not cloned correctly.");
             Assert.AreEqual(expectedEntity[0], actualEntity[0], "Binary value not set correctly.");
@@ -184,7 +185,7 @@ namespace GenFxTests
             entity[2] = true;
             entity[3] = false;
 
-            PrivateObject accessor = new PrivateObject(entity, new PrivateType(typeof(GeneticEntity<TestBinaryStringEntity, TestBinaryStringEntityConfiguration>)));
+            PrivateObject accessor = new PrivateObject(entity, new PrivateType(typeof(GeneticEntity<TestBinaryStringEntity, TestBinaryStringEntityFactoryConfig>)));
             accessor.SetProperty("Age", 3);
             accessor.SetField("rawFitnessValue", 1);
             entity.ScaledFitnessValue = 2;
@@ -194,13 +195,13 @@ namespace GenFxTests
 
         private static IGeneticAlgorithm GetAlgorithm(int entityLength)
         {
-            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentConfigurationSet
+            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentFactoryConfigSet
             {
-                GeneticAlgorithm = new MockGeneticAlgorithmConfiguration(),
-                SelectionOperator = new MockSelectionOperatorConfiguration(),
-                FitnessEvaluator = new MockFitnessEvaluatorConfiguration(),
-                Population = new MockPopulationConfiguration(),
-                Entity = new TestBinaryStringEntityConfiguration
+                GeneticAlgorithm = new MockGeneticAlgorithmFactoryConfig(),
+                SelectionOperator = new MockSelectionOperatorFactoryConfig(),
+                FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig(),
+                Population = new MockPopulationFactoryConfig(),
+                Entity = new TestBinaryStringEntityFactoryConfig
                 {
                     Length = entityLength
                 }
@@ -208,10 +209,10 @@ namespace GenFxTests
             return algorithm;
         }
 
-        private class TestBinaryStringEntity : BinaryStringEntity<TestBinaryStringEntity, TestBinaryStringEntityConfiguration>
+        private class TestBinaryStringEntity : BinaryStringEntity<TestBinaryStringEntity, TestBinaryStringEntityFactoryConfig>
         {
             public TestBinaryStringEntity(IGeneticAlgorithm algorithm)
-                : base(algorithm, ((TestBinaryStringEntityConfiguration)algorithm.ConfigurationSet.Entity).Length)
+                : base(algorithm, ((TestBinaryStringEntityFactoryConfig)algorithm.ConfigurationSet.Entity).Length)
             {
 
             }
@@ -222,7 +223,7 @@ namespace GenFxTests
             }
         }
 
-        private class TestBinaryStringEntityConfiguration : BinaryStringEntityConfiguration<TestBinaryStringEntityConfiguration, TestBinaryStringEntity>
+        private class TestBinaryStringEntityFactoryConfig : BinaryStringEntityFactoryConfig<TestBinaryStringEntityFactoryConfig, TestBinaryStringEntity>
         {
 
             public int Length { get; set; }

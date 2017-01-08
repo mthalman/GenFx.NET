@@ -1,6 +1,7 @@
 ﻿using GenFx;
 using GenFx.ComponentLibrary.Base;
 using GenFx.ComponentLibrary.Lists.BinaryStrings;
+using GenFx.Contracts;
 using GenFx.Validation;
 using System.Linq;
 using System.Threading.Tasks;
@@ -26,7 +27,7 @@ namespace SimpleBinaryString
     }
 
     internal class FitnessEvaluatorConfiguration
-        : FitnessEvaluatorConfigurationBase<FitnessEvaluatorConfiguration, FitnessEvaluator>
+        : FitnessEvaluatorFactoryConfigBase<FitnessEvaluatorConfiguration, FitnessEvaluator>
     {
     }
 }

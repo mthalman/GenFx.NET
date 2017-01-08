@@ -1,11 +1,12 @@
-﻿using System;
+﻿using GenFx.Contracts;
+using System;
 
 namespace GenFx.ComponentLibrary.Lists
 {
     /// <summary>
     /// Operates upon a <see cref="IListEntityBase"/> by shifting a random segment of the list to the left or right by one position.
     /// </summary>
-    public sealed class ListShiftMutationOperator : ListShiftMutationOperator<ListShiftMutationOperator, ListShiftMutationOperatorConfiguration>
+    public sealed class ListShiftMutationOperator : ListShiftMutationOperator<ListShiftMutationOperator, ListShiftMutationOperatorFactoryConfig>
     {
         /// <summary>
         /// Initializes a new instance of this class.

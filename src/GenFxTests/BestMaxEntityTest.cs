@@ -2,6 +2,7 @@
 using GenFx.ComponentLibrary.Base;
 using GenFx.ComponentLibrary.Populations;
 using GenFx.ComponentLibrary.Statistics;
+using GenFx.Contracts;
 using GenFxTests.Helpers;
 using GenFxTests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -24,15 +25,15 @@ namespace GenFxTests
         [TestMethod()]
         public void GetResultValue_NullPopulation()
         {
-            ComponentConfigurationSet config = new ComponentConfigurationSet
+            ComponentFactoryConfigSet config = new ComponentFactoryConfigSet
             {
-                GeneticAlgorithm = new MockGeneticAlgorithmConfiguration(),
-                SelectionOperator = new MockSelectionOperatorConfiguration(),
-                Entity = new MockEntityConfiguration(),
-                Population = new MockPopulationConfiguration(),
-                FitnessEvaluator = new MockFitnessEvaluatorConfiguration(),
+                GeneticAlgorithm = new MockGeneticAlgorithmFactoryConfig(),
+                SelectionOperator = new MockSelectionOperatorFactoryConfig(),
+                Entity = new MockEntityFactoryConfig(),
+                Population = new MockPopulationFactoryConfig(),
+                FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig(),
             };
-            config.Statistics.Add(new BestMaximumFitnessEntityStatisticConfiguration());
+            config.Statistics.Add(new BestMaximumFitnessEntityStatisticFactoryConfig());
             IGeneticAlgorithm algorithm = new MockGeneticAlgorithm(config);
             BestMaximumFitnessEntityStatistic target = new BestMaximumFitnessEntityStatistic(algorithm);
 
@@ -45,15 +46,15 @@ namespace GenFxTests
         [TestMethod()]
         public void GetResultValue()
         {
-            ComponentConfigurationSet config = new ComponentConfigurationSet
+            ComponentFactoryConfigSet config = new ComponentFactoryConfigSet
             {
-                SelectionOperator = new MockSelectionOperatorConfiguration(),
-                FitnessEvaluator = new MockFitnessEvaluatorConfiguration(),
-                Entity = new MockEntityConfiguration(),
-                Population = new SimplePopulationConfiguration(),
-                GeneticAlgorithm = new MockGeneticAlgorithmConfiguration(),
+                SelectionOperator = new MockSelectionOperatorFactoryConfig(),
+                FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig(),
+                Entity = new MockEntityFactoryConfig(),
+                Population = new SimplePopulationFactoryConfig(),
+                GeneticAlgorithm = new MockGeneticAlgorithmFactoryConfig(),
             };
-            config.Statistics.Add(new BestMaximumFitnessEntityStatisticConfiguration());
+            config.Statistics.Add(new BestMaximumFitnessEntityStatisticFactoryConfig());
 
             IGeneticAlgorithm algorithm = new MockGeneticAlgorithm(config);
             BestMaximumFitnessEntityStatistic target = new BestMaximumFitnessEntityStatistic(algorithm);

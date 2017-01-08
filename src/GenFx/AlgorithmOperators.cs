@@ -1,3 +1,5 @@
+using GenFx.Contracts;
+
 namespace GenFx
 {
     /// <summary>
@@ -7,7 +9,7 @@ namespace GenFx
     {
         /// <summary>
         /// Gets the <see cref="FitnessEvaluator"/> object associated with the configuration specified in the 
-        /// <see cref="ComponentConfigurationSet.FitnessEvaluator"/> property.
+        /// <see cref="ComponentFactoryConfigSet.FitnessEvaluator"/> property.
         /// </summary>
         public IFitnessEvaluator FitnessEvaluator
         {
@@ -17,7 +19,7 @@ namespace GenFx
 
         /// <summary>
         /// Gets the <see cref="Terminator"/> object associated with the configuration specified in thes
-        /// <see cref="ComponentConfigurationSet.Terminator"/> property.
+        /// <see cref="ComponentFactoryConfigSet.Terminator"/> property.
         /// </summary>
         public ITerminator Terminator
         {
@@ -27,7 +29,7 @@ namespace GenFx
 
         /// <summary>
         /// Gets the <see cref="FitnessScalingStrategy"/> object associated with the configuration specified in the
-        /// <see cref="ComponentConfigurationSet.FitnessScalingStrategy"/> property.
+        /// <see cref="ComponentFactoryConfigSet.FitnessScalingStrategy"/> property.
         /// </summary>
         public IFitnessScalingStrategy FitnessScalingStrategy
         {
@@ -37,7 +39,7 @@ namespace GenFx
 
         /// <summary>
         /// Gets the <see cref="SelectionOperator"/> object associated with the configuration specified in the
-        /// <see cref="ComponentConfigurationSet.SelectionOperator"/> property.
+        /// <see cref="ComponentFactoryConfigSet.SelectionOperator"/> property.
         /// </summary>
         public ISelectionOperator SelectionOperator
         {
@@ -47,7 +49,7 @@ namespace GenFx
 
         /// <summary>
         /// Gets the <see cref="MutationOperator"/> object associated with the configuration specified in the
-        /// <see cref="ComponentConfigurationSet.MutationOperator"/> property.
+        /// <see cref="ComponentFactoryConfigSet.MutationOperator"/> property.
         /// </summary>
         public IMutationOperator MutationOperator
         {
@@ -57,7 +59,7 @@ namespace GenFx
 
         /// <summary>
         /// Gets the <see cref="CrossoverOperator"/> object associated with the configuration specified in the
-        /// <see cref="ComponentConfigurationSet.CrossoverOperator"/> property.
+        /// <see cref="ComponentFactoryConfigSet.CrossoverOperator"/> property.
         /// </summary>
         public ICrossoverOperator CrossoverOperator
         {
@@ -67,7 +69,7 @@ namespace GenFx
 
         /// <summary>
         /// Gets the <see cref="ElitismStrategy"/> object associated with the configuration specified in the
-        /// <see cref="ComponentConfigurationSet.ElitismStrategy"/> property.
+        /// <see cref="ComponentFactoryConfigSet.ElitismStrategy"/> property.
         /// </summary>
         public IElitismStrategy ElitismStrategy
         {

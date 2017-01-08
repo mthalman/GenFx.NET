@@ -1,3 +1,4 @@
+using GenFx.Contracts;
 using System;
 
 namespace GenFx.ComponentLibrary.Lists.BinaryStrings
@@ -9,7 +10,7 @@ namespace GenFx.ComponentLibrary.Lists.BinaryStrings
     /// Uniform bit mutation operates upon a binary string, causing each bit of the string to
     /// mutate if it meets a certain probability.
     /// </remarks>
-    public sealed class UniformBitMutationOperator : UniformBitMutationOperator<UniformBitMutationOperator, UniformBitMutationOperatorConfiguration>
+    public sealed class UniformBitMutationOperator : UniformBitMutationOperator<UniformBitMutationOperator, UniformBitMutationOperatorFactoryConfig>
     {
         /// <summary>
         /// Initializes a new instance of this class.

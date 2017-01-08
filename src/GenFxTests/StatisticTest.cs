@@ -1,7 +1,7 @@
 ﻿using GenFx;
 using GenFx.ComponentLibrary.Base;
 using GenFx.ComponentLibrary.Populations;
-using GenFx.ComponentModel;
+using GenFx.Contracts;
 using GenFxTests.Helpers;
 using GenFxTests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -27,20 +27,20 @@ namespace GenFxTests
         [TestMethod]
         public void Statistic_Ctor()
         {
-            ComponentConfigurationSet config = new ComponentConfigurationSet
+            ComponentFactoryConfigSet config = new ComponentFactoryConfigSet
             {
-                GeneticAlgorithm = new MockGeneticAlgorithmConfiguration(),
-                Entity = new MockEntityConfiguration(),
-                Population = new MockPopulationConfiguration(),
-                SelectionOperator = new MockSelectionOperatorConfiguration(),
-                FitnessEvaluator = new MockFitnessEvaluatorConfiguration(),
+                GeneticAlgorithm = new MockGeneticAlgorithmFactoryConfig(),
+                Entity = new MockEntityFactoryConfig(),
+                Population = new MockPopulationFactoryConfig(),
+                SelectionOperator = new MockSelectionOperatorFactoryConfig(),
+                FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig(),
             };
-            config.Statistics.Add(new MockStatisticConfiguration());
+            config.Statistics.Add(new MockStatisticFactoryConfig());
 
             IGeneticAlgorithm algorithm = new MockGeneticAlgorithm(config);
 
             IStatistic stat = new MockStatistic(algorithm);
-            PrivateObject accessor = new PrivateObject(stat, new PrivateType(typeof(StatisticBase<MockStatistic, MockStatisticConfiguration>)));
+            PrivateObject accessor = new PrivateObject(stat, new PrivateType(typeof(StatisticBase<MockStatistic, MockStatisticFactoryConfig>)));
             Assert.AreSame(accessor.GetProperty("Algorithm"), algorithm, "Algorithm not set correctly.");
         }
 
@@ -59,13 +59,13 @@ namespace GenFxTests
         [TestMethod]
         public void Statistic_Ctor_MissingConfig()
         {
-            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentConfigurationSet
+            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentFactoryConfigSet
             {
-                GeneticAlgorithm = new MockGeneticAlgorithmConfiguration(),
-                Entity = new MockEntityConfiguration(),
-                Population = new MockPopulationConfiguration(),
-                SelectionOperator = new MockSelectionOperatorConfiguration(),
-                FitnessEvaluator = new MockFitnessEvaluatorConfiguration(),
+                GeneticAlgorithm = new MockGeneticAlgorithmFactoryConfig(),
+                Entity = new MockEntityFactoryConfig(),
+                Population = new MockPopulationFactoryConfig(),
+                SelectionOperator = new MockSelectionOperatorFactoryConfig(),
+                FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig(),
             });
             AssertEx.Throws<InvalidOperationException>(() => new TestStat(algorithm));
         }
@@ -76,18 +76,18 @@ namespace GenFxTests
         [TestMethod]
         public void Statistic_Calculate()
         {
-            ComponentConfigurationSet config = new ComponentConfigurationSet
+            ComponentFactoryConfigSet config = new ComponentFactoryConfigSet
             {
-                GeneticAlgorithm = new MockGeneticAlgorithmConfiguration
+                GeneticAlgorithm = new MockGeneticAlgorithmFactoryConfig
                 {
                     EnvironmentSize = 2
                 },
-                Entity = new MockEntityConfiguration(),
-                FitnessEvaluator = new MockFitnessEvaluatorConfiguration(),
-                SelectionOperator = new MockSelectionOperatorConfiguration(),
-                Population = new SimplePopulationConfiguration()
+                Entity = new MockEntityFactoryConfig(),
+                FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig(),
+                SelectionOperator = new MockSelectionOperatorFactoryConfig(),
+                Population = new SimplePopulationFactoryConfig()
             };
-            config.Statistics.Add(new FakeStatisticConfiguration());
+            config.Statistics.Add(new FakeStatisticFactoryConfig());
 
             IGeneticAlgorithm algorithm = new MockGeneticAlgorithm(config);
 
@@ -114,7 +114,7 @@ namespace GenFxTests
             Assert.AreSame(stat, results[0].Statistic, "Result's Statistic not set correctly.");
         }
 
-        private class FakeStatistic : StatisticBase<FakeStatistic, FakeStatisticConfiguration>
+        private class FakeStatistic : StatisticBase<FakeStatistic, FakeStatisticFactoryConfig>
         {
             internal int GetResultValueCallCount;
 
@@ -131,11 +131,11 @@ namespace GenFxTests
             }
         }
 
-        private class FakeStatisticConfiguration : StatisticConfigurationBase<FakeStatisticConfiguration, FakeStatistic>
+        private class FakeStatisticFactoryConfig : StatisticFactoryConfigBase<FakeStatisticFactoryConfig, FakeStatistic>
         {
         }
 
-        private class TestStat : StatisticBase<TestStat, TestStatConfiguration>
+        private class TestStat : StatisticBase<TestStat, TestStatFactoryConfig>
         {
             public TestStat(IGeneticAlgorithm algorithm)
                 : base(algorithm)
@@ -149,7 +149,7 @@ namespace GenFxTests
             }
         }
 
-        private class TestStatConfiguration : StatisticConfigurationBase<TestStatConfiguration, TestStat>
+        private class TestStatFactoryConfig : StatisticFactoryConfigBase<TestStatFactoryConfig, TestStat>
         {
         }
     }

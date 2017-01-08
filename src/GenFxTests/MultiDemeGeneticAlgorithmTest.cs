@@ -1,6 +1,7 @@
 ﻿using GenFx;
 using GenFx.ComponentLibrary.Algorithms;
 using GenFx.ComponentLibrary.Populations;
+using GenFx.Contracts;
 using GenFxTests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
@@ -23,16 +24,16 @@ namespace GenFxTests
         [TestMethod]
         public async Task MultiDemeGeneticAlgorithm_CreateNextGeneration_Async()
         {
-            TestMultiDemeGeneticAlgorithm algorithm = new TestMultiDemeGeneticAlgorithm(new ComponentConfigurationSet
+            TestMultiDemeGeneticAlgorithm algorithm = new TestMultiDemeGeneticAlgorithm(new ComponentFactoryConfigSet
             {
-                FitnessEvaluator = new MockFitnessEvaluatorConfiguration(),
-                Entity = new MockEntityConfiguration(),
-                Population = new SimplePopulationConfiguration(),
-                GeneticAlgorithm = new TestMultiDemeGeneticAlgorithmConfiguration
+                FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig(),
+                Entity = new MockEntityFactoryConfig(),
+                Population = new SimplePopulationFactoryConfig(),
+                GeneticAlgorithm = new TestMultiDemeGeneticAlgorithmFactoryConfig
                 {
                     MigrantCount = 1
                 },
-                SelectionOperator = new MockSelectionOperatorConfiguration
+                SelectionOperator = new MockSelectionOperatorFactoryConfig
                 {
                     SelectionBasedOnFitnessType = FitnessType.Raw
                 }
@@ -59,16 +60,16 @@ namespace GenFxTests
         [TestMethod]
         public void MultiDemeGeneticAlgorithm_Migrate()
         {
-            MultiDemeGeneticAlgorithm algorithm = new MultiDemeGeneticAlgorithm(new ComponentConfigurationSet
+            MultiDemeGeneticAlgorithm algorithm = new MultiDemeGeneticAlgorithm(new ComponentFactoryConfigSet
             {
-                Entity = new MockEntityConfiguration(),
-                Population = new SimplePopulationConfiguration(),
-                FitnessEvaluator = new MockFitnessEvaluatorConfiguration(),
-                GeneticAlgorithm = new MultiDemeGeneticAlgorithmConfiguration
+                Entity = new MockEntityFactoryConfig(),
+                Population = new SimplePopulationFactoryConfig(),
+                FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig(),
+                GeneticAlgorithm = new MultiDemeGeneticAlgorithmFactoryConfig
                 {
                     MigrantCount = 2
                 },
-                SelectionOperator = new MockSelectionOperatorConfiguration
+                SelectionOperator = new MockSelectionOperatorFactoryConfig
                 {
                     SelectionBasedOnFitnessType = FitnessType.Scaled
                 },
@@ -138,11 +139,11 @@ namespace GenFxTests
             return population;
         }
 
-        private class TestMultiDemeGeneticAlgorithm : MultiDemeGeneticAlgorithm<TestMultiDemeGeneticAlgorithm, TestMultiDemeGeneticAlgorithmConfiguration>
+        private class TestMultiDemeGeneticAlgorithm : MultiDemeGeneticAlgorithm<TestMultiDemeGeneticAlgorithm, TestMultiDemeGeneticAlgorithmFactoryConfig>
         {
             internal bool OnMigrateCalled;
 
-            public TestMultiDemeGeneticAlgorithm(ComponentConfigurationSet configurationSet)
+            public TestMultiDemeGeneticAlgorithm(ComponentFactoryConfigSet configurationSet)
             : base(configurationSet)
         {
             }
@@ -153,7 +154,7 @@ namespace GenFxTests
             }
         }
 
-        private class TestMultiDemeGeneticAlgorithmConfiguration : MultiDemeGeneticAlgorithmConfiguration<TestMultiDemeGeneticAlgorithmConfiguration, TestMultiDemeGeneticAlgorithm>
+        private class TestMultiDemeGeneticAlgorithmFactoryConfig : MultiDemeGeneticAlgorithmFactoryConfig<TestMultiDemeGeneticAlgorithmFactoryConfig, TestMultiDemeGeneticAlgorithm>
         {
         }
     }

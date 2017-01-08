@@ -1,6 +1,7 @@
 ﻿using GenFx;
 using GenFx.ComponentLibrary.Base;
 using GenFx.ComponentLibrary.Lists.BinaryStrings;
+using GenFx.Contracts;
 using GenFxTests.Helpers;
 using GenFxTests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -36,7 +37,7 @@ namespace GenFxTests
             int size = 3;
             IGeneticAlgorithm algorithm = GetAlgorithm(size);
             FixedLengthBinaryStringEntity entity = new FixedLengthBinaryStringEntity(algorithm);
-            PrivateObject accessor = new PrivateObject(entity, new PrivateType(typeof(BinaryStringEntity<FixedLengthBinaryStringEntity, FixedLengthBinaryStringEntityConfiguration>)));
+            PrivateObject accessor = new PrivateObject(entity, new PrivateType(typeof(BinaryStringEntity<FixedLengthBinaryStringEntity, FixedLengthBinaryStringEntityFactoryConfig>)));
             Assert.AreEqual(size, entity.Length, "Length not initialized correctly.");
             Assert.AreEqual(size, ((BitArray)accessor.GetField("genes")).Length, "Genes not initialized correctly.");
         }
@@ -47,7 +48,7 @@ namespace GenFxTests
         [TestMethod()]
         public void FixedLengthBinaryStringEntity_Ctor_MissingSetting()
         {
-            AssertEx.Throws<ArgumentException>(() => new FixedLengthBinaryStringEntity(new MockGeneticAlgorithm(new ComponentConfigurationSet())));
+            AssertEx.Throws<ArgumentException>(() => new FixedLengthBinaryStringEntity(new MockGeneticAlgorithm(new ComponentFactoryConfigSet())));
         }
 
         /// <summary>
@@ -56,7 +57,7 @@ namespace GenFxTests
         [TestMethod()]
         public void FixedLengthBinaryStringEntity_Ctor_InvalidLength()
         {
-            FixedLengthBinaryStringEntityConfiguration config = new FixedLengthBinaryStringEntityConfiguration();
+            FixedLengthBinaryStringEntityFactoryConfig config = new FixedLengthBinaryStringEntityFactoryConfig();
             AssertEx.Throws<ValidationException>(() => config.Length = 0);
         }
 
@@ -84,7 +85,7 @@ namespace GenFxTests
             entity[3] = true;
 
             entity.Age = 3;
-            PrivateObject accessor = new PrivateObject(entity, new PrivateType(typeof(GeneticEntity<FixedLengthBinaryStringEntity, FixedLengthBinaryStringEntityConfiguration>)));
+            PrivateObject accessor = new PrivateObject(entity, new PrivateType(typeof(GeneticEntity<FixedLengthBinaryStringEntity, FixedLengthBinaryStringEntityFactoryConfig>)));
             accessor.SetField("rawFitnessValue", 1);
             entity.ScaledFitnessValue = 2;
 
@@ -93,13 +94,13 @@ namespace GenFxTests
 
         private static IGeneticAlgorithm GetAlgorithm(int entityLength)
         {
-            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentConfigurationSet
+            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentFactoryConfigSet
             {
-                GeneticAlgorithm = new MockGeneticAlgorithmConfiguration(),
-                Population = new MockPopulationConfiguration(),
-                SelectionOperator = new MockSelectionOperatorConfiguration(),
-                FitnessEvaluator = new MockFitnessEvaluatorConfiguration(),
-                Entity = new FixedLengthBinaryStringEntityConfiguration
+                GeneticAlgorithm = new MockGeneticAlgorithmFactoryConfig(),
+                Population = new MockPopulationFactoryConfig(),
+                SelectionOperator = new MockSelectionOperatorFactoryConfig(),
+                FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig(),
+                Entity = new FixedLengthBinaryStringEntityFactoryConfig
                 {
                     Length = entityLength
                 }
