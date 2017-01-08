@@ -1,7 +1,7 @@
 ﻿using GenFx;
 using GenFx.ComponentLibrary.Algorithms;
 using GenFx.ComponentLibrary.Populations;
-using GenFx.ComponentModel;
+using GenFx.Contracts;
 using GenFxTests.Helpers;
 using GenFxTests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -32,7 +32,7 @@ namespace GenFxTests
         [TestMethod]
         public void SteadyStateGeneticAlgorithm_Initialize_InvalidPopulationReplacement2()
         {
-            SteadyStateGeneticAlgorithmConfiguration config = new SteadyStateGeneticAlgorithmConfiguration();
+            SteadyStateGeneticAlgorithmFactoryConfig config = new SteadyStateGeneticAlgorithmFactoryConfig();
             PopulationReplacementValue val = new PopulationReplacementValue(101, ReplacementValueKind.Percentage);
             AssertEx.Throws<ValidationException>(() => config.PopulationReplacementValue = val);
         }
@@ -43,24 +43,24 @@ namespace GenFxTests
         [TestMethod]
         public async Task SteadyStateGeneticAlgorithm_CreateNextGeneration_Async()
         {
-            SteadyStateGeneticAlgorithm algorithm = new SteadyStateGeneticAlgorithm(new ComponentConfigurationSet
+            SteadyStateGeneticAlgorithm algorithm = new SteadyStateGeneticAlgorithm(new ComponentFactoryConfigSet
             {
-                Entity = new MockEntityConfiguration(),
-                Population = new SimplePopulationConfiguration(),
-                FitnessEvaluator = new MockFitnessEvaluatorConfiguration(),
-                GeneticAlgorithm = new SteadyStateGeneticAlgorithmConfiguration
+                Entity = new MockEntityFactoryConfig(),
+                Population = new SimplePopulationFactoryConfig(),
+                FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig(),
+                GeneticAlgorithm = new SteadyStateGeneticAlgorithmFactoryConfig
                 {
                     PopulationReplacementValue = new PopulationReplacementValue(2, ReplacementValueKind.FixedCount)
                 },
-                SelectionOperator = new MockSelectionOperatorConfiguration
+                SelectionOperator = new MockSelectionOperatorFactoryConfig
                 {
                     SelectionBasedOnFitnessType = FitnessType.Scaled
                 },
-                CrossoverOperator = new MockCrossoverOperatorConfiguration
+                CrossoverOperator = new MockCrossoverOperatorFactoryConfig
                 {
                     CrossoverRate = 1
                 },
-                MutationOperator = new MockMutationOperatorConfiguration
+                MutationOperator = new MockMutationOperatorFactoryConfig
                 {
                     MutationRate = 1
                 }

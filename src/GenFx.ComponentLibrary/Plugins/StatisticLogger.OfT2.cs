@@ -1,4 +1,5 @@
 ﻿using GenFx.ComponentLibrary.Base;
+using GenFx.Contracts;
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -13,7 +14,7 @@ namespace GenFx.ComponentLibrary.Plugins
     /// <typeparam name="TConfiguration">Type of the associated configuration class.</typeparam>
     public abstract class StatisticLogger<TPlugin, TConfiguration> : PluginBase<TPlugin, TConfiguration>
         where TPlugin : StatisticLogger<TPlugin, TConfiguration>
-        where TConfiguration : StatisticLoggerConfiguration<TConfiguration, TPlugin>
+        where TConfiguration : StatisticLoggerFactoryConfig<TConfiguration, TPlugin>
     {
         /// <summary>
         /// Initializes a new instance of this class.

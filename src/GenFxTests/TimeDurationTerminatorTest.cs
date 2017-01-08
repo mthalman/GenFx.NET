@@ -1,6 +1,6 @@
 using GenFx;
 using GenFx.ComponentLibrary.Terminators;
-using GenFx.ComponentModel;
+using GenFx.Contracts;
 using GenFxTests.Helpers;
 using GenFxTests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -26,7 +26,7 @@ namespace GenFxTests
             IGeneticAlgorithm algorithm = GetAlgorithm(timeLimit);
 
             TimeDurationTerminator terminator = new TimeDurationTerminator(algorithm);
-            Assert.IsInstanceOfType(terminator.Configuration, typeof(TimeDurationTerminatorConfiguration));
+            Assert.IsInstanceOfType(terminator.Configuration, typeof(TimeDurationTerminatorFactoryConfig));
         }
 
         /// <summary>
@@ -35,7 +35,7 @@ namespace GenFxTests
         [TestMethod]
         public void TimeDurationTerminator_Ctor_MissingConfig()
         {
-            AssertEx.Throws<ArgumentException>(() => new TimeDurationTerminator(new MockGeneticAlgorithm(new ComponentConfigurationSet())));
+            AssertEx.Throws<ArgumentException>(() => new TimeDurationTerminator(new MockGeneticAlgorithm(new ComponentFactoryConfigSet())));
         }
 
         /// <summary>
@@ -50,7 +50,7 @@ namespace GenFxTests
             TimeDurationTerminator terminator = new TimeDurationTerminator(algorithm);
 
             // "Start" the algorithm to trigger the start time
-            PrivateObject algorithmAccessor = new PrivateObject(algorithm, new PrivateType(typeof(GeneticAlgorithm<MockGeneticAlgorithm, MockGeneticAlgorithmConfiguration>)));
+            PrivateObject algorithmAccessor = new PrivateObject(algorithm, new PrivateType(typeof(GeneticAlgorithm<MockGeneticAlgorithm, MockGeneticAlgorithmFactoryConfig>)));
             algorithmAccessor.Invoke("OnAlgorithmStarting");
 
             Assert.IsFalse(terminator.IsComplete(), "Time limit has not been reached.");
@@ -64,14 +64,14 @@ namespace GenFxTests
 
         private static IGeneticAlgorithm GetAlgorithm(TimeSpan timeLimit)
         {
-            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentConfigurationSet
+            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentFactoryConfigSet
             {
-                GeneticAlgorithm = new MockGeneticAlgorithmConfiguration(),
-                Entity = new MockEntityConfiguration(),
-                Population = new MockPopulationConfiguration(),
-                SelectionOperator = new MockSelectionOperatorConfiguration(),
-                FitnessEvaluator = new MockFitnessEvaluatorConfiguration(),
-                Terminator = new TimeDurationTerminatorConfiguration
+                GeneticAlgorithm = new MockGeneticAlgorithmFactoryConfig(),
+                Entity = new MockEntityFactoryConfig(),
+                Population = new MockPopulationFactoryConfig(),
+                SelectionOperator = new MockSelectionOperatorFactoryConfig(),
+                FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig(),
+                Terminator = new TimeDurationTerminatorFactoryConfig
                 {
                     TimeLimit = timeLimit
                 }

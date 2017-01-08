@@ -1,6 +1,7 @@
 ﻿using GenFx;
 using GenFx.ComponentLibrary.Base;
 using GenFx.ComponentLibrary.Lists.BinaryStrings;
+using GenFx.Contracts;
 using GenFx.Validation;
 using System;
 using System.Threading.Tasks;
@@ -38,7 +39,7 @@ namespace BinaryPatternMatching
     }
 
     internal class FitnessEvaluatorConfiguration
-        : FitnessEvaluatorConfigurationBase<FitnessEvaluatorConfiguration, FitnessEvaluator>
+        : FitnessEvaluatorFactoryConfigBase<FitnessEvaluatorConfiguration, FitnessEvaluator>
     {
         private string targetBinary;
 

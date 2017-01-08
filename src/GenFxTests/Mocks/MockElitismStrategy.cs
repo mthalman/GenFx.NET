@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Text;
 using GenFx;
 using GenFx.ComponentLibrary.Base;
+using GenFx.Contracts;
 
 namespace GenFxTests.Mocks
 {
-    class MockElitismStrategy : ElitismStrategyBase<MockElitismStrategy, MockElitismStrategyConfiguration>
+    class MockElitismStrategy : ElitismStrategyBase<MockElitismStrategy, MockElitismStrategyFactoryConfig>
     {
         internal int GetElitistGeneticEntitiesCallCount;
         public MockElitismStrategy(IGeneticAlgorithm algorithm)
@@ -21,11 +22,11 @@ namespace GenFxTests.Mocks
         }
     }
 
-    class MockElitismStrategyConfiguration : ElitismStrategyConfigurationBase<MockElitismStrategyConfiguration, MockElitismStrategy>
+    class MockElitismStrategyFactoryConfig : ElitismStrategyFactoryConfigBase<MockElitismStrategyFactoryConfig, MockElitismStrategy>
     {
     }
 
-    class MockElitismStrategy2 : ElitismStrategyBase<MockElitismStrategy2, MockElitismStrategy2Configuration>
+    class MockElitismStrategy2 : ElitismStrategyBase<MockElitismStrategy2, MockElitismStrategy2FactoryConfig>
     {
         public MockElitismStrategy2(IGeneticAlgorithm algorithm)
             : base(algorithm)
@@ -38,7 +39,7 @@ namespace GenFxTests.Mocks
         }
     }
 
-    class MockElitismStrategy2Configuration : ElitismStrategyConfigurationBase<MockElitismStrategy2Configuration, MockElitismStrategy2>
+    class MockElitismStrategy2FactoryConfig : ElitismStrategyFactoryConfigBase<MockElitismStrategy2FactoryConfig, MockElitismStrategy2>
     {
     }
 }

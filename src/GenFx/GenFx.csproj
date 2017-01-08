@@ -108,36 +108,36 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ComponentConfigurationSet.cs" />
-    <Compile Include="ComponentModel\ComponentConfiguration.cs" />
-    <Compile Include="ComponentModel\ComponentConfigurationExtensions.cs" />
-    <Compile Include="ComponentModel\GeneticComponent.cs" />
-    <Compile Include="ComponentModel\GeneticComponentExtensions.cs" />
-    <Compile Include="ComponentModel\IConfigurationForComponentWithAlgorithm.cs" />
+    <Compile Include="ComponentFactoryConfigSet.cs" />
+    <Compile Include="ComponentFactoryConfig.cs" />
+    <Compile Include="ComponentFactoryConfigExtensions.cs" />
+    <Compile Include="GeneticComponent.cs" />
+    <Compile Include="GeneticComponentExtensions.cs" />
+    <Compile Include="Contracts\IFactoryConfigForComponentWithAlgorithm.cs" />
     <Compile Include="DefaultTerminator.cs" />
-    <Compile Include="DefaultTerminatorConfiguration.cs" />
+    <Compile Include="DefaultTerminatorFactoryConfig.cs" />
     <Compile Include="EnumerableExtensions.cs" />
     <Compile Include="FitnessEvaluationMode.cs" />
-    <Compile Include="GeneticAlgorithmConfiguration.cs" />
+    <Compile Include="GeneticAlgorithmFactoryConfig.cs" />
     <Compile Include="GeneticAlgorithm.cs" />
     <Compile Include="GlobalSuppressions.cs" />
-    <Compile Include="ICrossoverOperatorConfiguration.cs" />
-    <Compile Include="IElitismStrategyConfiguration.cs" />
-    <Compile Include="IFitnessEvaluatorConfiguration.cs" />
-    <Compile Include="IFitnessScalingStrategyConfiguration.cs" />
-    <Compile Include="IGeneticAlgorithmConfiguration.cs" />
-    <Compile Include="IGeneticEntityConfiguration.cs" />
-    <Compile Include="IMutationOperatorConfiguration.cs" />
-    <Compile Include="IPluginConfiguration.cs" />
-    <Compile Include="ISelectionOperatorConfiguration.cs" />
-    <Compile Include="IStatisticConfiguration.cs" />
+    <Compile Include="Contracts\ICrossoverOperatorFactoryConfig.cs" />
+    <Compile Include="Contracts\IElitismStrategyFactoryConfig.cs" />
+    <Compile Include="Contracts\IFitnessEvaluatorFactoryConfig.cs" />
+    <Compile Include="Contracts\IFitnessScalingStrategyFactoryConfig.cs" />
+    <Compile Include="Contracts\IGeneticAlgorithmFactoryConfig.cs" />
+    <Compile Include="Contracts\IGeneticEntityFactoryConfig.cs" />
+    <Compile Include="Contracts\IMutationOperatorFactoryConfig.cs" />
+    <Compile Include="Contracts\IPluginFactoryConfig.cs" />
+    <Compile Include="Contracts\ISelectionOperatorFactoryConfig.cs" />
+    <Compile Include="Contracts\IStatisticFactoryConfig.cs" />
     <Compile Include="KeyValueMap.cs" />
     <Compile Include="CollectionExtensions.cs" />
-    <Compile Include="IPlugin.cs" />
-    <Compile Include="IPopulationConfiguration.cs" />
+    <Compile Include="Contracts\IPlugin.cs" />
+    <Compile Include="Contracts\IPopulationFactoryConfig.cs" />
     <Compile Include="StatisticExtensions.cs" />
     <Compile Include="StringUtil.cs" />
-    <Compile Include="ITerminatorConfiguration.cs" />
+    <Compile Include="Contracts\ITerminatorFactoryConfig.cs" />
     <Compile Include="Validation\RequiredValidator.cs" />
     <Compile Include="Validation\RequiredValidatorAttribute.cs" />
     <Compile Include="Validation\CustomValidatorAttribute.cs" />
@@ -153,43 +153,43 @@
     <Compile Include="Validation\IntegerValidatorAttribute.cs" />
     <Compile Include="Validation\Validator.cs" />
     <Compile Include="Validation\ConfigurationValidatorAttribute.cs" />
-    <Compile Include="ComponentModel\IComponentConfiguration.cs" />
+    <Compile Include="Contracts\IComponentFactoryConfig.cs" />
     <Compile Include="ConvertUtil.cs" />
     <Compile Include="EnumHelper.cs" />
-    <Compile Include="IFitnessEvaluator.cs" />
-    <Compile Include="IFitnessScalingStrategy.cs" />
+    <Compile Include="Contracts\IFitnessEvaluator.cs" />
+    <Compile Include="Contracts\IFitnessScalingStrategy.cs" />
     <Compile Include="FitnessType.cs" />
-    <Compile Include="IGeneticEntity.cs" />
+    <Compile Include="Contracts\IGeneticEntity.cs" />
     <Compile Include="GeneticEntityCollectionExtensions.cs" />
-    <Compile Include="ComponentModel\IGeneticComponent.cs" />
+    <Compile Include="Contracts\IGeneticComponent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="EnvironmentFitnessEvaluatedEventArgs.cs" />
-    <Compile Include="ICrossoverOperator.cs">
+    <Compile Include="Contracts\ICrossoverOperator.cs">
     </Compile>
-    <Compile Include="IMutationOperator.cs" />
+    <Compile Include="Contracts\IMutationOperator.cs" />
     <Compile Include="Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Validation\RequiredConfigurableTypeAttribute.cs" />
-    <Compile Include="ISelectionOperator.cs" />
-    <Compile Include="IStatistic.cs" />
+    <Compile Include="Contracts\ISelectionOperator.cs" />
+    <Compile Include="Contracts\IStatistic.cs" />
     <Compile Include="GeneticEnvironment.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="IGeneticAlgorithm.cs">
+    <Compile Include="Contracts\IGeneticAlgorithm.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="AlgorithmOperators.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="IElitismStrategy.cs">
+    <Compile Include="Contracts\IElitismStrategy.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="IPopulation.cs">
+    <Compile Include="Contracts\IPopulation.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="RandomNumberService.cs">
@@ -198,7 +198,7 @@
     <Compile Include="StatisticResult.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ITerminator.cs" />
+    <Compile Include="Contracts\ITerminator.cs" />
     <Compile Include="ValidationException.cs" />
     <Compile Include="Validation\ValidatorExtensions.cs" />
   </ItemGroup>

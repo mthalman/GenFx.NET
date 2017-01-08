@@ -1,4 +1,6 @@
-﻿namespace GenFx.ComponentLibrary.Trees
+﻿using GenFx.Contracts;
+
+namespace GenFx.ComponentLibrary.Trees
 {
     /// <summary>
     /// Represents an entity that is a tree (a connected, undirected graph).

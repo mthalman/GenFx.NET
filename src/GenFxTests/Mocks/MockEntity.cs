@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Text;
 using GenFx;
 using GenFx.ComponentLibrary.Base;
+using GenFx.Contracts;
 
 namespace GenFxTests.Mocks
 {
-    class MockEntity : GeneticEntity<MockEntity, MockEntityConfiguration>
+    class MockEntity : GeneticEntity<MockEntity, MockEntityFactoryConfig>
     {
         internal string Identifier;
 
@@ -32,11 +33,11 @@ namespace GenFxTests.Mocks
         }
     }
 
-    class MockEntityConfiguration : GeneticEntityConfiguration<MockEntityConfiguration, MockEntity>
+    class MockEntityFactoryConfig : GeneticEntityFactoryConfig<MockEntityFactoryConfig, MockEntity>
     {
     }
 
-    class MockEntity2 : GeneticEntity<MockEntity2, MockEntity2Configuration>
+    class MockEntity2 : GeneticEntity<MockEntity2, MockEntity2FactoryConfig>
     {
         public override string Representation
         {
@@ -58,7 +59,7 @@ namespace GenFxTests.Mocks
         }
     }
 
-    class MockEntity2Configuration : GeneticEntityConfiguration<MockEntity2Configuration, MockEntity2>
+    class MockEntity2FactoryConfig : GeneticEntityFactoryConfig<MockEntity2FactoryConfig, MockEntity2>
     {
     }
 }

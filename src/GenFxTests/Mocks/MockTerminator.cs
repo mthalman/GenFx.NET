@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Text;
 using GenFx;
 using GenFx.ComponentLibrary.Base;
+using GenFx.Contracts;
 
 namespace GenFxTests.Mocks
 {
-    class MockTerminator : TerminatorBase<MockTerminator, MockTerminatorConfiguration>
+    class MockTerminator : TerminatorBase<MockTerminator, MockTerminatorFactoryConfig>
     {
         public MockTerminator(IGeneticAlgorithm algorithm)
             : base(algorithm)
@@ -19,7 +20,7 @@ namespace GenFxTests.Mocks
         }
     }
 
-    class MockTerminatorConfiguration : TerminatorConfigurationBase<MockTerminatorConfiguration, MockTerminator>
+    class MockTerminatorFactoryConfig : TerminatorFactoryConfigBase<MockTerminatorFactoryConfig, MockTerminator>
     {
     }
 
@@ -30,7 +31,7 @@ namespace GenFxTests.Mocks
 
     abstract class MockTerminator2<TTerminator, TConfiguration> : TerminatorBase<TTerminator, TConfiguration>, IMockTerminator2
         where TTerminator : MockTerminator2<TTerminator, TConfiguration>
-        where TConfiguration : MockTerminator2Configuration<TConfiguration, TTerminator>
+        where TConfiguration : MockTerminator2FactoryConfig<TConfiguration, TTerminator>
     {
         public MockTerminator2(IGeneticAlgorithm algorithm)
             : base(algorithm)
@@ -38,7 +39,7 @@ namespace GenFxTests.Mocks
         }
     }
 
-    class MockTerminator2 : MockTerminator2<MockTerminator2, MockTerminator2Configuration>
+    class MockTerminator2 : MockTerminator2<MockTerminator2, MockTerminator2FactoryConfig>
     {
         public MockTerminator2(IGeneticAlgorithm algorithm)
             : base(algorithm)
@@ -51,7 +52,7 @@ namespace GenFxTests.Mocks
         }
     }
 
-    class MockTerminator3 : MockTerminator2<MockTerminator3, MockTerminator3Configuration>
+    class MockTerminator3 : MockTerminator2<MockTerminator3, MockTerminator3FactoryConfig>
     {
         public MockTerminator3(IGeneticAlgorithm algorithm)
             : base(algorithm)
@@ -64,17 +65,17 @@ namespace GenFxTests.Mocks
         }
     }
 
-    abstract class MockTerminator2Configuration<TConfiguration, TTerminator> : TerminatorConfigurationBase<TConfiguration, TTerminator>
-        where TConfiguration : MockTerminator2Configuration<TConfiguration, TTerminator> 
+    abstract class MockTerminator2FactoryConfig<TConfiguration, TTerminator> : TerminatorFactoryConfigBase<TConfiguration, TTerminator>
+        where TConfiguration : MockTerminator2FactoryConfig<TConfiguration, TTerminator> 
         where TTerminator : MockTerminator2<TTerminator, TConfiguration>
     {
     }
 
-    class MockTerminator2Configuration : MockTerminator2Configuration<MockTerminator2Configuration, MockTerminator2>
+    class MockTerminator2FactoryConfig : MockTerminator2FactoryConfig<MockTerminator2FactoryConfig, MockTerminator2>
     {
     }
 
-    class MockTerminator3Configuration : MockTerminator2Configuration<MockTerminator3Configuration, MockTerminator3>
+    class MockTerminator3FactoryConfig : MockTerminator2FactoryConfig<MockTerminator3FactoryConfig, MockTerminator3>
     {
     }
 }

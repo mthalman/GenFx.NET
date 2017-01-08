@@ -1,4 +1,5 @@
 ﻿using GenFx.ComponentLibrary.Base;
+using GenFx.Contracts;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -21,7 +22,7 @@ namespace GenFx.ComponentLibrary.Lists
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1005:AvoidExcessiveParametersOnGenericTypes")]
     public abstract class ListEntityBase<TEntity, TConfiguration, TItem> : GeneticEntity<TEntity, TConfiguration>, IListEntityBase, IListEntityBase<TItem>
         where TEntity : ListEntityBase<TEntity, TConfiguration, TItem>
-        where TConfiguration : ListEntityBaseConfiguration<TConfiguration, TEntity, TItem>
+        where TConfiguration : ListEntityBaseFactoryConfig<TConfiguration, TEntity, TItem>
     {
         private string representation;
 

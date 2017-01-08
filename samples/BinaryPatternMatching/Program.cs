@@ -5,6 +5,7 @@ using GenFx.ComponentLibrary.Lists.BinaryStrings;
 using GenFx.ComponentLibrary.Populations;
 using GenFx.ComponentLibrary.SelectionOperators;
 using GenFx.ComponentLibrary.Terminators;
+using GenFx.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,9 +22,9 @@ namespace BinaryPatternMatching
 
         private static async Task RunAlgorithmAsync()
         {
-            ComponentConfigurationSet configSet = new ComponentConfigurationSet
+            ComponentFactoryConfigSet configSet = new ComponentFactoryConfigSet
             {
-                GeneticAlgorithm = new SimpleGeneticAlgorithmConfiguration
+                GeneticAlgorithm = new SimpleGeneticAlgorithmFactoryConfig
                 {
                     EnvironmentSize = 1
                 },
@@ -32,20 +33,20 @@ namespace BinaryPatternMatching
                     EvaluationMode = FitnessEvaluationMode.Minimize,
                     TargetBinary = "010101010101"
                 },
-                Entity = new VariableLengthBinaryStringEntityConfiguration
+                Entity = new VariableLengthBinaryStringEntityFactoryConfig
                 {
                     MaximumStartingLength = 10,
                     MinimumStartingLength = 5
                 },
-                Population = new SimplePopulationConfiguration
+                Population = new SimplePopulationFactoryConfig
                 {
                     PopulationSize = 100
                 },
-                SelectionOperator = new FitnessProportionateSelectionOperatorConfiguration
+                SelectionOperator = new FitnessProportionateSelectionOperatorFactoryConfig
                 {
                     SelectionBasedOnFitnessType = FitnessType.Raw
                 },
-                CrossoverOperator = new VariableSinglePointCrossoverOperatorConfiguration
+                CrossoverOperator = new VariableSinglePointCrossoverOperatorFactoryConfig
                 {
                     CrossoverRate = 0.8
                 },
@@ -53,7 +54,7 @@ namespace BinaryPatternMatching
                 {
                     MutationRate = 0.01
                 },
-                Terminator = new FitnessTargetTerminatorConfiguration
+                Terminator = new FitnessTargetTerminatorFactoryConfig
                 {
                     FitnessTarget = 0,
                     FitnessValueType = FitnessType.Raw

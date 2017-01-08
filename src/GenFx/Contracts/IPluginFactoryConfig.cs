@@ -1,0 +1,10 @@
+﻿namespace GenFx.Contracts
+{
+    /// <summary>
+    /// Represents the configuration of <see cref="IPlugin"/>.
+    /// </summary>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1040:AvoidEmptyInterfaces")]
+    public interface IPluginFactoryConfig : IFactoryConfigForComponentWithAlgorithm
+    {
+    }
+}

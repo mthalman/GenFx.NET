@@ -24,21 +24,21 @@ namespace GenFxTests
         [TestMethod()]
         public void MeanStatistic_GetResultValue()
         {
-            ComponentConfigurationSet config = new ComponentConfigurationSet
+            ComponentFactoryConfigSet config = new ComponentFactoryConfigSet
             {
-                GeneticAlgorithm = new MockGeneticAlgorithmConfiguration(),
-                SelectionOperator = new MockSelectionOperatorConfiguration(),
-                Entity = new MockEntityConfiguration(),
-                Population = new SimplePopulationConfiguration(),
-                FitnessEvaluator = new MockFitnessEvaluatorConfiguration(),
+                GeneticAlgorithm = new MockGeneticAlgorithmFactoryConfig(),
+                SelectionOperator = new MockSelectionOperatorFactoryConfig(),
+                Entity = new MockEntityFactoryConfig(),
+                Population = new SimplePopulationFactoryConfig(),
+                FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig(),
             };
-            config.Statistics.Add(new MeanFitnessStatisticConfiguration());
+            config.Statistics.Add(new MeanFitnessStatisticFactoryConfig());
 
             MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm(config);
 
             MeanFitnessStatistic target = new MeanFitnessStatistic(algorithm);
             SimplePopulation population = new SimplePopulation(algorithm);
-            PrivateObject accessor = new PrivateObject(population, new PrivateType(typeof(PopulationBase<SimplePopulation, SimplePopulationConfiguration>)));
+            PrivateObject accessor = new PrivateObject(population, new PrivateType(typeof(PopulationBase<SimplePopulation, SimplePopulationFactoryConfig>)));
             accessor.SetField("scaledMean", 21);
             object result = target.GetResultValue(population);
 
@@ -51,15 +51,15 @@ namespace GenFxTests
         [TestMethod()]
         public void MeanStatistic_GetResultValue_NullPopulation()
         {
-            ComponentConfigurationSet config = new ComponentConfigurationSet
+            ComponentFactoryConfigSet config = new ComponentFactoryConfigSet
             {
-                GeneticAlgorithm = new MockGeneticAlgorithmConfiguration(),
-                SelectionOperator = new MockSelectionOperatorConfiguration(),
-                Entity = new MockEntityConfiguration(),
-                Population = new SimplePopulationConfiguration(),
-                FitnessEvaluator = new MockFitnessEvaluatorConfiguration(),
+                GeneticAlgorithm = new MockGeneticAlgorithmFactoryConfig(),
+                SelectionOperator = new MockSelectionOperatorFactoryConfig(),
+                Entity = new MockEntityFactoryConfig(),
+                Population = new SimplePopulationFactoryConfig(),
+                FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig(),
             };
-            config.Statistics.Add(new MeanFitnessStatisticConfiguration());
+            config.Statistics.Add(new MeanFitnessStatisticFactoryConfig());
 
             MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm(config);
             MeanFitnessStatistic target = new MeanFitnessStatistic(algorithm);

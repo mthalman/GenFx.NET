@@ -1,6 +1,7 @@
 ﻿using GenFx;
 using GenFx.ComponentLibrary.Algorithms;
 using GenFx.ComponentLibrary.Populations;
+using GenFx.Contracts;
 using GenFxTests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
@@ -23,25 +24,25 @@ namespace GenFxTests
         [TestMethod]
         public async Task SimpleGeneticAlgorithm_CreateNextGeneration_Async()
         {
-            SimpleGeneticAlgorithm algorithm = new SimpleGeneticAlgorithm(new ComponentConfigurationSet
+            SimpleGeneticAlgorithm algorithm = new SimpleGeneticAlgorithm(new ComponentFactoryConfigSet
             {
-                GeneticAlgorithm = new SimpleGeneticAlgorithmConfiguration(),
-                FitnessEvaluator = new MockFitnessEvaluatorConfiguration(),
-                Entity = new MockEntityConfiguration(),
-                Population = new SimplePopulationConfiguration(),
-                ElitismStrategy = new MockElitismStrategyConfiguration
+                GeneticAlgorithm = new SimpleGeneticAlgorithmFactoryConfig(),
+                FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig(),
+                Entity = new MockEntityFactoryConfig(),
+                Population = new SimplePopulationFactoryConfig(),
+                ElitismStrategy = new MockElitismStrategyFactoryConfig
                 {
                     ElitistRatio = .1
                 },
-                SelectionOperator = new MockSelectionOperatorConfiguration
+                SelectionOperator = new MockSelectionOperatorFactoryConfig
                 {
                     SelectionBasedOnFitnessType = FitnessType.Scaled
                 },
-                CrossoverOperator = new MockCrossoverOperatorConfiguration
+                CrossoverOperator = new MockCrossoverOperatorFactoryConfig
                 {
                     CrossoverRate = 1
                 },
-                MutationOperator = new MockMutationOperatorConfiguration
+                MutationOperator = new MockMutationOperatorFactoryConfig
                 {
                     MutationRate = 1
                 }

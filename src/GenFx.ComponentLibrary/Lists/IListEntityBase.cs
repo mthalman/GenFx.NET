@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using GenFx.Contracts;
+using System.Collections;
 
 namespace GenFx.ComponentLibrary.Lists
 {

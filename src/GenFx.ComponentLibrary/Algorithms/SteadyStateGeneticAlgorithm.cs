@@ -1,3 +1,5 @@
+using GenFx.Contracts;
+
 namespace GenFx.ComponentLibrary.Algorithms
 {
     /// <summary>
@@ -10,13 +12,13 @@ namespace GenFx.ComponentLibrary.Algorithms
     /// since all high-fitness <see cref="IGeneticEntity"/> objects will be moved to the next generation anyways.
     /// </para>
     /// </remarks>
-    public sealed class SteadyStateGeneticAlgorithm : SteadyStateGeneticAlgorithm<SteadyStateGeneticAlgorithm, SteadyStateGeneticAlgorithmConfiguration>
+    public sealed class SteadyStateGeneticAlgorithm : SteadyStateGeneticAlgorithm<SteadyStateGeneticAlgorithm, SteadyStateGeneticAlgorithmFactoryConfig>
     {
         /// <summary>
         /// Initializes a new instance of this class.
         /// </summary>
         /// <param name="configurationSet">Contains the component configuration for the algorithm.</param>
-        public SteadyStateGeneticAlgorithm(ComponentConfigurationSet configurationSet)
+        public SteadyStateGeneticAlgorithm(ComponentFactoryConfigSet configurationSet)
             : base(configurationSet)
         {
         }

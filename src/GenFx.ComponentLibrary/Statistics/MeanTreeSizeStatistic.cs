@@ -1,5 +1,6 @@
 using GenFx.ComponentLibrary.Base;
 using GenFx.ComponentLibrary.Trees;
+using GenFx.Contracts;
 using GenFx.Validation;
 using System;
 
@@ -10,7 +11,7 @@ namespace GenFx.ComponentLibrary.Statistics
     /// objects contained by a <see cref="IPopulation"/>.
     /// </summary>
     [RequiredEntity(typeof(ITreeEntity))]
-    public sealed class MeanTreeSizeStatistic : StatisticBase<MeanTreeSizeStatistic, MeanTreeSizeStatisticConfiguration>
+    public sealed class MeanTreeSizeStatistic : StatisticBase<MeanTreeSizeStatistic, MeanTreeSizeStatisticFactoryConfig>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="MeanTreeSizeStatistic"/> class.

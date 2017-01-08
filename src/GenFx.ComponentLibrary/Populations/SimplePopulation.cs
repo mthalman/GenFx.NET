@@ -1,4 +1,5 @@
 using GenFx.ComponentLibrary.Base;
+using GenFx.Contracts;
 using System;
 
 namespace GenFx.ComponentLibrary.Populations
@@ -12,7 +13,7 @@ namespace GenFx.ComponentLibrary.Populations
     /// which <see cref="IGeneticAlgorithm"/> is used.
     /// </remarks>
     /// <seealso cref="IGeneticAlgorithm"/>
-    public sealed class SimplePopulation : PopulationBase<SimplePopulation, SimplePopulationConfiguration>
+    public sealed class SimplePopulation : PopulationBase<SimplePopulation, SimplePopulationFactoryConfig>
     {
         /// <summary>
         /// Initializes a new instance of this class.

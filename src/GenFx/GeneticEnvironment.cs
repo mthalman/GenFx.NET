@@ -1,4 +1,4 @@
-using GenFx.ComponentModel;
+using GenFx.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;

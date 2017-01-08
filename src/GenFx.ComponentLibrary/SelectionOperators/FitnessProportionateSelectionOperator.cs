@@ -1,3 +1,4 @@
+using GenFx.Contracts;
 using System;
 
 namespace GenFx.ComponentLibrary.SelectionOperators
@@ -7,7 +8,7 @@ namespace GenFx.ComponentLibrary.SelectionOperators
     /// selected is directly proportional to its fitness value compared to the rest of the <see cref="IPopulation"/>
     /// to which it belongs.
     /// </summary>
-    public sealed class FitnessProportionateSelectionOperator : FitnessProportionateSelectionOperator<FitnessProportionateSelectionOperator, FitnessProportionateSelectionOperatorConfiguration>
+    public sealed class FitnessProportionateSelectionOperator : FitnessProportionateSelectionOperator<FitnessProportionateSelectionOperator, FitnessProportionateSelectionOperatorFactoryConfig>
     {
         /// <summary>
         /// Initializes a new instance of this class.

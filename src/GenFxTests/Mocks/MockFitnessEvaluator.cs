@@ -4,10 +4,11 @@ using System.Text;
 using GenFx;
 using System.Threading.Tasks;
 using GenFx.ComponentLibrary.Base;
+using GenFx.Contracts;
 
 namespace GenFxTests.Mocks
 {
-    class MockFitnessEvaluator : FitnessEvaluatorBase<MockFitnessEvaluator, MockFitnessEvaluatorConfiguration>
+    class MockFitnessEvaluator : FitnessEvaluatorBase<MockFitnessEvaluator, MockFitnessEvaluatorFactoryConfig>
     {
         internal int DoEvaluateFitnessCallCount;
 
@@ -24,11 +25,11 @@ namespace GenFxTests.Mocks
         }
     }
 
-    class MockFitnessEvaluatorConfiguration : FitnessEvaluatorConfigurationBase<MockFitnessEvaluatorConfiguration, MockFitnessEvaluator>
+    class MockFitnessEvaluatorFactoryConfig : FitnessEvaluatorFactoryConfigBase<MockFitnessEvaluatorFactoryConfig, MockFitnessEvaluator>
     {
     }
 
-    class MockFitnessEvaluator2 : FitnessEvaluatorBase<MockFitnessEvaluator2, MockFitnessEvaluator2Configuration>
+    class MockFitnessEvaluator2 : FitnessEvaluatorBase<MockFitnessEvaluator2, MockFitnessEvaluator2FactoryConfig>
     {
         public MockFitnessEvaluator2(IGeneticAlgorithm algorithm)
             : base(algorithm)
@@ -41,7 +42,7 @@ namespace GenFxTests.Mocks
         }
     }
 
-    class MockFitnessEvaluator2Configuration : FitnessEvaluatorConfigurationBase<MockFitnessEvaluator2Configuration, MockFitnessEvaluator2>
+    class MockFitnessEvaluator2FactoryConfig : FitnessEvaluatorFactoryConfigBase<MockFitnessEvaluator2FactoryConfig, MockFitnessEvaluator2>
     {
     }
 }

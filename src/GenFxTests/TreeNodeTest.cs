@@ -1,5 +1,6 @@
 ﻿using GenFx;
 using GenFx.ComponentLibrary.Trees;
+using GenFx.Contracts;
 using GenFxTests.Helpers;
 using GenFxTests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -122,18 +123,18 @@ namespace GenFxTests
 
         private static IGeneticAlgorithm GetAlgorithm()
         {
-            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentConfigurationSet
+            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentFactoryConfigSet
             {
-                GeneticAlgorithm = new MockGeneticAlgorithmConfiguration(),
-                Population = new MockPopulationConfiguration(),
-                SelectionOperator = new MockSelectionOperatorConfiguration(),
-                FitnessEvaluator = new MockFitnessEvaluatorConfiguration(),
-                Entity = new TestTreeEntityConfiguration()
+                GeneticAlgorithm = new MockGeneticAlgorithmFactoryConfig(),
+                Population = new MockPopulationFactoryConfig(),
+                SelectionOperator = new MockSelectionOperatorFactoryConfig(),
+                FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig(),
+                Entity = new TestTreeEntityFactoryConfig()
             });
             return algorithm;
         }
 
-        private class TestTreeEntity : TreeEntity<TestTreeEntity, TestTreeEntityConfiguration>
+        private class TestTreeEntity : TreeEntity<TestTreeEntity, TestTreeEntityFactoryConfig>
         {
             public TestTreeEntity(IGeneticAlgorithm algorithm)
                 : base(algorithm)
@@ -151,7 +152,7 @@ namespace GenFxTests
             }
         }
 
-        private class TestTreeEntityConfiguration : TreeEntityConfiguration<TestTreeEntityConfiguration, TestTreeEntity>
+        private class TestTreeEntityFactoryConfig : TreeEntityFactoryConfig<TestTreeEntityFactoryConfig, TestTreeEntity>
         {
         }
     }

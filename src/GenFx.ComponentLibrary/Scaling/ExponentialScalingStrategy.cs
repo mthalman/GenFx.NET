@@ -1,12 +1,13 @@
+using GenFx.Contracts;
 using System;
 
 namespace GenFx.ComponentLibrary.Scaling
 {
     /// <summary>
     /// Provides fitness scaling by raising the fitness of a <see cref="IGeneticEntity"/> to the power of the
-    /// value of the <see cref="ExponentialScalingStrategyConfiguration{TConfiguration, TScaling}.ScalingPower"/> property.
+    /// value of the <see cref="ExponentialScalingStrategyFactoryConfig{TConfiguration, TScaling}.ScalingPower"/> property.
     /// </summary>
-    public sealed class ExponentialScalingStrategy : ExponentialScalingStrategy<ExponentialScalingStrategy, ExponentialScalingStrategyConfiguration>
+    public sealed class ExponentialScalingStrategy : ExponentialScalingStrategy<ExponentialScalingStrategy, ExponentialScalingStrategyFactoryConfig>
     {
         /// <summary>
         /// Initializes a new instance of this class.

@@ -1,4 +1,5 @@
 using GenFx.ComponentLibrary.Base;
+using GenFx.Contracts;
 using System;
 
 namespace GenFx.ComponentLibrary.SelectionOperators
@@ -11,7 +12,7 @@ namespace GenFx.ComponentLibrary.SelectionOperators
     /// <typeparam name="TConfiguration">Type of the associated configuration class.</typeparam>
     public abstract class UniformSelectionOperator<TSelection, TConfiguration> : SelectionOperatorBase<TSelection, TConfiguration>
         where TSelection : UniformSelectionOperator<TSelection, TConfiguration>
-        where TConfiguration : UniformSelectionOperatorConfiguration<TConfiguration, TSelection>
+        where TConfiguration : UniformSelectionOperatorFactoryConfig<TConfiguration, TSelection>
     {
         /// <summary>
         /// Initializes a new instance of this class.

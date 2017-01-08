@@ -1,6 +1,7 @@
 ﻿using GenFx;
 using GenFx.ComponentLibrary.Populations;
 using GenFx.ComponentLibrary.SelectionOperators;
+using GenFx.Contracts;
 using GenFxTests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
@@ -83,16 +84,16 @@ namespace GenFxTests
 
         private static IGeneticAlgorithm GetAlgorithm()
         {
-            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentConfigurationSet
+            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentFactoryConfigSet
             {
-                GeneticAlgorithm = new MockGeneticAlgorithmConfiguration(),
-                Population = new SimplePopulationConfiguration(),
-                Entity = new MockEntityConfiguration(),
-                SelectionOperator = new RankSelectionOperatorConfiguration
+                GeneticAlgorithm = new MockGeneticAlgorithmFactoryConfig(),
+                Population = new SimplePopulationFactoryConfig(),
+                Entity = new MockEntityFactoryConfig(),
+                SelectionOperator = new RankSelectionOperatorFactoryConfig
                 {
                     SelectionBasedOnFitnessType = FitnessType.Scaled
                 },
-                FitnessEvaluator = new MockFitnessEvaluatorConfiguration()
+                FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig()
             });
 
             algorithm.Operators.FitnessEvaluator = new MockFitnessEvaluator(algorithm);

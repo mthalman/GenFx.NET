@@ -1,3 +1,4 @@
+using GenFx.Contracts;
 using System;
 
 namespace GenFx.ComponentLibrary.Lists.BinaryStrings
@@ -7,7 +8,7 @@ namespace GenFx.ComponentLibrary.Lists.BinaryStrings
     /// </summary>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix")]
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1501:AvoidExcessiveInheritance")]
-    public sealed class FixedLengthBinaryStringEntity : FixedLengthBinaryStringEntity<FixedLengthBinaryStringEntity, FixedLengthBinaryStringEntityConfiguration>
+    public sealed class FixedLengthBinaryStringEntity : FixedLengthBinaryStringEntity<FixedLengthBinaryStringEntity, FixedLengthBinaryStringEntityFactoryConfig>
     {
         /// <summary>
         /// Initializes a new instance of this class.

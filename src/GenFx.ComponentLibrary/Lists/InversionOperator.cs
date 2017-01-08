@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GenFx.Contracts;
+using System;
 
 namespace GenFx.ComponentLibrary.Lists
 {
@@ -8,7 +9,7 @@ namespace GenFx.ComponentLibrary.Lists
     /// <remarks>
     /// Inversion operates upon a list, causing the values of two list positions to become swapped.
     /// </remarks>
-    public sealed class InversionOperator : InversionOperator<InversionOperator, InversionOperatorConfiguration>
+    public sealed class InversionOperator : InversionOperator<InversionOperator, InversionOperatorFactoryConfig>
     {
         /// <summary>
         /// Initializes a new instance of this class.

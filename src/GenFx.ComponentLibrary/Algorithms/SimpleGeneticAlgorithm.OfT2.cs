@@ -1,3 +1,4 @@
+using GenFx.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -16,13 +17,13 @@ namespace GenFx.ComponentLibrary.Algorithms
     /// <typeparam name="TConfiguration">Type of the associated configuration class.</typeparam>
     public abstract class SimpleGeneticAlgorithm<TAlgorithm, TConfiguration> : GeneticAlgorithm<TAlgorithm, TConfiguration>
         where TAlgorithm : GeneticAlgorithm<TAlgorithm, TConfiguration>
-        where TConfiguration : GeneticAlgorithmConfiguration<TConfiguration, TAlgorithm>
+        where TConfiguration : GeneticAlgorithmFactoryConfig<TConfiguration, TAlgorithm>
     {
         /// <summary>
         /// Initializes a new instance of this class.
         /// </summary>
         /// <param name="configurationSet">Contains the component configuration for the algorithm.</param>
-        protected SimpleGeneticAlgorithm(ComponentConfigurationSet configurationSet)
+        protected SimpleGeneticAlgorithm(ComponentFactoryConfigSet configurationSet)
             : base(configurationSet)
         {
         }

@@ -1,4 +1,5 @@
 using GenFx.ComponentLibrary.Base;
+using GenFx.Contracts;
 using System;
 
 namespace GenFx.ComponentLibrary.Terminators
@@ -7,14 +8,14 @@ namespace GenFx.ComponentLibrary.Terminators
     /// Represents a genetic algorithm terminator that stops the algorithm once a target generation
     /// has been reached.
     /// </summary>
-    public sealed class GenerationalTerminator : TerminatorBase<GenerationalTerminator, GenerationalTerminatorConfiguration>
+    public sealed class GenerationalTerminator : TerminatorBase<GenerationalTerminator, GenerationalTerminatorFactoryConfig>
     {
         /// <summary>
         /// Gets the target generation that, when reached, will stop the algorithm.
         /// </summary>
         public int FinalGeneration
         {
-            get { return ((GenerationalTerminatorConfiguration)this.Algorithm.ConfigurationSet.Terminator).FinalGeneration; }
+            get { return ((GenerationalTerminatorFactoryConfig)this.Algorithm.ConfigurationSet.Terminator).FinalGeneration; }
         }
 
         /// <summary>

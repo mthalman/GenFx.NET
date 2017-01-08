@@ -1,3 +1,4 @@
+using GenFx.Contracts;
 using System;
 
 namespace GenFx.ComponentLibrary.Lists
@@ -11,7 +12,7 @@ namespace GenFx.ComponentLibrary.Lists
     /// by 001101 and 100011 were to be crossed over at position 2, the resulting offspring would
     /// be 000011 and 101101.
     /// </remarks>
-    public sealed class SinglePointCrossoverOperator : SinglePointCrossoverOperator<SinglePointCrossoverOperator, SinglePointCrossoverOperatorConfiguration>
+    public sealed class SinglePointCrossoverOperator : SinglePointCrossoverOperator<SinglePointCrossoverOperator, SinglePointCrossoverOperatorFactoryConfig>
     {
         /// <summary>
         /// Initializes a new instance of this class.

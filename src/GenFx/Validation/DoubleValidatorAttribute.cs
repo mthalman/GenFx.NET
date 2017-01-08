@@ -1,5 +1,5 @@
 using System;
-using GenFx.ComponentModel;
+using GenFx.Contracts;
 
 namespace GenFx.Validation
 {
@@ -112,11 +112,11 @@ namespace GenFx.Validation
         /// <summary>
         /// Initializes a new instance of the <see cref="DoubleExternalValidatorAttribute"/> class.
         /// </summary>
-        /// <param name="targetComponentConfigurationType"><see cref="Type"/> of the component configuration containing the property to be validated. This type must implement <see cref="IComponentConfiguration"/>.</param>
+        /// <param name="targetComponentConfigurationType"><see cref="Type"/> of the component configuration containing the property to be validated. This type must implement <see cref="IComponentFactoryConfig"/>.</param>
         /// <param name="targetProperty">Property of the <paramref name="targetComponentConfigurationType"/> to be validated.</param>
         /// <exception cref="ArgumentNullException"><paramref name="targetComponentConfigurationType"/> is null.</exception>
         /// <exception cref="ArgumentException"><paramref name="targetProperty"/> is null or empty.</exception>
-        /// <exception cref="ArgumentException"><paramref name="targetComponentConfigurationType"/> does not implement <see cref="IComponentConfiguration"/>.</exception>
+        /// <exception cref="ArgumentException"><paramref name="targetComponentConfigurationType"/> does not implement <see cref="IComponentFactoryConfig"/>.</exception>
         /// <exception cref="ArgumentException"><paramref name="targetProperty"/> does not exist on <paramref name="targetComponentConfigurationType"/>.</exception>
         public DoubleExternalValidatorAttribute(Type targetComponentConfigurationType, string targetProperty)
         {

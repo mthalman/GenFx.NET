@@ -1,6 +1,7 @@
 using GenFx;
 using GenFx.ComponentLibrary.Lists;
 using GenFx.ComponentLibrary.Lists.BinaryStrings;
+using GenFx.Contracts;
 using GenFxTests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
@@ -10,9 +11,8 @@ using System.Text;
 namespace GenFxTests
 {
     /// <summary>
-    ///This is a test class for GenFx.ComponentLibrary.BinaryStrings.VariableSinglePointBitCrossoverOperator and is intended
-    ///to contain all GenFx.ComponentLibrary.BinaryStrings.VariableSinglePointBitCrossoverOperator Unit Tests
-    ///</summary>
+    /// This is a test class for <see cref="VariableSinglePointListElementCrossoverOperator"/>. 
+    /// </summary>
     [TestClass()]
     public class VariableVariableSinglePointBitCrossoverOperatorTest
     {
@@ -28,17 +28,17 @@ namespace GenFxTests
         [TestMethod]
         public void VariableSinglePointBitCrossoverOperator_Crossover()
         {
-            MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentConfigurationSet
+            MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentFactoryConfigSet
             {
-                GeneticAlgorithm = new MockGeneticAlgorithmConfiguration(),
-                Population = new MockPopulationConfiguration(),
-                SelectionOperator = new MockSelectionOperatorConfiguration(),
-                FitnessEvaluator = new MockFitnessEvaluatorConfiguration(),
-                CrossoverOperator = new VariableSinglePointListElementCrossoverOperatorConfiguration
+                GeneticAlgorithm = new MockGeneticAlgorithmFactoryConfig(),
+                Population = new MockPopulationFactoryConfig(),
+                SelectionOperator = new MockSelectionOperatorFactoryConfig(),
+                FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig(),
+                CrossoverOperator = new VariableSinglePointListElementCrossoverOperatorFactoryConfig
                 {
                     CrossoverRate = 1
                 },
-                Entity = new VariableLengthBinaryStringEntityConfiguration
+                Entity = new VariableLengthBinaryStringEntityFactoryConfig
                 {
                     MinimumStartingLength = 4,
                     MaximumStartingLength = 6

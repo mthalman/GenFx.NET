@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Text;
 using GenFx;
 using GenFx.ComponentLibrary.Base;
+using GenFx.Contracts;
 
 namespace GenFxTests.Mocks
 {
-    class MockCrossoverOperator : CrossoverOperatorBase<MockCrossoverOperator, MockCrossoverOperatorConfiguration>
+    class MockCrossoverOperator : CrossoverOperatorBase<MockCrossoverOperator, MockCrossoverOperatorFactoryConfig>
     {
         internal int DoCrossoverCallCount;
 
@@ -25,11 +26,11 @@ namespace GenFxTests.Mocks
         }
     }
 
-    class MockCrossoverOperatorConfiguration : CrossoverOperatorConfigurationBase<MockCrossoverOperatorConfiguration, MockCrossoverOperator>
+    class MockCrossoverOperatorFactoryConfig : CrossoverOperatorFactoryConfigBase<MockCrossoverOperatorFactoryConfig, MockCrossoverOperator>
     {
     }
 
-    class MockCrossoverOperator2 : CrossoverOperatorBase<MockCrossoverOperator2, MockCrossoverOperator2Configuration>
+    class MockCrossoverOperator2 : CrossoverOperatorBase<MockCrossoverOperator2, MockCrossoverOperator2FactoryConfig>
     {
         public MockCrossoverOperator2(IGeneticAlgorithm algorithm)
             : base(algorithm)
@@ -42,7 +43,7 @@ namespace GenFxTests.Mocks
         }
     }
 
-    class MockCrossoverOperator2Configuration : CrossoverOperatorConfigurationBase<MockCrossoverOperator2Configuration, MockCrossoverOperator2>
+    class MockCrossoverOperator2FactoryConfig : CrossoverOperatorFactoryConfigBase<MockCrossoverOperator2FactoryConfig, MockCrossoverOperator2>
     {
     }
 }

@@ -5,6 +5,7 @@ using GenFxTests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
+using GenFx.Contracts;
 
 namespace GenFxTests
 {
@@ -27,17 +28,17 @@ namespace GenFxTests
         [TestMethod]
         public void SinglePointCrossoverOperator_Crossover()
         {
-            MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentConfigurationSet
+            MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentFactoryConfigSet
             {
-                GeneticAlgorithm = new MockGeneticAlgorithmConfiguration(),
-                Population = new MockPopulationConfiguration(),
-                SelectionOperator = new MockSelectionOperatorConfiguration(),
-                FitnessEvaluator = new MockFitnessEvaluatorConfiguration(),
-                CrossoverOperator = new SinglePointCrossoverOperatorConfiguration
+                GeneticAlgorithm = new MockGeneticAlgorithmFactoryConfig(),
+                Population = new MockPopulationFactoryConfig(),
+                SelectionOperator = new MockSelectionOperatorFactoryConfig(),
+                FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig(),
+                CrossoverOperator = new SinglePointCrossoverOperatorFactoryConfig
                 {
                     CrossoverRate = 1
                 },
-                Entity = new FixedLengthBinaryStringEntityConfiguration
+                Entity = new FixedLengthBinaryStringEntityFactoryConfig
                 {
                     Length = 4
                 }

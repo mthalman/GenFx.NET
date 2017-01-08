@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Text;
 using GenFx;
 using GenFx.ComponentLibrary.Base;
+using GenFx.Contracts;
 
 namespace GenFxTests.Mocks
 {
-    class MockMutationOperator : MutationOperatorBase<MockMutationOperator, MockMutationOperatorConfiguration>
+    class MockMutationOperator : MutationOperatorBase<MockMutationOperator, MockMutationOperatorFactoryConfig>
     {
         internal int DoMutateCallCount;
 
@@ -23,11 +24,11 @@ namespace GenFxTests.Mocks
         }
     }
 
-    class MockMutationOperatorConfiguration : MutationOperatorConfigurationBase<MockMutationOperatorConfiguration, MockMutationOperator>
+    class MockMutationOperatorFactoryConfig : MutationOperatorFactoryConfigBase<MockMutationOperatorFactoryConfig, MockMutationOperator>
     {
     }
 
-    class MockMutationOperator2 : MutationOperatorBase<MockMutationOperator2, MockMutationOperator2Configuration>
+    class MockMutationOperator2 : MutationOperatorBase<MockMutationOperator2, MockMutationOperator2FactoryConfig>
     {
         public MockMutationOperator2(IGeneticAlgorithm algorithm)
             : base(algorithm)
@@ -41,7 +42,7 @@ namespace GenFxTests.Mocks
         }
     }
 
-    class MockMutationOperator2Configuration : MutationOperatorConfigurationBase<MockMutationOperator2Configuration, MockMutationOperator2>
+    class MockMutationOperator2FactoryConfig : MutationOperatorFactoryConfigBase<MockMutationOperator2FactoryConfig, MockMutationOperator2>
     {
     }
 }

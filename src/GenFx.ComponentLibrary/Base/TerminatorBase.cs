@@ -1,4 +1,4 @@
-using GenFx.ComponentLibrary.ComponentModel;
+using GenFx.Contracts;
 using System;
 
 namespace GenFx.ComponentLibrary.Base
@@ -12,14 +12,14 @@ namespace GenFx.ComponentLibrary.Base
     /// </para>
     /// <para>
     /// <b>Notes to implementers:</b> When this base class is derived, the derived class can be used by
-    /// the genetic algorithm by using the <see cref="ComponentConfigurationSet.Terminator"/> property
+    /// the genetic algorithm by using the <see cref="ComponentFactoryConfigSet.Terminator"/> property
     /// </para>
     /// </remarks>
     /// <typeparam name="TTerminator">Type of the deriving terminator class.</typeparam>
     /// <typeparam name="TConfiguration">Type of the associated configuration class.</typeparam>
     public abstract class TerminatorBase<TTerminator, TConfiguration> : GeneticComponentWithAlgorithm<TTerminator, TConfiguration>, ITerminator
         where TTerminator : TerminatorBase<TTerminator, TConfiguration>
-        where TConfiguration : TerminatorConfigurationBase<TConfiguration, TTerminator>
+        where TConfiguration : TerminatorFactoryConfigBase<TConfiguration, TTerminator>
     { 
         /// <summary>
         /// Initializes a new instance of this class.

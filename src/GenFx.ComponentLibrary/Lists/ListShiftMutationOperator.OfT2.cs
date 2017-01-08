@@ -1,4 +1,5 @@
 ﻿using GenFx.ComponentLibrary.Base;
+using GenFx.Contracts;
 using GenFx.Validation;
 using System;
 
@@ -12,7 +13,7 @@ namespace GenFx.ComponentLibrary.Lists
     [RequiredEntity(typeof(IListEntityBase))]
     public abstract class ListShiftMutationOperator<TMutation, TConfiguration> : MutationOperatorBase<TMutation, TConfiguration>
         where TMutation : ListShiftMutationOperator<TMutation, TConfiguration>
-        where TConfiguration : ListShiftMutationOperatorConfiguration<TConfiguration, TMutation>
+        where TConfiguration : ListShiftMutationOperatorFactoryConfig<TConfiguration, TMutation>
     {
         /// <summary>
         /// Initializes a new instance of this class.

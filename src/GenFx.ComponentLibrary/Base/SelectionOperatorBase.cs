@@ -1,4 +1,4 @@
-using GenFx.ComponentLibrary.ComponentModel;
+using GenFx.Contracts;
 using System;
 
 namespace GenFx.ComponentLibrary.Base
@@ -15,7 +15,7 @@ namespace GenFx.ComponentLibrary.Base
     /// </para>
     /// <para>
     /// <b>Notes to implementers:</b> When this base class is derived, the derived class can be used by
-    /// the genetic algorithm by using the <see cref="ComponentConfigurationSet.SelectionOperator"/> 
+    /// the genetic algorithm by using the <see cref="ComponentFactoryConfigSet.SelectionOperator"/> 
     /// property.
     /// </para>
     /// </remarks>
@@ -23,7 +23,7 @@ namespace GenFx.ComponentLibrary.Base
     /// <typeparam name="TConfiguration">Type of the associated configuration class.</typeparam>
     public abstract class SelectionOperatorBase<TSelection, TConfiguration> : GeneticComponentWithAlgorithm<TSelection, TConfiguration>, ISelectionOperator
         where TSelection : SelectionOperatorBase<TSelection, TConfiguration>
-        where TConfiguration : SelectionOperatorConfigurationBase<TConfiguration, TSelection>
+        where TConfiguration : SelectionOperatorFactoryConfigBase<TConfiguration, TSelection>
     {
         /// <summary>
         /// Initializes a new instance of this class.

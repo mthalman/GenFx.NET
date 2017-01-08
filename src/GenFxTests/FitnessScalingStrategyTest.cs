@@ -1,7 +1,7 @@
 ﻿using GenFx;
 using GenFx.ComponentLibrary.Base;
 using GenFx.ComponentLibrary.Populations;
-using GenFx.ComponentModel;
+using GenFx.Contracts;
 using GenFxTests.Helpers;
 using GenFxTests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -35,7 +35,7 @@ namespace GenFxTests
         [TestMethod]
         public void FitnessScalingStrategy_Ctor_MissingSetting()
         {
-            AssertEx.Throws<ArgumentException>(() => new FakeFitnessScalingStrategy(new MockGeneticAlgorithm(new ComponentConfigurationSet())));
+            AssertEx.Throws<ArgumentException>(() => new FakeFitnessScalingStrategy(new MockGeneticAlgorithm(new ComponentFactoryConfigSet())));
         }
 
         /// <summary>
@@ -78,19 +78,19 @@ namespace GenFxTests
 
         private static IGeneticAlgorithm GetAlgorithm()
         {
-            MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentConfigurationSet
+            MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentFactoryConfigSet
             {
-                GeneticAlgorithm = new MockGeneticAlgorithmConfiguration(),
-                SelectionOperator = new MockSelectionOperatorConfiguration(),
-                FitnessEvaluator = new MockFitnessEvaluatorConfiguration(),
-                Entity = new MockEntityConfiguration(),
-                Population = new SimplePopulationConfiguration(),
-                FitnessScalingStrategy = new FakeFitnessScalingStrategy2Configuration()
+                GeneticAlgorithm = new MockGeneticAlgorithmFactoryConfig(),
+                SelectionOperator = new MockSelectionOperatorFactoryConfig(),
+                FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig(),
+                Entity = new MockEntityFactoryConfig(),
+                Population = new SimplePopulationFactoryConfig(),
+                FitnessScalingStrategy = new FakeFitnessScalingStrategy2FactoryConfig()
             });
             return algorithm;
         }
 
-        private class FakeFitnessScalingStrategy : FitnessScalingStrategyBase<FakeFitnessScalingStrategy, FakeFitnessScalingStrategyConfiguration>
+        private class FakeFitnessScalingStrategy : FitnessScalingStrategyBase<FakeFitnessScalingStrategy, FakeFitnessScalingStrategyFactoryConfig>
         {
             public FakeFitnessScalingStrategy(IGeneticAlgorithm algorithm)
                 : base(algorithm)
@@ -102,11 +102,11 @@ namespace GenFxTests
             }
         }
 
-        private class FakeFitnessScalingStrategyConfiguration : FitnessScalingStrategyConfigurationBase<FakeFitnessScalingStrategyConfiguration, FakeFitnessScalingStrategy>
+        private class FakeFitnessScalingStrategyFactoryConfig : FitnessScalingStrategyFactoryConfigBase<FakeFitnessScalingStrategyFactoryConfig, FakeFitnessScalingStrategy>
         {
         }
 
-        private class FakeFitnessScalingStrategy2 : FitnessScalingStrategyBase<FakeFitnessScalingStrategy2, FakeFitnessScalingStrategy2Configuration>
+        private class FakeFitnessScalingStrategy2 : FitnessScalingStrategyBase<FakeFitnessScalingStrategy2, FakeFitnessScalingStrategy2FactoryConfig>
         {
             public bool OnScaleCalled;
 
@@ -121,7 +121,7 @@ namespace GenFxTests
             }
         }
 
-        private class FakeFitnessScalingStrategy2Configuration : FitnessScalingStrategyConfigurationBase<FakeFitnessScalingStrategy2Configuration, FakeFitnessScalingStrategy2>
+        private class FakeFitnessScalingStrategy2FactoryConfig : FitnessScalingStrategyFactoryConfigBase<FakeFitnessScalingStrategy2FactoryConfig, FakeFitnessScalingStrategy2>
         {
         }
     }

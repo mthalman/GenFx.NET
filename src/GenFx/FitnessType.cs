@@ -1,3 +1,5 @@
+using GenFx.Contracts;
+
 namespace GenFx
 {
     /// <summary>

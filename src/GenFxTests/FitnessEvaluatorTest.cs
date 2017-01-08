@@ -1,6 +1,6 @@
 ﻿using GenFx;
 using GenFx.ComponentLibrary.Base;
-using GenFx.ComponentModel;
+using GenFx.Contracts;
 using GenFxTests.Helpers;
 using GenFxTests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -35,7 +35,7 @@ namespace GenFxTests
         [TestMethod]
         public void FitnessEvaluator_Ctor_MissingSetting()
         {
-            AssertEx.Throws<ArgumentException>(() => new FakeFitnessEvaluator(new MockGeneticAlgorithm(new ComponentConfigurationSet())));
+            AssertEx.Throws<ArgumentException>(() => new FakeFitnessEvaluator(new MockGeneticAlgorithm(new ComponentFactoryConfigSet())));
         }
 
         /// <summary>
@@ -44,13 +44,13 @@ namespace GenFxTests
         [TestMethod]
         public async Task FitnessEvaluator_EvaluateFitness_Async()
         {
-            MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentConfigurationSet
+            MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentFactoryConfigSet
             {
-                GeneticAlgorithm = new MockGeneticAlgorithmConfiguration(),
-                SelectionOperator = new MockSelectionOperatorConfiguration(),
-                Population = new MockPopulationConfiguration(),
-                Entity = new MockEntityConfiguration(),
-                FitnessEvaluator = new FakeFitnessEvaluator2Configuration()
+                GeneticAlgorithm = new MockGeneticAlgorithmFactoryConfig(),
+                SelectionOperator = new MockSelectionOperatorFactoryConfig(),
+                Population = new MockPopulationFactoryConfig(),
+                Entity = new MockEntityFactoryConfig(),
+                FitnessEvaluator = new FakeFitnessEvaluator2FactoryConfig()
             });
             FakeFitnessEvaluator2 evaluator = new FakeFitnessEvaluator2(algorithm);
             MockEntity entity = new MockEntity(algorithm);
@@ -59,7 +59,7 @@ namespace GenFxTests
             Assert.AreEqual((double)99, actualVal, "Fitness was not evaluated correctly.");
         }
 
-        private class FakeFitnessEvaluator : FitnessEvaluatorBase<FakeFitnessEvaluator, FakeFitnessEvaluatorConfiguration>
+        private class FakeFitnessEvaluator : FitnessEvaluatorBase<FakeFitnessEvaluator, FakeFitnessEvaluatorFactoryConfig>
         {
             public FakeFitnessEvaluator(IGeneticAlgorithm algorithm)
                 : base(algorithm)
@@ -72,11 +72,11 @@ namespace GenFxTests
             }
         }
 
-        private class FakeFitnessEvaluatorConfiguration : FitnessEvaluatorConfigurationBase<FakeFitnessEvaluatorConfiguration, FakeFitnessEvaluator>
+        private class FakeFitnessEvaluatorFactoryConfig : FitnessEvaluatorFactoryConfigBase<FakeFitnessEvaluatorFactoryConfig, FakeFitnessEvaluator>
         {
         }
 
-        private class FakeFitnessEvaluator2 : FitnessEvaluatorBase<FakeFitnessEvaluator2, FakeFitnessEvaluator2Configuration>
+        private class FakeFitnessEvaluator2 : FitnessEvaluatorBase<FakeFitnessEvaluator2, FakeFitnessEvaluator2FactoryConfig>
         {
             public FakeFitnessEvaluator2(IGeneticAlgorithm algorithm)
                 : base(algorithm)
@@ -89,7 +89,7 @@ namespace GenFxTests
             }
         }
 
-        private class FakeFitnessEvaluator2Configuration : FitnessEvaluatorConfigurationBase<FakeFitnessEvaluator2Configuration, FakeFitnessEvaluator2>
+        private class FakeFitnessEvaluator2FactoryConfig : FitnessEvaluatorFactoryConfigBase<FakeFitnessEvaluator2FactoryConfig, FakeFitnessEvaluator2>
         {
         }
     }

@@ -1,3 +1,4 @@
+using GenFx.Contracts;
 using System;
 
 namespace GenFx.ComponentLibrary.Trees
@@ -29,7 +30,7 @@ namespace GenFx.ComponentLibrary.Trees
     /// Represents the configuration of <see cref="BinaryTreeEntity{TEntity, TConfiguration, TValue}"/>.
     /// </summary>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1005:AvoidExcessiveParametersOnGenericTypes")]
-    public abstract class BinaryTreeEntityConfiguration<TConfiguration, TEntity, TValue> : TreeEntityConfiguration<TConfiguration, TEntity, BinaryTreeNode<TValue>>
+    public abstract class BinaryTreeEntityConfiguration<TConfiguration, TEntity, TValue> : TreeEntityFactoryConfig<TConfiguration, TEntity, BinaryTreeNode<TValue>>
         where TConfiguration : BinaryTreeEntityConfiguration<TConfiguration, TEntity, TValue>
         where TEntity : BinaryTreeEntity<TEntity, TConfiguration, TValue>
     {

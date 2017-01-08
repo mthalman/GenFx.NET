@@ -2,7 +2,7 @@
 using GenFx.ComponentLibrary.Base;
 using GenFx.ComponentLibrary.Populations;
 using GenFx.ComponentLibrary.Scaling;
-using GenFx.ComponentModel;
+using GenFx.Contracts;
 using GenFxTests.Helpers;
 using GenFxTests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -28,7 +28,7 @@ namespace GenFxTests
             IGeneticAlgorithm algorithm = GetAlgorithm(2);
 
             ExponentialScalingStrategy strategy = new ExponentialScalingStrategy(algorithm);
-            Assert.IsInstanceOfType(strategy.Configuration, typeof(ExponentialScalingStrategyConfiguration));
+            Assert.IsInstanceOfType(strategy.Configuration, typeof(ExponentialScalingStrategyFactoryConfig));
         }
 
         /// <summary>
@@ -46,7 +46,7 @@ namespace GenFxTests
         [TestMethod()]
         public void ExponentialScalingStrategy_Ctor_MissingSetting()
         {
-            AssertEx.Throws<ArgumentException>(() => new ExponentialScalingStrategy(new MockGeneticAlgorithm(new ComponentConfigurationSet())));
+            AssertEx.Throws<ArgumentException>(() => new ExponentialScalingStrategy(new MockGeneticAlgorithm(new ComponentFactoryConfigSet())));
         }
 
         /// <summary>
@@ -60,10 +60,10 @@ namespace GenFxTests
             ExponentialScalingStrategy target = new ExponentialScalingStrategy(algorithm);
             SimplePopulation population = new SimplePopulation(algorithm);
             MockEntity entity1 = new MockEntity(algorithm);
-            PrivateObject entity1Accessor = new PrivateObject(entity1, new PrivateType(typeof(GeneticEntity<MockEntity, MockEntityConfiguration>)));
+            PrivateObject entity1Accessor = new PrivateObject(entity1, new PrivateType(typeof(GeneticEntity<MockEntity, MockEntityFactoryConfig>)));
             entity1Accessor.SetField("rawFitnessValue", 5);
             MockEntity entity2 = new MockEntity(algorithm);
-            PrivateObject entity2Accessor = new PrivateObject(entity2, new PrivateType(typeof(GeneticEntity<MockEntity, MockEntityConfiguration>)));
+            PrivateObject entity2Accessor = new PrivateObject(entity2, new PrivateType(typeof(GeneticEntity<MockEntity, MockEntityFactoryConfig>)));
             entity2Accessor.SetField("rawFitnessValue", 7);
             population.Entities.Add(entity1);
             population.Entities.Add(entity2);
@@ -75,14 +75,14 @@ namespace GenFxTests
 
         private static IGeneticAlgorithm GetAlgorithm(double scalingPower)
         {
-            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentConfigurationSet
+            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentFactoryConfigSet
             {
-                GeneticAlgorithm = new MockGeneticAlgorithmConfiguration(),
-                SelectionOperator = new MockSelectionOperatorConfiguration(),
-                FitnessEvaluator = new MockFitnessEvaluatorConfiguration(),
-                Entity = new MockEntityConfiguration(),
-                Population = new SimplePopulationConfiguration(),
-                FitnessScalingStrategy = new ExponentialScalingStrategyConfiguration
+                GeneticAlgorithm = new MockGeneticAlgorithmFactoryConfig(),
+                SelectionOperator = new MockSelectionOperatorFactoryConfig(),
+                FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig(),
+                Entity = new MockEntityFactoryConfig(),
+                Population = new SimplePopulationFactoryConfig(),
+                FitnessScalingStrategy = new ExponentialScalingStrategyFactoryConfig
                 {
                     ScalingPower = scalingPower
                 }

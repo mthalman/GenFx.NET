@@ -1,6 +1,5 @@
 using GenFx;
-using GenFx.ComponentLibrary.ComponentModel;
-using GenFx.ComponentModel;
+using GenFx.Contracts;
 using GenFx.Validation;
 using GenFxTests.Helpers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -54,7 +53,7 @@ namespace GenFxTests
         [TestMethod]
         public void ComponentConfiguration_ComponentType()
         {
-            IComponentConfiguration component = new FakeComponentConfiguration();
+            IComponentFactoryConfig component = new FakeComponentConfiguration();
             Assert.AreSame(typeof(FakeComponent), component.ComponentType, "Incorrect type returned.");
         }
         
@@ -88,7 +87,7 @@ namespace GenFxTests
             }
         }
 
-        private class FakeComponentConfiguration : ComponentConfiguration<FakeComponentConfiguration, FakeComponent>
+        private class FakeComponentConfiguration : ComponentFactoryConfig<FakeComponentConfiguration, FakeComponent>
         {
             private int value;
             

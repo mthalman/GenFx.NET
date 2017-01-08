@@ -1,5 +1,6 @@
 ﻿using GenFx;
 using GenFx.ComponentLibrary.Lists.BinaryStrings;
+using GenFx.Contracts;
 using GenFx.Validation;
 
 namespace BinaryPatternMatching
@@ -38,7 +39,7 @@ namespace BinaryPatternMatching
     }
 
     public class BinaryStringMutationOperatorConfiguration
-        : UniformBitMutationOperatorConfiguration<BinaryStringMutationOperatorConfiguration, BinaryStringMutationOperator>
+        : UniformBitMutationOperatorFactoryConfig<BinaryStringMutationOperatorConfiguration, BinaryStringMutationOperator>
     {
     }
 }

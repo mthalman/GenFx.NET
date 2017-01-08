@@ -2,6 +2,7 @@
 using GenFx.ComponentLibrary.Populations;
 using GenFx.ComponentLibrary.Statistics;
 using GenFx.ComponentLibrary.Trees;
+using GenFx.Contracts;
 using GenFxTests.Helpers;
 using GenFxTests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -24,15 +25,15 @@ namespace GenFxTests
         [TestMethod()]
         public void MeanTreeSize_GetResultValue()
         {
-            ComponentConfigurationSet config = new ComponentConfigurationSet
+            ComponentFactoryConfigSet config = new ComponentFactoryConfigSet
             {
-                SelectionOperator = new MockSelectionOperatorConfiguration(),
-                FitnessEvaluator = new MockFitnessEvaluatorConfiguration(),
-                GeneticAlgorithm = new MockGeneticAlgorithmConfiguration(),
+                SelectionOperator = new MockSelectionOperatorFactoryConfig(),
+                FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig(),
+                GeneticAlgorithm = new MockGeneticAlgorithmFactoryConfig(),
                 Entity = new TestTreeEntityConfiguration(),
-                Population = new SimplePopulationConfiguration(),
+                Population = new SimplePopulationFactoryConfig(),
             };
-            config.Statistics.Add(new MeanTreeSizeStatisticConfiguration());
+            config.Statistics.Add(new MeanTreeSizeStatisticFactoryConfig());
 
             IGeneticAlgorithm algorithm = new MockGeneticAlgorithm(config);
             MeanTreeSizeStatistic target = new MeanTreeSizeStatistic(algorithm);
@@ -65,15 +66,15 @@ namespace GenFxTests
         [TestMethod()]
         public void MeanTreeSize_GetResultValue_NullPopulation()
         {
-            ComponentConfigurationSet config = new ComponentConfigurationSet
+            ComponentFactoryConfigSet config = new ComponentFactoryConfigSet
             {
-                SelectionOperator = new MockSelectionOperatorConfiguration(),
-                FitnessEvaluator = new MockFitnessEvaluatorConfiguration(),
-                GeneticAlgorithm = new MockGeneticAlgorithmConfiguration(),
+                SelectionOperator = new MockSelectionOperatorFactoryConfig(),
+                FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig(),
+                GeneticAlgorithm = new MockGeneticAlgorithmFactoryConfig(),
                 Entity = new TestTreeEntityConfiguration(),
-                Population = new SimplePopulationConfiguration(),
+                Population = new SimplePopulationFactoryConfig(),
             };
-            config.Statistics.Add(new MeanTreeSizeStatisticConfiguration());
+            config.Statistics.Add(new MeanTreeSizeStatisticFactoryConfig());
 
             IGeneticAlgorithm algorithm = new MockGeneticAlgorithm(config);
             MeanTreeSizeStatistic target = new MeanTreeSizeStatistic(algorithm);
@@ -98,7 +99,7 @@ namespace GenFxTests
             }
         }
 
-        private class TestTreeEntityConfiguration : TreeEntityConfiguration<TestTreeEntityConfiguration, TestTreeEntity, TreeNode>
+        private class TestTreeEntityConfiguration : TreeEntityFactoryConfig<TestTreeEntityConfiguration, TestTreeEntity, TreeNode>
         {
         }
     }

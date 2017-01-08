@@ -1,3 +1,4 @@
+using GenFx.Contracts;
 using System;
 
 namespace GenFx.ComponentLibrary.SelectionOperators
@@ -6,7 +7,7 @@ namespace GenFx.ComponentLibrary.SelectionOperators
     /// Provides a selection technique whereby all <see cref="IGeneticEntity"/> objects have an equal
     /// probability of being selected regardless of fitness.
     /// </summary>
-    public sealed class UniformSelectionOperator : UniformSelectionOperator<UniformSelectionOperator, UniformSelectionOperatorConfiguration>
+    public sealed class UniformSelectionOperator : UniformSelectionOperator<UniformSelectionOperator, UniformSelectionOperatorFactoryConfig>
     {
         /// <summary>
         /// Initializes a new instance of this class.

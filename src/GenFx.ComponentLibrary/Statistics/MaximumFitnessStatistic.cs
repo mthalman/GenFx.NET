@@ -1,4 +1,5 @@
 using GenFx.ComponentLibrary.Base;
+using GenFx.Contracts;
 using System;
 
 namespace GenFx.ComponentLibrary.Statistics
@@ -7,7 +8,7 @@ namespace GenFx.ComponentLibrary.Statistics
     /// Provides the calculation to determine the highest <see cref="IGeneticEntity.ScaledFitnessValue"/> 
     /// in a <see cref="IPopulation"/>.
     /// </summary>
-    public sealed class MaximumFitnessStatistic : StatisticBase<MaximumFitnessStatistic, MaximumFitnessStatisticConfiguration>
+    public sealed class MaximumFitnessStatistic : StatisticBase<MaximumFitnessStatistic, MaximumFitnessStatisticFactoryConfig>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="MaximumFitnessStatistic"/> class.

@@ -1,3 +1,4 @@
+using GenFx.Contracts;
 using System;
 
 namespace GenFx.ComponentLibrary.Lists
@@ -7,7 +8,7 @@ namespace GenFx.ComponentLibrary.Lists
     /// </summary>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix")]
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1501:AvoidExcessiveInheritance")]
-    public sealed class FixedLengthIntegerListEntity : FixedLengthIntegerListEntity<FixedLengthIntegerListEntity, FixedLengthIntegerListEntityConfiguration>
+    public sealed class FixedLengthIntegerListEntity : FixedLengthIntegerListEntity<FixedLengthIntegerListEntity, FixedLengthIntegerListEntityFactoryConfig>
     {
         /// <summary>
         /// Initializes a new instance of this class.

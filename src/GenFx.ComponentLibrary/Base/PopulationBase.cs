@@ -1,5 +1,4 @@
-using GenFx.ComponentLibrary.ComponentModel;
-using GenFx.ComponentModel;
+using GenFx.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -22,7 +21,7 @@ namespace GenFx.ComponentLibrary.Base
     /// <typeparam name="TConfiguration">Type of the associated configuration class.</typeparam>
     public abstract class PopulationBase<TPopulation, TConfiguration> : GeneticComponentWithAlgorithm<TPopulation, TConfiguration>, IPopulation
         where TPopulation : PopulationBase<TPopulation, TConfiguration>
-        where TConfiguration : PopulationConfigurationBase<TConfiguration, TPopulation>
+        where TConfiguration : PopulationFactoryConfigBase<TConfiguration, TPopulation>
     {
         private ObservableCollection<IGeneticEntity> geneticEntities = new ObservableCollection<IGeneticEntity>();
         private int index;
@@ -236,7 +235,7 @@ namespace GenFx.ComponentLibrary.Base
         /// </summary>
         /// <remarks>
         /// <para>The default implementation of this method creates X <see cref="IGeneticEntity"/> objects
-        /// where X is equal to <see cref="PopulationConfigurationBase{TConfiguration, TPopulation}.PopulationSize"/>.</para>
+        /// where X is equal to <see cref="PopulationFactoryConfigBase{TConfiguration, TPopulation}.PopulationSize"/>.</para>
         /// <para><b>Notes to implementers:</b> This method can be overriden in a derived class
         /// to customize how a <see cref="PopulationBase{TPopulation, TConfiguration}"/> is filled with <see cref="IGeneticEntity"/> objects
         /// or how those <see cref="IGeneticEntity"/> objects are created.</para>

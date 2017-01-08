@@ -1,3 +1,4 @@
+using GenFx.Contracts;
 using System;
 
 namespace GenFx.ComponentLibrary.Lists.BinaryStrings
@@ -10,7 +11,7 @@ namespace GenFx.ComponentLibrary.Lists.BinaryStrings
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix")]
     public abstract class FixedLengthBinaryStringEntity<TEntity, TConfiguration> : BinaryStringEntity<TEntity, TConfiguration>
         where TEntity : FixedLengthBinaryStringEntity<TEntity, TConfiguration>
-        where TConfiguration : FixedLengthBinaryStringEntityConfiguration<TConfiguration, TEntity>
+        where TConfiguration : FixedLengthBinaryStringEntityFactoryConfig<TConfiguration, TEntity>
     {
         /// <summary>
         /// Initializes a new instance of this class.
@@ -40,8 +41,8 @@ namespace GenFx.ComponentLibrary.Lists.BinaryStrings
                 throw new ArgumentNullException(nameof(algorithm));
             }
 
-            FixedLengthBinaryStringEntityConfiguration<TConfiguration, TEntity> config = 
-                (FixedLengthBinaryStringEntityConfiguration<TConfiguration, TEntity>)algorithm.ConfigurationSet.Entity;
+            FixedLengthBinaryStringEntityFactoryConfig<TConfiguration, TEntity> config = 
+                (FixedLengthBinaryStringEntityFactoryConfig<TConfiguration, TEntity>)algorithm.ConfigurationSet.Entity;
             if (config != null)
             {
                 return config.Length;

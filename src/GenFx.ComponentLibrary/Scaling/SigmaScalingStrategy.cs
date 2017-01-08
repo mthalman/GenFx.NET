@@ -1,3 +1,4 @@
+using GenFx.Contracts;
 using System;
 
 namespace GenFx.ComponentLibrary.Scaling
@@ -11,7 +12,7 @@ namespace GenFx.ComponentLibrary.Scaling
     /// The sigma scaling algorithm is based on the one defined by Goldberg (1989).
     /// </para>
     /// </remarks>
-    public sealed class SigmaScalingStrategy : SigmaScalingStrategy<SigmaScalingStrategy, SigmaScalingStrategyConfiguration>
+    public sealed class SigmaScalingStrategy : SigmaScalingStrategy<SigmaScalingStrategy, SigmaScalingStrategyFactoryConfig>
     {
         /// <summary>
         /// Initializes a new instance of this class.

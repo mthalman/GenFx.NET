@@ -1,11 +1,11 @@
 ﻿using System;
 using GenFx;
 using GenFx.ComponentLibrary.SelectionOperators;
-using GenFx.ComponentModel;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using GenFxTests.Mocks;
 using GenFxTests.Helpers;
 using GenFx.ComponentLibrary.Base;
+using GenFx.Contracts;
 
 namespace GenFxTests
 {
@@ -35,7 +35,7 @@ namespace GenFxTests
         [TestMethod]
         public void BoltzmannSelectionOperator_Ctor_MissingSetting()
         {
-            AssertEx.Throws<ArgumentException>(() => new FakeBoltzmannSelectionOperator(new MockGeneticAlgorithm(new ComponentConfigurationSet())));
+            AssertEx.Throws<ArgumentException>(() => new FakeBoltzmannSelectionOperator(new MockGeneticAlgorithm(new ComponentFactoryConfigSet())));
         }
 
         /// <summary>
@@ -94,13 +94,13 @@ namespace GenFxTests
 
         private static MockGeneticAlgorithm GetMockAlgorithm(double initialTemp)
         {
-            MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentConfigurationSet
+            MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentFactoryConfigSet
             {
-                GeneticAlgorithm = new MockGeneticAlgorithmConfiguration(),
-                FitnessEvaluator = new MockFitnessEvaluatorConfiguration(),
-                Entity = new MockEntityConfiguration(),
-                Population = new MockPopulationConfiguration(),
-                SelectionOperator = new FakeBoltzmannSelectionOperatorConfiguration
+                GeneticAlgorithm = new MockGeneticAlgorithmFactoryConfig(),
+                FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig(),
+                Entity = new MockEntityFactoryConfig(),
+                Population = new MockPopulationFactoryConfig(),
+                SelectionOperator = new FakeBoltzmannSelectionOperatorFactoryConfig
                 {
                     SelectionBasedOnFitnessType = FitnessType.Scaled,
                     InitialTemperature = initialTemp
@@ -109,7 +109,7 @@ namespace GenFxTests
             return algorithm;
         }
 
-        private class FakeBoltzmannSelectionOperator : BoltzmannSelectionOperator<FakeBoltzmannSelectionOperator, FakeBoltzmannSelectionOperatorConfiguration>
+        private class FakeBoltzmannSelectionOperator : BoltzmannSelectionOperator<FakeBoltzmannSelectionOperator, FakeBoltzmannSelectionOperatorFactoryConfig>
         {
             public FakeBoltzmannSelectionOperator(IGeneticAlgorithm algorithm)
                 : base(algorithm)
@@ -127,7 +127,7 @@ namespace GenFxTests
             }
         }
 
-        private class FakeBoltzmannSelectionOperatorConfiguration : BoltzmannSelectionOperatorConfiguration<FakeBoltzmannSelectionOperatorConfiguration, FakeBoltzmannSelectionOperator>
+        private class FakeBoltzmannSelectionOperatorFactoryConfig : BoltzmannSelectionOperatorFactoryConfig<FakeBoltzmannSelectionOperatorFactoryConfig, FakeBoltzmannSelectionOperator>
         {
         }
     }

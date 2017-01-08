@@ -1,6 +1,7 @@
 using GenFx;
 using GenFx.ComponentLibrary.Base;
 using GenFx.ComponentLibrary.Lists;
+using GenFx.Contracts;
 using GenFxTests.Helpers;
 using GenFxTests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -80,7 +81,7 @@ namespace GenFxTests
             int size = 3;
             IGeneticAlgorithm algorithm = GetAlgorithm(size);
             IIntegerListEntity entity = new TestIntegerListEntity(algorithm);
-            PrivateObject accessor = new PrivateObject(entity, new PrivateType(typeof(ListEntity<TestIntegerListEntity, TestIntegerListEntityConfiguration, int>)));
+            PrivateObject accessor = new PrivateObject(entity, new PrivateType(typeof(ListEntity<TestIntegerListEntity, TestIntegerListEntityFactoryConfig, int>)));
             Assert.AreEqual(size, entity.Length, "Length not initialized correctly.");
             Assert.AreEqual(size, ((List<int>)accessor.GetField("genes")).Count, "Genes not initialized correctly.");
         }
@@ -106,7 +107,7 @@ namespace GenFxTests
         {
             IGeneticAlgorithm algorithm = GetAlgorithm(3);
             IIntegerListEntity entity = new TestIntegerListEntity(algorithm);
-            PrivateObject accessor = new PrivateObject(entity, new PrivateType(typeof(ListEntity<TestIntegerListEntity, TestIntegerListEntityConfiguration, int>)));
+            PrivateObject accessor = new PrivateObject(entity, new PrivateType(typeof(ListEntity<TestIntegerListEntity, TestIntegerListEntityFactoryConfig, int>)));
             List<int> genes = (List<int>)accessor.GetField("genes");
 
             entity[0] = 1;
@@ -178,7 +179,7 @@ namespace GenFxTests
             entity[2] = 10;
             entity[3] = 127;
 
-            PrivateObject accessor = new PrivateObject(entity, new PrivateType(typeof(GeneticEntity<TestIntegerListEntity, TestIntegerListEntityConfiguration>)));
+            PrivateObject accessor = new PrivateObject(entity, new PrivateType(typeof(GeneticEntity<TestIntegerListEntity, TestIntegerListEntityFactoryConfig>)));
             entity.Age = 3;
             accessor.SetField("rawFitnessValue", 1);
             entity.ScaledFitnessValue = 2;
@@ -188,13 +189,13 @@ namespace GenFxTests
 
         private static IGeneticAlgorithm GetAlgorithm(int entityLength)
         {
-            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentConfigurationSet
+            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentFactoryConfigSet
             {
-                GeneticAlgorithm = new MockGeneticAlgorithmConfiguration(),
-                SelectionOperator = new MockSelectionOperatorConfiguration(),
-                FitnessEvaluator = new MockFitnessEvaluatorConfiguration(),
-                Population = new MockPopulationConfiguration(),
-                Entity = new TestIntegerListEntityConfiguration
+                GeneticAlgorithm = new MockGeneticAlgorithmFactoryConfig(),
+                SelectionOperator = new MockSelectionOperatorFactoryConfig(),
+                FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig(),
+                Population = new MockPopulationFactoryConfig(),
+                Entity = new TestIntegerListEntityFactoryConfig
                 {
                     Length = entityLength
                 }
@@ -202,10 +203,10 @@ namespace GenFxTests
             return algorithm;
         }
 
-        private class TestIntegerListEntity : IntegerListEntity<TestIntegerListEntity, TestIntegerListEntityConfiguration>
+        private class TestIntegerListEntity : IntegerListEntity<TestIntegerListEntity, TestIntegerListEntityFactoryConfig>
         {
             public TestIntegerListEntity(IGeneticAlgorithm algorithm)
-                : base(algorithm, ((TestIntegerListEntityConfiguration)algorithm.ConfigurationSet.Entity).Length)
+                : base(algorithm, ((TestIntegerListEntityFactoryConfig)algorithm.ConfigurationSet.Entity).Length)
             {
 
             }
@@ -219,7 +220,7 @@ namespace GenFxTests
             }
         }
 
-        private class TestIntegerListEntityConfiguration : IntegerListEntityConfiguration<TestIntegerListEntityConfiguration, TestIntegerListEntity>
+        private class TestIntegerListEntityFactoryConfig : IntegerListEntityFactoryConfig<TestIntegerListEntityFactoryConfig, TestIntegerListEntity>
         {
             public int Length { get; set; }
         }

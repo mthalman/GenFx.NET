@@ -1,4 +1,4 @@
-using GenFx.ComponentLibrary.ComponentModel;
+using GenFx.Contracts;
 using System;
 using System.Collections.Generic;
 
@@ -16,7 +16,7 @@ namespace GenFx.ComponentLibrary.Base
     /// </para>
     /// <para>
     /// <b>Notes to implementers:</b> When this base class is derived, the derived class can be used by
-    /// the genetic algorithm by using the <see cref="ComponentConfigurationSet.CrossoverOperator"/> 
+    /// the genetic algorithm by using the <see cref="ComponentFactoryConfigSet.CrossoverOperator"/> 
     /// property.
     /// </para>
     /// </remarks>
@@ -24,7 +24,7 @@ namespace GenFx.ComponentLibrary.Base
     /// <typeparam name="TConfiguration">Type of the associated configuration class.</typeparam>
     public abstract class CrossoverOperatorBase<TCrossover, TConfiguration> : GeneticComponentWithAlgorithm<TCrossover, TConfiguration>, ICrossoverOperator
         where TCrossover : CrossoverOperatorBase<TCrossover, TConfiguration>
-        where TConfiguration : CrossoverOperatorConfigurationBase<TConfiguration, TCrossover>
+        where TConfiguration : CrossoverOperatorFactoryConfigBase<TConfiguration, TCrossover>
     {        
         /// <summary>
         /// Initializes a new instance of this class.
@@ -39,7 +39,7 @@ namespace GenFx.ComponentLibrary.Base
 
         /// <summary>
         /// Attempts to perform a crossover between <paramref name="entity1"/> and <paramref name="entity2"/>
-        /// if a random value is within the range of the <see cref="ICrossoverOperatorConfiguration.CrossoverRate"/>.
+        /// if a random value is within the range of the <see cref="ICrossoverOperatorFactoryConfig.CrossoverRate"/>.
         /// </summary>
         /// <param name="entity1"><see cref="IGeneticEntity"/> to be crossed over with <paramref name="entity2"/>.</param>
         /// <param name="entity2"><see cref="IGeneticEntity"/> to be crossed over with <paramref name="entity1"/>.</param>

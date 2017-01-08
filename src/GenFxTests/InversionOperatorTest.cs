@@ -2,6 +2,7 @@
 using GenFx.ComponentLibrary.Base;
 using GenFx.ComponentLibrary.Lists;
 using GenFx.ComponentLibrary.Lists.BinaryStrings;
+using GenFx.Contracts;
 using GenFxTests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
@@ -27,17 +28,17 @@ namespace GenFxTests
         [TestMethod]
         public void BitInversionOperator_Mutate()
         {
-            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentConfigurationSet
+            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentFactoryConfigSet
             {
-                GeneticAlgorithm = new MockGeneticAlgorithmConfiguration(),
-                SelectionOperator = new MockSelectionOperatorConfiguration(),
-                Population = new MockPopulationConfiguration(),
-                FitnessEvaluator = new MockFitnessEvaluatorConfiguration(),
-                Entity = new FixedLengthBinaryStringEntityConfiguration
+                GeneticAlgorithm = new MockGeneticAlgorithmFactoryConfig(),
+                SelectionOperator = new MockSelectionOperatorFactoryConfig(),
+                Population = new MockPopulationFactoryConfig(),
+                FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig(),
+                Entity = new FixedLengthBinaryStringEntityFactoryConfig
                 {
                     Length = 4
                 },
-                MutationOperator = new InversionOperatorConfiguration
+                MutationOperator = new InversionOperatorFactoryConfig
                 {
                     MutationRate = 1
                 }

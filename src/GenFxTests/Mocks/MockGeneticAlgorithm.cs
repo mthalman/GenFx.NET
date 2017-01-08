@@ -4,12 +4,13 @@ using System.Reflection;
 using System.Text;
 using GenFx;
 using System.Threading.Tasks;
+using GenFx.Contracts;
 
 namespace GenFxTests.Mocks
 {
-    class MockGeneticAlgorithm : GeneticAlgorithm<MockGeneticAlgorithm, MockGeneticAlgorithmConfiguration>
+    class MockGeneticAlgorithm : GeneticAlgorithm<MockGeneticAlgorithm, MockGeneticAlgorithmFactoryConfig>
     {
-        public MockGeneticAlgorithm(ComponentConfigurationSet config)
+        public MockGeneticAlgorithm(ComponentFactoryConfigSet config)
             : base(config)
         {
         }
@@ -21,17 +22,17 @@ namespace GenFxTests.Mocks
 
         public void RaiseGenerationCreatedEvent()
         {
-            typeof(GeneticAlgorithm<MockGeneticAlgorithm, MockGeneticAlgorithmConfiguration>).GetMethod("OnGenerationCreated", BindingFlags.NonPublic | BindingFlags.Instance).Invoke(this, null);
+            typeof(GeneticAlgorithm<MockGeneticAlgorithm, MockGeneticAlgorithmFactoryConfig>).GetMethod("OnGenerationCreated", BindingFlags.NonPublic | BindingFlags.Instance).Invoke(this, null);
         }
     }
 
-    class MockGeneticAlgorithmConfiguration : GeneticAlgorithmConfiguration<MockGeneticAlgorithmConfiguration, MockGeneticAlgorithm>
+    class MockGeneticAlgorithmFactoryConfig : GeneticAlgorithmFactoryConfig<MockGeneticAlgorithmFactoryConfig, MockGeneticAlgorithm>
     {
     }
 
-    class MockGeneticAlgorithm2 : GeneticAlgorithm<MockGeneticAlgorithm2, MockGeneticAlgorithm2Configuration>
+    class MockGeneticAlgorithm2 : GeneticAlgorithm<MockGeneticAlgorithm2, MockGeneticAlgorithm2FactoryConfig>
     {
-        public MockGeneticAlgorithm2(ComponentConfigurationSet config)
+        public MockGeneticAlgorithm2(ComponentFactoryConfigSet config)
             : base(config)
         {
         }
@@ -42,7 +43,7 @@ namespace GenFxTests.Mocks
         }
     }
 
-    class MockGeneticAlgorithm2Configuration : GeneticAlgorithmConfiguration<MockGeneticAlgorithm2Configuration, MockGeneticAlgorithm2>
+    class MockGeneticAlgorithm2FactoryConfig : GeneticAlgorithmFactoryConfig<MockGeneticAlgorithm2FactoryConfig, MockGeneticAlgorithm2>
     {
     }
 }

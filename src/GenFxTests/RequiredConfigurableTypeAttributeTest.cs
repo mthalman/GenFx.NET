@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using GenFx;
 using GenFx.ComponentLibrary.SelectionOperators;
-using GenFx.ComponentModel;
 using GenFxTests.Helpers;
 using GenFx.Validation;
+using GenFx.Contracts;
 
 namespace GenFxTests
 {

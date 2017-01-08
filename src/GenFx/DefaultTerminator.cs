@@ -1,4 +1,4 @@
-﻿using GenFx.ComponentModel;
+﻿using GenFx.Contracts;
 using System.Diagnostics.CodeAnalysis;
 
 namespace GenFx
@@ -14,12 +14,12 @@ namespace GenFx
         /// <param name="algorithm"><see cref="IGeneticAlgorithm"/> using this <see cref="DefaultTerminator"/>.</param>
         /// <param name="configuration">The configuration associated with the terminator.</param>
         [SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "algorithm")]
-        public DefaultTerminator(IGeneticAlgorithm algorithm, DefaultTerminatorConfiguration configuration)
+        public DefaultTerminator(IGeneticAlgorithm algorithm, DefaultTerminatorFactoryConfig configuration)
         {
             this.Configuration = configuration;
         }
 
-        public IComponentConfiguration Configuration
+        public IComponentFactoryConfig Configuration
         {
             get;
             private set;

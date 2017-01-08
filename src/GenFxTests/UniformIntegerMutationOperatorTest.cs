@@ -1,6 +1,7 @@
 ﻿using GenFx;
 using GenFx.ComponentLibrary.Base;
 using GenFx.ComponentLibrary.Lists;
+using GenFx.Contracts;
 using GenFxTests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -19,19 +20,19 @@ namespace GenFxTests
         [TestMethod]
         public void UniformIntegerMutationOperatorTest_Mutate()
         {
-            MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentConfigurationSet
+            MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentFactoryConfigSet
             {
-                GeneticAlgorithm = new MockGeneticAlgorithmConfiguration(),
-                Population = new MockPopulationConfiguration(),
-                SelectionOperator = new MockSelectionOperatorConfiguration(),
-                FitnessEvaluator = new MockFitnessEvaluatorConfiguration(),
-                Entity = new FixedLengthIntegerListEntityConfiguration
+                GeneticAlgorithm = new MockGeneticAlgorithmFactoryConfig(),
+                Population = new MockPopulationFactoryConfig(),
+                SelectionOperator = new MockSelectionOperatorFactoryConfig(),
+                FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig(),
+                Entity = new FixedLengthIntegerListEntityFactoryConfig
                 {
                     Length = 4,
                     MaxElementValue = 2,
                     MinElementValue = 1
                 },
-                MutationOperator = new UniformIntegerMutationOperatorConfiguration
+                MutationOperator = new UniformIntegerMutationOperatorFactoryConfig
                 {
                     MutationRate = 1
                 }

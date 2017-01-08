@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GenFx.Contracts;
+using System;
 using System.Diagnostics.CodeAnalysis;
 
 namespace GenFx.ComponentLibrary.Lists
@@ -23,7 +24,7 @@ namespace GenFx.ComponentLibrary.Lists
     /// </remarks>
     [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Multi")]
     [SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "MultiPoint")]
-    public sealed class MultiPointCrossoverOperator : MultiPointCrossoverOperator<MultiPointCrossoverOperator, MultiPointCrossoverOperatorConfiguration>
+    public sealed class MultiPointCrossoverOperator : MultiPointCrossoverOperator<MultiPointCrossoverOperator, MultiPointCrossoverOperatorFactoryConfig>
     {
         /// <summary>
         /// Initializes a new instance of this class.

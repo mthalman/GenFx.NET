@@ -1,4 +1,5 @@
 using GenFx.ComponentLibrary.Base;
+using GenFx.Contracts;
 using System;
 using System.Collections.Generic;
 
@@ -8,7 +9,7 @@ namespace GenFx.ComponentLibrary.Statistics
     /// Provides the calculation to determine the <see cref="IGeneticEntity"/> object with the highest
     /// <see cref="IGeneticEntity.ScaledFitnessValue"/> found for a <see cref="IPopulation"/> during the entire run of the genetic algorithm.
     /// </summary>
-    public sealed class BestMaximumFitnessEntityStatistic : StatisticBase<BestMaximumFitnessEntityStatistic, BestMaximumFitnessEntityStatisticConfiguration>
+    public sealed class BestMaximumFitnessEntityStatistic : StatisticBase<BestMaximumFitnessEntityStatistic, BestMaximumFitnessEntityStatisticFactoryConfig>
     {
         private Dictionary<int, IGeneticEntity> bestEntities = new Dictionary<int, IGeneticEntity>();
 

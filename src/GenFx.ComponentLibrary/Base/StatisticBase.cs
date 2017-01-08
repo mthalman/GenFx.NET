@@ -1,4 +1,4 @@
-using GenFx.ComponentLibrary.ComponentModel;
+using GenFx.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -17,7 +17,7 @@ namespace GenFx.ComponentLibrary.Base
     /// </para>
     /// <para>
     /// <b>Notes to implementers:</b> When this base class is derived, the derived class can be used by
-    /// the genetic algorithm by adding to the <see cref="ComponentConfigurationSet.Statistics"/> property
+    /// the genetic algorithm by adding to the <see cref="ComponentFactoryConfigSet.Statistics"/> property
     /// the type of that derived class.
     /// </para>
     /// </remarks>
@@ -25,7 +25,7 @@ namespace GenFx.ComponentLibrary.Base
     /// <typeparam name="TConfiguration">Type of the associated configuration class.</typeparam>
     public abstract class StatisticBase<TStatistic, TConfiguration> : GeneticComponentWithAlgorithm<TStatistic, TConfiguration>, IStatistic
         where TStatistic : StatisticBase<TStatistic, TConfiguration>
-        where TConfiguration : StatisticConfigurationBase<TConfiguration, TStatistic>
+        where TConfiguration : StatisticFactoryConfigBase<TConfiguration, TStatistic>
     {
         private Dictionary<int, ObservableCollection<StatisticResult>> populationResults = new Dictionary<int, ObservableCollection<StatisticResult>>();
         

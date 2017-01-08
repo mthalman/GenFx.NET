@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Text;
 using GenFx;
 using GenFx.ComponentLibrary.Base;
+using GenFx.Contracts;
 
 namespace GenFxTests.Mocks
 {
-    class MockSelectionOperator : SelectionOperatorBase<MockSelectionOperator, MockSelectionOperatorConfiguration>
+    class MockSelectionOperator : SelectionOperatorBase<MockSelectionOperator, MockSelectionOperatorFactoryConfig>
     {
         internal int DoSelectCallCount;
 
@@ -23,11 +24,11 @@ namespace GenFxTests.Mocks
         }
     }
 
-    class MockSelectionOperatorConfiguration : SelectionOperatorConfigurationBase<MockSelectionOperatorConfiguration, MockSelectionOperator>
+    class MockSelectionOperatorFactoryConfig : SelectionOperatorFactoryConfigBase<MockSelectionOperatorFactoryConfig, MockSelectionOperator>
     {
     }
 
-    class MockSelectionOperator2 : SelectionOperatorBase<MockSelectionOperator2, MockSelectionOperator2Configuration>
+    class MockSelectionOperator2 : SelectionOperatorBase<MockSelectionOperator2, MockSelectionOperator2FactoryConfig>
     {
         public MockSelectionOperator2(IGeneticAlgorithm algorithm)
             : base(algorithm)
@@ -41,7 +42,7 @@ namespace GenFxTests.Mocks
         }
     }
 
-    class MockSelectionOperator2Configuration : SelectionOperatorConfigurationBase<MockSelectionOperator2Configuration, MockSelectionOperator2>
+    class MockSelectionOperator2FactoryConfig : SelectionOperatorFactoryConfigBase<MockSelectionOperator2FactoryConfig, MockSelectionOperator2>
     {
     }
 }

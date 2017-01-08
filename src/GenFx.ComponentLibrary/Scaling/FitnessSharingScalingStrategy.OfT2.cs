@@ -1,4 +1,5 @@
 using GenFx.ComponentLibrary.Base;
+using GenFx.Contracts;
 using System;
 
 namespace GenFx.ComponentLibrary.Scaling
@@ -12,7 +13,7 @@ namespace GenFx.ComponentLibrary.Scaling
     /// <typeparam name="TConfiguration">Type of the associated configuration class.</typeparam>
     public abstract class FitnessSharingScalingStrategy<TScaling, TConfiguration> : FitnessScalingStrategyBase<TScaling, TConfiguration>
         where TScaling : FitnessSharingScalingStrategy<TScaling, TConfiguration>
-        where TConfiguration : FitnessSharingScalingStrategyConfiguration<TConfiguration, TScaling>
+        where TConfiguration : FitnessSharingScalingStrategyFactoryConfig<TConfiguration, TScaling>
     {
         private double[] fitnessDistances;
         
