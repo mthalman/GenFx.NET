@@ -25,22 +25,22 @@ namespace GenFxTests
         [TestMethod]
         public void StdDevStatistic_GetResultValue()
         {
-            ComponentFactoryConfigSet config = new ComponentFactoryConfigSet
+            MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm
             {
-                GeneticAlgorithm = new MockGeneticAlgorithmFactoryConfig(),
-                Entity = new MockEntityFactoryConfig(),
-                Population = new SimplePopulationFactoryConfig(),
-                SelectionOperator = new MockSelectionOperatorFactoryConfig(),
-                FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig(),
+                GeneticEntitySeed = new MockEntity(),
+                PopulationSeed = new SimplePopulation(),
+                SelectionOperator = new MockSelectionOperator(),
+                FitnessEvaluator = new MockFitnessEvaluator(),
             };
-            config.Statistics.Add(new StandardDeviationFitnessStatisticFactoryConfig());
+            algorithm.Statistics.Add(new StandardDeviationFitnessStatistic());
 
-            MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm(config);
-            SimplePopulation population = new SimplePopulation(algorithm);
-            PrivateObject accessor = new PrivateObject(population, new PrivateType(typeof(PopulationBase<SimplePopulation, SimplePopulationFactoryConfig>)));
+            SimplePopulation population = new SimplePopulation();
+            population.Initialize(algorithm);
+            PrivateObject accessor = new PrivateObject(population, new PrivateType(typeof(PopulationBase)));
             accessor.SetField("scaledStandardDeviation", 1234);
 
-            StandardDeviationFitnessStatistic stat = new StandardDeviationFitnessStatistic(algorithm);
+            StandardDeviationFitnessStatistic stat = new StandardDeviationFitnessStatistic();
+            stat.Initialize(algorithm);
             object result = stat.GetResultValue(population);
 
             Assert.AreEqual(population.ScaledStandardDeviation, result, "Incorrect result returned.");
@@ -52,18 +52,17 @@ namespace GenFxTests
         [TestMethod]
         public void StdDevStatistic_GetResultValue_NullPopulation()
         {
-            ComponentFactoryConfigSet config = new ComponentFactoryConfigSet
+            MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm
             {
-                GeneticAlgorithm = new MockGeneticAlgorithmFactoryConfig(),
-                Entity = new MockEntityFactoryConfig(),
-                Population = new MockPopulationFactoryConfig(),
-                SelectionOperator = new MockSelectionOperatorFactoryConfig(),
-                FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig(),
+                GeneticEntitySeed = new MockEntity(),
+                PopulationSeed = new MockPopulation(),
+                SelectionOperator = new MockSelectionOperator(),
+                FitnessEvaluator = new MockFitnessEvaluator(),
             };
-            config.Statistics.Add(new StandardDeviationFitnessStatisticFactoryConfig());
+            algorithm.Statistics.Add(new StandardDeviationFitnessStatistic());
 
-            MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm(config);
-            StandardDeviationFitnessStatistic stat = new StandardDeviationFitnessStatistic(algorithm);
+            StandardDeviationFitnessStatistic stat = new StandardDeviationFitnessStatistic();
+            stat.Initialize(algorithm);
             AssertEx.Throws<ArgumentNullException>(() => stat.GetResultValue(null));
         }
     }

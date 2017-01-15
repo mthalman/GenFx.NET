@@ -1,9 +1,7 @@
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
-using System.Text;
 
 namespace GenFx
 {
@@ -12,19 +10,6 @@ namespace GenFx
     /// </summary>
     internal static class ConvertUtil
     {
-        /// <summary>
-        /// Returns whether <paramref name="value"/> can be converted to the type indicated by <paramref name="conversionType"/>.
-        /// </summary>
-        /// <param name="value">Value to be converted.</param>
-        /// <param name="conversionType">Type the value should be converted to.</param>
-        /// <returns>true if the value can be converted; otherwise, false.</returns>
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        public static bool CanConvert(object value, Type conversionType)
-        {
-            object convertedValue;
-            return TryConvert(value, conversionType, out convertedValue);
-        }
-
         /// <summary>
         /// Converts <paramref name="value"/> to a type of <typeparamref name="T"/>.
         /// </summary>

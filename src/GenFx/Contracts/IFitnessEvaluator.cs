@@ -5,8 +5,13 @@ namespace GenFx.Contracts
     /// <summary>
     /// Represents a component which evaluates the fitness of entities.
     /// </summary>
-    public interface IFitnessEvaluator : IGeneticComponent
+    public interface IFitnessEvaluator : IGeneticComponentWithAlgorithm
     {
+        /// <summary>
+        /// Gets the mode which specifies whether to treat higher or lower fitness values as being better.
+        /// </summary>
+        FitnessEvaluationMode EvaluationMode { get; }
+
         /// <summary>
         /// Returns the calculated fitness value of the <paramref name="entity"/>.
         /// </summary>

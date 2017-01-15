@@ -132,6 +132,9 @@
   <data name="ErrorMsg_EntityListEmpty" xml:space="preserve">
     <value>Entity list cannot be empty.</value>
   </data>
+  <data name="ErrorMsg_EntityNotInitialized" xml:space="preserve">
+    <value>The entity has not been initialized yet.</value>
+  </data>
   <data name="ErrorMsg_InsertChildNodeWithoutTree" xml:space="preserve">
     <value>Parent node must belong to a tree before child nodes can be added.</value>
   </data>

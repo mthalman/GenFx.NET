@@ -7,6 +7,7 @@ using GenFxTests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace GenFxTests
 {
@@ -18,33 +19,13 @@ namespace GenFxTests
     public class ElitismStrategyTest
     {
         /// <summary>
-        /// Tests that the constructor initializes the state correctly.
-        /// </summary>
-        [TestMethod()]
-        public void ElitismStrategy_Ctor()
-        {
-            double elitistRatio = .1;
-            MockGeneticAlgorithm algorithm = GetGeneticAlgorithm(elitistRatio);
-            ElitismStrategy strategy = new ElitismStrategy(algorithm);
-            Assert.IsInstanceOfType(strategy.Configuration, typeof(ElitismStrategyConfiguration));
-        }
-
-        /// <summary>
         /// Tests that an exception is thrown when a null algorithm is passed.
         /// </summary>
         [TestMethod()]
         public void ElitismStrategy_Ctor_NullAlgorithm()
         {
-            AssertEx.Throws<ArgumentNullException>(() => new ElitismStrategy(null));
-        }
-
-        /// <summary>
-        /// Tests that an exception is thrown when a required setting is missing.
-        /// </summary>
-        [TestMethod()]
-        public void ElitismStrategy_Ctor_MissingSettings()
-        {
-            AssertEx.Throws<ArgumentException>(() => new ElitismStrategy(new MockGeneticAlgorithm(new ComponentFactoryConfigSet())));
+            ElitismStrategy strategy = new ElitismStrategy();
+            AssertEx.Throws<ArgumentNullException>(() => strategy.Initialize(null));
         }
 
         /// <summary>
@@ -53,8 +34,8 @@ namespace GenFxTests
         [TestMethod]
         public void ElitismStrategy_Ctor_InvalidSetting1()
         {
-            ElitismStrategyConfiguration config = new ElitismStrategyConfiguration();
-            AssertEx.Throws<ValidationException>(() => config.ElitistRatio = 2);
+            ElitismStrategy strategy = new ElitismStrategy();
+            AssertEx.Throws<ValidationException>(() => strategy.ElitistRatio = 2);
         }
 
         /// <summary>
@@ -63,26 +44,31 @@ namespace GenFxTests
         [TestMethod]
         public void ElitismStrategy_Ctor_InvalidSetting2()
         {
-            ElitismStrategyConfiguration config = new ElitismStrategyConfiguration();
-            AssertEx.Throws<ValidationException>(() => config.ElitistRatio = -1);
+            ElitismStrategy strategy = new ElitismStrategy();
+            AssertEx.Throws<ValidationException>(() => strategy.ElitistRatio = -1);
         }
 
         /// <summary>
         /// Tests that ApplyElitism works correctly.
         /// </summary>
         [TestMethod()]
-        public void ElitismStrategy_GetElitistGeneticEntities()
+        public async Task ElitismStrategy_GetElitistGeneticEntities()
         {
             double elitismRatio = .1;
             int totalGeneticEntities = 100;
             IGeneticAlgorithm algorithm = GetGeneticAlgorithm(elitismRatio);
-            SimplePopulation population = new SimplePopulation(algorithm);
+            await algorithm.InitializeAsync();
+            SimplePopulation population = new SimplePopulation();
+            population.Initialize(algorithm);
             for (int i = 0; i < totalGeneticEntities; i++)
             {
-                population.Entities.Add(new MockEntity(algorithm));
+                MockEntity entity = new MockEntity();
+                entity.Initialize(algorithm);
+                population.Entities.Add(entity);
             }
             algorithm.Environment.Populations.Add(population);
-            ElitismStrategy strategy = new ElitismStrategy(algorithm);
+            ElitismStrategy strategy = (ElitismStrategy)algorithm.ElitismStrategy;
+            strategy.Initialize(algorithm);
 
             IList<IGeneticEntity> geneticEntities = strategy.GetEliteEntities(population);
 
@@ -95,7 +81,8 @@ namespace GenFxTests
         [TestMethod()]
         public void ElitismStrategy_GetElitistGeneticEntities_NullPopulation()
         {
-            ElitismStrategy strategy = new ElitismStrategy(GetGeneticAlgorithm(.1));
+            ElitismStrategy strategy = new ElitismStrategy();
+            strategy.Initialize(GetGeneticAlgorithm(.1));
             AssertEx.Throws<ArgumentNullException>(() => strategy.GetEliteEntities(null));
         }
 
@@ -106,24 +93,26 @@ namespace GenFxTests
         public void ElitismStrategy_GetElitistGeneticEntities_EmptyPopulation()
         {
             IGeneticAlgorithm algorithm = GetGeneticAlgorithm(.1);
-            ElitismStrategy strategy = new ElitismStrategy(algorithm);
-            AssertEx.Throws<ArgumentException>(() => strategy.GetEliteEntities(new SimplePopulation(algorithm)));
+            ElitismStrategy strategy = new ElitismStrategy();
+            strategy.Initialize(algorithm);
+            SimplePopulation pop = new SimplePopulation();
+            pop.Initialize(algorithm);
+            AssertEx.Throws<ArgumentException>(() => strategy.GetEliteEntities(pop));
         }
 
         private static MockGeneticAlgorithm GetGeneticAlgorithm(double elitismRatio)
         {
-            MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentFactoryConfigSet
+            MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm
             {
-                GeneticAlgorithm = new MockGeneticAlgorithmFactoryConfig(),
-                SelectionOperator = new MockSelectionOperatorFactoryConfig(),
-                FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig(),
-                Entity = new MockEntityFactoryConfig(),
-                Population = new SimplePopulationFactoryConfig(),
-                ElitismStrategy = new ElitismStrategyConfiguration
+                SelectionOperator = new MockSelectionOperator(),
+                FitnessEvaluator = new MockFitnessEvaluator(),
+                GeneticEntitySeed = new MockEntity(),
+                PopulationSeed = new SimplePopulation(),
+                ElitismStrategy = new ElitismStrategy
                 {
                     ElitistRatio = elitismRatio
                 }
-            });
+            };
             return algorithm;
         }
     }

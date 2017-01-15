@@ -97,15 +97,6 @@ namespace GenFx {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Component configuration &apos;{0}&apos; is missing the &apos;{1}&apos; that specifies its corresponding component..
-        /// </summary>
-        internal static string ErrorMsg_Component_MissingComponentAttribute {
-            get {
-                return ResourceManager.GetString("ErrorMsg_Component_MissingComponentAttribute", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Property &apos;{0}&apos; not found on type &apos;{1}&apos;..
         /// </summary>
         internal static string ErrorMsg_ComponentConfigurationPropertyNotFound {
@@ -115,29 +106,40 @@ namespace GenFx {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This object is read-only while an algorithm is executing..
-        /// </summary>
-        internal static string ErrorMsg_ComponentConfigurationSetIsFrozen {
-            get {
-                return ResourceManager.GetString("ErrorMsg_ComponentConfigurationSetIsFrozen", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Configuration type &apos;{0}&apos; is not associated with the current component type of &apos;{1}&apos;..
-        /// </summary>
-        internal static string ErrorMsg_ComponentConfigurationTypeMismatch {
-            get {
-                return ResourceManager.GetString("ErrorMsg_ComponentConfigurationTypeMismatch", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Property &apos;{0}&apos; is defined as a configuration property but has no setter. A setter must be defined on this property..
         /// </summary>
         internal static string ErrorMsg_ConfigurationPropertyHasNoSetter {
             get {
                 return ResourceManager.GetString("ErrorMsg_ConfigurationPropertyHasNoSetter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Property &apos;{0}.{1}&apos; must have both a getter and setter since it is adorned with &apos;{2}&apos;..
+        /// </summary>
+        internal static string ErrorMsg_ConfigurationPropertyNoGetterNoSetter {
+            get {
+                return ResourceManager.GetString("ErrorMsg_ConfigurationPropertyNoGetterNoSetter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The object returned from &apos;{0}.{1}&apos; must not be null..
+        /// </summary>
+        internal static string ErrorMsg_CreateNewComponentNull {
+            get {
+                return ResourceManager.GetString("ErrorMsg_CreateNewComponentNull", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The object returned from &apos;{0}.{1}&apos; is of an incorrect type.
+        ///Expected type: &apos;{0}&apos;
+        ///Actual type: &apos;{2]&apos;.
+        /// </summary>
+        internal static string ErrorMsg_CreateNewComponentWrongType {
+            get {
+                return ResourceManager.GetString("ErrorMsg_CreateNewComponentWrongType", resourceCulture);
             }
         }
         
@@ -192,15 +194,6 @@ namespace GenFx {
         internal static string ErrorMsg_IncorrectDerivedType {
             get {
                 return ResourceManager.GetString("ErrorMsg_IncorrectDerivedType", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; is an invalid type.  It must be of type &apos;{0}&apos; or derived from that type..
-        /// </summary>
-        internal static string ErrorMsg_InvalidComponentConfigurationType {
-            get {
-                return ResourceManager.GetString("ErrorMsg_InvalidComponentConfigurationType", resourceCulture);
             }
         }
         
@@ -292,33 +285,6 @@ namespace GenFx {
         internal static string ErrorMsg_IsValidButCannotConvert {
             get {
                 return ResourceManager.GetString("ErrorMsg_IsValidButCannotConvert", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The GeneticAlgorithm is missing a component configuration named &apos;{0}&apos; required by type &apos;{1}&apos;..
-        /// </summary>
-        internal static string ErrorMsg_MissingComponentConfiguration {
-            get {
-                return ResourceManager.GetString("ErrorMsg_MissingComponentConfiguration", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The &apos;{0}.{1}&apos; property must be set before initializing the algorithm..
-        /// </summary>
-        internal static string ErrorMsg_MissingOperatorType {
-            get {
-                return ResourceManager.GetString("ErrorMsg_MissingOperatorType", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to No corresponding component configuration for &apos;{0}&apos; was configured on the algorithm..
-        /// </summary>
-        internal static string ErrorMsg_NoCorrespondingComponentConfiguration {
-            get {
-                return ResourceManager.GetString("ErrorMsg_NoCorrespondingComponentConfiguration", resourceCulture);
             }
         }
         

@@ -36,19 +36,11 @@ namespace GenFxTests
         {
             int size = 3;
             IGeneticAlgorithm algorithm = GetAlgorithm(size);
-            FixedLengthBinaryStringEntity entity = new FixedLengthBinaryStringEntity(algorithm);
-            PrivateObject accessor = new PrivateObject(entity, new PrivateType(typeof(BinaryStringEntity<FixedLengthBinaryStringEntity, FixedLengthBinaryStringEntityFactoryConfig>)));
+            FixedLengthBinaryStringEntity entity = (FixedLengthBinaryStringEntity)algorithm.GeneticEntitySeed.CreateNewAndInitialize();
+            entity.Initialize(algorithm);
+            PrivateObject accessor = new PrivateObject(entity, new PrivateType(typeof(BinaryStringEntity)));
             Assert.AreEqual(size, entity.Length, "Length not initialized correctly.");
             Assert.AreEqual(size, ((BitArray)accessor.GetField("genes")).Length, "Genes not initialized correctly.");
-        }
-
-        /// <summary>
-        /// Tests that an exception is thrown when required settings are missing.
-        /// </summary>
-        [TestMethod()]
-        public void FixedLengthBinaryStringEntity_Ctor_MissingSetting()
-        {
-            AssertEx.Throws<ArgumentException>(() => new FixedLengthBinaryStringEntity(new MockGeneticAlgorithm(new ComponentFactoryConfigSet())));
         }
 
         /// <summary>
@@ -57,8 +49,8 @@ namespace GenFxTests
         [TestMethod()]
         public void FixedLengthBinaryStringEntity_Ctor_InvalidLength()
         {
-            FixedLengthBinaryStringEntityFactoryConfig config = new FixedLengthBinaryStringEntityFactoryConfig();
-            AssertEx.Throws<ValidationException>(() => config.Length = 0);
+            FixedLengthBinaryStringEntity entity = new FixedLengthBinaryStringEntity();
+            AssertEx.Throws<ValidationException>(() => entity.FixedLength = 0);
         }
 
         private static void CompareGeneticEntities(FixedLengthBinaryStringEntity expectedEntity, FixedLengthBinaryStringEntity actualEntity)
@@ -77,15 +69,16 @@ namespace GenFxTests
         private static FixedLengthBinaryStringEntity GetEntity()
         {
             IGeneticAlgorithm algorithm = GetAlgorithm(4);
-
-            FixedLengthBinaryStringEntity entity = new FixedLengthBinaryStringEntity(algorithm);
+            
+            FixedLengthBinaryStringEntity entity = (FixedLengthBinaryStringEntity)algorithm.GeneticEntitySeed.CreateNewAndInitialize();
+            entity.Initialize(algorithm);
             entity[0] = true;
             entity[1] = true;
             entity[2] = false;
             entity[3] = true;
 
             entity.Age = 3;
-            PrivateObject accessor = new PrivateObject(entity, new PrivateType(typeof(GeneticEntity<FixedLengthBinaryStringEntity, FixedLengthBinaryStringEntityFactoryConfig>)));
+            PrivateObject accessor = new PrivateObject(entity, new PrivateType(typeof(GeneticEntity)));
             accessor.SetField("rawFitnessValue", 1);
             entity.ScaledFitnessValue = 2;
 
@@ -94,17 +87,17 @@ namespace GenFxTests
 
         private static IGeneticAlgorithm GetAlgorithm(int entityLength)
         {
-            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentFactoryConfigSet
+            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm
             {
-                GeneticAlgorithm = new MockGeneticAlgorithmFactoryConfig(),
-                Population = new MockPopulationFactoryConfig(),
-                SelectionOperator = new MockSelectionOperatorFactoryConfig(),
-                FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig(),
-                Entity = new FixedLengthBinaryStringEntityFactoryConfig
+                PopulationSeed = new MockPopulation(),
+                SelectionOperator = new MockSelectionOperator(),
+                FitnessEvaluator = new MockFitnessEvaluator(),
+                GeneticEntitySeed = new FixedLengthBinaryStringEntity
                 {
-                    Length = entityLength
+                    FixedLength = entityLength
                 }
-            });
+            };
+            algorithm.GeneticEntitySeed.Initialize(algorithm);
             return algorithm;
         }
 

@@ -24,18 +24,18 @@ namespace GenFxTests
         public void EntityCollection_SortByFitness()
         {
             ObservableCollection<IGeneticEntity> geneticEntities = new ObservableCollection<IGeneticEntity>();
-            MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentFactoryConfigSet
+            MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm
             {
-                GeneticAlgorithm = new MockGeneticAlgorithmFactoryConfig(),
-                SelectionOperator = new MockSelectionOperatorFactoryConfig(),
-                FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig(),
-                Population = new MockPopulationFactoryConfig(),
-                Entity = new MockEntityFactoryConfig()
-            });
+                SelectionOperator = new MockSelectionOperator(),
+                FitnessEvaluator = new MockFitnessEvaluator(),
+                PopulationSeed = new MockPopulation(),
+                GeneticEntitySeed = new MockEntity()
+            };
 
             for (int i = 9; i >= 0; i--)
             {
-                MockEntity entity = new MockEntity(algorithm);
+                MockEntity entity = new MockEntity();
+                entity.Initialize(algorithm);
                 entity.ScaledFitnessValue = Convert.ToDouble(i);
                 geneticEntities.Add(entity);
             }

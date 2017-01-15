@@ -7,35 +7,13 @@ namespace GenFx.ComponentLibrary.Base
     /// Provides the abstract base class for the fitness scaling strategy of a genetic algorithm.
     /// </summary>
     /// <remarks>
-    /// <para>
     /// Fitness scaling is used to prevent the problem of premature convergence where too much emphasis
     /// is placed on the highly fit genetic entities in early generations causing loss of diversity.  Fitness
     /// scaling is a method of mapping raw fitness values to scaled fitness values so as to more easily
     /// control the diversity of a population.
-    /// </para>
-    /// <para>
-    /// <b>Notes to implementers:</b> When this base class is derived, the derived class can be used by
-    /// the genetic algorithm by using the <see cref="ComponentFactoryConfigSet.FitnessScalingStrategy"/> 
-    /// property.
-    /// </para>
     /// </remarks>
-    /// <typeparam name="TScaling">Type of the deriving fitness scaling strategy class.</typeparam>
-    /// <typeparam name="TConfiguration">Type of the associated configuration class.</typeparam>
-    public abstract class FitnessScalingStrategyBase<TScaling, TConfiguration> : GeneticComponentWithAlgorithm<TScaling, TConfiguration>, IFitnessScalingStrategy
-        where TScaling : FitnessScalingStrategyBase<TScaling, TConfiguration>
-        where TConfiguration : FitnessScalingStrategyFactoryConfigBase<TConfiguration, TScaling>
+    public abstract class FitnessScalingStrategyBase : GeneticComponentWithAlgorithm, IFitnessScalingStrategy
     {
-        /// <summary>
-        /// Initializes a new instance of this class.
-        /// </summary>
-        /// <param name="algorithm"><see cref="IGeneticAlgorithm"/> using this class.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="algorithm"/> is null.</exception>
-        /// <exception cref="ValidationException">The component's configuration is in an invalid state.</exception>
-        protected FitnessScalingStrategyBase(IGeneticAlgorithm algorithm)
-            : base(algorithm, GetConfiguration(algorithm, c => c.FitnessScalingStrategy))
-        {
-        }
-
         /// <summary>
         /// Updates the <see cref="IGeneticEntity.ScaledFitnessValue"/>
         /// of the <see cref="IGeneticEntity"/> objects in the <paramref name="population"/>.

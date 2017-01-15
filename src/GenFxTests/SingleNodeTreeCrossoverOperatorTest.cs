@@ -28,28 +28,30 @@ namespace GenFxTests
         [TestMethod]
         public void SingleNodeTreeCrossoverOperator_Crossover()
         {
-            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentFactoryConfigSet
+            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm
             {
-                GeneticAlgorithm = new MockGeneticAlgorithmFactoryConfig(),
-                FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig(),
-                SelectionOperator = new MockSelectionOperatorFactoryConfig(),
-                Population = new MockPopulationFactoryConfig(),
-                Entity = new FakeTreeEntityFactoryConfig(),
-                CrossoverOperator = new SingleNodeTreeCrossoverOperatorFactoryConfig
+                FitnessEvaluator = new MockFitnessEvaluator(),
+                SelectionOperator = new MockSelectionOperator(),
+                PopulationSeed = new MockPopulation(),
+                GeneticEntitySeed = new FakeTreeEntity(),
+                CrossoverOperator = new SingleNodeTreeCrossoverOperator
                 {
                     CrossoverRate = 1
                 }
-            });
-            SingleNodeTreeCrossoverOperator op = new SingleNodeTreeCrossoverOperator(algorithm);
+            };
+            SingleNodeTreeCrossoverOperator op = new SingleNodeTreeCrossoverOperator();
+            op.Initialize(algorithm);
 
-            FakeTreeEntity entity1 = new FakeTreeEntity(algorithm);
+            FakeTreeEntity entity1 = new FakeTreeEntity();
+            entity1.Initialize(algorithm);
             entity1.SetRootNode(new FakeTreeNode(1));
             entity1.RootNode.ChildNodes.Add(new FakeTreeNode(2));
             entity1.RootNode.ChildNodes.Add(new FakeTreeNode(3));
             entity1.RootNode.ChildNodes[1].ChildNodes.Add(new FakeTreeNode(4));
             entity1.RootNode.ChildNodes.Add(new FakeTreeNode(5));
 
-            FakeTreeEntity entity2 = new FakeTreeEntity(algorithm);
+            FakeTreeEntity entity2 = new FakeTreeEntity();
+            entity2.Initialize(algorithm);
             entity2.SetRootNode(new FakeTreeNode(6));
             entity2.RootNode.ChildNodes.Add(new FakeTreeNode(7));
             entity2.RootNode.ChildNodes[0].ChildNodes.Add(new FakeTreeNode(8));
@@ -100,9 +102,9 @@ namespace GenFxTests
                 }
             }
 
-            public double GetRandomPercentRatio()
+            public double GetDouble()
             {
-                return new RandomNumberService().GetRandomPercentRatio();
+                return new RandomNumberService().GetDouble();
             }
 
             public int GetRandomValue(int minValue, int maxValue)
@@ -129,26 +131,12 @@ namespace GenFxTests
             }
         }
 
-        private class FakeTreeEntity : TreeEntity<FakeTreeEntity, FakeTreeEntityFactoryConfig, FakeTreeNode>
+        private class FakeTreeEntity : TreeEntity<FakeTreeNode>
         {
-            public FakeTreeEntity(IGeneticAlgorithm algorithm)
-                : base(algorithm)
-            {
-            }
-
             public override string Representation
             {
                 get { throw new Exception("The method or operation is not implemented."); }
             }
-
-            protected override void InitializeCore()
-            {
-                throw new Exception("The method or operation is not implemented.");
-            }
-        }
-
-        private class FakeTreeEntityFactoryConfig : TreeEntityFactoryConfig<FakeTreeEntityFactoryConfig, FakeTreeEntity>
-        {
         }
     }
 }

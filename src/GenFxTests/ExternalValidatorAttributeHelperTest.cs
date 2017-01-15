@@ -28,7 +28,7 @@ namespace GenFxTests
         [TestMethod]
         public void ExternalValidatorAttributeHelper_ValidateArgs_NullTargetProperty()
         {
-            AssertEx.Throws<ArgumentException>(() => ExternalValidatorAttributeHelper.ValidateArguments(typeof(FakeComponentFactoryConfig), null));
+            AssertEx.Throws<ArgumentException>(() => ExternalValidatorAttributeHelper.ValidateArguments(typeof(FakeComponent), null));
         }
 
         /// <summary>
@@ -37,7 +37,7 @@ namespace GenFxTests
         [TestMethod]
         public void ExternalValidatorAttributeHelper_ValidateArgs_EmptyTargetProperty()
         {
-            AssertEx.Throws<ArgumentException>(() => ExternalValidatorAttributeHelper.ValidateArguments(typeof(FakeComponentFactoryConfig), String.Empty));
+            AssertEx.Throws<ArgumentException>(() => ExternalValidatorAttributeHelper.ValidateArguments(typeof(FakeComponent), String.Empty));
         }
 
         /// <summary>
@@ -46,7 +46,7 @@ namespace GenFxTests
         [TestMethod]
         public void ExternalValidatorAttributeHelper_ValidateArgs_InvalidTargetType()
         {
-            AssertEx.Throws<ArgumentException>(() => ExternalValidatorAttributeHelper.ValidateArguments(typeof(InvalidComponentFactoryConfig), "Value"));
+            AssertEx.Throws<ArgumentException>(() => ExternalValidatorAttributeHelper.ValidateArguments(typeof(InvalidComponent), "Value"));
         }
 
         /// <summary>
@@ -55,20 +55,14 @@ namespace GenFxTests
         [TestMethod]
         public void ExternalValidatorAttributeHelper_ValidateArgs_InvalidTargetProperty()
         {
-            AssertEx.Throws<ArgumentException>(() => ExternalValidatorAttributeHelper.ValidateArguments(typeof(FakeComponentFactoryConfig), "boo"));
+            AssertEx.Throws<ArgumentException>(() => ExternalValidatorAttributeHelper.ValidateArguments(typeof(FakeComponent), "boo"));
         }
 
-        private class FakeComponent : GeneticComponent<FakeComponent, FakeComponentFactoryConfig>
-        {
-            public FakeComponent(FakeComponentFactoryConfig configuration) : base(configuration)
-            {
-            }
-        }
-
-        private class FakeComponentFactoryConfig : ComponentFactoryConfig<FakeComponentFactoryConfig, FakeComponent>
+        private class FakeComponent : GeneticComponent
         {
             private int value;
-            
+
+            [ConfigurationProperty]
             public int Value
             {
                 get { return this.value; }
@@ -76,7 +70,7 @@ namespace GenFxTests
             }
         }
 
-        private class InvalidComponentFactoryConfig
+        private class InvalidComponent
         {
             private int value;
 

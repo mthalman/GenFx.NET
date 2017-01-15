@@ -6,7 +6,7 @@ namespace GenFx.Contracts
     /// <summary>
     /// Represents the "organism" which undergoes evolution in the algorithm.
     /// </summary>
-    public interface IGeneticEntity : IGeneticComponent
+    public interface IGeneticEntity : IGeneticComponentWithAlgorithm
     {
         /// <summary>
         /// Gets or sets the number of generations this entity has survived without being altered.
@@ -27,12 +27,7 @@ namespace GenFx.Contracts
         /// Gets the string representation of the entity.
         /// </summary>
         string Representation { get; }
-
-        /// <summary>
-        /// Initializes the entity with its default data.
-        /// </summary>
-        void Initialize();
-
+        
         /// <summary>
         /// Returns a clone of this entity.
         /// </summary>

@@ -12,31 +12,15 @@ namespace GenFx.ComponentLibrary.Lists
     /// </summary>
     /// <remarks>
     /// This class does not define the list structure.  It only defines the API.  Classes which derive from
-    /// <see cref="ListEntityBase{TEntity, TConfiguration, TItem}"/> are responsible for the definition of the actual data structure
+    /// <see cref="ListEntityBase{TItem}"/> are responsible for the definition of the actual data structure
     /// representing the list.
     /// </remarks>
-    /// <typeparam name="TEntity">Type of the deriving entity class.</typeparam>
-    /// <typeparam name="TConfiguration">Type of the entity's configuration class.</typeparam>
     /// <typeparam name="TItem">Type of the values contained in the list.</typeparam>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix")]
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1005:AvoidExcessiveParametersOnGenericTypes")]
-    public abstract class ListEntityBase<TEntity, TConfiguration, TItem> : GeneticEntity<TEntity, TConfiguration>, IListEntityBase, IListEntityBase<TItem>
-        where TEntity : ListEntityBase<TEntity, TConfiguration, TItem>
-        where TConfiguration : ListEntityBaseFactoryConfig<TConfiguration, TEntity, TItem>
+    public abstract class ListEntityBase<TItem> : GeneticEntity, IListEntityBase, IListEntityBase<TItem>
     {
         private string representation;
-
-        /// <summary>
-        /// Initializes a new instance of this class.
-        /// </summary>
-        /// <param name="algorithm"><see cref="IGeneticAlgorithm"/> using this class.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="algorithm"/> is null.</exception>
-        /// <exception cref="ValidationException">The component's configuration is in an invalid state.</exception>
-        protected ListEntityBase(IGeneticAlgorithm algorithm)
-            : base(algorithm)
-        {
-        }
-
+        
         /// <summary>
         /// Returns the list string as a <see cref="String"/>.
         /// </summary>

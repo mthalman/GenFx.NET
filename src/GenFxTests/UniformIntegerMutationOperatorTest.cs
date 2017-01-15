@@ -20,27 +20,27 @@ namespace GenFxTests
         [TestMethod]
         public void UniformIntegerMutationOperatorTest_Mutate()
         {
-            MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentFactoryConfigSet
+            MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm
             {
-                GeneticAlgorithm = new MockGeneticAlgorithmFactoryConfig(),
-                Population = new MockPopulationFactoryConfig(),
-                SelectionOperator = new MockSelectionOperatorFactoryConfig(),
-                FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig(),
-                Entity = new FixedLengthIntegerListEntityFactoryConfig
+                PopulationSeed = new MockPopulation(),
+                SelectionOperator = new MockSelectionOperator(),
+                FitnessEvaluator = new MockFitnessEvaluator(),
+                GeneticEntitySeed = new FixedLengthIntegerListEntity
                 {
-                    Length = 4,
+                    FixedLength = 4,
                     MaxElementValue = 2,
                     MinElementValue = 1
                 },
-                MutationOperator = new UniformIntegerMutationOperatorFactoryConfig
+                MutationOperator = new UniformIntegerMutationOperator
                 {
                     MutationRate = 1
                 }
-            });
-            UniformIntegerMutationOperator op = new UniformIntegerMutationOperator(algorithm);
-            FixedLengthIntegerListEntity entity = new FixedLengthIntegerListEntity(algorithm);
+            };
+            UniformIntegerMutationOperator op = new UniformIntegerMutationOperator { MutationRate = 1 };
+            op.Initialize(algorithm);
+            FixedLengthIntegerListEntity entity = new FixedLengthIntegerListEntity { FixedLength = 4, MaxElementValue = 2, MinElementValue = 1 };
             entity.Age = 10;
-            entity.Initialize();
+            entity.Initialize(algorithm);
             entity[0] = 1;
             entity[1] = 1;
             entity[2] = 2;

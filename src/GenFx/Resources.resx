@@ -132,12 +132,6 @@
   <data name="ErrorMsg_InvalidType" xml:space="preserve">
     <value>Type must be derived from '{0}'.</value>
   </data>
-  <data name="ErrorMsg_MissingOperatorType" xml:space="preserve">
-    <value>The '{0}.{1}' property must be set before initializing the algorithm.</value>
-  </data>
-  <data name="ErrorMsg_MissingComponentConfiguration" xml:space="preserve">
-    <value>The GeneticAlgorithm is missing a component configuration named '{0}' required by type '{1}'.</value>
-  </data>
   <data name="ErrorMsg_NoRequiredConfigurableType" xml:space="preserve">
     <value>The '{0}' type requires a {1} of type '{2}' but the algorithm is configured for type '{3}'.</value>
   </data>
@@ -187,23 +181,14 @@
   <data name="ErrorMsg_IsValidButCannotConvert" xml:space="preserve">
     <value>The {0} declared the configuration value as valid but the value could not be converted to the target type '{1}'.  Either fix the implementation of the validator or implement a {2}.</value>
   </data>
-  <data name="ErrorMsg_InvalidComponentConfigurationType" xml:space="preserve">
-    <value>'{0}' is an invalid type.  It must be of type '{0}' or derived from that type.</value>
-  </data>
   <data name="ErrorMsg_ComponentConfigurationPropertyNotFound" xml:space="preserve">
     <value>Property '{0}' not found on type '{1}'.</value>
-  </data>
-  <data name="ErrorMsg_ComponentConfigurationTypeMismatch" xml:space="preserve">
-    <value>Configuration type '{0}' is not associated with the current component type of '{1}'.</value>
   </data>
   <data name="ErrorMsg_IncorrectDerivedType" xml:space="preserve">
     <value>Type must derive from '{0}'.</value>
   </data>
   <data name="ErrorMsg_DuplicateConfiguration" xml:space="preserve">
     <value>Object of type '{0}' already exists in collection.</value>
-  </data>
-  <data name="ErrorMsg_NoCorrespondingComponentConfiguration" xml:space="preserve">
-    <value>No corresponding component configuration for '{0}' was configured on the algorithm.</value>
   </data>
   <data name="ErrorMsg_StringNullOrEmpty" xml:space="preserve">
     <value>String value cannot be null or empty.</value>
@@ -226,9 +211,6 @@
   <data name="ErrorMsg_ErrorCreatingComponent" xml:space="preserve">
     <value>An error occurred while instantiating component associated with configuration '{0}'.\n\nException detail: {1}</value>
   </data>
-  <data name="ErrorMsg_Component_MissingComponentAttribute" xml:space="preserve">
-    <value>Component configuration '{0}' is missing the '{1}' that specifies its corresponding component.</value>
-  </data>
   <data name="ErrorMsg_InvalidEnum" xml:space="preserve">
     <value>The {0} value is invalid.  Valid values are {1}.</value>
   </data>
@@ -241,7 +223,15 @@
   <data name="ErrorMsg_RequiredPropertyNotSet" xml:space="preserve">
     <value>Configuration property '{0}' must be set.</value>
   </data>
-  <data name="ErrorMsg_ComponentConfigurationSetIsFrozen" xml:space="preserve">
-    <value>This object is read-only while an algorithm is executing.</value>
+  <data name="ErrorMsg_ConfigurationPropertyNoGetterNoSetter" xml:space="preserve">
+    <value>Property '{0}.{1}' must have both a getter and setter since it is adorned with '{2}'.</value>
+  </data>
+  <data name="ErrorMsg_CreateNewComponentNull" xml:space="preserve">
+    <value>The object returned from '{0}.{1}' must not be null.</value>
+  </data>
+  <data name="ErrorMsg_CreateNewComponentWrongType" xml:space="preserve">
+    <value>The object returned from '{0}.{1}' is of an incorrect type.
+Expected type: '{0}'
+Actual type: '{2]'</value>
   </data>
 </root>

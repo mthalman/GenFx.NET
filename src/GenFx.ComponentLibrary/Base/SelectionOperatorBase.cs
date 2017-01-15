@@ -1,4 +1,5 @@
 using GenFx.Contracts;
+using GenFx.Validation;
 using System;
 
 namespace GenFx.ComponentLibrary.Base
@@ -7,33 +8,27 @@ namespace GenFx.ComponentLibrary.Base
     /// Provides the abstract base class for a genetic algorithm selection operator.
     /// </summary>
     /// <remarks>
-    /// <para>
     /// Selection in a genetic algorithm involves choosing a entity from a population to be acted
     /// upon by other operators, such as crossover and mutation, and move to the next generation.  The
     /// general strategy is for a entity to have a higher probability of being selected if it has a higher
     /// fitness value.
-    /// </para>
-    /// <para>
-    /// <b>Notes to implementers:</b> When this base class is derived, the derived class can be used by
-    /// the genetic algorithm by using the <see cref="ComponentFactoryConfigSet.SelectionOperator"/> 
-    /// property.
-    /// </para>
     /// </remarks>
-    /// <typeparam name="TSelection">Type of the deriving selection operator class.</typeparam>
-    /// <typeparam name="TConfiguration">Type of the associated configuration class.</typeparam>
-    public abstract class SelectionOperatorBase<TSelection, TConfiguration> : GeneticComponentWithAlgorithm<TSelection, TConfiguration>, ISelectionOperator
-        where TSelection : SelectionOperatorBase<TSelection, TConfiguration>
-        where TConfiguration : SelectionOperatorFactoryConfigBase<TConfiguration, TSelection>
+    public abstract class SelectionOperatorBase : GeneticComponentWithAlgorithm, ISelectionOperator
     {
+        private const FitnessType DefaultSelectionBasedOnFitnessType = FitnessType.Scaled;
+
+        private FitnessType selectionBasedOnFitnessType = DefaultSelectionBasedOnFitnessType;
+
         /// <summary>
-        /// Initializes a new instance of this class.
+        /// Gets or sets the <see cref="FitnessType"/> to base selection of <see cref="IGeneticEntity"/> objects on.
         /// </summary>
-        /// <param name="algorithm"><see cref="IGeneticAlgorithm"/> using this class.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="algorithm"/> is null.</exception>
-        /// <exception cref="ValidationException">The component's configuration is in an invalid state.</exception>
-        protected SelectionOperatorBase(IGeneticAlgorithm algorithm)
-            : base(algorithm, GetConfiguration(algorithm, c => c.SelectionOperator))
+        /// <exception cref="ValidationException">Value is undefined.</exception>
+        [ConfigurationProperty]
+        [FitnessTypeValidator]
+        public FitnessType SelectionBasedOnFitnessType
         {
+            get { return this.selectionBasedOnFitnessType; }
+            set { this.SetProperty(ref this.selectionBasedOnFitnessType, value); }
         }
 
         /// <summary>

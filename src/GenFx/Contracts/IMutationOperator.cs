@@ -11,8 +11,13 @@ namespace GenFx.Contracts
     /// errors in nature.  Mutations are the driver of randomness in a population.
     /// </para>
     /// </remarks>
-    public interface IMutationOperator : IGeneticComponent
+    public interface IMutationOperator : IGeneticComponentWithAlgorithm
     {
+        /// <summary>
+        /// Gets the probability that a data segment within a <see cref="IGeneticEntity"/> will become mutated.
+        /// </summary>
+        double MutationRate { get; set; }
+
         /// <summary>
         /// Attempts to mutate the <paramref name="entity"/>.
         /// </summary>

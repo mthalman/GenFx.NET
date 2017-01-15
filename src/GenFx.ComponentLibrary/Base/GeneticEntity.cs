@@ -1,6 +1,5 @@
 using GenFx.Contracts;
 using System;
-using System.Globalization;
 using System.Threading.Tasks;
 
 namespace GenFx.ComponentLibrary.Base
@@ -9,22 +8,11 @@ namespace GenFx.ComponentLibrary.Base
     /// Provides the abstract base class for genetic entities in a genetic algorithm.
     /// </summary>
     /// <remarks>
-    /// <para>
     /// A genetic entity in a genetic algorithm represents the "organism" which undergoes evolution.  All the genetic
     /// operators such as the <see cref="ISelectionOperator"/>, <see cref="ICrossoverOperator"/>, and
     /// <see cref="IMutationOperator"/> act upon genetic entities to bring about change in the system.
-    /// </para>
-    /// <para>
-    /// <b>Notes to implementers:</b> When this base class is derived, the derived class can be used by
-    /// the genetic algorithm by using the <see cref="ComponentFactoryConfigSet.Entity"/> 
-    /// property.
-    /// </para>
     /// </remarks>
-    /// <typeparam name="TEntity">Type of the deriving entity class.</typeparam>
-    /// <typeparam name="TConfiguration">Type of the associated configuration class.</typeparam>
-    public abstract class GeneticEntity<TEntity, TConfiguration> : GeneticComponentWithAlgorithm<TEntity, TConfiguration>, IGeneticEntity
-        where TEntity : GeneticEntity<TEntity, TConfiguration>
-        where TConfiguration : GeneticEntityFactoryConfig<TConfiguration, TEntity>
+    public abstract class GeneticEntity : GeneticComponentWithAlgorithm, IGeneticEntity
     {
         private double rawFitnessValue;
         private double scaledFitnessValue;
@@ -82,23 +70,7 @@ namespace GenFx.ComponentLibrary.Base
             get { return this.scaledFitnessValue; }
             set { this.scaledFitnessValue = value; }
         }
-
-        /// <summary>
-        /// Initializes a new instance of this class.
-        /// </summary>
-        /// <param name="algorithm"><see cref="IGeneticAlgorithm"/> using this entity.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="algorithm"/> is null.</exception>
-        /// <exception cref="ValidationException">The component's configuration is in an invalid state.</exception>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        protected GeneticEntity(IGeneticAlgorithm algorithm)
-            : base(algorithm, GetConfiguration(algorithm, c => c.Entity))
-        {
-            if (algorithm == null)
-            {
-                throw new ArgumentNullException(nameof(algorithm));
-            }
-        }
-
+        
         /// <summary>
         /// Restores the state of this component.
         /// </summary>
@@ -140,7 +112,7 @@ namespace GenFx.ComponentLibrary.Base
         /// </summary>
         public async Task EvaluateFitnessAsync()
         {
-            this.rawFitnessValue = this.scaledFitnessValue = await this.Algorithm.Operators.FitnessEvaluator.EvaluateFitnessAsync(this);
+            this.rawFitnessValue = this.scaledFitnessValue = await this.Algorithm.FitnessEvaluator.EvaluateFitnessAsync(this);
         }
 
         /// <summary>
@@ -168,27 +140,17 @@ namespace GenFx.ComponentLibrary.Base
         }
 
         /// <summary>
-        /// Initializes the entity with its default data.
+        /// Initializes the component to ensure its readiness for algorithm execution.
         /// </summary>
-        public void Initialize()
+        /// <param name="algorithm">The algorithm that is to use this component.</param>
+        public override void Initialize(IGeneticAlgorithm algorithm)
         {
-            this.InitializeCore();
-        }
-
-        /// <summary>
-        /// Initializes the entity with its default data.
-        /// </summary>
-        /// <remarks>
-        /// <b>Notes to implementers:</b> When this method is overriden, it is suggested that the
-        /// entity be filled with random data to provide diversity in the population.
-        /// </remarks>
-        protected virtual void InitializeCore()
-        {
+            base.Initialize(algorithm);
             this.rawFitnessValue = 0;
             this.scaledFitnessValue = 0;
             this.Age = 0;
         }
-
+        
         /// <summary>
         /// Returns the string representation of the entity.
         /// </summary>
@@ -202,22 +164,18 @@ namespace GenFx.ComponentLibrary.Base
         /// Returns a clone of this entity.
         /// </summary>
         /// <returns>A clone of this entity.</returns>
-        public TEntity Clone()
+        public GeneticEntity Clone()
         {
-            TEntity clone = this.Configuration.CreateComponent(this.Algorithm);
+            GeneticEntity clone = (GeneticEntity)this.CreateNew();
+            clone.Algorithm = this.Algorithm;
             this.CopyTo(clone);
             return clone;
-        }
-
-        IGeneticEntity IGeneticEntity.Clone()
-        {
-            return this.Clone();
         }
 
         /// <summary>
         /// Copies the state from this instance to <paramref name="entity"/>.
         /// </summary>
-        /// <param name="entity"><typeparamref name="TEntity"/> to which state is to be copied.</param>
+        /// <param name="entity"><see cref="GeneticEntity"/> to which state is to be copied.</param>
         /// <remarks>
         /// <para>
         /// The default implementation of this method is to copy the state of this instance
@@ -225,22 +183,29 @@ namespace GenFx.ComponentLibrary.Base
         /// </para>
         /// <para>
         /// <b>Notes to inheritors:</b> When overriding this method, it is necessary to call the
-        /// <b>CopyTo</b> method of the base class.
+        /// <b>CopyTo</b> method of the base class.  It is not necessary to copy the state of properties that
+        /// are adorned with the <see cref="ConfigurationPropertyAttribute"/>; these properties have their state
+        /// automatically copied as part of the base implementation of this method.
         /// </para>
         /// </remarks>
         /// <exception cref="ArgumentNullException"><paramref name="entity"/> is null.</exception>
-        public virtual void CopyTo(TEntity entity)
+        public virtual void CopyTo(GeneticEntity entity)
         {
             if (entity == null)
             {
                 throw new ArgumentNullException(nameof(entity));
             }
 
-            entity.SetAlgorithm(this.Algorithm);
+            this.CopyConfigurationStateTo(entity);
 
             entity.Age = this.Age;
             entity.rawFitnessValue = this.rawFitnessValue;
             entity.scaledFitnessValue = this.scaledFitnessValue;
+        }
+
+        IGeneticEntity IGeneticEntity.Clone()
+        {
+            return this.Clone();
         }
 
         void IGeneticEntity.CopyTo(IGeneticEntity entity)
@@ -250,12 +215,14 @@ namespace GenFx.ComponentLibrary.Base
                 throw new ArgumentNullException(nameof(entity));
             }
 
-            if (!(entity is TEntity))
+            GeneticEntity geneticEntity = entity as GeneticEntity;
+            if (geneticEntity == null)
             {
-                throw new ArgumentException(nameof(entity), String.Format(CultureInfo.CurrentCulture, Resources.ErrorMsg_EntityCopyToTypeMismatch, typeof(TEntity)));
+                throw new ArgumentException(nameof(entity),
+                    StringUtil.GetFormattedString(Resources.ErrorMsg_EntityCopyToTypeMismatch, typeof(GeneticEntity)));
             }
 
-            this.CopyTo((TEntity)entity);
+            this.CopyTo(geneticEntity);
         }
     }
 }

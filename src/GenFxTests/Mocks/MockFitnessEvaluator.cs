@@ -8,15 +8,10 @@ using GenFx.Contracts;
 
 namespace GenFxTests.Mocks
 {
-    class MockFitnessEvaluator : FitnessEvaluatorBase<MockFitnessEvaluator, MockFitnessEvaluatorFactoryConfig>
+    class MockFitnessEvaluator : FitnessEvaluatorBase
     {
         internal int DoEvaluateFitnessCallCount;
-
-        public MockFitnessEvaluator(IGeneticAlgorithm algorithm)
-            : base(algorithm)
-        {
-        }
-
+        
         public override Task<double> EvaluateFitnessAsync(IGeneticEntity entity)
         {
             this.DoEvaluateFitnessCallCount++;
@@ -24,25 +19,12 @@ namespace GenFxTests.Mocks
             return Task.FromResult(Double.Parse(mockEntity.Identifier));
         }
     }
-
-    class MockFitnessEvaluatorFactoryConfig : FitnessEvaluatorFactoryConfigBase<MockFitnessEvaluatorFactoryConfig, MockFitnessEvaluator>
+    
+    class MockFitnessEvaluator2 : FitnessEvaluatorBase
     {
-    }
-
-    class MockFitnessEvaluator2 : FitnessEvaluatorBase<MockFitnessEvaluator2, MockFitnessEvaluator2FactoryConfig>
-    {
-        public MockFitnessEvaluator2(IGeneticAlgorithm algorithm)
-            : base(algorithm)
-        {
-        }
-
         public override Task<double> EvaluateFitnessAsync(IGeneticEntity entity)
         {
             throw new Exception();
         }
-    }
-
-    class MockFitnessEvaluator2FactoryConfig : FitnessEvaluatorFactoryConfigBase<MockFitnessEvaluator2FactoryConfig, MockFitnessEvaluator2>
-    {
     }
 }

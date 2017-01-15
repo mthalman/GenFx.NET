@@ -37,8 +37,8 @@ namespace GenFxTests
         [TestMethod]
         public void RandomUtil_GetRandomRatio()
         {
-            double num1 = RandomNumberService.Instance.GetRandomPercentRatio();
-            double num2 = RandomNumberService.Instance.GetRandomPercentRatio();
+            double num1 = RandomNumberService.Instance.GetDouble();
+            double num2 = RandomNumberService.Instance.GetDouble();
             Assert.AreNotEqual(num1, num2, "Numbers should probably be different.");
         }
     }

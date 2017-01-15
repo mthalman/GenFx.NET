@@ -1,28 +1,37 @@
 using GenFx.ComponentLibrary.Base;
 using GenFx.Contracts;
 using System;
-using System.Diagnostics.CodeAnalysis;
 
 namespace GenFx.ComponentLibrary.Terminators
 {
     /// <summary>
-    /// Represents a genetic algorithm terminator that stops the algorithm once the specified <see cref="TimeDurationTerminatorFactoryConfig.TimeLimit"/>
+    /// Represents a genetic algorithm terminator that stops the algorithm once the specified <see cref="TimeLimit"/>
     /// has been reached.
     /// </summary> 
-    public sealed class TimeDurationTerminator : TerminatorBase<TimeDurationTerminator, TimeDurationTerminatorFactoryConfig>
+    public class TimeDurationTerminator : TerminatorBase
     {
         private DateTime timeStarted;
-        
+        private TimeSpan timeLimit;
+
         /// <summary>
-        /// Initializes a new instance of the <see cref="TimeDurationTerminator"/> class.
+        /// Gets or sets the <see cref="TimeSpan"/> which the algorithm will be allowed to run for.
         /// </summary>
-        /// <param name="algorithm"><see cref="IGeneticAlgorithm"/> using this <see cref="TimeDurationTerminator"/>.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="algorithm"/> is null.</exception>
-        /// <exception cref="ValidationException">The component's configuration is in an invalid state.</exception>
-        [SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-        public TimeDurationTerminator(IGeneticAlgorithm algorithm)
-            : base(algorithm)
+        [ConfigurationProperty]
+        public TimeSpan TimeLimit
         {
+            get { return this.timeLimit; }
+            set { this.SetProperty(ref this.timeLimit, value); }
+        }
+
+        /// <summary>
+        /// Initializes the component to ensure its readiness for algorithm execution.
+        /// </summary>
+        /// <param name="algorithm">The algorithm that is to use this component.</param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+        public override void Initialize(IGeneticAlgorithm algorithm)
+        {
+            base.Initialize(algorithm);
+
             algorithm.AlgorithmStarting += new EventHandler(this.AlgorithmStarting);
         }
 
@@ -43,7 +52,7 @@ namespace GenFx.ComponentLibrary.Terminators
         /// <returns>true if the genetic algorithm is to stop executing; otherwise, false.</returns>
         public override bool IsComplete()
         {
-            return (DateTime.Now >= this.timeStarted + this.Configuration.TimeLimit);
+            return (DateTime.Now >= this.timeStarted + this.TimeLimit);
         }
     }
 }

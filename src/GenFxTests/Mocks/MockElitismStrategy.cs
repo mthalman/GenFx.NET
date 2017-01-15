@@ -7,13 +7,9 @@ using GenFx.Contracts;
 
 namespace GenFxTests.Mocks
 {
-    class MockElitismStrategy : ElitismStrategyBase<MockElitismStrategy, MockElitismStrategyFactoryConfig>
+    class MockElitismStrategy : ElitismStrategyBase
     {
         internal int GetElitistGeneticEntitiesCallCount;
-        public MockElitismStrategy(IGeneticAlgorithm algorithm)
-            : base(algorithm)
-        {
-        }
 
         protected override IList<IGeneticEntity> GetEliteGeneticEntitiesCore(IPopulation population)
         {
@@ -22,24 +18,11 @@ namespace GenFxTests.Mocks
         }
     }
 
-    class MockElitismStrategyFactoryConfig : ElitismStrategyFactoryConfigBase<MockElitismStrategyFactoryConfig, MockElitismStrategy>
+    class MockElitismStrategy2 : ElitismStrategyBase
     {
-    }
-
-    class MockElitismStrategy2 : ElitismStrategyBase<MockElitismStrategy2, MockElitismStrategy2FactoryConfig>
-    {
-        public MockElitismStrategy2(IGeneticAlgorithm algorithm)
-            : base(algorithm)
-        {
-        }
-
         protected override IList<IGeneticEntity> GetEliteGeneticEntitiesCore(IPopulation population)
         {
             throw new Exception();
         }
-    }
-
-    class MockElitismStrategy2FactoryConfig : ElitismStrategyFactoryConfigBase<MockElitismStrategy2FactoryConfig, MockElitismStrategy2>
-    {
     }
 }

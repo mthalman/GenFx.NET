@@ -7,7 +7,7 @@ using GenFx.Contracts;
 
 namespace GenFxTests.Mocks
 {
-    class MockEntity : GeneticEntity<MockEntity, MockEntityFactoryConfig>
+    class MockEntity : GeneticEntity
     {
         internal string Identifier;
 
@@ -15,51 +15,31 @@ namespace GenFxTests.Mocks
         {
             get { return this.Identifier; }
         }
-
-        public MockEntity(IGeneticAlgorithm algorithm)
-            : base(algorithm)
+        
+        public override void Initialize(IGeneticAlgorithm algorithm)
         {
-        }
+            base.Initialize(algorithm);
 
-        protected override void InitializeCore()
-        {
             this.Identifier = "11111";
         }
         
-        public override void CopyTo(MockEntity entity)
+        public override void CopyTo(GeneticEntity entity)
         {
             base.CopyTo(entity);
             ((MockEntity)entity).Identifier = this.Identifier;
         }
     }
-
-    class MockEntityFactoryConfig : GeneticEntityFactoryConfig<MockEntityFactoryConfig, MockEntity>
-    {
-    }
-
-    class MockEntity2 : GeneticEntity<MockEntity2, MockEntity2FactoryConfig>
+    
+    class MockEntity2 : GeneticEntity
     {
         public override string Representation
         {
             get { throw new Exception(); }
         }
-
-        public MockEntity2(IGeneticAlgorithm algorithm)
-            : base(algorithm)
-        {
-        }
-
-        protected override void InitializeCore()
-        {
-        }
         
-        public override void CopyTo(MockEntity2 entity)
+        public override void CopyTo(GeneticEntity entity)
         {
             throw new Exception();
         }
-    }
-
-    class MockEntity2FactoryConfig : GeneticEntityFactoryConfig<MockEntity2FactoryConfig, MockEntity2>
-    {
     }
 }

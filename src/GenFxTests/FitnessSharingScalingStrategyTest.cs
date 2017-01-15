@@ -16,36 +16,13 @@ namespace GenFxTests
     [TestClass()]
     public class FitnessSharingScalingStrategyTest
     {
-
-        /// <summary>
-        /// Tests that the constructor initializes the state correctly.
-        /// </summary>
-        [TestMethod]
-        public void FitnessSharingScalingStrategy_Ctor()
-        {
-            double scalingCurvature = .8;
-            double scalingDistance = 1.5;
-            IGeneticAlgorithm algorithm = GetAlgorithm(scalingCurvature, scalingDistance);
-            FakeFitnessSharingScalingStrategy strategy = new FakeFitnessSharingScalingStrategy(algorithm);
-            Assert.IsInstanceOfType(strategy.Configuration, typeof(FakeFitnessSharingScalingStrategyFactoryConfig));
-        }
-
-        /// <summary>
-        /// Tests that an exception is thrown when required settings are missing.
-        /// </summary>
-        [TestMethod]
-        public void FitnessSharingScalingStrategy_Ctor_MissingSetting()
-        {
-            AssertEx.Throws<ArgumentException>(() => new FakeFitnessSharingScalingStrategy(new MockGeneticAlgorithm(new ComponentFactoryConfigSet())));
-        }
-
         // <summary>
         /// Tests that an exception is thrown when an invalid value is used for the cutoff setting.
         /// </summary>
         [TestMethod]
         public void FitnessSharingScalingStrategy_Ctor_InvalidCutoffSetting()
         {
-            FakeFitnessSharingScalingStrategyFactoryConfig config = new FakeFitnessSharingScalingStrategyFactoryConfig();
+            FakeFitnessSharingScalingStrategy config = new FakeFitnessSharingScalingStrategy();
             config.ScalingCurvature = 3;
             AssertEx.Throws<ValidationException>(() => config.ScalingDistanceCutoff = 0);
         }
@@ -59,8 +36,10 @@ namespace GenFxTests
             double scalingCurvature = .8;
             double scalingDistance = 3;
             IGeneticAlgorithm algorithm = GetAlgorithm(scalingCurvature, scalingDistance);
-            FakeFitnessSharingScalingStrategy strategy = new FakeFitnessSharingScalingStrategy(algorithm);
-            SimplePopulation population = new SimplePopulation(algorithm);
+            FakeFitnessSharingScalingStrategy strategy = (FakeFitnessSharingScalingStrategy)algorithm.FitnessScalingStrategy;
+            strategy.Initialize(algorithm);
+            SimplePopulation population = new SimplePopulation();
+            population.Initialize(algorithm);
             IGeneticEntity entity1 = AddEntity(algorithm, population, 5);
             IGeneticEntity entity2 = AddEntity(algorithm, population, 6);
             IGeneticEntity entity3 = AddEntity(algorithm, population, 9);
@@ -84,7 +63,8 @@ namespace GenFxTests
 
         private static IGeneticEntity AddEntity(IGeneticAlgorithm algorithm, SimplePopulation population, double scaledFitnessValue)
         {
-            IGeneticEntity entity = new MockEntity(algorithm);
+            IGeneticEntity entity = new MockEntity();
+            entity.Initialize(algorithm);
             entity.ScaledFitnessValue = scaledFitnessValue;
             population.Entities.Add(entity);
             return entity;
@@ -92,37 +72,27 @@ namespace GenFxTests
 
         private static IGeneticAlgorithm GetAlgorithm(double scalingCurvature, double scalingDistance)
         {
-            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentFactoryConfigSet
+            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm
             {
-                GeneticAlgorithm = new MockGeneticAlgorithmFactoryConfig(),
-                SelectionOperator = new MockSelectionOperatorFactoryConfig(),
-                FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig(),
-                Entity = new MockEntityFactoryConfig(),
-                Population = new SimplePopulationFactoryConfig(),
-                FitnessScalingStrategy = new FakeFitnessSharingScalingStrategyFactoryConfig
+                SelectionOperator = new MockSelectionOperator(),
+                FitnessEvaluator = new MockFitnessEvaluator(),
+                GeneticEntitySeed = new MockEntity(),
+                PopulationSeed = new SimplePopulation(),
+                FitnessScalingStrategy = new FakeFitnessSharingScalingStrategy
                 {
                     ScalingCurvature = scalingCurvature,
                     ScalingDistanceCutoff = scalingDistance
                 }
-            });
+            };
             return algorithm;
         }
 
-        private class FakeFitnessSharingScalingStrategy : FitnessSharingScalingStrategy<FakeFitnessSharingScalingStrategy, FakeFitnessSharingScalingStrategyFactoryConfig>
+        private class FakeFitnessSharingScalingStrategy : FitnessSharingScalingStrategy
         {
-            public FakeFitnessSharingScalingStrategy(IGeneticAlgorithm algorithm)
-                : base(algorithm)
-            {
-            }
-
             public override double EvaluateFitnessDistance(IGeneticEntity entity1, IGeneticEntity entity2)
             {
                 return Math.Abs(entity1.ScaledFitnessValue - entity2.ScaledFitnessValue);
             }
-        }
-
-        private class FakeFitnessSharingScalingStrategyFactoryConfig : FitnessSharingScalingStrategyFactoryConfig<FakeFitnessSharingScalingStrategyFactoryConfig, FakeFitnessSharingScalingStrategy>
-        {
         }
     }
 }

@@ -25,17 +25,16 @@ namespace GenFxTests
         [TestMethod()]
         public void GetResultValue_NullPopulation()
         {
-            ComponentFactoryConfigSet config = new ComponentFactoryConfigSet
+            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm
             {
-                GeneticAlgorithm = new MockGeneticAlgorithmFactoryConfig(),
-                SelectionOperator = new MockSelectionOperatorFactoryConfig(),
-                Entity = new MockEntityFactoryConfig(),
-                Population = new MockPopulationFactoryConfig(),
-                FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig(),
+                SelectionOperator = new MockSelectionOperator(),
+                GeneticEntitySeed = new MockEntity(),
+                PopulationSeed = new MockPopulation(),
+                FitnessEvaluator = new MockFitnessEvaluator(),
             };
-            config.Statistics.Add(new BestMaximumFitnessEntityStatisticFactoryConfig());
-            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm(config);
-            BestMaximumFitnessEntityStatistic target = new BestMaximumFitnessEntityStatistic(algorithm);
+            algorithm.Statistics.Add(new BestMaximumFitnessEntityStatistic());
+            BestMaximumFitnessEntityStatistic target = new BestMaximumFitnessEntityStatistic();
+            target.Initialize(algorithm);
 
             AssertEx.Throws<ArgumentNullException>(() => target.GetResultValue(null));
         }
@@ -46,32 +45,34 @@ namespace GenFxTests
         [TestMethod()]
         public void GetResultValue()
         {
-            ComponentFactoryConfigSet config = new ComponentFactoryConfigSet
+            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm
             {
-                SelectionOperator = new MockSelectionOperatorFactoryConfig(),
-                FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig(),
-                Entity = new MockEntityFactoryConfig(),
-                Population = new SimplePopulationFactoryConfig(),
-                GeneticAlgorithm = new MockGeneticAlgorithmFactoryConfig(),
+                SelectionOperator = new MockSelectionOperator(),
+                FitnessEvaluator = new MockFitnessEvaluator(),
+                GeneticEntitySeed = new MockEntity(),
+                PopulationSeed = new SimplePopulation(),
             };
-            config.Statistics.Add(new BestMaximumFitnessEntityStatisticFactoryConfig());
+            algorithm.Statistics.Add(new BestMaximumFitnessEntityStatistic());
 
-            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm(config);
-            BestMaximumFitnessEntityStatistic target = new BestMaximumFitnessEntityStatistic(algorithm);
+            BestMaximumFitnessEntityStatistic target = new BestMaximumFitnessEntityStatistic();
+            target.Initialize(algorithm);
 
-            SimplePopulation population1 = new SimplePopulation(algorithm)
+            SimplePopulation population1 = new SimplePopulation()
             {
                 Index = 0
             };
+            population1.Initialize(algorithm);
 
             VerifyGetResultValue(2, target, population1, algorithm, "20");
             VerifyGetResultValue(1, target, population1, algorithm, "20");
             VerifyGetResultValue(3, target, population1, algorithm, "30");
 
-            SimplePopulation population2 = new SimplePopulation(algorithm)
+            SimplePopulation population2 = new SimplePopulation()
             {
                 Index = 1
             };
+            population2.Initialize(algorithm);
+
             VerifyGetResultValue(7, target, population2, algorithm, "70");
             VerifyGetResultValue(1, target, population1, algorithm, "30");
             VerifyGetResultValue(4, target, population2, algorithm, "70");
@@ -81,7 +82,8 @@ namespace GenFxTests
         {
             for (int i = 0; i < 5; i++)
             {
-                MockEntity entity = new MockEntity(algorithm);
+                MockEntity entity = new MockEntity();
+                entity.Initialize(algorithm);
                 entity.ScaledFitnessValue = i * multiplier;
                 entity.Identifier = entity.ScaledFitnessValue.ToString();
                 population.Entities.Add(entity);
@@ -89,7 +91,8 @@ namespace GenFxTests
 
             for (int i = 10; i >= 5; i--)
             {
-                MockEntity entity = new MockEntity(algorithm);
+                MockEntity entity = new MockEntity();
+                entity.Initialize(algorithm);
                 entity.ScaledFitnessValue = i * multiplier;
                 entity.Identifier = entity.ScaledFitnessValue.ToString();
                 population.Entities.Add(entity);

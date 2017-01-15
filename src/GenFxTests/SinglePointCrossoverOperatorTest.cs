@@ -28,32 +28,32 @@ namespace GenFxTests
         [TestMethod]
         public void SinglePointCrossoverOperator_Crossover()
         {
-            MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentFactoryConfigSet
+            MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm
             {
-                GeneticAlgorithm = new MockGeneticAlgorithmFactoryConfig(),
-                Population = new MockPopulationFactoryConfig(),
-                SelectionOperator = new MockSelectionOperatorFactoryConfig(),
-                FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig(),
-                CrossoverOperator = new SinglePointCrossoverOperatorFactoryConfig
+                PopulationSeed = new MockPopulation(),
+                SelectionOperator = new MockSelectionOperator(),
+                FitnessEvaluator = new MockFitnessEvaluator(),
+                CrossoverOperator = new SinglePointCrossoverOperator
                 {
                     CrossoverRate = 1
                 },
-                Entity = new FixedLengthBinaryStringEntityFactoryConfig
+                GeneticEntitySeed = new FixedLengthBinaryStringEntity
                 {
-                    Length = 4
+                    FixedLength = 4
                 }
-            });
+            };
+            algorithm.GeneticEntitySeed.Initialize(algorithm);
 
-            SinglePointCrossoverOperator op = new SinglePointCrossoverOperator(algorithm);
-            FixedLengthBinaryStringEntity entity1 = new FixedLengthBinaryStringEntity(algorithm);
-            entity1.Initialize();
+            SinglePointCrossoverOperator op = new SinglePointCrossoverOperator { CrossoverRate = 1 };
+            op.Initialize(algorithm);
+            FixedLengthBinaryStringEntity entity1 = (FixedLengthBinaryStringEntity)algorithm.GeneticEntitySeed.CreateNewAndInitialize();
             entity1[0] = true;
             entity1[1] = false;
             entity1[2] = false;
             entity1[3] = true;
 
-            FixedLengthBinaryStringEntity entity2 = new FixedLengthBinaryStringEntity(algorithm);
-            entity2.Initialize();
+            FixedLengthBinaryStringEntity entity2 = (FixedLengthBinaryStringEntity)algorithm.GeneticEntitySeed.CreateNewAndInitialize();
+            entity2.Initialize(algorithm);
             entity2[0] = true;
             entity2[1] = true;
             entity2[2] = false;
@@ -90,9 +90,9 @@ namespace GenFxTests
                 return RandomVal;
             }
 
-            public double GetRandomPercentRatio()
+            public double GetDouble()
             {
-                return new RandomNumberService().GetRandomPercentRatio();
+                return new RandomNumberService().GetDouble();
             }
 
             public int GetRandomValue(int minValue, int maxValue)

@@ -29,19 +29,22 @@ namespace GenFxTests
         [TestMethod]
         public void RouletteWheelSampler_GetEntity()
         {
-            MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentFactoryConfigSet
+            MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm
             {
-                GeneticAlgorithm = new MockGeneticAlgorithmFactoryConfig(),
-                Entity = new MockEntityFactoryConfig(),
-                SelectionOperator = new MockSelectionOperatorFactoryConfig(),
-                FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig(),
-                Population = new MockPopulationFactoryConfig()
-            });
+                GeneticEntitySeed = new MockEntity(),
+                SelectionOperator = new MockSelectionOperator(),
+                FitnessEvaluator = new MockFitnessEvaluator(),
+                PopulationSeed = new MockPopulation()
+            };
             List<WheelSlice> slices = new List<WheelSlice>();
-            MockEntity entity1 = new MockEntity(algorithm);
-            MockEntity entity2 = new MockEntity(algorithm);
-            MockEntity entity3 = new MockEntity(algorithm);
-            MockEntity entity4 = new MockEntity(algorithm);
+            MockEntity entity1 = new MockEntity();
+            entity1.Initialize(algorithm);
+            MockEntity entity2 = new MockEntity();
+            entity2.Initialize(algorithm);
+            MockEntity entity3 = new MockEntity();
+            entity3.Initialize(algorithm);
+            MockEntity entity4 = new MockEntity();
+            entity4.Initialize(algorithm);
 
             slices.Add(new WheelSlice(entity1, 4));
             slices.Add(new WheelSlice(entity2, 2));
@@ -90,19 +93,23 @@ namespace GenFxTests
         [TestMethod]
         public void RouletteWheelSampler_GetEntity_NoSizes()
         {
-            MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentFactoryConfigSet
+            MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm
             {
-                GeneticAlgorithm = new MockGeneticAlgorithmFactoryConfig(),
-                Entity = new MockEntityFactoryConfig(),
-                SelectionOperator = new MockSelectionOperatorFactoryConfig(),
-                FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig(),
-                Population = new MockPopulationFactoryConfig()
-            });
+                GeneticEntitySeed = new MockEntity(),
+                SelectionOperator = new MockSelectionOperator(),
+                FitnessEvaluator = new MockFitnessEvaluator(),
+                PopulationSeed = new MockPopulation()
+            };
             List<WheelSlice> slices = new List<WheelSlice>();
-            MockEntity entity1 = new MockEntity(algorithm);
-            MockEntity entity2 = new MockEntity(algorithm);
-            MockEntity entity3 = new MockEntity(algorithm);
-            MockEntity entity4 = new MockEntity(algorithm);
+
+            MockEntity entity1 = new MockEntity();
+            entity1.Initialize(algorithm);
+            MockEntity entity2 = new MockEntity();
+            entity2.Initialize(algorithm);
+            MockEntity entity3 = new MockEntity();
+            entity3.Initialize(algorithm);
+            MockEntity entity4 = new MockEntity();
+            entity4.Initialize(algorithm);
 
             slices.Add(new WheelSlice(entity1, 0));
             slices.Add(new WheelSlice(entity2, 0));
@@ -138,7 +145,7 @@ namespace GenFxTests
                 return RandomValue;
             }
 
-            public double GetRandomPercentRatio()
+            public double GetDouble()
             {
                 return Ratio;
             }

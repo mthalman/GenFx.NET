@@ -79,14 +79,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ComponentFactoryConfigSetTest.cs" />
     <Compile Include="BestMaxEntityTest.cs" />
     <Compile Include="BestMaxStatisticTest.cs" />
     <Compile Include="BestMinStatisticTest.cs" />
     <Compile Include="BinaryStringEntityTest.cs" />
     <Compile Include="BinaryTreeNodeTest.cs" />
     <Compile Include="BoltzmannSelectionOperatorTest.cs" />
-    <Compile Include="ComponentConfigurationTest.cs" />
     <Compile Include="InversionOperatorTest.cs" />
     <Compile Include="Mocks\MockPlugin.cs" />
     <Compile Include="StringExtensions.cs" />
@@ -149,7 +147,6 @@
     <Compile Include="UniformBitMutationOperatorTest.cs" />
     <Compile Include="UniformSelectionOperatorTest.cs" />
     <Compile Include="VariableLengthBinaryStringEntityTest.cs" />
-    <Compile Include="VariableSinglePointListElementCrossoverOperatorTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GenFx.ComponentLibrary\GenFx.ComponentLibrary.csproj">

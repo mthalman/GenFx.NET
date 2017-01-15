@@ -28,25 +28,27 @@ namespace GenFxTests
         [TestMethod]
         public void BitInversionOperator_Mutate()
         {
-            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentFactoryConfigSet
+            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm
             {
-                GeneticAlgorithm = new MockGeneticAlgorithmFactoryConfig(),
-                SelectionOperator = new MockSelectionOperatorFactoryConfig(),
-                Population = new MockPopulationFactoryConfig(),
-                FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig(),
-                Entity = new FixedLengthBinaryStringEntityFactoryConfig
+                SelectionOperator = new MockSelectionOperator(),
+                PopulationSeed = new MockPopulation(),
+                FitnessEvaluator = new MockFitnessEvaluator(),
+                GeneticEntitySeed = new FixedLengthBinaryStringEntity
                 {
-                    Length = 4
+                    FixedLength = 4
                 },
-                MutationOperator = new InversionOperatorFactoryConfig
+                MutationOperator = new InversionOperator
                 {
                     MutationRate = 1
                 }
-            });
-            InversionOperator op = new InversionOperator(algorithm);
-            FixedLengthBinaryStringEntity entity = new FixedLengthBinaryStringEntity(algorithm);
+            };
+            algorithm.GeneticEntitySeed.Initialize(algorithm);
+
+            InversionOperator op = (InversionOperator)algorithm.MutationOperator;
+            op.Initialize(algorithm);
+            FixedLengthBinaryStringEntity entity = (FixedLengthBinaryStringEntity)algorithm.GeneticEntitySeed.CreateNewAndInitialize();
             entity.Age = 10;
-            entity.Initialize();
+            entity.Initialize(algorithm);
             entity[0] = true;
             entity[1] = true;
             entity[2] = false;
@@ -71,7 +73,7 @@ namespace GenFxTests
                 return this.RandomValue++;
             }
 
-            public double GetRandomPercentRatio()
+            public double GetDouble()
             {
                 return 1;
             }

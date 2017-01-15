@@ -8,13 +8,8 @@ using GenFx.Contracts;
 
 namespace GenFxTests.Mocks
 {
-    class MockGeneticAlgorithm : GeneticAlgorithm<MockGeneticAlgorithm, MockGeneticAlgorithmFactoryConfig>
+    class MockGeneticAlgorithm : GeneticAlgorithm
     {
-        public MockGeneticAlgorithm(ComponentFactoryConfigSet config)
-            : base(config)
-        {
-        }
-
         protected override Task CreateNextGenerationAsync(IPopulation population)
         {
             throw new Exception("The method or operation is not implemented.");
@@ -22,28 +17,15 @@ namespace GenFxTests.Mocks
 
         public void RaiseGenerationCreatedEvent()
         {
-            typeof(GeneticAlgorithm<MockGeneticAlgorithm, MockGeneticAlgorithmFactoryConfig>).GetMethod("OnGenerationCreated", BindingFlags.NonPublic | BindingFlags.Instance).Invoke(this, null);
+            typeof(GeneticAlgorithm).GetMethod("OnGenerationCreated", BindingFlags.NonPublic | BindingFlags.Instance).Invoke(this, null);
         }
     }
-
-    class MockGeneticAlgorithmFactoryConfig : GeneticAlgorithmFactoryConfig<MockGeneticAlgorithmFactoryConfig, MockGeneticAlgorithm>
+    
+    class MockGeneticAlgorithm2 : GeneticAlgorithm
     {
-    }
-
-    class MockGeneticAlgorithm2 : GeneticAlgorithm<MockGeneticAlgorithm2, MockGeneticAlgorithm2FactoryConfig>
-    {
-        public MockGeneticAlgorithm2(ComponentFactoryConfigSet config)
-            : base(config)
-        {
-        }
-
         protected override Task CreateNextGenerationAsync(IPopulation population)
         {
             throw new Exception("The method or operation is not implemented.");
         }
-    }
-
-    class MockGeneticAlgorithm2FactoryConfig : GeneticAlgorithmFactoryConfig<MockGeneticAlgorithm2FactoryConfig, MockGeneticAlgorithm2>
-    {
     }
 }

@@ -1,6 +1,5 @@
 using GenFx.ComponentLibrary.Base;
-using GenFx.Contracts;
-using System;
+using GenFx.Validation;
 
 namespace GenFx.ComponentLibrary.Terminators
 {
@@ -8,27 +7,24 @@ namespace GenFx.ComponentLibrary.Terminators
     /// Represents a genetic algorithm terminator that stops the algorithm once a target generation
     /// has been reached.
     /// </summary>
-    public sealed class GenerationalTerminator : TerminatorBase<GenerationalTerminator, GenerationalTerminatorFactoryConfig>
+    public class GenerationalTerminator : TerminatorBase
     {
+        private const int DefaultFinalGeneration = 100;
+
+        private int finalGeneration = DefaultFinalGeneration;
+
         /// <summary>
-        /// Gets the target generation that, when reached, will stop the algorithm.
+        /// Gets or sets the target generation that, when reached, will stop the algorithm.
         /// </summary>
+        /// <exception cref="ValidationException">Value is not valid.</exception>
+        [ConfigurationProperty]
+        [IntegerValidator(MinValue = 1)]
         public int FinalGeneration
         {
-            get { return ((GenerationalTerminatorFactoryConfig)this.Algorithm.ConfigurationSet.Terminator).FinalGeneration; }
+            get { return this.finalGeneration; }
+            set { this.SetProperty(ref this.finalGeneration, value); }
         }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="GenerationalTerminator"/> class.
-        /// </summary>
-        /// <param name="algorithm"><see cref="IGeneticAlgorithm"/> using this <see cref="GenerationalTerminator"/>.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="algorithm"/> is null.</exception>
-        /// <exception cref="ValidationException">The component's configuration is in an invalid state.</exception>
-        public GenerationalTerminator(IGeneticAlgorithm algorithm)
-            : base(algorithm)
-        {
-        }
-
+        
         /// <summary>
         /// Calculates whether the target generation has been reached.
         /// </summary>

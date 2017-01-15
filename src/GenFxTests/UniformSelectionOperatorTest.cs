@@ -29,23 +29,27 @@ namespace GenFxTests
         [TestMethod]
         public void UniformSelectionOperator_Select()
         {
-            MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentFactoryConfigSet
+            MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm
             {
-                GeneticAlgorithm = new MockGeneticAlgorithmFactoryConfig(),
-                FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig(),
-                Entity = new MockEntityFactoryConfig(),
-                Population = new SimplePopulationFactoryConfig(),
-                SelectionOperator = new UniformSelectionOperatorFactoryConfig
+                FitnessEvaluator = new MockFitnessEvaluator(),
+                GeneticEntitySeed = new MockEntity(),
+                PopulationSeed = new SimplePopulation(),
+                SelectionOperator = new UniformSelectionOperator
                 {
                     SelectionBasedOnFitnessType = FitnessType.Scaled
                 }
-            });
-            UniformSelectionOperator op = new UniformSelectionOperator(algorithm);
-            SimplePopulation population = new SimplePopulation(algorithm);
-            population.Entities.Add(new MockEntity(algorithm));
-            population.Entities.Add(new MockEntity(algorithm));
-            population.Entities.Add(new MockEntity(algorithm));
-            population.Entities.Add(new MockEntity(algorithm));
+            };
+            UniformSelectionOperator op = new UniformSelectionOperator();
+            op.Initialize(algorithm);
+            SimplePopulation population = new SimplePopulation();
+            population.Initialize(algorithm);
+
+            for (int i = 0; i < 4; i++)
+            {
+                MockEntity entity = new MockEntity();
+                entity.Initialize(algorithm);
+                population.Entities.Add(entity);
+            }
 
             TestRandomUtil randomUtil = new TestRandomUtil();
             RandomNumberService.Instance = randomUtil;
@@ -76,7 +80,7 @@ namespace GenFxTests
                 return Value;
             }
 
-            public double GetRandomPercentRatio()
+            public double GetDouble()
             {
                 throw new Exception("The method or operation is not implemented.");
             }

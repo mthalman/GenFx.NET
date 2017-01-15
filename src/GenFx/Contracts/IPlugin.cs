@@ -3,7 +3,7 @@
     /// <summary>
     /// Represents a component that provides custom extension functionality.
     /// </summary>
-    public interface IPlugin : IGeneticComponent
+    public interface IPlugin : IGeneticComponentWithAlgorithm
     {
         /// <summary>
         /// Handles the event when a genetic algorithm is about to start execution.

@@ -12,7 +12,7 @@ namespace GenFx.Contracts
     /// invoked with the <see cref="IPopulation"/> of that generation to calculate its data.
     /// </para>
     /// </remarks>
-    public interface IStatistic : IGeneticComponent
+    public interface IStatistic : IGeneticComponentWithAlgorithm
     {
         /// <summary>
         /// Calculates a statistical value from <paramref name="population"/>.

@@ -7,14 +7,9 @@ using GenFx.Contracts;
 
 namespace GenFxTests.Mocks
 {
-    class MockFitnessScalingStrategy : FitnessScalingStrategyBase<MockFitnessScalingStrategy, MockFitnessScalingStrategyFactoryConfig>
+    class MockFitnessScalingStrategy : FitnessScalingStrategyBase
     {
         internal int OnScaleCallCount;
-
-        public MockFitnessScalingStrategy(IGeneticAlgorithm algorithm)
-            : base(algorithm)
-        {
-        }
 
         protected override void UpdateScaledFitnessValues(IPopulation population)
         {
@@ -22,23 +17,10 @@ namespace GenFxTests.Mocks
         }
     }
 
-    class MockFitnessScalingStrategyFactoryConfig : FitnessScalingStrategyFactoryConfigBase<MockFitnessScalingStrategyFactoryConfig, MockFitnessScalingStrategy>
+    class MockFitnessScalingStrategy2 : FitnessScalingStrategyBase
     {
-    }
-
-    class MockFitnessScalingStrategy2 : FitnessScalingStrategyBase<MockFitnessScalingStrategy2, MockFitnessScalingStrategy2FactoryConfig>
-    {
-        public MockFitnessScalingStrategy2(IGeneticAlgorithm algorithm)
-            : base(algorithm)
-        {
-        }
-
         protected override void UpdateScaledFitnessValues(IPopulation population)
         {
         }
-    }
-
-    class MockFitnessScalingStrategy2FactoryConfig : FitnessScalingStrategyFactoryConfigBase<MockFitnessScalingStrategy2FactoryConfig, MockFitnessScalingStrategy2>
-    {
     }
 }

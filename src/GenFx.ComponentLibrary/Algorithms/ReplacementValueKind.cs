@@ -10,13 +10,13 @@ namespace GenFx.ComponentLibrary.Algorithms
     public enum ReplacementValueKind
     {
         /// <summary>
-        /// Indicates the <see cref="SteadyStateGeneticAlgorithmFactoryConfig{TConfiguration, TAlgorithm}.PopulationReplacementValue"/>
+        /// Indicates the <see cref="SteadyStateGeneticAlgorithm.PopulationReplacementValue"/>
         /// property value represents a fixed number of <see cref="IGeneticEntity"/> objects to be replaced.
         /// </summary>
         FixedCount = 0,
 
         /// <summary>
-        /// Indicates the <see cref="SteadyStateGeneticAlgorithmFactoryConfig{TConfiguration, TAlgorithm}.PopulationReplacementValue"/>
+        /// Indicates the <see cref="SteadyStateGeneticAlgorithm.PopulationReplacementValue"/>
         /// property value represents a percentage of the <see cref="IGeneticEntity"/> objects to be replaced.
         /// </summary>
         Percentage

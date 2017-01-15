@@ -76,7 +76,7 @@ namespace GenFx.ComponentLibrary.SelectionOperators
         /// </summary>
         private static IGeneticEntity SpinWheel(List<EntityPercentageRange> percentageRanges)
         {
-            double percentTarget = RandomNumberService.Instance.GetRandomPercentRatio() * 100;
+            double percentTarget = RandomNumberService.Instance.GetDouble() * 100;
 
             foreach (EntityPercentageRange range in percentageRanges)
             {

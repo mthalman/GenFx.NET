@@ -9,21 +9,10 @@ namespace GenFx.ComponentLibrary.Statistics
     /// Provides the calculation to determine the highest <see cref="IGeneticEntity.ScaledFitnessValue"/> 
     /// found for a <see cref="IPopulation"/> during the entire run of the genetic algorithm.
     /// </summary>
-    public sealed class BestMaximumFitnessStatistic : StatisticBase<BestMaximumFitnessStatistic, BestMaximumFitnessStatisticFactoryConfig>
+    public class BestMaximumFitnessStatistic : StatisticBase
     {
         private Dictionary<int, double> bestMaxValues = new Dictionary<int, double>();
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="BestMaximumFitnessStatistic"/> class.
-        /// </summary>
-        /// <param name="algorithm"><see cref="IGeneticAlgorithm"/> using this <see cref="BestMaximumFitnessStatistic"/>.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="algorithm"/> is null.</exception>
-        /// <exception cref="ValidationException">The component's configuration is in an invalid state.</exception>
-        public BestMaximumFitnessStatistic(IGeneticAlgorithm algorithm)
-            : base(algorithm)
-        {
-        }
-
+        
         /// <summary>
         /// Calculates to determine the highest <see cref="IGeneticEntity.ScaledFitnessValue"/> 
         /// found for a <see cref="IPopulation"/> during the entire run of the genetic algorithm.

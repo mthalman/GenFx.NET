@@ -31,12 +31,18 @@ namespace GenFxTests
         public void RankSelectionOperator_Select()
         {
             IGeneticAlgorithm algorithm = GetAlgorithm();
-            RankSelectionOperator op = new RankSelectionOperator(algorithm);
-            SimplePopulation population = new SimplePopulation(algorithm);
-            MockEntity entity1 = new MockEntity(algorithm);
-            MockEntity entity2 = new MockEntity(algorithm);
-            MockEntity entity3 = new MockEntity(algorithm);
-            MockEntity entity4 = new MockEntity(algorithm);
+            RankSelectionOperator op = new RankSelectionOperator();
+            op.Initialize(algorithm);
+            SimplePopulation population = new SimplePopulation();
+            population.Initialize(algorithm);
+            MockEntity entity1 = new MockEntity();
+            entity1.Initialize(algorithm);
+            MockEntity entity2 = new MockEntity();
+            entity2.Initialize(algorithm);
+            MockEntity entity3 = new MockEntity();
+            entity3.Initialize(algorithm);
+            MockEntity entity4 = new MockEntity();
+            entity4.Initialize(algorithm);
             entity1.ScaledFitnessValue = 0;
             entity2.ScaledFitnessValue = 50;
             entity3.ScaledFitnessValue = 23;
@@ -84,19 +90,19 @@ namespace GenFxTests
 
         private static IGeneticAlgorithm GetAlgorithm()
         {
-            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentFactoryConfigSet
+            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm
             {
-                GeneticAlgorithm = new MockGeneticAlgorithmFactoryConfig(),
-                Population = new SimplePopulationFactoryConfig(),
-                Entity = new MockEntityFactoryConfig(),
-                SelectionOperator = new RankSelectionOperatorFactoryConfig
+                PopulationSeed = new SimplePopulation(),
+                GeneticEntitySeed = new MockEntity(),
+                SelectionOperator = new RankSelectionOperator
                 {
                     SelectionBasedOnFitnessType = FitnessType.Scaled
                 },
-                FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig()
-            });
+                FitnessEvaluator = new MockFitnessEvaluator()
+            };
 
-            algorithm.Operators.FitnessEvaluator = new MockFitnessEvaluator(algorithm);
+            algorithm.FitnessEvaluator = new MockFitnessEvaluator();
+            algorithm.FitnessEvaluator.Initialize(algorithm);
 
             return algorithm;
         }
@@ -110,7 +116,7 @@ namespace GenFxTests
                 throw new Exception("The method or operation is not implemented.");
             }
 
-            public double GetRandomPercentRatio()
+            public double GetDouble()
             {
                 return Ratio;
             }

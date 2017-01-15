@@ -2,7 +2,6 @@ using GenFx.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
 
 namespace GenFx.ComponentLibrary.Base
 {
@@ -10,35 +9,23 @@ namespace GenFx.ComponentLibrary.Base
     /// Provides the abstract base class for a statistic.
     /// </summary>
     /// <remarks>
-    /// <para>
     /// The <b>Statistic</b> class represents any computation of data contained by a <see cref="IPopulation"/>.
-    /// After each generation is created, <see cref="StatisticBase{TStatistic, TConfiguration}.GetResultValue(IPopulation)"/> is
+    /// After each generation is created, <see cref="GetResultValue(IPopulation)"/> is
     /// invoked with the <see cref="IPopulation"/> of that generation to calculate its data.
-    /// </para>
-    /// <para>
-    /// <b>Notes to implementers:</b> When this base class is derived, the derived class can be used by
-    /// the genetic algorithm by adding to the <see cref="ComponentFactoryConfigSet.Statistics"/> property
-    /// the type of that derived class.
-    /// </para>
     /// </remarks>
-    /// <typeparam name="TStatistic">Type of the deriving statistic class.</typeparam>
-    /// <typeparam name="TConfiguration">Type of the associated configuration class.</typeparam>
-    public abstract class StatisticBase<TStatistic, TConfiguration> : GeneticComponentWithAlgorithm<TStatistic, TConfiguration>, IStatistic
-        where TStatistic : StatisticBase<TStatistic, TConfiguration>
-        where TConfiguration : StatisticFactoryConfigBase<TConfiguration, TStatistic>
+    public abstract class StatisticBase : GeneticComponentWithAlgorithm, IStatistic
     {
         private Dictionary<int, ObservableCollection<StatisticResult>> populationResults = new Dictionary<int, ObservableCollection<StatisticResult>>();
         
         /// <summary>
-        /// Initializes a new instance of this class.
+        /// Initializes the component to ensure its readiness for algorithm execution.
         /// </summary>
-        /// <param name="algorithm"><see cref="IGeneticAlgorithm"/> using this class.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="algorithm"/> is null.</exception>
-        /// <exception cref="ValidationException">The component's configuration is in an invalid state.</exception>
-        protected StatisticBase(IGeneticAlgorithm algorithm)
-            : base(algorithm, GetConfiguration(algorithm, c => c.Statistics.OfType<TConfiguration>().FirstOrDefault()))
+        /// <param name="algorithm">The algorithm that is to use this component.</param>
+        public override void Initialize(IGeneticAlgorithm algorithm)
         {
-            for (int i = 0; i < this.Algorithm.ConfigurationSet.GeneticAlgorithm.EnvironmentSize; i++)
+            base.Initialize(algorithm);
+
+            for (int i = 0; i < this.Algorithm.EnvironmentSize; i++)
             {
                 this.populationResults.Add(i, new ObservableCollection<StatisticResult>());
             }

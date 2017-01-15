@@ -103,7 +103,7 @@ namespace GenFx.Validation
     public sealed class CustomExternalValidatorAttribute : CustomValidatorBaseAttribute, IExternalConfigurationValidatorAttribute
     {
         private string targetProperty;
-        private Type targetComponentConfigurationType;
+        private Type targetComponentType;
 
         /// <summary>
         /// Gets the name of the property of the component configuration type to be validated.
@@ -116,9 +116,9 @@ namespace GenFx.Validation
         /// <summary>
         /// Gets the <see cref="Type"/> of the component configuration containing the property to be validated.
         /// </summary>
-        public Type TargetComponentConfigurationType
+        public Type TargetComponentType
         {
-            get { return this.targetComponentConfigurationType; }
+            get { return this.targetComponentType; }
         }
 
         /// <summary>
@@ -126,20 +126,20 @@ namespace GenFx.Validation
         /// </summary>
         /// <param name="validatorType"><see cref="Type"/> of validator for the configuration property. This
         /// type must derive from <see cref="Validator"/>.</param>
-        /// <param name="targetComponentConfigurationType"><see cref="Type"/> of the component configuration containing the property to be validated. This type must implement <see cref="IComponentFactoryConfig"/>.</param>
-        /// <param name="targetProperty">Property of the <paramref name="targetComponentConfigurationType"/> to be validated.</param>
+        /// <param name="targetComponentType"><see cref="Type"/> of the component containing the property to be validated. This type must implement <see cref="IGeneticComponent"/>.</param>
+        /// <param name="targetProperty">Property of the <paramref name="targetComponentType"/> to be validated.</param>
         /// <exception cref="ArgumentNullException"><paramref name="validatorType"/> is null.</exception>
-        /// <exception cref="ArgumentNullException"><paramref name="targetComponentConfigurationType"/> is null.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="targetComponentType"/> is null.</exception>
         /// <exception cref="ArgumentException"><paramref name="targetProperty"/> is null or empty.</exception>
-        /// <exception cref="ArgumentException"><paramref name="targetComponentConfigurationType"/> does not implement <see cref="IComponentFactoryConfig"/>.</exception>
-        /// <exception cref="ArgumentException"><paramref name="targetProperty"/> does not exist on <paramref name="targetComponentConfigurationType"/>.</exception>
+        /// <exception cref="ArgumentException"><paramref name="targetComponentType"/> does not implement <see cref="IGeneticComponent"/>.</exception>
+        /// <exception cref="ArgumentException"><paramref name="targetProperty"/> does not exist on <paramref name="targetComponentType"/>.</exception>
         /// <exception cref="ArgumentException"><paramref name="validatorType"/> does not derive from <see cref="Validator"/>.</exception>
-        public CustomExternalValidatorAttribute(Type validatorType, Type targetComponentConfigurationType, string targetProperty)
+        public CustomExternalValidatorAttribute(Type validatorType, Type targetComponentType, string targetProperty)
             : base(validatorType)
         {
-            ExternalValidatorAttributeHelper.ValidateArguments(targetComponentConfigurationType, targetProperty);
+            ExternalValidatorAttributeHelper.ValidateArguments(targetComponentType, targetProperty);
 
-            this.targetComponentConfigurationType = targetComponentConfigurationType;
+            this.targetComponentType = targetComponentType;
             this.targetProperty = targetProperty;
         }
     }

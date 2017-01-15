@@ -57,7 +57,7 @@ namespace GenFx
 
             foreach (KeyValueMap populationState in (KeyValueMapCollection)state[nameof(this.populations)])
             {
-                IPopulation population = (IPopulation)this.algorithm.ConfigurationSet.Population.CreateComponent(this.algorithm);
+                IPopulation population = (IPopulation)this.algorithm.PopulationSeed.CreateNewAndInitialize();
                 population.RestoreState(populationState);
                 this.Populations.Add(population);
             }
@@ -85,9 +85,9 @@ namespace GenFx
         {
             List<Task> generatePopulationTasks = new List<Task>();
 
-            for (int i = 0; i < this.algorithm.ConfigurationSet.GeneticAlgorithm.EnvironmentSize; i++)
+            for (int i = 0; i < this.algorithm.EnvironmentSize; i++)
             {
-                IPopulation newPopulation = (IPopulation)this.algorithm.ConfigurationSet.Population.CreateComponent(this.algorithm);
+                IPopulation newPopulation = (IPopulation)this.algorithm.PopulationSeed.CreateNewAndInitialize();
                 newPopulation.Index = i;
                 this.populations.Add(newPopulation);
 

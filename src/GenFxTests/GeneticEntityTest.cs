@@ -25,7 +25,8 @@ namespace GenFxTests
         [TestMethod]
         public void Entity_Ctor_NullAlgorithm()
         {
-            AssertEx.Throws<ArgumentNullException>(() => new MockEntity(null));
+            MockEntity entity = new MockEntity();
+            AssertEx.Throws<ArgumentNullException>(() => entity.Initialize(null));
         }
 
         /// <summary>
@@ -34,16 +35,17 @@ namespace GenFxTests
         [TestMethod]
         public async Task Entity_EvaluateFitness_Async()
         {
-            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentFactoryConfigSet
+            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm
             {
-                GeneticAlgorithm = new MockGeneticAlgorithmFactoryConfig(),
-                Population = new MockPopulationFactoryConfig(),
-                SelectionOperator = new MockSelectionOperatorFactoryConfig(),
-                Entity = new MockEntityFactoryConfig(),
-                FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig(),
-            });
-            algorithm.Operators.FitnessEvaluator = new MockFitnessEvaluator(algorithm);
-            MockEntity entity = new MockEntity(algorithm);
+                PopulationSeed = new MockPopulation(),
+                SelectionOperator = new MockSelectionOperator(),
+                GeneticEntitySeed = new MockEntity(),
+                FitnessEvaluator = new MockFitnessEvaluator(),
+            };
+            algorithm.FitnessEvaluator = new MockFitnessEvaluator();
+            algorithm.FitnessEvaluator.Initialize(algorithm);
+            MockEntity entity = new MockEntity();
+            entity.Initialize(algorithm);
             entity.Identifier = "123";
             await entity.EvaluateFitnessAsync();
             Assert.AreEqual((double)123, entity.RawFitnessValue, "RawFitnessValue not set correctly.");
@@ -56,16 +58,16 @@ namespace GenFxTests
         [TestMethod]
         public void Entity_GetFitnessValue()
         {
-            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentFactoryConfigSet
+            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm
             {
-                GeneticAlgorithm = new MockGeneticAlgorithmFactoryConfig(),
-                Population = new MockPopulationFactoryConfig(),
-                SelectionOperator = new MockSelectionOperatorFactoryConfig(),
-                FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig(),
-                Entity = new MockEntityFactoryConfig()
-            });
-            MockEntity entity = new MockEntity(algorithm);
-            PrivateObject accessor = new PrivateObject(entity, new PrivateType(typeof(GeneticEntity<MockEntity, MockEntityFactoryConfig>)));
+                PopulationSeed = new MockPopulation(),
+                SelectionOperator = new MockSelectionOperator(),
+                FitnessEvaluator = new MockFitnessEvaluator(),
+                GeneticEntitySeed = new MockEntity()
+            };
+            MockEntity entity = new MockEntity();
+            entity.Initialize(algorithm);
+            PrivateObject accessor = new PrivateObject(entity, new PrivateType(typeof(GeneticEntity)));
             entity.ScaledFitnessValue = 12;
             accessor.SetField("rawFitnessValue", 10);
             Assert.AreEqual(entity.ScaledFitnessValue, entity.GetFitnessValue(FitnessType.Scaled), "Incorrect fitness value returned.");
@@ -78,16 +80,15 @@ namespace GenFxTests
         [TestMethod]
         public void Entity_Initialize()
         {
-            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentFactoryConfigSet
+            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm
             {
-                GeneticAlgorithm = new MockGeneticAlgorithmFactoryConfig(),
-                Population = new MockPopulationFactoryConfig(),
-                SelectionOperator = new MockSelectionOperatorFactoryConfig(),
-                FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig(),
-                Entity = new MockEntityFactoryConfig()
-            });
-            MockEntity entity = new MockEntity(algorithm);
-            entity.Initialize();
+                PopulationSeed = new MockPopulation(),
+                SelectionOperator = new MockSelectionOperator(),
+                FitnessEvaluator = new MockFitnessEvaluator(),
+                GeneticEntitySeed = new MockEntity()
+            };
+            MockEntity entity = new MockEntity();
+            entity.Initialize(algorithm);
             Assert.AreEqual("11111", entity.Identifier, "Entity not initialized correctly.");
         }
 
@@ -97,21 +98,22 @@ namespace GenFxTests
         [TestMethod]
         public void Entity_CopyTo()
         {
-            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentFactoryConfigSet
+            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm
             {
-                GeneticAlgorithm = new MockGeneticAlgorithmFactoryConfig(),
-                Population = new MockPopulationFactoryConfig(),
-                SelectionOperator = new MockSelectionOperatorFactoryConfig(),
-                FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig(),
-                Entity = new MockEntityFactoryConfig()
-            });
-            MockEntity entity = new MockEntity(algorithm);
+                PopulationSeed = new MockPopulation(),
+                SelectionOperator = new MockSelectionOperator(),
+                FitnessEvaluator = new MockFitnessEvaluator(),
+                GeneticEntitySeed = new MockEntity()
+            };
+            MockEntity entity = new MockEntity();
+            entity.Initialize(algorithm);
             entity.Age = 10;
             entity.ScaledFitnessValue = 10;
-            PrivateObject accessor = new PrivateObject(entity, new PrivateType(typeof(GeneticEntity<MockEntity, MockEntityFactoryConfig>)));
+            PrivateObject accessor = new PrivateObject(entity, new PrivateType(typeof(GeneticEntity)));
             accessor.SetField("rawFitnessValue", 123);
 
-            MockEntity newEntity = new MockEntity(algorithm);
+            MockEntity newEntity = new MockEntity();
+            newEntity.Initialize(algorithm);
             entity.CopyTo(newEntity);
 
             Assert.AreEqual(entity.Age, newEntity.Age, "Age value not copied correctly.");
@@ -119,27 +121,12 @@ namespace GenFxTests
             Assert.AreEqual(entity.ScaledFitnessValue, newEntity.ScaledFitnessValue, "RawFitnessValue not copied correctly.");
         }
 
-        private class TestEntity : GeneticEntity<TestEntity, TestEntityFactoryConfig>
+        private class TestEntity : GeneticEntity
         {
-            public TestEntity(IGeneticAlgorithm algorithm)
-                : base(algorithm)
-            {
-            }
-
             public override string Representation
             {
                 get { throw new Exception("The method or operation is not implemented."); }
             }
-
-            protected override void InitializeCore()
-            {
-                throw new Exception("The method or operation is not implemented.");
-            }
-        }
-
-        private class TestEntityFactoryConfig : GeneticEntityFactoryConfig<TestEntityFactoryConfig, TestEntity>
-        {
-            public int Test { get; set; }
         }
     }
 }

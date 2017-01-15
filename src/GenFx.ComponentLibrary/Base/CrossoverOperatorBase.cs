@@ -1,4 +1,5 @@
 using GenFx.Contracts;
+using GenFx.Validation;
 using System;
 using System.Collections.Generic;
 
@@ -8,38 +9,34 @@ namespace GenFx.ComponentLibrary.Base
     /// Provides the abstract base class for a genetic algorithm crossover operator.
     /// </summary>
     /// <remarks>
-    /// <para>
-    /// A <see cref="CrossoverOperatorBase{TCrossover, TConfiguration}"/> acts upon two <see cref="IGeneticEntity"/> objects that were
+    /// A <see cref="CrossoverOperatorBase"/> acts upon two <see cref="IGeneticEntity"/> objects that were
     /// selected by the <see cref="ISelectionOperator"/>.  It exchanges subparts of the two <see cref="IGeneticEntity"/> 
     /// objects to produce one or more new <see cref="IGeneticEntity"/> objects.  It is intended to be similar
     /// to biological recombination between two chromosomes.
-    /// </para>
-    /// <para>
-    /// <b>Notes to implementers:</b> When this base class is derived, the derived class can be used by
-    /// the genetic algorithm by using the <see cref="ComponentFactoryConfigSet.CrossoverOperator"/> 
-    /// property.
-    /// </para>
     /// </remarks>
-    /// <typeparam name="TCrossover">Type of the deriving crossover operator class.</typeparam>
-    /// <typeparam name="TConfiguration">Type of the associated configuration class.</typeparam>
-    public abstract class CrossoverOperatorBase<TCrossover, TConfiguration> : GeneticComponentWithAlgorithm<TCrossover, TConfiguration>, ICrossoverOperator
-        where TCrossover : CrossoverOperatorBase<TCrossover, TConfiguration>
-        where TConfiguration : CrossoverOperatorFactoryConfigBase<TConfiguration, TCrossover>
-    {        
+    public abstract class CrossoverOperatorBase : GeneticComponentWithAlgorithm, ICrossoverOperator
+    {
+        private const double DefaultCrossoverRate = .7;
+        private const double CrossoverRateMin = 0;
+        private const double CrossoverRateMax = 1;
+
+        private double crossoverRate = DefaultCrossoverRate;
+
         /// <summary>
-        /// Initializes a new instance of this class.
+        /// Gets or sets the probability that two <see cref="IGeneticEntity"/> objects will crossover after being selected.
         /// </summary>
-        /// <param name="algorithm"><see cref="IGeneticAlgorithm"/> using this instance.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="algorithm"/> is null.</exception>
-        /// <exception cref="ValidationException">The component's configuration is in an invalid state.</exception>
-        protected CrossoverOperatorBase(IGeneticAlgorithm algorithm)
-            : base(algorithm, GetConfiguration(algorithm, c => c.CrossoverOperator))
+        /// <exception cref="ValidationException">Value is not valid.</exception>
+        [ConfigurationProperty]
+        [DoubleValidator(MinValue = CrossoverRateMin, MaxValue = CrossoverRateMax)]
+        public double CrossoverRate
         {
+            get { return this.crossoverRate; }
+            set { this.SetProperty(ref this.crossoverRate, value); }
         }
 
         /// <summary>
         /// Attempts to perform a crossover between <paramref name="entity1"/> and <paramref name="entity2"/>
-        /// if a random value is within the range of the <see cref="ICrossoverOperatorFactoryConfig.CrossoverRate"/>.
+        /// if a random value is within the range of the <see cref="CrossoverRate"/>.
         /// </summary>
         /// <param name="entity1"><see cref="IGeneticEntity"/> to be crossed over with <paramref name="entity2"/>.</param>
         /// <param name="entity2"><see cref="IGeneticEntity"/> to be crossed over with <paramref name="entity1"/>.</param>
@@ -61,7 +58,7 @@ namespace GenFx.ComponentLibrary.Base
             }
 
             IList<IGeneticEntity> crossoverOffspring;
-            if (RandomNumberService.Instance.GetRandomPercentRatio() <= this.Configuration.CrossoverRate)
+            if (RandomNumberService.Instance.GetDouble() <= this.CrossoverRate)
             {
                 IGeneticEntity clonedEntity1 = entity1.Clone();
                 IGeneticEntity clonedEntity2 = entity2.Clone();

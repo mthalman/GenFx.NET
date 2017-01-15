@@ -9,21 +9,10 @@ namespace GenFx.ComponentLibrary.Statistics
     /// Provides the calculation to determine the <see cref="IGeneticEntity"/> object with the highest
     /// <see cref="IGeneticEntity.ScaledFitnessValue"/> found for a <see cref="IPopulation"/> during the entire run of the genetic algorithm.
     /// </summary>
-    public sealed class BestMaximumFitnessEntityStatistic : StatisticBase<BestMaximumFitnessEntityStatistic, BestMaximumFitnessEntityStatisticFactoryConfig>
+    public class BestMaximumFitnessEntityStatistic : StatisticBase
     {
         private Dictionary<int, IGeneticEntity> bestEntities = new Dictionary<int, IGeneticEntity>();
-
-        /// <summary>
-        /// Initializes a new instance of this class.
-        /// </summary>
-        /// <param name="algorithm"><see cref="IGeneticAlgorithm"/> using this object.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="algorithm"/> is null.</exception>
-        /// <exception cref="ValidationException">The component's configuration is in an invalid state.</exception>
-        public BestMaximumFitnessEntityStatistic(IGeneticAlgorithm algorithm)
-            : base(algorithm)
-        {
-        }
-
+        
         /// <summary>
         /// Calculates to determine the <see cref="IGeneticEntity"/> object with the highest
         /// <see cref="IGeneticEntity.ScaledFitnessValue"/> found for a <see cref="IPopulation"/> during the entire run of the genetic algorithm.
@@ -102,7 +91,7 @@ namespace GenFx.ComponentLibrary.Statistics
             this.bestEntities = new Dictionary<int, IGeneticEntity>();
             foreach (KeyValuePair<int, KeyValueMap> kvp in savedEntitiesByPopulation)
             {
-                IGeneticEntity entity = (IGeneticEntity)this.Algorithm.ConfigurationSet.Entity.CreateComponent(this.Algorithm);
+                IGeneticEntity entity = (IGeneticEntity)this.Algorithm.GeneticEntitySeed.CreateNew();
                 entity.RestoreState(kvp.Value);
                 this.bestEntities.Add(kvp.Key, entity);
             }

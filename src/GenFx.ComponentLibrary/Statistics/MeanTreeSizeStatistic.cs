@@ -11,19 +11,8 @@ namespace GenFx.ComponentLibrary.Statistics
     /// objects contained by a <see cref="IPopulation"/>.
     /// </summary>
     [RequiredEntity(typeof(ITreeEntity))]
-    public sealed class MeanTreeSizeStatistic : StatisticBase<MeanTreeSizeStatistic, MeanTreeSizeStatisticFactoryConfig>
+    public class MeanTreeSizeStatistic : StatisticBase
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="MeanTreeSizeStatistic"/> class.
-        /// </summary>
-        /// <param name="algorithm"><see cref="IGeneticAlgorithm"/> using this <see cref="MeanTreeSizeStatistic"/>.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="algorithm"/> is null.</exception>
-        /// <exception cref="ValidationException">The component's configuration is in an invalid state.</exception>
-        public MeanTreeSizeStatistic(IGeneticAlgorithm algorithm)
-            : base(algorithm)
-        {
-        }
-
         /// <summary>
         /// Calculates the mean of the tree size of <see cref="ITreeEntity"/> objects contained by the
         /// <paramref name="population"/>.
