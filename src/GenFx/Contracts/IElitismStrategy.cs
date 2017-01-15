@@ -11,11 +11,17 @@ namespace GenFx.Contracts
     /// genetic algorithm to have some number of genetic entities remain unchanged and brought forth to the
     /// next generation.  An <see cref="IElitismStrategy"/> acts upon a <see cref="IPopulation"/> to
     /// select those <see cref="IGeneticEntity"/> objects which are determined to be "elite".  The number
-    /// of genetic entities chosen is based on the <see cref="IElitismStrategyFactoryConfig.ElitistRatio"/> property value.
+    /// of genetic entities chosen is based on the <see cref="IElitismStrategy.ElitistRatio"/> property value.
     /// </para>
     /// </remarks>
-    public interface IElitismStrategy : IGeneticComponent
+    public interface IElitismStrategy : IGeneticComponentWithAlgorithm
     {
+        /// <summary>
+        /// Gets the ratio of <see cref="IGeneticEntity"/> objects that will be selected as elite and move on 
+        /// to the next generation unchanged.
+        /// </summary>
+        double ElitistRatio { get; }
+
         /// <summary>
         /// Returns the collection of <see cref="IGeneticEntity"/> objects from the <paramref name="population"/>
         /// that are to be treated as elite and move on to the next generation unchanged.

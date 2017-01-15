@@ -7,41 +7,58 @@ namespace GenFx.ComponentLibrary.Lists
     /// <summary>
     /// Entity made up of a list of integers.
     /// </summary>
-    /// <typeparam name="TEntity">Type of the deriving entity class.</typeparam>
-    /// <typeparam name="TConfiguration">Type of the entity's configuration class.</typeparam>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix")]
-    public abstract class IntegerListEntity<TEntity, TConfiguration> : ListEntity<TEntity, TConfiguration, int>, IIntegerListEntity
-        where TEntity : IntegerListEntity<TEntity, TConfiguration>
-        where TConfiguration : IntegerListEntityFactoryConfig<TConfiguration, TEntity>
+    public abstract class IntegerListEntity : ListEntity<int>, IIntegerListEntity
     {
+        private const int DefaultMinElementValue = 0;
+        private const int DefaultMaxElementValue = Int32.MaxValue;
+
+        private int minElementValue = DefaultMinElementValue;
+        private int maxElementValue = DefaultMaxElementValue;
+        private bool useUniqueElementValues;
+        
         /// <summary>
-        /// Initializes a new instance of this class.
+        /// Gets or sets the minimum value an integer in the list can have.
         /// </summary>
-        /// <param name="algorithm"><see cref="IGeneticAlgorithm"/> using this object.</param>
-        /// <param name="initialLength">Initial length of the list.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="algorithm"/> is null.</exception>
-        /// <exception cref="ValidationException">The component's configuration is in an invalid state.</exception>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="initialLength"/> is less than zero.</exception>
-        protected IntegerListEntity(IGeneticAlgorithm algorithm, int initialLength)
-            : base(algorithm, initialLength)
+        [ConfigurationProperty]
+        public int MinElementValue
         {
+            get { return this.minElementValue; }
+            set { this.SetProperty(ref this.minElementValue, value); }
         }
 
         /// <summary>
-        /// Initializes the list with random values.
+        /// Gets or sets the maximum value an integer in the list can have.
         /// </summary>
-        /// <remarks>
-        /// <b>Notes to inheritors:</b> When overriding this method, you must either call the <b>InitializeCore</b>
-        /// method of the base class or call <see cref="ListEntityBase{TEntity, TConfiguration, TItem}.UpdateStringRepresentation"/>
-        /// after the list has been initialized.  This is necessary in order to sync the 
-        /// string representation of this object with the initialized data.
-        /// </remarks>
-        protected override void InitializeCore()
+        [ConfigurationProperty]
+        public int MaxElementValue
         {
-            if (this.Configuration.UseUniqueElementValues)
+            get { return this.maxElementValue; }
+            set { this.SetProperty(ref this.maxElementValue, value); }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether each of the element values should be unique for the entity.
+        /// </summary>
+        [ConfigurationProperty]
+        public bool UseUniqueElementValues
+        {
+            get { return this.useUniqueElementValues; }
+            set { this.SetProperty(ref this.useUniqueElementValues, value); }
+        }
+
+        /// <summary>
+        /// Initializes the component to ensure its readiness for algorithm execution.
+        /// </summary>
+        /// <param name="algorithm">The algorithm that is to use this component.</param>
+        public override void Initialize(IGeneticAlgorithm algorithm)
+        {
+            base.Initialize(algorithm);
+
+            if (this.UseUniqueElementValues)
             {
                 List<int> availableInts = new List<int>();
-                for (int i = this.Configuration.MinElementValue; i <= this.Configuration.MaxElementValue; i++)
+                for (int i = this.MinElementValue; i <= this.MaxElementValue; i++)
                 {
                     availableInts.Add(i);
                 }
@@ -68,7 +85,10 @@ namespace GenFx.ComponentLibrary.Lists
             {
                 for (int i = 0; i < this.Length; i++)
                 {
-                    this[i] = RandomNumberService.Instance.GetRandomValue(this.Configuration.MinElementValue, this.Configuration.MaxElementValue + 1);
+                    // Normally, we would get a random value like this GetRandomValue(MinElementValue, MaxElementValue + 1),
+                    // but if MaxElementValue is equal to Int32.Max, then adding 1 to it would cause an overlflow, so
+                    // we shift the range down by 1 to get the random value and then add 1 to it.
+                    this[i] = RandomNumberService.Instance.GetRandomValue(this.MinElementValue - 1, this.MaxElementValue) + 1;
                 }
             }
 

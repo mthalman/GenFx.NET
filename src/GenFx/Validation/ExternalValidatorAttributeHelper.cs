@@ -12,17 +12,17 @@ namespace GenFx.Validation
         /// <summary>
         /// Validates that the arguments are correctly set.
         /// </summary>
-        /// <param name="targetComponentConfigurationType"><see cref="Type"/> of the component configuration containing the property to be validated.</param>
-        /// <param name="targetProperty">Property of the <paramref name="targetComponentConfigurationType"/> to be validated.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="targetComponentConfigurationType"/> is null.</exception>
+        /// <param name="targetComponentType"><see cref="Type"/> of the component configuration containing the property to be validated.</param>
+        /// <param name="targetProperty">Property of the <paramref name="targetComponentType"/> to be validated.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="targetComponentType"/> is null.</exception>
         /// <exception cref="ArgumentException"><paramref name="targetProperty"/> is null or empty.</exception>
-        /// <exception cref="ArgumentException"><paramref name="targetComponentConfigurationType"/> does not implement <see cref="IComponentFactoryConfig"/>.</exception>
-        /// <exception cref="ArgumentException"><paramref name="targetProperty"/> does not exist on <paramref name="targetComponentConfigurationType"/>.</exception>
-        public static void ValidateArguments(Type targetComponentConfigurationType, string targetProperty)
+        /// <exception cref="ArgumentException"><paramref name="targetComponentType"/> does not implement <see cref="IGeneticComponent"/>.</exception>
+        /// <exception cref="ArgumentException"><paramref name="targetProperty"/> does not exist on <paramref name="targetComponentType"/>.</exception>
+        public static void ValidateArguments(Type targetComponentType, string targetProperty)
         {
-            if (targetComponentConfigurationType == null)
+            if (targetComponentType == null)
             {
-                throw new ArgumentNullException(nameof(targetComponentConfigurationType));
+                throw new ArgumentNullException(nameof(targetComponentType));
             }
 
             if (String.IsNullOrEmpty(targetProperty))
@@ -30,16 +30,16 @@ namespace GenFx.Validation
                 throw new ArgumentException(Resources.ErrorMsg_StringNullOrEmpty, nameof(targetProperty));
             }
 
-            if (!typeof(IComponentFactoryConfig).IsAssignableFrom(targetComponentConfigurationType))
+            if (!typeof(IGeneticComponent).IsAssignableFrom(targetComponentType))
             {
                 throw new ArgumentException(StringUtil.GetFormattedString(
-                    Resources.ErrorMsg_ExternalValidator_InvalidTargetType, targetComponentConfigurationType.FullName, typeof(IComponentFactoryConfig).FullName), nameof(targetComponentConfigurationType));
+                    Resources.ErrorMsg_ExternalValidator_InvalidTargetType, targetComponentType.FullName, typeof(IGeneticComponent).FullName), nameof(targetComponentType));
             }
 
-            if (ExternalValidatorAttributeHelper.GetTargetPropertyInfo(targetComponentConfigurationType, targetProperty) == null)
+            if (ExternalValidatorAttributeHelper.GetTargetPropertyInfo(targetComponentType, targetProperty) == null)
             {
                 throw new ArgumentException(StringUtil.GetFormattedString(
-                    Resources.ErrorMsg_ExternalValidator_PropertyDoesNotExist, targetProperty, targetComponentConfigurationType.FullName), nameof(targetProperty));
+                    Resources.ErrorMsg_ExternalValidator_PropertyDoesNotExist, targetProperty, targetComponentType.FullName), nameof(targetProperty));
             }
         }
 

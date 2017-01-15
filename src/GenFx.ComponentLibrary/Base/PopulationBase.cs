@@ -1,4 +1,5 @@
 using GenFx.Contracts;
+using GenFx.Validation;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -16,13 +17,10 @@ namespace GenFx.ComponentLibrary.Base
     /// Populations can be isolated or interactive with one another through migration depending on
     /// which <see cref="IGeneticAlgorithm"/> is used.
     /// </remarks>
-    /// <seealso cref="IGeneticAlgorithm"/>
-    /// <typeparam name="TPopulation">Type of the deriving population class.</typeparam>
-    /// <typeparam name="TConfiguration">Type of the associated configuration class.</typeparam>
-    public abstract class PopulationBase<TPopulation, TConfiguration> : GeneticComponentWithAlgorithm<TPopulation, TConfiguration>, IPopulation
-        where TPopulation : PopulationBase<TPopulation, TConfiguration>
-        where TConfiguration : PopulationFactoryConfigBase<TConfiguration, TPopulation>
+    public abstract class PopulationBase : GeneticComponentWithAlgorithm, IPopulation
     {
+        private const int DefaultPopulationSize = 1;
+
         private ObservableCollection<IGeneticEntity> geneticEntities = new ObservableCollection<IGeneticEntity>();
         private int index;
         private double rawMean;
@@ -33,6 +31,24 @@ namespace GenFx.ComponentLibrary.Base
         private double scaledStandardDeviation;
         private double scaledMax;
         private double scaledMin;
+
+        private int populationSize = DefaultPopulationSize;
+
+        /// <summary>
+        /// Gets or sets the number of <see cref="IGeneticEntity"/> objects that are contained by a population.
+        /// </summary>
+        /// <remarks>
+        /// This value is defaulted to 1 and must be greater or equal to 1 to be valid for executing
+        /// a genetic algorithm.
+        /// </remarks>
+        /// <exception cref="ValidationException">Value is invalid.</exception>
+        [ConfigurationProperty]
+        [IntegerValidator(MinValue = 1)]
+        public int PopulationSize
+        {
+            get { return this.populationSize; }
+            set { this.SetProperty(ref this.populationSize, value); }
+        }
 
         /// <summary>
         /// Gets the minimum <see cref="IGeneticEntity.ScaledFitnessValue"/> in the entire population of genetic entities.
@@ -147,18 +163,7 @@ namespace GenFx.ComponentLibrary.Base
         {
             get { return this.Entities.Count; }
         }
-
-        /// <summary>
-        /// Initializes a new instance of this class.
-        /// </summary>
-        /// <param name="algorithm"><see cref="IGeneticAlgorithm"/> using this <see cref="PopulationBase{TPopulation, TConfiguration}"/>.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="algorithm"/> is null.</exception>
-        /// <exception cref="ValidationException">The component's configuration is in an invalid state.</exception>
-        protected PopulationBase(IGeneticAlgorithm algorithm)
-            : base(algorithm, GetConfiguration(algorithm, c => c.Population))
-        {
-        }
-
+        
         /// <summary>
         /// Evaluates the <see cref="IGeneticEntity.RawFitnessValue"/> of all the <see cref="IGeneticEntity"/> objects
         /// within the population followed by evaluation of the <see cref="IGeneticEntity.ScaledFitnessValue"/>
@@ -196,10 +201,10 @@ namespace GenFx.ComponentLibrary.Base
             this.rawMean = this.scaledMean = rawSum / this.geneticEntities.Count;
             this.rawStandardDeviation = this.scaledStandardDeviation = this.GetStandardDeviation(this.rawMean, false);
 
-            if (this.Algorithm.Operators.FitnessScalingStrategy != null)
+            if (this.Algorithm.FitnessScalingStrategy != null)
             {
                 // Scale the fitness values of the population.
-                this.Algorithm.Operators.FitnessScalingStrategy.Scale(this);
+                this.Algorithm.FitnessScalingStrategy.Scale(this);
 
                 // Calculate the stats based on scaled fitness value
                 double scaledSum = 0;
@@ -235,17 +240,17 @@ namespace GenFx.ComponentLibrary.Base
         /// </summary>
         /// <remarks>
         /// <para>The default implementation of this method creates X <see cref="IGeneticEntity"/> objects
-        /// where X is equal to <see cref="PopulationFactoryConfigBase{TConfiguration, TPopulation}.PopulationSize"/>.</para>
+        /// where X is equal to <see cref="PopulationSize"/>.</para>
         /// <para><b>Notes to implementers:</b> This method can be overriden in a derived class
-        /// to customize how a <see cref="PopulationBase{TPopulation, TConfiguration}"/> is filled with <see cref="IGeneticEntity"/> objects
+        /// to customize how a population is filled with <see cref="IGeneticEntity"/> objects
         /// or how those <see cref="IGeneticEntity"/> objects are created.</para>
         /// </remarks>
         protected virtual Task InitializeCoreAsync()
         {
-            for (int i = 0; i < this.Algorithm.ConfigurationSet.Population.PopulationSize; i++)
+            for (int i = 0; i < this.Algorithm.PopulationSeed.PopulationSize; i++)
             {
-                IGeneticEntity entity = (IGeneticEntity)this.Algorithm.ConfigurationSet.Entity.CreateComponent(this.Algorithm);
-                entity.Initialize();
+                IGeneticEntity entity = (IGeneticEntity)this.Algorithm.GeneticEntitySeed.CreateNew();
+                entity.Initialize(this.Algorithm);
                 this.geneticEntities.Add(entity);
             }
 
@@ -280,7 +285,7 @@ namespace GenFx.ComponentLibrary.Base
 
             foreach (KeyValueMap entityState in entityStates)
             {
-                IGeneticEntity entity = (IGeneticEntity)this.Algorithm.ConfigurationSet.Entity.CreateComponent(this.Algorithm);
+                IGeneticEntity entity = (IGeneticEntity)this.Algorithm.GeneticEntitySeed.CreateNew();
                 entity.RestoreState(entityState);
                 this.Entities.Add(entity);
             }

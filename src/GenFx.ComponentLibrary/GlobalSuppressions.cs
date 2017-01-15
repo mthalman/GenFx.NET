@@ -14,4 +14,9 @@
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1020:AvoidNamespacesWithFewTypes", Scope = "namespace", Target = "GenFx.ComponentLibrary.Populations")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Scope = "member", Target = "GenFx.ComponentLibrary.Lists.ListEntityBase`3.#System.Collections.IList.IndexOf(System.Object)")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1020:AvoidNamespacesWithFewTypes", Scope = "namespace", Target = "GenFx.ComponentLibrary.ComponentModel")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1020:AvoidNamespacesWithFewTypes", Scope = "namespace", Target = "GenFx.ComponentLibrary.Lists.BinaryStrings")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Scope = "member", Target = "GenFx.ComponentLibrary.Lists.ListEntityBase`1.#System.Collections.ICollection.Count")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Scope = "member", Target = "GenFx.ComponentLibrary.Lists.ListEntityBase`1.#System.Collections.Generic.ICollection`1<!0>.Count")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Scope = "member", Target = "GenFx.ComponentLibrary.Lists.ListEntityBase`1.#System.Collections.ICollection.IsSynchronized")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Scope = "member", Target = "GenFx.ComponentLibrary.Lists.ListEntityBase`1.#System.Collections.ICollection.SyncRoot")]
 

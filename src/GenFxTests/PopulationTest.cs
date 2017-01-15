@@ -26,15 +26,15 @@ namespace GenFxTests
         [TestMethod]
         public void Population_Ctor()
         {
-            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentFactoryConfigSet
+            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm
             {
-                SelectionOperator = new MockSelectionOperatorFactoryConfig(),
-                FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig(),
-                GeneticAlgorithm = new MockGeneticAlgorithmFactoryConfig(),
-                Entity = new MockEntityFactoryConfig(),
-                Population = new SimplePopulationFactoryConfig(),
-            });
-            IPopulation population = new SimplePopulation(algorithm);
+                SelectionOperator = new MockSelectionOperator(),
+                FitnessEvaluator = new MockFitnessEvaluator(),
+                GeneticEntitySeed = new MockEntity(),
+                PopulationSeed = new SimplePopulation(),
+            };
+            IPopulation population = new SimplePopulation();
+            population.Initialize(algorithm);
             PrivateObject accessor = new PrivateObject(population);
 
             Assert.AreSame(algorithm, accessor.GetProperty("Algorithm"), "Algorithm not initialized correctly.");
@@ -46,7 +46,8 @@ namespace GenFxTests
         [TestMethod]
         public void Population_Ctor_NullAlgorithm()
         {
-            AssertEx.Throws<ArgumentNullException>(() => new SimplePopulation(null));
+            SimplePopulation population = new SimplePopulation();
+            AssertEx.Throws<ArgumentNullException>(() => population.Initialize(null));
         }
 
         /// <summary>
@@ -73,20 +74,20 @@ namespace GenFxTests
         [TestMethod]
         public async Task Population_Initialize_Async()
         {
-            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentFactoryConfigSet
+            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm
             {
-                GeneticAlgorithm = new MockGeneticAlgorithmFactoryConfig(),
-                FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig(),
-                SelectionOperator = new MockSelectionOperatorFactoryConfig(),
-                Entity = new MockEntityFactoryConfig(),
-                Population = new SimplePopulationFactoryConfig
+                FitnessEvaluator = new MockFitnessEvaluator(),
+                SelectionOperator = new MockSelectionOperator(),
+                GeneticEntitySeed = new MockEntity(),
+                PopulationSeed = new SimplePopulation
                 {
                     PopulationSize = 10
                 }
-            });
-            SimplePopulation population = new SimplePopulation(algorithm);
+            };
+            SimplePopulation population = new SimplePopulation();
+            population.Initialize(algorithm);
             await population.InitializeAsync();
-            Assert.AreEqual(algorithm.ConfigurationSet.Population.PopulationSize, population.Entities.Count, "Population not generated correctly.");
+            Assert.AreEqual(algorithm.PopulationSeed.PopulationSize, population.Entities.Count, "Population not generated correctly.");
         }
 
         /// <summary>
@@ -95,7 +96,7 @@ namespace GenFxTests
         [TestMethod()]
         public void PopulationSizeTest_Valid()
         {
-            SimplePopulationFactoryConfig target = new SimplePopulationFactoryConfig();
+            SimplePopulation target = new SimplePopulation();
             int val = 100;
             target.PopulationSize = val;
             Assert.AreEqual(val, target.PopulationSize, "PopulationSize was not set correctly.");
@@ -108,40 +109,42 @@ namespace GenFxTests
         [TestMethod()]
         public void PopulationSizeTest_Invalid()
         {
-            SimplePopulationFactoryConfig target = new SimplePopulationFactoryConfig();
+            SimplePopulation target = new SimplePopulation();
             AssertEx.Throws<ValidationException>(() => target.PopulationSize = 0);
         }
 
         private static async Task TestEvaluateFitnessAsync(bool useScaling)
         {
-            ComponentFactoryConfigSet config = new ComponentFactoryConfigSet
+            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm
             {
-                SelectionOperator = new MockSelectionOperatorFactoryConfig(),
-                Entity = new MockEntityFactoryConfig(),
-                Population = new SimplePopulationFactoryConfig(),
-                FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig(),
-                GeneticAlgorithm = new MockGeneticAlgorithmFactoryConfig()
+                SelectionOperator = new MockSelectionOperator(),
+                GeneticEntitySeed = new MockEntity(),
+                PopulationSeed = new SimplePopulation(),
+                FitnessEvaluator = new MockFitnessEvaluator(),
             };
-            
+
             if (useScaling)
             {
-                config.FitnessScalingStrategy = new FakeFitnessScalingStrategyFactoryConfig();
+                algorithm.FitnessScalingStrategy = new FakeFitnessScalingStrategy();
             }
 
-            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm(config);
-
-            algorithm.Operators.FitnessEvaluator = new MockFitnessEvaluator(algorithm);
+            algorithm.FitnessEvaluator = new MockFitnessEvaluator();
+            algorithm.FitnessEvaluator.Initialize(algorithm);
             if (useScaling)
             {
-                algorithm.Operators.FitnessScalingStrategy = new FakeFitnessScalingStrategy(algorithm);
+                algorithm.FitnessScalingStrategy = new FakeFitnessScalingStrategy();
+                algorithm.FitnessScalingStrategy.Initialize(algorithm);
             }
 
-            SimplePopulation population = new SimplePopulation(algorithm);
-            MockEntity entity1 = new MockEntity(algorithm);
+            SimplePopulation population = new SimplePopulation();
+            population.Initialize(algorithm);
+            MockEntity entity1 = new MockEntity();
+            entity1.Initialize(algorithm);
             entity1.Identifier = "123";
             population.Entities.Add(entity1);
 
-            MockEntity entity2 = new MockEntity(algorithm);
+            MockEntity entity2 = new MockEntity();
+            entity2.Initialize(algorithm);
             entity2.Identifier = "456";
             population.Entities.Add(entity2);
 
@@ -170,13 +173,8 @@ namespace GenFxTests
             Assert.AreEqual((entity1.ScaledFitnessValue + entity2.ScaledFitnessValue) / 2, population.ScaledMean, "ScaledMean not set correctly.");
         }
 
-        private class FakeFitnessScalingStrategy : FitnessScalingStrategyBase<FakeFitnessScalingStrategy, FakeFitnessScalingStrategyFactoryConfig>
+        private class FakeFitnessScalingStrategy : FitnessScalingStrategyBase
         {
-            public FakeFitnessScalingStrategy(IGeneticAlgorithm algorithm)
-                : base(algorithm)
-            {
-            }
-
             protected override void UpdateScaledFitnessValues(IPopulation population)
             {
                 for (int i = 0; i < population.Entities.Count; i++)
@@ -186,19 +184,7 @@ namespace GenFxTests
             }
         }
 
-        private class FakeFitnessScalingStrategyFactoryConfig : FitnessScalingStrategyFactoryConfigBase<FakeFitnessScalingStrategyFactoryConfig, FakeFitnessScalingStrategy>
-        {
-        }
-
-        private class TestPopulation : PopulationBase<TestPopulation, TestPopulationFactoryConfig>
-        {
-            public TestPopulation(IGeneticAlgorithm algorithm)
-                : base(algorithm)
-            {
-            }
-        }
-
-        private class TestPopulationFactoryConfig : PopulationFactoryConfigBase<TestPopulationFactoryConfig, TestPopulation>
+        private class TestPopulation : PopulationBase
         {
         }
     }

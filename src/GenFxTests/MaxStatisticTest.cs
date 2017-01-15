@@ -24,21 +24,20 @@ namespace GenFxTests
         [TestMethod()]
         public void MaxStatistic_GetResultValue()
         {
-            ComponentFactoryConfigSet config = new ComponentFactoryConfigSet
+            MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm
             {
-                GeneticAlgorithm = new MockGeneticAlgorithmFactoryConfig(),
-                SelectionOperator = new MockSelectionOperatorFactoryConfig(),
-                Entity = new MockEntityFactoryConfig(),
-                Population = new SimplePopulationFactoryConfig(),
-                FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig(),
+                SelectionOperator = new MockSelectionOperator(),
+                GeneticEntitySeed = new MockEntity(),
+                PopulationSeed = new SimplePopulation(),
+                FitnessEvaluator = new MockFitnessEvaluator(),
             };
-            config.Statistics.Add(new MaximumFitnessStatisticFactoryConfig());
+            algorithm.Statistics.Add(new MaximumFitnessStatistic());
 
-            MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm(config);
-            
-            MaximumFitnessStatistic target = new MaximumFitnessStatistic(algorithm);
-            SimplePopulation population = new SimplePopulation(algorithm);
-            PrivateObject accessor = new PrivateObject(population, new PrivateType(typeof(PopulationBase<SimplePopulation, SimplePopulationFactoryConfig>)));
+            MaximumFitnessStatistic target = new MaximumFitnessStatistic();
+            target.Initialize(algorithm);
+            SimplePopulation population = new SimplePopulation();
+            population.Initialize(algorithm);
+            PrivateObject accessor = new PrivateObject(population, new PrivateType(typeof(PopulationBase)));
             accessor.SetField("scaledMax", 21);
             object result = target.GetResultValue(population);
 
@@ -51,18 +50,17 @@ namespace GenFxTests
         [TestMethod()]
         public void MaxStatistic_GetResultValue_NullPopulation()
         {
-            ComponentFactoryConfigSet config = new ComponentFactoryConfigSet
+            MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm
             {
-                GeneticAlgorithm = new MockGeneticAlgorithmFactoryConfig(),
-                SelectionOperator = new MockSelectionOperatorFactoryConfig(),
-                Entity = new MockEntityFactoryConfig(),
-                Population = new SimplePopulationFactoryConfig(),
-                FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig(),
+                SelectionOperator = new MockSelectionOperator(),
+                GeneticEntitySeed = new MockEntity(),
+                PopulationSeed = new SimplePopulation(),
+                FitnessEvaluator = new MockFitnessEvaluator(),
             };
-            config.Statistics.Add(new MaximumFitnessStatisticFactoryConfig());
+            algorithm.Statistics.Add(new MaximumFitnessStatistic());
 
-            MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm(config);
-            MaximumFitnessStatistic target = new MaximumFitnessStatistic(algorithm);
+            MaximumFitnessStatistic target = new MaximumFitnessStatistic();
+            target.Initialize(algorithm);
             AssertEx.Throws<ArgumentNullException>(() => target.GetResultValue(null));
         }
     }

@@ -7,8 +7,13 @@ namespace GenFx.Contracts
     /// Represents a collection of <see cref="IGeneticEntity"/> objects which interact locally with each other.  A population is 
     /// the unit from which the <see cref="ISelectionOperator"/> selects its genetic entities.
     /// </summary>
-    public interface IPopulation : IGeneticComponent
+    public interface IPopulation : IGeneticComponentWithAlgorithm
     {
+        /// <summary>
+        /// Gets the number of <see cref="IGeneticEntity"/> objects that are contained by a population.
+        /// </summary>
+        int PopulationSize { get; }
+
         /// <summary>
         /// Gets the collection of <see cref="IGeneticEntity"/> objects contained by the population.
         /// </summary>

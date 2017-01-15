@@ -1,4 +1,5 @@
 using GenFx.Contracts;
+using GenFx.Validation;
 using System;
 
 namespace GenFx.ComponentLibrary.Base
@@ -7,33 +8,27 @@ namespace GenFx.ComponentLibrary.Base
     /// Provides the abstract base class for a genetic algorithm mutation operator.
     /// </summary>
     /// <remarks>
-    /// <para>
     /// Mutations in genetic algorithms involve the altering of a single data component in a entity.
     /// For example, a binary string entity has a chance of mutating one of its bits before progressing
     /// to the next generation.  Genetic algorithm mutation is intended to be similar to gene copying 
     /// errors in nature.  Mutations are the driver of randomness in a population.
-    /// </para>
-    /// <para>
-    /// <b>Notes to implementers:</b> When this base class is derived, the derived class can be used by
-    /// the genetic algorithm by setting the <see cref="ComponentFactoryConfigSet.MutationOperator"/> 
-    /// property.
-    /// </para>
     /// </remarks>
-    /// <typeparam name="TMutation">Type of the deriving mutation operator class.</typeparam>
-    /// <typeparam name="TConfiguration">Type of the associated configuration class.</typeparam>
-    public abstract class MutationOperatorBase<TMutation, TConfiguration> : GeneticComponentWithAlgorithm<TMutation, TConfiguration>, IMutationOperator
-        where TMutation : MutationOperatorBase<TMutation, TConfiguration>
-        where TConfiguration : MutationOperatorFactoryConfigBase<TConfiguration, TMutation>
+    public abstract class MutationOperatorBase : GeneticComponentWithAlgorithm, IMutationOperator
     {
+        private const double DefaultMutationRate = .001;
+
+        private double mutationRate = DefaultMutationRate;
+
         /// <summary>
-        /// Initializes a new instance of this class.
+        /// Gets or sets the probability that a data segment within a <see cref="IGeneticEntity"/> will become mutated.
         /// </summary>
-        /// <param name="algorithm"><see cref="IGeneticAlgorithm"/> using this class.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="algorithm"/> is null.</exception>
-        /// <exception cref="ValidationException">The component's configuration is in an invalid state.</exception>
-        protected MutationOperatorBase(IGeneticAlgorithm algorithm)
-            : base(algorithm, GetConfiguration(algorithm, c => c.MutationOperator))
+        /// <exception cref="ValidationException">Value is not valid.</exception>
+        [ConfigurationProperty]
+        [DoubleValidator(MinValue = 0, MaxValue = 1)]
+        public double MutationRate
         {
+            get { return this.mutationRate; }
+            set { this.SetProperty(ref this.mutationRate, value); }
         }
 
         /// <summary>
@@ -72,7 +67,7 @@ namespace GenFx.ComponentLibrary.Base
         /// <remarks>
         /// <b>Notes to implementers:</b> When this method is overriden, each segment of data making up the 
         /// representation of the <see cref="IGeneticEntity"/> should be attempted to be mutated.  Use the 
-        /// <see cref="MutationOperatorFactoryConfigBase{TConfiguration, TMutation}.MutationRate"/> property to determine whether a component
+        /// <see cref="MutationRate"/> property to determine whether a component
         /// of the <see cref="IGeneticEntity"/> should be mutated or not.  
         /// </remarks>
         protected abstract bool GenerateMutation(IGeneticEntity entity);

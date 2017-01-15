@@ -48,19 +48,11 @@ namespace GenFxTests
             randomUtil.MaxValue = maxSize;
 
             IGeneticAlgorithm algorithm = GetAlgorithm(minSize, maxSize);
-            VariableLengthBinaryStringEntity entity = new VariableLengthBinaryStringEntity(algorithm);
-            PrivateObject accessor = new PrivateObject(entity, new PrivateType(typeof(BinaryStringEntity<VariableLengthBinaryStringEntity, VariableLengthBinaryStringEntityFactoryConfig>)));
+            VariableLengthBinaryStringEntity entity = new VariableLengthBinaryStringEntity { MinimumStartingLength = minSize, MaximumStartingLength = maxSize };
+            entity.Initialize(algorithm);
+            PrivateObject accessor = new PrivateObject(entity, new PrivateType(typeof(BinaryStringEntity)));
             Assert.AreEqual(maxSize, entity.Length, "Length not initialized correctly.");
             Assert.AreEqual(maxSize, ((BitArray)accessor.GetField("genes")).Length, "Genes not initialized correctly.");
-        }
-
-        /// <summary>
-        /// Tests that an exception is thrown when a required config class is missing.
-        /// </summary>
-        [TestMethod()]
-        public void VariableLengthBinaryStringEntity_Ctor_MissingConfig()
-        {
-            AssertEx.Throws<ArgumentException>(() => new VariableLengthBinaryStringEntity(new MockGeneticAlgorithm(new ComponentFactoryConfigSet())));
         }
 
         /// <summary>
@@ -70,7 +62,8 @@ namespace GenFxTests
         public void VariableLengthBinaryStringEntity_Ctor_MismatchedMinMax()
         {
             IGeneticAlgorithm algorithm = GetAlgorithm(10, 5);
-            AssertEx.Throws<ValidationException>(() => new VariableLengthBinaryStringEntity(algorithm));
+            VariableLengthBinaryStringEntity entity = new VariableLengthBinaryStringEntity { MaximumStartingLength = 5, MinimumStartingLength = 10 };
+            AssertEx.Throws<ValidationException>(() => entity.Initialize(algorithm));
         }
 
         /// <summary>
@@ -79,7 +72,7 @@ namespace GenFxTests
         [TestMethod()]
         public void VariableLengthBinaryStringEntity_Ctor_InvalidLength1()
         {
-            VariableLengthBinaryStringEntityFactoryConfig config = new VariableLengthBinaryStringEntityFactoryConfig();
+            VariableLengthBinaryStringEntity config = new VariableLengthBinaryStringEntity();
             AssertEx.Throws<ValidationException>(() => config.MinimumStartingLength = 0);
         }
 
@@ -89,7 +82,7 @@ namespace GenFxTests
         [TestMethod()]
         public void VariableLengthBinaryStringEntity_Ctor_InvalidLength2()
         {
-            VariableLengthBinaryStringEntityFactoryConfig config = new VariableLengthBinaryStringEntityFactoryConfig();
+            VariableLengthBinaryStringEntity config = new VariableLengthBinaryStringEntity();
             config.MinimumStartingLength = 10;
             AssertEx.Throws<ValidationException>(() => config.MaximumStartingLength = 0);
         }
@@ -109,10 +102,11 @@ namespace GenFxTests
 
             IGeneticAlgorithm algorithm = GetAlgorithm(minLength, maxLength);
 
-            VariableLengthBinaryStringEntity entity = new VariableLengthBinaryStringEntity(algorithm);
+            VariableLengthBinaryStringEntity entity = new VariableLengthBinaryStringEntity { MinimumStartingLength = minLength, MaximumStartingLength = maxLength };
+            entity.Initialize(algorithm);
             Assert.AreEqual(maxLength, entity.Length, "Length not set correctly.");
 
-            PrivateObject accessor = new PrivateObject(entity, new PrivateType(typeof(BinaryStringEntity<VariableLengthBinaryStringEntity, VariableLengthBinaryStringEntityFactoryConfig>)));
+            PrivateObject accessor = new PrivateObject(entity, new PrivateType(typeof(BinaryStringEntity)));
             BitArray genes = (BitArray)accessor.GetField("genes");
             entity.Length = maxLength + 10;
             Assert.AreEqual(maxLength + 10, genes.Count, "Genes not expanded correctly.");
@@ -137,8 +131,8 @@ namespace GenFxTests
             randomUtil.MaxValue = maxLength;
             IGeneticAlgorithm algorithm = GetAlgorithm(minLength, maxLength);
 
-            VariableLengthBinaryStringEntity entity = new VariableLengthBinaryStringEntity(algorithm);
-            entity.Initialize();
+            VariableLengthBinaryStringEntity entity = new VariableLengthBinaryStringEntity { MinimumStartingLength = minLength, MaximumStartingLength = maxLength };
+            entity.Initialize(algorithm);
 
             int currentLength = entity.Length;
             string currentBinaryString = entity.Representation;
@@ -171,8 +165,8 @@ namespace GenFxTests
             randomUtil.MaxValue = maxLength;
             IGeneticAlgorithm algorithm = GetAlgorithm(minLength, maxLength);
 
-            VariableLengthBinaryStringEntity entity = new VariableLengthBinaryStringEntity(algorithm);
-            entity.Initialize();
+            VariableLengthBinaryStringEntity entity = new VariableLengthBinaryStringEntity { MinimumStartingLength = minLength, MaximumStartingLength = maxLength };
+            entity.Initialize(algorithm);
 
             int currentLength = entity.Length;
             string currentBinaryString = entity.Representation;
@@ -206,14 +200,15 @@ namespace GenFxTests
         {
             IGeneticAlgorithm algorithm = GetAlgorithm(4, 5);
 
-            VariableLengthBinaryStringEntity entity = new VariableLengthBinaryStringEntity(algorithm);
+            VariableLengthBinaryStringEntity entity = new VariableLengthBinaryStringEntity();
+            entity.Initialize(algorithm);
             entity[0] = true;
             entity[1] = true;
             entity[2] = false;
             entity[3] = true;
 
             entity.Age = 3;
-            PrivateObject accessor = new PrivateObject(entity, new PrivateType(typeof(GeneticEntity<VariableLengthBinaryStringEntity, VariableLengthBinaryStringEntityFactoryConfig>)));
+            PrivateObject accessor = new PrivateObject(entity, new PrivateType(typeof(GeneticEntity)));
             accessor.SetField("rawFitnessValue", 1);
             entity.ScaledFitnessValue = 2;
 
@@ -222,18 +217,17 @@ namespace GenFxTests
 
         private static IGeneticAlgorithm GetAlgorithm(int minLength, int maxLength)
         {
-            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentFactoryConfigSet
+            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm
             {
-                GeneticAlgorithm = new MockGeneticAlgorithmFactoryConfig(),
-                Population = new MockPopulationFactoryConfig(),
-                SelectionOperator = new MockSelectionOperatorFactoryConfig(),
-                FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig(),
-                Entity = new VariableLengthBinaryStringEntityFactoryConfig
+                PopulationSeed = new MockPopulation(),
+                SelectionOperator = new MockSelectionOperator(),
+                FitnessEvaluator = new MockFitnessEvaluator(),
+                GeneticEntitySeed = new VariableLengthBinaryStringEntity
                 {
                     MinimumStartingLength = minLength,
                     MaximumStartingLength = maxLength
                 }
-            });
+            };
             return algorithm;
         }
 
@@ -249,7 +243,7 @@ namespace GenFxTests
                 return (switcher) ? 1 : 0;
             }
 
-            public double GetRandomPercentRatio()
+            public double GetDouble()
             {
                 throw new Exception("The method or operation is not implemented.");
             }

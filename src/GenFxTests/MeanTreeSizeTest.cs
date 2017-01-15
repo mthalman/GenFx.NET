@@ -25,32 +25,35 @@ namespace GenFxTests
         [TestMethod()]
         public void MeanTreeSize_GetResultValue()
         {
-            ComponentFactoryConfigSet config = new ComponentFactoryConfigSet
+            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm
             {
-                SelectionOperator = new MockSelectionOperatorFactoryConfig(),
-                FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig(),
-                GeneticAlgorithm = new MockGeneticAlgorithmFactoryConfig(),
-                Entity = new TestTreeEntityConfiguration(),
-                Population = new SimplePopulationFactoryConfig(),
+                SelectionOperator = new MockSelectionOperator(),
+                FitnessEvaluator = new MockFitnessEvaluator(),
+                GeneticEntitySeed = new TestTreeEntity(),
+                PopulationSeed = new SimplePopulation(),
             };
-            config.Statistics.Add(new MeanTreeSizeStatisticFactoryConfig());
+            algorithm.Statistics.Add(new MeanTreeSizeStatistic());
 
-            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm(config);
-            MeanTreeSizeStatistic target = new MeanTreeSizeStatistic(algorithm);
-            SimplePopulation population = new SimplePopulation(algorithm);
+            MeanTreeSizeStatistic target = new MeanTreeSizeStatistic();
+            target.Initialize(algorithm);
+            SimplePopulation population = new SimplePopulation();
+            population.Initialize(algorithm);
 
-            ITreeEntity entity = new TestTreeEntity(algorithm);
+            ITreeEntity entity = new TestTreeEntity();
+            entity.Initialize(algorithm);
             entity.SetRootNode(new TreeNode());
             entity.RootNode.ChildNodes.Add(new TreeNode());
             entity.RootNode.ChildNodes.Add(new TreeNode());
             entity.RootNode.ChildNodes[0].ChildNodes.Add(new TreeNode());
             population.Entities.Add(entity);
 
-            entity = new TestTreeEntity(algorithm);
+            entity = new TestTreeEntity();
+            entity.Initialize(algorithm);
             entity.SetRootNode(new TreeNode());
             population.Entities.Add(entity);
 
-            entity = new TestTreeEntity(algorithm);
+            entity = new TestTreeEntity();
+            entity.Initialize(algorithm);
             entity.SetRootNode(new TreeNode());
             entity.RootNode.ChildNodes.Add(new TreeNode());
             population.Entities.Add(entity);
@@ -66,41 +69,26 @@ namespace GenFxTests
         [TestMethod()]
         public void MeanTreeSize_GetResultValue_NullPopulation()
         {
-            ComponentFactoryConfigSet config = new ComponentFactoryConfigSet
+            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm
             {
-                SelectionOperator = new MockSelectionOperatorFactoryConfig(),
-                FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig(),
-                GeneticAlgorithm = new MockGeneticAlgorithmFactoryConfig(),
-                Entity = new TestTreeEntityConfiguration(),
-                Population = new SimplePopulationFactoryConfig(),
+                SelectionOperator = new MockSelectionOperator(),
+                FitnessEvaluator = new MockFitnessEvaluator(),
+                GeneticEntitySeed = new TestTreeEntity(),
+                PopulationSeed = new SimplePopulation(),
             };
-            config.Statistics.Add(new MeanTreeSizeStatisticFactoryConfig());
+            algorithm.Statistics.Add(new MeanTreeSizeStatistic());
 
-            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm(config);
-            MeanTreeSizeStatistic target = new MeanTreeSizeStatistic(algorithm);
+            MeanTreeSizeStatistic target = new MeanTreeSizeStatistic();
+            target.Initialize(algorithm);
             AssertEx.Throws<ArgumentNullException>(() => target.GetResultValue(null));
         }
 
-        private class TestTreeEntity : TreeEntity<TestTreeEntity, TestTreeEntityConfiguration, TreeNode>
+        private class TestTreeEntity : TreeEntity<TreeNode>
         {
-            public TestTreeEntity(IGeneticAlgorithm algorithm)
-                : base(algorithm)
-            {
-            }
-
             public override string Representation
             {
                 get { throw new Exception("The method or operation is not implemented."); }
             }
-
-            protected override void InitializeCore()
-            {
-                throw new Exception("The method or operation is not implemented.");
-            }
-        }
-
-        private class TestTreeEntityConfiguration : TreeEntityFactoryConfig<TestTreeEntityConfiguration, TestTreeEntity, TreeNode>
-        {
         }
     }
 }

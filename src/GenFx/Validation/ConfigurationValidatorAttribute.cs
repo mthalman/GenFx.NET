@@ -58,16 +58,16 @@ namespace GenFx.Validation
         /// <summary>
         /// Gets the name of the property of the component configuration type to be validated.
         /// </summary>
-        /// <seealso cref="TargetComponentConfigurationType"/>
+        /// <seealso cref="TargetComponentType"/>
         string TargetProperty
         {
             get;
         }
 
         /// <summary>
-        /// Gets the <see cref="Type"/> of the component configuration containing the property to be validated.
+        /// Gets the <see cref="Type"/> of the component containing the property to be validated.
         /// </summary>
-        Type TargetComponentConfigurationType
+        Type TargetComponentType
         {
             get;
         }

@@ -32,7 +32,7 @@ namespace GenFxTests
         [TestMethod]
         public void SteadyStateGeneticAlgorithm_Initialize_InvalidPopulationReplacement2()
         {
-            SteadyStateGeneticAlgorithmFactoryConfig config = new SteadyStateGeneticAlgorithmFactoryConfig();
+            SteadyStateGeneticAlgorithm config = new SteadyStateGeneticAlgorithm();
             PopulationReplacementValue val = new PopulationReplacementValue(101, ReplacementValueKind.Percentage);
             AssertEx.Throws<ValidationException>(() => config.PopulationReplacementValue = val);
         }
@@ -43,33 +43,34 @@ namespace GenFxTests
         [TestMethod]
         public async Task SteadyStateGeneticAlgorithm_CreateNextGeneration_Async()
         {
-            SteadyStateGeneticAlgorithm algorithm = new SteadyStateGeneticAlgorithm(new ComponentFactoryConfigSet
+            SteadyStateGeneticAlgorithm algorithm = new SteadyStateGeneticAlgorithm
             {
-                Entity = new MockEntityFactoryConfig(),
-                Population = new SimplePopulationFactoryConfig(),
-                FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig(),
-                GeneticAlgorithm = new SteadyStateGeneticAlgorithmFactoryConfig
-                {
-                    PopulationReplacementValue = new PopulationReplacementValue(2, ReplacementValueKind.FixedCount)
-                },
-                SelectionOperator = new MockSelectionOperatorFactoryConfig
+                GeneticEntitySeed = new MockEntity(),
+                PopulationSeed = new SimplePopulation(),
+                FitnessEvaluator = new MockFitnessEvaluator(),
+                PopulationReplacementValue = new PopulationReplacementValue(2, ReplacementValueKind.FixedCount),
+                SelectionOperator = new MockSelectionOperator
                 {
                     SelectionBasedOnFitnessType = FitnessType.Scaled
                 },
-                CrossoverOperator = new MockCrossoverOperatorFactoryConfig
+                CrossoverOperator = new MockCrossoverOperator
                 {
                     CrossoverRate = 1
                 },
-                MutationOperator = new MockMutationOperatorFactoryConfig
+                MutationOperator = new MockMutationOperator
                 {
                     MutationRate = 1
                 }
-            });
+            };
 
-            algorithm.Operators.SelectionOperator = new MockSelectionOperator(algorithm);
-            algorithm.Operators.CrossoverOperator = new MockCrossoverOperator(algorithm);
-            algorithm.Operators.MutationOperator = new MockMutationOperator(algorithm);
-            algorithm.Operators.FitnessEvaluator = new MockFitnessEvaluator(algorithm);
+            algorithm.SelectionOperator = new MockSelectionOperator { SelectionBasedOnFitnessType = FitnessType.Scaled };
+            algorithm.SelectionOperator.Initialize(algorithm);
+            algorithm.CrossoverOperator = new MockCrossoverOperator { CrossoverRate = 1 };
+            algorithm.CrossoverOperator.Initialize(algorithm);
+            algorithm.MutationOperator = new MockMutationOperator { MutationRate = 1 };
+            algorithm.MutationOperator.Initialize(algorithm);
+            algorithm.FitnessEvaluator = new MockFitnessEvaluator();
+            algorithm.FitnessEvaluator.Initialize(algorithm);
 
             PrivateObject ssAccessor = new PrivateObject(algorithm);
             SimplePopulation population = GetPopulation(algorithm);
@@ -77,9 +78,9 @@ namespace GenFxTests
             int prevPopCount = population.Entities.Count;
             await (Task)ssAccessor.Invoke("CreateNextGenerationAsync", population);
 
-            Assert.AreEqual(4, ((MockSelectionOperator)algorithm.Operators.SelectionOperator).DoSelectCallCount, "Selection not called correctly.");
-            Assert.AreEqual(2, ((MockCrossoverOperator)algorithm.Operators.CrossoverOperator).DoCrossoverCallCount, "Crossover not called correctly.");
-            Assert.AreEqual(4, ((MockMutationOperator)algorithm.Operators.MutationOperator).DoMutateCallCount, "Mutation not called correctly.");
+            Assert.AreEqual(4, ((MockSelectionOperator)algorithm.SelectionOperator).DoSelectCallCount, "Selection not called correctly.");
+            Assert.AreEqual(2, ((MockCrossoverOperator)algorithm.CrossoverOperator).DoCrossoverCallCount, "Crossover not called correctly.");
+            Assert.AreEqual(4, ((MockMutationOperator)algorithm.MutationOperator).DoMutateCallCount, "Mutation not called correctly.");
             Assert.AreEqual(prevPopCount, population.Entities.Count, "New population not created correctly.");
         }
 
@@ -94,10 +95,16 @@ namespace GenFxTests
 
         private static SimplePopulation GetPopulation(IGeneticAlgorithm algorithm)
         {
-            SimplePopulation population = new SimplePopulation(algorithm);
-            population.Entities.Add(new MockEntity(algorithm));
-            population.Entities.Add(new MockEntity(algorithm));
-            population.Entities.Add(new MockEntity(algorithm));
+            SimplePopulation population = new SimplePopulation();
+            population.Initialize(algorithm);
+
+            for (int i = 0; i < 3; i++)
+            {
+                MockEntity entity = new MockEntity();
+                entity.Initialize(algorithm);
+                population.Entities.Add(entity);
+            }
+            
             return population;
         }
     }

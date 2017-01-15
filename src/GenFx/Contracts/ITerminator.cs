@@ -3,7 +3,7 @@ namespace GenFx.Contracts
     /// <summary>
     /// Represents a component which defines when a genetic algorithm should stop executing.
     /// </summary>
-    public interface ITerminator : IGeneticComponent
+    public interface ITerminator : IGeneticComponentWithAlgorithm
     {
         /// <summary>
         /// Returns whether the genetic algorithm should stop executing.

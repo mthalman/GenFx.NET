@@ -3,7 +3,7 @@ namespace GenFx.Contracts
     /// <summary>
     /// Represents a strategy for genetic algorithms that scales fitness values.
     /// </summary>
-    public interface IFitnessScalingStrategy : IGeneticComponent
+    public interface IFitnessScalingStrategy : IGeneticComponentWithAlgorithm
     {
         /// <summary>
         /// Updates the <see cref="IGeneticEntity.ScaledFitnessValue"/>

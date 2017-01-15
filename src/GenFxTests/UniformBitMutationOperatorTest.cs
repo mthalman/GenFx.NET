@@ -23,25 +23,25 @@ namespace GenFxTests
         [TestMethod]
         public void UniformBitMutationOperator_Mutate()
         {
-            MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentFactoryConfigSet
+            MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm
             {
-                GeneticAlgorithm = new MockGeneticAlgorithmFactoryConfig(),
-                Population = new MockPopulationFactoryConfig(),
-                SelectionOperator = new MockSelectionOperatorFactoryConfig(),
-                FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig(),
-                Entity = new FixedLengthBinaryStringEntityFactoryConfig
+                PopulationSeed = new MockPopulation(),
+                SelectionOperator = new MockSelectionOperator(),
+                FitnessEvaluator = new MockFitnessEvaluator(),
+                GeneticEntitySeed = new FixedLengthBinaryStringEntity
                 {
-                    Length = 4
+                    FixedLength = 4
                 },
-                MutationOperator = new UniformBitMutationOperatorFactoryConfig
+                MutationOperator = new UniformBitMutationOperator
                 {
                     MutationRate = 1
                 }
-            });
-            UniformBitMutationOperator op = new UniformBitMutationOperator(algorithm);
-            FixedLengthBinaryStringEntity entity = new FixedLengthBinaryStringEntity(algorithm);
+            };
+            UniformBitMutationOperator op = new UniformBitMutationOperator { MutationRate = 1 };
+            op.Initialize(algorithm);
+            FixedLengthBinaryStringEntity entity = new FixedLengthBinaryStringEntity { FixedLength = 4 };
             entity.Age = 10;
-            entity.Initialize();
+            entity.Initialize(algorithm);
             entity[0] = true;
             entity[1] = true;
             entity[2] = false;

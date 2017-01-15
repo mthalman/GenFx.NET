@@ -22,46 +22,41 @@ namespace BinaryPatternMatching
 
         private static async Task RunAlgorithmAsync()
         {
-            ComponentFactoryConfigSet configSet = new ComponentFactoryConfigSet
+            SimpleGeneticAlgorithm algorithm = new SimpleGeneticAlgorithm
             {
-                GeneticAlgorithm = new SimpleGeneticAlgorithmFactoryConfig
-                {
-                    EnvironmentSize = 1
-                },
-                FitnessEvaluator = new FitnessEvaluatorConfiguration
+                EnvironmentSize = 1,
+                FitnessEvaluator = new FitnessEvaluator
                 {
                     EvaluationMode = FitnessEvaluationMode.Minimize,
                     TargetBinary = "010101010101"
                 },
-                Entity = new VariableLengthBinaryStringEntityFactoryConfig
+                GeneticEntitySeed = new VariableLengthBinaryStringEntity
                 {
                     MaximumStartingLength = 10,
                     MinimumStartingLength = 5
                 },
-                Population = new SimplePopulationFactoryConfig
+                PopulationSeed = new SimplePopulation
                 {
                     PopulationSize = 100
                 },
-                SelectionOperator = new FitnessProportionateSelectionOperatorFactoryConfig
+                SelectionOperator = new FitnessProportionateSelectionOperator
                 {
                     SelectionBasedOnFitnessType = FitnessType.Raw
                 },
-                CrossoverOperator = new VariableSinglePointCrossoverOperatorFactoryConfig
+                CrossoverOperator = new VariableSinglePointCrossoverOperator
                 {
                     CrossoverRate = 0.8
                 },
-                MutationOperator = new BinaryStringMutationOperatorConfiguration
+                MutationOperator = new BinaryStringMutationOperator
                 {
                     MutationRate = 0.01
                 },
-                Terminator = new FitnessTargetTerminatorFactoryConfig
+                Terminator = new FitnessTargetTerminator
                 {
                     FitnessTarget = 0,
                     FitnessValueType = FitnessType.Raw
                 }
             };
-
-            SimpleGeneticAlgorithm algorithm = new SimpleGeneticAlgorithm(configSet);
             algorithm.GenerationCreated += Algorithm_GenerationCreated;
             await algorithm.InitializeAsync();
             await algorithm.RunAsync();

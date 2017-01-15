@@ -8,19 +8,8 @@ namespace GenFx.ComponentLibrary.Statistics
     /// Provides the calculation to determine the mean of the values of the <see cref="IGeneticEntity.ScaledFitnessValue"/> 
     /// property in a <see cref="IPopulation"/>.
     /// </summary>
-    public sealed class MeanFitnessStatistic : StatisticBase<MeanFitnessStatistic, MeanFitnessStatisticFactoryConfig>
+    public class MeanFitnessStatistic : StatisticBase
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="MeanFitnessStatistic"/> class.
-        /// </summary>
-        /// <param name="algorithm"><see cref="IGeneticAlgorithm"/> using this <see cref="MeanFitnessStatistic"/>.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="algorithm"/> is null.</exception>
-        /// <exception cref="ValidationException">The component's configuration is in an invalid state.</exception>
-        public MeanFitnessStatistic(IGeneticAlgorithm algorithm)
-            : base(algorithm)
-        {
-        }
-
         /// <summary>
         /// Calculates the mean of the values of the <see cref="IGeneticEntity.ScaledFitnessValue"/> 
         /// property in the <paramref name="population"/>.

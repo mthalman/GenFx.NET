@@ -35,14 +35,62 @@ namespace GenFx.Contracts
         event EventHandler AlgorithmStarting;
 
         /// <summary>
-        /// Gets the <see cref="ComponentFactoryConfigSet"/> containing the configuration for the algorithm.
+        /// Gets or sets the number of <see cref="IPopulation"/> objects that are contained by the <see cref="GeneticEnvironment"/>.
         /// </summary>
-        ComponentFactoryConfigSet ConfigurationSet { get; }
+        int EnvironmentSize { get; }
 
         /// <summary>
-        /// Gets the <see cref="AlgorithmOperators"/> to be used.
+        /// Gets the <see cref="IFitnessEvaluator"/> to be used by the algorithm.
         /// </summary>
-        AlgorithmOperators Operators { get; }
+        IFitnessEvaluator FitnessEvaluator { get; set; }
+
+        /// <summary>
+        /// Gets the <see cref="ITerminator"/> to be used by the algorithm.
+        /// </summary>
+        ITerminator Terminator { get; set; }
+
+        /// <summary>
+        /// Gets the <see cref="IFitnessScalingStrategy"/> to be used by the algorithm.
+        /// </summary>
+        IFitnessScalingStrategy FitnessScalingStrategy { get; set; }
+
+        /// <summary>
+        /// Gets the <see cref="ISelectionOperator"/> to be used by the algorithm.
+        /// </summary>
+        ISelectionOperator SelectionOperator { get; set; }
+
+        /// <summary>
+        /// Gets the <see cref="IMutationOperator"/> to be used by the algorithm.
+        /// </summary>
+        IMutationOperator MutationOperator { get; set; }
+
+        /// <summary>
+        /// Gets the <see cref="ICrossoverOperator"/> to be used by the algorithm.
+        /// </summary>
+        ICrossoverOperator CrossoverOperator { get; set; }
+
+        /// <summary>
+        /// Gets the <see cref="IElitismStrategy"/> to be used by the algorithm.
+        /// </summary>
+        IElitismStrategy ElitismStrategy { get; set; }
+
+        /// <summary>
+        /// Gets the <see cref="IGeneticEntity"/> to be used by the algorithm.
+        /// </summary>
+        /// <remarks>
+        /// This instance is only used for its configuration property values and to generate
+        /// additional genetic entities.
+        /// </remarks>
+        IGeneticEntity GeneticEntitySeed { get; set; }
+
+        /// <summary>
+        /// Gets the <see cref="IPopulation"/> to be used by the algorithm.
+        /// </summary>
+        /// <remarks>
+        /// This instance is only used for its configuration property values and to generate
+        /// additional populations.
+        /// </remarks>
+        IPopulation PopulationSeed { get; set; }
 
         /// <summary>
         /// Gets the <see cref="GeneticEnvironment"/> being used by this object.
@@ -58,14 +106,14 @@ namespace GenFx.Contracts
         int CurrentGeneration { get; }
 
         /// <summary>
-        /// Gets the collection of statistics being calculated for the genetic algorithm.
+        /// Gets the collection of statistics to be calculated for the genetic algorithm.
         /// </summary>
-        IEnumerable<IStatistic> Statistics { get; }
+        IList<IStatistic> Statistics { get; }
 
         /// <summary>
-        /// Gets the collection of plugins being used by the genetic algorithm.
+        /// Gets the collection of plugins to be used by the genetic algorithm.
         /// </summary>
-        IEnumerable<IPlugin> Plugins { get; }
+        IList<IPlugin> Plugins { get; }
 
         /// <summary>
         /// Initializes the genetic algorithm with a starting <see cref="GeneticEnvironment"/>.

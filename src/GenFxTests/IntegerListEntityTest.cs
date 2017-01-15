@@ -40,7 +40,7 @@ namespace GenFxTests
         /// Tests that the Clone method works correctly.
         /// </summary>
         [TestMethod()]
-        public void BinaryStringEntity_Clone()
+        public void IntegerListEntity_Clone()
         {
             IIntegerListEntity entity = GetEntity();
             IIntegerListEntity clone = (IIntegerListEntity)entity.Clone();
@@ -51,10 +51,11 @@ namespace GenFxTests
         /// Tests that the CopyTo method works correctly.
         /// </summary>
         [TestMethod()]
-        public void BinaryStringEntity_CopyTo()
+        public void IntegerListEntity_CopyTo()
         {
             IIntegerListEntity entity = GetEntity();
-            IIntegerListEntity entity2 = new TestIntegerListEntity(GetAlgorithm(4));
+            IIntegerListEntity entity2 = new TestIntegerListEntity();
+            entity2.Initialize(GetAlgorithm(4));
 
             entity.CopyTo(entity2);
 
@@ -65,7 +66,7 @@ namespace GenFxTests
         /// Tests that an exception is thrown when a null entity is passed.
         /// </summary>
         [TestMethod()]
-        public void BinaryStringEntity_CopyTo_NullEntity()
+        public void IntegerListEntity_CopyTo_NullEntity()
         {
             IIntegerListEntity entity = GetEntity();
 
@@ -76,12 +77,13 @@ namespace GenFxTests
         /// Tests that the constructor initializes the state correctly.
         /// </summary>
         [TestMethod()]
-        public void BinaryStringEntity_Ctor()
+        public void IntegerListEntity_Ctor()
         {
             int size = 3;
             IGeneticAlgorithm algorithm = GetAlgorithm(size);
-            IIntegerListEntity entity = new TestIntegerListEntity(algorithm);
-            PrivateObject accessor = new PrivateObject(entity, new PrivateType(typeof(ListEntity<TestIntegerListEntity, TestIntegerListEntityFactoryConfig, int>)));
+            IIntegerListEntity entity = new TestIntegerListEntity { InitialLength = size };
+            entity.Initialize(algorithm);
+            PrivateObject accessor = new PrivateObject(entity, new PrivateType(typeof(ListEntity<int>)));
             Assert.AreEqual(size, entity.Length, "Length not initialized correctly.");
             Assert.AreEqual(size, ((List<int>)accessor.GetField("genes")).Count, "Genes not initialized correctly.");
         }
@@ -90,25 +92,32 @@ namespace GenFxTests
         /// Tests that the Initialize method works correctly.
         /// </summary>
         [TestMethod()]
-        public void BinaryStringEntity_Initialize()
+        public void IntegerListEntity_Initialize()
         {
-            IGeneticAlgorithm algorithm = GetAlgorithm(4);
-            IIntegerListEntity entity = new TestIntegerListEntity(algorithm);
             RandomNumberService.Instance = new TestRandomUtil();
-            entity.Initialize();
-            Assert.AreEqual("0, 1, 2, 3", entity.Representation, "Entity not initialized correctly.");
+
+            IGeneticAlgorithm algorithm = GetAlgorithm(4);
+            IIntegerListEntity entity = new TestIntegerListEntity { InitialLength = 4 };
+            entity.Initialize(algorithm);
+            
+            Assert.AreEqual("1, 2, 3, 4", entity.Representation, "Entity not initialized correctly.");
         }
 
         /// <summary>
         /// Tests that the indexer works correctly.
         ///</summary>
         [TestMethod()]
-        public void BinaryStringEntity_Indexer()
+        public void IntegerListEntity_Indexer()
         {
             IGeneticAlgorithm algorithm = GetAlgorithm(3);
-            IIntegerListEntity entity = new TestIntegerListEntity(algorithm);
-            PrivateObject accessor = new PrivateObject(entity, new PrivateType(typeof(ListEntity<TestIntegerListEntity, TestIntegerListEntityFactoryConfig, int>)));
+            IIntegerListEntity entity = new TestIntegerListEntity { InitialLength = 3 };
+            entity.Initialize(algorithm);
+            PrivateObject accessor = new PrivateObject(entity, new PrivateType(typeof(ListEntity<int>)));
             List<int> genes = (List<int>)accessor.GetField("genes");
+            for (int i = 0; i < genes.Count; i++)
+            {
+                genes[i] = 0;
+            }
 
             entity[0] = 1;
             Assert.AreEqual(1, genes[0], "Genes not set correctly.");
@@ -131,12 +140,13 @@ namespace GenFxTests
         /// Tests that the Length property works correctly.
         ///</summary>
         [TestMethod()]
-        public void BinaryStringEntity_Length()
+        public void IntegerListEntity_Length()
         {
             int length = 50;
             IGeneticAlgorithm algorithm = GetAlgorithm(length);
-            
-            IIntegerListEntity entity = new TestIntegerListEntity(algorithm);
+
+            IIntegerListEntity entity = new TestIntegerListEntity { InitialLength = length };
+            entity.Initialize(algorithm);
             Assert.AreEqual(length, entity.Length, "Length not set correctly.");
 
             entity.Length = length;
@@ -147,12 +157,13 @@ namespace GenFxTests
         /// Tests that an exception is thrown when the Length is set to a different value.
         ///</summary>
         [TestMethod()]
-        public void BinaryStringEntity_Length_SetToDifferentValue()
+        public void IntegerListEntity_Length_SetToDifferentValue()
         {
             int length = 50;
             IGeneticAlgorithm algorithm = GetAlgorithm(length);
             
-            TestIntegerListEntity entity = new TestIntegerListEntity(algorithm);
+            TestIntegerListEntity entity = new TestIntegerListEntity();
+            entity.Initialize(algorithm);
             AssertEx.Throws<ArgumentException>(() => entity.Length = 51);
         }
 
@@ -173,13 +184,14 @@ namespace GenFxTests
         {
             IGeneticAlgorithm algorithm = GetAlgorithm(4);
 
-            TestIntegerListEntity entity = new TestIntegerListEntity(algorithm);
+            TestIntegerListEntity entity = new TestIntegerListEntity { InitialLength = 4 };
+            entity.Initialize(algorithm);
             entity[0] = 5;
             entity[1] = 3;
             entity[2] = 10;
             entity[3] = 127;
 
-            PrivateObject accessor = new PrivateObject(entity, new PrivateType(typeof(GeneticEntity<TestIntegerListEntity, TestIntegerListEntityFactoryConfig>)));
+            PrivateObject accessor = new PrivateObject(entity, new PrivateType(typeof(GeneticEntity)));
             entity.Age = 3;
             accessor.SetField("rawFitnessValue", 1);
             entity.ScaledFitnessValue = 2;
@@ -189,26 +201,26 @@ namespace GenFxTests
 
         private static IGeneticAlgorithm GetAlgorithm(int entityLength)
         {
-            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentFactoryConfigSet
+            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm
             {
-                GeneticAlgorithm = new MockGeneticAlgorithmFactoryConfig(),
-                SelectionOperator = new MockSelectionOperatorFactoryConfig(),
-                FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig(),
-                Population = new MockPopulationFactoryConfig(),
-                Entity = new TestIntegerListEntityFactoryConfig
+                SelectionOperator = new MockSelectionOperator(),
+                FitnessEvaluator = new MockFitnessEvaluator(),
+                PopulationSeed = new MockPopulation(),
+                GeneticEntitySeed = new TestIntegerListEntity
                 {
-                    Length = entityLength
+                    InitialLength = entityLength
                 }
-            });
+            };
             return algorithm;
         }
 
-        private class TestIntegerListEntity : IntegerListEntity<TestIntegerListEntity, TestIntegerListEntityFactoryConfig>
+        private class TestIntegerListEntity : IntegerListEntity
         {
-            public TestIntegerListEntity(IGeneticAlgorithm algorithm)
-                : base(algorithm, ((TestIntegerListEntityFactoryConfig)algorithm.ConfigurationSet.Entity).Length)
-            {
+            public int InitialLength { get; set; }
 
+            protected override int GetInitialLength()
+            {
+                return this.InitialLength;
             }
 
             public override bool IsFixedSize
@@ -220,11 +232,6 @@ namespace GenFxTests
             }
         }
 
-        private class TestIntegerListEntityFactoryConfig : IntegerListEntityFactoryConfig<TestIntegerListEntityFactoryConfig, TestIntegerListEntity>
-        {
-            public int Length { get; set; }
-        }
-
         private class TestRandomUtil : IRandomNumberService
         {
             private int increment;
@@ -234,7 +241,7 @@ namespace GenFxTests
                 throw new Exception("The method or operation is not implemented.");
             }
 
-            public double GetRandomPercentRatio()
+            public double GetDouble()
             {
                 throw new Exception("The method or operation is not implemented.");
             }

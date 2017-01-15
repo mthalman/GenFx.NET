@@ -15,29 +15,6 @@ namespace GenFxTests
     [TestClass]
     public class TimeDurationTerminatorTest
     {
-
-        /// <summary>
-        /// Tests that the constructor initializes the state correctly.
-        /// </summary>
-        [TestMethod]
-        public void TimeDurationTerminator_Ctor()
-        {
-            TimeSpan timeLimit = new TimeSpan(2, 3, 5);
-            IGeneticAlgorithm algorithm = GetAlgorithm(timeLimit);
-
-            TimeDurationTerminator terminator = new TimeDurationTerminator(algorithm);
-            Assert.IsInstanceOfType(terminator.Configuration, typeof(TimeDurationTerminatorFactoryConfig));
-        }
-
-        /// <summary>
-        /// Tests that an exception is thrown when a required config is missing.
-        /// </summary>
-        [TestMethod]
-        public void TimeDurationTerminator_Ctor_MissingConfig()
-        {
-            AssertEx.Throws<ArgumentException>(() => new TimeDurationTerminator(new MockGeneticAlgorithm(new ComponentFactoryConfigSet())));
-        }
-
         /// <summary>
         /// Tests that the IsComplete method works correctly.
         /// </summary>
@@ -47,10 +24,11 @@ namespace GenFxTests
             TimeSpan timeLimit = new TimeSpan(0, 1, 0);
             IGeneticAlgorithm algorithm = GetAlgorithm(timeLimit);
 
-            TimeDurationTerminator terminator = new TimeDurationTerminator(algorithm);
+            TimeDurationTerminator terminator = new TimeDurationTerminator { TimeLimit = timeLimit };
+            terminator.Initialize(algorithm);
 
             // "Start" the algorithm to trigger the start time
-            PrivateObject algorithmAccessor = new PrivateObject(algorithm, new PrivateType(typeof(GeneticAlgorithm<MockGeneticAlgorithm, MockGeneticAlgorithmFactoryConfig>)));
+            PrivateObject algorithmAccessor = new PrivateObject(algorithm, new PrivateType(typeof(GeneticAlgorithm)));
             algorithmAccessor.Invoke("OnAlgorithmStarting");
 
             Assert.IsFalse(terminator.IsComplete(), "Time limit has not been reached.");
@@ -64,18 +42,17 @@ namespace GenFxTests
 
         private static IGeneticAlgorithm GetAlgorithm(TimeSpan timeLimit)
         {
-            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentFactoryConfigSet
+            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm
             {
-                GeneticAlgorithm = new MockGeneticAlgorithmFactoryConfig(),
-                Entity = new MockEntityFactoryConfig(),
-                Population = new MockPopulationFactoryConfig(),
-                SelectionOperator = new MockSelectionOperatorFactoryConfig(),
-                FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig(),
-                Terminator = new TimeDurationTerminatorFactoryConfig
+                GeneticEntitySeed = new MockEntity(),
+                PopulationSeed = new MockPopulation(),
+                SelectionOperator = new MockSelectionOperator(),
+                FitnessEvaluator = new MockFitnessEvaluator(),
+                Terminator = new TimeDurationTerminator
                 {
                     TimeLimit = timeLimit
                 }
-            });
+            };
             return algorithm;
         }
     }

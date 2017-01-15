@@ -3,10 +3,10 @@
 namespace GenFx.ComponentLibrary.Lists
 {
     /// <summary>
-    /// Validates the crossover point-related properties of <see cref="MultiPointCrossoverOperatorFactoryConfig{TConfiguration, TCrossover}"/>.
+    /// Validates the crossover point-related properties of <see cref="MultiPointCrossoverOperator"/>.
     /// </summary>
     /// <remarks>
-    /// Ensures that there can be no more than two crossover points if <see cref="MultiPointCrossoverOperatorFactoryConfig{TConfiguration, TCrossover}.UsePartiallyMatchedCrossover"/> is true.
+    /// Ensures that there can be no more than two crossover points if <see cref="MultiPointCrossoverOperator.UsePartiallyMatchedCrossover"/> is true.
     /// </remarks>
     internal class MultiPointCrossoverOperatorCrossoverPointValidator : Validator
     {
@@ -14,7 +14,7 @@ namespace GenFx.ComponentLibrary.Lists
         {
             errorMessage = null;
 
-            IMultiPointCrossoverOperatorFactoryConfig config = (IMultiPointCrossoverOperatorFactoryConfig)owner;
+            MultiPointCrossoverOperator config = (MultiPointCrossoverOperator)owner;
             if (config.UsePartiallyMatchedCrossover && config.CrossoverPointCount > 2)
             {
                 errorMessage = StringUtil.GetFormattedString(Resources.ErrorMsg_MultiPointCrossoverOperationCrossoverPointValidator_ValidationError);

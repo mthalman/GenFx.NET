@@ -21,7 +21,7 @@ namespace GenFxTests
         [TestMethod]
         public void StringUtil_GetFormattedString()
         {
-            Type stringUtilType = typeof(GeneticAlgorithm<,>).Assembly.GetType("GenFx.StringUtil");
+            Type stringUtilType = typeof(GeneticAlgorithm).Assembly.GetType("GenFx.StringUtil");
             MethodInfo method = stringUtilType.GetMethod("GetFormattedString", BindingFlags.Static | BindingFlags.NonPublic);
 
             object result = method.Invoke(null, new object[] { @"Test\n{0}\t{1}.", new string[] { "1", "2" } });

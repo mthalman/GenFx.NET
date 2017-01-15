@@ -28,13 +28,18 @@ namespace GenFxTests
         public void FitnessProportionateSelectionOperator_Select()
         {
             IGeneticAlgorithm algorithm = GetAlgorithm();
-            FitnessProportionateSelectionOperator op = new FitnessProportionateSelectionOperator(algorithm);
-            SimplePopulation population = new SimplePopulation(algorithm);
-            MockEntity entity1 = new MockEntity(algorithm);
+            FitnessProportionateSelectionOperator op = new FitnessProportionateSelectionOperator();
+            op.Initialize(algorithm);
+            SimplePopulation population = new SimplePopulation();
+            population.Initialize(algorithm);
+            MockEntity entity1 = new MockEntity();
+            entity1.Initialize(algorithm);
             entity1.ScaledFitnessValue = 1;
-            MockEntity entity2 = new MockEntity(algorithm);
+            MockEntity entity2 = new MockEntity();
+            entity2.Initialize(algorithm);
             entity2.ScaledFitnessValue = 5;
-            MockEntity entity3 = new MockEntity(algorithm);
+            MockEntity entity3 = new MockEntity();
+            entity3.Initialize(algorithm);
             entity3.ScaledFitnessValue = 4;
             population.Entities.Add(entity1);
             population.Entities.Add(entity2);
@@ -74,15 +79,20 @@ namespace GenFxTests
         public void FitnessProportionateSelectionOperator_Select_MinimizeFitness()
         {
             IGeneticAlgorithm algorithm = GetAlgorithm();
-            ((MockFitnessEvaluatorFactoryConfig)algorithm.ConfigurationSet.FitnessEvaluator).EvaluationMode = FitnessEvaluationMode.Minimize;
+            ((MockFitnessEvaluator)algorithm.FitnessEvaluator).EvaluationMode = FitnessEvaluationMode.Minimize;
 
-            FitnessProportionateSelectionOperator op = new FitnessProportionateSelectionOperator(algorithm);
-            SimplePopulation population = new SimplePopulation(algorithm);
-            MockEntity entity1 = new MockEntity(algorithm);
+            FitnessProportionateSelectionOperator op = new FitnessProportionateSelectionOperator();
+            op.Initialize(algorithm);
+            SimplePopulation population = new SimplePopulation();
+            population.Initialize(algorithm);
+            MockEntity entity1 = new MockEntity();
+            entity1.Initialize(algorithm);
             entity1.ScaledFitnessValue = 1; // Slice size: 5
-            MockEntity entity2 = new MockEntity(algorithm);
+            MockEntity entity2 = new MockEntity();
+            entity2.Initialize(algorithm);
             entity2.ScaledFitnessValue = 5; // Slice size: 1
-            MockEntity entity3 = new MockEntity(algorithm);
+            MockEntity entity3 = new MockEntity();
+            entity3.Initialize(algorithm);
             entity3.ScaledFitnessValue = 4; // Slice size: 4
             population.Entities.Add(entity1);
             population.Entities.Add(entity2);
@@ -122,13 +132,18 @@ namespace GenFxTests
         public void FitnessProportionateSelectionOperator_Select_FitnessValueZero()
         {
             IGeneticAlgorithm algorithm = GetAlgorithm();
-            FitnessProportionateSelectionOperator op = new FitnessProportionateSelectionOperator(algorithm);
-            SimplePopulation population = new SimplePopulation(algorithm);
-            MockEntity entity1 = new MockEntity(algorithm);
+            FitnessProportionateSelectionOperator op = new FitnessProportionateSelectionOperator();
+            op.Initialize(algorithm);
+            SimplePopulation population = new SimplePopulation();
+            population.Initialize(algorithm);
+            MockEntity entity1 = new MockEntity();
+            entity1.Initialize(algorithm);
             entity1.ScaledFitnessValue = 1; // Slice size: 2
-            MockEntity entity2 = new MockEntity(algorithm);
+            MockEntity entity2 = new MockEntity();
+            entity2.Initialize(algorithm);
             entity2.ScaledFitnessValue = 0; // Slice size: 1
-            MockEntity entity3 = new MockEntity(algorithm);
+            MockEntity entity3 = new MockEntity();
+            entity3.Initialize(algorithm);
             entity3.ScaledFitnessValue = 6; // Slice size: 7
             population.Entities.Add(entity1);
             population.Entities.Add(entity2);
@@ -168,13 +183,18 @@ namespace GenFxTests
         public void FitnessProportionateSelectionOperator_Select_FitnessValueNegative()
         {
             IGeneticAlgorithm algorithm = GetAlgorithm();
-            FitnessProportionateSelectionOperator op = new FitnessProportionateSelectionOperator(algorithm);
-            SimplePopulation population = new SimplePopulation(algorithm);
-            MockEntity entity1 = new MockEntity(algorithm);
+            FitnessProportionateSelectionOperator op = new FitnessProportionateSelectionOperator();
+            op.Initialize(algorithm);
+            SimplePopulation population = new SimplePopulation();
+            population.Initialize(algorithm);
+            MockEntity entity1 = new MockEntity();
+            entity1.Initialize(algorithm);
             entity1.ScaledFitnessValue = -1; // Slice size: 1
-            MockEntity entity2 = new MockEntity(algorithm);
+            MockEntity entity2 = new MockEntity();
+            entity2.Initialize(algorithm);
             entity2.ScaledFitnessValue = 1; // Slice size: 3
-            MockEntity entity3 = new MockEntity(algorithm);
+            MockEntity entity3 = new MockEntity();
+            entity3.Initialize(algorithm);
             entity3.ScaledFitnessValue = 4; // Slice size: 6
             population.Entities.Add(entity1);
             population.Entities.Add(entity2);
@@ -209,19 +229,19 @@ namespace GenFxTests
 
         private static IGeneticAlgorithm GetAlgorithm()
         {
-            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentFactoryConfigSet
+            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm
             {
-                GeneticAlgorithm = new MockGeneticAlgorithmFactoryConfig(),
-                Entity = new MockEntityFactoryConfig(),
-                Population = new SimplePopulationFactoryConfig(),
-                FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig(),
-                SelectionOperator = new FitnessProportionateSelectionOperatorFactoryConfig
+                GeneticEntitySeed = new MockEntity(),
+                PopulationSeed = new SimplePopulation(),
+                FitnessEvaluator = new MockFitnessEvaluator(),
+                SelectionOperator = new FitnessProportionateSelectionOperator
                 {
                     SelectionBasedOnFitnessType = FitnessType.Scaled
                 }
-            });
+            };
 
-            algorithm.Operators.FitnessEvaluator = new MockFitnessEvaluator(algorithm);
+            algorithm.FitnessEvaluator = new MockFitnessEvaluator();
+            algorithm.FitnessEvaluator.Initialize(algorithm);
 
             return algorithm;
         }
@@ -235,7 +255,7 @@ namespace GenFxTests
                 throw new Exception("The method or operation is not implemented.");
             }
 
-            public double GetRandomPercentRatio()
+            public double GetDouble()
             {
                 return RandomRatio;
             }

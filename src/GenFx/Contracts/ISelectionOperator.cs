@@ -11,8 +11,13 @@ namespace GenFx.Contracts
     /// fitness value.
     /// </para>
     /// </remarks>
-    public interface ISelectionOperator : IGeneticComponent
+    public interface ISelectionOperator : IGeneticComponentWithAlgorithm
     {
+        /// <summary>
+        /// Gets the <see cref="FitnessType"/> to base selection of <see cref="IGeneticEntity"/> objects on.
+        /// </summary>
+        FitnessType SelectionBasedOnFitnessType { get; }
+
         /// <summary>
         /// Selects a <see cref="IGeneticEntity"/> from <paramref name="population"/>.
         /// </summary>

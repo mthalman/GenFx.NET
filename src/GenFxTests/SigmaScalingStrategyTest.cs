@@ -18,33 +18,13 @@ namespace GenFxTests
     public class SigmaScalingStrategyTest
     {
         /// <summary>
-        /// Tests that the constructor initializes the state correctly.
-        /// </summary>
-        [TestMethod]
-        public void SigmaScalingStrategy_Ctor()
-        {
-            int multiplier = 3;
-            IGeneticAlgorithm algorithm = GetAlgorithm(multiplier);
-            SigmaScalingStrategy strategy = new SigmaScalingStrategy(algorithm);
-            Assert.IsInstanceOfType(strategy.Configuration, typeof(SigmaScalingStrategyFactoryConfig));
-        }
-
-        /// <summary>
         /// Tests that an exception is thrown when a null algorithm is passed.
         /// </summary>
         [TestMethod]
         public void SigmaScalingStrategy_Ctor_NullAlgorithm()
         {
-            AssertEx.Throws<ArgumentNullException>(() => new SigmaScalingStrategy(null));
-        }
-
-        /// <summary>
-        /// Tests that an exception is thrown when a required config is missing.
-        /// </summary>
-        [TestMethod]
-        public void SigmaScalingStrategy_Ctor_MissingConfig()
-        {
-            AssertEx.Throws<ArgumentException>(() => new SigmaScalingStrategy(new MockGeneticAlgorithm(new ComponentFactoryConfigSet())));
+            SigmaScalingStrategy strategy = new SigmaScalingStrategy();
+            AssertEx.Throws<ArgumentNullException>(() => strategy.Initialize(null));
         }
 
         /// <summary>
@@ -53,7 +33,7 @@ namespace GenFxTests
         [TestMethod]
         public void SigmaScalingStrategy_Ctor_InvalidSetting()
         {
-            SigmaScalingStrategyFactoryConfig config = new SigmaScalingStrategyFactoryConfig();
+            SigmaScalingStrategy config = new SigmaScalingStrategy();
             AssertEx.Throws<ValidationException>(() => config.Multiplier = -2);
         }
 
@@ -64,9 +44,11 @@ namespace GenFxTests
         public void SigmaScalingStrategy_Scale()
         {
             IGeneticAlgorithm algorithm = GetAlgorithm(5);
-            SigmaScalingStrategy strategy = new SigmaScalingStrategy(algorithm);
-            SimplePopulation population = new SimplePopulation(algorithm);
-            PrivateObject populationAccessor = new PrivateObject(population, new PrivateType(typeof(PopulationBase<SimplePopulation, SimplePopulationFactoryConfig>)));
+            SigmaScalingStrategy strategy = new SigmaScalingStrategy { Multiplier = 5 };
+            strategy.Initialize(algorithm);
+            SimplePopulation population = new SimplePopulation();
+            population.Initialize(algorithm);
+            PrivateObject populationAccessor = new PrivateObject(population, new PrivateType(typeof(PopulationBase)));
             AddEntity(algorithm, 4, population);
             AddEntity(algorithm, 10, population);
             AddEntity(algorithm, 20, population);
@@ -90,8 +72,10 @@ namespace GenFxTests
         public void SigmaScalingStrategy_Scale_EmptyPopulation()
         {
             IGeneticAlgorithm algorithm = GetAlgorithm(10);
-            SigmaScalingStrategy op = new SigmaScalingStrategy(algorithm);
-            SimplePopulation population = new SimplePopulation(algorithm);
+            SigmaScalingStrategy op = new SigmaScalingStrategy();
+            op.Initialize(algorithm);
+            SimplePopulation population = new SimplePopulation();
+            population.Initialize(algorithm);
             AssertEx.Throws<ArgumentException>(() => op.Scale(population));
         }
 
@@ -102,32 +86,33 @@ namespace GenFxTests
         public void SigmaScalingStrategy_Scale_NullPopulation()
         {
             IGeneticAlgorithm algorithm = GetAlgorithm(10);
-            SigmaScalingStrategy op = new SigmaScalingStrategy(algorithm);
+            SigmaScalingStrategy op = new SigmaScalingStrategy();
+            op.Initialize(algorithm);
             AssertEx.Throws<ArgumentNullException>(() => op.Scale(null));
         }
 
         private void AddEntity(IGeneticAlgorithm algorithm, double fitness, IPopulation population)
         {
-            MockEntity entity = new MockEntity(algorithm);
-            PrivateObject accessor = new PrivateObject(entity, new PrivateType(typeof(GeneticEntity<MockEntity, MockEntityFactoryConfig>)));
+            MockEntity entity = new MockEntity();
+            entity.Initialize(algorithm);
+            PrivateObject accessor = new PrivateObject(entity, new PrivateType(typeof(GeneticEntity)));
             accessor.SetField("rawFitnessValue", fitness);
             population.Entities.Add(entity);
         }
 
         private IGeneticAlgorithm GetAlgorithm(int multiplier)
         {
-            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentFactoryConfigSet
+            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm
             {
-                GeneticAlgorithm = new MockGeneticAlgorithmFactoryConfig(),
-                FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig(),
-                SelectionOperator = new MockSelectionOperatorFactoryConfig(),
-                Entity = new MockEntityFactoryConfig(),
-                Population = new SimplePopulationFactoryConfig(),
-                FitnessScalingStrategy = new SigmaScalingStrategyFactoryConfig
+                FitnessEvaluator = new MockFitnessEvaluator(),
+                SelectionOperator = new MockSelectionOperator(),
+                GeneticEntitySeed = new MockEntity(),
+                PopulationSeed = new SimplePopulation(),
+                FitnessScalingStrategy = new SigmaScalingStrategy
                 {
                     Multiplier = multiplier
                 }
-            });
+            };
             return algorithm;
         }
     }

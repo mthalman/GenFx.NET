@@ -8,19 +8,8 @@ namespace GenFx.ComponentLibrary.Statistics
     /// Provides the calculation to determine the standard deviation of the values of the 
     /// <see cref="IGeneticEntity.ScaledFitnessValue"/> property in a <see cref="IPopulation"/>.
     /// </summary>
-    public sealed class StandardDeviationFitnessStatistic : StatisticBase<StandardDeviationFitnessStatistic, StandardDeviationFitnessStatisticFactoryConfig>
+    public class StandardDeviationFitnessStatistic : StatisticBase
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="StandardDeviationFitnessStatistic"/> class.
-        /// </summary>
-        /// <param name="algorithm"><see cref="IGeneticAlgorithm"/> using this <see cref="StandardDeviationFitnessStatistic"/>.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="algorithm"/> is null.</exception>
-        /// <exception cref="ValidationException">The component's configuration is in an invalid state.</exception>
-        public StandardDeviationFitnessStatistic(IGeneticAlgorithm algorithm)
-            : base(algorithm)
-        {
-        }
-
         /// <summary>
         /// Calculates the standard deviation of the values of the <see cref="IGeneticEntity.ScaledFitnessValue"/> 
         /// property in the <paramref name="population"/>.

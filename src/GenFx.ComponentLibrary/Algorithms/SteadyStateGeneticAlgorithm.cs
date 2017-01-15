@@ -1,4 +1,10 @@
 using GenFx.Contracts;
+using GenFx.Validation;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace GenFx.ComponentLibrary.Algorithms
 {
@@ -12,15 +18,77 @@ namespace GenFx.ComponentLibrary.Algorithms
     /// since all high-fitness <see cref="IGeneticEntity"/> objects will be moved to the next generation anyways.
     /// </para>
     /// </remarks>
-    public sealed class SteadyStateGeneticAlgorithm : SteadyStateGeneticAlgorithm<SteadyStateGeneticAlgorithm, SteadyStateGeneticAlgorithmFactoryConfig>
+    public class SteadyStateGeneticAlgorithm : GeneticAlgorithm
     {
+        private PopulationReplacementValue replacementValue = new PopulationReplacementValue(10, ReplacementValueKind.Percentage);
+        
         /// <summary>
-        /// Initializes a new instance of this class.
+        /// Gets or sets the value indicating how many members of the the <see cref="IPopulation"/> are to 
+        /// be replaced with the offspring of the previous generation.
         /// </summary>
-        /// <param name="configurationSet">Contains the component configuration for the algorithm.</param>
-        public SteadyStateGeneticAlgorithm(ComponentFactoryConfigSet configurationSet)
-            : base(configurationSet)
+        /// <value>
+        /// A value representing a fixed amount of <see cref="IGeneticEntity"/> objects to be replaced
+        /// or the percentage that is to be replaced.
+        /// </value>
+        /// <exception cref="ValidationException">Value is not valid.</exception>
+        [ConfigurationProperty]
+        [CustomValidator(typeof(PopulationReplacementValueValidator))]
+        public PopulationReplacementValue PopulationReplacementValue
         {
+            get { return this.replacementValue; }
+            set { this.SetProperty(ref this.replacementValue, value); }
+        }
+
+        /// <summary>
+        /// Modifies <paramref name="population"/> to become the next generation of <see cref="IGeneticEntity"/> objects.
+        /// </summary>
+        /// <param name="population">The current <see cref="IPopulation"/> to be modified.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="population"/> is null.</exception>
+        protected override Task CreateNextGenerationAsync(IPopulation population)
+        {
+            if (population == null)
+            {
+                throw new ArgumentNullException(nameof(population));
+            }
+
+            int populationCount = population.Entities.Count;
+            int replacementCount;
+            if (this.PopulationReplacementValue.Kind == ReplacementValueKind.Percentage)
+            {
+                replacementCount = Convert.ToInt32(
+                    Math.Round(
+                        populationCount * ((double)this.PopulationReplacementValue.Value / 100)
+                    ));
+            }
+            else
+            {
+                replacementCount = this.PopulationReplacementValue.Value;
+            }
+
+            // Add a select number of potentially modified Entities to the new generation.
+            for (int i = 0; i < replacementCount; i++)
+            {
+                IList<IGeneticEntity> childEntities = this.SelectGeneticEntitiesAndApplyCrossoverAndMutation(population);
+
+                for (int entityIndex = 0; entityIndex < childEntities.Count; entityIndex++)
+                {
+                    population.Entities.Add(childEntities[entityIndex]);
+                }
+            }
+
+            // Remove the weakest Entities from the population.
+            ObservableCollection<IGeneticEntity> workingGeneticEntities = new ObservableCollection<IGeneticEntity>(population.Entities);
+            IGeneticEntity[] sortedEntities = workingGeneticEntities.GetEntitiesSortedByFitness(
+                this.SelectionOperator.SelectionBasedOnFitnessType,
+                this.FitnessEvaluator.EvaluationMode).ToArray();
+
+            population.Entities.Clear();
+            for (int i = sortedEntities.Length - 1; i >= sortedEntities.Length - populationCount; i--)
+            {
+                population.Entities.Add(sortedEntities[i]);
+            }
+
+            return Task.FromResult(true);
         }
     }
 }

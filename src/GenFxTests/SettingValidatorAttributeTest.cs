@@ -48,14 +48,14 @@ namespace GenFxTests
         [TestMethod]
         public void IntegerExternalValidatorAttribute_Ctor()
         {
-            Type configType = typeof(FakeComponentFactoryConfig);
+            Type configType = typeof(FakeComponent);
             string targetProperty = "Value";
             IntegerExternalValidatorAttribute attrib = new IntegerExternalValidatorAttribute(configType, targetProperty);
 
             Assert.AreEqual(Int32.MinValue, attrib.MinValue, "MinValue not initialized correctly.");
             Assert.AreEqual(Int32.MaxValue, attrib.MaxValue, "MinValue not initialized correctly.");
             Assert.IsInstanceOfType(attrib.Validator, typeof(IntegerValidator), "Validator is not correct type.");
-            Assert.AreSame(configType, attrib.TargetComponentConfigurationType, "TargetComponentConfigurationType not initialized correctly.");
+            Assert.AreSame(configType, attrib.TargetComponentType, "TargetComponentConfigurationType not initialized correctly.");
             Assert.AreEqual(targetProperty, attrib.TargetProperty, "TargetProperty not initialized correctly.");
         }
 
@@ -109,14 +109,14 @@ namespace GenFxTests
         [TestMethod]
         public void DoubleExternalValidatorAttribute_Ctor()
         {
-            Type configType = typeof(FakeComponentFactoryConfig);
+            Type configType = typeof(FakeComponent);
             string targetProperty = "Value";
             DoubleExternalValidatorAttribute attrib = new DoubleExternalValidatorAttribute(configType, targetProperty);
 
             Assert.AreEqual(Double.MinValue, attrib.MinValue, "MinValue not initialized correctly.");
             Assert.AreEqual(Double.MaxValue, attrib.MaxValue, "MinValue not initialized correctly.");
             Assert.IsInstanceOfType(attrib.Validator, typeof(DoubleValidator), "Validator is not correct type.");
-            Assert.AreSame(configType, attrib.TargetComponentConfigurationType, "TargetComponentConfigurationType not initialized correctly.");
+            Assert.AreSame(configType, attrib.TargetComponentType, "TargetComponentType not initialized correctly.");
             Assert.AreEqual(targetProperty, attrib.TargetProperty, "TargetProperty not initialized correctly.");
         }
 
@@ -148,13 +148,13 @@ namespace GenFxTests
         [TestMethod]
         public void CustomExternalValidatorAttribute_Ctor()
         {
-            Type configType = typeof(FakeComponentFactoryConfig);
+            Type configType = typeof(FakeComponent);
             string targetProperty = "Value";
             CustomExternalValidatorAttribute attrib = new CustomExternalValidatorAttribute(typeof(TestConfigurationValidator), configType, targetProperty);
 
             Assert.AreSame(typeof(TestConfigurationValidator), attrib.ValidatorType, "ValidatorType not initialized correctly.");
             Assert.IsInstanceOfType(attrib.Validator, typeof(TestConfigurationValidator), "Validator is not correct type.");
-            Assert.AreSame(configType, attrib.TargetComponentConfigurationType, "TargetComponentConfigurationType not initialized correctly.");
+            Assert.AreSame(configType, attrib.TargetComponentType, "TargetComponentConfigurationType not initialized correctly.");
             Assert.AreEqual(targetProperty, attrib.TargetProperty, "TargetProperty not initialized correctly.");
         }
 
@@ -184,15 +184,7 @@ namespace GenFxTests
             }
         }
 
-        private class FakeComponent : GeneticComponent<FakeComponent, FakeComponentFactoryConfig>
-        {
-            public FakeComponent()
-                : base(null)
-            {
-            }
-        }
-
-        private class FakeComponentFactoryConfig : ComponentFactoryConfig<FakeComponentFactoryConfig, FakeComponent>
+        private class FakeComponent : GeneticComponent
         {
             private int value;
 

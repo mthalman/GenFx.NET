@@ -1,29 +1,12 @@
 ﻿using GenFx.Contracts;
-using System;
-using System.Linq;
 
 namespace GenFx.ComponentLibrary.Base
 {
     /// <summary>
     /// Plugin component that provides custom extension functionality.
     /// </summary>
-    /// <typeparam name="TPlugin">Type of the deriving plugin class.</typeparam>
-    /// <typeparam name="TConfiguration">Type of the associated configuration class.</typeparam>
-    public abstract class PluginBase<TPlugin, TConfiguration> : GeneticComponentWithAlgorithm<TPlugin, TConfiguration>, IPlugin
-        where TPlugin : PluginBase<TPlugin, TConfiguration>
-        where TConfiguration : PluginFactoryConfigBase<TConfiguration, TPlugin>
+    public abstract class PluginBase : GeneticComponentWithAlgorithm, IPlugin
     {
-        /// <summary>
-        /// Initializes a new instance of this class.
-        /// </summary>
-        /// <param name="algorithm"><see cref="IGeneticAlgorithm"/> using this class.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="algorithm"/> is null.</exception>
-        /// <exception cref="ValidationException">The component's configuration is in an invalid state.</exception>
-        protected PluginBase(IGeneticAlgorithm algorithm)
-            : base(algorithm, GetConfiguration(algorithm, c => c.Plugins.OfType<TConfiguration>().FirstOrDefault()))
-        {
-        }
-
         /// <summary>
         /// Handles the event when the fitness of an environment has been evaluated.
         /// </summary>

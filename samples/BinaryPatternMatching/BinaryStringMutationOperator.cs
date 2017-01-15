@@ -6,13 +6,8 @@ using GenFx.Validation;
 namespace BinaryPatternMatching
 {
     [RequiredEntity(typeof(VariableLengthBinaryStringEntity))]
-    public class BinaryStringMutationOperator : UniformBitMutationOperator<BinaryStringMutationOperator, BinaryStringMutationOperatorConfiguration>
+    public class BinaryStringMutationOperator : UniformBitMutationOperator
     {
-        public BinaryStringMutationOperator(IGeneticAlgorithm algorithm)
-            : base(algorithm)
-        {
-        }
-
         protected override bool GenerateMutation(IGeneticEntity entity)
         {
             bool isMutated = false;
@@ -22,7 +17,7 @@ namespace BinaryPatternMatching
             VariableLengthBinaryStringEntity binaryEntity = (VariableLengthBinaryStringEntity)entity;
             for (int i = binaryEntity.Length - 1; i >= 0; i--)
             {
-                if (RandomNumberService.Instance.GetRandomPercentRatio() <= this.Configuration.MutationRate)
+                if (RandomNumberService.Instance.GetDouble() <= this.MutationRate)
                 {
                     binaryEntity.RemoveAt(i);
                     isMutated = true;
@@ -36,10 +31,5 @@ namespace BinaryPatternMatching
 
             return isMutated;
         }
-    }
-
-    public class BinaryStringMutationOperatorConfiguration
-        : UniformBitMutationOperatorFactoryConfig<BinaryStringMutationOperatorConfiguration, BinaryStringMutationOperator>
-    {
     }
 }

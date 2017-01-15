@@ -8,19 +8,8 @@ namespace GenFx.ComponentLibrary.Statistics
     /// Provides the calculation to determine the lowest <see cref="IGeneticEntity.ScaledFitnessValue"/> 
     /// in a <see cref="IPopulation"/>.
     /// </summary>
-    public sealed class MinimumFitnessStatistic : StatisticBase<MinimumFitnessStatistic, MinimumFitnessStatisticFactoryConfig>
+    public class MinimumFitnessStatistic : StatisticBase
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="MinimumFitnessStatistic"/> class.
-        /// </summary>
-        /// <param name="algorithm"><see cref="IGeneticAlgorithm"/> using this <see cref="MinimumFitnessStatistic"/>.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="algorithm"/> is null.</exception>
-        /// <exception cref="ValidationException">The component's configuration is in an invalid state.</exception>
-        public MinimumFitnessStatistic(IGeneticAlgorithm algorithm)
-            : base(algorithm)
-        {
-        }
-
         /// <summary>
         /// Calculates to determine the lowest <see cref="IGeneticEntity.ScaledFitnessValue"/> 
         /// in the <paramref name="population"/>.

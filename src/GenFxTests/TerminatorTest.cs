@@ -25,17 +25,17 @@ namespace GenFxTests
         [TestMethod]
         public void Terminator_Ctor()
         {
-            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentFactoryConfigSet
+            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm
             {
-                GeneticAlgorithm = new MockGeneticAlgorithmFactoryConfig(),
-                Entity = new MockEntityFactoryConfig(),
-                Population = new SimplePopulationFactoryConfig(),
-                SelectionOperator = new MockSelectionOperatorFactoryConfig(),
-                FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig(),
-                Terminator = new MockTerminatorFactoryConfig()
-            });
-            MockTerminator terminator = new MockTerminator(algorithm);
-            PrivateObject accessor = new PrivateObject(terminator, new PrivateType(typeof(TerminatorBase<MockTerminator, MockTerminatorFactoryConfig>)));
+                GeneticEntitySeed = new MockEntity(),
+                PopulationSeed = new SimplePopulation(),
+                SelectionOperator = new MockSelectionOperator(),
+                FitnessEvaluator = new MockFitnessEvaluator(),
+                Terminator = new MockTerminator()
+            };
+            MockTerminator terminator = new MockTerminator();
+            terminator.Initialize(algorithm);
+            PrivateObject accessor = new PrivateObject(terminator, new PrivateType(typeof(TerminatorBase)));
             Assert.AreSame(algorithm, accessor.GetProperty("Algorithm"), "Algorithm not set correctly.");
         }
 
@@ -45,41 +45,16 @@ namespace GenFxTests
         [TestMethod]
         public void Terminator_Ctor_NullAlgorithm()
         {
-            AssertEx.Throws<ArgumentNullException>(() => new MockTerminator(null));
+            MockTerminator terminator = new MockTerminator();
+            AssertEx.Throws<ArgumentNullException>(() => terminator.Initialize(null));
         }
 
-        /// <summary>
-        /// Tests that an exception is thrown when a required config class is missing.
-        /// </summary>
-        [TestMethod]
-        public void Terminator_Ctor_MissingConfig()
+        private class TestTerminator : TerminatorBase
         {
-            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm(new ComponentFactoryConfigSet
-            {
-                GeneticAlgorithm = new MockGeneticAlgorithmFactoryConfig(),
-                SelectionOperator = new MockSelectionOperatorFactoryConfig(),
-                FitnessEvaluator = new MockFitnessEvaluatorFactoryConfig(),
-                Population = new MockPopulationFactoryConfig(),
-                Entity = new MockEntityFactoryConfig()
-            });
-            AssertEx.Throws<InvalidOperationException>(() => new TestTerminator(algorithm));
-        }
-
-        private class TestTerminator : TerminatorBase<TestTerminator, TestTerminatorFactoryConfig>
-        {
-            public TestTerminator(IGeneticAlgorithm algorithm)
-                : base(algorithm)
-            {
-
-            }
             public override bool IsComplete()
             {
                 throw new Exception("The method or operation is not implemented.");
             }
-        }
-
-        private class TestTerminatorFactoryConfig : TerminatorFactoryConfigBase<TestTerminatorFactoryConfig, TestTerminator>
-        {
         }
     }
 }

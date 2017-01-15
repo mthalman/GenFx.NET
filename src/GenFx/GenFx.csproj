@@ -108,36 +108,21 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ComponentFactoryConfigSet.cs" />
-    <Compile Include="ComponentFactoryConfig.cs" />
-    <Compile Include="ComponentFactoryConfigExtensions.cs" />
+    <Compile Include="ConfigurationPropertyAttribute.cs" />
+    <Compile Include="Contracts\IGeneticComponentWithAlgorithm.cs" />
     <Compile Include="GeneticComponent.cs" />
     <Compile Include="GeneticComponentExtensions.cs" />
-    <Compile Include="Contracts\IFactoryConfigForComponentWithAlgorithm.cs" />
     <Compile Include="DefaultTerminator.cs" />
-    <Compile Include="DefaultTerminatorFactoryConfig.cs" />
     <Compile Include="EnumerableExtensions.cs" />
     <Compile Include="FitnessEvaluationMode.cs" />
-    <Compile Include="GeneticAlgorithmFactoryConfig.cs" />
     <Compile Include="GeneticAlgorithm.cs" />
+    <Compile Include="GeneticComponentWithAlgorithm.cs" />
     <Compile Include="GlobalSuppressions.cs" />
-    <Compile Include="Contracts\ICrossoverOperatorFactoryConfig.cs" />
-    <Compile Include="Contracts\IElitismStrategyFactoryConfig.cs" />
-    <Compile Include="Contracts\IFitnessEvaluatorFactoryConfig.cs" />
-    <Compile Include="Contracts\IFitnessScalingStrategyFactoryConfig.cs" />
-    <Compile Include="Contracts\IGeneticAlgorithmFactoryConfig.cs" />
-    <Compile Include="Contracts\IGeneticEntityFactoryConfig.cs" />
-    <Compile Include="Contracts\IMutationOperatorFactoryConfig.cs" />
-    <Compile Include="Contracts\IPluginFactoryConfig.cs" />
-    <Compile Include="Contracts\ISelectionOperatorFactoryConfig.cs" />
-    <Compile Include="Contracts\IStatisticFactoryConfig.cs" />
     <Compile Include="KeyValueMap.cs" />
     <Compile Include="CollectionExtensions.cs" />
     <Compile Include="Contracts\IPlugin.cs" />
-    <Compile Include="Contracts\IPopulationFactoryConfig.cs" />
     <Compile Include="StatisticExtensions.cs" />
     <Compile Include="StringUtil.cs" />
-    <Compile Include="Contracts\ITerminatorFactoryConfig.cs" />
     <Compile Include="Validation\RequiredValidator.cs" />
     <Compile Include="Validation\RequiredValidatorAttribute.cs" />
     <Compile Include="Validation\CustomValidatorAttribute.cs" />
@@ -153,7 +138,6 @@
     <Compile Include="Validation\IntegerValidatorAttribute.cs" />
     <Compile Include="Validation\Validator.cs" />
     <Compile Include="Validation\ConfigurationValidatorAttribute.cs" />
-    <Compile Include="Contracts\IComponentFactoryConfig.cs" />
     <Compile Include="ConvertUtil.cs" />
     <Compile Include="EnumHelper.cs" />
     <Compile Include="Contracts\IFitnessEvaluator.cs" />
@@ -174,16 +158,13 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Validation\RequiredConfigurableTypeAttribute.cs" />
+    <Compile Include="Validation\RequiredComponentTypeAttribute.cs" />
     <Compile Include="Contracts\ISelectionOperator.cs" />
     <Compile Include="Contracts\IStatistic.cs" />
     <Compile Include="GeneticEnvironment.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Contracts\IGeneticAlgorithm.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AlgorithmOperators.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Contracts\IElitismStrategy.cs">

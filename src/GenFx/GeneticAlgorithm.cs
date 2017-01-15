@@ -16,20 +16,37 @@ namespace GenFx
     /// <summary>
     /// Provides the abstract base class for a type of genetic algorithm.
     /// </summary>
-    /// <typeparam name="TAlgorithm">Type of the deriving algorithm class.</typeparam>
-    /// <typeparam name="TConfiguration">Type of the associated configuration class.</typeparam>
     [SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
-    public abstract class GeneticAlgorithm<TAlgorithm, TConfiguration> : GeneticComponent<TAlgorithm, TConfiguration>, IGeneticAlgorithm
-        where TAlgorithm : GeneticAlgorithm<TAlgorithm, TConfiguration>
-        where TConfiguration : GeneticAlgorithmFactoryConfig<TConfiguration, TAlgorithm>
+    public abstract class GeneticAlgorithm : GeneticComponent, IGeneticAlgorithm
     {
+        private const int DefaultEnvironmentSize = 1;
+
         private int currentGeneration;
         private GeneticEnvironment environment;
         private List<IStatistic> statistics = new List<IStatistic>();
         private List<IPlugin> plugins = new List<IPlugin>();
-        private ComponentFactoryConfigSet config;
-        private AlgorithmOperators operators = new AlgorithmOperators();
         private bool isInitialized;
+        private IFitnessEvaluator fitnessEvaluator;
+        private ITerminator terminator;
+        private IFitnessScalingStrategy fitnessScalingStrategy;
+        private ISelectionOperator selectionOperator;
+        private IMutationOperator mutationOperator;
+        private ICrossoverOperator crossoverOperator;
+        private IElitismStrategy elitismStrategy;
+        private IGeneticEntity geneticEntitySeed;
+        private IPopulation populationSeed;
+        private int environmentSize = DefaultEnvironmentSize;
+
+        // Mapping of component properties to Validator objects as described by external components.
+        private Dictionary<PropertyInfo, List<Validator>> externalValidationMapping;
+
+        /// <summary>
+        /// Initializes a new instance of this class.
+        /// </summary>
+        [SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        protected GeneticAlgorithm()
+        {
+        }
 
         /// <summary>
         /// Occurs when the fitness of an environment has been evaluated.
@@ -56,69 +73,137 @@ namespace GenFx
         public event EventHandler AlgorithmStarting;
 
         /// <summary>
-        /// Initializes a new instance of this class.
+        /// Gets or sets the number of <see cref="IPopulation"/> objects that are contained by the <see cref="GeneticEnvironment"/>.
         /// </summary>
-        /// <param name="configurationSet">Contains the component configuration for the algorithm.</param>
-        [SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        protected GeneticAlgorithm(ComponentFactoryConfigSet configurationSet)
-            : base(GetAlgorithmConfiguration(configurationSet))
+        /// <value>
+        /// The number of populations that are contained by the <see cref="GeneticEnvironment"/>.
+        /// This value is defaulted to 1 and must be greater or equal to 1.
+        /// </value>
+        /// <exception cref="ValidationException">Value is not valid.</exception>
+        [ConfigurationProperty]
+        [IntegerValidator(MinValue = 1)]
+        public int EnvironmentSize
         {
-            if (configurationSet == null)
-            {
-                throw new ArgumentNullException(nameof(configurationSet));
-            }
-
-            this.environment = new GeneticEnvironment(this);
-
-            // We want to ensure the config set cannot be changed once it's being used by an algorithm.  To enforce this, we
-            // freeze the state of the config set when the algorithm is created.  By cloning the config set that is passed in, we allow
-            // the caller to modify their unfrozen instance so it can be configured appropriately between instantiations of an algorithm.
-            this.config = configurationSet.Clone();
-            this.config.Freeze();
-            this.ValidateConfiguration();
-            this.config.CompileExternalValidatorMapping();
-            this.config.Validate(this);
-
-            this.CreateComponents();
-        }
-
-        private static TConfiguration GetAlgorithmConfiguration(ComponentFactoryConfigSet configurationSet)
-        {
-            if (configurationSet == null)
-            {
-                throw new ArgumentNullException(nameof(configurationSet));
-            }
-
-            if (!(configurationSet.GeneticAlgorithm is TConfiguration))
-            {
-                throw new ArgumentException(StringUtil.GetFormattedString(
-                  Resources.ErrorMsg_ComponentConfigurationTypeMismatch,
-                  typeof(TConfiguration).FullName, typeof(TAlgorithm).FullName), nameof(configurationSet));
-            }
-
-            return (TConfiguration)configurationSet.GeneticAlgorithm;
+            get { return this.environmentSize; }
+            set { this.SetProperty(ref this.environmentSize, value); }
         }
 
         /// <summary>
-        /// Gets the <see cref="ComponentFactoryConfigSet"/> containing the configuration for this class.
+        /// Gets the <see cref="IFitnessEvaluator"/> to be used by the algorithm.
         /// </summary>
-        public ComponentFactoryConfigSet ConfigurationSet
+        [ConfigurationProperty]
+        [RequiredValidator]
+        public IFitnessEvaluator FitnessEvaluator
         {
-            get { return this.config; }
+            get { return this.fitnessEvaluator; }
+            set { this.SetProperty(ref this.fitnessEvaluator, value); }
         }
 
         /// <summary>
-        /// Gets the collection of statistics being calculated for the genetic algorithm.
+        /// Gets the <see cref="ITerminator"/> to be used by the algorithm.
         /// </summary>
-        public IEnumerable<IStatistic> Statistics
+        [ConfigurationProperty]
+        public ITerminator Terminator
+        {
+            get { return this.terminator; }
+            set { this.SetProperty(ref this.terminator, value); }
+        }
+
+        /// <summary>
+        /// Gets the <see cref="IFitnessScalingStrategy"/> to be used by the algorithm.
+        /// </summary>
+        [ConfigurationProperty]
+        public IFitnessScalingStrategy FitnessScalingStrategy
+        {
+            get { return this.fitnessScalingStrategy; }
+            set { this.SetProperty(ref this.fitnessScalingStrategy, value); }
+        }
+
+        /// <summary>
+        /// Gets the <see cref="ISelectionOperator"/> to be used by the algorithm.
+        /// </summary>
+        [ConfigurationProperty]
+        [RequiredValidator]
+        public ISelectionOperator SelectionOperator
+        {
+            get { return this.selectionOperator; }
+            set { this.SetProperty(ref this.selectionOperator, value); }
+        }
+
+        /// <summary>
+        /// Gets the <see cref="IMutationOperator"/> to be used by the algorithm.
+        /// </summary>
+        [ConfigurationProperty]
+        public IMutationOperator MutationOperator
+        {
+            get { return this.mutationOperator; }
+            set { this.SetProperty(ref this.mutationOperator, value); }
+        }
+
+        /// <summary>
+        /// Gets the <see cref="ICrossoverOperator"/> to be used by the algorithm.
+        /// </summary>
+        [ConfigurationProperty]
+        public ICrossoverOperator CrossoverOperator
+        {
+            get { return this.crossoverOperator; }
+            set { this.SetProperty(ref this.crossoverOperator, value); }
+        }
+
+        /// <summary>
+        /// Gets the <see cref="IElitismStrategy"/> to be used by the algorithm.
+        /// </summary>
+        [ConfigurationProperty]
+        public IElitismStrategy ElitismStrategy
+        {
+            get { return this.elitismStrategy; }
+            set { this.SetProperty(ref this.elitismStrategy, value); }
+        }
+
+        /// <summary>
+        /// Gets the <see cref="IGeneticEntity"/> to be used by the algorithm.
+        /// </summary>
+        /// <remarks>
+        /// This instance is only used for its configuration property values and to generate
+        /// additional genetic entities.
+        /// </remarks>
+        [ConfigurationProperty]
+        [RequiredValidator]
+        public IGeneticEntity GeneticEntitySeed
+        {
+            get { return this.geneticEntitySeed; }
+            set { this.SetProperty(ref this.geneticEntitySeed, value); }
+        }
+
+        /// <summary>
+        /// Gets the <see cref="IPopulation"/> to be used by the algorithm.
+        /// </summary>
+        /// <remarks>
+        /// This instance is only used for its configuration property values and to generate
+        /// additional populations.
+        /// </remarks>
+        [ConfigurationProperty]
+        [RequiredValidator]
+        public IPopulation PopulationSeed
+        {
+            get { return this.populationSeed; }
+            set { this.SetProperty(ref this.populationSeed, value); }
+        }
+
+        /// <summary>
+        /// Gets the collection of statistics to be calculated for the genetic algorithm.
+        /// </summary>
+        [ConfigurationProperty]
+        public IList<IStatistic> Statistics
         {
             get { return this.statistics; }
         }
 
         /// <summary>
-        /// Gets the collection of plugins being used by the genetic algorithm.
+        /// Gets the collection of plugins to be used by the genetic algorithm.
         /// </summary>
-        public IEnumerable<IPlugin> Plugins
+        [ConfigurationProperty]
+        public IList<IPlugin> Plugins
         {
             get { return this.plugins; }
         }
@@ -141,15 +226,7 @@ namespace GenFx
         {
             get { return this.currentGeneration; }
         }
-
-        /// <summary>
-        /// Gets the <see cref="AlgorithmOperators"/> to be used.
-        /// </summary>
-        public AlgorithmOperators Operators
-        {
-            get { return this.operators; }
-        }
-
+        
         /// <summary>
         /// Gets a value indicating whether the algorithm is initialized.
         /// </summary>
@@ -167,6 +244,19 @@ namespace GenFx
         [SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
         public async Task InitializeAsync()
         {
+            this.environment = new GeneticEnvironment(this);
+
+            this.CompileExternalValidatorMapping();
+            this.Validate(this);
+            this.ValidateConfiguration();
+            
+
+            foreach (IGeneticComponentWithAlgorithm component in this.GetAllComponents())
+            {
+                component.Initialize(this);
+                this.Validate(component);
+            }
+
             this.environment.Populations.Clear();
 
             this.currentGeneration = 0;
@@ -192,7 +282,7 @@ namespace GenFx
             BinaryFormatter formatter = new BinaryFormatter();
             using (MemoryStream stream = new MemoryStream())
             {
-                formatter.Serialize(stream, this.SaveState());
+                formatter.Serialize(stream, GeneticComponentExtensions.SaveState(this));
                 stream.Flush();
                 return stream.GetBuffer();
             }
@@ -211,66 +301,7 @@ namespace GenFx
                 RestoreState(state);
             }
         }
-
-        private void CreateComponents()
-        {
-            IFactoryConfigForComponentWithAlgorithm componentConfig = null;
-            try
-            {
-                // Set optional operators
-                if (this.config.CrossoverOperator != null)
-                {
-                    componentConfig = this.config.CrossoverOperator;
-                    this.operators.CrossoverOperator = (ICrossoverOperator)componentConfig.CreateComponent(this);
-                }
-                if (this.config.ElitismStrategy != null)
-                {
-                    componentConfig = this.config.ElitismStrategy;
-                    this.operators.ElitismStrategy = (IElitismStrategy)componentConfig.CreateComponent(this);
-                }
-                if (this.config.MutationOperator != null)
-                {
-                    componentConfig = this.config.MutationOperator;
-                    this.operators.MutationOperator = (IMutationOperator)componentConfig.CreateComponent(this);
-                }
-                if (this.config.FitnessScalingStrategy != null)
-                {
-                    componentConfig = this.config.FitnessScalingStrategy;
-                    this.operators.FitnessScalingStrategy = (IFitnessScalingStrategy)componentConfig.CreateComponent(this);
-                }
-
-                // Set required operators
-                componentConfig = this.config.SelectionOperator;
-                this.operators.SelectionOperator = (ISelectionOperator)componentConfig.CreateComponent(this);
-                componentConfig = this.config.FitnessEvaluator;
-                this.operators.FitnessEvaluator = (IFitnessEvaluator)componentConfig.CreateComponent(this);
-
-                componentConfig = this.config.Terminator;
-                this.operators.Terminator = (ITerminator)componentConfig.CreateComponent(this);
-
-                this.statistics.Clear();
-
-                foreach (IStatisticFactoryConfig statConfig in this.config.Statistics)
-                {
-                    componentConfig = statConfig;
-                    IStatistic stat = (IStatistic)componentConfig.CreateComponent(this);
-                    this.statistics.Add(stat);
-                }
-
-                this.plugins.Clear();
-
-                foreach (IPluginFactoryConfig pluginConfig in this.ConfigurationSet.Plugins)
-                {
-                    componentConfig = pluginConfig;
-                    this.plugins.Add((IPlugin)componentConfig.CreateComponent(this));
-                }
-            }
-            catch (TargetInvocationException e)
-            {
-                throw new InvalidOperationException(StringUtil.GetFormattedString(Resources.ErrorMsg_ErrorCreatingComponent, componentConfig.GetType().FullName, e.InnerException.Message), e.InnerException);
-            }
-        }
-
+        
         /// <summary>
         /// Restores the state of the algorithm.
         /// </summary>
@@ -282,28 +313,33 @@ namespace GenFx
             }
 
             base.RestoreState(state);
-
-            this.config.RestoreState((KeyValueMap)state[nameof(this.config)]);
-
-            CreateComponents();
-
+            
             this.environment.RestoreState((KeyValueMap)state[nameof(this.environment)]);
             this.currentGeneration = (int)state[nameof(this.currentGeneration)];
             this.isInitialized = (bool)state[nameof(this.isInitialized)];
+            this.EnvironmentSize = (int)state[nameof(this.EnvironmentSize)];
 
-            KeyValueMapCollection statisticStates = (KeyValueMapCollection)state[nameof(this.statistics)];
+            KeyValueMapCollection statisticStates = (KeyValueMapCollection)state[nameof(this.Statistics)];
             for (int i = 0; i < statisticStates.Count; i++)
             {
                 this.statistics[i].RestoreState(statisticStates[i]);
             }
 
-            this.Operators.CrossoverOperator?.RestoreState((KeyValueMap)state[nameof(this.Operators.CrossoverOperator)]);
-            this.Operators.ElitismStrategy?.RestoreState((KeyValueMap)state[nameof(this.Operators.ElitismStrategy)]);
-            this.Operators.FitnessEvaluator?.RestoreState((KeyValueMap)state[nameof(this.Operators.FitnessEvaluator)]);
-            this.Operators.FitnessScalingStrategy?.RestoreState((KeyValueMap)state[nameof(this.Operators.FitnessScalingStrategy)]);
-            this.Operators.MutationOperator?.RestoreState((KeyValueMap)state[nameof(this.Operators.MutationOperator)]);
-            this.Operators.SelectionOperator?.RestoreState((KeyValueMap)state[nameof(this.Operators.SelectionOperator)]);
-            this.Operators.Terminator?.RestoreState((KeyValueMap)state[nameof(this.Operators.Terminator)]);
+            KeyValueMapCollection pluginStates = (KeyValueMapCollection)state[nameof(this.Plugins)];
+            for (int i = 0; i < pluginStates.Count; i++)
+            {
+                this.plugins[i].RestoreState(pluginStates[i]);
+            }
+
+            this.CrossoverOperator?.RestoreState((KeyValueMap)state[nameof(this.CrossoverOperator)]);
+            this.ElitismStrategy?.RestoreState((KeyValueMap)state[nameof(this.ElitismStrategy)]);
+            this.FitnessEvaluator?.RestoreState((KeyValueMap)state[nameof(this.FitnessEvaluator)]);
+            this.FitnessScalingStrategy?.RestoreState((KeyValueMap)state[nameof(this.FitnessScalingStrategy)]);
+            this.MutationOperator?.RestoreState((KeyValueMap)state[nameof(this.MutationOperator)]);
+            this.SelectionOperator?.RestoreState((KeyValueMap)state[nameof(this.SelectionOperator)]);
+            this.Terminator?.RestoreState((KeyValueMap)state[nameof(this.Terminator)]);
+            this.PopulationSeed?.RestoreState((KeyValueMap)state[nameof(this.PopulationSeed)]);
+            this.GeneticEntitySeed?.RestoreState((KeyValueMap)state[nameof(this.GeneticEntitySeed)]);
         }
 
         /// <summary>
@@ -319,20 +355,24 @@ namespace GenFx
 
             base.SetSaveState(state);
 
-            state[nameof(this.config)] = this.config.SaveState();
             state[nameof(this.environment)] = this.environment.SaveState();
             state[nameof(this.currentGeneration)] = this.currentGeneration;
             state[nameof(this.isInitialized)] = this.isInitialized;
-            state[nameof(this.statistics)] = new KeyValueMapCollection(this.statistics.Select(s => s.SaveState()).Cast<KeyValueMap>());
+            state[nameof(this.EnvironmentSize)] = this.EnvironmentSize;
 
-            state[nameof(this.Operators.CrossoverOperator)] = this.Operators.CrossoverOperator?.SaveState();
-            state[nameof(this.Operators.ElitismStrategy)] = this.Operators.ElitismStrategy?.SaveState();
-            state[nameof(this.Operators.FitnessEvaluator)] = this.Operators.FitnessEvaluator?.SaveState();
-            state[nameof(this.Operators.FitnessEvaluator)] = this.Operators.FitnessEvaluator?.SaveState();
-            state[nameof(this.Operators.FitnessScalingStrategy)] = this.Operators.FitnessScalingStrategy?.SaveState();
-            state[nameof(this.Operators.MutationOperator)] = this.Operators.MutationOperator?.SaveState();
-            state[nameof(this.Operators.SelectionOperator)] = this.Operators.SelectionOperator?.SaveState();
-            state[nameof(this.Operators.Terminator)] = this.Operators.Terminator?.SaveState();
+            state[nameof(this.Statistics)] = new KeyValueMapCollection(this.statistics.Select(s => s.SaveState()).Cast<KeyValueMap>());
+            state[nameof(this.Plugins)] = new KeyValueMapCollection(this.plugins.Select(s => s.SaveState()).Cast<KeyValueMap>());
+
+            state[nameof(this.CrossoverOperator)] = this.CrossoverOperator?.SaveState();
+            state[nameof(this.ElitismStrategy)] = this.ElitismStrategy?.SaveState();
+            state[nameof(this.FitnessEvaluator)] = this.FitnessEvaluator?.SaveState();
+            state[nameof(this.FitnessEvaluator)] = this.FitnessEvaluator?.SaveState();
+            state[nameof(this.FitnessScalingStrategy)] = this.FitnessScalingStrategy?.SaveState();
+            state[nameof(this.MutationOperator)] = this.MutationOperator?.SaveState();
+            state[nameof(this.SelectionOperator)] = this.SelectionOperator?.SaveState();
+            state[nameof(this.Terminator)] = this.Terminator?.SaveState();
+            state[nameof(this.GeneticEntitySeed)] = this.GeneticEntitySeed?.SaveState();
+            state[nameof(this.PopulationSeed)] = this.PopulationSeed?.SaveState();
         }
 
         /// <summary>
@@ -400,9 +440,9 @@ namespace GenFx
                 throw new ArgumentNullException(nameof(currentPopulation));
             }
 
-            if (this.operators.ElitismStrategy != null)
+            if (this.ElitismStrategy != null)
             {
-                return this.operators.ElitismStrategy.GetEliteEntities(currentPopulation);
+                return this.ElitismStrategy.GetEliteEntities(currentPopulation);
             }
             else
             {
@@ -428,8 +468,8 @@ namespace GenFx
                 throw new ArgumentNullException(nameof(population));
             }
 
-            IGeneticEntity entity1 = this.operators.SelectionOperator.SelectEntity(population);
-            IGeneticEntity entity2 = this.operators.SelectionOperator.SelectEntity(population);
+            IGeneticEntity entity1 = this.SelectionOperator.SelectEntity(population);
+            IGeneticEntity entity2 = this.SelectionOperator.SelectEntity(population);
 
             IList<IGeneticEntity> childGeneticEntities = this.ApplyCrossover(entity1, entity2);
             childGeneticEntities = this.ApplyMutation(childGeneticEntities);
@@ -457,10 +497,10 @@ namespace GenFx
             }
 
             IList<IGeneticEntity> childEntities;
-            ICrossoverOperator crossoverOperator = this.operators.CrossoverOperator;
-            if (crossoverOperator != null)
+            
+            if (this.CrossoverOperator != null)
             {
-                childEntities = crossoverOperator.Crossover(entity1, entity2);
+                childEntities = this.CrossoverOperator.Crossover(entity1, entity2);
             }
             else
             {
@@ -487,11 +527,10 @@ namespace GenFx
             List<IGeneticEntity> mutants = new List<IGeneticEntity>();
             foreach (IGeneticEntity entity in entities)
             {
-                IMutationOperator mutationOperator = this.operators.MutationOperator;
                 IGeneticEntity newEntity = entity;
-                if (mutationOperator != null)
+                if (this.MutationOperator != null)
                 {
-                    newEntity = mutationOperator.Mutate(entity);
+                    newEntity = this.MutationOperator.Mutate(entity);
                 }
                 mutants.Add(newEntity);
             }
@@ -499,83 +538,62 @@ namespace GenFx
         }
 
         /// <summary>
-        /// Validates that the <see cref="ComponentFactoryConfigSet"/> is properly set.
+        /// Validates the correctness of the algorithm's configuration.
         /// </summary>
         /// <exception cref="InvalidOperationException">The configuration for a required component has been set.</exception>
         /// <remarks>
-        /// This only validates that the <see cref="ComponentFactoryConfigSet"/> is correct as a whole.  It does not validate the state
-        /// of each of the configuration objects.
+        /// This only validates that the algorithm object is correct.  It does not validate the state
+        /// of each of the referenced components.
         /// </remarks>
-        protected virtual void ValidateConfiguration()
+        private void ValidateConfiguration()
         {
-            string missingComponent = null;
-            if (this.config.GeneticAlgorithm == null)
+            foreach (IGeneticComponent component in this.GetAllComponents())
             {
-                missingComponent = nameof(ComponentFactoryConfigSet.GeneticAlgorithm);
+                this.ValidateRequiredComponents(component.GetType());
             }
-            else if (this.config.SelectionOperator == null)
+        }
+
+        private IEnumerable<IGeneticComponent> GetAllComponents()
+        {
+            if (this.CrossoverOperator != null)
             {
-                missingComponent = nameof(ComponentFactoryConfigSet.SelectionOperator);
-            }
-            else if (this.config.FitnessEvaluator == null)
-            {
-                missingComponent = nameof(ComponentFactoryConfigSet.FitnessEvaluator);
-            }
-            else if (this.config.Population == null)
-            {
-                missingComponent = nameof(ComponentFactoryConfigSet.Population);
-            }
-            else if (this.config.Entity == null)
-            {
-                missingComponent = nameof(ComponentFactoryConfigSet.Entity);
+                yield return this.CrossoverOperator;
             }
 
-            if (missingComponent != null)
+            if (this.ElitismStrategy != null)
             {
-                throw new InvalidOperationException(
-                  StringUtil.GetFormattedString(Resources.ErrorMsg_MissingOperatorType,
-                    typeof(ComponentFactoryConfigSet).FullName, missingComponent));
+                yield return this.ElitismStrategy;
             }
 
-            if (this.config.CrossoverOperator != null)
+            if (this.FitnessScalingStrategy != null)
             {
-                this.ValidateRequiredComponents(this.config.CrossoverOperator.ComponentType);
+                yield return this.FitnessScalingStrategy;
             }
 
-            if (this.config.ElitismStrategy != null)
+            if (this.MutationOperator != null)
             {
-                this.ValidateRequiredComponents(this.config.ElitismStrategy.ComponentType);
+                yield return this.MutationOperator;
             }
 
-            if (this.config.FitnessScalingStrategy != null)
+            foreach (IStatistic stat in this.Statistics)
             {
-                this.ValidateRequiredComponents(this.config.FitnessScalingStrategy.ComponentType);
+                yield return stat;
             }
 
-            if (this.config.MutationOperator != null)
+            foreach (IPlugin pluginConfig in this.Plugins)
             {
-                this.ValidateRequiredComponents(this.config.MutationOperator.ComponentType);
+                yield return pluginConfig;
             }
 
-            foreach (IStatisticFactoryConfig statConfig in this.config.Statistics)
+            if (this.Terminator != null)
             {
-                this.ValidateRequiredComponents(statConfig.ComponentType);
+                yield return terminator;
             }
-
-            foreach (IPluginFactoryConfig pluginConfig in this.config.Plugins)
-            {
-                this.ValidateRequiredComponents(pluginConfig.ComponentType);
-            }
-
-            if (this.config.Terminator != null)
-            {
-                this.ValidateRequiredComponents(this.config.Terminator.ComponentType);
-            }
-
-            this.ValidateRequiredComponents(this.config.FitnessEvaluator.ComponentType);
-            this.ValidateRequiredComponents(this.config.SelectionOperator.ComponentType);
-            this.ValidateRequiredComponents(this.config.Entity.ComponentType);
-            this.ValidateRequiredComponents(this.config.Population.ComponentType);
+            
+            yield return this.FitnessEvaluator;
+            yield return this.SelectionOperator;
+            yield return this.GeneticEntitySeed;
+            yield return this.PopulationSeed;
         }
 
         /// <summary>
@@ -599,91 +617,91 @@ namespace GenFx
             }
 
             RequiredComponentAttribute[] attribs = (RequiredComponentAttribute[])type.GetCustomAttributes(typeof(RequiredComponentAttribute), true);
-
+            
             for (int i = 0; i < attribs.Length; i++)
             {
-
+                RequiredComponentAttribute attrib = attribs[i];
                 string configurableTypeCommonName = null;
                 string configuredType = null;
 
-                if (attribs[i] is RequiredCrossoverOperatorAttribute)
+                if (attrib is RequiredCrossoverOperatorAttribute)
                 {
-                    if (!attribs[i].RequiredType.IsAssignableFrom(this.config.CrossoverOperator.ComponentType))
+                    if (!attrib.RequiredType.IsAssignableFrom(this.CrossoverOperator.GetType()))
                     {
                         configurableTypeCommonName = Resources.CrossoverCommonName;
-                        configuredType = this.config.CrossoverOperator.ComponentType.FullName;
+                        configuredType = this.CrossoverOperator.GetType().FullName;
                     }
                 }
-                else if (attribs[i] is RequiredElitismStrategyAttribute)
+                else if (attrib is RequiredElitismStrategyAttribute)
                 {
-                    if (!attribs[i].RequiredType.IsAssignableFrom(this.config.ElitismStrategy.ComponentType))
+                    if (!attrib.RequiredType.IsAssignableFrom(this.ElitismStrategy.GetType()))
                     {
                         configurableTypeCommonName = Resources.ElitismCommonName;
-                        configuredType = this.config.ElitismStrategy.ComponentType.FullName;
+                        configuredType = this.ElitismStrategy.GetType().FullName;
                     }
                 }
-                else if (attribs[i] is RequiredFitnessEvaluatorAttribute)
+                else if (attrib is RequiredFitnessEvaluatorAttribute)
                 {
-                    if (!attribs[i].RequiredType.IsAssignableFrom(this.config.FitnessEvaluator.ComponentType))
+                    if (!attrib.RequiredType.IsAssignableFrom(this.FitnessEvaluator.GetType()))
                     {
                         configurableTypeCommonName = Resources.FitnessEvaluatorCommonName;
-                        configuredType = this.config.FitnessEvaluator.ComponentType.FullName;
+                        configuredType = this.FitnessEvaluator.GetType().FullName;
                     }
                 }
-                else if (attribs[i] is RequiredFitnessScalingStrategyAttribute)
+                else if (attrib is RequiredFitnessScalingStrategyAttribute)
                 {
-                    if (!attribs[i].RequiredType.IsAssignableFrom(this.config.FitnessScalingStrategy.ComponentType))
+                    if (!attrib.RequiredType.IsAssignableFrom(this.FitnessScalingStrategy.GetType()))
                     {
                         configurableTypeCommonName = Resources.FitnessScalingCommonName;
-                        configuredType = this.config.FitnessScalingStrategy.ComponentType.FullName;
+                        configuredType = this.FitnessScalingStrategy.GetType().FullName;
                     }
                 }
-                else if (attribs[i] is RequiredGeneticAlgorithmAttribute)
+                else if (attrib is RequiredGeneticAlgorithmAttribute)
                 {
-                    if (!attribs[i].RequiredType.IsAssignableFrom(this.GetType()))
+                    if (!attrib.RequiredType.IsAssignableFrom(this.GetType()))
                     {
                         configurableTypeCommonName = Resources.GeneticAlgorithmCommonName;
                         configuredType = this.GetType().FullName;
                     }
                 }
-                else if (attribs[i] is RequiredEntityAttribute)
+                else if (attrib is RequiredEntityAttribute)
                 {
-                    if (!attribs[i].RequiredType.IsAssignableFrom(this.config.Entity.ComponentType))
+                    if (!attrib.RequiredType.IsAssignableFrom(this.GeneticEntitySeed.GetType()))
                     {
                         configurableTypeCommonName = Resources.EntityCommonName;
-                        configuredType = this.config.Entity.ComponentType.FullName;
+                        configuredType = this.GeneticEntitySeed.GetType().FullName;
                     }
                 }
-                else if (attribs[i] is RequiredMutationOperatorAttribute)
+                else if (attrib is RequiredMutationOperatorAttribute)
                 {
-                    if (!attribs[i].RequiredType.IsAssignableFrom(this.config.MutationOperator.ComponentType))
+                    if (!attrib.RequiredType.IsAssignableFrom(this.MutationOperator.GetType()))
                     {
                         configurableTypeCommonName = Resources.MutationCommonName;
-                        configuredType = this.config.MutationOperator.ComponentType.FullName;
+                        configuredType = this.MutationOperator.GetType().FullName;
                     }
                 }
-                else if (attribs[i] is RequiredPopulationAttribute)
+                else if (attrib is RequiredPopulationAttribute)
                 {
-                    if (!attribs[i].RequiredType.IsAssignableFrom(this.config.Population.ComponentType))
+                    if (!attrib.RequiredType.IsAssignableFrom(this.PopulationSeed.GetType()))
                     {
                         configurableTypeCommonName = Resources.PopulationCommonName;
-                        configuredType = this.config.Population.ComponentType.FullName;
+                        configuredType = this.PopulationSeed.GetType().FullName;
                     }
                 }
-                else if (attribs[i] is RequiredSelectionOperatorAttribute)
+                else if (attrib is RequiredSelectionOperatorAttribute)
                 {
-                    if (!attribs[i].RequiredType.IsAssignableFrom(this.config.SelectionOperator.ComponentType))
+                    if (!attrib.RequiredType.IsAssignableFrom(this.SelectionOperator.GetType()))
                     {
                         configurableTypeCommonName = Resources.SelectionCommonName;
-                        configuredType = this.config.SelectionOperator.ComponentType.FullName;
+                        configuredType = this.SelectionOperator.GetType().FullName;
                     }
                 }
-                else if (attribs[i] is RequiredStatisticAttribute)
+                else if (attrib is RequiredStatisticAttribute)
                 {
                     bool foundRequiredType = false;
-                    foreach (IStatisticFactoryConfig statConfig in this.config.Statistics)
+                    foreach (IStatistic stat in this.Statistics)
                     {
-                        if (!attribs[i].RequiredType.IsAssignableFrom(statConfig.ComponentType))
+                        if (!attribs[i].RequiredType.IsAssignableFrom(stat.GetType()))
                         {
                             foundRequiredType = true;
                             break;
@@ -692,19 +710,19 @@ namespace GenFx
 
                     if (!foundRequiredType)
                     {
-                        configuredType = this.config.Statistics
-                            .Select(s => s.ComponentType.FullName)
+                        configuredType = this.Statistics
+                            .Select(s => s.GetType().FullName)
                             .Aggregate((type1, type2) => type1 + ", " + type2);
 
                         configurableTypeCommonName = Resources.StatisticCommonName;
                     }
                 }
-                else if (attribs[i] is RequiredTerminatorAttribute)
+                else if (attrib is RequiredTerminatorAttribute)
                 {
-                    if (!attribs[i].RequiredType.IsAssignableFrom(this.config.Terminator.ComponentType))
+                    if (!attrib.RequiredType.IsAssignableFrom(this.Terminator.GetType()))
                     {
                         configurableTypeCommonName = Resources.TerminatorCommonName;
-                        configuredType = this.config.Terminator.ComponentType.FullName;
+                        configuredType = this.Terminator.GetType().FullName;
                     }
                 }
 
@@ -716,7 +734,7 @@ namespace GenFx
                 }
             }
         }
-
+        
         /// <summary>
         /// Throws an exception if the algorithm is not initialized.
         /// </summary>
@@ -784,12 +802,12 @@ namespace GenFx
             bool isAlgorithmComplete = false;
             bool isCanceled = false;
 
-            if (!this.operators.Terminator.IsComplete())
+            if (!this.Terminator.IsComplete())
             {
                 isCanceled = await this.CreateNextGenerationAsync();
                 if (!isCanceled)
                 {
-                    isAlgorithmComplete = this.operators.Terminator.IsComplete();
+                    isAlgorithmComplete = this.Terminator.IsComplete();
                     if (isAlgorithmComplete)
                     {
                         this.isInitialized = false;
@@ -853,6 +871,74 @@ namespace GenFx
 
             await this.environment.EvaluateFitnessAsync();
             return this.RaiseFitnessEvaluatedEvent();
+        }
+
+        /// <summary>
+        /// Validates the component.
+        /// </summary>
+        /// <param name="component">The <see cref="IGeneticComponent"/> to validate.</param>
+        private void Validate(IGeneticComponent component)
+        {
+            if (component == null)
+            {
+                throw new ArgumentNullException(nameof(component));
+            }
+
+            component.Validate();
+
+            IEnumerable<PropertyInfo> properties = component.GetType()
+                .GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.FlattenHierarchy);
+            foreach (PropertyInfo propertyInfo in properties)
+            {
+                // Check that the property is valid using the validators described by external components.
+                List<Validator> externalValidators;
+                if (externalValidationMapping.TryGetValue(propertyInfo, out externalValidators))
+                {
+                    object propValue = propertyInfo.GetValue(this, null);
+                    foreach (Validator validator in externalValidators)
+                    {
+                        validator.EnsureIsValid(component.GetType().Name + Type.Delimiter + propertyInfo.Name, propValue, component);
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Compiles the mapping of component configuration properties to <see cref="Validator"/> objects as described by external components.
+        /// </summary>
+        private void CompileExternalValidatorMapping()
+        {
+            this.externalValidationMapping = new Dictionary<PropertyInfo, List<Validator>>();
+
+            foreach (IGeneticComponent component in this.GetAllComponents())
+            {
+                this.CompileExternalValidatorMapping(component);
+            }
+        }
+
+        /// <summary>
+        /// Compiles the mapping of component configuration properties to <see cref="Validator"/> objects as described by the specified component.
+        /// </summary>
+        /// <param name="component">The component to check whether it has defined validators for a configuration property.</param>
+        private void CompileExternalValidatorMapping(IGeneticComponent component)
+        {
+            if (component == null)
+            {
+                return;
+            }
+
+            IExternalConfigurationValidatorAttribute[] attribs = (IExternalConfigurationValidatorAttribute[])component.GetType().GetCustomAttributes(typeof(IExternalConfigurationValidatorAttribute), true);
+            foreach (IExternalConfigurationValidatorAttribute attrib in attribs)
+            {
+                PropertyInfo prop = ExternalValidatorAttributeHelper.GetTargetPropertyInfo(attrib.TargetComponentType, attrib.TargetProperty);
+                List<Validator> validators;
+                if (!this.externalValidationMapping.TryGetValue(prop, out validators))
+                {
+                    validators = new List<Validator>();
+                    this.externalValidationMapping.Add(prop, validators);
+                }
+                validators.Add(attrib.Validator);
+            }
         }
     }
 }

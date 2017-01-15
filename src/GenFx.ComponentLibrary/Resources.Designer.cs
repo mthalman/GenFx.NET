@@ -106,6 +106,15 @@ namespace GenFx.ComponentLibrary {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The entity has not been initialized yet..
+        /// </summary>
+        internal static string ErrorMsg_EntityNotInitialized {
+            get {
+                return ResourceManager.GetString("ErrorMsg_EntityNotInitialized", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Parent node must belong to a tree before child nodes can be added..
         /// </summary>
         internal static string ErrorMsg_InsertChildNodeWithoutTree {

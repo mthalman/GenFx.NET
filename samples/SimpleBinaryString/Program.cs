@@ -22,41 +22,37 @@ namespace SimpleBinaryString
 
         private static async Task RunAlgorithmAsync()
         {
-            ComponentFactoryConfigSet configSet = new ComponentFactoryConfigSet
+            SimpleGeneticAlgorithm algorithm = new SimpleGeneticAlgorithm
             {
-                GeneticAlgorithm = new SimpleGeneticAlgorithmFactoryConfig
+                EnvironmentSize = 1,
+                FitnessEvaluator = new FitnessEvaluator(),
+                GeneticEntitySeed = new FixedLengthBinaryStringEntity
                 {
-                    EnvironmentSize = 1
+                    FixedLength = 20
                 },
-                FitnessEvaluator = new FitnessEvaluatorConfiguration(),
-                Entity = new FixedLengthBinaryStringEntityFactoryConfig
-                {
-                    Length = 20
-                },
-                Population = new SimplePopulationFactoryConfig
+                PopulationSeed = new SimplePopulation
                 {
                     PopulationSize = 100
                 },
-                SelectionOperator = new FitnessProportionateSelectionOperatorFactoryConfig
+                SelectionOperator = new FitnessProportionateSelectionOperator
                 {
                     SelectionBasedOnFitnessType = FitnessType.Raw
                 },
-                CrossoverOperator = new SinglePointCrossoverOperatorFactoryConfig
+                CrossoverOperator = new SinglePointCrossoverOperator
                 {
                     CrossoverRate = 0.8
                 },
-                MutationOperator = new UniformBitMutationOperatorFactoryConfig
+                MutationOperator = new UniformBitMutationOperator
                 {
                     MutationRate = 0.01
                 },
-                Terminator = new FitnessTargetTerminatorFactoryConfig
+                Terminator = new FitnessTargetTerminator
                 {
                     FitnessTarget = 20,
                     FitnessValueType = FitnessType.Raw
                 }
             };
 
-            SimpleGeneticAlgorithm algorithm = new SimpleGeneticAlgorithm(configSet);
             algorithm.GenerationCreated += Algorithm_GenerationCreated;
             await algorithm.InitializeAsync();
             await algorithm.RunAsync();

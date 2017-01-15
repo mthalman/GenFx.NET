@@ -7,15 +7,10 @@ using GenFx.Contracts;
 
 namespace GenFxTests.Mocks
 {
-    class MockCrossoverOperator : CrossoverOperatorBase<MockCrossoverOperator, MockCrossoverOperatorFactoryConfig>
+    class MockCrossoverOperator : CrossoverOperatorBase
     {
         internal int DoCrossoverCallCount;
-
-        public MockCrossoverOperator(IGeneticAlgorithm algorithm)
-            : base(algorithm)
-        {
-        }
-
+        
         protected override IList<IGeneticEntity> GenerateCrossover(IGeneticEntity entity1, IGeneticEntity entity2)
         {
             this.DoCrossoverCallCount++;
@@ -25,25 +20,12 @@ namespace GenFxTests.Mocks
             return geneticEntities;
         }
     }
-
-    class MockCrossoverOperatorFactoryConfig : CrossoverOperatorFactoryConfigBase<MockCrossoverOperatorFactoryConfig, MockCrossoverOperator>
+    
+    class MockCrossoverOperator2 : CrossoverOperatorBase
     {
-    }
-
-    class MockCrossoverOperator2 : CrossoverOperatorBase<MockCrossoverOperator2, MockCrossoverOperator2FactoryConfig>
-    {
-        public MockCrossoverOperator2(IGeneticAlgorithm algorithm)
-            : base(algorithm)
-        {
-        }
-
         protected override IList<IGeneticEntity> GenerateCrossover(IGeneticEntity entity1, IGeneticEntity entity2)
         {
             throw new Exception();
         }
-    }
-
-    class MockCrossoverOperator2FactoryConfig : CrossoverOperatorFactoryConfigBase<MockCrossoverOperator2FactoryConfig, MockCrossoverOperator2>
-    {
     }
 }

@@ -1,5 +1,8 @@
+using GenFx.ComponentLibrary.Base;
 using GenFx.Contracts;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace GenFx.ComponentLibrary.SelectionOperators
 {
@@ -16,17 +19,34 @@ namespace GenFx.ComponentLibrary.SelectionOperators
     /// when <b>RankSelectionOperator</b> is being used since absolute differences in fitness are ignored.
     /// </para>
     /// </remarks>
-    public sealed class RankSelectionOperator : RankSelectionOperator<RankSelectionOperator, RankSelectionOperatorFactoryConfig>
+    public class RankSelectionOperator : SelectionOperatorBase
     {
         /// <summary>
-        /// Initializes a new instance of this class.
+        /// Selects a <see cref="IGeneticEntity"/> from <paramref name="population"/> according to its
+        /// fitness rank within the <paramref name="population"/>.
         /// </summary>
-        /// <param name="algorithm"><see cref="IGeneticAlgorithm"/> using this object.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="algorithm"/> is null.</exception>
-        /// <exception cref="ValidationException">The component's configuration is in an invalid state.</exception>
-        public RankSelectionOperator(IGeneticAlgorithm algorithm)
-            : base(algorithm)
+        /// <param name="population"><see cref="IPopulation"/> containing the <see cref="IGeneticEntity"/>
+        /// objects from which to select.</param>
+        /// <returns>The <see cref="IGeneticEntity"/> object that was selected.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="population"/> is null.</exception>
+        protected override IGeneticEntity SelectEntityFromPopulation(IPopulation population)
         {
+            if (population == null)
+            {
+                throw new ArgumentNullException(nameof(population));
+            }
+
+            IGeneticEntity[] sortedEntities = population.Entities.GetEntitiesSortedByFitness(
+                this.SelectionBasedOnFitnessType,
+                this.Algorithm.FitnessEvaluator.EvaluationMode).ToArray();
+
+            List<WheelSlice> wheelSlices = new List<WheelSlice>(sortedEntities.Length);
+            for (int i = 0; i < sortedEntities.Length; i++)
+            {
+                wheelSlices.Add(new WheelSlice(sortedEntities[i], i + 1));
+            }
+
+            return RouletteWheelSampler.GetEntity(wheelSlices);
         }
     }
 }

@@ -63,7 +63,7 @@ namespace GenFx
         /// </summary>
         /// <returns>A number between 0 and 1.</returns>
         [SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate")]
-        public double GetRandomPercentRatio()
+        public double GetDouble()
         {
             return this.randomizer.NextDouble();
         }
@@ -101,6 +101,6 @@ namespace GenFx
         /// </summary>
         /// <returns>A number between 0 and 1.</returns>
         [SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate")]
-        double GetRandomPercentRatio();
+        double GetDouble();
     }
 }
