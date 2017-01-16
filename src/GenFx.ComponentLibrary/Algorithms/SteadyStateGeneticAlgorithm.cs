@@ -1,4 +1,3 @@
-using GenFx.Contracts;
 using GenFx.Validation;
 using System;
 using System.Collections.Generic;
@@ -9,13 +8,13 @@ using System.Threading.Tasks;
 namespace GenFx.ComponentLibrary.Algorithms
 {
     /// <summary>
-    /// A type of genetic algorithm that replaces the weakest members of a <see cref="IPopulation"/>
+    /// A type of genetic algorithm that replaces the weakest members of a <see cref="Population"/>
     /// with the offspring of the previous generation.
     /// </summary>
     /// <remarks>
     /// <para>
-    /// Usage of an <see cref="IElitismStrategy"/> type with this algorithm will result in elitism being ignored
-    /// since all high-fitness <see cref="IGeneticEntity"/> objects will be moved to the next generation anyways.
+    /// Usage of an <see cref="ElitismStrategy"/> type with this algorithm will result in elitism being ignored
+    /// since all high-fitness <see cref="GeneticEntity"/> objects will be moved to the next generation anyways.
     /// </para>
     /// </remarks>
     public class SteadyStateGeneticAlgorithm : GeneticAlgorithm
@@ -23,11 +22,11 @@ namespace GenFx.ComponentLibrary.Algorithms
         private PopulationReplacementValue replacementValue = new PopulationReplacementValue(10, ReplacementValueKind.Percentage);
         
         /// <summary>
-        /// Gets or sets the value indicating how many members of the the <see cref="IPopulation"/> are to 
+        /// Gets or sets the value indicating how many members of the the <see cref="Population"/> are to 
         /// be replaced with the offspring of the previous generation.
         /// </summary>
         /// <value>
-        /// A value representing a fixed amount of <see cref="IGeneticEntity"/> objects to be replaced
+        /// A value representing a fixed amount of <see cref="GeneticEntity"/> objects to be replaced
         /// or the percentage that is to be replaced.
         /// </value>
         /// <exception cref="ValidationException">Value is not valid.</exception>
@@ -40,11 +39,11 @@ namespace GenFx.ComponentLibrary.Algorithms
         }
 
         /// <summary>
-        /// Modifies <paramref name="population"/> to become the next generation of <see cref="IGeneticEntity"/> objects.
+        /// Modifies <paramref name="population"/> to become the next generation of <see cref="GeneticEntity"/> objects.
         /// </summary>
-        /// <param name="population">The current <see cref="IPopulation"/> to be modified.</param>
+        /// <param name="population">The current <see cref="Population"/> to be modified.</param>
         /// <exception cref="ArgumentNullException"><paramref name="population"/> is null.</exception>
-        protected override Task CreateNextGenerationAsync(IPopulation population)
+        protected override Task CreateNextGenerationAsync(Population population)
         {
             if (population == null)
             {
@@ -68,7 +67,7 @@ namespace GenFx.ComponentLibrary.Algorithms
             // Add a select number of potentially modified Entities to the new generation.
             for (int i = 0; i < replacementCount; i++)
             {
-                IList<IGeneticEntity> childEntities = this.SelectGeneticEntitiesAndApplyCrossoverAndMutation(population);
+                IList<GeneticEntity> childEntities = this.SelectGeneticEntitiesAndApplyCrossoverAndMutation(population);
 
                 for (int entityIndex = 0; entityIndex < childEntities.Count; entityIndex++)
                 {
@@ -77,8 +76,8 @@ namespace GenFx.ComponentLibrary.Algorithms
             }
 
             // Remove the weakest Entities from the population.
-            ObservableCollection<IGeneticEntity> workingGeneticEntities = new ObservableCollection<IGeneticEntity>(population.Entities);
-            IGeneticEntity[] sortedEntities = workingGeneticEntities.GetEntitiesSortedByFitness(
+            ObservableCollection<GeneticEntity> workingGeneticEntities = new ObservableCollection<GeneticEntity>(population.Entities);
+            GeneticEntity[] sortedEntities = workingGeneticEntities.GetEntitiesSortedByFitness(
                 this.SelectionOperator.SelectionBasedOnFitnessType,
                 this.FitnessEvaluator.EvaluationMode).ToArray();
 

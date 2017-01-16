@@ -1,5 +1,4 @@
 ﻿using GenFx;
-using GenFx.Contracts;
 using GenFxTests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
@@ -23,7 +22,7 @@ namespace GenFxTests
         [TestMethod()]
         public void EntityCollection_SortByFitness()
         {
-            ObservableCollection<IGeneticEntity> geneticEntities = new ObservableCollection<IGeneticEntity>();
+            ObservableCollection<GeneticEntity> geneticEntities = new ObservableCollection<GeneticEntity>();
             MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm
             {
                 SelectionOperator = new MockSelectionOperator(),
@@ -40,7 +39,7 @@ namespace GenFxTests
                 geneticEntities.Add(entity);
             }
 
-            IGeneticEntity[] sortedEntities = geneticEntities.GetEntitiesSortedByFitness(FitnessType.Scaled, FitnessEvaluationMode.Maximize).ToArray();
+            GeneticEntity[] sortedEntities = geneticEntities.GetEntitiesSortedByFitness(FitnessType.Scaled, FitnessEvaluationMode.Maximize).ToArray();
             for (int i = 0; i < 10; i++)
             {
                 Assert.AreEqual(Convert.ToDouble(i), sortedEntities[i].ScaledFitnessValue, "Index {0}: Entity is not in correct position of list.", i.ToString());

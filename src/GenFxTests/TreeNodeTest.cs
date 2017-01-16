@@ -1,6 +1,5 @@
 ﻿using GenFx;
 using GenFx.ComponentLibrary.Trees;
-using GenFx.Contracts;
 using GenFxTests.Helpers;
 using GenFxTests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -23,7 +22,7 @@ namespace GenFxTests
         [TestMethod]
         public void TreeNode_AppendChild()
         {
-            IGeneticAlgorithm algorithm = GetAlgorithm();
+            GeneticAlgorithm algorithm = GetAlgorithm();
             TestTreeEntity entity = new TestTreeEntity();
             entity.Initialize(algorithm);
             TreeNode node = new TreeNode();
@@ -42,7 +41,7 @@ namespace GenFxTests
         [TestMethod]
         public void TreeNode_InsertChild()
         {
-            IGeneticAlgorithm algorithm = GetAlgorithm();
+            GeneticAlgorithm algorithm = GetAlgorithm();
             TestTreeEntity entity = new TestTreeEntity();
             entity.Initialize(algorithm);
             TreeNode node = new TreeNode();
@@ -67,7 +66,7 @@ namespace GenFxTests
         [TestMethod]
         public void TreeNode_InsertChild_NoTree()
         {
-            IGeneticAlgorithm algorithm = GetAlgorithm();
+            GeneticAlgorithm algorithm = GetAlgorithm();
             TestTreeEntity entity = new TestTreeEntity();
             entity.Initialize(algorithm);
             TreeNode node = new TreeNode();
@@ -82,7 +81,7 @@ namespace GenFxTests
         [TestMethod]
         public void TreeNode_Clone()
         {
-            IGeneticAlgorithm algorithm = GetAlgorithm();
+            GeneticAlgorithm algorithm = GetAlgorithm();
             TestTreeEntity entity = new TestTreeEntity();
             entity.Initialize(algorithm);
             TreeNode node = new TreeNode();
@@ -108,7 +107,7 @@ namespace GenFxTests
         [TestMethod]
         public void TreeNode_CopyTo()
         {
-            IGeneticAlgorithm algorithm = GetAlgorithm();
+            GeneticAlgorithm algorithm = GetAlgorithm();
             TestTreeEntity entity = new TestTreeEntity();
             entity.Initialize(algorithm);
             TreeNode node = new TreeNode();
@@ -128,9 +127,9 @@ namespace GenFxTests
             Assert.AreEqual(node.Value, newNode.Value, "Value not set correctly.");
         }
 
-        private static IGeneticAlgorithm GetAlgorithm()
+        private static GeneticAlgorithm GetAlgorithm()
         {
-            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm
+            GeneticAlgorithm algorithm = new MockGeneticAlgorithm
             {
                 PopulationSeed = new MockPopulation(),
                 SelectionOperator = new MockSelectionOperator(),

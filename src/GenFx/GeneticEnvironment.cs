@@ -1,4 +1,3 @@
-using GenFx.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -8,17 +7,17 @@ using System.Threading.Tasks;
 namespace GenFx
 {
     /// <summary>
-    /// Container of all the <see cref="IPopulation"/> objects for a genetic algorithm.  This class cannot be inherited.
+    /// Container of all the <see cref="Population"/> objects for a genetic algorithm.  This class cannot be inherited.
     /// </summary>
     public sealed class GeneticEnvironment
     {
-        private ObservableCollection<IPopulation> populations = new ObservableCollection<IPopulation>();
-        private IGeneticAlgorithm algorithm;
+        private ObservableCollection<Population> populations = new ObservableCollection<Population>();
+        private GeneticAlgorithm algorithm;
 
         /// <summary>
-        /// Gets the collection of <see cref="IPopulation"/> objects contained by this <see cref="GeneticEnvironment"/>.
+        /// Gets the collection of <see cref="Population"/> objects contained by this <see cref="GeneticEnvironment"/>.
         /// </summary>
-        public ObservableCollection<IPopulation> Populations
+        public ObservableCollection<Population> Populations
         {
             get { return this.populations; }
         }
@@ -26,8 +25,8 @@ namespace GenFx
         /// <summary>
         /// Initializes a new instance of the <see cref="GeneticEnvironment"/> class.
         /// </summary>
-        /// <param name="algorithm"><see cref="IGeneticAlgorithm"/> using this <see cref="GeneticEnvironment"/>.</param>
-        internal GeneticEnvironment(IGeneticAlgorithm algorithm)
+        /// <param name="algorithm"><see cref="GeneticAlgorithm"/> using this <see cref="GeneticEnvironment"/>.</param>
+        internal GeneticEnvironment(GeneticAlgorithm algorithm)
         {
             this.algorithm = algorithm;
         }
@@ -57,20 +56,20 @@ namespace GenFx
 
             foreach (KeyValueMap populationState in (KeyValueMapCollection)state[nameof(this.populations)])
             {
-                IPopulation population = (IPopulation)this.algorithm.PopulationSeed.CreateNewAndInitialize();
+                Population population = (Population)this.algorithm.PopulationSeed.CreateNewAndInitialize();
                 population.RestoreState(populationState);
                 this.Populations.Add(population);
             }
         }
 
         /// <summary>
-        /// Evaluates the fitness of all the <see cref="IPopulation"/> objects contained by this <see cref="GeneticEnvironment"/>
+        /// Evaluates the fitness of all the <see cref="Population"/> objects contained by this <see cref="GeneticEnvironment"/>
         /// </summary>
         internal Task EvaluateFitnessAsync()
         {
             List<Task> fitnessEvalTasks = new List<Task>();
 
-            foreach (IPopulation population in this.populations)
+            foreach (Population population in this.populations)
             {
                 fitnessEvalTasks.Add(population.EvaluateFitnessAsync());
             }
@@ -79,7 +78,7 @@ namespace GenFx
         }
 
         /// <summary>
-        /// Populates the collection of <see cref="IPopulation"/> objects.
+        /// Populates the collection of <see cref="Population"/> objects.
         /// </summary>
         internal Task InitializeAsync()
         {
@@ -87,7 +86,7 @@ namespace GenFx
 
             for (int i = 0; i < this.algorithm.EnvironmentSize; i++)
             {
-                IPopulation newPopulation = (IPopulation)this.algorithm.PopulationSeed.CreateNewAndInitialize();
+                Population newPopulation = (Population)this.algorithm.PopulationSeed.CreateNewAndInitialize();
                 newPopulation.Index = i;
                 this.populations.Add(newPopulation);
 

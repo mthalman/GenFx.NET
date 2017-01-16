@@ -1,8 +1,6 @@
 ﻿using GenFx;
-using GenFx.ComponentLibrary.Base;
 using GenFx.ComponentLibrary.Populations;
 using GenFx.ComponentLibrary.Statistics;
-using GenFx.Contracts;
 using GenFxTests.Helpers;
 using GenFxTests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -39,7 +37,7 @@ namespace GenFxTests
 
             SimplePopulation population1 = new SimplePopulation();
             population1.Initialize(algorithm);
-            PrivateObject accessor1 = new PrivateObject(population1, new PrivateType(typeof(PopulationBase)));
+            PrivateObject accessor1 = new PrivateObject(population1, new PrivateType(typeof(Population)));
 
             double expectedValue1 = 3;
             accessor1.SetField("scaledMax", expectedValue1);
@@ -58,7 +56,7 @@ namespace GenFxTests
 
             SimplePopulation population2 = new SimplePopulation();
             population2.Initialize(algorithm);
-            PrivateObject accessor2 = new PrivateObject(population2, new PrivateType(typeof(PopulationBase)));
+            PrivateObject accessor2 = new PrivateObject(population2, new PrivateType(typeof(Population)));
             accessor2.SetField("index", 1);
 
             double expectedValue4 = 7;
@@ -100,7 +98,7 @@ namespace GenFxTests
 
             SimplePopulation population1 = new SimplePopulation();
             population1.Initialize(algorithm);
-            PrivateObject accessor1 = new PrivateObject(population1, new PrivateType(typeof(PopulationBase)));
+            PrivateObject accessor1 = new PrivateObject(population1, new PrivateType(typeof(Population)));
 
             double expectedValue1 = -7;
             accessor1.SetField("scaledMax", expectedValue1);
@@ -119,7 +117,7 @@ namespace GenFxTests
 
             SimplePopulation population2 = new SimplePopulation();
             population2.Initialize(algorithm);
-            PrivateObject accessor2 = new PrivateObject(population2, new PrivateType(typeof(PopulationBase)));
+            PrivateObject accessor2 = new PrivateObject(population2, new PrivateType(typeof(Population)));
             accessor2.SetField("index", 1);
 
             double expectedValue4 = -5;
@@ -146,7 +144,7 @@ namespace GenFxTests
         [TestMethod()]
         public void GetResultValue_NullPopulation()
         {
-            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm
+            GeneticAlgorithm algorithm = new MockGeneticAlgorithm
             {
                 SelectionOperator = new MockSelectionOperator(),
                 GeneticEntitySeed = new MockEntity(),

@@ -1,6 +1,4 @@
-using GenFx.Contracts;
-
-namespace GenFx.ComponentLibrary.Base
+namespace GenFx
 {
     /// <summary>
     /// Provides the abstract base class for a genetic algorithm terminator.
@@ -8,7 +6,7 @@ namespace GenFx.ComponentLibrary.Base
     /// <remarks>
     /// The <b>Terminator</b> class defines when a genetic algorithm should stop executing.
     /// </remarks>
-    public abstract class TerminatorBase : GeneticComponentWithAlgorithm, ITerminator
+    public abstract class Terminator : GeneticComponentWithAlgorithm
     {
         /// <summary>
         /// When overriden in a derived class, returns whether the genetic algorithm should stop

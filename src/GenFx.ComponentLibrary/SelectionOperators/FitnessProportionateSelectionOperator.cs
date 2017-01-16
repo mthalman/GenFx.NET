@@ -1,5 +1,3 @@
-using GenFx.ComponentLibrary.Base;
-using GenFx.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,21 +5,21 @@ using System.Linq;
 namespace GenFx.ComponentLibrary.SelectionOperators
 {
     /// <summary>
-    /// Provides a selection technique whereby a <see cref="IGeneticEntity"/> object's probability of being
-    /// selected is directly proportional to its fitness value compared to the rest of the <see cref="IPopulation"/>
+    /// Provides a selection technique whereby a <see cref="GeneticEntity"/> object's probability of being
+    /// selected is directly proportional to its fitness value compared to the rest of the <see cref="Population"/>
     /// to which it belongs.
     /// </summary>
-    public class FitnessProportionateSelectionOperator : SelectionOperatorBase
+    public class FitnessProportionateSelectionOperator : SelectionOperator
     {
         /// <summary>
-        /// Selects a <see cref="IGeneticEntity"/> from <paramref name="population"/> using the <see cref="RouletteWheelSampler"/>
-        /// based on the fitness values of the <see cref="IGeneticEntity"/> objects.
+        /// Selects a <see cref="GeneticEntity"/> from <paramref name="population"/> using the <see cref="RouletteWheelSampler"/>
+        /// based on the fitness values of the <see cref="GeneticEntity"/> objects.
         /// </summary>
-        /// <param name="population"><see cref="IPopulation"/> containing the <see cref="IGeneticEntity"/>
+        /// <param name="population"><see cref="Population"/> containing the <see cref="GeneticEntity"/>
         /// objects from which to select.</param>
-        /// <returns>The <see cref="IGeneticEntity"/> object that was selected.</returns>
+        /// <returns>The <see cref="GeneticEntity"/> object that was selected.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="population"/> is null.</exception>
-        protected override IGeneticEntity SelectEntityFromPopulation(IPopulation population)
+        protected override GeneticEntity SelectEntityFromPopulation(Population population)
         {
             if (population == null)
             {
@@ -38,7 +36,7 @@ namespace GenFx.ComponentLibrary.SelectionOperators
             // value.
             if (evaluationMode == FitnessEvaluationMode.Minimize)
             {
-                IGeneticEntity[] entities = population.Entities.GetEntitiesSortedByFitness(this.SelectionBasedOnFitnessType, evaluationMode).ToArray();
+                GeneticEntity[] entities = population.Entities.GetEntitiesSortedByFitness(this.SelectionBasedOnFitnessType, evaluationMode).ToArray();
 
                 int descendingIndex = entities.Length - 1;
                 for (int i = 0; i < entities.Length; i++)
@@ -54,7 +52,7 @@ namespace GenFx.ComponentLibrary.SelectionOperators
             else
             {
                 // calculate percentage ranges
-                foreach (IGeneticEntity entity in population.Entities)
+                foreach (GeneticEntity entity in population.Entities)
                 {
                     tempSlices.Add(
                         new TemporaryWheelSlice {
@@ -83,7 +81,7 @@ namespace GenFx.ComponentLibrary.SelectionOperators
 
         private class TemporaryWheelSlice
         {
-            public IGeneticEntity Entity { get; set; }
+            public GeneticEntity Entity { get; set; }
             public double Size { get; set; }
         }
     }

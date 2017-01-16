@@ -1,7 +1,5 @@
 ﻿using GenFx;
-using GenFx.ComponentLibrary.Base;
 using GenFx.ComponentLibrary.Populations;
-using GenFx.Contracts;
 using GenFxTests.Helpers;
 using GenFxTests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -36,7 +34,7 @@ namespace GenFxTests
         [TestMethod]
         public void FitnessScalingStrategy_Scale()
         {
-            IGeneticAlgorithm algorithm = GetAlgorithm();
+            GeneticAlgorithm algorithm = GetAlgorithm();
             FakeFitnessScalingStrategy2 strategy = new FakeFitnessScalingStrategy2();
             strategy.Initialize(algorithm);
             SimplePopulation population = new SimplePopulation();
@@ -55,7 +53,7 @@ namespace GenFxTests
         [TestMethod]
         public void FitnessScalingStrategy_Scale_NullPopulation()
         {
-            IGeneticAlgorithm algorithm = GetAlgorithm();
+            GeneticAlgorithm algorithm = GetAlgorithm();
             FakeFitnessScalingStrategy2 strategy = new FakeFitnessScalingStrategy2();
             strategy.Initialize(algorithm);
             AssertEx.Throws<ArgumentNullException>(() => strategy.Scale(null));
@@ -67,7 +65,7 @@ namespace GenFxTests
         [TestMethod]
         public void FitnessScalingStrategy_Scale_EmptyPopulation()
         {
-            IGeneticAlgorithm algorithm = GetAlgorithm();
+            GeneticAlgorithm algorithm = GetAlgorithm();
             FakeFitnessScalingStrategy2 strategy = new FakeFitnessScalingStrategy2();
             strategy.Initialize(algorithm);
             SimplePopulation population = new SimplePopulation();
@@ -75,7 +73,7 @@ namespace GenFxTests
             AssertEx.Throws<ArgumentException>(() => strategy.Scale(population));
         }
 
-        private static IGeneticAlgorithm GetAlgorithm()
+        private static GeneticAlgorithm GetAlgorithm()
         {
             MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm
             {
@@ -88,18 +86,18 @@ namespace GenFxTests
             return algorithm;
         }
 
-        private class FakeFitnessScalingStrategy : FitnessScalingStrategyBase
+        private class FakeFitnessScalingStrategy : FitnessScalingStrategy
         {
-            protected override void UpdateScaledFitnessValues(IPopulation population)
+            protected override void UpdateScaledFitnessValues(Population population)
             {
             }
         }
         
-        private class FakeFitnessScalingStrategy2 : FitnessScalingStrategyBase
+        private class FakeFitnessScalingStrategy2 : FitnessScalingStrategy
         {
             public bool OnScaleCalled;
             
-            protected override void UpdateScaledFitnessValues(IPopulation population)
+            protected override void UpdateScaledFitnessValues(Population population)
             {
                 this.OnScaleCalled = true;
             }

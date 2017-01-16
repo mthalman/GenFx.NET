@@ -1,18 +1,16 @@
-using GenFx.ComponentLibrary.Base;
-using GenFx.Contracts;
 using System;
 using System.Diagnostics.CodeAnalysis;
 
 namespace GenFx.ComponentLibrary.Trees
 {
     /// <summary>
-    /// Provides the abstract base class for a tree that is a type of <see cref="IGeneticEntity"/>.
+    /// Provides the abstract base class for a tree that is a type of <see cref="GeneticEntity"/>.
     /// </summary>
     /// <remarks>
     /// The <b>TreeEntity</b> is used to represent genetic entities that require a tree structure, such as
     /// expression trees.  Trees generally do not have a fixed size and can grow infinitely.
     /// </remarks>
-    public abstract class TreeEntityBase : GeneticEntity, ITreeEntity
+    public abstract class TreeEntityBase : GeneticEntity
     {
         private TreeNode rootNode;
         

@@ -1,7 +1,5 @@
 ﻿using GenFx;
-using GenFx.ComponentLibrary.Base;
 using GenFx.ComponentLibrary.Populations;
-using GenFx.Contracts;
 using GenFxTests.Helpers;
 using GenFxTests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -28,7 +26,7 @@ namespace GenFxTests
         [TestMethod]
         public void Statistic_Ctor()
         {
-            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm
+            GeneticAlgorithm algorithm = new MockGeneticAlgorithm
             {
                 GeneticEntitySeed = new MockEntity(),
                 PopulationSeed = new MockPopulation(),
@@ -38,9 +36,9 @@ namespace GenFxTests
 
             algorithm.Statistics.Add(new MockStatistic());
 
-            IStatistic stat = new MockStatistic();
+            Statistic stat = new MockStatistic();
             stat.Initialize(algorithm);
-            PrivateObject accessor = new PrivateObject(stat, new PrivateType(typeof(StatisticBase)));
+            PrivateObject accessor = new PrivateObject(stat, new PrivateType(typeof(Statistic)));
             Assert.AreSame(accessor.GetProperty("Algorithm"), algorithm, "Algorithm not set correctly.");
         }
 
@@ -60,7 +58,7 @@ namespace GenFxTests
         [TestMethod]
         public async Task Statistic_Calculate()
         {
-            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm
+            GeneticAlgorithm algorithm = new MockGeneticAlgorithm
             {
                 EnvironmentSize = 2,
                 GeneticEntitySeed = new MockEntity(),
@@ -92,20 +90,20 @@ namespace GenFxTests
             Assert.AreSame(stat, results[0].Statistic, "Result's Statistic not set correctly.");
         }
 
-        private class FakeStatistic : StatisticBase
+        private class FakeStatistic : Statistic
         {
             internal int GetResultValueCallCount;
             
-            public override object GetResultValue(IPopulation population)
+            public override object GetResultValue(Population population)
             {
                 this.GetResultValueCallCount++;
                 return this.GetResultValueCallCount;
             }
         }
         
-        private class TestStat : StatisticBase
+        private class TestStat : Statistic
         {
-            public override object GetResultValue(IPopulation population)
+            public override object GetResultValue(Population population)
             {
                 throw new Exception("The method or operation is not implemented.");
             }

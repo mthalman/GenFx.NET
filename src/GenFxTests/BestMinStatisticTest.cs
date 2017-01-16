@@ -1,5 +1,4 @@
 ﻿using GenFx;
-using GenFx.ComponentLibrary.Base;
 using GenFx.ComponentLibrary.Populations;
 using GenFx.ComponentLibrary.Statistics;
 using GenFxTests.Helpers;
@@ -38,7 +37,7 @@ namespace GenFxTests
 
             SimplePopulation population1 = new SimplePopulation();
             population1.Initialize(algorithm);
-            PrivateObject accessor1 = new PrivateObject(population1, new PrivateType(typeof(PopulationBase)));
+            PrivateObject accessor1 = new PrivateObject(population1, new PrivateType(typeof(Population)));
 
             double expectedValue1 = 3;
             accessor1.SetField("scaledMin", expectedValue1);
@@ -57,7 +56,7 @@ namespace GenFxTests
 
             SimplePopulation population2 = new SimplePopulation();
             population2.Initialize(algorithm);
-            PrivateObject accessor2 = new PrivateObject(population2, new PrivateType(typeof(PopulationBase)));
+            PrivateObject accessor2 = new PrivateObject(population2, new PrivateType(typeof(Population)));
             accessor2.SetField("index",  1);
 
             double expectedValue4 = 8;
@@ -96,7 +95,7 @@ namespace GenFxTests
 
             SimplePopulation population1 = new SimplePopulation();
             population1.Initialize(algorithm);
-            PrivateObject accessor1 = new PrivateObject(population1, new PrivateType(typeof(PopulationBase)));
+            PrivateObject accessor1 = new PrivateObject(population1, new PrivateType(typeof(Population)));
 
             double expectedValue1 = -7;
             accessor1.SetField("scaledMin", expectedValue1);
@@ -115,7 +114,7 @@ namespace GenFxTests
 
             SimplePopulation population2 = new SimplePopulation();
             population2.Initialize(algorithm);
-            PrivateObject accessor2 = new PrivateObject(population2, new PrivateType(typeof(PopulationBase)));
+            PrivateObject accessor2 = new PrivateObject(population2, new PrivateType(typeof(Population)));
             accessor2.SetField("index", 1);
 
             double expectedValue4 = -9;

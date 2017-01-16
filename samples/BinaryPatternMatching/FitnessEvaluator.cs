@@ -1,7 +1,5 @@
 ﻿using GenFx;
-using GenFx.ComponentLibrary.Base;
-using GenFx.ComponentLibrary.Lists.BinaryStrings;
-using GenFx.Contracts;
+using GenFx.ComponentLibrary.Lists;
 using GenFx.Validation;
 using System;
 using System.Threading.Tasks;
@@ -9,7 +7,7 @@ using System.Threading.Tasks;
 namespace BinaryPatternMatching
 {
     [RequiredEntity(typeof(BinaryStringEntity))]
-    internal class FitnessEvaluator : FitnessEvaluatorBase
+    internal class FitnessEvaluator : GenFx.FitnessEvaluator
     {
         private string targetBinary;
 
@@ -21,7 +19,7 @@ namespace BinaryPatternMatching
             set { this.SetProperty(ref this.targetBinary, value); }
         }
 
-        public override Task<double> EvaluateFitnessAsync(IGeneticEntity entity)
+        public override Task<double> EvaluateFitnessAsync(GeneticEntity entity)
         {
             BinaryStringEntity binaryEntity = (BinaryStringEntity)entity;
 

@@ -1,23 +1,21 @@
-using GenFx.ComponentLibrary.Base;
-using GenFx.Contracts;
 using System;
 
 namespace GenFx.ComponentLibrary.Statistics
 {
     /// <summary>
     /// Provides the calculation to determine the standard deviation of the values of the 
-    /// <see cref="IGeneticEntity.ScaledFitnessValue"/> property in a <see cref="IPopulation"/>.
+    /// <see cref="GeneticEntity.ScaledFitnessValue"/> property in a <see cref="Population"/>.
     /// </summary>
-    public class StandardDeviationFitnessStatistic : StatisticBase
+    public class StandardDeviationFitnessStatistic : Statistic
     {
         /// <summary>
-        /// Calculates the standard deviation of the values of the <see cref="IGeneticEntity.ScaledFitnessValue"/> 
+        /// Calculates the standard deviation of the values of the <see cref="GeneticEntity.ScaledFitnessValue"/> 
         /// property in the <paramref name="population"/>.
         /// </summary>
-        /// <param name="population"><see cref="IPopulation"/> from which to derive the statistic.</param>
-        /// <returns>Standard deviation of the values of the <see cref="IGeneticEntity.ScaledFitnessValue"/> property.</returns>
+        /// <param name="population"><see cref="Population"/> from which to derive the statistic.</param>
+        /// <returns>Standard deviation of the values of the <see cref="GeneticEntity.ScaledFitnessValue"/> property.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="population"/> is null.</exception>
-        public override object GetResultValue(IPopulation population)
+        public override object GetResultValue(Population population)
         {
             if (population == null)
             {

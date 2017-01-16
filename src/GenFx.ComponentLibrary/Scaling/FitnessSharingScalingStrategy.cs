@@ -1,16 +1,14 @@
-using GenFx.ComponentLibrary.Base;
-using GenFx.Contracts;
 using GenFx.Validation;
 using System;
 
 namespace GenFx.ComponentLibrary.Scaling
 {
     /// <summary>
-    /// Provides fitness scaling by adjusting the fitness of a <see cref="IGeneticEntity"/> so that those <see cref="IGeneticEntity"/>
-    /// objects which are common have a degraded fitness while rare <see cref="IGeneticEntity"/> objects are given a boost in
+    /// Provides fitness scaling by adjusting the fitness of a <see cref="GeneticEntity"/> so that those <see cref="GeneticEntity"/>
+    /// objects which are common have a degraded fitness while rare <see cref="GeneticEntity"/> objects are given a boost in
     /// fitness.
     /// </summary>
-    public abstract class FitnessSharingScalingStrategy : FitnessScalingStrategyBase
+    public abstract class FitnessSharingScalingStrategy : FitnessScalingStrategy
     {
         private const double DefaultScalingCurvature = 1;
         private const double DefaultScalingDistanceCutoff = 1;
@@ -48,12 +46,12 @@ namespace GenFx.ComponentLibrary.Scaling
         }
 
         /// <summary>
-        /// Sets the <see cref="IGeneticEntity.ScaledFitnessValue"/> property of each entity
+        /// Sets the <see cref="GeneticEntity.ScaledFitnessValue"/> property of each entity
         /// in <paramref name="population"/> according to the fitness sharing scaling algorithm.
         /// </summary>
-        /// <param name="population"><see cref="IPopulation"/> containing the <see cref="IGeneticEntity"/> objects.</param>
+        /// <param name="population"><see cref="Population"/> containing the <see cref="GeneticEntity"/> objects.</param>
         /// <exception cref="ArgumentNullException"><paramref name="population"/> is null.</exception>
-        protected override void UpdateScaledFitnessValues(IPopulation population)
+        protected override void UpdateScaledFitnessValues(Population population)
         {
             if (population == null)
             {
@@ -96,10 +94,10 @@ namespace GenFx.ComponentLibrary.Scaling
         /// <summary>
         /// Returns the fitness distance between <paramref name="entity1"/> and <paramref name="entity2"/>.
         /// </summary>
-        /// <param name="entity1"><see cref="IGeneticEntity"/> to be evaluated against <paramref name="entity2"/>.</param>
-        /// <param name="entity2"><see cref="IGeneticEntity"/> to be evaluated against <paramref name="entity1"/>.</param>
+        /// <param name="entity1"><see cref="GeneticEntity"/> to be evaluated against <paramref name="entity2"/>.</param>
+        /// <param name="entity2"><see cref="GeneticEntity"/> to be evaluated against <paramref name="entity1"/>.</param>
         /// <returns>Fitness distance between <paramref name="entity1"/> and <paramref name="entity2"/>.</returns>
-        /// <remarks>A distance of 0 means that the two <see cref="IGeneticEntity"/> objects are identical.</remarks>
-        public abstract double EvaluateFitnessDistance(IGeneticEntity entity1, IGeneticEntity entity2);
+        /// <remarks>A distance of 0 means that the two <see cref="GeneticEntity"/> objects are identical.</remarks>
+        public abstract double EvaluateFitnessDistance(GeneticEntity entity1, GeneticEntity entity2);
     }
 }

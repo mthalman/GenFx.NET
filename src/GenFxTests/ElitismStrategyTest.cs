@@ -1,7 +1,6 @@
 ﻿using GenFx;
-using GenFx.ComponentLibrary.Base;
+using GenFx.ComponentLibrary.Elitism;
 using GenFx.ComponentLibrary.Populations;
-using GenFx.Contracts;
 using GenFxTests.Helpers;
 using GenFxTests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -24,7 +23,7 @@ namespace GenFxTests
         [TestMethod()]
         public void ElitismStrategy_Ctor_NullAlgorithm()
         {
-            ElitismStrategy strategy = new ElitismStrategy();
+            SimpleElitismStrategy strategy = new SimpleElitismStrategy();
             AssertEx.Throws<ArgumentNullException>(() => strategy.Initialize(null));
         }
 
@@ -34,7 +33,7 @@ namespace GenFxTests
         [TestMethod]
         public void ElitismStrategy_Ctor_InvalidSetting1()
         {
-            ElitismStrategy strategy = new ElitismStrategy();
+            SimpleElitismStrategy strategy = new SimpleElitismStrategy();
             AssertEx.Throws<ValidationException>(() => strategy.ElitistRatio = 2);
         }
 
@@ -44,7 +43,7 @@ namespace GenFxTests
         [TestMethod]
         public void ElitismStrategy_Ctor_InvalidSetting2()
         {
-            ElitismStrategy strategy = new ElitismStrategy();
+            SimpleElitismStrategy strategy = new SimpleElitismStrategy();
             AssertEx.Throws<ValidationException>(() => strategy.ElitistRatio = -1);
         }
 
@@ -56,7 +55,7 @@ namespace GenFxTests
         {
             double elitismRatio = .1;
             int totalGeneticEntities = 100;
-            IGeneticAlgorithm algorithm = GetGeneticAlgorithm(elitismRatio);
+            GeneticAlgorithm algorithm = GetGeneticAlgorithm(elitismRatio);
             await algorithm.InitializeAsync();
             SimplePopulation population = new SimplePopulation();
             population.Initialize(algorithm);
@@ -67,10 +66,10 @@ namespace GenFxTests
                 population.Entities.Add(entity);
             }
             algorithm.Environment.Populations.Add(population);
-            ElitismStrategy strategy = (ElitismStrategy)algorithm.ElitismStrategy;
+            SimpleElitismStrategy strategy = (SimpleElitismStrategy)algorithm.ElitismStrategy;
             strategy.Initialize(algorithm);
 
-            IList<IGeneticEntity> geneticEntities = strategy.GetEliteEntities(population);
+            IList<GeneticEntity> geneticEntities = strategy.GetEliteEntities(population);
 
             Assert.AreEqual(Convert.ToInt32(Math.Round(elitismRatio * totalGeneticEntities)), geneticEntities.Count, "Incorrect number of elitist genetic entities.");
         }
@@ -81,7 +80,7 @@ namespace GenFxTests
         [TestMethod()]
         public void ElitismStrategy_GetElitistGeneticEntities_NullPopulation()
         {
-            ElitismStrategy strategy = new ElitismStrategy();
+            SimpleElitismStrategy strategy = new SimpleElitismStrategy();
             strategy.Initialize(GetGeneticAlgorithm(.1));
             AssertEx.Throws<ArgumentNullException>(() => strategy.GetEliteEntities(null));
         }
@@ -92,8 +91,8 @@ namespace GenFxTests
         [TestMethod()]
         public void ElitismStrategy_GetElitistGeneticEntities_EmptyPopulation()
         {
-            IGeneticAlgorithm algorithm = GetGeneticAlgorithm(.1);
-            ElitismStrategy strategy = new ElitismStrategy();
+            GeneticAlgorithm algorithm = GetGeneticAlgorithm(.1);
+            SimpleElitismStrategy strategy = new SimpleElitismStrategy();
             strategy.Initialize(algorithm);
             SimplePopulation pop = new SimplePopulation();
             pop.Initialize(algorithm);
@@ -108,7 +107,7 @@ namespace GenFxTests
                 FitnessEvaluator = new MockFitnessEvaluator(),
                 GeneticEntitySeed = new MockEntity(),
                 PopulationSeed = new SimplePopulation(),
-                ElitismStrategy = new ElitismStrategy
+                ElitismStrategy = new SimpleElitismStrategy
                 {
                     ElitistRatio = elitismRatio
                 }

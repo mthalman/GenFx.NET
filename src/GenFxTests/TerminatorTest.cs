@@ -1,7 +1,5 @@
 ﻿using GenFx;
-using GenFx.ComponentLibrary.Base;
 using GenFx.ComponentLibrary.Populations;
-using GenFx.Contracts;
 using GenFxTests.Helpers;
 using GenFxTests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -25,7 +23,7 @@ namespace GenFxTests
         [TestMethod]
         public void Terminator_Ctor()
         {
-            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm
+            GeneticAlgorithm algorithm = new MockGeneticAlgorithm
             {
                 GeneticEntitySeed = new MockEntity(),
                 PopulationSeed = new SimplePopulation(),
@@ -35,7 +33,7 @@ namespace GenFxTests
             };
             MockTerminator terminator = new MockTerminator();
             terminator.Initialize(algorithm);
-            PrivateObject accessor = new PrivateObject(terminator, new PrivateType(typeof(TerminatorBase)));
+            PrivateObject accessor = new PrivateObject(terminator, new PrivateType(typeof(Terminator)));
             Assert.AreSame(algorithm, accessor.GetProperty("Algorithm"), "Algorithm not set correctly.");
         }
 
@@ -49,7 +47,7 @@ namespace GenFxTests
             AssertEx.Throws<ArgumentNullException>(() => terminator.Initialize(null));
         }
 
-        private class TestTerminator : TerminatorBase
+        private class TestTerminator : Terminator
         {
             public override bool IsComplete()
             {

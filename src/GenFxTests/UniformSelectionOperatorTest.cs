@@ -1,7 +1,6 @@
 ﻿using GenFx;
 using GenFx.ComponentLibrary.Populations;
 using GenFx.ComponentLibrary.SelectionOperators;
-using GenFx.Contracts;
 using GenFxTests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
@@ -55,7 +54,7 @@ namespace GenFxTests
             RandomNumberService.Instance = randomUtil;
 
             randomUtil.Value = 3;
-            IGeneticEntity selectedEntity = op.SelectEntity(population);
+            GeneticEntity selectedEntity = op.SelectEntity(population);
             Assert.AreSame(population.Entities[randomUtil.Value], selectedEntity, "Incorrect selected entity.");
 
             randomUtil.Value = 2;

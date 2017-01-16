@@ -1,23 +1,22 @@
-using GenFx.Contracts;
 using System;
 
 namespace GenFx
 {
     /// <summary>
-    /// Represents the result of a statistical calculation for a particular generation of a <see cref="IPopulation"/>.
+    /// Represents the result of a statistical calculation for a particular generation of a <see cref="Population"/>.
     /// </summary>
     public class StatisticResult
     {
         private int generationIndex;
         private object resultValue;
         private int populationId;
-        private IStatistic statistic;
+        private Statistic statistic;
 
         /// <summary>
         /// Gets the <see cref="Statistic"/> to which this result belongs.
         /// </summary>
         /// <value>The <see cref="Statistic"/> to which this result belongs.</value>
-        public IStatistic Statistic
+        public Statistic Statistic
         {
             get { return this.statistic; }
         }
@@ -60,7 +59,7 @@ namespace GenFx
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="populationId"/> is less than zero.</exception>
         /// <exception cref="ArgumentNullException"><paramref name="resultValue"/> is null.</exception>
         /// <exception cref="ArgumentNullException"><paramref name="statistic"/> is null.</exception>
-        public StatisticResult(int generationIndex, int populationId, object resultValue, IStatistic statistic)
+        public StatisticResult(int generationIndex, int populationId, object resultValue, Statistic statistic)
         {
             if (generationIndex < 0)
             {

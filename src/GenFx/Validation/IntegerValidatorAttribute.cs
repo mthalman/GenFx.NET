@@ -1,5 +1,4 @@
 using System;
-using GenFx.Contracts;
 
 namespace GenFx.Validation
 {
@@ -87,11 +86,11 @@ namespace GenFx.Validation
         /// <summary>
         /// Initializes a new instance of the <see cref="IntegerExternalValidatorAttribute"/> class.
         /// </summary>
-        /// <param name="targetComponentType"><see cref="Type"/> of the component containing the property to be validated. This type must implement <see cref="IGeneticComponent"/>.</param>
+        /// <param name="targetComponentType"><see cref="Type"/> of the component containing the property to be validated. This type must implement <see cref="GeneticComponent"/>.</param>
         /// <param name="targetProperty">Property of the <paramref name="targetComponentType"/> to be validated.</param>
         /// <exception cref="ArgumentNullException"><paramref name="targetComponentType"/> is null.</exception>
         /// <exception cref="ArgumentException"><paramref name="targetProperty"/> is null or empty.</exception>
-        /// <exception cref="ArgumentException"><paramref name="targetComponentType"/> does not implement <see cref="IGeneticComponent"/>.</exception>
+        /// <exception cref="ArgumentException"><paramref name="targetComponentType"/> does not implement <see cref="GeneticComponent"/>.</exception>
         /// <exception cref="ArgumentException"><paramref name="targetProperty"/> does not exist on <paramref name="targetComponentType"/>.</exception>
         public IntegerExternalValidatorAttribute(Type targetComponentType, string targetProperty)
         {

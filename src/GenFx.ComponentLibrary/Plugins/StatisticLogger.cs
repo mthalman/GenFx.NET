@@ -1,6 +1,4 @@
-﻿using GenFx.ComponentLibrary.Base;
-using GenFx.Contracts;
-using GenFx.Validation;
+﻿using GenFx.Validation;
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -11,7 +9,7 @@ namespace GenFx.ComponentLibrary.Plugins
     /// <summary>
     /// Logs statistics for each generation.
     /// </summary>
-    public class StatisticLogger : PluginBase
+    public class StatisticLogger : Plugin
     {
         private string traceCategory;
 
@@ -55,9 +53,9 @@ namespace GenFx.ComponentLibrary.Plugins
                 throw new ArgumentNullException(nameof(environment));
             }
 
-            foreach (IPopulation population in environment.Populations)
+            foreach (Population population in environment.Populations)
             {
-                foreach (IStatistic stat in this.Algorithm.Statistics)
+                foreach (Statistic stat in this.Algorithm.Statistics)
                 {
                     string statVal = stat.GetResultValue(population).ToString();
 

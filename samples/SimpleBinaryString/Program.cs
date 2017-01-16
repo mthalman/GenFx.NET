@@ -1,11 +1,9 @@
 ﻿using GenFx;
 using GenFx.ComponentLibrary.Algorithms;
 using GenFx.ComponentLibrary.Lists;
-using GenFx.ComponentLibrary.Lists.BinaryStrings;
 using GenFx.ComponentLibrary.Populations;
 using GenFx.ComponentLibrary.SelectionOperators;
 using GenFx.ComponentLibrary.Terminators;
-using GenFx.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -58,7 +56,7 @@ namespace SimpleBinaryString
             await algorithm.InitializeAsync();
             await algorithm.RunAsync();
 
-            IEnumerable<IGeneticEntity> top10Entities =
+            IEnumerable<GeneticEntity> top10Entities =
                 algorithm.Environment.Populations[0].Entities.GetEntitiesSortedByFitness(
                     FitnessType.Raw, FitnessEvaluationMode.Maximize)
                 .Reverse()
@@ -66,7 +64,7 @@ namespace SimpleBinaryString
 
             Console.WriteLine();
             Console.WriteLine("Top 10 entities:");
-            foreach (IGeneticEntity entity in top10Entities)
+            foreach (GeneticEntity entity in top10Entities)
             {
                 Console.WriteLine("Bits: " + entity.Representation + ", Fitness: " + entity.RawFitnessValue);
             }
@@ -76,7 +74,7 @@ namespace SimpleBinaryString
 
         private static void Algorithm_GenerationCreated(object sender, EventArgs e)
         {
-            Console.WriteLine("Generation: {0}", ((IGeneticAlgorithm)sender).CurrentGeneration);
+            Console.WriteLine("Generation: {0}", ((GeneticAlgorithm)sender).CurrentGeneration);
         }
     }
 }

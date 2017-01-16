@@ -1,8 +1,6 @@
-﻿using GenFx.ComponentLibrary.Base;
-using GenFx.Validation;
+﻿using GenFx.Validation;
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Text;
 
 namespace GenFx.ComponentLibrary.Lists
@@ -12,12 +10,11 @@ namespace GenFx.ComponentLibrary.Lists
     /// </summary>
     /// <remarks>
     /// This class does not define the list structure.  It only defines the API.  Classes which derive from
-    /// <see cref="ListEntityBase{TItem}"/> are responsible for the definition of the actual data structure
+    /// <see cref="ListEntityBase"/> are responsible for the definition of the actual data structure
     /// representing the list.
     /// </remarks>
-    /// <typeparam name="TItem">Type of the values contained in the list.</typeparam>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix")]
-    public abstract class ListEntityBase<TItem> : GeneticEntity, IListEntityBase, IListEntityBase<TItem>
+    public abstract class ListEntityBase : GeneticEntity, IList
     {
         private const int DefaultMaxLength = 20;
         private const int DefaultMinLength = 5;
@@ -59,35 +56,33 @@ namespace GenFx.ComponentLibrary.Lists
         /// Gets or sets the list element at the specified index.
         /// </summary>
         /// <param name="index">The zero-based index of the list element to get or set.</param>
-        public abstract TItem this[int index]
-        {
-            get;
-            set;
-        }
-
         object IList.this[int index]
         {
-            get { return this[index]; }
-            set
-            {
-                if (!(value is TItem))
-                {
-                    throw new ArgumentException(StringUtil.GetFormattedString(Resources.ErrorMsg_ListEntityBase_InvalidItemType, value?.GetType(), typeof(TItem)), nameof(value));
-                }
-
-                this[index] = (TItem)value;
-            }
+            get { return this.GetValue(index); }
+            set { this.SetValue(index, value); }
         }
 
+        /// <summary>
+        /// Returns the list element at the specified index.
+        /// </summary>
+        /// <param name="index">The zero-based index of the list element to get.</param>
+        /// <returns>The list element at the specified index.</returns>
+        public abstract object GetValue(int index);
+
+        /// <summary>
+        /// Sets the list element at the specified index.
+        /// </summary>
+        /// <param name="index">The zero-based index of the list element to set.</param>
+        /// <param name="value">The value to set at the index.</param>
+        public abstract void SetValue(int index, object value);
+        
         /// <summary>
         /// When overriden by a derived class, gets or sets the length of the list.
         /// </summary>
         public abstract int Length { get; set; }
 
         int ICollection.Count { get { return this.Length; } }
-
-        int ICollection<TItem>.Count { get { return this.Length; } }
-
+        
         /// <summary>
         /// When overriden by a derived class, gets a value indicating whether the list is a fixed size.
         /// </summary>
@@ -146,11 +141,6 @@ namespace GenFx.ComponentLibrary.Lists
             return index;
         }
 
-        void ICollection<TItem>.Add(TItem value)
-        {
-            this.Add(value);
-        }
-
         /// <summary>
         /// Removes all items from the list.
         /// </summary>
@@ -159,11 +149,16 @@ namespace GenFx.ComponentLibrary.Lists
             this.Length = 0;
         }
         
-        bool IList.Contains(object value)
+        /// <summary>
+        /// Returns a value indicating whether the specified value is contained in the list.
+        /// </summary>
+        /// <param name="value">Value to check.</param>
+        /// <returns>True if the value is contained in the list; otherwise, false.</returns>
+        public bool Contains(object value)
         {
             for (int i = 0; i < this.Length; i++)
             {
-                if ((object)this[i] == value)
+                if ((object)this.GetValue(i) == value)
                 {
                     return true;
                 }
@@ -171,17 +166,7 @@ namespace GenFx.ComponentLibrary.Lists
 
             return false;
         }
-
-        /// <summary>
-        /// Returns a value indicating whether the specified item is contained in the list.
-        /// </summary>
-        /// <param name="item">The item to check.</param>
-        /// <returns>true if the value exists; otherwise, false.</returns>
-        public bool Contains(TItem item)
-        {
-            return ((IList)this).Contains(item);
-        }
-
+        
         void ICollection.CopyTo(Array array, int index)
         {
             if (array == null)
@@ -191,37 +176,32 @@ namespace GenFx.ComponentLibrary.Lists
 
             for (int i = index; i < this.Length; i++)
             {
-                array.SetValue(this[i], i);
+                array.SetValue(this.GetValue(i), i);
             }
-        }
-
-        void ICollection<TItem>.CopyTo(TItem[] array, int arrayIndex)
-        {
-            ((ICollection)this).CopyTo(array, arrayIndex);
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return ((IEnumerable<TItem>)this).GetEnumerator();
         }
 
         /// <summary>
         /// Returns an enumerator that iterates the items in the list.
         /// </summary>
         /// <returns>An enumerator that iterates the items in the list.</returns>
-        public IEnumerator<TItem> GetEnumerator()
+        public IEnumerator GetEnumerator()
         {
             for (int i = 0; i < this.Length; i++)
             {
-                yield return this[i];
+                yield return this.GetValue(i);
             }
         }
 
-        int IList.IndexOf(object value)
+        /// <summary>
+        /// Determines the index of a specified value in the list.
+        /// </summary>
+        /// <param name="value">The value to locate in the list.</param>
+        /// <returns>The index of the item if it exists; otherwise, returns -1.</returns>
+        public int IndexOf(object value)
         {
             for (int i = 0; i < this.Length; i++)
             {
-                if ((object)this[i] == value)
+                if (this.GetValue(i) == value)
                 {
                     return i;
                 }
@@ -229,18 +209,13 @@ namespace GenFx.ComponentLibrary.Lists
 
             return -1;
         }
-
+        
         /// <summary>
-        /// Determines the index of a specified item in the list.
+        /// Inserts the value at the specified index.
         /// </summary>
-        /// <param name="item">The item to locate in the list.</param>
-        /// <returns>The index of the item if it exists; otherwise, returns -1.</returns>
-        public int IndexOf(TItem item)
-        {
-            return ((IList)this).IndexOf(item);
-        }
-
-        void IList.Insert(int index, object value)
+        /// <param name="index">Index within the list where the value should be inserted.</param>
+        /// <param name="value">The value to be inserted.</param>
+        public void Insert(int index, object value)
         {
             if (index > this.Length)
             {
@@ -259,41 +234,22 @@ namespace GenFx.ComponentLibrary.Lists
                 // Move the position all items at and past the index by one
                 for (int i = this.Length - 2; i >= index; i--)
                 {
-                    this[i + 1] = this[i];
+                    this.SetValue(i + 1, this.GetValue(i));
                 }
 
                 ((IList)this)[index] = value;
             }
         }
-
+        
         /// <summary>
-        /// Inserts an item to the list at the specified index.
+        /// Removes the specified value from the list.
         /// </summary>
-        /// <param name="index">The zero-based index at which the item should be inserted.</param>
-        /// <param name="item">The item to insert.</param>
-        public void Insert(int index, TItem item)
-        {
-            ((IList)this).Insert(index, item);
-        }
-
-        void IList.Remove(object value)
+        /// <param name="value">Value to be removed.</param>
+        public void Remove(object value)
         {
             ((IList)this).RemoveAt(((IList)this).IndexOf(value));
         }
-
-        /// <summary>
-        /// Removes the specified item from the list.
-        /// </summary>
-        /// <param name="item">The item to remove.</param>
-        /// <returns>true if the item was found and removed; otherwise, false.</returns>
-        public bool Remove(TItem item)
-        {
-            IList list = (IList)this;
-            int count = list.Count;
-            list.Remove(item);
-            return list.Count != count;
-        }
-
+        
         /// <summary>
         /// Removes the value at the specified index within the list.
         /// </summary>
@@ -303,14 +259,14 @@ namespace GenFx.ComponentLibrary.Lists
             // Move all the items one position down and remove the last item by reducing the length
             for (int i = index; i < this.Length - 1; i++)
             {
-                this[i] = this[i + 1];
+                this.SetValue(i, this.GetValue(i + 1));
             }
 
             this.Length--;
         }
 
         /// <summary>
-        /// Stores a cached string representation of the <see cref="IListEntityBase"/>.
+        /// Stores a cached string representation of the <see cref="ListEntityBase{TItem}"/>.
         /// </summary>
         protected void UpdateStringRepresentation()
         {
@@ -318,7 +274,7 @@ namespace GenFx.ComponentLibrary.Lists
         }
 
         /// <summary>
-        /// Calculates the string representation of the <see cref="IListEntityBase"/>.
+        /// Calculates the string representation of the <see cref="ListEntityBase{TItem}"/>.
         /// </summary>
         /// <returns>The string representation.</returns>
         protected virtual string CalculateStringRepresentation()
@@ -331,7 +287,7 @@ namespace GenFx.ComponentLibrary.Lists
                     builder.Append(", ");
                 }
 
-                builder.Append(this[i]);
+                builder.Append(this.GetValue(i));
             }
 
             return builder.ToString();

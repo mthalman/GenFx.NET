@@ -2,25 +2,23 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using GenFx;
-using GenFx.ComponentLibrary.Base;
-using GenFx.Contracts;
 
 namespace GenFxTests.Mocks
 {
-    class MockMutationOperator : MutationOperatorBase
+    class MockMutationOperator : MutationOperator
     {
         internal int DoMutateCallCount;
         
-        protected override bool GenerateMutation(IGeneticEntity entity)
+        protected override bool GenerateMutation(GeneticEntity entity)
         {
             this.DoMutateCallCount++;
             return false;
         }
     }
 
-    class MockMutationOperator2 : MutationOperatorBase
+    class MockMutationOperator2 : MutationOperator
     {
-        protected override bool GenerateMutation(IGeneticEntity entity)
+        protected override bool GenerateMutation(GeneticEntity entity)
         {
             throw new Exception();
         }

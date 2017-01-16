@@ -2,12 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using GenFx;
-using GenFx.ComponentLibrary.Base;
-using GenFx.Contracts;
 
 namespace GenFxTests.Mocks
 {
-    class MockTerminator : TerminatorBase
+    class MockTerminator : Terminator
     {
         public override bool IsComplete()
         {
@@ -15,12 +13,7 @@ namespace GenFxTests.Mocks
         }
     }
     
-    interface IMockTerminator2 : ITerminator
-    {
-
-    }
-
-    abstract class MockTerminator2Base : TerminatorBase, IMockTerminator2
+    abstract class MockTerminator2Base : Terminator
     {
     }
 

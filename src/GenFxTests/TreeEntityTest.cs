@@ -6,8 +6,6 @@ using GenFx.ComponentLibrary.Trees;
 using GenFx;
 using GenFxTests.Mocks;
 using GenFxTests.Helpers;
-using GenFx.ComponentLibrary.Base;
-using GenFx.Contracts;
 
 namespace GenFxTests
 {
@@ -95,7 +93,7 @@ namespace GenFxTests
         [TestMethod]
         public void TreeEntity_GetPrefixTree()
         {
-            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm
+            GeneticAlgorithm algorithm = new MockGeneticAlgorithm
             {
                 PopulationSeed = new MockPopulation(),
                 SelectionOperator = new MockSelectionOperator(),
@@ -142,7 +140,7 @@ namespace GenFxTests
         [TestMethod]
         public void TreeEntity_GetPostfixTree()
         {
-            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm
+            GeneticAlgorithm algorithm = new MockGeneticAlgorithm
             {
                 PopulationSeed = new MockPopulation(),
                 SelectionOperator = new MockSelectionOperator(),
@@ -189,7 +187,7 @@ namespace GenFxTests
         [TestMethod]
         public void TreeEntity_SetRootNode()
         {
-            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm
+            GeneticAlgorithm algorithm = new MockGeneticAlgorithm
             {
                 PopulationSeed = new MockPopulation(),
                 SelectionOperator = new MockSelectionOperator(),
@@ -222,7 +220,7 @@ namespace GenFxTests
         [TestMethod]
         public void TreeEntity_Swap()
         {
-            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm
+            GeneticAlgorithm algorithm = new MockGeneticAlgorithm
             {
                 PopulationSeed = new MockPopulation(),
                 SelectionOperator = new MockSelectionOperator(),

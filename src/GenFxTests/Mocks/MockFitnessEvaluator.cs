@@ -3,16 +3,14 @@ using System.Collections.Generic;
 using System.Text;
 using GenFx;
 using System.Threading.Tasks;
-using GenFx.ComponentLibrary.Base;
-using GenFx.Contracts;
 
 namespace GenFxTests.Mocks
 {
-    class MockFitnessEvaluator : FitnessEvaluatorBase
+    class MockFitnessEvaluator : FitnessEvaluator
     {
         internal int DoEvaluateFitnessCallCount;
         
-        public override Task<double> EvaluateFitnessAsync(IGeneticEntity entity)
+        public override Task<double> EvaluateFitnessAsync(GeneticEntity entity)
         {
             this.DoEvaluateFitnessCallCount++;
             MockEntity mockEntity = (MockEntity)entity;
@@ -20,9 +18,9 @@ namespace GenFxTests.Mocks
         }
     }
     
-    class MockFitnessEvaluator2 : FitnessEvaluatorBase
+    class MockFitnessEvaluator2 : FitnessEvaluator
     {
-        public override Task<double> EvaluateFitnessAsync(IGeneticEntity entity)
+        public override Task<double> EvaluateFitnessAsync(GeneticEntity entity)
         {
             throw new Exception();
         }

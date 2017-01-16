@@ -1,11 +1,9 @@
-﻿using GenFx.Contracts;
-
-namespace GenFx.ComponentLibrary.Base
+﻿namespace GenFx
 {
     /// <summary>
     /// Plugin component that provides custom extension functionality.
     /// </summary>
-    public abstract class PluginBase : GeneticComponentWithAlgorithm, IPlugin
+    public abstract class Plugin : GeneticComponentWithAlgorithm
     {
         /// <summary>
         /// Handles the event when the fitness of an environment has been evaluated.

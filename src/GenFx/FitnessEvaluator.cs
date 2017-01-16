@@ -1,20 +1,19 @@
-using GenFx.Contracts;
 using GenFx.Validation;
 using System.Threading.Tasks;
 
-namespace GenFx.ComponentLibrary.Base
+namespace GenFx
 {
     /// <summary>
     /// Provides the abstract base class for a fitness evaluator.
     /// </summary>
     /// <remarks>
-    /// The <b>FitnessEvaluator</b> calculates the <see cref="IGeneticEntity.RawFitnessValue"/> of a <see cref="IGeneticEntity"/>.  
+    /// The <b>FitnessEvaluator</b> calculates the <see cref="GeneticEntity.RawFitnessValue"/> of a <see cref="GeneticEntity"/>.  
     /// The fitness value is a relative measurement of how close a entity is to meeting the goal
     /// of the genetic algorithm.  For example, a genetic algorithm that uses binary strings to reach
     /// a goal of a entity with all ones in its string might use a <b>FitnessEvaluator</b> 
     /// that uses the number of ones in a binary string as the fitness value.
     /// </remarks>
-    public abstract class FitnessEvaluatorBase : GeneticComponentWithAlgorithm, IFitnessEvaluator
+    public abstract class FitnessEvaluator : GeneticComponentWithAlgorithm
     {
         private const FitnessEvaluationMode DefaultEvaluationMode = FitnessEvaluationMode.Maximize;
         private FitnessEvaluationMode evaluationMode = DefaultEvaluationMode;
@@ -34,10 +33,10 @@ namespace GenFx.ComponentLibrary.Base
         /// <summary>
         /// When overriden in a derived class, returns the calculated fitness value of the <paramref name="entity"/>.
         /// </summary>
-        /// <param name="entity"><see cref="IGeneticEntity"/> whose calculated fitness value is to be returned.</param>
+        /// <param name="entity"><see cref="GeneticEntity"/> whose calculated fitness value is to be returned.</param>
         /// <returns>
         /// The calculated fitness value of the <paramref name="entity"/>.
         /// </returns>
-        public abstract Task<double> EvaluateFitnessAsync(IGeneticEntity entity);
+        public abstract Task<double> EvaluateFitnessAsync(GeneticEntity entity);
     }
 }

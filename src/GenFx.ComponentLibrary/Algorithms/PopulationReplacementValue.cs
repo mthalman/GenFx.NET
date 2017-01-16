@@ -1,12 +1,11 @@
-﻿using GenFx.Contracts;
-using System;
+﻿using System;
 using System.ComponentModel;
 using System.Globalization;
 
 namespace GenFx.ComponentLibrary.Algorithms
 {
     /// <summary>
-    /// Represents the value indicating how many <see cref="IGeneticEntity"/> objects are to 
+    /// Represents the value indicating how many <see cref="GeneticEntity"/> objects are to 
     /// be replaced with the offspring of the previous generation.
     /// </summary>
     /// <seealso cref="SteadyStateGeneticAlgorithm"/>
@@ -17,7 +16,7 @@ namespace GenFx.ComponentLibrary.Algorithms
         private ReplacementValueKind kind;
 
         /// <summary>
-        /// Gets the kind of value being used to indicate the number of <see cref="IGeneticEntity"/> objects
+        /// Gets the kind of value being used to indicate the number of <see cref="GeneticEntity"/> objects
         /// to replace.
         /// </summary>
         public ReplacementValueKind Kind
@@ -26,7 +25,7 @@ namespace GenFx.ComponentLibrary.Algorithms
         }
 
         /// <summary>
-        /// Gets the number of <see cref="IGeneticEntity"/> objects to be replaced.
+        /// Gets the number of <see cref="GeneticEntity"/> objects to be replaced.
         /// </summary>
         public int Value
         {
@@ -36,9 +35,9 @@ namespace GenFx.ComponentLibrary.Algorithms
         /// <summary>
         /// Initializes a new instance of the <see cref="PopulationReplacementValue"/> class.
         /// </summary>
-        /// <param name="value">Number of <see cref="IGeneticEntity"/> objects to be replaced.</param>
+        /// <param name="value">Number of <see cref="GeneticEntity"/> objects to be replaced.</param>
         /// <param name="kind">
-        /// Kind of value being used to indicate the number of <see cref="IGeneticEntity"/> objects to replace.
+        /// Kind of value being used to indicate the number of <see cref="GeneticEntity"/> objects to replace.
         /// </param>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="value"/> is less than zero.</exception>
         public PopulationReplacementValue(int value, ReplacementValueKind kind)

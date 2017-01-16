@@ -1,7 +1,6 @@
 ﻿using GenFx;
 using GenFx.ComponentLibrary.Algorithms;
 using GenFx.ComponentLibrary.Populations;
-using GenFx.Contracts;
 using GenFxTests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
@@ -115,7 +114,7 @@ namespace GenFxTests
             Assert.AreEqual((double)7, population3.Entities[3].ScaledFitnessValue, "Incorrect entity.");
         }
 
-        private static SimplePopulation GetPopulation(IGeneticAlgorithm algorithm)
+        private static SimplePopulation GetPopulation(GeneticAlgorithm algorithm)
         {
             SimplePopulation population = new SimplePopulation();
             population.Initialize(algorithm);

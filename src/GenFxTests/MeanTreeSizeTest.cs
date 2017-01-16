@@ -2,7 +2,6 @@
 using GenFx.ComponentLibrary.Populations;
 using GenFx.ComponentLibrary.Statistics;
 using GenFx.ComponentLibrary.Trees;
-using GenFx.Contracts;
 using GenFxTests.Helpers;
 using GenFxTests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -25,7 +24,7 @@ namespace GenFxTests
         [TestMethod()]
         public void MeanTreeSize_GetResultValue()
         {
-            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm
+            GeneticAlgorithm algorithm = new MockGeneticAlgorithm
             {
                 SelectionOperator = new MockSelectionOperator(),
                 FitnessEvaluator = new MockFitnessEvaluator(),
@@ -39,7 +38,7 @@ namespace GenFxTests
             SimplePopulation population = new SimplePopulation();
             population.Initialize(algorithm);
 
-            ITreeEntity entity = new TestTreeEntity();
+            TreeEntityBase entity = new TestTreeEntity();
             entity.Initialize(algorithm);
             entity.SetRootNode(new TreeNode());
             entity.RootNode.ChildNodes.Add(new TreeNode());
@@ -69,7 +68,7 @@ namespace GenFxTests
         [TestMethod()]
         public void MeanTreeSize_GetResultValue_NullPopulation()
         {
-            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm
+            GeneticAlgorithm algorithm = new MockGeneticAlgorithm
             {
                 SelectionOperator = new MockSelectionOperator(),
                 FitnessEvaluator = new MockFitnessEvaluator(),

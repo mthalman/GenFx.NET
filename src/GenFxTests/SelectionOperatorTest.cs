@@ -1,6 +1,5 @@
 ﻿using GenFx;
 using GenFx.ComponentLibrary.Populations;
-using GenFx.Contracts;
 using GenFxTests.Helpers;
 using GenFxTests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -31,18 +30,18 @@ namespace GenFxTests
         [TestMethod]
         public void SelectionOperator_Select()
         {
-            IGeneticAlgorithm algorithm = GetAlgorithm();
+            GeneticAlgorithm algorithm = GetAlgorithm();
             MockSelectionOperator op = new MockSelectionOperator();
             op.Initialize(algorithm);
             SimplePopulation population = new SimplePopulation();
             population.Initialize(algorithm);
-            IGeneticEntity entity1 = new MockEntity();
+            GeneticEntity entity1 = new MockEntity();
             entity1.Initialize(algorithm);
-            IGeneticEntity entity2 = new MockEntity();
+            GeneticEntity entity2 = new MockEntity();
             entity2.Initialize(algorithm);
             population.Entities.Add(entity1);
             population.Entities.Add(entity2);
-            IGeneticEntity selectedEntity = op.SelectEntity(population);
+            GeneticEntity selectedEntity = op.SelectEntity(population);
             Assert.AreSame(entity1, selectedEntity, "Incorrect entity selected.");
             Assert.AreEqual(1, op.DoSelectCallCount, "Selection not called correctly.");
         }
@@ -53,7 +52,7 @@ namespace GenFxTests
         [TestMethod]
         public void SelectionOperator_Select_EmptyPopulation()
         {
-            IGeneticAlgorithm algorithm = GetAlgorithm();
+            GeneticAlgorithm algorithm = GetAlgorithm();
             MockSelectionOperator op = new MockSelectionOperator();
             op.Initialize(algorithm);
             SimplePopulation population = new SimplePopulation();
@@ -67,15 +66,15 @@ namespace GenFxTests
         [TestMethod]
         public void SelectionOperator_Select_NullPopulation()
         {
-            IGeneticAlgorithm algorithm = GetAlgorithm();
+            GeneticAlgorithm algorithm = GetAlgorithm();
             MockSelectionOperator op = new MockSelectionOperator();
             op.Initialize(algorithm);
             AssertEx.Throws<ArgumentNullException>(() => op.SelectEntity(null));
         }
 
-        private IGeneticAlgorithm GetAlgorithm()
+        private GeneticAlgorithm GetAlgorithm()
         {
-            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm
+            GeneticAlgorithm algorithm = new MockGeneticAlgorithm
             {
                 FitnessEvaluator = new MockFitnessEvaluator(),
                 GeneticEntitySeed = new MockEntity(),

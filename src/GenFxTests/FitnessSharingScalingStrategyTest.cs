@@ -1,7 +1,6 @@
 ﻿using GenFx;
 using GenFx.ComponentLibrary.Populations;
 using GenFx.ComponentLibrary.Scaling;
-using GenFx.Contracts;
 using GenFxTests.Helpers;
 using GenFxTests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -35,17 +34,17 @@ namespace GenFxTests
         {
             double scalingCurvature = .8;
             double scalingDistance = 3;
-            IGeneticAlgorithm algorithm = GetAlgorithm(scalingCurvature, scalingDistance);
+            GeneticAlgorithm algorithm = GetAlgorithm(scalingCurvature, scalingDistance);
             FakeFitnessSharingScalingStrategy strategy = (FakeFitnessSharingScalingStrategy)algorithm.FitnessScalingStrategy;
             strategy.Initialize(algorithm);
             SimplePopulation population = new SimplePopulation();
             population.Initialize(algorithm);
-            IGeneticEntity entity1 = AddEntity(algorithm, population, 5);
-            IGeneticEntity entity2 = AddEntity(algorithm, population, 6);
-            IGeneticEntity entity3 = AddEntity(algorithm, population, 9);
-            IGeneticEntity entity4 = AddEntity(algorithm, population, 11.5);
-            IGeneticEntity entity5 = AddEntity(algorithm, population, 20);
-            IGeneticEntity entity6 = AddEntity(algorithm, population, 25);
+            GeneticEntity entity1 = AddEntity(algorithm, population, 5);
+            GeneticEntity entity2 = AddEntity(algorithm, population, 6);
+            GeneticEntity entity3 = AddEntity(algorithm, population, 9);
+            GeneticEntity entity4 = AddEntity(algorithm, population, 11.5);
+            GeneticEntity entity5 = AddEntity(algorithm, population, 20);
+            GeneticEntity entity6 = AddEntity(algorithm, population, 25);
             strategy.Scale(population);
 
             ValidateScale(entity1, 3.16);
@@ -56,23 +55,23 @@ namespace GenFxTests
             ValidateScale(entity6, 25);
         }
 
-        private static void ValidateScale(IGeneticEntity entity, double expectedValue)
+        private static void ValidateScale(GeneticEntity entity, double expectedValue)
         {
             Assert.AreEqual(expectedValue, Math.Round(entity.ScaledFitnessValue, 2), "ScaledFitnessValue not scaled correctly.");
         }
 
-        private static IGeneticEntity AddEntity(IGeneticAlgorithm algorithm, SimplePopulation population, double scaledFitnessValue)
+        private static GeneticEntity AddEntity(GeneticAlgorithm algorithm, SimplePopulation population, double scaledFitnessValue)
         {
-            IGeneticEntity entity = new MockEntity();
+            GeneticEntity entity = new MockEntity();
             entity.Initialize(algorithm);
             entity.ScaledFitnessValue = scaledFitnessValue;
             population.Entities.Add(entity);
             return entity;
         }
 
-        private static IGeneticAlgorithm GetAlgorithm(double scalingCurvature, double scalingDistance)
+        private static GeneticAlgorithm GetAlgorithm(double scalingCurvature, double scalingDistance)
         {
-            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm
+            GeneticAlgorithm algorithm = new MockGeneticAlgorithm
             {
                 SelectionOperator = new MockSelectionOperator(),
                 FitnessEvaluator = new MockFitnessEvaluator(),
@@ -89,7 +88,7 @@ namespace GenFxTests
 
         private class FakeFitnessSharingScalingStrategy : FitnessSharingScalingStrategy
         {
-            public override double EvaluateFitnessDistance(IGeneticEntity entity1, IGeneticEntity entity2)
+            public override double EvaluateFitnessDistance(GeneticEntity entity1, GeneticEntity entity2)
             {
                 return Math.Abs(entity1.ScaledFitnessValue - entity2.ScaledFitnessValue);
             }

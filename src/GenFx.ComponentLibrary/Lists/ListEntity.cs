@@ -1,9 +1,6 @@
-﻿using GenFx.ComponentLibrary.Base;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using GenFx.Contracts;
-using GenFx.Validation;
 
 namespace GenFx.ComponentLibrary.Lists
 {
@@ -13,7 +10,7 @@ namespace GenFx.ComponentLibrary.Lists
     /// <remarks>This class uses a <see cref="List{TItem}"/> data structure to represent the list.</remarks>
     /// <typeparam name="TItem">Type of the values contained in the list.</typeparam>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix")]
-    public abstract class ListEntity<TItem> : ListEntityBase<TItem>, IListEntity<TItem>
+    public abstract class ListEntity<TItem> : ListEntityBase<TItem>
     {
         private List<TItem> genes;
         
@@ -84,7 +81,7 @@ namespace GenFx.ComponentLibrary.Lists
         /// Initializes the component to ensure its readiness for algorithm execution.
         /// </summary>
         /// <param name="algorithm">The algorithm that is to use this component.</param>
-        public override void Initialize(IGeneticAlgorithm algorithm)
+        public override void Initialize(GeneticAlgorithm algorithm)
         {
             base.Initialize(algorithm);
 

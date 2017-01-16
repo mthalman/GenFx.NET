@@ -2,25 +2,23 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using GenFx;
-using GenFx.ComponentLibrary.Base;
-using GenFx.Contracts;
 
 namespace GenFxTests.Mocks
 {
-    class MockSelectionOperator : SelectionOperatorBase
+    class MockSelectionOperator : SelectionOperator
     {
         internal int DoSelectCallCount;
         
-        protected override IGeneticEntity SelectEntityFromPopulation(IPopulation population)
+        protected override GeneticEntity SelectEntityFromPopulation(Population population)
         {
             this.DoSelectCallCount++;
             return population.Entities[0];
         }
     }
     
-    class MockSelectionOperator2 : SelectionOperatorBase
+    class MockSelectionOperator2 : SelectionOperator
     {
-        protected override IGeneticEntity SelectEntityFromPopulation(IPopulation population)
+        protected override GeneticEntity SelectEntityFromPopulation(Population population)
         {
             throw new Exception();
         }

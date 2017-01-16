@@ -1,6 +1,5 @@
-﻿using GenFx.ComponentLibrary.Base;
-using GenFx.ComponentLibrary.Lists.BinaryStrings;
-using GenFx.Contracts;
+﻿using GenFx;
+using GenFx.ComponentLibrary.Lists;
 using GenFx.Validation;
 using System.Linq;
 using System.Threading.Tasks;
@@ -8,9 +7,9 @@ using System.Threading.Tasks;
 namespace SimpleBinaryString
 {
     [RequiredEntity(typeof(BinaryStringEntity))]
-    internal class FitnessEvaluator : FitnessEvaluatorBase
+    internal class FitnessEvaluator : GenFx.FitnessEvaluator
     {
-        public override Task<double> EvaluateFitnessAsync(IGeneticEntity entity)
+        public override Task<double> EvaluateFitnessAsync(GeneticEntity entity)
         {
             BinaryStringEntity binStrEntity = (BinaryStringEntity)entity;
 

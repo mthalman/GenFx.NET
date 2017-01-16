@@ -1,7 +1,5 @@
 using GenFx;
-using GenFx.ComponentLibrary.Base;
-using GenFx.ComponentLibrary.Lists.BinaryStrings;
-using GenFx.Contracts;
+using GenFx.ComponentLibrary.Lists;
 using GenFxTests.Helpers;
 using GenFxTests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -83,7 +81,7 @@ namespace GenFxTests
         public void BinaryStringEntity_Ctor()
         {
             int size = 3;
-            IGeneticAlgorithm algorithm = GetAlgorithm(size);
+            GeneticAlgorithm algorithm = GetAlgorithm(size);
             TestBinaryStringEntity entity = new TestBinaryStringEntity { MinimumStartingLength = size, MaximumStartingLength = size };
             entity.Initialize(algorithm);
             PrivateObject accessor = new PrivateObject(entity, new PrivateType(typeof(BinaryStringEntity)));
@@ -97,7 +95,7 @@ namespace GenFxTests
         [TestMethod()]
         public void BinaryStringEntity_Initialize()
         {
-            IGeneticAlgorithm algorithm = GetAlgorithm(4);
+            GeneticAlgorithm algorithm = GetAlgorithm(4);
             TestBinaryStringEntity entity = new TestBinaryStringEntity { MinimumStartingLength = 4, MaximumStartingLength = 4 };
             RandomNumberService.Instance = new TestRandomUtil();
             entity.Initialize(algorithm);
@@ -110,7 +108,7 @@ namespace GenFxTests
         [TestMethod()]
         public void BinaryStringEntity_Indexer()
         {
-            IGeneticAlgorithm algorithm = GetAlgorithm(3);
+            GeneticAlgorithm algorithm = GetAlgorithm(3);
             TestBinaryStringEntity entity = new TestBinaryStringEntity { MinimumStartingLength = 3, MaximumStartingLength = 3 };
             entity.Initialize(algorithm);
             PrivateObject accessor = new PrivateObject(entity, new PrivateType(typeof(BinaryStringEntity)));
@@ -145,7 +143,7 @@ namespace GenFxTests
         public void BinaryStringEntity_Length()
         {
             int length = 50;
-            IGeneticAlgorithm algorithm = GetAlgorithm(length);
+            GeneticAlgorithm algorithm = GetAlgorithm(length);
 
             TestBinaryStringEntity entity = new TestBinaryStringEntity { MinimumStartingLength = length, MaximumStartingLength = length };
             entity.Initialize(algorithm);
@@ -162,7 +160,7 @@ namespace GenFxTests
         public void BinaryStringEntity_Length_SetToDifferentValue()
         {
             int length = 50;
-            IGeneticAlgorithm algorithm = GetAlgorithm(length);
+            GeneticAlgorithm algorithm = GetAlgorithm(length);
 
             TestBinaryStringEntity entity = new TestBinaryStringEntity { MinimumStartingLength = length, MaximumStartingLength = length };
             entity.Initialize(algorithm);
@@ -187,7 +185,7 @@ namespace GenFxTests
 
         private static TestBinaryStringEntity GetEntity()
         {
-            IGeneticAlgorithm algorithm = GetAlgorithm(4);
+            GeneticAlgorithm algorithm = GetAlgorithm(4);
             
             TestBinaryStringEntity entity = (TestBinaryStringEntity)algorithm.GeneticEntitySeed.CreateNewAndInitialize();
 
@@ -204,9 +202,9 @@ namespace GenFxTests
             return entity;
         }
 
-        private static IGeneticAlgorithm GetAlgorithm(int entityLength)
+        private static GeneticAlgorithm GetAlgorithm(int entityLength)
         {
-            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm
+            GeneticAlgorithm algorithm = new MockGeneticAlgorithm
             {
                 SelectionOperator = new MockSelectionOperator(),
                 FitnessEvaluator = new MockFitnessEvaluator(),

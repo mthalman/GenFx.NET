@@ -1,6 +1,4 @@
 ﻿using GenFx;
-using GenFx.ComponentLibrary.Base;
-using GenFx.Contracts;
 using GenFxTests.Helpers;
 using GenFxTests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -35,7 +33,7 @@ namespace GenFxTests
         [TestMethod]
         public async Task Entity_EvaluateFitness_Async()
         {
-            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm
+            GeneticAlgorithm algorithm = new MockGeneticAlgorithm
             {
                 PopulationSeed = new MockPopulation(),
                 SelectionOperator = new MockSelectionOperator(),
@@ -58,7 +56,7 @@ namespace GenFxTests
         [TestMethod]
         public void Entity_GetFitnessValue()
         {
-            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm
+            GeneticAlgorithm algorithm = new MockGeneticAlgorithm
             {
                 PopulationSeed = new MockPopulation(),
                 SelectionOperator = new MockSelectionOperator(),
@@ -80,7 +78,7 @@ namespace GenFxTests
         [TestMethod]
         public void Entity_Initialize()
         {
-            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm
+            GeneticAlgorithm algorithm = new MockGeneticAlgorithm
             {
                 PopulationSeed = new MockPopulation(),
                 SelectionOperator = new MockSelectionOperator(),
@@ -98,7 +96,7 @@ namespace GenFxTests
         [TestMethod]
         public void Entity_CopyTo()
         {
-            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm
+            GeneticAlgorithm algorithm = new MockGeneticAlgorithm
             {
                 PopulationSeed = new MockPopulation(),
                 SelectionOperator = new MockSelectionOperator(),

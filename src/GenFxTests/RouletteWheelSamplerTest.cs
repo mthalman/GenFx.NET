@@ -1,6 +1,5 @@
 ﻿using GenFx;
 using GenFx.ComponentLibrary.SelectionOperators;
-using GenFx.Contracts;
 using GenFxTests.Helpers;
 using GenFxTests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -55,7 +54,7 @@ namespace GenFxTests
             RandomNumberService.Instance = randomUtil;
 
             randomUtil.Ratio = 0;
-            IGeneticEntity sampledEntity = RouletteWheelSampler.GetEntity(slices);
+            GeneticEntity sampledEntity = RouletteWheelSampler.GetEntity(slices);
             Assert.AreSame(entity1, sampledEntity, "Incorrect entity instance returned.");
 
             randomUtil.Ratio = .39999;
@@ -119,7 +118,7 @@ namespace GenFxTests
             TestRandomUtil randomUtil = new TestRandomUtil();
             RandomNumberService.Instance = randomUtil;
             randomUtil.RandomValue = 2;
-            IGeneticEntity sampledEntity = RouletteWheelSampler.GetEntity(slices);
+            GeneticEntity sampledEntity = RouletteWheelSampler.GetEntity(slices);
             Assert.AreEqual(randomUtil.MaxValuePassed, 4, "Incorrect max value passed.");
             Assert.AreSame(entity3, sampledEntity, "Incorrect entity returned.");
         }

@@ -1,10 +1,9 @@
-using GenFx.Contracts;
 using GenFx.Validation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace GenFx.ComponentLibrary.Base
+namespace GenFx
 {
     /// <summary>
     /// Provides the base class for elitism in a genetic algorithm.
@@ -12,17 +11,17 @@ namespace GenFx.ComponentLibrary.Base
     /// <remarks>
     /// Elitism in genetic algorithms is an addition to the selection operator.  It causes the
     /// genetic algorithm to have some number of genetic entities remain unchanged and brought forth to the
-    /// next generation.  An <see cref="ElitismStrategyBase"/> acts upon a <see cref="IPopulation"/> to
-    /// select those <see cref="IGeneticEntity"/> objects which are determined to be "elite".  The number
-    /// of genetic entities chosen is based on the <see cref="ElitismStrategyBase.ElitistRatio"/> property value.
+    /// next generation.  An <see cref="ElitismStrategy"/> acts upon a <see cref="Population"/> to
+    /// select those <see cref="GeneticEntity"/> objects which are determined to be "elite".  The number
+    /// of genetic entities chosen is based on the <see cref="ElitismStrategy.ElitistRatio"/> property value.
     /// </remarks>
-    public abstract class ElitismStrategyBase : GeneticComponentWithAlgorithm, IElitismStrategy
+    public abstract class ElitismStrategy : GeneticComponentWithAlgorithm
     {
         private const double DefaultElitistRatio = .1;
         private double elitistRatio = DefaultElitistRatio;
 
         /// <summary>
-        /// Gets or sets the ratio of <see cref="IGeneticEntity"/> objects that will be selected as elite and move on 
+        /// Gets or sets the ratio of <see cref="GeneticEntity"/> objects that will be selected as elite and move on 
         /// to the next generation unchanged.
         /// </summary>
         /// <exception cref="ValidationException">Value is not valid.</exception>
@@ -33,20 +32,20 @@ namespace GenFx.ComponentLibrary.Base
             get { return this.elitistRatio; }
             set { this.SetProperty(ref this.elitistRatio, value); }
         }
-        
+
         /// <summary>
-        /// Returns the collection of <see cref="IGeneticEntity"/> objects from the <paramref name="population"/>
+        /// Returns the collection of <see cref="GeneticEntity"/> objects from the <paramref name="population"/>
         /// that are to be treated as elite and move on to the next generation unchanged.
         /// </summary>
-        /// <param name="population"><see cref="IPopulation"/> containing the <see cref="IGeneticEntity"/> objects
+        /// <param name="population"><see cref="Population"/> containing the <see cref="GeneticEntity"/> objects
         /// from which to select.</param>
         /// <returns>
-        /// The collection of <see cref="IGeneticEntity"/> objects from the <paramref name="population"/>
+        /// The collection of <see cref="GeneticEntity"/> objects from the <paramref name="population"/>
         /// that are to be treated as elite.
         /// </returns>
         /// <exception cref="ArgumentNullException"><paramref name="population"/> is null.</exception>
         /// <exception cref="ArgumentException"><paramref name="population"/> contains no entities.</exception>
-        public IList<IGeneticEntity> GetEliteEntities(IPopulation population)
+        public IList<GeneticEntity> GetEliteEntities(Population population)
         {
             if (population == null)
             {
@@ -62,22 +61,22 @@ namespace GenFx.ComponentLibrary.Base
         }
 
         /// <summary>
-        /// Returns the collection of <see cref="IGeneticEntity"/> objects from the <paramref name="population"/>
+        /// Returns the collection of <see cref="GeneticEntity"/> objects from the <paramref name="population"/>
         /// that are to be treated as elite and move on to the next generation unchanged.
         /// </summary>
-        /// <param name="population"><see cref="IPopulation"/> containing the <see cref="IGeneticEntity"/> objects
+        /// <param name="population"><see cref="Population"/> containing the <see cref="GeneticEntity"/> objects
         /// from which to select.</param>
-        /// <returns>The collection of <see cref="IGeneticEntity"/> objects from the <paramref name="population"/>
+        /// <returns>The collection of <see cref="GeneticEntity"/> objects from the <paramref name="population"/>
         /// that are to be treated as elite.</returns>
         /// <remarks>
         /// <para>
-        /// The default implementation of this method is to use the <see cref="ElitismStrategyBase.ElitistRatio"/>
-        /// property to determine how many <see cref="IGeneticEntity"/> objects are chosen to be elite.  Those <see cref="IGeneticEntity"/>
-        /// objects with the highest <see cref="IGeneticEntity.ScaledFitnessValue"/> are chosen.
+        /// The default implementation of this method is to use the <see cref="ElitismStrategy.ElitistRatio"/>
+        /// property to determine how many <see cref="GeneticEntity"/> objects are chosen to be elite.  Those <see cref="GeneticEntity"/>
+        /// objects with the highest <see cref="GeneticEntity.ScaledFitnessValue"/> are chosen.
         /// </para>
         /// </remarks>
         /// <exception cref="ArgumentNullException"><paramref name="population"/> is null.</exception>
-        protected virtual IList<IGeneticEntity> GetEliteGeneticEntitiesCore(IPopulation population)
+        protected virtual IList<GeneticEntity> GetEliteGeneticEntitiesCore(Population population)
         {
             if (population == null)
             {
@@ -86,10 +85,10 @@ namespace GenFx.ComponentLibrary.Base
 
             int elitistCount = Convert.ToInt32(Math.Round(this.ElitistRatio * population.Entities.Count));
 
-            List<IGeneticEntity> geneticEntities = new List<IGeneticEntity>();
+            List<GeneticEntity> geneticEntities = new List<GeneticEntity>();
             if (elitistCount > 0)
             {
-                IGeneticEntity[] sorted = population.Entities.GetEntitiesSortedByFitness(
+                GeneticEntity[] sorted = population.Entities.GetEntitiesSortedByFitness(
                     this.Algorithm.SelectionOperator.SelectionBasedOnFitnessType,
                     this.Algorithm.FitnessEvaluator.EvaluationMode).ToArray();
 

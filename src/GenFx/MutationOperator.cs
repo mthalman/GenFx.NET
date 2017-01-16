@@ -1,8 +1,7 @@
-using GenFx.Contracts;
 using GenFx.Validation;
 using System;
 
-namespace GenFx.ComponentLibrary.Base
+namespace GenFx
 {
     /// <summary>
     /// Provides the abstract base class for a genetic algorithm mutation operator.
@@ -13,14 +12,14 @@ namespace GenFx.ComponentLibrary.Base
     /// to the next generation.  Genetic algorithm mutation is intended to be similar to gene copying 
     /// errors in nature.  Mutations are the driver of randomness in a population.
     /// </remarks>
-    public abstract class MutationOperatorBase : GeneticComponentWithAlgorithm, IMutationOperator
+    public abstract class MutationOperator : GeneticComponentWithAlgorithm
     {
         private const double DefaultMutationRate = .001;
 
         private double mutationRate = DefaultMutationRate;
 
         /// <summary>
-        /// Gets or sets the probability that a data segment within a <see cref="IGeneticEntity"/> will become mutated.
+        /// Gets or sets the probability that a data segment within a <see cref="GeneticEntity"/> will become mutated.
         /// </summary>
         /// <exception cref="ValidationException">Value is not valid.</exception>
         [ConfigurationProperty]
@@ -34,22 +33,22 @@ namespace GenFx.ComponentLibrary.Base
         /// <summary>
         /// Attempts to mutate the <paramref name="entity"/>.
         /// </summary>
-        /// <param name="entity"><see cref="IGeneticEntity"/> to be mutated.</param>
+        /// <param name="entity"><see cref="GeneticEntity"/> to be mutated.</param>
         /// <returns>
         /// A potentially mutated clone of the <paramref name="entity"/>.
         /// </returns>
         /// <remarks>
-        /// If the <see cref="IGeneticEntity"/> was mutated, its <see cref="IGeneticEntity.Age"/> property will be set to zero.
+        /// If the <see cref="GeneticEntity"/> was mutated, its <see cref="GeneticEntity.Age"/> property will be set to zero.
         /// </remarks>
         /// <exception cref="ArgumentNullException"><paramref name="entity"/> is null.</exception>
-        public IGeneticEntity Mutate(IGeneticEntity entity)
+        public GeneticEntity Mutate(GeneticEntity entity)
         {
             if (entity == null)
             {
                 throw new ArgumentNullException(nameof(entity));
             }
 
-            IGeneticEntity clonedEntity = entity.Clone();
+            GeneticEntity clonedEntity = entity.Clone();
             bool isMutated = this.GenerateMutation(clonedEntity);
             if (isMutated)
             {
@@ -62,14 +61,14 @@ namespace GenFx.ComponentLibrary.Base
         /// <summary>
         /// When overriden in a derived class, attempts to mutate the <paramref name="entity"/>.
         /// </summary>
-        /// <param name="entity"><see cref="IGeneticEntity"/> to be mutated.</param>
+        /// <param name="entity"><see cref="GeneticEntity"/> to be mutated.</param>
         /// <returns>true if a mutation occurred; otherwise, false.</returns>
         /// <remarks>
         /// <b>Notes to implementers:</b> When this method is overriden, each segment of data making up the 
-        /// representation of the <see cref="IGeneticEntity"/> should be attempted to be mutated.  Use the 
+        /// representation of the <see cref="GeneticEntity"/> should be attempted to be mutated.  Use the 
         /// <see cref="MutationRate"/> property to determine whether a component
-        /// of the <see cref="IGeneticEntity"/> should be mutated or not.  
+        /// of the <see cref="GeneticEntity"/> should be mutated or not.  
         /// </remarks>
-        protected abstract bool GenerateMutation(IGeneticEntity entity);
+        protected abstract bool GenerateMutation(GeneticEntity entity);
     }
 }

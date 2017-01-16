@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace GenFx.ComponentLibrary.Trees
 {
     /// <summary>
-    /// Contains extension methods for <see cref="ITreeEntity"/>.
+    /// Contains extension methods for <see cref="TreeEntityBase"/>.
     /// </summary>
     public static class TreeEntityExtensions
     {
@@ -12,7 +12,7 @@ namespace GenFx.ComponentLibrary.Trees
         /// Returns the number of nodes contained in the tree.
         /// </summary>
         /// <returns>The number of nodes contained in the tree.</returns>
-        public static int GetSize(this ITreeEntity treeEntity)
+        public static int GetSize(this TreeEntityBase treeEntity)
         {
             if (treeEntity == null)
             {
@@ -51,7 +51,7 @@ namespace GenFx.ComponentLibrary.Trees
         /// An enumerable collection of <see cref="TreeNode"/> objects containing the nodes
         /// of the tree sorted in prefix order.
         /// </returns>
-        public static IEnumerable<TreeNode> GetPrefixTree(this ITreeEntity treeEntity)
+        public static IEnumerable<TreeNode> GetPrefixTree(this TreeEntityBase treeEntity)
         {
             if (treeEntity == null)
             {
@@ -89,7 +89,7 @@ namespace GenFx.ComponentLibrary.Trees
         /// <param name="treeEntity">The tree entity from which to get the nodes.</param>
         /// <returns>An enumerable collection of <see cref="TreeNode"/> objects containing the nodes
         /// of the tree sorted in prefix order.</returns>
-        public static IEnumerable<TreeNode> GetPostfixTree(this ITreeEntity treeEntity)
+        public static IEnumerable<TreeNode> GetPostfixTree(this TreeEntityBase treeEntity)
         {
             if (treeEntity == null)
             {

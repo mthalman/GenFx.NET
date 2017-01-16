@@ -1,4 +1,3 @@
-using GenFx.Contracts;
 using GenFx.Validation;
 using System;
 using System.Collections.Generic;
@@ -7,21 +6,21 @@ using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace GenFx.ComponentLibrary.Base
+namespace GenFx
 {
     /// <summary>
-    /// Represents a collection of <see cref="IGeneticEntity"/> objects which interact locally with each other.  A population is 
-    /// the unit from which the <see cref="ISelectionOperator"/> selects its genetic entities.
+    /// Represents a collection of <see cref="GeneticEntity"/> objects which interact locally with each other.  A population is 
+    /// the unit from which the <see cref="SelectionOperator"/> selects its genetic entities.
     /// </summary>
     /// <remarks>
     /// Populations can be isolated or interactive with one another through migration depending on
-    /// which <see cref="IGeneticAlgorithm"/> is used.
+    /// which <see cref="GeneticAlgorithm"/> is used.
     /// </remarks>
-    public abstract class PopulationBase : GeneticComponentWithAlgorithm, IPopulation
+    public abstract class Population : GeneticComponentWithAlgorithm
     {
         private const int DefaultPopulationSize = 1;
 
-        private ObservableCollection<IGeneticEntity> geneticEntities = new ObservableCollection<IGeneticEntity>();
+        private ObservableCollection<GeneticEntity> geneticEntities = new ObservableCollection<GeneticEntity>();
         private int index;
         private double rawMean;
         private double rawStandardDeviation;
@@ -35,7 +34,7 @@ namespace GenFx.ComponentLibrary.Base
         private int populationSize = DefaultPopulationSize;
 
         /// <summary>
-        /// Gets or sets the number of <see cref="IGeneticEntity"/> objects that are contained by a population.
+        /// Gets or sets the number of <see cref="GeneticEntity"/> objects that are contained by a population.
         /// </summary>
         /// <remarks>
         /// This value is defaulted to 1 and must be greater or equal to 1 to be valid for executing
@@ -51,10 +50,10 @@ namespace GenFx.ComponentLibrary.Base
         }
 
         /// <summary>
-        /// Gets the minimum <see cref="IGeneticEntity.ScaledFitnessValue"/> in the entire population of genetic entities.
+        /// Gets the minimum <see cref="GeneticEntity.ScaledFitnessValue"/> in the entire population of genetic entities.
         /// </summary>
         /// <value>
-        /// The minimum <see cref="IGeneticEntity.ScaledFitnessValue"/> in the entire population of genetic entities.
+        /// The minimum <see cref="GeneticEntity.ScaledFitnessValue"/> in the entire population of genetic entities.
         /// </value>
         public double ScaledMin
         {
@@ -62,10 +61,10 @@ namespace GenFx.ComponentLibrary.Base
         }
 
         /// <summary>
-        /// Gets the maximum <see cref="IGeneticEntity.ScaledFitnessValue"/> in the entire population of genetic entities.
+        /// Gets the maximum <see cref="GeneticEntity.ScaledFitnessValue"/> in the entire population of genetic entities.
         /// </summary>
         /// <value>
-        /// The maximum <see cref="IGeneticEntity.ScaledFitnessValue"/> in the entire population of genetic entities.
+        /// The maximum <see cref="GeneticEntity.ScaledFitnessValue"/> in the entire population of genetic entities.
         /// </value>
         public double ScaledMax
         {
@@ -73,10 +72,10 @@ namespace GenFx.ComponentLibrary.Base
         }
 
         /// <summary>
-        /// Gets the minimum <see cref="IGeneticEntity.RawFitnessValue"/> in the entire population of genetic entities.
+        /// Gets the minimum <see cref="GeneticEntity.RawFitnessValue"/> in the entire population of genetic entities.
         /// </summary>
         /// <value>
-        /// The minimum <see cref="IGeneticEntity.RawFitnessValue"/> in the entire population of genetic entities.
+        /// The minimum <see cref="GeneticEntity.RawFitnessValue"/> in the entire population of genetic entities.
         /// </value>
         public double RawMin
         {
@@ -84,10 +83,10 @@ namespace GenFx.ComponentLibrary.Base
         }
 
         /// <summary>
-        /// Gets the maximum <see cref="IGeneticEntity.RawFitnessValue"/> in the entire population of genetic entities.
+        /// Gets the maximum <see cref="GeneticEntity.RawFitnessValue"/> in the entire population of genetic entities.
         /// </summary>
         /// <value>
-        /// The maximum <see cref="IGeneticEntity.RawFitnessValue"/> in the entire population of genetic entities.
+        /// The maximum <see cref="GeneticEntity.RawFitnessValue"/> in the entire population of genetic entities.
         /// </value>
         public double RawMax
         {
@@ -95,10 +94,10 @@ namespace GenFx.ComponentLibrary.Base
         }
 
         /// <summary>
-        /// Gets the standard deviation of all the <see cref="IGeneticEntity.ScaledFitnessValue"/> values in the entire population of genetic entities.
+        /// Gets the standard deviation of all the <see cref="GeneticEntity.ScaledFitnessValue"/> values in the entire population of genetic entities.
         /// </summary>
         /// <value>
-        /// The standard deviation of all the <see cref="IGeneticEntity.ScaledFitnessValue"/> values in the entire population of genetic entities.
+        /// The standard deviation of all the <see cref="GeneticEntity.ScaledFitnessValue"/> values in the entire population of genetic entities.
         /// </value>
         public double ScaledStandardDeviation
         {
@@ -106,10 +105,10 @@ namespace GenFx.ComponentLibrary.Base
         }
 
         /// <summary>
-        /// Gets the mean of all the <see cref="IGeneticEntity.ScaledFitnessValue"/> values in the entire population of genetic entities.
+        /// Gets the mean of all the <see cref="GeneticEntity.ScaledFitnessValue"/> values in the entire population of genetic entities.
         /// </summary>
         /// <value>
-        /// The mean of all the <see cref="IGeneticEntity.ScaledFitnessValue"/> values in the entire population of genetic entities.
+        /// The mean of all the <see cref="GeneticEntity.ScaledFitnessValue"/> values in the entire population of genetic entities.
         /// </value>
         public double ScaledMean
         {
@@ -117,10 +116,10 @@ namespace GenFx.ComponentLibrary.Base
         }
 
         /// <summary>
-        /// Gets the standard deviation of all the <see cref="IGeneticEntity.RawFitnessValue"/> values in the entire population of genetic entities.
+        /// Gets the standard deviation of all the <see cref="GeneticEntity.RawFitnessValue"/> values in the entire population of genetic entities.
         /// </summary>
         /// <value>
-        /// The standard deviation of all the <see cref="IGeneticEntity.RawFitnessValue"/> values in the entire population of genetic entities.
+        /// The standard deviation of all the <see cref="GeneticEntity.RawFitnessValue"/> values in the entire population of genetic entities.
         /// </value>
         public double RawStandardDeviation
         {
@@ -128,10 +127,10 @@ namespace GenFx.ComponentLibrary.Base
         }
 
         /// <summary>
-        /// Gets the mean of all the <see cref="IGeneticEntity.RawFitnessValue"/> values in the entire population of genetic entities.
+        /// Gets the mean of all the <see cref="GeneticEntity.RawFitnessValue"/> values in the entire population of genetic entities.
         /// </summary>
         /// <value>
-        /// The mean of all the <see cref="IGeneticEntity.RawFitnessValue"/> values in the entire population of genetic entities.
+        /// The mean of all the <see cref="GeneticEntity.RawFitnessValue"/> values in the entire population of genetic entities.
         /// </value>
         public double RawMean
         {
@@ -139,10 +138,10 @@ namespace GenFx.ComponentLibrary.Base
         }
 
         /// <summary>
-        /// Gets the collection of <see cref="IGeneticEntity"/> objects contained by the population.
+        /// Gets the collection of <see cref="GeneticEntity"/> objects contained by the population.
         /// </summary>
         [Browsable(false)]
-        public ObservableCollection<IGeneticEntity> Entities
+        public ObservableCollection<GeneticEntity> Entities
         {
             get { return this.geneticEntities; }
         }
@@ -163,18 +162,18 @@ namespace GenFx.ComponentLibrary.Base
         {
             get { return this.Entities.Count; }
         }
-        
+
         /// <summary>
-        /// Evaluates the <see cref="IGeneticEntity.RawFitnessValue"/> of all the <see cref="IGeneticEntity"/> objects
-        /// within the population followed by evaluation of the <see cref="IGeneticEntity.ScaledFitnessValue"/>
-        /// using the <see cref="IFitnessScalingStrategy"/>.
+        /// Evaluates the <see cref="GeneticEntity.RawFitnessValue"/> of all the <see cref="GeneticEntity"/> objects
+        /// within the population followed by evaluation of the <see cref="GeneticEntity.ScaledFitnessValue"/>
+        /// using the <see cref="FitnessScalingStrategy"/>.
         /// </summary>
         public virtual async Task EvaluateFitnessAsync()
         {
             double rawSum = 0;
 
             List<Task> fitnessEvalTasks = new List<Task>();
-            foreach (IGeneticEntity entity in this.geneticEntities)
+            foreach (GeneticEntity entity in this.geneticEntities)
             {
                 fitnessEvalTasks.Add(entity.EvaluateFitnessAsync());
             }
@@ -228,7 +227,7 @@ namespace GenFx.ComponentLibrary.Base
         }
 
         /// <summary>
-        /// Creates the collection of <see cref="IGeneticEntity"/> objects contained by this population.
+        /// Creates the collection of <see cref="GeneticEntity"/> objects contained by this population.
         /// </summary>
         public Task InitializeAsync()
         {
@@ -236,20 +235,20 @@ namespace GenFx.ComponentLibrary.Base
         }
 
         /// <summary>
-        /// Creates the collection of <see cref="IGeneticEntity"/> objects contained by this population.
+        /// Creates the collection of <see cref="GeneticEntity"/> objects contained by this population.
         /// </summary>
         /// <remarks>
-        /// <para>The default implementation of this method creates X <see cref="IGeneticEntity"/> objects
+        /// <para>The default implementation of this method creates X <see cref="GeneticEntity"/> objects
         /// where X is equal to <see cref="PopulationSize"/>.</para>
         /// <para><b>Notes to implementers:</b> This method can be overriden in a derived class
-        /// to customize how a population is filled with <see cref="IGeneticEntity"/> objects
-        /// or how those <see cref="IGeneticEntity"/> objects are created.</para>
+        /// to customize how a population is filled with <see cref="GeneticEntity"/> objects
+        /// or how those <see cref="GeneticEntity"/> objects are created.</para>
         /// </remarks>
         protected virtual Task InitializeCoreAsync()
         {
             for (int i = 0; i < this.Algorithm.PopulationSeed.PopulationSize; i++)
             {
-                IGeneticEntity entity = (IGeneticEntity)this.Algorithm.GeneticEntitySeed.CreateNew();
+                GeneticEntity entity = (GeneticEntity)this.Algorithm.GeneticEntitySeed.CreateNew();
                 entity.Initialize(this.Algorithm);
                 this.geneticEntities.Add(entity);
             }
@@ -285,7 +284,7 @@ namespace GenFx.ComponentLibrary.Base
 
             foreach (KeyValueMap entityState in entityStates)
             {
-                IGeneticEntity entity = (IGeneticEntity)this.Algorithm.GeneticEntitySeed.CreateNew();
+                GeneticEntity entity = (GeneticEntity)this.Algorithm.GeneticEntitySeed.CreateNew();
                 entity.RestoreState(entityState);
                 this.Entities.Add(entity);
             }

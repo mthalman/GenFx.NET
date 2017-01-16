@@ -1,6 +1,5 @@
 ﻿using GenFx;
-using GenFx.ComponentLibrary.Lists.BinaryStrings;
-using GenFx.Contracts;
+using GenFx.ComponentLibrary.Lists;
 using GenFx.Validation;
 
 namespace BinaryPatternMatching
@@ -8,7 +7,7 @@ namespace BinaryPatternMatching
     [RequiredEntity(typeof(BinaryStringEntity))]
     public class BinaryStringMutationOperator : UniformBitMutationOperator
     {
-        protected override bool GenerateMutation(IGeneticEntity entity)
+        protected override bool GenerateMutation(GeneticEntity entity)
         {
             bool isMutated = false;
 

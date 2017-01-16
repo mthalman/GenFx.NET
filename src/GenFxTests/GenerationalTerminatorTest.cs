@@ -1,6 +1,5 @@
 ﻿using GenFx;
 using GenFx.ComponentLibrary.Terminators;
-using GenFx.Contracts;
 using GenFxTests.Helpers;
 using GenFxTests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -42,7 +41,7 @@ namespace GenFxTests
         public void GenerationalTerminator_IsComplete()
         {
             int finalGeneration = 10;
-            IGeneticAlgorithm algorithm = GetAlgorithm(finalGeneration);
+            GeneticAlgorithm algorithm = GetAlgorithm(finalGeneration);
             PrivateObject accessor = new PrivateObject(algorithm, new PrivateType(typeof(GeneticAlgorithm)));
             GenerationalTerminator terminator = (GenerationalTerminator)algorithm.Terminator;
             terminator.Initialize(algorithm);
@@ -53,9 +52,9 @@ namespace GenFxTests
             Assert.IsTrue(terminator.IsComplete(), "Should be complete.");
         }
 
-        private static IGeneticAlgorithm GetAlgorithm(int finalGeneration)
+        private static GeneticAlgorithm GetAlgorithm(int finalGeneration)
         {
-            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm
+            GeneticAlgorithm algorithm = new MockGeneticAlgorithm
             {
                 PopulationSeed = new MockPopulation(),
                 GeneticEntitySeed = new MockEntity(),

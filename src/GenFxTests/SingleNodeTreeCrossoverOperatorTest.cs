@@ -1,6 +1,5 @@
 ﻿using GenFx;
 using GenFx.ComponentLibrary.Trees;
-using GenFx.Contracts;
 using GenFxTests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
@@ -28,7 +27,7 @@ namespace GenFxTests
         [TestMethod]
         public void SingleNodeTreeCrossoverOperator_Crossover()
         {
-            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm
+            GeneticAlgorithm algorithm = new MockGeneticAlgorithm
             {
                 FitnessEvaluator = new MockFitnessEvaluator(),
                 SelectionOperator = new MockSelectionOperator(),
@@ -59,10 +58,10 @@ namespace GenFxTests
 
             RandomNumberService.Instance = new TestRandomUtil();
 
-            IList<IGeneticEntity> result = op.Crossover(entity1, entity2);
+            IList<GeneticEntity> result = op.Crossover(entity1, entity2);
 
-            FakeTreeNode rootNode1 = (FakeTreeNode)((ITreeEntity)result[0]).RootNode;
-            FakeTreeNode rootNode2 = (FakeTreeNode)((ITreeEntity)result[1]).RootNode;
+            FakeTreeNode rootNode1 = (FakeTreeNode)((TreeEntityBase)result[0]).RootNode;
+            FakeTreeNode rootNode2 = (FakeTreeNode)((TreeEntityBase)result[1]).RootNode;
 
             Assert.AreEqual(1, rootNode1.Value, "Wrong TreeNode.");
             Assert.AreEqual(3, rootNode1.ChildNodes.Count, "Incorrect number of children.");
@@ -123,7 +122,7 @@ namespace GenFxTests
                 this.Value = id;
             }
 
-            public override TreeNode Clone(ITreeEntity newTree, TreeNode newParentNode)
+            public override TreeNode Clone(TreeEntityBase newTree, TreeNode newParentNode)
             {
                 FakeTreeNode clone = new FakeTreeNode();
                 this.CopyTo(clone, newTree, newParentNode);

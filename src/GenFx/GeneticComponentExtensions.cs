@@ -1,5 +1,4 @@
-﻿using GenFx.Contracts;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -7,14 +6,14 @@ using System.Reflection;
 namespace GenFx
 {
     /// <summary>
-    /// Contains extension methods for <see cref="IGeneticComponent"/>.
+    /// Contains extension methods for <see cref="GeneticComponent"/>.
     /// </summary>
     public static class GeneticComponentExtensions
     {
         /// <summary>
         /// Returns an objects that contains the serializable state of this component.
         /// </summary>
-        public static KeyValueMap SaveState(this IGeneticComponent component)
+        public static KeyValueMap SaveState(this GeneticComponent component)
         {
             if (component == null)
             {
@@ -31,14 +30,14 @@ namespace GenFx
         /// </summary>
         /// <param name="component">The component from which to create a new component and the source of the configuration state to be copied.</param>
         /// <returns>A new version of the component.</returns>
-        public static IGeneticComponent CreateNewAndInitialize(this IGeneticComponent component)
+        public static GeneticComponent CreateNewAndInitialize(this GeneticComponent component)
         {
             if (component == null)
             {
                 throw new ArgumentNullException(nameof(component));
             }
 
-            IGeneticComponent newComponent = component.CreateNew();
+            GeneticComponent newComponent = component.CreateNew();
             if (newComponent == null)
             {
                 throw new InvalidOperationException(
@@ -53,10 +52,10 @@ namespace GenFx
 
             component.CopyConfigurationStateTo(newComponent);
 
-            IGeneticComponentWithAlgorithm newComponentWithAlg = newComponent as IGeneticComponentWithAlgorithm;
+            GeneticComponentWithAlgorithm newComponentWithAlg = newComponent as GeneticComponentWithAlgorithm;
             if (newComponentWithAlg != null)
             {
-                newComponentWithAlg.Initialize(((IGeneticComponentWithAlgorithm)component).Algorithm);
+                newComponentWithAlg.Initialize(((GeneticComponentWithAlgorithm)component).Algorithm);
             }
 
             return newComponent;
@@ -65,9 +64,9 @@ namespace GenFx
         /// <summary>
         /// Copies the state of all configuration properties defined on the source component to the target component.
         /// </summary>
-        /// <param name="source">The <see cref="IGeneticComponent"/> from which to copy the configuration state.</param>
-        /// <param name="target">The <see cref="IGeneticComponent"/> to which the state is to be copied.</param>
-        public static void CopyConfigurationStateTo(this IGeneticComponent source, IGeneticComponent target)
+        /// <param name="source">The <see cref="GeneticComponent"/> from which to copy the configuration state.</param>
+        /// <param name="target">The <see cref="GeneticComponent"/> to which the state is to be copied.</param>
+        public static void CopyConfigurationStateTo(this GeneticComponent source, GeneticComponent target)
         {
             if (source == null)
             {

@@ -1,5 +1,4 @@
 ﻿using GenFx;
-using GenFx.ComponentLibrary.Base;
 using GenFx.ComponentLibrary.Populations;
 using GenFx.ComponentLibrary.Statistics;
 using GenFxTests.Helpers;
@@ -36,7 +35,7 @@ namespace GenFxTests
 
             SimplePopulation population = new SimplePopulation();
             population.Initialize(algorithm);
-            PrivateObject accessor = new PrivateObject(population, new PrivateType(typeof(PopulationBase)));
+            PrivateObject accessor = new PrivateObject(population, new PrivateType(typeof(Population)));
             accessor.SetField("scaledStandardDeviation", 1234);
 
             StandardDeviationFitnessStatistic stat = new StandardDeviationFitnessStatistic();

@@ -1,8 +1,6 @@
 ﻿using GenFx;
-using GenFx.ComponentLibrary.Base;
 using GenFx.ComponentLibrary.Populations;
 using GenFx.ComponentLibrary.Scaling;
-using GenFx.Contracts;
 using GenFxTests.Helpers;
 using GenFxTests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -43,12 +41,12 @@ namespace GenFxTests
         [TestMethod]
         public void SigmaScalingStrategy_Scale()
         {
-            IGeneticAlgorithm algorithm = GetAlgorithm(5);
+            GeneticAlgorithm algorithm = GetAlgorithm(5);
             SigmaScalingStrategy strategy = new SigmaScalingStrategy { Multiplier = 5 };
             strategy.Initialize(algorithm);
             SimplePopulation population = new SimplePopulation();
             population.Initialize(algorithm);
-            PrivateObject populationAccessor = new PrivateObject(population, new PrivateType(typeof(PopulationBase)));
+            PrivateObject populationAccessor = new PrivateObject(population, new PrivateType(typeof(Population)));
             AddEntity(algorithm, 4, population);
             AddEntity(algorithm, 10, population);
             AddEntity(algorithm, 20, population);
@@ -71,7 +69,7 @@ namespace GenFxTests
         [TestMethod]
         public void SigmaScalingStrategy_Scale_EmptyPopulation()
         {
-            IGeneticAlgorithm algorithm = GetAlgorithm(10);
+            GeneticAlgorithm algorithm = GetAlgorithm(10);
             SigmaScalingStrategy op = new SigmaScalingStrategy();
             op.Initialize(algorithm);
             SimplePopulation population = new SimplePopulation();
@@ -85,13 +83,13 @@ namespace GenFxTests
         [TestMethod]
         public void SigmaScalingStrategy_Scale_NullPopulation()
         {
-            IGeneticAlgorithm algorithm = GetAlgorithm(10);
+            GeneticAlgorithm algorithm = GetAlgorithm(10);
             SigmaScalingStrategy op = new SigmaScalingStrategy();
             op.Initialize(algorithm);
             AssertEx.Throws<ArgumentNullException>(() => op.Scale(null));
         }
 
-        private void AddEntity(IGeneticAlgorithm algorithm, double fitness, IPopulation population)
+        private void AddEntity(GeneticAlgorithm algorithm, double fitness, Population population)
         {
             MockEntity entity = new MockEntity();
             entity.Initialize(algorithm);
@@ -100,9 +98,9 @@ namespace GenFxTests
             population.Entities.Add(entity);
         }
 
-        private IGeneticAlgorithm GetAlgorithm(int multiplier)
+        private GeneticAlgorithm GetAlgorithm(int multiplier)
         {
-            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm
+            GeneticAlgorithm algorithm = new MockGeneticAlgorithm
             {
                 FitnessEvaluator = new MockFitnessEvaluator(),
                 SelectionOperator = new MockSelectionOperator(),

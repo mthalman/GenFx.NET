@@ -1,11 +1,9 @@
 ﻿using GenFx;
-using GenFx.ComponentLibrary.Lists.BinaryStrings;
 using GenFx.ComponentLibrary.Lists;
 using GenFxTests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
-using GenFx.Contracts;
 
 namespace GenFxTests
 {
@@ -64,7 +62,7 @@ namespace GenFxTests
             RandomNumberService.Instance = randomUtil;
 
             randomUtil.RandomVal = 1;
-            IList<IGeneticEntity> result = op.Crossover(entity1, entity2);
+            IList<GeneticEntity> result = op.Crossover(entity1, entity2);
 
             BinaryStringEntity resultEntity1 = (BinaryStringEntity)result[0];
             BinaryStringEntity resultEntity2 = (BinaryStringEntity)result[1];
