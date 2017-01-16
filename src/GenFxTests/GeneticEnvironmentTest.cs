@@ -1,6 +1,5 @@
 ﻿using GenFx;
 using GenFx.ComponentLibrary.Populations;
-using GenFx.Contracts;
 using GenFxTests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
@@ -23,7 +22,7 @@ namespace GenFxTests
         [TestMethod()]
         public async Task GeneticEnvironment_EvaluateFitness_Async()
         {
-            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm
+            GeneticAlgorithm algorithm = new MockGeneticAlgorithm
             {
                 PopulationSeed = new SimplePopulation(),
                 GeneticEntitySeed = new MockEntity(),
@@ -59,7 +58,7 @@ namespace GenFxTests
             int environmentSize = 2;
             int populationSize = 5;
 
-            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm
+            GeneticAlgorithm algorithm = new MockGeneticAlgorithm
             {
                 FitnessEvaluator = new MockFitnessEvaluator(),
                 SelectionOperator = new MockSelectionOperator(),
@@ -86,7 +85,7 @@ namespace GenFxTests
             }
         }
 
-        private static SimplePopulation GetPopulation(IGeneticAlgorithm algorithm)
+        private static SimplePopulation GetPopulation(GeneticAlgorithm algorithm)
         {
             SimplePopulation population = new SimplePopulation();
             population.Initialize(algorithm);

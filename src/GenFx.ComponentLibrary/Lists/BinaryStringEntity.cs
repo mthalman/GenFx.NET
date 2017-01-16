@@ -1,14 +1,12 @@
-using GenFx.ComponentLibrary.Base;
-using GenFx.Contracts;
 using System;
 using System.Collections;
 using System.Linq;
 using System.Text;
 
-namespace GenFx.ComponentLibrary.Lists.BinaryStrings
+namespace GenFx.ComponentLibrary.Lists
 {
     /// <summary>
-    /// <see cref="IGeneticEntity"/> made up of a string of bits.
+    /// <see cref="GeneticEntity"/> made up of a string of bits.
     /// </summary>
     /// <remarks>This class uses a <see cref="BitArray"/> data structure to represent the list.</remarks>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix")]
@@ -78,7 +76,7 @@ namespace GenFx.ComponentLibrary.Lists.BinaryStrings
         /// Initializes the component to ensure its readiness for algorithm execution.
         /// </summary>
         /// <param name="algorithm">The algorithm that is to use this component.</param>
-        public override void Initialize(IGeneticAlgorithm algorithm)
+        public override void Initialize(GeneticAlgorithm algorithm)
         {
             base.Initialize(algorithm);
 

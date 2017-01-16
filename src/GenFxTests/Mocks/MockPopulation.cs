@@ -1,17 +1,15 @@
 using GenFx;
-using GenFx.ComponentLibrary.Base;
-using GenFx.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace GenFxTests.Mocks
 {
-    class MockPopulation : PopulationBase
+    class MockPopulation : Population
     {
     }
 
-    class MockPopulation2 : PopulationBase
+    class MockPopulation2 : Population
     {
     }
 }

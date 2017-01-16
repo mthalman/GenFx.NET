@@ -2,25 +2,23 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using GenFx;
-using GenFx.ComponentLibrary.Base;
-using GenFx.Contracts;
 
 namespace GenFxTests.Mocks
 {
-    public class MockStatistic : StatisticBase
+    public class MockStatistic : Statistic
     {
         internal bool StatisticEvaluated;
         
-        public override object GetResultValue(IPopulation population)
+        public override object GetResultValue(Population population)
         {
             this.StatisticEvaluated = true;
             return "foo";
         }
     }
 
-    public class MockStatistic2 : StatisticBase
+    public class MockStatistic2 : Statistic
     {
-        public override object GetResultValue(IPopulation population)
+        public override object GetResultValue(Population population)
         {
             throw new Exception();
         }

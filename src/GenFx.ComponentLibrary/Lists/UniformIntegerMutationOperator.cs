@@ -1,28 +1,26 @@
-using GenFx.ComponentLibrary.Base;
-using GenFx.Contracts;
 using GenFx.Validation;
 using System;
 
 namespace GenFx.ComponentLibrary.Lists
 {
     /// <summary>
-    /// Provides the <see cref="IIntegerListEntity"/> with uniform integer mutation operator support.
+    /// Provides the <see cref="IntegerListEntity"/> with uniform integer mutation operator support.
     /// </summary>
     /// <remarks>
     /// Uniform integer mutation operates upon an integer list, causing each integer of the list to
     /// mutate if it meets a certain probability.
     /// </remarks>
-    [RequiredEntity(typeof(IIntegerListEntity))]
-    public class UniformIntegerMutationOperator : MutationOperatorBase
+    [RequiredEntity(typeof(IntegerListEntity))]
+    public class UniformIntegerMutationOperator : MutationOperator
     {
         /// <summary>
-        /// Mutates each bit of a <see cref="IIntegerListEntity"/> if it meets a certain
+        /// Mutates each bit of a <see cref="IntegerListEntity"/> if it meets a certain
         /// probability.
         /// </summary>
-        /// <param name="entity"><see cref="IIntegerListEntity"/> to be mutated.</param>
+        /// <param name="entity"><see cref="IntegerListEntity"/> to be mutated.</param>
         /// <returns>True if a mutation occurred; otherwise, false.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="entity"/> is null.</exception>
-        protected override bool GenerateMutation(IGeneticEntity entity)
+        protected override bool GenerateMutation(GeneticEntity entity)
         {
             if (entity == null)
             {
@@ -30,7 +28,7 @@ namespace GenFx.ComponentLibrary.Lists
             }
 
             bool isMutated = false;
-            IIntegerListEntity listEntity = (IIntegerListEntity)entity;
+            IntegerListEntity listEntity = (IntegerListEntity)entity;
             for (int i = 0; i < listEntity.Length; i++)
             {
                 if (RandomNumberService.Instance.GetDouble() <= this.MutationRate)

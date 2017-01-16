@@ -1,4 +1,3 @@
-using GenFx.Contracts;
 using GenFx.Validation;
 using System;
 using System.Collections.Generic;
@@ -13,8 +12,8 @@ namespace GenFx.ComponentLibrary.Algorithms
     /// </summary>
     /// <remarks>
     /// <para>
-    /// The number of <see cref="IGeneticEntity"/> objects that migrate each generation is determined by the 
-    /// <see cref="MultiDemeGeneticAlgorithm.MigrantCount"/> property value.  Those <see cref="IGeneticEntity"/>
+    /// The number of <see cref="GeneticEntity"/> objects that migrate each generation is determined by the 
+    /// <see cref="MultiDemeGeneticAlgorithm.MigrantCount"/> property value.  Those <see cref="GeneticEntity"/>
     /// objects with the highest fitness value are the ones chosen to be migrated.
     /// </para>
     /// </remarks>
@@ -36,7 +35,7 @@ namespace GenFx.ComponentLibrary.Algorithms
         }
 
         /// <summary>
-        /// Gets or sets the value indicating how many <see cref="IGeneticEntity"/> objects are migrated between
+        /// Gets or sets the value indicating how many <see cref="GeneticEntity"/> objects are migrated between
         /// populations each generation.
         /// </summary>
         /// <exception cref="ValidationException">Value is not valid.</exception>
@@ -75,7 +74,7 @@ namespace GenFx.ComponentLibrary.Algorithms
         }
 
         /// <summary>
-        /// Migrates the <see cref="IGeneticEntity"/> objects with the best fitness between populations.
+        /// Migrates the <see cref="GeneticEntity"/> objects with the best fitness between populations.
         /// </summary>
         public void Migrate()
         {
@@ -83,17 +82,17 @@ namespace GenFx.ComponentLibrary.Algorithms
         }
 
         /// <summary>
-        /// Migrates the <see cref="IGeneticEntity"/> objects with the best fitness between populations.
+        /// Migrates the <see cref="GeneticEntity"/> objects with the best fitness between populations.
         /// </summary>
         protected virtual void OnMigrate()
         {
-            IList<IPopulation> populations = this.Environment.Populations;
+            IList<Population> populations = this.Environment.Populations;
 
             // Build a list of migrant genetic entities from the first population
-            List<IGeneticEntity> migrantGeneticEntities = new List<IGeneticEntity>(this.MigrantCount);
+            List<GeneticEntity> migrantGeneticEntities = new List<GeneticEntity>(this.MigrantCount);
             for (int i = 0; i < this.MigrantCount; i++)
             {
-                IGeneticEntity[] sortedEntities = populations[0].Entities.GetEntitiesSortedByFitness(
+                GeneticEntity[] sortedEntities = populations[0].Entities.GetEntitiesSortedByFitness(
                     this.SelectionOperator.SelectionBasedOnFitnessType,
                     this.FitnessEvaluator.EvaluationMode).ToArray();
                 migrantGeneticEntities.Add(sortedEntities[sortedEntities.Length - i - 1]);
@@ -102,8 +101,8 @@ namespace GenFx.ComponentLibrary.Algorithms
             // Migrate genetic entities between populations
             for (int populationIndex = 1; populationIndex < populations.Count; populationIndex++)
             {
-                IPopulation population = populations[populationIndex];
-                List<IGeneticEntity> sortedEntities = population.Entities.GetEntitiesSortedByFitness(
+                Population population = populations[populationIndex];
+                List<GeneticEntity> sortedEntities = population.Entities.GetEntitiesSortedByFitness(
                     this.SelectionOperator.SelectionBasedOnFitnessType,
                     this.FitnessEvaluator.EvaluationMode).ToList();
 
@@ -114,7 +113,7 @@ namespace GenFx.ComponentLibrary.Algorithms
                     sortedEntities.Add(migrantGeneticEntities[entityIndex]);
 
                     // Set entity to be replaced as a new migrant for next population.
-                    IGeneticEntity migrant = sortedEntities[sortedEntities.Count - entityIndex - 2];
+                    GeneticEntity migrant = sortedEntities[sortedEntities.Count - entityIndex - 2];
                     migrantGeneticEntities[entityIndex] = migrant;
 
                     // Remove the replaced entity.
@@ -123,8 +122,8 @@ namespace GenFx.ComponentLibrary.Algorithms
                 }
             }
 
-            IPopulation firstPopulation = populations[0];
-            List<IGeneticEntity> firstPopulationSortedEntities = firstPopulation.Entities.GetEntitiesSortedByFitness(
+            Population firstPopulation = populations[0];
+            List<GeneticEntity> firstPopulationSortedEntities = firstPopulation.Entities.GetEntitiesSortedByFitness(
                 this.SelectionOperator.SelectionBasedOnFitnessType,
                 this.FitnessEvaluator.EvaluationMode).ToList();
 
@@ -135,7 +134,7 @@ namespace GenFx.ComponentLibrary.Algorithms
                 firstPopulation.Entities.Add(migrantGeneticEntities[entityIndex]);
                 firstPopulationSortedEntities.Add(migrantGeneticEntities[entityIndex]);
 
-                IGeneticEntity replacedEntity = firstPopulationSortedEntities[firstPopulationSortedEntities.Count - entityIndex - 2];
+                GeneticEntity replacedEntity = firstPopulationSortedEntities[firstPopulationSortedEntities.Count - entityIndex - 2];
 
                 // Remove the replaced entity.
                 firstPopulation.Entities.Remove(replacedEntity);

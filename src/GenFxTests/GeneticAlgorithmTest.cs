@@ -1,8 +1,6 @@
 ﻿using GenFx;
 using GenFx.ComponentLibrary.Algorithms;
-using GenFx.ComponentLibrary.Base;
 using GenFx.ComponentLibrary.Populations;
-using GenFx.Contracts;
 using GenFx.Validation;
 using GenFxTests.Helpers;
 using GenFxTests.Mocks;
@@ -457,7 +455,7 @@ namespace GenFxTests
                 entity.Initialize(algorithm);
                 population.Entities.Add(entity);
             }
-            IList<IGeneticEntity> entities = (IList<IGeneticEntity>)accessor.Invoke("ApplyElitism", population);
+            IList<GeneticEntity> entities = (IList<GeneticEntity>)accessor.Invoke("ApplyElitism", population);
             Assert.AreEqual(expectedEliteCount, entities.Count);
         }
 
@@ -467,7 +465,7 @@ namespace GenFxTests
         [TestMethod]
         public void GeneticAlgorithm_SelectGeneticEntitiesAndApplyCrossoverAndMutation()
         {
-            IGeneticAlgorithm algorithm = new TestGeneticAlgorithm
+            GeneticAlgorithm algorithm = new TestGeneticAlgorithm
             {
                 FitnessEvaluator = new MockFitnessEvaluator(),
                 GeneticEntitySeed = new MockEntity(),
@@ -507,7 +505,7 @@ namespace GenFxTests
 
             PrivateObject algAccessor = new PrivateObject(algorithm);
 
-            IList<IGeneticEntity> geneticEntities = (IList<IGeneticEntity>)algAccessor.Invoke("SelectGeneticEntitiesAndApplyCrossoverAndMutation", population);
+            IList<GeneticEntity> geneticEntities = (IList<GeneticEntity>)algAccessor.Invoke("SelectGeneticEntitiesAndApplyCrossoverAndMutation", population);
 
             Assert.AreEqual(2, geneticEntities.Count, "Incorrect number of genetic entities returned.");
             Assert.AreEqual(2, selectionOp.DoSelectCallCount, "Selection not called correctly.");
@@ -521,7 +519,7 @@ namespace GenFxTests
         [TestMethod]
         public void GeneticAlgorithm_ApplyCrossover()
         {
-            IGeneticAlgorithm algorithm = new TestGeneticAlgorithm
+            GeneticAlgorithm algorithm = new TestGeneticAlgorithm
             {
                 PopulationSeed = new MockPopulation(),
                 FitnessEvaluator = new MockFitnessEvaluator(),
@@ -543,7 +541,7 @@ namespace GenFxTests
             entity1.Initialize(algorithm);
             MockEntity entity2 = new MockEntity();
             entity2.Initialize(algorithm);
-            IList<IGeneticEntity> geneticEntities = (IList<IGeneticEntity>)algAccessor.Invoke("ApplyCrossover", entity1, entity2);
+            IList<GeneticEntity> geneticEntities = (IList<GeneticEntity>)algAccessor.Invoke("ApplyCrossover", entity1, entity2);
 
             Assert.AreEqual(2, geneticEntities.Count, "Incorrect number of genetic entities returned.");
             Assert.AreEqual(1, crossoverOp.DoCrossoverCallCount, "Crossover not called correctly.");
@@ -575,7 +573,7 @@ namespace GenFxTests
         private void TestApplyMutation(TestGeneticAlgorithm algorithm, int expectedMutationCount)
         {
             PrivateObject accessor = new PrivateObject(algorithm);
-            List<IGeneticEntity> geneticEntities = new List<IGeneticEntity>();
+            List<GeneticEntity> geneticEntities = new List<GeneticEntity>();
 
             for (int i = 0; i < 3; i++)
             {
@@ -584,7 +582,7 @@ namespace GenFxTests
                 geneticEntities.Add(entity);
             }
 
-            IList<IGeneticEntity> mutants = (IList<IGeneticEntity>)accessor.Invoke("ApplyMutation", geneticEntities);
+            IList<GeneticEntity> mutants = (IList<GeneticEntity>)accessor.Invoke("ApplyMutation", geneticEntities);
 
             Assert.AreEqual(geneticEntities.Count, mutants.Count, "Incorrect number of genetic entities returned.");
             if (algorithm.MutationOperator != null)
@@ -1036,7 +1034,7 @@ namespace GenFxTests
             AssertEx.Throws<ValidationException>(() => target.EnvironmentSize = val);
         }
 
-        private static async Task<IGeneticAlgorithm> TestInitializeAsync(MockGeneticAlgorithm algorithm, bool initializeExceptionExpected = false)
+        private static async Task<GeneticAlgorithm> TestInitializeAsync(MockGeneticAlgorithm algorithm, bool initializeExceptionExpected = false)
         {
             bool eventCalled = false;
             algorithm.FitnessEvaluated += new EventHandler<EnvironmentFitnessEvaluatedEventArgs>(delegate(object sender, EnvironmentFitnessEvaluatedEventArgs args)
@@ -1209,12 +1207,12 @@ namespace GenFxTests
         {
         }
 
-        [RequiredTerminator(typeof(IMockTerminator2))]
+        [RequiredTerminator(typeof(MockTerminator2))]
         private class TerminatorDependentClass2
         {
         }
 
-        [RequiredTerminator(typeof(IMockTerminator2))]
+        [RequiredTerminator(typeof(MockTerminator2Base))]
         private class TerminatorDependentClass3
         {
         }
@@ -1224,20 +1222,20 @@ namespace GenFxTests
         {
         }
 
-        [RequiredTerminator(typeof(IMockTerminator2))]
+        [RequiredTerminator(typeof(MockTerminator2))]
         private class TerminatorDependentDerivedClass : TerminatorDependentBaseClass
         {
         }
 
         private class RequiredSettingGeneticAlgorithm : GeneticAlgorithm
         {
-            protected override Task CreateNextGenerationAsync(IPopulation population)
+            protected override Task CreateNextGenerationAsync(Population population)
             {
                 throw new Exception("The method or operation is not implemented.");
             }
         }
         
-        private class TestTerminator : TerminatorBase
+        private class TestTerminator : Terminator
         {
             public override bool IsComplete()
             {
@@ -1247,13 +1245,13 @@ namespace GenFxTests
         
         private class TestGeneticAlgorithm : GeneticAlgorithm
         {
-            protected override Task CreateNextGenerationAsync(IPopulation population)
+            protected override Task CreateNextGenerationAsync(Population population)
             {
                 return Task.FromResult(true);
             }
         }
 
-        private class FakeValidationMutationOperator : MutationOperatorBase
+        private class FakeValidationMutationOperator : MutationOperator
         {
             private int value = -1;
 
@@ -1265,13 +1263,13 @@ namespace GenFxTests
                 set { this.value = value; }
             }
 
-            protected override bool GenerateMutation(IGeneticEntity entity)
+            protected override bool GenerateMutation(GeneticEntity entity)
             {
                 throw new Exception("The method or operation is not implemented.");
             }
         }
 
-        private class FakeMutationOperator : MutationOperatorBase
+        private class FakeMutationOperator : MutationOperator
         {
             private int value;
             private double value2;
@@ -1290,7 +1288,7 @@ namespace GenFxTests
                 set { this.value = value; }
             }
             
-            protected override bool GenerateMutation(IGeneticEntity entity)
+            protected override bool GenerateMutation(GeneticEntity entity)
             {
                 throw new Exception("The method or operation is not implemented.");
             }
@@ -1299,7 +1297,7 @@ namespace GenFxTests
         [IntegerExternalValidator(typeof(FakeMutationOperator), "Value")]
         [CustomExternalValidator(typeof(FakeValidator), typeof(FakeMutationOperator), "Value")]
         [DoubleExternalValidator(typeof(FakeMutationOperator), "Value2")]
-        private class FakeExternalValidatorTerminator : TerminatorBase
+        private class FakeExternalValidatorTerminator : Terminator
         {
             public override bool IsComplete()
             {

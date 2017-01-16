@@ -1,4 +1,3 @@
-using GenFx.Contracts;
 using System;
 using System.Reflection;
 
@@ -16,7 +15,7 @@ namespace GenFx.Validation
         /// <param name="targetProperty">Property of the <paramref name="targetComponentType"/> to be validated.</param>
         /// <exception cref="ArgumentNullException"><paramref name="targetComponentType"/> is null.</exception>
         /// <exception cref="ArgumentException"><paramref name="targetProperty"/> is null or empty.</exception>
-        /// <exception cref="ArgumentException"><paramref name="targetComponentType"/> does not implement <see cref="IGeneticComponent"/>.</exception>
+        /// <exception cref="ArgumentException"><paramref name="targetComponentType"/> does not implement <see cref="GeneticComponent"/>.</exception>
         /// <exception cref="ArgumentException"><paramref name="targetProperty"/> does not exist on <paramref name="targetComponentType"/>.</exception>
         public static void ValidateArguments(Type targetComponentType, string targetProperty)
         {
@@ -30,10 +29,10 @@ namespace GenFx.Validation
                 throw new ArgumentException(Resources.ErrorMsg_StringNullOrEmpty, nameof(targetProperty));
             }
 
-            if (!typeof(IGeneticComponent).IsAssignableFrom(targetComponentType))
+            if (!typeof(GeneticComponent).IsAssignableFrom(targetComponentType))
             {
                 throw new ArgumentException(StringUtil.GetFormattedString(
-                    Resources.ErrorMsg_ExternalValidator_InvalidTargetType, targetComponentType.FullName, typeof(IGeneticComponent).FullName), nameof(targetComponentType));
+                    Resources.ErrorMsg_ExternalValidator_InvalidTargetType, targetComponentType.FullName, typeof(GeneticComponent).FullName), nameof(targetComponentType));
             }
 
             if (ExternalValidatorAttributeHelper.GetTargetPropertyInfo(targetComponentType, targetProperty) == null)

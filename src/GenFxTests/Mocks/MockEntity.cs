@@ -2,8 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using GenFx;
-using GenFx.ComponentLibrary.Base;
-using GenFx.Contracts;
 
 namespace GenFxTests.Mocks
 {
@@ -16,7 +14,7 @@ namespace GenFxTests.Mocks
             get { return this.Identifier; }
         }
         
-        public override void Initialize(IGeneticAlgorithm algorithm)
+        public override void Initialize(GeneticAlgorithm algorithm)
         {
             base.Initialize(algorithm);
 

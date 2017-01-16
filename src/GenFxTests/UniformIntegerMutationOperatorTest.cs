@@ -1,7 +1,5 @@
 ﻿using GenFx;
-using GenFx.ComponentLibrary.Base;
 using GenFx.ComponentLibrary.Lists;
-using GenFx.Contracts;
 using GenFxTests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -46,7 +44,7 @@ namespace GenFxTests
             entity[1] = 1;
             entity[2] = 2;
             entity[3] = 1;
-            IGeneticEntity mutant = op.Mutate(entity);
+            GeneticEntity mutant = op.Mutate(entity);
 
             Assert.AreEqual("2, 2, 1, 2", mutant.Representation, "Mutation not called correctly.");
             Assert.AreEqual(0, mutant.Age, "Age should have been reset.");

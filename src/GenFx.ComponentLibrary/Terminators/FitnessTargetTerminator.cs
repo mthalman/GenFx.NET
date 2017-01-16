@@ -1,5 +1,3 @@
-using GenFx.ComponentLibrary.Base;
-using GenFx.Contracts;
 using GenFx.Validation;
 using System.Linq;
 
@@ -7,10 +5,10 @@ namespace GenFx.ComponentLibrary.Terminators
 {
     /// <summary>
     /// Represents a genetic algorithm terminator that stops the algorithm once a generation
-    /// contains a <see cref="IGeneticEntity"/> whose <see cref="IGeneticEntity.ScaledFitnessValue"/> property value
+    /// contains a <see cref="GeneticEntity"/> whose <see cref="GeneticEntity.ScaledFitnessValue"/> property value
     /// matches the <see cref="FitnessTargetTerminator.FitnessTarget"/> property value.
     /// </summary>
-    public class FitnessTargetTerminator : TerminatorBase
+    public class FitnessTargetTerminator : Terminator
     {
         private const FitnessType DefaultFitnessValueType = FitnessType.Scaled;
 
@@ -18,7 +16,7 @@ namespace GenFx.ComponentLibrary.Terminators
         private double fitnessTarget;
 
         /// <summary>
-        /// Gets or sets the fitness value which a <see cref="IGeneticEntity"/> must have in order for the algorithm
+        /// Gets or sets the fitness value which a <see cref="GeneticEntity"/> must have in order for the algorithm
         /// to stop.
         /// </summary>
         [ConfigurationProperty]
@@ -41,7 +39,7 @@ namespace GenFx.ComponentLibrary.Terminators
         }
 
         /// <summary>
-        /// Calculates whether a <see cref="IGeneticEntity"/> exists whose <see cref="IGeneticEntity.ScaledFitnessValue"/> property value
+        /// Calculates whether a <see cref="GeneticEntity"/> exists whose <see cref="GeneticEntity.ScaledFitnessValue"/> property value
         /// matches the <see cref="FitnessTargetTerminator.FitnessTarget"/> property value.
         /// </summary>
         /// <returns>True if the genetic algorithm is to stop executing; otherwise, false.</returns>
@@ -53,9 +51,9 @@ namespace GenFx.ComponentLibrary.Terminators
         /// <summary>
         /// Returns the fitness value to base termination on.
         /// </summary>
-        /// <param name="entity">The <see cref="IGeneticEntity"/> whose appropriate fitness value should be returned.</param>
+        /// <param name="entity">The <see cref="GeneticEntity"/> whose appropriate fitness value should be returned.</param>
         /// <returns>The fitness value to base termination on.</returns>
-        private double GetFitnessValue(IGeneticEntity entity)
+        private double GetFitnessValue(GeneticEntity entity)
         {
             if (this.FitnessValueType == FitnessType.Raw)
             {

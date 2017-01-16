@@ -1,19 +1,18 @@
-using GenFx.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
-namespace GenFx.ComponentLibrary.Base
+namespace GenFx
 {
     /// <summary>
     /// Provides the abstract base class for a statistic.
     /// </summary>
     /// <remarks>
-    /// The <b>Statistic</b> class represents any computation of data contained by a <see cref="IPopulation"/>.
-    /// After each generation is created, <see cref="GetResultValue(IPopulation)"/> is
-    /// invoked with the <see cref="IPopulation"/> of that generation to calculate its data.
+    /// The <b>Statistic</b> class represents any computation of data contained by a <see cref="Population"/>.
+    /// After each generation is created, <see cref="GetResultValue(Population)"/> is
+    /// invoked with the <see cref="Population"/> of that generation to calculate its data.
     /// </remarks>
-    public abstract class StatisticBase : GeneticComponentWithAlgorithm, IStatistic
+    public abstract class Statistic : GeneticComponentWithAlgorithm
     {
         private Dictionary<int, ObservableCollection<StatisticResult>> populationResults = new Dictionary<int, ObservableCollection<StatisticResult>>();
         
@@ -21,7 +20,7 @@ namespace GenFx.ComponentLibrary.Base
         /// Initializes the component to ensure its readiness for algorithm execution.
         /// </summary>
         /// <param name="algorithm">The algorithm that is to use this component.</param>
-        public override void Initialize(IGeneticAlgorithm algorithm)
+        public override void Initialize(GeneticAlgorithm algorithm)
         {
             base.Initialize(algorithm);
 
@@ -50,12 +49,12 @@ namespace GenFx.ComponentLibrary.Base
         /// <summary>
         /// When overriden in a derived class, calculates a statistical value from <paramref name="population"/>.
         /// </summary>
-        /// <param name="population"><see cref="IPopulation"/> from which to derive a statistic.</param>
+        /// <param name="population"><see cref="Population"/> from which to derive a statistic.</param>
         /// <returns>Value of the statistic derived from <paramref name="population"/>.</returns>
         /// <remarks>
         /// This method is called once for each generation.
         /// </remarks>
-        public abstract object GetResultValue(IPopulation population);
+        public abstract object GetResultValue(Population population);
 
         /// <summary>
         /// Restores the state of this component.

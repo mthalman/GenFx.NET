@@ -1,8 +1,6 @@
 ﻿using GenFx;
-using GenFx.ComponentLibrary.Base;
 using GenFx.ComponentLibrary.Populations;
 using GenFx.ComponentLibrary.Statistics;
-using GenFx.Contracts;
 using GenFxTests.Helpers;
 using GenFxTests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -25,7 +23,7 @@ namespace GenFxTests
         [TestMethod()]
         public void GetResultValue_NullPopulation()
         {
-            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm
+            GeneticAlgorithm algorithm = new MockGeneticAlgorithm
             {
                 SelectionOperator = new MockSelectionOperator(),
                 GeneticEntitySeed = new MockEntity(),
@@ -45,7 +43,7 @@ namespace GenFxTests
         [TestMethod()]
         public void GetResultValue()
         {
-            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm
+            GeneticAlgorithm algorithm = new MockGeneticAlgorithm
             {
                 SelectionOperator = new MockSelectionOperator(),
                 FitnessEvaluator = new MockFitnessEvaluator(),
@@ -78,7 +76,7 @@ namespace GenFxTests
             VerifyGetResultValue(4, target, population2, algorithm, "70");
         }
         
-        private static void VerifyGetResultValue(int multiplier, BestMaximumFitnessEntityStatistic stat, SimplePopulation population, IGeneticAlgorithm algorithm, string expectedReturnVal)
+        private static void VerifyGetResultValue(int multiplier, BestMaximumFitnessEntityStatistic stat, SimplePopulation population, GeneticAlgorithm algorithm, string expectedReturnVal)
         {
             for (int i = 0; i < 5; i++)
             {

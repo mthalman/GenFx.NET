@@ -1,7 +1,6 @@
-using GenFx.Contracts;
 using System;
 
-namespace GenFx.ComponentLibrary.Base
+namespace GenFx
 {
     /// <summary>
     /// Provides the abstract base class for the fitness scaling strategy of a genetic algorithm.
@@ -12,16 +11,16 @@ namespace GenFx.ComponentLibrary.Base
     /// scaling is a method of mapping raw fitness values to scaled fitness values so as to more easily
     /// control the diversity of a population.
     /// </remarks>
-    public abstract class FitnessScalingStrategyBase : GeneticComponentWithAlgorithm, IFitnessScalingStrategy
+    public abstract class FitnessScalingStrategy : GeneticComponentWithAlgorithm
     {
         /// <summary>
-        /// Updates the <see cref="IGeneticEntity.ScaledFitnessValue"/>
-        /// of the <see cref="IGeneticEntity"/> objects in the <paramref name="population"/>.
+        /// Updates the <see cref="GeneticEntity.ScaledFitnessValue"/>
+        /// of the <see cref="GeneticEntity"/> objects in the <paramref name="population"/>.
         /// </summary>
-        /// <param name="population"><see cref="IPopulation"/> containing the <see cref="IGeneticEntity"/> objects.</param>
+        /// <param name="population"><see cref="Population"/> containing the <see cref="GeneticEntity"/> objects.</param>
         /// <exception cref="ArgumentNullException"><paramref name="population"/> is null.</exception>
         /// <exception cref="ArgumentException"><paramref name="population"/> does not contain any entities.</exception>
-        public void Scale(IPopulation population)
+        public void Scale(Population population)
         {
             if (population == null)
             {
@@ -38,10 +37,10 @@ namespace GenFx.ComponentLibrary.Base
         }
 
         /// <summary>
-        /// When overriden in a derived class, updates the <see cref="IGeneticEntity.ScaledFitnessValue"/>
-        /// of the <see cref="IGeneticEntity"/> objects in the <paramref name="population"/>.
+        /// When overriden in a derived class, updates the <see cref="GeneticEntity.ScaledFitnessValue"/>
+        /// of the <see cref="GeneticEntity"/> objects in the <paramref name="population"/>.
         /// </summary>
-        /// <param name="population"><see cref="IPopulation"/> containing the <see cref="IGeneticEntity"/> objects.</param>
-        protected abstract void UpdateScaledFitnessValues(IPopulation population);
+        /// <param name="population"><see cref="Population"/> containing the <see cref="GeneticEntity"/> objects.</param>
+        protected abstract void UpdateScaledFitnessValues(Population population);
     }
 }

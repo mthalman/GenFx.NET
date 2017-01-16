@@ -1,8 +1,6 @@
 ﻿using GenFx;
-using GenFx.ComponentLibrary.Base;
 using GenFx.ComponentLibrary.Populations;
 using GenFx.ComponentLibrary.Scaling;
-using GenFx.Contracts;
 using GenFxTests.Helpers;
 using GenFxTests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -33,7 +31,7 @@ namespace GenFxTests
         [TestMethod()]
         public void ExponentialScalingStrategy_Scale()
         {
-            IGeneticAlgorithm algorithm = GetAlgorithm(2);
+            GeneticAlgorithm algorithm = GetAlgorithm(2);
 
             ExponentialScalingStrategy target = (ExponentialScalingStrategy)algorithm.FitnessScalingStrategy;
             target.Initialize(algorithm);
@@ -55,9 +53,9 @@ namespace GenFxTests
             Assert.AreEqual((double)49, entity2.ScaledFitnessValue, "ScaledFitnessValue not set correctly.");
         }
 
-        private static IGeneticAlgorithm GetAlgorithm(double scalingPower)
+        private static GeneticAlgorithm GetAlgorithm(double scalingPower)
         {
-            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm
+            GeneticAlgorithm algorithm = new MockGeneticAlgorithm
             {
                 SelectionOperator = new MockSelectionOperator(),
                 FitnessEvaluator = new MockFitnessEvaluator(),

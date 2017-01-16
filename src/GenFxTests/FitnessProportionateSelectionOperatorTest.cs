@@ -1,7 +1,6 @@
 ﻿using GenFx;
 using GenFx.ComponentLibrary.Populations;
 using GenFx.ComponentLibrary.SelectionOperators;
-using GenFx.Contracts;
 using GenFxTests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
@@ -27,7 +26,7 @@ namespace GenFxTests
         [TestMethod()]
         public void FitnessProportionateSelectionOperator_Select()
         {
-            IGeneticAlgorithm algorithm = GetAlgorithm();
+            GeneticAlgorithm algorithm = GetAlgorithm();
             FitnessProportionateSelectionOperator op = new FitnessProportionateSelectionOperator();
             op.Initialize(algorithm);
             SimplePopulation population = new SimplePopulation();
@@ -48,7 +47,7 @@ namespace GenFxTests
             RandomNumberService.Instance = randomUtil;
 
             randomUtil.RandomRatio = 0;
-            IGeneticEntity selectedEntity = op.SelectEntity(population);
+            GeneticEntity selectedEntity = op.SelectEntity(population);
             Assert.AreSame(entity1, selectedEntity, "Incorrect entity selected.");
 
             randomUtil.RandomRatio = .099999;
@@ -78,7 +77,7 @@ namespace GenFxTests
         [TestMethod()]
         public void FitnessProportionateSelectionOperator_Select_MinimizeFitness()
         {
-            IGeneticAlgorithm algorithm = GetAlgorithm();
+            GeneticAlgorithm algorithm = GetAlgorithm();
             ((MockFitnessEvaluator)algorithm.FitnessEvaluator).EvaluationMode = FitnessEvaluationMode.Minimize;
 
             FitnessProportionateSelectionOperator op = new FitnessProportionateSelectionOperator();
@@ -101,7 +100,7 @@ namespace GenFxTests
             RandomNumberService.Instance = randomUtil;
 
             randomUtil.RandomRatio = 0;
-            IGeneticEntity selectedEntity = op.SelectEntity(population);
+            GeneticEntity selectedEntity = op.SelectEntity(population);
             Assert.AreSame(entity2, selectedEntity, "Incorrect entity selected.");
 
             randomUtil.RandomRatio = .099999;
@@ -131,7 +130,7 @@ namespace GenFxTests
         [TestMethod()]
         public void FitnessProportionateSelectionOperator_Select_FitnessValueZero()
         {
-            IGeneticAlgorithm algorithm = GetAlgorithm();
+            GeneticAlgorithm algorithm = GetAlgorithm();
             FitnessProportionateSelectionOperator op = new FitnessProportionateSelectionOperator();
             op.Initialize(algorithm);
             SimplePopulation population = new SimplePopulation();
@@ -152,7 +151,7 @@ namespace GenFxTests
             RandomNumberService.Instance = randomUtil;
 
             randomUtil.RandomRatio = 0;
-            IGeneticEntity selectedEntity = op.SelectEntity(population);
+            GeneticEntity selectedEntity = op.SelectEntity(population);
             Assert.AreSame(entity1, selectedEntity, "Incorrect entity selected.");
 
             randomUtil.RandomRatio = .199999;
@@ -182,7 +181,7 @@ namespace GenFxTests
         [TestMethod()]
         public void FitnessProportionateSelectionOperator_Select_FitnessValueNegative()
         {
-            IGeneticAlgorithm algorithm = GetAlgorithm();
+            GeneticAlgorithm algorithm = GetAlgorithm();
             FitnessProportionateSelectionOperator op = new FitnessProportionateSelectionOperator();
             op.Initialize(algorithm);
             SimplePopulation population = new SimplePopulation();
@@ -203,7 +202,7 @@ namespace GenFxTests
             RandomNumberService.Instance = randomUtil;
 
             randomUtil.RandomRatio = 0;
-            IGeneticEntity selectedEntity = op.SelectEntity(population);
+            GeneticEntity selectedEntity = op.SelectEntity(population);
             Assert.AreSame(entity1, selectedEntity, "Incorrect entity selected.");
 
             randomUtil.RandomRatio = .099999;
@@ -227,9 +226,9 @@ namespace GenFxTests
             Assert.AreSame(entity3, selectedEntity, "Incorrect entity selected.");
         }
 
-        private static IGeneticAlgorithm GetAlgorithm()
+        private static GeneticAlgorithm GetAlgorithm()
         {
-            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm
+            GeneticAlgorithm algorithm = new MockGeneticAlgorithm
             {
                 GeneticEntitySeed = new MockEntity(),
                 PopulationSeed = new SimplePopulation(),

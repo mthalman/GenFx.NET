@@ -1,4 +1,3 @@
-using GenFx.Contracts;
 using GenFx.Validation;
 using System;
 using System.Collections.Generic;
@@ -12,7 +11,7 @@ namespace GenFx
     /// <summary>
     /// Represents a customizable component within the framework.
     /// </summary>
-    public abstract class GeneticComponent : IGeneticComponent, INotifyPropertyChanged
+    public abstract class GeneticComponent : INotifyPropertyChanged
     {
         /// <summary>
         /// Occurs when a property value changes.
@@ -29,9 +28,9 @@ namespace GenFx
         /// method must be overriden.
         /// </remarks>
         /// <returns>A new instance of the same component type as this object.</returns>
-        public virtual IGeneticComponent CreateNew()
+        public virtual GeneticComponent CreateNew()
         {
-            return (IGeneticComponent)Activator.CreateInstance(this.GetType());
+            return (GeneticComponent)Activator.CreateInstance(this.GetType());
         }
         
         /// <summary>

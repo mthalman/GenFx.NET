@@ -1,31 +1,29 @@
-﻿using GenFx.ComponentLibrary.Base;
-using GenFx.Contracts;
-using GenFx.Validation;
+﻿using GenFx.Validation;
 using System;
 
 namespace GenFx.ComponentLibrary.Lists
 {
     /// <summary>
-    /// Operates upon a <see cref="IListEntityBase"/> by shifting a random segment of the list to the left or right by one position.
+    /// Operates upon a <see cref="ListEntityBase"/> by shifting a random segment of the list to the left or right by one position.
     /// </summary>
-    [RequiredEntity(typeof(IListEntityBase))]
-    public class ListShiftMutationOperator : MutationOperatorBase
+    [RequiredEntity(typeof(ListEntityBase))]
+    public class ListShiftMutationOperator : MutationOperator
     {
         /// <summary>
-        /// Mutates each bit of a <see cref="IListEntityBase"/> if it meets a certain
+        /// Mutates each bit of a <see cref="ListEntityBase"/> if it meets a certain
         /// probability.
         /// </summary>
-        /// <param name="entity"><see cref="IListEntityBase"/> to be mutated.</param>
+        /// <param name="entity"><see cref="ListEntityBase"/> to be mutated.</param>
         /// <returns>True if a mutation occurred; otherwise, false.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="entity"/> is null.</exception>
-        protected override bool GenerateMutation(IGeneticEntity entity)
+        protected override bool GenerateMutation(GeneticEntity entity)
         {
             if (entity == null)
             {
                 throw new ArgumentNullException(nameof(entity));
             }
 
-            IListEntityBase listEntity = (IListEntityBase)entity;
+            ListEntityBase listEntity = (ListEntityBase)entity;
             if (RandomNumberService.Instance.GetDouble() <= this.MutationRate)
             {
                 int firstPosition = RandomNumberService.Instance.GetRandomValue(listEntity.Length);
@@ -37,28 +35,28 @@ namespace GenFx.ComponentLibrary.Lists
 
                 if (firstPosition < secondPosition)
                 {
-                    object currentMovingValue = listEntity[firstPosition];
+                    object currentMovingValue = listEntity.GetValue(firstPosition);
                     for (int i = firstPosition + 1; i <= secondPosition; i++)
                     {
-                        object savedValue = listEntity[i];
-                        listEntity[i] = currentMovingValue;
+                        object savedValue = listEntity.GetValue(i);
+                        listEntity.SetValue(i, currentMovingValue);
                         currentMovingValue = savedValue;
                     }
 
-                    listEntity[firstPosition] = currentMovingValue;
+                    listEntity.SetValue(firstPosition, currentMovingValue);
                 }
                 else
                 {
-                    object currentMovingValue = listEntity[firstPosition];
+                    object currentMovingValue = listEntity.GetValue(firstPosition);
 
                     for (int i = firstPosition - 1; i >= secondPosition; i--)
                     {
-                        object savedValue = listEntity[i];
-                        listEntity[i] = currentMovingValue;
+                        object savedValue = listEntity.GetValue(i);
+                        listEntity.SetValue(i, currentMovingValue);
                         currentMovingValue = savedValue;
                     }
 
-                    listEntity[firstPosition] = currentMovingValue;
+                    listEntity.SetValue(firstPosition, currentMovingValue);
                 }
                 
                 return true;

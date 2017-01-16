@@ -1,4 +1,3 @@
-using GenFx.ComponentLibrary.Base;
 using GenFx.Validation;
 
 namespace GenFx.ComponentLibrary.Terminators
@@ -7,7 +6,7 @@ namespace GenFx.ComponentLibrary.Terminators
     /// Represents a genetic algorithm terminator that stops the algorithm once a target generation
     /// has been reached.
     /// </summary>
-    public class GenerationalTerminator : TerminatorBase
+    public class GenerationalTerminator : Terminator
     {
         private const int DefaultFinalGeneration = 100;
 

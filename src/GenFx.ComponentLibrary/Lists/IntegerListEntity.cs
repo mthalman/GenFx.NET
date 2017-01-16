@@ -1,5 +1,4 @@
-﻿using GenFx.Contracts;
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace GenFx.ComponentLibrary.Lists
@@ -8,7 +7,7 @@ namespace GenFx.ComponentLibrary.Lists
     /// Entity made up of a list of integers.
     /// </summary>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix")]
-    public class IntegerListEntity : ListEntity<int>, IIntegerListEntity
+    public class IntegerListEntity : ListEntity<int>
     {
         private const int DefaultMinElementValue = 0;
         private const int DefaultMaxElementValue = Int32.MaxValue;
@@ -51,7 +50,7 @@ namespace GenFx.ComponentLibrary.Lists
         /// Initializes the component to ensure its readiness for algorithm execution.
         /// </summary>
         /// <param name="algorithm">The algorithm that is to use this component.</param>
-        public override void Initialize(IGeneticAlgorithm algorithm)
+        public override void Initialize(GeneticAlgorithm algorithm)
         {
             base.Initialize(algorithm);
 

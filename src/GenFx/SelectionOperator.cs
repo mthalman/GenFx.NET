@@ -1,8 +1,7 @@
-using GenFx.Contracts;
 using GenFx.Validation;
 using System;
 
-namespace GenFx.ComponentLibrary.Base
+namespace GenFx
 {
     /// <summary>
     /// Provides the abstract base class for a genetic algorithm selection operator.
@@ -13,14 +12,14 @@ namespace GenFx.ComponentLibrary.Base
     /// general strategy is for a entity to have a higher probability of being selected if it has a higher
     /// fitness value.
     /// </remarks>
-    public abstract class SelectionOperatorBase : GeneticComponentWithAlgorithm, ISelectionOperator
+    public abstract class SelectionOperator : GeneticComponentWithAlgorithm
     {
         private const FitnessType DefaultSelectionBasedOnFitnessType = FitnessType.Scaled;
 
         private FitnessType selectionBasedOnFitnessType = DefaultSelectionBasedOnFitnessType;
 
         /// <summary>
-        /// Gets or sets the <see cref="FitnessType"/> to base selection of <see cref="IGeneticEntity"/> objects on.
+        /// Gets or sets the <see cref="FitnessType"/> to base selection of <see cref="GeneticEntity"/> objects on.
         /// </summary>
         /// <exception cref="ValidationException">Value is undefined.</exception>
         [ConfigurationProperty]
@@ -32,14 +31,14 @@ namespace GenFx.ComponentLibrary.Base
         }
 
         /// <summary>
-        /// Selects a <see cref="IGeneticEntity"/> from <paramref name="population"/>.
+        /// Selects a <see cref="GeneticEntity"/> from <paramref name="population"/>.
         /// </summary>
-        /// <param name="population"><see cref="IPopulation"/> containing the <see cref="IGeneticEntity"/>
+        /// <param name="population"><see cref="Population"/> containing the <see cref="GeneticEntity"/>
         /// objects from which to select.</param>
-        /// <returns>The <see cref="IGeneticEntity"/> object that was selected.</returns>
+        /// <returns>The <see cref="GeneticEntity"/> object that was selected.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="population"/> is null.</exception>
         /// <exception cref="ArgumentException"><paramref name="population"/> does not contain any entities.</exception>
-        public IGeneticEntity SelectEntity(IPopulation population)
+        public GeneticEntity SelectEntity(Population population)
         {
             if (population == null)
             {
@@ -56,11 +55,11 @@ namespace GenFx.ComponentLibrary.Base
         }
 
         /// <summary>
-        /// When overriden in a derived class, selects a <see cref="IGeneticEntity"/> from <paramref name="population"/>.
+        /// When overriden in a derived class, selects a <see cref="GeneticEntity"/> from <paramref name="population"/>.
         /// </summary>
-        /// <param name="population"><see cref="IPopulation"/> containing the <see cref="IGeneticEntity"/>
+        /// <param name="population"><see cref="Population"/> containing the <see cref="GeneticEntity"/>
         /// objects from which to select.</param>
-        /// <returns>The <see cref="IGeneticEntity"/> object that was selected.</returns>
-        protected abstract IGeneticEntity SelectEntityFromPopulation(IPopulation population);
+        /// <returns>The <see cref="GeneticEntity"/> object that was selected.</returns>
+        protected abstract GeneticEntity SelectEntityFromPopulation(Population population);
     }
 }

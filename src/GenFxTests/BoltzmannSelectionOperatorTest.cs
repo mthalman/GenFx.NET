@@ -4,8 +4,6 @@ using GenFx.ComponentLibrary.SelectionOperators;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using GenFxTests.Mocks;
 using GenFxTests.Helpers;
-using GenFx.ComponentLibrary.Base;
-using GenFx.Contracts;
 
 namespace GenFxTests
 {
@@ -23,7 +21,7 @@ namespace GenFxTests
         public void BoltzmannSelectionOperator_Ctor()
         {
             double initialTemp = 10;
-            IGeneticAlgorithm algorithm = GetMockAlgorithm(initialTemp);
+            GeneticAlgorithm algorithm = GetMockAlgorithm(initialTemp);
 
             FakeBoltzmannSelectionOperator op = new FakeBoltzmannSelectionOperator { InitialTemperature = initialTemp };
             op.Initialize(algorithm);
@@ -37,7 +35,7 @@ namespace GenFxTests
         public void BoltzmannSelectionOperator_Select()
         {
             double initialTemp = 10;
-            IGeneticAlgorithm algorithm = GetMockAlgorithm(initialTemp);
+            GeneticAlgorithm algorithm = GetMockAlgorithm(initialTemp);
 
             FakeBoltzmannSelectionOperator op = (FakeBoltzmannSelectionOperator)algorithm.SelectionOperator;
             op.Initialize(algorithm);
@@ -52,7 +50,7 @@ namespace GenFxTests
             entity2.Initialize(algorithm);
             population.Entities.Add(entity2);
 
-            IGeneticEntity entity = op.SelectEntity(population);
+            GeneticEntity entity = op.SelectEntity(population);
             Assert.IsNotNull(entity, "An entity should have been selected.");
         }
 

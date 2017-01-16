@@ -109,7 +109,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConfigurationPropertyAttribute.cs" />
-    <Compile Include="Contracts\IGeneticComponentWithAlgorithm.cs" />
+    <Compile Include="CrossoverOperator.cs" />
+    <Compile Include="ElitismStrategy.cs" />
+    <Compile Include="FitnessEvaluator.cs" />
+    <Compile Include="FitnessScalingStrategy.cs" />
     <Compile Include="GeneticComponent.cs" />
     <Compile Include="GeneticComponentExtensions.cs" />
     <Compile Include="DefaultTerminator.cs" />
@@ -117,12 +120,18 @@
     <Compile Include="FitnessEvaluationMode.cs" />
     <Compile Include="GeneticAlgorithm.cs" />
     <Compile Include="GeneticComponentWithAlgorithm.cs" />
+    <Compile Include="GeneticEntity.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="KeyValueMap.cs" />
     <Compile Include="CollectionExtensions.cs" />
-    <Compile Include="Contracts\IPlugin.cs" />
+    <Compile Include="MutationOperator.cs" />
+    <Compile Include="Plugin.cs" />
+    <Compile Include="Population.cs" />
+    <Compile Include="SelectionOperator.cs" />
+    <Compile Include="Statistic.cs" />
     <Compile Include="StatisticExtensions.cs" />
     <Compile Include="StringUtil.cs" />
+    <Compile Include="Terminator.cs" />
     <Compile Include="Validation\RequiredValidator.cs" />
     <Compile Include="Validation\RequiredValidatorAttribute.cs" />
     <Compile Include="Validation\CustomValidatorAttribute.cs" />
@@ -140,37 +149,19 @@
     <Compile Include="Validation\ConfigurationValidatorAttribute.cs" />
     <Compile Include="ConvertUtil.cs" />
     <Compile Include="EnumHelper.cs" />
-    <Compile Include="Contracts\IFitnessEvaluator.cs" />
-    <Compile Include="Contracts\IFitnessScalingStrategy.cs" />
     <Compile Include="FitnessType.cs" />
-    <Compile Include="Contracts\IGeneticEntity.cs" />
     <Compile Include="GeneticEntityCollectionExtensions.cs" />
-    <Compile Include="Contracts\IGeneticComponent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="EnvironmentFitnessEvaluatedEventArgs.cs" />
-    <Compile Include="Contracts\ICrossoverOperator.cs">
-    </Compile>
-    <Compile Include="Contracts\IMutationOperator.cs" />
     <Compile Include="Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Validation\RequiredComponentTypeAttribute.cs" />
-    <Compile Include="Contracts\ISelectionOperator.cs" />
-    <Compile Include="Contracts\IStatistic.cs" />
     <Compile Include="GeneticEnvironment.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Contracts\IGeneticAlgorithm.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Contracts\IElitismStrategy.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Contracts\IPopulation.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="RandomNumberService.cs">
@@ -179,7 +170,6 @@
     <Compile Include="StatisticResult.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Contracts\ITerminator.cs" />
     <Compile Include="ValidationException.cs" />
     <Compile Include="Validation\ValidatorExtensions.cs" />
   </ItemGroup>

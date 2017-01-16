@@ -3,7 +3,7 @@ using System;
 namespace GenFx.ComponentLibrary.Trees
 {
     /// <summary>
-    /// Represents the node of a tree represented by a <see cref="ITreeEntity"/>.
+    /// Represents the node of a tree represented by a <see cref="TreeEntityBase"/>.
     /// </summary>
     /// <remarks>
     /// The <b>TreeNode</b> objects of a tree contain the data making up the representation of that tree.
@@ -14,7 +14,7 @@ namespace GenFx.ComponentLibrary.Trees
     {
         private TreeNodeCollection childNodes;
         private TreeNode parentNode;
-        private ITreeEntity tree;
+        private TreeEntityBase tree;
         private object nodeValue;
 
         /// <summary>
@@ -64,11 +64,11 @@ namespace GenFx.ComponentLibrary.Trees
         }
 
         /// <summary>
-        /// Gets the <see cref="ITreeEntity"/> containing this node.
+        /// Gets the <see cref="TreeEntityBase"/> containing this node.
         /// </summary>
-        /// <value>The <see cref="ITreeEntity"/> containing this node.</value>
+        /// <value>The <see cref="TreeEntityBase"/> containing this node.</value>
         /// <exception cref="ArgumentNullException">Value is null.</exception>
-        public ITreeEntity Tree
+        public TreeEntityBase Tree
         {
             get { return this.tree; }
             internal set
@@ -159,12 +159,12 @@ namespace GenFx.ComponentLibrary.Trees
         /// <summary>
         /// Returns a clone of this node.
         /// </summary>
-        /// <param name="newTree"><see cref="ITreeEntity"/> to which the cloned node should be assigned.</param>
+        /// <param name="newTree"><see cref="TreeEntityBase"/> to which the cloned node should be assigned.</param>
         /// <param name="newParentNode"><see cref="TreeNode"/> to be assigned as the parent node of the cloned node.</param>
         /// <returns>A clone of this node.</returns>
         /// <remarks>
         /// <b>Notes to implementers:</b> When this method is overriden, it is suggested that the
-        /// <see cref="TreeNode.CopyTo(TreeNode, ITreeEntity, TreeNode)"/> method is also overriden.  
+        /// <see cref="TreeNode.CopyTo(TreeNode, TreeEntityBase, TreeNode)"/> method is also overriden.  
         /// In that case, the suggested implementation of this method is the following:
         /// <code>
         /// <![CDATA[
@@ -178,7 +178,7 @@ namespace GenFx.ComponentLibrary.Trees
         /// </code>
         /// </remarks>
         /// <exception cref="ArgumentNullException"><paramref name="newTree"/> is null.</exception>
-        public virtual TreeNode Clone(ITreeEntity newTree, TreeNode newParentNode)
+        public virtual TreeNode Clone(TreeEntityBase newTree, TreeNode newParentNode)
         {
             if (newTree == null)
             {
@@ -194,7 +194,7 @@ namespace GenFx.ComponentLibrary.Trees
         /// Copies the state from this <see cref="TreeNode"/> to <paramref name="node"/>.
         /// </summary>
         /// <param name="node"><see cref="TreeNode"/> to which state is to be copied.</param>
-        /// <param name="newTree"><see cref="ITreeEntity"/> to which the <paramref name="node"/> should be assigned.</param>
+        /// <param name="newTree"><see cref="TreeEntityBase"/> to which the <paramref name="node"/> should be assigned.</param>
         /// <param name="newParentNode"><see cref="TreeNode"/> to be assigned as the parent node of the <paramref name="node"/>.</param>
         /// <remarks>
         /// <para>
@@ -204,12 +204,12 @@ namespace GenFx.ComponentLibrary.Trees
         /// <para>
         /// <b>Notes to inheritors:</b> When overriding this method, it is necessary to call the
         /// <b>CopyTo</b> method of the base class.  This method should be used in conjunction with
-        /// the <see cref="TreeNode.Clone(ITreeEntity, TreeNode)"/> method.
+        /// the <see cref="TreeNode.Clone(TreeEntityBase, TreeNode)"/> method.
         /// </para>
         /// </remarks>
         /// <exception cref="ArgumentNullException"><paramref name="node"/> is null.</exception>
         /// <exception cref="ArgumentNullException"><paramref name="newTree"/> is null.</exception>
-        public virtual void CopyTo(TreeNode node, ITreeEntity newTree, TreeNode newParentNode)
+        public virtual void CopyTo(TreeNode node, TreeEntityBase newTree, TreeNode newParentNode)
         {
             if (node == null)
             {
@@ -233,7 +233,7 @@ namespace GenFx.ComponentLibrary.Trees
     }
 
     /// <summary>
-    /// Represents a generic node in a <see cref="ITreeEntity"/>.
+    /// Represents a generic node in a <see cref="TreeEntityBase"/>.
     /// </summary>
     /// <typeparam name="T">Type of value contained by the node.</typeparam>
     public class TreeNode<T> : TreeNode
@@ -268,12 +268,12 @@ namespace GenFx.ComponentLibrary.Trees
         /// <summary>
         /// Returns a clone of this node.
         /// </summary>
-        /// <param name="newTree"><see cref="ITreeEntity"/> to which the cloned node should be assigned.</param>
+        /// <param name="newTree"><see cref="TreeEntityBase"/> to which the cloned node should be assigned.</param>
         /// <param name="newParentNode"><see cref="TreeNode"/> to be assigned as the parent node of the cloned node.</param>
         /// <returns>A clone of this node.</returns>
         /// <remarks>
         /// <b>Notes to implementers:</b> When this method is overriden, it is suggested that the
-        /// <see cref="TreeNode.CopyTo(TreeNode, ITreeEntity, TreeNode)"/> method is also overriden.  
+        /// <see cref="TreeNode.CopyTo(TreeNode, TreeEntityBase, TreeNode)"/> method is also overriden.  
         /// In that case, the suggested implementation of this method is the following:
         /// <code>
         /// <![CDATA[
@@ -287,7 +287,7 @@ namespace GenFx.ComponentLibrary.Trees
         /// </code>
         /// </remarks>
         /// <exception cref="ArgumentNullException"><paramref name="newTree"/> is null.</exception>
-        public override TreeNode Clone(ITreeEntity newTree, TreeNode newParentNode)
+        public override TreeNode Clone(TreeEntityBase newTree, TreeNode newParentNode)
         {
             if (newTree == null)
             {

@@ -1,7 +1,6 @@
 ﻿using GenFx;
 using GenFx.ComponentLibrary.Algorithms;
 using GenFx.ComponentLibrary.Populations;
-using GenFx.Contracts;
 using GenFxTests.Helpers;
 using GenFxTests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -93,7 +92,7 @@ namespace GenFxTests
             AssertEx.Throws<ArgumentOutOfRangeException>(() => new PopulationReplacementValue(-1, ReplacementValueKind.FixedCount));
         }
 
-        private static SimplePopulation GetPopulation(IGeneticAlgorithm algorithm)
+        private static SimplePopulation GetPopulation(GeneticAlgorithm algorithm)
         {
             SimplePopulation population = new SimplePopulation();
             population.Initialize(algorithm);

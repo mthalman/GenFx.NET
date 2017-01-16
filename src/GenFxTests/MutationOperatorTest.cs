@@ -1,6 +1,4 @@
 ﻿using GenFx;
-using GenFx.ComponentLibrary.Base;
-using GenFx.Contracts;
 using GenFxTests.Helpers;
 using GenFxTests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -51,13 +49,13 @@ namespace GenFxTests
         [TestMethod]
         public void MutationOperator_Mutate()
         {
-            IGeneticAlgorithm algorithm = GetAlgorithm(.03);
+            GeneticAlgorithm algorithm = GetAlgorithm(.03);
             MockMutationOperator op = new MockMutationOperator();
             op.Initialize(algorithm);
-            IGeneticEntity entity = new MockEntity();
+            GeneticEntity entity = new MockEntity();
             entity.Initialize(algorithm);
             entity.Age = 10;
-            IGeneticEntity mutant = op.Mutate(entity);
+            GeneticEntity mutant = op.Mutate(entity);
 
             Assert.AreNotSame(entity, mutant, "Entities should not be same instance.");
             Assert.AreEqual(entity.Age, mutant.Age, "Age should be reset.");
@@ -74,9 +72,9 @@ namespace GenFxTests
             AssertEx.Throws<ArgumentNullException>(() => op.Mutate(null));
         }
 
-        private static IGeneticAlgorithm GetAlgorithm(double mutationRate)
+        private static GeneticAlgorithm GetAlgorithm(double mutationRate)
         {
-            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm
+            GeneticAlgorithm algorithm = new MockGeneticAlgorithm
             {
                 PopulationSeed = new MockPopulation(),
                 GeneticEntitySeed = new MockEntity(),
@@ -90,9 +88,9 @@ namespace GenFxTests
             return algorithm;
         }
 
-        private class FakeMutationOperator : MutationOperatorBase
+        private class FakeMutationOperator : MutationOperator
         {
-            protected override bool GenerateMutation(IGeneticEntity entity)
+            protected override bool GenerateMutation(GeneticEntity entity)
             {
                 return true;
             }

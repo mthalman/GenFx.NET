@@ -1,6 +1,5 @@
 using GenFx;
 using GenFx.ComponentLibrary.Terminators;
-using GenFx.Contracts;
 using GenFxTests.Helpers;
 using GenFxTests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -22,7 +21,7 @@ namespace GenFxTests
         public void TimeDurationTerminator_IsComplete()
         {
             TimeSpan timeLimit = new TimeSpan(0, 1, 0);
-            IGeneticAlgorithm algorithm = GetAlgorithm(timeLimit);
+            GeneticAlgorithm algorithm = GetAlgorithm(timeLimit);
 
             TimeDurationTerminator terminator = new TimeDurationTerminator { TimeLimit = timeLimit };
             terminator.Initialize(algorithm);
@@ -40,9 +39,9 @@ namespace GenFxTests
             Assert.IsTrue(terminator.IsComplete(), "Time limit has been reached.");
         }
 
-        private static IGeneticAlgorithm GetAlgorithm(TimeSpan timeLimit)
+        private static GeneticAlgorithm GetAlgorithm(TimeSpan timeLimit)
         {
-            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm
+            GeneticAlgorithm algorithm = new MockGeneticAlgorithm
             {
                 GeneticEntitySeed = new MockEntity(),
                 PopulationSeed = new MockPopulation(),

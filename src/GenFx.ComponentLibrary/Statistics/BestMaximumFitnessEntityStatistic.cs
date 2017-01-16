@@ -1,26 +1,24 @@
-using GenFx.ComponentLibrary.Base;
-using GenFx.Contracts;
 using System;
 using System.Collections.Generic;
 
 namespace GenFx.ComponentLibrary.Statistics
 {
     /// <summary>
-    /// Provides the calculation to determine the <see cref="IGeneticEntity"/> object with the highest
-    /// <see cref="IGeneticEntity.ScaledFitnessValue"/> found for a <see cref="IPopulation"/> during the entire run of the genetic algorithm.
+    /// Provides the calculation to determine the <see cref="GeneticEntity"/> object with the highest
+    /// <see cref="GeneticEntity.ScaledFitnessValue"/> found for a <see cref="Population"/> during the entire run of the genetic algorithm.
     /// </summary>
-    public class BestMaximumFitnessEntityStatistic : StatisticBase
+    public class BestMaximumFitnessEntityStatistic : Statistic
     {
-        private Dictionary<int, IGeneticEntity> bestEntities = new Dictionary<int, IGeneticEntity>();
+        private Dictionary<int, GeneticEntity> bestEntities = new Dictionary<int, GeneticEntity>();
         
         /// <summary>
-        /// Calculates to determine the <see cref="IGeneticEntity"/> object with the highest
-        /// <see cref="IGeneticEntity.ScaledFitnessValue"/> found for a <see cref="IPopulation"/> during the entire run of the genetic algorithm.
+        /// Calculates to determine the <see cref="GeneticEntity"/> object with the highest
+        /// <see cref="GeneticEntity.ScaledFitnessValue"/> found for a <see cref="Population"/> during the entire run of the genetic algorithm.
         /// </summary>
-        /// <param name="population"><see cref="IPopulation"/> from which to derive the statistic.</param>
-        /// <returns>String representation of the <see cref="IGeneticEntity"/> with the highest <see cref="IGeneticEntity.ScaledFitnessValue"/>.</returns>
+        /// <param name="population"><see cref="Population"/> from which to derive the statistic.</param>
+        /// <returns>String representation of the <see cref="GeneticEntity"/> with the highest <see cref="GeneticEntity.ScaledFitnessValue"/>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="population"/> is null.</exception>
-        public override object GetResultValue(IPopulation population)
+        public override object GetResultValue(Population population)
         {
             if (population == null)
             {
@@ -28,7 +26,7 @@ namespace GenFx.ComponentLibrary.Statistics
             }
 
             int startIndex = 0;
-            IGeneticEntity bestEntity;
+            GeneticEntity bestEntity;
             if (!this.bestEntities.TryGetValue(population.Index, out bestEntity))
             {
                 if (population.Entities.Count > 0)
@@ -65,7 +63,7 @@ namespace GenFx.ComponentLibrary.Statistics
             base.SetSaveState(state);
 
             Dictionary<int, KeyValueMap> savedEntitiesByPopulation = new Dictionary<int, KeyValueMap>();
-            foreach (KeyValuePair<int, IGeneticEntity> kvp in this.bestEntities)
+            foreach (KeyValuePair<int, GeneticEntity> kvp in this.bestEntities)
             {
                 KeyValueMap keyValueMap = new KeyValueMap();
                 kvp.Value.SetSaveState(keyValueMap);
@@ -88,10 +86,10 @@ namespace GenFx.ComponentLibrary.Statistics
             base.RestoreState(state);
 
             Dictionary<int, KeyValueMap> savedEntitiesByPopulation = (Dictionary<int, KeyValueMap>)state[nameof(this.bestEntities)];
-            this.bestEntities = new Dictionary<int, IGeneticEntity>();
+            this.bestEntities = new Dictionary<int, GeneticEntity>();
             foreach (KeyValuePair<int, KeyValueMap> kvp in savedEntitiesByPopulation)
             {
-                IGeneticEntity entity = (IGeneticEntity)this.Algorithm.GeneticEntitySeed.CreateNew();
+                GeneticEntity entity = (GeneticEntity)this.Algorithm.GeneticEntitySeed.CreateNew();
                 entity.RestoreState(kvp.Value);
                 this.bestEntities.Add(kvp.Key, entity);
             }

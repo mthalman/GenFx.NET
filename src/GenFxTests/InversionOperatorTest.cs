@@ -1,8 +1,5 @@
 ﻿using GenFx;
-using GenFx.ComponentLibrary.Base;
 using GenFx.ComponentLibrary.Lists;
-using GenFx.ComponentLibrary.Lists.BinaryStrings;
-using GenFx.Contracts;
 using GenFxTests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
@@ -28,7 +25,7 @@ namespace GenFxTests
         [TestMethod]
         public void BitInversionOperator_Mutate()
         {
-            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm
+            GeneticAlgorithm algorithm = new MockGeneticAlgorithm
             {
                 SelectionOperator = new MockSelectionOperator(),
                 PopulationSeed = new MockPopulation(),
@@ -59,7 +56,7 @@ namespace GenFxTests
             RandomNumberService.Instance = randomUtil;
             randomUtil.RandomValue = 1;
 
-            IGeneticEntity mutant = op.Mutate(entity);
+            GeneticEntity mutant = op.Mutate(entity);
 
             Assert.AreEqual("1011", mutant.Representation, "Mutation not called correctly.");
             Assert.AreEqual(0, mutant.Age, "Age should have been reset.");

@@ -1,4 +1,3 @@
-using GenFx.Contracts;
 using System;
 using System.Diagnostics.CodeAnalysis;
 
@@ -46,7 +45,7 @@ namespace GenFx.Validation
     /// <remarks>
     /// Attributes that implement this interface can be attached to components that need to describe
     /// how validation should be done for a configuration property external to the component when the component is being used.
-    /// For example, a <see cref="IFitnessEvaluator"/> type may require that a binary string entity
+    /// For example, a <see cref="FitnessEvaluator"/> type may require that a binary string entity
     /// have a specific length.<br />
     /// Note to developers: if creating your own <see cref="ConfigurationValidatorAttribute"/>, it is a best
     /// practice to also create a version of the attribute that implements the <see cref="IExternalConfigurationValidatorAttribute"/>

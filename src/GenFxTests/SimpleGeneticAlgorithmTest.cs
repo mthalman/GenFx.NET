@@ -1,7 +1,6 @@
 ﻿using GenFx;
 using GenFx.ComponentLibrary.Algorithms;
 using GenFx.ComponentLibrary.Populations;
-using GenFx.Contracts;
 using GenFxTests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
@@ -69,7 +68,7 @@ namespace GenFxTests
             Assert.AreEqual(prevPopCount, population.Entities.Count, "New population not created correctly.");
         }
 
-        private static SimplePopulation GetPopulation(IGeneticAlgorithm algorithm)
+        private static SimplePopulation GetPopulation(GeneticAlgorithm algorithm)
         {
             SimplePopulation population = new SimplePopulation();
             population.Initialize(algorithm);

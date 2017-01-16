@@ -6,7 +6,6 @@ using GenFx;
 using GenFx.ComponentLibrary.SelectionOperators;
 using GenFxTests.Helpers;
 using GenFx.Validation;
-using GenFx.Contracts;
 
 namespace GenFxTests
 {
@@ -23,7 +22,7 @@ namespace GenFxTests
         public void RequiredConfigurableTypeAttribute_Ctor()
         {
             TestRequiredConfigurableTypeAttribute attrib = new TestRequiredConfigurableTypeAttribute(
-              typeof(UniformSelectionOperator), typeof(ISelectionOperator));
+              typeof(UniformSelectionOperator), typeof(SelectionOperator));
 
             Assert.AreSame(typeof(UniformSelectionOperator), attrib.RequiredType, "RequiredType not set correctly.");
         }
@@ -34,7 +33,7 @@ namespace GenFxTests
         [TestMethod]
         public void RequiredConfigurableTypeAttribute_Ctor_NullRequiredType()
         {
-            AssertEx.Throws<ArgumentNullException>(() => new TestRequiredConfigurableTypeAttribute(null, typeof(ICrossoverOperator)));
+            AssertEx.Throws<ArgumentNullException>(() => new TestRequiredConfigurableTypeAttribute(null, typeof(CrossoverOperator)));
         }
 
         /// <summary>
@@ -52,7 +51,7 @@ namespace GenFxTests
         [TestMethod]
         public void RequiredConfigurableTypeAttribute_Ctor_InvalidType()
         {
-            AssertEx.Throws<ArgumentException>(() => new TestRequiredConfigurableTypeAttribute(typeof(UniformSelectionOperator), typeof(ICrossoverOperator)));
+            AssertEx.Throws<ArgumentException>(() => new TestRequiredConfigurableTypeAttribute(typeof(UniformSelectionOperator), typeof(CrossoverOperator)));
         }
 
         private class TestRequiredConfigurableTypeAttribute : RequiredComponentAttribute

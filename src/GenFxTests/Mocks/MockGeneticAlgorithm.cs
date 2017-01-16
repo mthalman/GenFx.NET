@@ -4,13 +4,12 @@ using System.Reflection;
 using System.Text;
 using GenFx;
 using System.Threading.Tasks;
-using GenFx.Contracts;
 
 namespace GenFxTests.Mocks
 {
     class MockGeneticAlgorithm : GeneticAlgorithm
     {
-        protected override Task CreateNextGenerationAsync(IPopulation population)
+        protected override Task CreateNextGenerationAsync(Population population)
         {
             throw new Exception("The method or operation is not implemented.");
         }
@@ -23,7 +22,7 @@ namespace GenFxTests.Mocks
     
     class MockGeneticAlgorithm2 : GeneticAlgorithm
     {
-        protected override Task CreateNextGenerationAsync(IPopulation population)
+        protected override Task CreateNextGenerationAsync(Population population)
         {
             throw new Exception("The method or operation is not implemented.");
         }

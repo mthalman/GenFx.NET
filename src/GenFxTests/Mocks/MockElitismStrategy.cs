@@ -2,25 +2,23 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using GenFx;
-using GenFx.ComponentLibrary.Base;
-using GenFx.Contracts;
 
 namespace GenFxTests.Mocks
 {
-    class MockElitismStrategy : ElitismStrategyBase
+    class MockElitismStrategy : ElitismStrategy
     {
         internal int GetElitistGeneticEntitiesCallCount;
 
-        protected override IList<IGeneticEntity> GetEliteGeneticEntitiesCore(IPopulation population)
+        protected override IList<GeneticEntity> GetEliteGeneticEntitiesCore(Population population)
         {
             this.GetElitistGeneticEntitiesCallCount++;
             return base.GetEliteGeneticEntitiesCore(population);
         }
     }
 
-    class MockElitismStrategy2 : ElitismStrategyBase
+    class MockElitismStrategy2 : ElitismStrategy
     {
-        protected override IList<IGeneticEntity> GetEliteGeneticEntitiesCore(IPopulation population)
+        protected override IList<GeneticEntity> GetEliteGeneticEntitiesCore(Population population)
         {
             throw new Exception();
         }

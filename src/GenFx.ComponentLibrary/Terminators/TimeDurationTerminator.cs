@@ -1,5 +1,3 @@
-using GenFx.ComponentLibrary.Base;
-using GenFx.Contracts;
 using System;
 
 namespace GenFx.ComponentLibrary.Terminators
@@ -8,7 +6,7 @@ namespace GenFx.ComponentLibrary.Terminators
     /// Represents a genetic algorithm terminator that stops the algorithm once the specified <see cref="TimeLimit"/>
     /// has been reached.
     /// </summary> 
-    public class TimeDurationTerminator : TerminatorBase
+    public class TimeDurationTerminator : Terminator
     {
         private DateTime timeStarted;
         private TimeSpan timeLimit;
@@ -28,7 +26,7 @@ namespace GenFx.ComponentLibrary.Terminators
         /// </summary>
         /// <param name="algorithm">The algorithm that is to use this component.</param>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-        public override void Initialize(IGeneticAlgorithm algorithm)
+        public override void Initialize(GeneticAlgorithm algorithm)
         {
             base.Initialize(algorithm);
 
@@ -36,7 +34,7 @@ namespace GenFx.ComponentLibrary.Terminators
         }
 
         /// <summary>
-        /// Subscription to the <see cref="IGeneticAlgorithm.AlgorithmStarting"/> event.
+        /// Subscription to the <see cref="GeneticAlgorithm.AlgorithmStarting"/> event.
         /// Initializes the starting time.
         /// </summary>
         /// <param name="sender">Sender of the event.</param>

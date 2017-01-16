@@ -1,7 +1,6 @@
 ﻿using GenFx;
 using GenFx.ComponentLibrary.Populations;
 using GenFx.ComponentLibrary.SelectionOperators;
-using GenFx.Contracts;
 using GenFxTests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
@@ -30,7 +29,7 @@ namespace GenFxTests
         [TestMethod]
         public void RankSelectionOperator_Select()
         {
-            IGeneticAlgorithm algorithm = GetAlgorithm();
+            GeneticAlgorithm algorithm = GetAlgorithm();
             RankSelectionOperator op = new RankSelectionOperator();
             op.Initialize(algorithm);
             SimplePopulation population = new SimplePopulation();
@@ -56,7 +55,7 @@ namespace GenFxTests
             RandomNumberService.Instance = randomUtil;
 
             randomUtil.Ratio = 0;
-            IGeneticEntity selectedEntity = op.SelectEntity(population);
+            GeneticEntity selectedEntity = op.SelectEntity(population);
             Assert.AreSame(entity1, selectedEntity, "Incorrect entity seleceted.");
 
             randomUtil.Ratio = .099999;
@@ -88,9 +87,9 @@ namespace GenFxTests
             Assert.AreSame(entity2, selectedEntity, "Incorrect entity seleceted.");
         }
 
-        private static IGeneticAlgorithm GetAlgorithm()
+        private static GeneticAlgorithm GetAlgorithm()
         {
-            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm
+            GeneticAlgorithm algorithm = new MockGeneticAlgorithm
             {
                 PopulationSeed = new SimplePopulation(),
                 GeneticEntitySeed = new MockEntity(),

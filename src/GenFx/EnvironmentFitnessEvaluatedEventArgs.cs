@@ -1,15 +1,14 @@
-using GenFx.Contracts;
 using System;
 using System.ComponentModel;
 
 namespace GenFx
 {
     /// <summary>
-    /// Provides data for the <see cref="IGeneticAlgorithm.FitnessEvaluated"/> event.  This class cannot be inherited.
+    /// Provides data for the <see cref="GeneticAlgorithm.FitnessEvaluated"/> event.  This class cannot be inherited.
     /// </summary>
     /// <remarks>
-    /// If the <see cref="IGeneticAlgorithm"/> is cancelled, it is still safe to execute its <see cref="IGeneticAlgorithm.RunAsync"/> or
-    /// <see cref="IGeneticAlgorithm.StepAsync"/> methods. This will cause it to resume execution from where it left off.
+    /// If the <see cref="GeneticAlgorithm"/> is cancelled, it is still safe to execute its <see cref="GeneticAlgorithm.RunAsync"/> or
+    /// <see cref="GeneticAlgorithm.StepAsync"/> methods. This will cause it to resume execution from where it left off.
     /// </remarks>
     public sealed class EnvironmentFitnessEvaluatedEventArgs : CancelEventArgs
     {
@@ -17,7 +16,7 @@ namespace GenFx
         private int generationIndex;
 
         /// <summary>
-        /// Gets the <see cref="GeneticEnvironment"/> being used by the <see cref="IGeneticAlgorithm"/>.
+        /// Gets the <see cref="GeneticEnvironment"/> being used by the <see cref="GeneticAlgorithm"/>.
         /// </summary>
         public GeneticEnvironment Environment
         {
@@ -35,7 +34,7 @@ namespace GenFx
         /// <summary>
         /// Initializes a new instance of the <see cref="EnvironmentFitnessEvaluatedEventArgs"/> class.
         /// </summary>
-        /// <param name="environment">The <see cref="GeneticEnvironment"/> being used by the <see cref="IGeneticAlgorithm"/>.</param>
+        /// <param name="environment">The <see cref="GeneticEnvironment"/> being used by the <see cref="GeneticAlgorithm"/>.</param>
         /// <param name="generationIndex">The index of the generation that has just been created.</param>
         /// <exception cref="ArgumentNullException"><paramref name="environment"/> is null.</exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="generationIndex"/> is less than zero.</exception>

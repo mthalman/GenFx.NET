@@ -1,7 +1,5 @@
 ﻿using GenFx;
-using GenFx.ComponentLibrary.Base;
 using GenFx.ComponentLibrary.Populations;
-using GenFx.Contracts;
 using GenFxTests.Helpers;
 using GenFxTests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -26,14 +24,14 @@ namespace GenFxTests
         [TestMethod]
         public void Population_Ctor()
         {
-            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm
+            GeneticAlgorithm algorithm = new MockGeneticAlgorithm
             {
                 SelectionOperator = new MockSelectionOperator(),
                 FitnessEvaluator = new MockFitnessEvaluator(),
                 GeneticEntitySeed = new MockEntity(),
                 PopulationSeed = new SimplePopulation(),
             };
-            IPopulation population = new SimplePopulation();
+            Population population = new SimplePopulation();
             population.Initialize(algorithm);
             PrivateObject accessor = new PrivateObject(population);
 
@@ -74,7 +72,7 @@ namespace GenFxTests
         [TestMethod]
         public async Task Population_Initialize_Async()
         {
-            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm
+            GeneticAlgorithm algorithm = new MockGeneticAlgorithm
             {
                 FitnessEvaluator = new MockFitnessEvaluator(),
                 SelectionOperator = new MockSelectionOperator(),
@@ -115,7 +113,7 @@ namespace GenFxTests
 
         private static async Task TestEvaluateFitnessAsync(bool useScaling)
         {
-            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm
+            GeneticAlgorithm algorithm = new MockGeneticAlgorithm
             {
                 SelectionOperator = new MockSelectionOperator(),
                 GeneticEntitySeed = new MockEntity(),
@@ -173,9 +171,9 @@ namespace GenFxTests
             Assert.AreEqual((entity1.ScaledFitnessValue + entity2.ScaledFitnessValue) / 2, population.ScaledMean, "ScaledMean not set correctly.");
         }
 
-        private class FakeFitnessScalingStrategy : FitnessScalingStrategyBase
+        private class FakeFitnessScalingStrategy : FitnessScalingStrategy
         {
-            protected override void UpdateScaledFitnessValues(IPopulation population)
+            protected override void UpdateScaledFitnessValues(Population population)
             {
                 for (int i = 0; i < population.Entities.Count; i++)
                 {
@@ -184,7 +182,7 @@ namespace GenFxTests
             }
         }
 
-        private class TestPopulation : PopulationBase
+        private class TestPopulation : Population
         {
         }
     }

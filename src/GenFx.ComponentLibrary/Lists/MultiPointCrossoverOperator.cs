@@ -1,6 +1,4 @@
-﻿using GenFx.ComponentLibrary.Base;
-using GenFx.Contracts;
-using GenFx.Validation;
+﻿using GenFx.Validation;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -27,8 +25,8 @@ namespace GenFx.ComponentLibrary.Lists
     /// </remarks>
     [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Multi")]
     [SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "MultiPoint")]
-    [RequiredEntity(typeof(IListEntityBase))]
-    public class MultiPointCrossoverOperator : CrossoverOperatorBase
+    [RequiredEntity(typeof(ListEntityBase))]
+    public class MultiPointCrossoverOperator : CrossoverOperator
     {
         private const int DefaultCrossoverPointCount = CrossoverRateMin;
         private const int CrossoverRateMin = 2;
@@ -63,8 +61,8 @@ namespace GenFx.ComponentLibrary.Lists
         /// <summary>
         /// Executes a single-point crossover between two list-based entities.
         /// </summary>
-        /// <param name="entity1"><see cref="IGeneticEntity"/> to be crossed over with <paramref name="entity2"/>.</param>
-        /// <param name="entity2"><see cref="IGeneticEntity"/> to be crossed over with <paramref name="entity1"/>.</param>
+        /// <param name="entity1"><see cref="GeneticEntity"/> to be crossed over with <paramref name="entity2"/>.</param>
+        /// <param name="entity2"><see cref="GeneticEntity"/> to be crossed over with <paramref name="entity1"/>.</param>
         /// <returns>
         /// Collection of the list-based entities resulting from the crossover.  If no
         /// crossover occurred, this collection contains the original values of <paramref name="entity1"/>
@@ -72,7 +70,7 @@ namespace GenFx.ComponentLibrary.Lists
         /// </returns>
         /// <exception cref="ArgumentNullException"><paramref name="entity1"/> is null.</exception>
         /// <exception cref="ArgumentNullException"><paramref name="entity2"/> is null.</exception>
-        protected override IList<IGeneticEntity> GenerateCrossover(IGeneticEntity entity1, IGeneticEntity entity2)
+        protected override IList<GeneticEntity> GenerateCrossover(GeneticEntity entity1, GeneticEntity entity2)
         {
             if (entity1 == null)
             {
@@ -84,8 +82,8 @@ namespace GenFx.ComponentLibrary.Lists
                 throw new ArgumentNullException(nameof(entity2));
             }
 
-            IListEntityBase listEntity1 = (IListEntityBase)entity1;
-            IListEntityBase listEntity2 = (IListEntityBase)entity2;
+            ListEntityBase listEntity1 = (ListEntityBase)entity1;
+            ListEntityBase listEntity2 = (ListEntityBase)entity2;
 
             int entity1Length = listEntity1.Length;
             int entity2Length = listEntity2.Length;
@@ -106,7 +104,7 @@ namespace GenFx.ComponentLibrary.Lists
 
             crossoverLoci.Sort();
 
-            IList<IGeneticEntity> crossoverOffspring = new List<IGeneticEntity>();
+            IList<GeneticEntity> crossoverOffspring = new List<GeneticEntity>();
 
             int maxLength = Math.Max(entity1Length, entity2Length);
 
@@ -117,11 +115,11 @@ namespace GenFx.ComponentLibrary.Lists
                 listEntity2.Length = maxLength;
             }
 
-            IListEntityBase originalEntity1 = (IListEntityBase)listEntity1.Clone();
-            IListEntityBase originalEntity2 = (IListEntityBase)listEntity2.Clone();
+            ListEntityBase originalEntity1 = (ListEntityBase)listEntity1.Clone();
+            ListEntityBase originalEntity2 = (ListEntityBase)listEntity2.Clone();
 
-            IListEntityBase entity1Source = listEntity1;
-            IListEntityBase entity2Source = listEntity2;
+            ListEntityBase entity1Source = listEntity1;
+            ListEntityBase entity2Source = listEntity2;
 
             for (int i = 0; i < maxLength; i++)
             {
@@ -140,26 +138,26 @@ namespace GenFx.ComponentLibrary.Lists
                     }
                 }
 
-                object entity1SourceVal = entity1Source[i];
-                object entity2SourceVal = entity2Source[i];
+                object entity1SourceVal = entity1Source.GetValue(i);
+                object entity2SourceVal = entity2Source.GetValue(i);
 
                 if (this.UsePartiallyMatchedCrossover)
                 {
                     if (listEntity1 != entity1Source && listEntity1.Contains(entity1SourceVal))
                     {
                         int index = originalEntity2.IndexOf(entity1SourceVal);
-                        entity1SourceVal = originalEntity1[index];
+                        entity1SourceVal = originalEntity1.GetValue(index);
                     }
 
                     if (listEntity2 != entity2Source && listEntity2.Contains(entity2SourceVal))
                     {
                         int index = originalEntity1.IndexOf(entity2SourceVal);
-                        entity2SourceVal = originalEntity2[index];
+                        entity2SourceVal = originalEntity2.GetValue(index);
                     }
                 }
 
-                listEntity1[i] = entity1SourceVal;
-                listEntity2[i] = entity2SourceVal;
+                listEntity1.SetValue(i, entity1SourceVal);
+                listEntity2.SetValue(i, entity2SourceVal);
             }
 
             // Set the length based on their swapped length

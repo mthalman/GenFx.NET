@@ -1,6 +1,4 @@
 ﻿using GenFx;
-using GenFx.ComponentLibrary.Base;
-using GenFx.Contracts;
 using GenFxTests.Helpers;
 using GenFxTests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -52,17 +50,17 @@ namespace GenFxTests
             Assert.AreEqual((double)99, actualVal, "Fitness was not evaluated correctly.");
         }
 
-        private class FakeFitnessEvaluator : FitnessEvaluatorBase
+        private class FakeFitnessEvaluator : FitnessEvaluator
         {
-            public override Task<double> EvaluateFitnessAsync(IGeneticEntity entity)
+            public override Task<double> EvaluateFitnessAsync(GeneticEntity entity)
             {
                 throw new Exception("The method or operation is not implemented.");
             }
         }
         
-        private class FakeFitnessEvaluator2 : FitnessEvaluatorBase
+        private class FakeFitnessEvaluator2 : FitnessEvaluator
         {
-            public override Task<double> EvaluateFitnessAsync(IGeneticEntity entity)
+            public override Task<double> EvaluateFitnessAsync(GeneticEntity entity)
             {
                 return Task.FromResult((double)99);
             }

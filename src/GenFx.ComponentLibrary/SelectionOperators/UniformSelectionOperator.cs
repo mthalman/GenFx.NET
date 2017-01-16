@@ -1,24 +1,22 @@
-using GenFx.ComponentLibrary.Base;
-using GenFx.Contracts;
 using System;
 
 namespace GenFx.ComponentLibrary.SelectionOperators
 {
     /// <summary>
-    /// Provides a selection technique whereby all <see cref="IGeneticEntity"/> objects have an equal
+    /// Provides a selection technique whereby all <see cref="GeneticEntity"/> objects have an equal
     /// probability of being selected regardless of fitness.
     /// </summary>
-    public class UniformSelectionOperator : SelectionOperatorBase
+    public class UniformSelectionOperator : SelectionOperator
     {
         /// <summary>
-        /// Selects a <see cref="IGeneticEntity"/> from <paramref name="population"/> with all <see cref="IGeneticEntity"/>
+        /// Selects a <see cref="GeneticEntity"/> from <paramref name="population"/> with all <see cref="GeneticEntity"/>
         /// objects having an equal probability of being selected.
         /// </summary>
-        /// <param name="population"><see cref="IPopulation"/> containing the <see cref="IGeneticEntity"/>
+        /// <param name="population"><see cref="Population"/> containing the <see cref="GeneticEntity"/>
         /// objects from which to select.</param>
-        /// <returns>The <see cref="IGeneticEntity"/> object that was selected.</returns>
+        /// <returns>The <see cref="GeneticEntity"/> object that was selected.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="population"/> is null.</exception>
-        protected override IGeneticEntity SelectEntityFromPopulation(IPopulation population)
+        protected override GeneticEntity SelectEntityFromPopulation(Population population)
         {
             if (population == null)
             {

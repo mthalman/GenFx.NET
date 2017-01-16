@@ -1,23 +1,21 @@
-using GenFx.ComponentLibrary.Base;
-using GenFx.Contracts;
 using System;
 
 namespace GenFx.ComponentLibrary.Statistics
 {
     /// <summary>
-    /// Provides the calculation to determine the lowest <see cref="IGeneticEntity.ScaledFitnessValue"/> 
-    /// in a <see cref="IPopulation"/>.
+    /// Provides the calculation to determine the lowest <see cref="GeneticEntity.ScaledFitnessValue"/> 
+    /// in a <see cref="Population"/>.
     /// </summary>
-    public class MinimumFitnessStatistic : StatisticBase
+    public class MinimumFitnessStatistic : Statistic
     {
         /// <summary>
-        /// Calculates to determine the lowest <see cref="IGeneticEntity.ScaledFitnessValue"/> 
+        /// Calculates to determine the lowest <see cref="GeneticEntity.ScaledFitnessValue"/> 
         /// in the <paramref name="population"/>.
         /// </summary>
-        /// <param name="population"><see cref="IPopulation"/> from which to derive the statistic.</param>
-        /// <returns>Smallest value of <see cref="IGeneticEntity.ScaledFitnessValue"/> found.</returns>
+        /// <param name="population"><see cref="Population"/> from which to derive the statistic.</param>
+        /// <returns>Smallest value of <see cref="GeneticEntity.ScaledFitnessValue"/> found.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="population"/> is null.</exception>
-        public override object GetResultValue(IPopulation population)
+        public override object GetResultValue(Population population)
         {
             if (population == null)
             {

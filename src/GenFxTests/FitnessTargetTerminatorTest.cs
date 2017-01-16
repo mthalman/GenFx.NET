@@ -1,7 +1,6 @@
 ﻿using GenFx;
 using GenFx.ComponentLibrary.Populations;
 using GenFx.ComponentLibrary.Terminators;
-using GenFx.Contracts;
 using GenFxTests.Helpers;
 using GenFxTests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -24,7 +23,7 @@ namespace GenFxTests
         public async Task FitnessTargetTerminator_IsComplete()
         {
             double fitnessTarget = 15;
-            IGeneticAlgorithm algorithm = GetAlgorithm(fitnessTarget);
+            GeneticAlgorithm algorithm = GetAlgorithm(fitnessTarget);
             await algorithm.InitializeAsync();
 
             FitnessTargetTerminator terminator = (FitnessTargetTerminator)algorithm.Terminator;
@@ -47,9 +46,9 @@ namespace GenFxTests
             Assert.IsTrue(terminator.IsComplete(), "A entity does have the fitness target.");
         }
 
-        private static IGeneticAlgorithm GetAlgorithm(double fitnessTarget)
+        private static GeneticAlgorithm GetAlgorithm(double fitnessTarget)
         {
-            IGeneticAlgorithm algorithm = new MockGeneticAlgorithm
+            GeneticAlgorithm algorithm = new MockGeneticAlgorithm
             {
                 SelectionOperator = new MockSelectionOperator(),
                 FitnessEvaluator = new MockFitnessEvaluator(),

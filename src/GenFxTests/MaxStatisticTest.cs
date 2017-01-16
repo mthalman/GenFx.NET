@@ -1,5 +1,4 @@
 ﻿using GenFx;
-using GenFx.ComponentLibrary.Base;
 using GenFx.ComponentLibrary.Populations;
 using GenFx.ComponentLibrary.Statistics;
 using GenFxTests.Helpers;
@@ -37,7 +36,7 @@ namespace GenFxTests
             target.Initialize(algorithm);
             SimplePopulation population = new SimplePopulation();
             population.Initialize(algorithm);
-            PrivateObject accessor = new PrivateObject(population, new PrivateType(typeof(PopulationBase)));
+            PrivateObject accessor = new PrivateObject(population, new PrivateType(typeof(Population)));
             accessor.SetField("scaledMax", 21);
             object result = target.GetResultValue(population);
 

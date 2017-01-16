@@ -1,20 +1,19 @@
-using GenFx.Contracts;
 using GenFx.Validation;
 using System;
 using System.Collections.Generic;
 
-namespace GenFx.ComponentLibrary.Base
+namespace GenFx
 {
     /// <summary>
     /// Provides the abstract base class for a genetic algorithm crossover operator.
     /// </summary>
     /// <remarks>
-    /// A <see cref="CrossoverOperatorBase"/> acts upon two <see cref="IGeneticEntity"/> objects that were
-    /// selected by the <see cref="ISelectionOperator"/>.  It exchanges subparts of the two <see cref="IGeneticEntity"/> 
-    /// objects to produce one or more new <see cref="IGeneticEntity"/> objects.  It is intended to be similar
+    /// A <see cref="CrossoverOperator"/> acts upon two <see cref="GeneticEntity"/> objects that were
+    /// selected by the <see cref="SelectionOperator"/>.  It exchanges subparts of the two <see cref="GeneticEntity"/> 
+    /// objects to produce one or more new <see cref="GeneticEntity"/> objects.  It is intended to be similar
     /// to biological recombination between two chromosomes.
     /// </remarks>
-    public abstract class CrossoverOperatorBase : GeneticComponentWithAlgorithm, ICrossoverOperator
+    public abstract class CrossoverOperator : GeneticComponentWithAlgorithm
     {
         private const double DefaultCrossoverRate = .7;
         private const double CrossoverRateMin = 0;
@@ -23,7 +22,7 @@ namespace GenFx.ComponentLibrary.Base
         private double crossoverRate = DefaultCrossoverRate;
 
         /// <summary>
-        /// Gets or sets the probability that two <see cref="IGeneticEntity"/> objects will crossover after being selected.
+        /// Gets or sets the probability that two <see cref="GeneticEntity"/> objects will crossover after being selected.
         /// </summary>
         /// <exception cref="ValidationException">Value is not valid.</exception>
         [ConfigurationProperty]
@@ -38,14 +37,14 @@ namespace GenFx.ComponentLibrary.Base
         /// Attempts to perform a crossover between <paramref name="entity1"/> and <paramref name="entity2"/>
         /// if a random value is within the range of the <see cref="CrossoverRate"/>.
         /// </summary>
-        /// <param name="entity1"><see cref="IGeneticEntity"/> to be crossed over with <paramref name="entity2"/>.</param>
-        /// <param name="entity2"><see cref="IGeneticEntity"/> to be crossed over with <paramref name="entity1"/>.</param>
+        /// <param name="entity1"><see cref="GeneticEntity"/> to be crossed over with <paramref name="entity2"/>.</param>
+        /// <param name="entity2"><see cref="GeneticEntity"/> to be crossed over with <paramref name="entity1"/>.</param>
         /// <returns>
-        /// Collection of the <see cref="IGeneticEntity"/> objects resulting from the crossover.  If no
+        /// Collection of the <see cref="GeneticEntity"/> objects resulting from the crossover.  If no
         /// crossover occurred, this collection contains the original values of <paramref name="entity1"/>
         /// and <paramref name="entity2"/>.
         /// </returns>
-        public IList<IGeneticEntity> Crossover(IGeneticEntity entity1, IGeneticEntity entity2)
+        public IList<GeneticEntity> Crossover(GeneticEntity entity1, GeneticEntity entity2)
         {
             if (entity1 == null)
             {
@@ -57,11 +56,11 @@ namespace GenFx.ComponentLibrary.Base
                 throw new ArgumentNullException(nameof(entity2));
             }
 
-            IList<IGeneticEntity> crossoverOffspring;
+            IList<GeneticEntity> crossoverOffspring;
             if (RandomNumberService.Instance.GetDouble() <= this.CrossoverRate)
             {
-                IGeneticEntity clonedEntity1 = entity1.Clone();
-                IGeneticEntity clonedEntity2 = entity2.Clone();
+                GeneticEntity clonedEntity1 = entity1.Clone();
+                GeneticEntity clonedEntity2 = entity2.Clone();
                 crossoverOffspring = this.GenerateCrossover(clonedEntity1, clonedEntity2);
 
                 for (int i = 0; i < crossoverOffspring.Count; i++)
@@ -71,7 +70,7 @@ namespace GenFx.ComponentLibrary.Base
             }
             else
             {
-                crossoverOffspring = new List<IGeneticEntity>();
+                crossoverOffspring = new List<GeneticEntity>();
                 crossoverOffspring.Add(entity1);
                 crossoverOffspring.Add(entity2);
             }
@@ -82,11 +81,11 @@ namespace GenFx.ComponentLibrary.Base
         /// When overriden in a derived class, generates a crossover between <paramref name="entity1"/> 
         /// and <paramref name="entity2"/>.
         /// </summary>
-        /// <param name="entity1"><see cref="IGeneticEntity"/> to be crossed over with <paramref name="entity2"/>.</param>
-        /// <param name="entity2"><see cref="IGeneticEntity"/> to be crossed over with <paramref name="entity1"/>.</param>
+        /// <param name="entity1"><see cref="GeneticEntity"/> to be crossed over with <paramref name="entity2"/>.</param>
+        /// <param name="entity2"><see cref="GeneticEntity"/> to be crossed over with <paramref name="entity1"/>.</param>
         /// <returns>
-        /// Collection of the <see cref="IGeneticEntity"/> objects resulting from the crossover.
+        /// Collection of the <see cref="GeneticEntity"/> objects resulting from the crossover.
         /// </returns>
-        protected abstract IList<IGeneticEntity> GenerateCrossover(IGeneticEntity entity1, IGeneticEntity entity2);
+        protected abstract IList<GeneticEntity> GenerateCrossover(GeneticEntity entity1, GeneticEntity entity2);
     }
 }
