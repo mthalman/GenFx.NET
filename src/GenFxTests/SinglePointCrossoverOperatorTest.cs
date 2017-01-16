@@ -37,22 +37,23 @@ namespace GenFxTests
                 {
                     CrossoverRate = 1
                 },
-                GeneticEntitySeed = new FixedLengthBinaryStringEntity
+                GeneticEntitySeed = new BinaryStringEntity
                 {
-                    FixedLength = 4
+                    MinimumStartingLength = 4,
+                    MaximumStartingLength = 4
                 }
             };
             algorithm.GeneticEntitySeed.Initialize(algorithm);
 
             SinglePointCrossoverOperator op = new SinglePointCrossoverOperator { CrossoverRate = 1 };
             op.Initialize(algorithm);
-            FixedLengthBinaryStringEntity entity1 = (FixedLengthBinaryStringEntity)algorithm.GeneticEntitySeed.CreateNewAndInitialize();
+            BinaryStringEntity entity1 = (BinaryStringEntity)algorithm.GeneticEntitySeed.CreateNewAndInitialize();
             entity1[0] = true;
             entity1[1] = false;
             entity1[2] = false;
             entity1[3] = true;
 
-            FixedLengthBinaryStringEntity entity2 = (FixedLengthBinaryStringEntity)algorithm.GeneticEntitySeed.CreateNewAndInitialize();
+            BinaryStringEntity entity2 = (BinaryStringEntity)algorithm.GeneticEntitySeed.CreateNewAndInitialize();
             entity2.Initialize(algorithm);
             entity2[0] = true;
             entity2[1] = true;
@@ -65,8 +66,8 @@ namespace GenFxTests
             randomUtil.RandomVal = 1;
             IList<IGeneticEntity> result = op.Crossover(entity1, entity2);
 
-            FixedLengthBinaryStringEntity resultEntity1 = (FixedLengthBinaryStringEntity)result[0];
-            FixedLengthBinaryStringEntity resultEntity2 = (FixedLengthBinaryStringEntity)result[1];
+            BinaryStringEntity resultEntity1 = (BinaryStringEntity)result[0];
+            BinaryStringEntity resultEntity2 = (BinaryStringEntity)result[1];
 
             Assert.AreEqual("1100", resultEntity1.Representation, "Crossover not correct.");
             Assert.AreEqual("1001", resultEntity2.Representation, "Crossover not correct.");
@@ -74,8 +75,8 @@ namespace GenFxTests
             randomUtil.RandomVal = 3;
             result = op.Crossover(entity1, entity2);
 
-            resultEntity1 = (FixedLengthBinaryStringEntity)result[0];
-            resultEntity2 = (FixedLengthBinaryStringEntity)result[1];
+            resultEntity1 = (BinaryStringEntity)result[0];
+            resultEntity2 = (BinaryStringEntity)result[1];
 
             Assert.AreEqual("1000", resultEntity1.Representation, "Crossover not correct.");
             Assert.AreEqual("1101", resultEntity2.Representation, "Crossover not correct.");

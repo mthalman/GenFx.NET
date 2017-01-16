@@ -5,13 +5,7 @@
     /// </summary>
     /// <typeparam name="T">Type of the items contained in the list.</typeparam>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix")]
-    public interface IListEntity<T> : IListEntityBase
+    public interface IListEntity<T> : IListEntityBase<T>
     {
-        /// <summary>
-        /// Gets or sets the item at the specified index.
-        /// </summary>
-        /// <param name="index">Index of the item to get.</param>
-        /// <returns>Item at the specified index.</returns>
-        new T this[int index] { get; set; }
     }
 }

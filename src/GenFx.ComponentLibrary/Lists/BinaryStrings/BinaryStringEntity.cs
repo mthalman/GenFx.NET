@@ -12,7 +12,7 @@ namespace GenFx.ComponentLibrary.Lists.BinaryStrings
     /// </summary>
     /// <remarks>This class uses a <see cref="BitArray"/> data structure to represent the list.</remarks>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix")]
-    public abstract class BinaryStringEntity : ListEntityBase<bool>
+    public class BinaryStringEntity : ListEntityBase<bool>
     {
         private BitArray genes;
         
@@ -20,23 +20,29 @@ namespace GenFx.ComponentLibrary.Lists.BinaryStrings
         /// Gets or sets the length of the binary string.
         /// </summary>
         /// <remarks>
-        /// By default, the length of a <see cref="BinaryStringEntity"/> cannot be changed
-        /// from its initial value unless the derived class overrides this behavior.
+        /// The length of this entity can be changed
+        /// from its initial value.  The list will be truncated if the value is less than the current length.
+        /// The list will be expanded with zeroes if the value is greater than the current length.
         /// </remarks>
-        /// <exception cref="ArgumentException">Value is different from the current length.</exception>
         public override int Length
         {
             get
             {
                 this.EnsureEntityIsInitialized();
-                return this.genes.Length;
+                return this.genes.Count;
             }
             set
             {
-                this.EnsureEntityIsInitialized();
-                if (value != this.genes.Length)
+                if (value != this.Length)
                 {
-                    throw new ArgumentException(Resources.ErrorMsg_BinaryStringEntityLengthCannotBeChanged, nameof(value));
+                    if (this.MinimumStartingLength == this.MaximumStartingLength)
+                    {
+                        throw new ArgumentException(Resources.ErrorMsg_ListEntityLengthCannotBeChanged, nameof(value));
+                    }
+
+                    this.genes.Length = value;
+
+                    this.UpdateStringRepresentation();
                 }
             }
         }
@@ -67,13 +73,6 @@ namespace GenFx.ComponentLibrary.Lists.BinaryStrings
                 this.UpdateStringRepresentation();
             }
         }
-
-        /// <summary>
-        /// Returns the initial length to use for the list.
-        /// </summary>
-        /// <returns>The initial length to use for the list.</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate")]
-        protected abstract int GetInitialLength();
 
         /// <summary>
         /// Initializes the component to ensure its readiness for algorithm execution.

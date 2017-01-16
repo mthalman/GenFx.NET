@@ -81,7 +81,7 @@ namespace GenFxTests
         {
             int size = 3;
             IGeneticAlgorithm algorithm = GetAlgorithm(size);
-            IIntegerListEntity entity = new TestIntegerListEntity { InitialLength = size };
+            IIntegerListEntity entity = new TestIntegerListEntity { MinimumStartingLength = size, MaximumStartingLength = size };
             entity.Initialize(algorithm);
             PrivateObject accessor = new PrivateObject(entity, new PrivateType(typeof(ListEntity<int>)));
             Assert.AreEqual(size, entity.Length, "Length not initialized correctly.");
@@ -97,7 +97,7 @@ namespace GenFxTests
             RandomNumberService.Instance = new TestRandomUtil();
 
             IGeneticAlgorithm algorithm = GetAlgorithm(4);
-            IIntegerListEntity entity = new TestIntegerListEntity { InitialLength = 4 };
+            IIntegerListEntity entity = new TestIntegerListEntity { MinimumStartingLength = 4, MaximumStartingLength = 4 };
             entity.Initialize(algorithm);
             
             Assert.AreEqual("1, 2, 3, 4", entity.Representation, "Entity not initialized correctly.");
@@ -110,7 +110,7 @@ namespace GenFxTests
         public void IntegerListEntity_Indexer()
         {
             IGeneticAlgorithm algorithm = GetAlgorithm(3);
-            IIntegerListEntity entity = new TestIntegerListEntity { InitialLength = 3 };
+            IIntegerListEntity entity = new TestIntegerListEntity { MinimumStartingLength = 3, MaximumStartingLength = 3 };
             entity.Initialize(algorithm);
             PrivateObject accessor = new PrivateObject(entity, new PrivateType(typeof(ListEntity<int>)));
             List<int> genes = (List<int>)accessor.GetField("genes");
@@ -145,7 +145,7 @@ namespace GenFxTests
             int length = 50;
             IGeneticAlgorithm algorithm = GetAlgorithm(length);
 
-            IIntegerListEntity entity = new TestIntegerListEntity { InitialLength = length };
+            IIntegerListEntity entity = new TestIntegerListEntity { MinimumStartingLength = length, MaximumStartingLength = length };
             entity.Initialize(algorithm);
             Assert.AreEqual(length, entity.Length, "Length not set correctly.");
 
@@ -161,8 +161,12 @@ namespace GenFxTests
         {
             int length = 50;
             IGeneticAlgorithm algorithm = GetAlgorithm(length);
-            
-            TestIntegerListEntity entity = new TestIntegerListEntity();
+
+            TestIntegerListEntity entity = new TestIntegerListEntity
+            {
+                MinimumStartingLength = 5,
+                MaximumStartingLength = 5
+            };
             entity.Initialize(algorithm);
             AssertEx.Throws<ArgumentException>(() => entity.Length = 51);
         }
@@ -184,7 +188,7 @@ namespace GenFxTests
         {
             IGeneticAlgorithm algorithm = GetAlgorithm(4);
 
-            TestIntegerListEntity entity = new TestIntegerListEntity { InitialLength = 4 };
+            TestIntegerListEntity entity = new TestIntegerListEntity { MinimumStartingLength = 4, MaximumStartingLength = 4 };
             entity.Initialize(algorithm);
             entity[0] = 5;
             entity[1] = 3;
@@ -208,7 +212,8 @@ namespace GenFxTests
                 PopulationSeed = new MockPopulation(),
                 GeneticEntitySeed = new TestIntegerListEntity
                 {
-                    InitialLength = entityLength
+                    MinimumStartingLength = entityLength,
+                    MaximumStartingLength = entityLength
                 }
             };
             return algorithm;
@@ -216,20 +221,6 @@ namespace GenFxTests
 
         private class TestIntegerListEntity : IntegerListEntity
         {
-            public int InitialLength { get; set; }
-
-            protected override int GetInitialLength()
-            {
-                return this.InitialLength;
-            }
-
-            public override bool IsFixedSize
-            {
-                get
-                {
-                    throw new NotImplementedException();
-                }
-            }
         }
 
         private class TestRandomUtil : IRandomNumberService

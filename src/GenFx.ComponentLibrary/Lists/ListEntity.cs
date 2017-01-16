@@ -18,13 +18,13 @@ namespace GenFx.ComponentLibrary.Lists
         private List<TItem> genes;
         
         /// <summary>
-        /// Gets or sets the length of the list.
+        /// Gets or sets the length of the integer list.
         /// </summary>
         /// <remarks>
-        /// By default, the length of this object cannot be changed
-        /// from its initial value unless the derived class overrides this behavior.
+        /// The length of this entity can be changed
+        /// from its initial value.  The list will be truncated if the value is less than the current length.
+        /// The list will be expanded with zeroes if the value is greater than the current length.
         /// </remarks>
-        /// <exception cref="ArgumentException">Value is different from the current length.</exception>
         public override int Length
         {
             get
@@ -34,10 +34,29 @@ namespace GenFx.ComponentLibrary.Lists
             }
             set
             {
-                this.EnsureEntityIsInitialized();
-                if (value != this.genes.Count)
+                if (value != this.Length)
                 {
-                    throw new ArgumentException(Resources.ErrorMsg_ListEntityLengthCannotBeChanged, nameof(value));
+                    if (this.MinimumStartingLength == this.MaximumStartingLength)
+                    {
+                        throw new ArgumentException(Resources.ErrorMsg_ListEntityLengthCannotBeChanged, nameof(value));
+                    }
+
+                    if (value > this.Length)
+                    {
+                        for (int i = 0; i < value - this.Length; i++)
+                        {
+                            this.genes.Add(default(TItem));
+                        }
+                    }
+                    else
+                    {
+                        for (int i = 0; i < this.Length - value; i++)
+                        {
+                            this.genes.RemoveAt(this.Length - 1);
+                        }
+                    }
+
+                    this.UpdateStringRepresentation();
                 }
             }
         }
@@ -60,14 +79,7 @@ namespace GenFx.ComponentLibrary.Lists
                 this.UpdateStringRepresentation();
             }
         }
-
-        /// <summary>
-        /// Returns the initial length to use for the list.
-        /// </summary>
-        /// <returns>The initial length to use for the list.</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate")]
-        protected abstract int GetInitialLength();
-
+        
         /// <summary>
         /// Initializes the component to ensure its readiness for algorithm execution.
         /// </summary>

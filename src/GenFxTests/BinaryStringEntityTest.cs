@@ -84,10 +84,10 @@ namespace GenFxTests
         {
             int size = 3;
             IGeneticAlgorithm algorithm = GetAlgorithm(size);
-            TestBinaryStringEntity entity = new TestBinaryStringEntity { InitialLength = size };
+            TestBinaryStringEntity entity = new TestBinaryStringEntity { MinimumStartingLength = size, MaximumStartingLength = size };
             entity.Initialize(algorithm);
             PrivateObject accessor = new PrivateObject(entity, new PrivateType(typeof(BinaryStringEntity)));
-            Assert.AreEqual(size, entity.InitialLength, "Length not initialized correctly.");
+            Assert.AreEqual(size, entity.Length, "Length not initialized correctly.");
             Assert.AreEqual(size, ((BitArray)accessor.GetField("genes")).Length, "Genes not initialized correctly.");
         }
 
@@ -98,7 +98,7 @@ namespace GenFxTests
         public void BinaryStringEntity_Initialize()
         {
             IGeneticAlgorithm algorithm = GetAlgorithm(4);
-            TestBinaryStringEntity entity = new TestBinaryStringEntity { InitialLength = 4 };
+            TestBinaryStringEntity entity = new TestBinaryStringEntity { MinimumStartingLength = 4, MaximumStartingLength = 4 };
             RandomNumberService.Instance = new TestRandomUtil();
             entity.Initialize(algorithm);
             Assert.AreEqual("1010", entity.Representation, "Entity not initialized correctly.");
@@ -111,12 +111,12 @@ namespace GenFxTests
         public void BinaryStringEntity_Indexer()
         {
             IGeneticAlgorithm algorithm = GetAlgorithm(3);
-            TestBinaryStringEntity entity = new TestBinaryStringEntity { InitialLength = 3 };
+            TestBinaryStringEntity entity = new TestBinaryStringEntity { MinimumStartingLength = 3, MaximumStartingLength = 3 };
             entity.Initialize(algorithm);
             PrivateObject accessor = new PrivateObject(entity, new PrivateType(typeof(BinaryStringEntity)));
             
             BitArray genes = (BitArray)accessor.GetField("genes");
-            for (int i = 0; i < entity.InitialLength; i++)
+            for (int i = 0; i < entity.Length; i++)
             {
                 genes[i] = false;
             }
@@ -147,12 +147,12 @@ namespace GenFxTests
             int length = 50;
             IGeneticAlgorithm algorithm = GetAlgorithm(length);
 
-            TestBinaryStringEntity entity = new TestBinaryStringEntity { InitialLength = length };
+            TestBinaryStringEntity entity = new TestBinaryStringEntity { MinimumStartingLength = length, MaximumStartingLength = length };
             entity.Initialize(algorithm);
-            Assert.AreEqual(length, entity.InitialLength, "Length not set correctly.");
+            Assert.AreEqual(length, entity.Length, "Length not set correctly.");
 
-            entity.InitialLength = length;
-            Assert.AreEqual(length, entity.InitialLength, "Length not set correctly.");
+            entity.Length = length;
+            Assert.AreEqual(length, entity.Length, "Length not set correctly.");
         }
 
         /// <summary>
@@ -164,7 +164,7 @@ namespace GenFxTests
             int length = 50;
             IGeneticAlgorithm algorithm = GetAlgorithm(length);
 
-            TestBinaryStringEntity entity = new TestBinaryStringEntity { InitialLength = 50 };
+            TestBinaryStringEntity entity = new TestBinaryStringEntity { MinimumStartingLength = length, MaximumStartingLength = length };
             entity.Initialize(algorithm);
             AssertEx.Throws<ArgumentException>(() => entity.Length = 51);
         }
@@ -213,7 +213,8 @@ namespace GenFxTests
                 PopulationSeed = new MockPopulation(),
                 GeneticEntitySeed = new TestBinaryStringEntity
                 {
-                    InitialLength = entityLength
+                    MinimumStartingLength = entityLength,
+                    MaximumStartingLength = entityLength
                 }
             };
             algorithm.GeneticEntitySeed.Initialize(algorithm);
@@ -222,18 +223,6 @@ namespace GenFxTests
 
         private class TestBinaryStringEntity : BinaryStringEntity
         {
-            [ConfigurationProperty]
-            public int InitialLength { get; set; }
-            
-            public override bool IsFixedSize
-            {
-                get { return true; }
-            }
-
-            protected override int GetInitialLength()
-            {
-                return this.InitialLength;
-            }
         }
         
         private class TestRandomUtil : IRandomNumberService

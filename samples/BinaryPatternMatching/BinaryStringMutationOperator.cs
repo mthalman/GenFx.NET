@@ -5,7 +5,7 @@ using GenFx.Validation;
 
 namespace BinaryPatternMatching
 {
-    [RequiredEntity(typeof(VariableLengthBinaryStringEntity))]
+    [RequiredEntity(typeof(BinaryStringEntity))]
     public class BinaryStringMutationOperator : UniformBitMutationOperator
     {
         protected override bool GenerateMutation(IGeneticEntity entity)
@@ -14,7 +14,7 @@ namespace BinaryPatternMatching
 
             // In addition to the base mutation implementation, each bit has a
             // probability (equal to the mutation rate) of being removed.
-            VariableLengthBinaryStringEntity binaryEntity = (VariableLengthBinaryStringEntity)entity;
+            BinaryStringEntity binaryEntity = (BinaryStringEntity)entity;
             for (int i = binaryEntity.Length - 1; i >= 0; i--)
             {
                 if (RandomNumberService.Instance.GetDouble() <= this.MutationRate)

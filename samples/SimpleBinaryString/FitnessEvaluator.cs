@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 
 namespace SimpleBinaryString
 {
-    [RequiredEntity(typeof(FixedLengthBinaryStringEntity))]
+    [RequiredEntity(typeof(BinaryStringEntity))]
     internal class FitnessEvaluator : FitnessEvaluatorBase
     {
         public override Task<double> EvaluateFitnessAsync(IGeneticEntity entity)
         {
-            FixedLengthBinaryStringEntity binStrEntity = (FixedLengthBinaryStringEntity)entity;
+            BinaryStringEntity binStrEntity = (BinaryStringEntity)entity;
 
             // The entity's fitness is equal to the number of "true" bits (a bit representing a 1 value)
             // it contains.

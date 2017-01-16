@@ -26,9 +26,10 @@ namespace SimpleBinaryString
             {
                 EnvironmentSize = 1,
                 FitnessEvaluator = new FitnessEvaluator(),
-                GeneticEntitySeed = new FixedLengthBinaryStringEntity
+                GeneticEntitySeed = new BinaryStringEntity
                 {
-                    FixedLength = 20
+                    MinimumStartingLength = 20,
+                    MaximumStartingLength = 20
                 },
                 PopulationSeed = new SimplePopulation
                 {

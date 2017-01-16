@@ -8,7 +8,7 @@ namespace GenFx.ComponentLibrary.Lists
     /// Entity made up of a list of integers.
     /// </summary>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix")]
-    public abstract class IntegerListEntity : ListEntity<int>, IIntegerListEntity
+    public class IntegerListEntity : ListEntity<int>, IIntegerListEntity
     {
         private const int DefaultMinElementValue = 0;
         private const int DefaultMaxElementValue = Int32.MaxValue;

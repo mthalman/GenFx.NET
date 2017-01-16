@@ -1,5 +1,5 @@
 ﻿using GenFx.ComponentLibrary.Base;
-using GenFx.Contracts;
+using GenFx.Validation;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -19,8 +19,37 @@ namespace GenFx.ComponentLibrary.Lists
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix")]
     public abstract class ListEntityBase<TItem> : GeneticEntity, IListEntityBase, IListEntityBase<TItem>
     {
+        private const int DefaultMaxLength = 20;
+        private const int DefaultMinLength = 5;
+
         private string representation;
-        
+        private int minimumStartingLength = DefaultMinLength;
+        private int maximumStartingLength = DefaultMaxLength;
+
+        /// <summary>
+        /// Gets or sets the maximum starting length a new entity can have.
+        /// </summary>
+        /// <exception cref="ValidationException">Value is not valid.</exception>
+        [ConfigurationProperty]
+        [IntegerValidator(MinValue = 1)]
+        public int MaximumStartingLength
+        {
+            get { return this.maximumStartingLength; }
+            set { this.SetProperty(ref this.maximumStartingLength, value); }
+        }
+
+        /// <summary>
+        /// Gets or sets the minimum starting length a new entity can have.
+        /// </summary>
+        /// <exception cref="ValidationException">Value is not valid.</exception>
+        [ConfigurationProperty]
+        [IntegerValidator(MinValue = 1)]
+        public int MinimumStartingLength
+        {
+            get { return this.minimumStartingLength; }
+            set { this.SetProperty(ref this.minimumStartingLength, value); }
+        }
+
         /// <summary>
         /// Returns the list string as a <see cref="String"/>.
         /// </summary>
@@ -62,7 +91,10 @@ namespace GenFx.ComponentLibrary.Lists
         /// <summary>
         /// When overriden by a derived class, gets a value indicating whether the list is a fixed size.
         /// </summary>
-        public abstract bool IsFixedSize { get; }
+        public bool IsFixedSize
+        {
+            get { return this.MinimumStartingLength == this.MaximumStartingLength; }
+        }
 
         /// <summary>
         /// Gets a value indicating whether the list is read-only.
@@ -72,6 +104,30 @@ namespace GenFx.ComponentLibrary.Lists
         bool ICollection.IsSynchronized { get { return false; } }
 
         object ICollection.SyncRoot { get { return null; } }
+
+        /// <summary>
+        /// Returns the initial length to use for the list.
+        /// </summary>
+        /// <returns>The initial length to use for the list.</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate")]
+        protected int GetInitialLength()
+        {
+            if (this.MinimumStartingLength > this.MaximumStartingLength)
+            {
+                throw new ValidationException(
+                    StringUtil.GetFormattedString(
+                    Resources.ErrorMsg_MismatchedMinMaxValues,
+                    nameof(this.MinimumStartingLength),
+                    nameof(this.MaximumStartingLength)));
+            }
+
+            if (this.MinimumStartingLength == this.MaximumStartingLength)
+            {
+                return this.MinimumStartingLength;
+            }
+
+            return RandomNumberService.Instance.GetRandomValue(this.MinimumStartingLength, this.MaximumStartingLength + 1);
+        }
 
         /// <summary>
         /// Adds the value to the end of the list.
