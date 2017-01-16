@@ -61,15 +61,13 @@ namespace GenFx.ComponentLibrary.SelectionOperators
         }
 
         /// <summary>
-        /// Selects a <see cref="GeneticEntity"/> from <paramref name="population"/> according to the
-        /// Boltzmann selection algorithm.
+        /// Selects the specified number of <see cref="GeneticEntity"/> objects from <paramref name="population"/>.
         /// </summary>
-        /// <param name="population"><see cref="Population"/> containing the <see cref="GeneticEntity"/>
+        /// <param name="entityCount">Number of <see cref="GeneticEntity"/> objects to select from the population.</param>
+        /// <param name="population"><see cref="Population"/> containing the <see cref="GeneticEntity"/> objects from which to select.
         /// objects from which to select.</param>
         /// <returns>The <see cref="GeneticEntity"/> object that was selected.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="population"/> is null.</exception>
-        /// <exception cref="OverflowException">Sum of the entity fitness values has exceeded the range of <see cref="Double"/>.</exception>
-        protected override GeneticEntity SelectEntityFromPopulation(Population population)
+        protected override IEnumerable<GeneticEntity> SelectEntitiesFromPopulation(int entityCount, Population population)
         {
             if (population == null)
             {
@@ -97,7 +95,13 @@ namespace GenFx.ComponentLibrary.SelectionOperators
                 wheelSlices.Add(new WheelSlice(entity, expectedValue));
             }
 
-            return RouletteWheelSampler.GetEntity(wheelSlices);
+            List<GeneticEntity> result = new List<GeneticEntity>();
+            for (int i = 0; i < entityCount; i++)
+            {
+                result.Add(RouletteWheelSampler.GetEntity(wheelSlices));
+            }
+
+            return result;
         }
 
         /// <summary>

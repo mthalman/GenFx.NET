@@ -4,6 +4,7 @@ using GenFxTests.Helpers;
 using GenFxTests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Collections.Generic;
 
 namespace GenFxTests
 {
@@ -41,8 +42,8 @@ namespace GenFxTests
             entity2.Initialize(algorithm);
             population.Entities.Add(entity1);
             population.Entities.Add(entity2);
-            GeneticEntity selectedEntity = op.SelectEntity(population);
-            Assert.AreSame(entity1, selectedEntity, "Incorrect entity selected.");
+            IList<GeneticEntity> selectedEntities = op.SelectEntities(1, population);
+            Assert.AreSame(entity1, selectedEntities[0], "Incorrect entity selected.");
             Assert.AreEqual(1, op.DoSelectCallCount, "Selection not called correctly.");
         }
 
@@ -57,7 +58,7 @@ namespace GenFxTests
             op.Initialize(algorithm);
             SimplePopulation population = new SimplePopulation();
             population.Initialize(algorithm);
-            AssertEx.Throws<ArgumentException>(() => op.SelectEntity(population));
+            AssertEx.Throws<ArgumentException>(() => op.SelectEntities(1, population));
         }
 
         /// <summary>
@@ -69,7 +70,7 @@ namespace GenFxTests
             GeneticAlgorithm algorithm = GetAlgorithm();
             MockSelectionOperator op = new MockSelectionOperator();
             op.Initialize(algorithm);
-            AssertEx.Throws<ArgumentNullException>(() => op.SelectEntity(null));
+            AssertEx.Throws<ArgumentNullException>(() => op.SelectEntities(1, null));
         }
 
         private GeneticAlgorithm GetAlgorithm()

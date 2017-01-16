@@ -17,31 +17,29 @@ namespace GenFx.ComponentLibrary.Lists
     public class SinglePointCrossoverOperator : CrossoverOperator
     {
         /// <summary>
-        /// Executes a single-point crossover between two list-based entities.
+        /// Initializes a new instance of this class.
         /// </summary>
-        /// <param name="entity1"><see cref="GeneticEntity"/> to be crossed over with <paramref name="entity2"/>.</param>
-        /// <param name="entity2"><see cref="GeneticEntity"/> to be crossed over with <paramref name="entity1"/>.</param>
-        /// <returns>
-        /// Collection of the list-based entities resulting from the crossover.  If no
-        /// crossover occurred, this collection contains the original values of <paramref name="entity1"/>
-        /// and <paramref name="entity2"/>.
-        /// </returns>
-        /// <exception cref="ArgumentNullException"><paramref name="entity1"/> is null.</exception>
-        /// <exception cref="ArgumentNullException"><paramref name="entity2"/> is null.</exception>
-        protected override IList<GeneticEntity> GenerateCrossover(GeneticEntity entity1, GeneticEntity entity2)
+        public SinglePointCrossoverOperator()
+            : base(2)
         {
-            if (entity1 == null)
-            {
-                throw new ArgumentNullException(nameof(entity1));
-            }
+        }
 
-            if (entity2 == null)
+        /// <summary>
+        /// When overriden in a derived class, generates a crossover based on the parent entities.
+        /// </summary>
+        /// <param name="parents">The <see cref="GeneticEntity"/> objects to be operated upon.</param>
+        /// <returns>
+        /// Collection of the <see cref="GeneticEntity"/> objects resulting from the crossover.
+        /// </returns>
+        protected override IEnumerable<GeneticEntity> GenerateCrossover(IList<GeneticEntity> parents)
+        {
+            if (parents == null)
             {
-                throw new ArgumentNullException(nameof(entity2));
+                throw new ArgumentNullException(nameof(parents));
             }
-
-            ListEntityBase listEntity1 = (ListEntityBase)entity1;
-            ListEntityBase listEntity2 = (ListEntityBase)entity2;
+            
+            ListEntityBase listEntity1 = (ListEntityBase)parents[0];
+            ListEntityBase listEntity2 = (ListEntityBase)parents[1];
 
             int entity1Length = listEntity1.Length;
             int entity2Length = listEntity2.Length;
@@ -71,8 +69,8 @@ namespace GenFx.ComponentLibrary.Lists
             listEntity1.Length = entity2Length;
             listEntity2.Length = entity1Length;
 
-            crossoverOffspring.Add(entity1);
-            crossoverOffspring.Add(entity2);
+            crossoverOffspring.Add(listEntity1);
+            crossoverOffspring.Add(listEntity2);
 
             return crossoverOffspring;
         }

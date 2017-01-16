@@ -298,6 +298,15 @@ namespace GenFx {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The result of invoking method &apos;{0}.{1}&apos; is null which is an invalid value.  It must return a non-null value..
+        /// </summary>
+        internal static string ErrorMsg_NullReturnValue {
+            get {
+                return ResourceManager.GetString("ErrorMsg_NullReturnValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Configuration property &apos;{0}&apos; must be set..
         /// </summary>
         internal static string ErrorMsg_RequiredPropertyNotSet {

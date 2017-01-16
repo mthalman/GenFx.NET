@@ -19,31 +19,29 @@ namespace GenFx.ComponentLibrary.Lists
     public class VariableSinglePointCrossoverOperator : CrossoverOperator
     {
         /// <summary>
-        /// Executes a single-point crossover between two <see cref="ListEntityBase"/> objects.
+        /// Initializes a new instance of this class.
         /// </summary>
-        /// <param name="entity1"><see cref="GeneticEntity"/> to be crossed over with <paramref name="entity2"/>.</param>
-        /// <param name="entity2"><see cref="GeneticEntity"/> to be crossed over with <paramref name="entity1"/>.</param>
-        /// <returns>
-        /// Collection of the <see cref="ListEntityBase"/> objects resulting from the crossover.  If no
-        /// crossover occurred, this collection contains the original values of <paramref name="entity1"/>
-        /// and <paramref name="entity2"/>.
-        /// </returns>
-        /// <exception cref="ArgumentNullException"><paramref name="entity1"/> is null.</exception>
-        /// <exception cref="ArgumentNullException"><paramref name="entity2"/> is null.</exception>
-        protected override IList<GeneticEntity> GenerateCrossover(GeneticEntity entity1, GeneticEntity entity2)
+        public VariableSinglePointCrossoverOperator()
+            : base(2)
         {
-            if (entity1 == null)
+        }
+
+        /// <summary>
+        /// When overriden in a derived class, generates a crossover based on the parent entities.
+        /// </summary>
+        /// <param name="parents">The <see cref="GeneticEntity"/> objects to be operated upon.</param>
+        /// <returns>
+        /// Collection of the <see cref="GeneticEntity"/> objects resulting from the crossover.
+        /// </returns>
+        protected override IEnumerable<GeneticEntity> GenerateCrossover(IList<GeneticEntity> parents)
+        {
+            if (parents == null)
             {
-                throw new ArgumentNullException(nameof(entity1));
+                throw new ArgumentNullException(nameof(parents));
             }
 
-            if (entity2 == null)
-            {
-                throw new ArgumentNullException(nameof(entity2));
-            }
-
-            ListEntityBase listEntity1 = (ListEntityBase)entity1;
-            ListEntityBase listEntity2 = (ListEntityBase)entity2;
+            ListEntityBase listEntity1 = (ListEntityBase)parents[0];
+            ListEntityBase listEntity2 = (ListEntityBase)parents[1];
 
             int crossoverLocus1 = RandomNumberService.Instance.GetRandomValue(listEntity1.Length);
             int crossoverLocus2 = RandomNumberService.Instance.GetRandomValue(listEntity2.Length);

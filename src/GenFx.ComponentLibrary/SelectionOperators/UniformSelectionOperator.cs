@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace GenFx.ComponentLibrary.SelectionOperators
 {
@@ -9,22 +10,27 @@ namespace GenFx.ComponentLibrary.SelectionOperators
     public class UniformSelectionOperator : SelectionOperator
     {
         /// <summary>
-        /// Selects a <see cref="GeneticEntity"/> from <paramref name="population"/> with all <see cref="GeneticEntity"/>
-        /// objects having an equal probability of being selected.
+        /// Selects the specified number of <see cref="GeneticEntity"/> objects from <paramref name="population"/>.
         /// </summary>
-        /// <param name="population"><see cref="Population"/> containing the <see cref="GeneticEntity"/>
+        /// <param name="entityCount">Number of <see cref="GeneticEntity"/> objects to select from the population.</param>
+        /// <param name="population"><see cref="Population"/> containing the <see cref="GeneticEntity"/> objects from which to select.
         /// objects from which to select.</param>
         /// <returns>The <see cref="GeneticEntity"/> object that was selected.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="population"/> is null.</exception>
-        protected override GeneticEntity SelectEntityFromPopulation(Population population)
+        protected override IEnumerable<GeneticEntity> SelectEntitiesFromPopulation(int entityCount, Population population)
         {
             if (population == null)
             {
                 throw new ArgumentNullException(nameof(population));
             }
 
-            int selectedEntityIndex = RandomNumberService.Instance.GetRandomValue(population.Entities.Count);
-            return population.Entities[selectedEntityIndex];
+            List<GeneticEntity> result = new List<GeneticEntity>();
+            for (int i = 0; i < entityCount; i++)
+            {
+                int selectedEntityIndex = RandomNumberService.Instance.GetRandomValue(population.Entities.Count);
+                result.Add(population.Entities[selectedEntityIndex]);
+            }
+
+            return result;
         }
     }
 }

@@ -63,10 +63,10 @@ namespace GenFxTests
                 FitnessEvaluator = new MockFitnessEvaluator(),
                 SelectionOperator = new MockSelectionOperator(),
                 GeneticEntitySeed = new MockEntity(),
-                EnvironmentSize = environmentSize,
+                MinimumEnvironmentSize = environmentSize,
                 PopulationSeed = new MockPopulation
                 {
-                    PopulationSize = populationSize
+                    MinimumPopulationSize = populationSize
                 }
             };
             algorithm.PopulationSeed.Initialize(algorithm);

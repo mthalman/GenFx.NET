@@ -12,14 +12,13 @@ namespace GenFx.ComponentLibrary.SelectionOperators
     public class FitnessProportionateSelectionOperator : SelectionOperator
     {
         /// <summary>
-        /// Selects a <see cref="GeneticEntity"/> from <paramref name="population"/> using the <see cref="RouletteWheelSampler"/>
-        /// based on the fitness values of the <see cref="GeneticEntity"/> objects.
+        /// Selects the specified number of <see cref="GeneticEntity"/> objects from <paramref name="population"/>.
         /// </summary>
-        /// <param name="population"><see cref="Population"/> containing the <see cref="GeneticEntity"/>
+        /// <param name="entityCount">Number of <see cref="GeneticEntity"/> objects to select from the population.</param>
+        /// <param name="population"><see cref="Population"/> containing the <see cref="GeneticEntity"/> objects from which to select.
         /// objects from which to select.</param>
         /// <returns>The <see cref="GeneticEntity"/> object that was selected.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="population"/> is null.</exception>
-        protected override GeneticEntity SelectEntityFromPopulation(Population population)
+        protected override IEnumerable<GeneticEntity> SelectEntitiesFromPopulation(int entityCount, Population population)
         {
             if (population == null)
             {
@@ -76,7 +75,13 @@ namespace GenFx.ComponentLibrary.SelectionOperators
 
             List<WheelSlice> wheelSlices = new List<WheelSlice>(tempSlices.Select(slice => new WheelSlice(slice.Entity, slice.Size)));
 
-            return RouletteWheelSampler.GetEntity(wheelSlices);
+            List<GeneticEntity> result = new List<GeneticEntity>();
+            for (int i = 0; i < entityCount; i++)
+            {
+                result.Add(RouletteWheelSampler.GetEntity(wheelSlices));
+            }
+
+            return result;
         }
 
         private class TemporaryWheelSlice

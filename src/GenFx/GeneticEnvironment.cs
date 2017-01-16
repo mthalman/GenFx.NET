@@ -84,7 +84,7 @@ namespace GenFx
         {
             List<Task> generatePopulationTasks = new List<Task>();
 
-            for (int i = 0; i < this.algorithm.EnvironmentSize; i++)
+            for (int i = 0; i < this.algorithm.MinimumEnvironmentSize; i++)
             {
                 Population newPopulation = (Population)this.algorithm.PopulationSeed.CreateNewAndInitialize();
                 newPopulation.Index = i;

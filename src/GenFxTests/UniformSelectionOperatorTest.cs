@@ -54,20 +54,20 @@ namespace GenFxTests
             RandomNumberService.Instance = randomUtil;
 
             randomUtil.Value = 3;
-            GeneticEntity selectedEntity = op.SelectEntity(population);
-            Assert.AreSame(population.Entities[randomUtil.Value], selectedEntity, "Incorrect selected entity.");
+            IList<GeneticEntity> selectedEntities = op.SelectEntities(1, population);
+            Assert.AreSame(population.Entities[randomUtil.Value], selectedEntities[0], "Incorrect selected entity.");
 
             randomUtil.Value = 2;
-            selectedEntity = op.SelectEntity(population);
-            Assert.AreSame(population.Entities[randomUtil.Value], selectedEntity, "Incorrect selected entity.");
+            selectedEntities = op.SelectEntities(1, population);
+            Assert.AreSame(population.Entities[randomUtil.Value], selectedEntities[0], "Incorrect selected entity.");
 
             randomUtil.Value = 1;
-            selectedEntity = op.SelectEntity(population);
-            Assert.AreSame(population.Entities[randomUtil.Value], selectedEntity, "Incorrect selected entity.");
+            selectedEntities = op.SelectEntities(1, population);
+            Assert.AreSame(population.Entities[randomUtil.Value], selectedEntities[0], "Incorrect selected entity.");
 
             randomUtil.Value = 0;
-            selectedEntity = op.SelectEntity(population);
-            Assert.AreSame(population.Entities[randomUtil.Value], selectedEntity, "Incorrect selected entity.");
+            selectedEntities = op.SelectEntities(1, population);
+            Assert.AreSame(population.Entities[randomUtil.Value], selectedEntities[0], "Incorrect selected entity.");
         }
 
         private class TestRandomUtil : IRandomNumberService

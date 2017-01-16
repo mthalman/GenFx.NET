@@ -77,9 +77,9 @@ namespace GenFxTests
             int prevPopCount = population.Entities.Count;
             await (Task)ssAccessor.Invoke("CreateNextGenerationAsync", population);
 
-            Assert.AreEqual(4, ((MockSelectionOperator)algorithm.SelectionOperator).DoSelectCallCount, "Selection not called correctly.");
-            Assert.AreEqual(2, ((MockCrossoverOperator)algorithm.CrossoverOperator).DoCrossoverCallCount, "Crossover not called correctly.");
-            Assert.AreEqual(4, ((MockMutationOperator)algorithm.MutationOperator).DoMutateCallCount, "Mutation not called correctly.");
+            Assert.AreEqual(1, ((MockSelectionOperator)algorithm.SelectionOperator).DoSelectCallCount, "Selection not called correctly.");
+            Assert.AreEqual(1, ((MockCrossoverOperator)algorithm.CrossoverOperator).DoCrossoverCallCount, "Crossover not called correctly.");
+            Assert.AreEqual(2, ((MockMutationOperator)algorithm.MutationOperator).DoMutateCallCount, "Mutation not called correctly.");
             Assert.AreEqual(prevPopCount, population.Entities.Count, "New population not created correctly.");
         }
 
@@ -94,7 +94,7 @@ namespace GenFxTests
 
         private static SimplePopulation GetPopulation(GeneticAlgorithm algorithm)
         {
-            SimplePopulation population = new SimplePopulation();
+            SimplePopulation population = new SimplePopulation { MinimumPopulationSize = 3 };
             population.Initialize(algorithm);
 
             for (int i = 0; i < 3; i++)

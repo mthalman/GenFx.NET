@@ -460,60 +460,6 @@ namespace GenFxTests
         }
 
         /// <summary>
-        /// Tests that the SelectGeneticEntitiesAndApplyCrossoverAndMutation method works correctly.
-        /// </summary>
-        [TestMethod]
-        public void GeneticAlgorithm_SelectGeneticEntitiesAndApplyCrossoverAndMutation()
-        {
-            GeneticAlgorithm algorithm = new TestGeneticAlgorithm
-            {
-                FitnessEvaluator = new MockFitnessEvaluator(),
-                GeneticEntitySeed = new MockEntity(),
-                PopulationSeed = new SimplePopulation(),
-                CrossoverOperator = new MockCrossoverOperator
-                {
-                    CrossoverRate = 1
-                },
-                MutationOperator = new MockMutationOperator
-                {
-                    MutationRate = 1
-                },
-                SelectionOperator = new MockSelectionOperator
-                {
-                    SelectionBasedOnFitnessType = FitnessType.Scaled
-                }
-            };
-
-            MockCrossoverOperator crossoverOp = (MockCrossoverOperator)algorithm.CrossoverOperator;
-            crossoverOp.Initialize(algorithm);
-            algorithm.CrossoverOperator = crossoverOp;
-            MockMutationOperator mutationOp = new MockMutationOperator();
-            mutationOp.Initialize(algorithm);
-            algorithm.MutationOperator = mutationOp;
-            MockSelectionOperator selectionOp = new MockSelectionOperator();
-            selectionOp.Initialize(algorithm);
-            algorithm.SelectionOperator = selectionOp;
-
-            SimplePopulation population = new SimplePopulation();
-            population.Initialize(algorithm);
-            for (int i = 0; i < 10; i++)
-            {
-                MockEntity entity = new MockEntity();
-                entity.Initialize(algorithm);
-                population.Entities.Add(entity);
-            }
-
-            PrivateObject algAccessor = new PrivateObject(algorithm);
-
-            IList<GeneticEntity> geneticEntities = (IList<GeneticEntity>)algAccessor.Invoke("SelectGeneticEntitiesAndApplyCrossoverAndMutation", population);
-
-            Assert.AreEqual(2, geneticEntities.Count, "Incorrect number of genetic entities returned.");
-            Assert.AreEqual(2, selectionOp.DoSelectCallCount, "Selection not called correctly.");
-            Assert.AreEqual(1, crossoverOp.DoCrossoverCallCount, "Crossover not called correctly.");
-            Assert.AreEqual(2, mutationOp.DoMutateCallCount, "Mutation not called correctly.");
-        }
-
-        /// <summary>
         /// Tests that the ApplyCrossover method works correctly.
         /// </summary>
         [TestMethod]
@@ -541,7 +487,7 @@ namespace GenFxTests
             entity1.Initialize(algorithm);
             MockEntity entity2 = new MockEntity();
             entity2.Initialize(algorithm);
-            IList<GeneticEntity> geneticEntities = (IList<GeneticEntity>)algAccessor.Invoke("ApplyCrossover", entity1, entity2);
+            IList<GeneticEntity> geneticEntities = (IList<GeneticEntity>)algAccessor.Invoke("ApplyCrossover", algorithm.PopulationSeed, new GeneticEntity[] { entity1, entity2 });
 
             Assert.AreEqual(2, geneticEntities.Count, "Incorrect number of genetic entities returned.");
             Assert.AreEqual(1, crossoverOp.DoCrossoverCallCount, "Crossover not called correctly.");
@@ -1017,9 +963,9 @@ namespace GenFxTests
         {
             SimpleGeneticAlgorithm target = new SimpleGeneticAlgorithm();
             int val = 2;
-            target.EnvironmentSize = val;
+            target.MinimumEnvironmentSize = val;
 
-            Assert.AreEqual(val, target.EnvironmentSize, "EnvironmentSize was not set correctly.");
+            Assert.AreEqual(val, target.MinimumEnvironmentSize, "EnvironmentSize was not set correctly.");
         }
 
         /// <summary>
@@ -1031,7 +977,7 @@ namespace GenFxTests
         {
             SimpleGeneticAlgorithm target = new SimpleGeneticAlgorithm();
             int val = 0;
-            AssertEx.Throws<ValidationException>(() => target.EnvironmentSize = val);
+            AssertEx.Throws<ValidationException>(() => target.MinimumEnvironmentSize = val);
         }
 
         private static async Task<GeneticAlgorithm> TestInitializeAsync(MockGeneticAlgorithm algorithm, bool initializeExceptionExpected = false)
@@ -1054,8 +1000,8 @@ namespace GenFxTests
 
             Assert.AreEqual(0, algorithm.CurrentGeneration, "Generation should be initialized.");
             
-            Assert.AreEqual(algorithm.EnvironmentSize, algorithm.Environment.Populations.Count, "Environment not initialized correctly.");
-            Assert.AreEqual(algorithm.PopulationSeed.PopulationSize, algorithm.Environment.Populations[0].Entities.Count, "Population not initialized correctly.");
+            Assert.AreEqual(algorithm.MinimumEnvironmentSize, algorithm.Environment.Populations.Count, "Environment not initialized correctly.");
+            Assert.AreEqual(algorithm.PopulationSeed.MinimumPopulationSize, algorithm.Environment.Populations[0].Entities.Count, "Population not initialized correctly.");
 
             MockEntity entity = (MockEntity)algorithm.Environment.Populations[0].Entities[0];
             double entityId = Double.Parse(entity.Identifier);
@@ -1072,10 +1018,10 @@ namespace GenFxTests
             int populationSize = 100;
 
             TestGeneticAlgorithm algorithm = new TestGeneticAlgorithm();
-            algorithm.EnvironmentSize = environmentSize;
+            algorithm.MinimumEnvironmentSize = environmentSize;
 
             MockPopulation popConfig = new MockPopulation();
-            popConfig.PopulationSize = populationSize;
+            popConfig.MinimumPopulationSize = populationSize;
             algorithm.PopulationSeed = popConfig;
 
             MockCrossoverOperator crossConfig = new MockCrossoverOperator();

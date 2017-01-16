@@ -27,7 +27,10 @@ namespace GenFxTests
             {
                 FitnessEvaluator = new MockFitnessEvaluator(),
                 GeneticEntitySeed = new MockEntity(),
-                PopulationSeed = new SimplePopulation(),
+                PopulationSeed = new SimplePopulation
+                {
+                    MinimumPopulationSize = 3
+                },
                 MigrantCount = 1,
                 SelectionOperator = new MockSelectionOperator
                 {
@@ -48,7 +51,7 @@ namespace GenFxTests
             int prevPopCount = population.Entities.Count;
             await (Task)accessor.Invoke("CreateNextGenerationAsync", population);
 
-            Assert.AreEqual(4, selectionOp.DoSelectCallCount, "Selection not called correctly.");
+            Assert.AreEqual(1, selectionOp.DoSelectCallCount, "Selection not called correctly.");
             Assert.AreEqual(prevPopCount, population.Entities.Count, "New population not created correctly.");
         }
 
@@ -60,11 +63,11 @@ namespace GenFxTests
         {
             MultiDemeGeneticAlgorithm algorithm = new MultiDemeGeneticAlgorithm
             {
-                EnvironmentSize = 3,
+                MinimumEnvironmentSize = 3,
                 GeneticEntitySeed = new MockEntity(),
                 PopulationSeed = new SimplePopulation
                 {
-                    PopulationSize = 4
+                    MinimumPopulationSize = 4
                 },
                 FitnessEvaluator = new MockFitnessEvaluator(),
                 MigrantCount = 2,
@@ -116,7 +119,7 @@ namespace GenFxTests
 
         private static SimplePopulation GetPopulation(GeneticAlgorithm algorithm)
         {
-            SimplePopulation population = new SimplePopulation();
+            SimplePopulation population = new SimplePopulation { MinimumPopulationSize = 3 };
             population.Initialize(algorithm);
 
             for (int i = 0; i < 3; i++)

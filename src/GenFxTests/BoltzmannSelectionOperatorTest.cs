@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Linq;
 using GenFx;
 using GenFx.ComponentLibrary.SelectionOperators;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using GenFxTests.Mocks;
 using GenFxTests.Helpers;
+using System.Collections.Generic;
 
 namespace GenFxTests
 {
@@ -50,8 +52,9 @@ namespace GenFxTests
             entity2.Initialize(algorithm);
             population.Entities.Add(entity2);
 
-            GeneticEntity entity = op.SelectEntity(population);
-            Assert.IsNotNull(entity, "An entity should have been selected.");
+            IEnumerable<GeneticEntity> entities = op.SelectEntities(2, population);
+            Assert.IsNotNull(entities, "An entity should have been selected.");
+            Assert.IsTrue(entities.Count() > 0, "An entity should have been selected.");
         }
 
         /// <summary>
@@ -92,7 +95,7 @@ namespace GenFxTests
             entity.Initialize(algorithm);
             entity.ScaledFitnessValue = 1;
             population.Entities.Add(entity);
-            AssertEx.Throws<OverflowException>(() => op.SelectEntity(population));
+            AssertEx.Throws<OverflowException>(() => op.SelectEntities(1, population));
         }
 
         private static MockGeneticAlgorithm GetMockAlgorithm(double initialTemp)

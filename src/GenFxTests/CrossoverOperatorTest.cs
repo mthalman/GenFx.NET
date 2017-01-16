@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using GenFx;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using GenFxTests.Mocks;
@@ -62,7 +63,7 @@ namespace GenFxTests
             entity2.Initialize(algorithm);
             entity2.Age = 5;
             entity2.Identifier = "3";
-            IList<GeneticEntity> geneticEntities = op.Crossover(entity1, entity2);
+            IList<GeneticEntity> geneticEntities = op.Crossover(new GeneticEntity[] { entity1, entity2 }).ToList();
             Assert.AreNotSame(entity1, geneticEntities[1], "Clone was not called correctly.");
             Assert.AreNotSame(entity2, geneticEntities[0], "Clone was not called correctly.");
             Assert.AreEqual(entity1.Identifier, ((MockEntity)geneticEntities[1]).Identifier, "Entity value was not swapped.");
@@ -88,7 +89,7 @@ namespace GenFxTests
             MockEntity entity2 = new MockEntity();
             entity2.Initialize(algorithm);
             entity2.Identifier = "3";
-            IList<GeneticEntity> geneticEntities = op.Crossover(entity1, entity2);
+            IList<GeneticEntity> geneticEntities = op.Crossover(new GeneticEntity[] { entity1, entity2 }).ToList();
             Assert.AreSame(entity1, geneticEntities[0], "Different entity was returned.");
             Assert.AreSame(entity2, geneticEntities[1], "Different entity was returned.");
         }
@@ -111,10 +112,14 @@ namespace GenFxTests
 
         private class FakeCrossoverOperator : CrossoverOperator
         {
-            protected override IList<GeneticEntity> GenerateCrossover(GeneticEntity entity1, GeneticEntity entity2)
+            public FakeCrossoverOperator() : base(2)
             {
-                MockEntity mockEntity1 = (MockEntity)entity1;
-                MockEntity mockEntity2 = (MockEntity)entity2;
+            }
+
+            protected override IEnumerable<GeneticEntity> GenerateCrossover(IList<GeneticEntity> parents)
+            {
+                MockEntity mockEntity1 = (MockEntity)parents[0];
+                MockEntity mockEntity2 = (MockEntity)parents[1];
                 List<GeneticEntity> geneticEntities = new List<GeneticEntity>();
                 geneticEntities.Add(mockEntity2);
                 geneticEntities.Add(mockEntity1);

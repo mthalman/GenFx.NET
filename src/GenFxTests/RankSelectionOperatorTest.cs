@@ -5,6 +5,7 @@ using GenFxTests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace GenFxTests
@@ -55,36 +56,36 @@ namespace GenFxTests
             RandomNumberService.Instance = randomUtil;
 
             randomUtil.Ratio = 0;
-            GeneticEntity selectedEntity = op.SelectEntity(population);
-            Assert.AreSame(entity1, selectedEntity, "Incorrect entity seleceted.");
+            IList<GeneticEntity> selectedEntities = op.SelectEntities(1, population).ToList();
+            Assert.AreSame(entity1, selectedEntities[0], "Incorrect entity seleceted.");
 
             randomUtil.Ratio = .099999;
-            selectedEntity = op.SelectEntity(population);
-            Assert.AreSame(entity1, selectedEntity, "Incorrect entity seleceted.");
+            selectedEntities = op.SelectEntities(1, population);
+            Assert.AreSame(entity1, selectedEntities[0], "Incorrect entity seleceted.");
 
             randomUtil.Ratio = .1;
-            selectedEntity = op.SelectEntity(population);
-            Assert.AreSame(entity3, selectedEntity, "Incorrect entity seleceted.");
+            selectedEntities = op.SelectEntities(1, population);
+            Assert.AreSame(entity3, selectedEntities[0], "Incorrect entity seleceted.");
 
             randomUtil.Ratio = .299999;
-            selectedEntity = op.SelectEntity(population);
-            Assert.AreSame(entity3, selectedEntity, "Incorrect entity seleceted.");
+            selectedEntities = op.SelectEntities(1, population);
+            Assert.AreSame(entity3, selectedEntities[0], "Incorrect entity seleceted.");
 
             randomUtil.Ratio = .3;
-            selectedEntity = op.SelectEntity(population);
-            Assert.AreSame(entity4, selectedEntity, "Incorrect entity seleceted.");
+            selectedEntities = op.SelectEntities(1, population);
+            Assert.AreSame(entity4, selectedEntities[0], "Incorrect entity seleceted.");
 
             randomUtil.Ratio = .599999;
-            selectedEntity = op.SelectEntity(population);
-            Assert.AreSame(entity4, selectedEntity, "Incorrect entity seleceted.");
+            selectedEntities = op.SelectEntities(1, population);
+            Assert.AreSame(entity4, selectedEntities[0], "Incorrect entity seleceted.");
 
             randomUtil.Ratio = .6;
-            selectedEntity = op.SelectEntity(population);
-            Assert.AreSame(entity2, selectedEntity, "Incorrect entity seleceted.");
+            selectedEntities = op.SelectEntities(1, population);
+            Assert.AreSame(entity2, selectedEntities[0], "Incorrect entity seleceted.");
 
             randomUtil.Ratio = 1;
-            selectedEntity = op.SelectEntity(population);
-            Assert.AreSame(entity2, selectedEntity, "Incorrect entity seleceted.");
+            selectedEntities = op.SelectEntities(1, population);
+            Assert.AreSame(entity2, selectedEntities[0], "Incorrect entity seleceted.");
         }
 
         private static GeneticAlgorithm GetAlgorithm()

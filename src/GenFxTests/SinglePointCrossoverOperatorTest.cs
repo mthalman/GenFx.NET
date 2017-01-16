@@ -4,6 +4,7 @@ using GenFxTests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace GenFxTests
 {
@@ -62,7 +63,7 @@ namespace GenFxTests
             RandomNumberService.Instance = randomUtil;
 
             randomUtil.RandomVal = 1;
-            IList<GeneticEntity> result = op.Crossover(entity1, entity2);
+            IList<GeneticEntity> result = op.Crossover(new GeneticEntity[] { entity1, entity2 }).ToList();
 
             BinaryStringEntity resultEntity1 = (BinaryStringEntity)result[0];
             BinaryStringEntity resultEntity2 = (BinaryStringEntity)result[1];
@@ -71,7 +72,7 @@ namespace GenFxTests
             Assert.AreEqual("1001", resultEntity2.Representation, "Crossover not correct.");
 
             randomUtil.RandomVal = 3;
-            result = op.Crossover(entity1, entity2);
+            result = op.Crossover(new GeneticEntity[] { entity1, entity2 }).ToList();
 
             resultEntity1 = (BinaryStringEntity)result[0];
             resultEntity2 = (BinaryStringEntity)result[1];
