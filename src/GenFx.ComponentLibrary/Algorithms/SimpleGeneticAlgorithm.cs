@@ -28,8 +28,6 @@ namespace GenFx.ComponentLibrary.Algorithms
 
             IList<GeneticEntity> eliteGeneticEntities = this.ApplyElitism(population);
 
-            int populationCount = population.Entities.Count;
-
             ObservableCollection<GeneticEntity> nextGeneration = new ObservableCollection<GeneticEntity>();
 
             foreach (GeneticEntity entity in eliteGeneticEntities)
@@ -38,18 +36,10 @@ namespace GenFx.ComponentLibrary.Algorithms
                 population.Entities.Remove(entity);
             }
 
-            while (nextGeneration.Count != populationCount)
-            {
-                IList<GeneticEntity> childGeneticEntities = this.SelectGeneticEntitiesAndApplyCrossoverAndMutation(population);
-
-                foreach (GeneticEntity entity in childGeneticEntities)
-                {
-                    if (nextGeneration.Count != populationCount)
-                    {
-                        nextGeneration.Add(entity);
-                    }
-                }
-            }
+            IList<GeneticEntity> parents = this.ApplySelection(population.MinimumPopulationSize - nextGeneration.Count, population);
+            IList<GeneticEntity> offspring = this.ApplyCrossover(population, parents);
+            offspring = this.ApplyMutation(offspring);
+            nextGeneration.AddRange(offspring);
 
             population.Entities.Clear();
             population.Entities.AddRange(nextGeneration);

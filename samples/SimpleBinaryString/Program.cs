@@ -22,7 +22,7 @@ namespace SimpleBinaryString
         {
             SimpleGeneticAlgorithm algorithm = new SimpleGeneticAlgorithm
             {
-                EnvironmentSize = 1,
+                MinimumEnvironmentSize = 1,
                 FitnessEvaluator = new FitnessEvaluator(),
                 GeneticEntitySeed = new BinaryStringEntity
                 {
@@ -31,7 +31,7 @@ namespace SimpleBinaryString
                 },
                 PopulationSeed = new SimplePopulation
                 {
-                    PopulationSize = 100
+                    MinimumPopulationSize = 100
                 },
                 SelectionOperator = new FitnessProportionateSelectionOperator
                 {

@@ -4,6 +4,7 @@ using GenFxTests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace GenFxTests
@@ -58,7 +59,7 @@ namespace GenFxTests
 
             RandomNumberService.Instance = new TestRandomUtil();
 
-            IList<GeneticEntity> result = op.Crossover(entity1, entity2);
+            IList<GeneticEntity> result = op.Crossover(new GeneticEntity[] { entity1, entity2 }).ToList();
 
             FakeTreeNode rootNode1 = (FakeTreeNode)((TreeEntityBase)result[0]).RootNode;
             FakeTreeNode rootNode2 = (FakeTreeNode)((TreeEntityBase)result[1]).RootNode;

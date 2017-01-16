@@ -34,7 +34,7 @@ namespace GenFx
         private ElitismStrategy elitismStrategy;
         private GeneticEntity geneticEntitySeed;
         private Population populationSeed;
-        private int environmentSize = DefaultEnvironmentSize;
+        private int minimumEnvironmentSize = DefaultEnvironmentSize;
 
         // Mapping of component properties to Validator objects as described by external components.
         private Dictionary<PropertyInfo, List<Validator>> externalValidationMapping;
@@ -72,7 +72,7 @@ namespace GenFx
         public event EventHandler AlgorithmStarting;
 
         /// <summary>
-        /// Gets or sets the number of <see cref="Population"/> objects that are contained by the <see cref="GeneticEnvironment"/>.
+        /// Gets or sets the minimum number of <see cref="Population"/> objects that are contained by the <see cref="GeneticEnvironment"/>.
         /// </summary>
         /// <value>
         /// The number of populations that are contained by the <see cref="GeneticEnvironment"/>.
@@ -81,10 +81,10 @@ namespace GenFx
         /// <exception cref="ValidationException">Value is not valid.</exception>
         [ConfigurationProperty]
         [IntegerValidator(MinValue = 1)]
-        public int EnvironmentSize
+        public int MinimumEnvironmentSize
         {
-            get { return this.environmentSize; }
-            set { this.SetProperty(ref this.environmentSize, value); }
+            get { return this.minimumEnvironmentSize; }
+            set { this.SetProperty(ref this.minimumEnvironmentSize, value); }
         }
 
         /// <summary>
@@ -316,7 +316,7 @@ namespace GenFx
             this.environment.RestoreState((KeyValueMap)state[nameof(this.environment)]);
             this.currentGeneration = (int)state[nameof(this.currentGeneration)];
             this.isInitialized = (bool)state[nameof(this.isInitialized)];
-            this.EnvironmentSize = (int)state[nameof(this.EnvironmentSize)];
+            this.MinimumEnvironmentSize = (int)state[nameof(this.MinimumEnvironmentSize)];
 
             KeyValueMapCollection statisticStates = (KeyValueMapCollection)state[nameof(this.Statistics)];
             for (int i = 0; i < statisticStates.Count; i++)
@@ -357,7 +357,7 @@ namespace GenFx
             state[nameof(this.environment)] = this.environment.SaveState();
             state[nameof(this.currentGeneration)] = this.currentGeneration;
             state[nameof(this.isInitialized)] = this.isInitialized;
-            state[nameof(this.EnvironmentSize)] = this.EnvironmentSize;
+            state[nameof(this.MinimumEnvironmentSize)] = this.MinimumEnvironmentSize;
 
             state[nameof(this.Statistics)] = new KeyValueMapCollection(this.statistics.Select(s => s.SaveState()).Cast<KeyValueMap>());
             state[nameof(this.Plugins)] = new KeyValueMapCollection(this.plugins.Select(s => s.SaveState()).Cast<KeyValueMap>());
@@ -426,6 +426,17 @@ namespace GenFx
         protected abstract Task CreateNextGenerationAsync(Population population);
 
         /// <summary>
+        /// Helper method used to apply the <see cref="GenFx.SelectionOperator"/>.
+        /// </summary>
+        /// <param name="entityCount">Number of <see cref="GeneticEntity"/> objects to select from the population.</param>
+        /// <param name="currentPopulation"><see cref="Population"/> containing the <see cref="GeneticEntity"/> objects from which to select.</param>
+        /// <returns>The selected <see cref="GeneticEntity"/> objects.</returns>
+        protected IList<GeneticEntity> ApplySelection(int entityCount, Population currentPopulation)
+        {
+            return this.SelectionOperator.SelectEntities(entityCount, currentPopulation);
+        }
+
+        /// <summary>
         /// Helper method used to apply the <see cref="GenFx.ElitismStrategy"/>, if one is set, to the <paramref name="currentPopulation"/>.
         /// </summary>
         /// <param name="currentPopulation"><see cref="Population"/> from which to select the
@@ -449,64 +460,80 @@ namespace GenFx
             }
         }
 
+        ///// <summary>
+        ///// Selects entities from the population and applies
+        ///// the <see cref="GenFx.CrossoverOperator"/> and <see cref="GenFx.MutationOperator"/>, if they exist, to the selected
+        ///// entities.
+        ///// </summary>
+        ///// <param name="population"><see cref="Population"/> from which to select the entities.</param>
+        ///// <returns>
+        ///// List of entities that were selected from the <paramref name="population"/>
+        ///// and potentially modified through crossover and mutation.
+        ///// </returns>
+        ///// <exception cref="ArgumentNullException"><paramref name="population"/> is null.</exception>
+        //protected IList<GeneticEntity> SelectGeneticEntitiesAndApplyCrossoverAndMutation(Population population)
+        //{
+        //    if (population == null)
+        //    {
+        //        throw new ArgumentNullException(nameof(population));
+        //    }
+
+        //    IList<GeneticEntity> parents = this.SelectionOperator.SelectEntities(population.MinimumPopulationSize, population).ToList();
+        //    IList<GeneticEntity> offspring = this.ApplyCrossover(population, parents);
+        //    offspring = this.ApplyMutation(offspring);
+        //    return offspring;
+        //}
+
         /// <summary>
-        /// Selects two entities from the population and applies
-        /// the <see cref="GenFx.CrossoverOperator"/> and <see cref="GenFx.MutationOperator"/>, if they exist, to the selected
-        /// entities.
+        /// Applies the <see cref="GenFx.CrossoverOperator"/>, if one is set, to the genetic entities.
         /// </summary>
-        /// <param name="population"><see cref="Population"/> from which to select the entities.</param>
-        /// <returns>
-        /// List of entities that were selected from the <paramref name="population"/>
-        /// and potentially modified through crossover and mutation.
-        /// </returns>
-        /// <exception cref="ArgumentNullException"><paramref name="population"/> is null.</exception>
-        protected IList<GeneticEntity> SelectGeneticEntitiesAndApplyCrossoverAndMutation(Population population)
+        /// <param name="population">Current population.</param>
+        /// <param name="parents">Parents to which to apply the crossover operation.</param>
+        /// <returns>List of entities after the crossover was applied.</returns>
+        protected IList<GeneticEntity> ApplyCrossover(Population population, IList<GeneticEntity> parents)
         {
             if (population == null)
             {
                 throw new ArgumentNullException(nameof(population));
             }
 
-            GeneticEntity entity1 = this.SelectionOperator.SelectEntity(population);
-            GeneticEntity entity2 = this.SelectionOperator.SelectEntity(population);
-
-            IList<GeneticEntity> childGeneticEntities = this.ApplyCrossover(entity1, entity2);
-            childGeneticEntities = this.ApplyMutation(childGeneticEntities);
-            return childGeneticEntities;
-        }
-
-        /// <summary>
-        /// Applies the <see cref="GenFx.CrossoverOperator"/>, if one is set, to the genetic entities.
-        /// </summary>
-        /// <param name="entity1"><see cref="GeneticEntity"/> to be potentially crossed over with <paramref name="entity2"/>.</param>
-        /// <param name="entity2"><see cref="GeneticEntity"/> to be potentially crossed over with <paramref name="entity1"/>.</param>
-        /// <returns>List of entities after the crossover was applied.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="entity1"/> is null.</exception>
-        /// <exception cref="ArgumentNullException"><paramref name="entity2"/> is null.</exception>
-        protected IList<GeneticEntity> ApplyCrossover(GeneticEntity entity1, GeneticEntity entity2)
-        {
-            if (entity1 == null)
+            if (parents == null)
             {
-                throw new ArgumentNullException(nameof(entity1));
+                throw new ArgumentNullException(nameof(parents));
             }
 
-            if (entity2 == null)
-            {
-                throw new ArgumentNullException(nameof(entity2));
-            }
+            IList<GeneticEntity> childEntities = new List<GeneticEntity>();
 
-            IList<GeneticEntity> childEntities;
-            
             if (this.CrossoverOperator != null)
             {
-                childEntities = this.CrossoverOperator.Crossover(entity1, entity2);
+                Queue<GeneticEntity> parentQueue = new Queue<GeneticEntity>(parents);
+                while (childEntities.Count < population.MinimumPopulationSize)
+                {
+                    // If there are not enough parents left to perform a crossover with, then
+                    // just skip the crossover and add the parents to the child list.
+                    if (this.CrossoverOperator.RequiredParentCount > parentQueue.Count)
+                    {
+                        childEntities.AddRange(parentQueue);
+                        parentQueue.Clear();
+                        break;
+                    }
+                    else
+                    {
+                        List<GeneticEntity> parentSubset = new List<GeneticEntity>();
+                        for (int i = 0; i < this.CrossoverOperator.RequiredParentCount; i++)
+                        {
+                            parentSubset.Add(parentQueue.Dequeue());
+                        }
+
+                        childEntities.AddRange(this.CrossoverOperator.Crossover(parentSubset));
+                    }
+                }
             }
             else
             {
-                childEntities = new List<GeneticEntity>();
-                childEntities.Add(entity1);
-                childEntities.Add(entity2);
+                childEntities = parents;
             }
+
             return childEntities;
         }
 
@@ -523,16 +550,18 @@ namespace GenFx
                 throw new ArgumentNullException(nameof(entities));
             }
 
+            if (this.MutationOperator == null)
+            {
+                return entities;
+            }
+
             List<GeneticEntity> mutants = new List<GeneticEntity>();
             foreach (GeneticEntity entity in entities)
             {
-                GeneticEntity newEntity = entity;
-                if (this.MutationOperator != null)
-                {
-                    newEntity = this.MutationOperator.Mutate(entity);
-                }
+                GeneticEntity newEntity = this.MutationOperator.Mutate(entity);
                 mutants.Add(newEntity);
             }
+
             return mutants;
         }
 

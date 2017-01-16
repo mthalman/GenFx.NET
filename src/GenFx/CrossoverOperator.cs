@@ -1,6 +1,7 @@
 using GenFx.Validation;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace GenFx
 {
@@ -19,7 +20,25 @@ namespace GenFx
         private const double CrossoverRateMin = 0;
         private const double CrossoverRateMax = 1;
 
+        private int requiredParentCount;
         private double crossoverRate = DefaultCrossoverRate;
+
+        /// <summary>
+        /// Initializes a new instance of this class.
+        /// </summary>
+        /// <param name="requiredParentCount">The number of parent entities required for input in order to execute the crossover operation.</param>
+        protected CrossoverOperator(int requiredParentCount)
+        {
+            this.requiredParentCount = requiredParentCount;
+        }
+
+        /// <summary>
+        /// Gets the number of parent entities required for input in order to execute the crossover operation
+        /// </summary>
+        /// <remarks>
+        /// The value of this property determines the number of entities passed to the <see cref="GenerateCrossover"/> method.
+        /// </remarks>
+        public int RequiredParentCount { get { return this.requiredParentCount; } }
 
         /// <summary>
         /// Gets or sets the probability that two <see cref="GeneticEntity"/> objects will crossover after being selected.
@@ -34,58 +53,53 @@ namespace GenFx
         }
 
         /// <summary>
-        /// Attempts to perform a crossover between <paramref name="entity1"/> and <paramref name="entity2"/>
-        /// if a random value is within the range of the <see cref="CrossoverRate"/>.
+        /// Attempts to perform a crossover between the parent entities if a random value is within
+        /// the range of the <see cref="CrossoverRate"/>.
         /// </summary>
-        /// <param name="entity1"><see cref="GeneticEntity"/> to be crossed over with <paramref name="entity2"/>.</param>
-        /// <param name="entity2"><see cref="GeneticEntity"/> to be crossed over with <paramref name="entity1"/>.</param>
+        /// <param name="parents">The <see cref="GeneticEntity"/> objects to be operated upon.</param>
         /// <returns>
         /// Collection of the <see cref="GeneticEntity"/> objects resulting from the crossover.  If no
-        /// crossover occurred, this collection contains the original values of <paramref name="entity1"/>
-        /// and <paramref name="entity2"/>.
+        /// crossover occurred, this collection contains the original values contained in <paramref name="parents"/>.
         /// </returns>
-        public IList<GeneticEntity> Crossover(GeneticEntity entity1, GeneticEntity entity2)
+        public IEnumerable<GeneticEntity> Crossover(IList<GeneticEntity> parents)
         {
-            if (entity1 == null)
+            if (parents == null)
             {
-                throw new ArgumentNullException(nameof(entity1));
+                throw new ArgumentNullException(nameof(parents));
             }
-
-            if (entity2 == null)
-            {
-                throw new ArgumentNullException(nameof(entity2));
-            }
-
-            IList<GeneticEntity> crossoverOffspring;
+            
             if (RandomNumberService.Instance.GetDouble() <= this.CrossoverRate)
             {
-                GeneticEntity clonedEntity1 = entity1.Clone();
-                GeneticEntity clonedEntity2 = entity2.Clone();
-                crossoverOffspring = this.GenerateCrossover(clonedEntity1, clonedEntity2);
+                IList<GeneticEntity> clones = parents.Select(p => p.Clone()).ToList();
+                IEnumerable<GeneticEntity> result = this.GenerateCrossover(clones);
+                if (result == null)
+                {
+                    throw new InvalidOperationException(
+                        StringUtil.GetFormattedString(Resources.ErrorMsg_NullReturnValue, this.GetType(), nameof(GenerateCrossover)));
+                }
+
+                IList<GeneticEntity> crossoverOffspring = result.ToList();
 
                 for (int i = 0; i < crossoverOffspring.Count; i++)
                 {
                     crossoverOffspring[i].Age = 0;
                 }
+
+                return crossoverOffspring;
             }
             else
             {
-                crossoverOffspring = new List<GeneticEntity>();
-                crossoverOffspring.Add(entity1);
-                crossoverOffspring.Add(entity2);
+                return parents;
             }
-            return crossoverOffspring;
         }
 
         /// <summary>
-        /// When overriden in a derived class, generates a crossover between <paramref name="entity1"/> 
-        /// and <paramref name="entity2"/>.
+        /// When overriden in a derived class, generates a crossover based on the parent entities.
         /// </summary>
-        /// <param name="entity1"><see cref="GeneticEntity"/> to be crossed over with <paramref name="entity2"/>.</param>
-        /// <param name="entity2"><see cref="GeneticEntity"/> to be crossed over with <paramref name="entity1"/>.</param>
+        /// <param name="parents">The <see cref="GeneticEntity"/> objects to be operated upon.</param>
         /// <returns>
         /// Collection of the <see cref="GeneticEntity"/> objects resulting from the crossover.
         /// </returns>
-        protected abstract IList<GeneticEntity> GenerateCrossover(GeneticEntity entity1, GeneticEntity entity2);
+        protected abstract IEnumerable<GeneticEntity> GenerateCrossover(IList<GeneticEntity> parents);
     }
 }

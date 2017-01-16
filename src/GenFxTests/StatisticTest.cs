@@ -60,7 +60,7 @@ namespace GenFxTests
         {
             GeneticAlgorithm algorithm = new MockGeneticAlgorithm
             {
-                EnvironmentSize = 2,
+                MinimumEnvironmentSize = 2,
                 GeneticEntitySeed = new MockEntity(),
                 FitnessEvaluator = new MockFitnessEvaluator(),
                 SelectionOperator = new MockSelectionOperator(),

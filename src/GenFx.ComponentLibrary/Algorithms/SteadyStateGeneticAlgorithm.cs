@@ -65,16 +65,11 @@ namespace GenFx.ComponentLibrary.Algorithms
             }
 
             // Add a select number of potentially modified Entities to the new generation.
-            for (int i = 0; i < replacementCount; i++)
-            {
-                IList<GeneticEntity> childEntities = this.SelectGeneticEntitiesAndApplyCrossoverAndMutation(population);
-
-                for (int entityIndex = 0; entityIndex < childEntities.Count; entityIndex++)
-                {
-                    population.Entities.Add(childEntities[entityIndex]);
-                }
-            }
-
+            IList<GeneticEntity> parents = this.ApplySelection(replacementCount, population);
+            IList<GeneticEntity> offspring = this.ApplyCrossover(population, parents);
+            offspring = this.ApplyMutation(offspring);
+            population.Entities.AddRange(offspring.Take(replacementCount));
+            
             // Remove the weakest Entities from the population.
             ObservableCollection<GeneticEntity> workingGeneticEntities = new ObservableCollection<GeneticEntity>(population.Entities);
             GeneticEntity[] sortedEntities = workingGeneticEntities.GetEntitiesSortedByFitness(

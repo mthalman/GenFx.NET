@@ -24,7 +24,7 @@ namespace GenFx
         {
             base.Initialize(algorithm);
 
-            for (int i = 0; i < this.Algorithm.EnvironmentSize; i++)
+            for (int i = 0; i < this.Algorithm.MinimumEnvironmentSize; i++)
             {
                 this.populationResults.Add(i, new ObservableCollection<StatisticResult>());
             }

@@ -1,5 +1,7 @@
 using GenFx.Validation;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace GenFx
 {
@@ -31,14 +33,15 @@ namespace GenFx
         }
 
         /// <summary>
-        /// Selects a <see cref="GeneticEntity"/> from <paramref name="population"/>.
+        /// Selects the specified number of <see cref="GeneticEntity"/> objects from <paramref name="population"/>.
         /// </summary>
-        /// <param name="population"><see cref="Population"/> containing the <see cref="GeneticEntity"/>
+        /// <param name="entityCount">Number of <see cref="GeneticEntity"/> objects to select from the population.</param>
+        /// <param name="population"><see cref="Population"/> containing the <see cref="GeneticEntity"/> objects from which to select.
         /// objects from which to select.</param>
         /// <returns>The <see cref="GeneticEntity"/> object that was selected.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="population"/> is null.</exception>
         /// <exception cref="ArgumentException"><paramref name="population"/> does not contain any entities.</exception>
-        public GeneticEntity SelectEntity(Population population)
+        public IList<GeneticEntity> SelectEntities(int entityCount, Population population)
         {
             if (population == null)
             {
@@ -51,15 +54,23 @@ namespace GenFx
                   StringUtil.GetFormattedString(Resources.ErrorMsg_EntityListEmpty), nameof(population));
             }
 
-            return this.SelectEntityFromPopulation(population);
+            IEnumerable<GeneticEntity> result = this.SelectEntitiesFromPopulation(entityCount, population);
+            if (result == null)
+            {
+                throw new InvalidOperationException(
+                    StringUtil.GetFormattedString(Resources.ErrorMsg_NullReturnValue, this.GetType(), nameof(SelectEntitiesFromPopulation)));
+            }
+
+            return result.ToList();
         }
 
         /// <summary>
-        /// When overriden in a derived class, selects a <see cref="GeneticEntity"/> from <paramref name="population"/>.
+        /// When overriden in a derived class, selects the specified number of <see cref="GeneticEntity"/> objects from <paramref name="population"/>.
         /// </summary>
-        /// <param name="population"><see cref="Population"/> containing the <see cref="GeneticEntity"/>
+        /// <param name="entityCount">Number of <see cref="GeneticEntity"/> objects to select from the population.</param>
+        /// <param name="population"><see cref="Population"/> containing the <see cref="GeneticEntity"/> objects from which to select.
         /// objects from which to select.</param>
         /// <returns>The <see cref="GeneticEntity"/> object that was selected.</returns>
-        protected abstract GeneticEntity SelectEntityFromPopulation(Population population);
+        protected abstract IEnumerable<GeneticEntity> SelectEntitiesFromPopulation(int entityCount, Population population);
     }
 }

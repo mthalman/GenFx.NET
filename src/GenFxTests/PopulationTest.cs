@@ -79,13 +79,13 @@ namespace GenFxTests
                 GeneticEntitySeed = new MockEntity(),
                 PopulationSeed = new SimplePopulation
                 {
-                    PopulationSize = 10
+                    MinimumPopulationSize = 10
                 }
             };
             SimplePopulation population = new SimplePopulation();
             population.Initialize(algorithm);
             await population.InitializeAsync();
-            Assert.AreEqual(algorithm.PopulationSeed.PopulationSize, population.Entities.Count, "Population not generated correctly.");
+            Assert.AreEqual(algorithm.PopulationSeed.MinimumPopulationSize, population.Entities.Count, "Population not generated correctly.");
         }
 
         /// <summary>
@@ -96,8 +96,8 @@ namespace GenFxTests
         {
             SimplePopulation target = new SimplePopulation();
             int val = 100;
-            target.PopulationSize = val;
-            Assert.AreEqual(val, target.PopulationSize, "PopulationSize was not set correctly.");
+            target.MinimumPopulationSize = val;
+            Assert.AreEqual(val, target.MinimumPopulationSize, "PopulationSize was not set correctly.");
         }
 
         /// <summary>
@@ -108,7 +108,7 @@ namespace GenFxTests
         public void PopulationSizeTest_Invalid()
         {
             SimplePopulation target = new SimplePopulation();
-            AssertEx.Throws<ValidationException>(() => target.PopulationSize = 0);
+            AssertEx.Throws<ValidationException>(() => target.MinimumPopulationSize = 0);
         }
 
         private static async Task TestEvaluateFitnessAsync(bool useScaling)

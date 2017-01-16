@@ -8,20 +8,28 @@ namespace GenFxTests.Mocks
     class MockCrossoverOperator : CrossoverOperator
     {
         internal int DoCrossoverCallCount;
-        
-        protected override IList<GeneticEntity> GenerateCrossover(GeneticEntity entity1, GeneticEntity entity2)
+
+        public MockCrossoverOperator() : base(2)
+        {
+        }
+
+        protected override IEnumerable<GeneticEntity> GenerateCrossover(IList<GeneticEntity> parents)
         {
             this.DoCrossoverCallCount++;
             List<GeneticEntity> geneticEntities = new List<GeneticEntity>();
-            geneticEntities.Add(entity1);
-            geneticEntities.Add(entity2);
+            geneticEntities.Add(parents[0]);
+            geneticEntities.Add(parents[1]);
             return geneticEntities;
         }
     }
     
     class MockCrossoverOperator2 : CrossoverOperator
     {
-        protected override IList<GeneticEntity> GenerateCrossover(GeneticEntity entity1, GeneticEntity entity2)
+        public MockCrossoverOperator2() : base(2)
+        {
+        }
+
+        protected override IEnumerable<GeneticEntity> GenerateCrossover(IList<GeneticEntity> parents)
         {
             throw new Exception();
         }

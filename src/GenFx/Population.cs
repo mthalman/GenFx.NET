@@ -31,10 +31,10 @@ namespace GenFx
         private double scaledMax;
         private double scaledMin;
 
-        private int populationSize = DefaultPopulationSize;
+        private int minimumPopulationSize = DefaultPopulationSize;
 
         /// <summary>
-        /// Gets or sets the number of <see cref="GeneticEntity"/> objects that are contained by a population.
+        /// Gets or sets the minimum number of <see cref="GeneticEntity"/> objects that are contained by a population.
         /// </summary>
         /// <remarks>
         /// This value is defaulted to 1 and must be greater or equal to 1 to be valid for executing
@@ -43,10 +43,10 @@ namespace GenFx
         /// <exception cref="ValidationException">Value is invalid.</exception>
         [ConfigurationProperty]
         [IntegerValidator(MinValue = 1)]
-        public int PopulationSize
+        public int MinimumPopulationSize
         {
-            get { return this.populationSize; }
-            set { this.SetProperty(ref this.populationSize, value); }
+            get { return this.minimumPopulationSize; }
+            set { this.SetProperty(ref this.minimumPopulationSize, value); }
         }
 
         /// <summary>
@@ -239,14 +239,14 @@ namespace GenFx
         /// </summary>
         /// <remarks>
         /// <para>The default implementation of this method creates X <see cref="GeneticEntity"/> objects
-        /// where X is equal to <see cref="PopulationSize"/>.</para>
+        /// where X is equal to <see cref="MinimumPopulationSize"/>.</para>
         /// <para><b>Notes to implementers:</b> This method can be overriden in a derived class
         /// to customize how a population is filled with <see cref="GeneticEntity"/> objects
         /// or how those <see cref="GeneticEntity"/> objects are created.</para>
         /// </remarks>
         protected virtual Task InitializeCoreAsync()
         {
-            for (int i = 0; i < this.Algorithm.PopulationSeed.PopulationSize; i++)
+            for (int i = 0; i < this.Algorithm.PopulationSeed.MinimumPopulationSize; i++)
             {
                 GeneticEntity entity = (GeneticEntity)this.Algorithm.GeneticEntitySeed.CreateNew();
                 entity.Initialize(this.Algorithm);
