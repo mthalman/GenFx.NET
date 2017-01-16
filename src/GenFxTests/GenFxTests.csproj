@@ -101,7 +101,6 @@
     <Compile Include="FitnessScalingStrategyTest.cs" />
     <Compile Include="FitnessSharingScalingStrategyTest.cs" />
     <Compile Include="FitnessTargetTerminatorTest.cs" />
-    <Compile Include="FixedLengthBinaryStringGenomeTest.cs" />
     <Compile Include="GenerationalTerminatorTest.cs" />
     <Compile Include="GeneticAlgorithmTest.cs" />
     <Compile Include="GeneticEntityCollectionTest.cs" />
@@ -146,7 +145,6 @@
     <Compile Include="TreeNodeTest.cs" />
     <Compile Include="UniformBitMutationOperatorTest.cs" />
     <Compile Include="UniformSelectionOperatorTest.cs" />
-    <Compile Include="VariableLengthBinaryStringEntityTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GenFx.ComponentLibrary\GenFx.ComponentLibrary.csproj">

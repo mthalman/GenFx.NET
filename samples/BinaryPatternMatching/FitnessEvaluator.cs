@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace BinaryPatternMatching
 {
-    [RequiredEntity(typeof(VariableLengthBinaryStringEntity))]
+    [RequiredEntity(typeof(BinaryStringEntity))]
     internal class FitnessEvaluator : FitnessEvaluatorBase
     {
         private string targetBinary;
@@ -23,7 +23,7 @@ namespace BinaryPatternMatching
 
         public override Task<double> EvaluateFitnessAsync(IGeneticEntity entity)
         {
-            VariableLengthBinaryStringEntity binaryEntity = (VariableLengthBinaryStringEntity)entity;
+            BinaryStringEntity binaryEntity = (BinaryStringEntity)entity;
 
             int totalBitDiffs = 0;
             int minLength = Math.Min(binaryEntity.Length, this.TargetBinary.Length);

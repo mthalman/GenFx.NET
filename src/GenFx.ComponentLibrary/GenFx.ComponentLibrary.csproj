@@ -102,17 +102,15 @@
     <Compile Include="Base\TerminatorBase.cs" />
     <Compile Include="Elitism\ElitismStrategy.cs" />
     <Compile Include="Lists\BinaryStrings\BinaryStringEntity.cs" />
-    <Compile Include="Lists\BinaryStrings\FixedLengthBinaryStringEntity.cs" />
     <Compile Include="Lists\BinaryStrings\UniformBitMutationOperator.cs" />
-    <Compile Include="Lists\BinaryStrings\VariableLengthBinaryStringEntity.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Lists\IIntegerListEntity.cs" />
+    <Compile Include="Lists\IListEntityBaseCommon.cs" />
     <Compile Include="Lists\IListEntityBase.OfT.cs" />
     <Compile Include="Lists\IListEntity.cs" />
     <Compile Include="Lists\IListEntityBase.cs" />
     <Compile Include="Lists\InversionOperator.cs" />
     <Compile Include="Lists\ListEntityBase.cs" />
-    <Compile Include="Lists\FixedLengthIntegerListEntity.cs" />
     <Compile Include="Lists\IntegerListEntity.cs" />
     <Compile Include="Lists\ListShiftMutationOperator.cs" />
     <Compile Include="Lists\MultiPointCrossoverOperator.cs" />
@@ -120,7 +118,6 @@
     <Compile Include="Lists\SinglePointCrossoverOperator.cs" />
     <Compile Include="Lists\ListEntity.cs" />
     <Compile Include="Lists\UniformIntegerMutationOperator.cs" />
-    <Compile Include="Lists\VariableLengthIntegerListEntity.cs" />
     <Compile Include="Lists\VariableSinglePointCrossoverOperator.cs" />
     <Compile Include="Plugins\StatisticLogger.cs" />
     <Compile Include="Populations\SimplePopulation.cs" />

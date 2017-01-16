@@ -28,9 +28,10 @@ namespace GenFxTests
                 PopulationSeed = new MockPopulation(),
                 SelectionOperator = new MockSelectionOperator(),
                 FitnessEvaluator = new MockFitnessEvaluator(),
-                GeneticEntitySeed = new FixedLengthBinaryStringEntity
+                GeneticEntitySeed = new BinaryStringEntity
                 {
-                    FixedLength = 4
+                    MinimumStartingLength = 4,
+                    MaximumStartingLength = 4
                 },
                 MutationOperator = new UniformBitMutationOperator
                 {
@@ -39,7 +40,7 @@ namespace GenFxTests
             };
             UniformBitMutationOperator op = new UniformBitMutationOperator { MutationRate = 1 };
             op.Initialize(algorithm);
-            FixedLengthBinaryStringEntity entity = new FixedLengthBinaryStringEntity { FixedLength = 4 };
+            BinaryStringEntity entity = new BinaryStringEntity { MinimumStartingLength = 4, MaximumStartingLength = 4 };
             entity.Age = 10;
             entity.Initialize(algorithm);
             entity[0] = true;

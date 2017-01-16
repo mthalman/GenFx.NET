@@ -30,7 +30,7 @@ namespace BinaryPatternMatching
                     EvaluationMode = FitnessEvaluationMode.Minimize,
                     TargetBinary = "010101010101"
                 },
-                GeneticEntitySeed = new VariableLengthBinaryStringEntity
+                GeneticEntitySeed = new BinaryStringEntity
                 {
                     MaximumStartingLength = 10,
                     MinimumStartingLength = 5
