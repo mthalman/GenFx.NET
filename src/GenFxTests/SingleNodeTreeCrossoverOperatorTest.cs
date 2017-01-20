@@ -39,7 +39,7 @@ namespace GenFxTests
                     CrossoverRate = 1
                 }
             };
-            SingleNodeTreeCrossoverOperator op = new SingleNodeTreeCrossoverOperator();
+            SingleNodeTreeCrossoverOperator op = (SingleNodeTreeCrossoverOperator)algorithm.CrossoverOperator;
             op.Initialize(algorithm);
 
             FakeTreeEntity entity1 = new FakeTreeEntity();

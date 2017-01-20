@@ -10,17 +10,28 @@ namespace GenFx.ComponentLibrary.Lists
     /// <remarks>This class uses a <see cref="List{TItem}"/> data structure to represent the list.</remarks>
     /// <typeparam name="TItem">Type of the values contained in the list.</typeparam>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix")]
-    public abstract class ListEntity<TItem> : ListEntityBase<TItem>
+    public class ListEntity<TItem> : ListEntityBase<TItem>
     {
+        private bool isFixedSize;
         private List<TItem> genes;
-        
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the list is a fixed size.
+        /// </summary>
+        [ConfigurationProperty]
+        public override bool IsFixedSize
+        {
+            get { return this.isFixedSize; }
+            set { this.SetProperty(ref this.isFixedSize, value); }
+        }
+
         /// <summary>
         /// Gets or sets the length of the integer list.
         /// </summary>
         /// <remarks>
-        /// The length of this entity can be changed
-        /// from its initial value.  The list will be truncated if the value is less than the current length.
-        /// The list will be expanded with zeroes if the value is greater than the current length.
+        /// The length of this entity can be changed from its initial value.  The list will be truncated
+        /// if the value is less than the current length. The list will be expanded with zeroes if the
+        /// value is greater than the current length.
         /// </remarks>
         public override int Length
         {
@@ -33,21 +44,22 @@ namespace GenFx.ComponentLibrary.Lists
             {
                 if (value != this.Length)
                 {
-                    if (this.MinimumStartingLength == this.MaximumStartingLength)
+                    if (this.IsFixedSize)
                     {
                         throw new ArgumentException(Resources.ErrorMsg_ListEntityLengthCannotBeChanged, nameof(value));
                     }
 
                     if (value > this.Length)
                     {
-                        for (int i = 0; i < value - this.Length; i++)
+                        for (int i = 0; i <= value - this.Length; i++)
                         {
                             this.genes.Add(default(TItem));
                         }
                     }
                     else
                     {
-                        for (int i = 0; i < this.Length - value; i++)
+                        int currentLength = this.Length;
+                        for (int i = 0; i < currentLength - value; i++)
                         {
                             this.genes.RemoveAt(this.Length - 1);
                         }

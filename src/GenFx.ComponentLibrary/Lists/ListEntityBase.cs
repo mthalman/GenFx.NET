@@ -48,6 +48,12 @@ namespace GenFx.ComponentLibrary.Lists
         }
 
         /// <summary>
+        /// When overriden by a derived class, gets or sets a value indicating whether the list is a fixed size.
+        /// </summary>
+        [ConfigurationProperty]
+        public abstract bool IsFixedSize { get; set; }
+
+        /// <summary>
         /// Returns the list string as a <see cref="String"/>.
         /// </summary>
         public override string Representation { get { return this.representation; } }
@@ -82,14 +88,6 @@ namespace GenFx.ComponentLibrary.Lists
         public abstract int Length { get; set; }
 
         int ICollection.Count { get { return this.Length; } }
-        
-        /// <summary>
-        /// When overriden by a derived class, gets a value indicating whether the list is a fixed size.
-        /// </summary>
-        public bool IsFixedSize
-        {
-            get { return this.MinimumStartingLength == this.MaximumStartingLength; }
-        }
 
         /// <summary>
         /// Gets a value indicating whether the list is read-only.

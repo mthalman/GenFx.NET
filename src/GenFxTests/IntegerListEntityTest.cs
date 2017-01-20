@@ -151,24 +151,6 @@ namespace GenFxTests
             Assert.AreEqual(length, entity.Length, "Length not set correctly.");
         }
 
-        /// <summary>
-        /// Tests that an exception is thrown when the Length is set to a different value.
-        ///</summary>
-        [TestMethod()]
-        public void IntegerListEntity_Length_SetToDifferentValue()
-        {
-            int length = 50;
-            GeneticAlgorithm algorithm = GetAlgorithm(length);
-
-            TestIntegerListEntity entity = new TestIntegerListEntity
-            {
-                MinimumStartingLength = 5,
-                MaximumStartingLength = 5
-            };
-            entity.Initialize(algorithm);
-            AssertEx.Throws<ArgumentException>(() => entity.Length = 51);
-        }
-
         private static void CompareGeneticEntities(IntegerListEntity expectedEntity, IntegerListEntity actualEntity)
         {
             Assert.AreNotSame(expectedEntity, actualEntity, "Objects should not be the same instance.");
