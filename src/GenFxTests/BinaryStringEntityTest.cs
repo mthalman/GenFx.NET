@@ -154,7 +154,7 @@ namespace GenFxTests
         }
 
         /// <summary>
-        /// Tests that an exception is thrown when the Length is set to a different value.
+        /// Tests that an exception is thrown when the Length is set to a different value when the string is fixed size.
         ///</summary>
         [TestMethod()]
         public void BinaryStringEntity_Length_SetToDifferentValue()
@@ -162,9 +162,61 @@ namespace GenFxTests
             int length = 50;
             GeneticAlgorithm algorithm = GetAlgorithm(length);
 
-            TestBinaryStringEntity entity = new TestBinaryStringEntity { MinimumStartingLength = length, MaximumStartingLength = length };
+            TestBinaryStringEntity entity = new TestBinaryStringEntity
+            {
+                MinimumStartingLength = length,
+                MaximumStartingLength = length,
+                IsFixedSize = true
+            };
             entity.Initialize(algorithm);
             AssertEx.Throws<ArgumentException>(() => entity.Length = 51);
+        }
+
+        /// <summary>
+        /// Tests that the length can be expanded to contain more items.
+        /// </summary>
+        [TestMethod]
+        public void BinaryStringEntity_SetLengthToExpand()
+        {
+            BinaryStringEntity entity = new BinaryStringEntity
+            {
+                MinimumStartingLength = 2,
+                MaximumStartingLength = 2,
+            };
+
+            entity.Initialize(new MockGeneticAlgorithm());
+
+            Assert.AreEqual(2, entity.Length);
+
+            entity.Length = 4;
+            Assert.AreEqual(4, entity.Length);
+
+            Assert.AreEqual(false, entity[2]);
+            Assert.AreEqual(false, entity[3]);
+        }
+
+        /// <summary>
+        /// Tests that the length can be contracted to decrease the number of items.
+        /// </summary>
+        [TestMethod]
+        public void BinaryStringEntity_SetLengthToContract()
+        {
+            BinaryStringEntity entity = new BinaryStringEntity
+            {
+                MinimumStartingLength = 4,
+                MaximumStartingLength = 4,
+            };
+
+            entity.Initialize(new MockGeneticAlgorithm());
+            Assert.AreEqual(4, entity.Length);
+
+            entity[0] = true;
+            Assert.AreEqual(true, entity[0]);
+
+            entity.Length = 1;
+            Assert.AreEqual(1, entity.Length);
+
+            Assert.AreEqual(true, entity[0]);
         }
 
         private static void CompareGeneticEntities(TestBinaryStringEntity expectedEntity, TestBinaryStringEntity actualEntity)

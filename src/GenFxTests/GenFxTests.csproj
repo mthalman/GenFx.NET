@@ -86,6 +86,7 @@
     <Compile Include="BinaryTreeNodeTest.cs" />
     <Compile Include="BoltzmannSelectionOperatorTest.cs" />
     <Compile Include="InversionOperatorTest.cs" />
+    <Compile Include="ListEntityTests.cs" />
     <Compile Include="Mocks\MockPlugin.cs" />
     <Compile Include="StringExtensions.cs" />
     <Compile Include="Helpers\AssertEx.cs" />

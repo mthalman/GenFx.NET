@@ -13,7 +13,18 @@ namespace GenFx.ComponentLibrary.Lists
     public class BinaryStringEntity : ListEntityBase<bool>
     {
         private BitArray genes;
-        
+        private bool isFixedSize;
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the list is a fixed size.
+        /// </summary>
+        [ConfigurationProperty]
+        public override bool IsFixedSize
+        {
+            get { return this.isFixedSize; }
+            set { this.SetProperty(ref this.isFixedSize, value); }
+        }
+
         /// <summary>
         /// Gets or sets the length of the binary string.
         /// </summary>
@@ -33,7 +44,7 @@ namespace GenFx.ComponentLibrary.Lists
             {
                 if (value != this.Length)
                 {
-                    if (this.MinimumStartingLength == this.MaximumStartingLength)
+                    if (this.IsFixedSize)
                     {
                         throw new ArgumentException(Resources.ErrorMsg_ListEntityLengthCannotBeChanged, nameof(value));
                     }
