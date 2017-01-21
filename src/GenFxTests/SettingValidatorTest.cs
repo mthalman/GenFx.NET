@@ -6,7 +6,7 @@ using GenFxTests.Helpers;
 namespace GenFxTests
 {
     /// <summary>
-    /// Unit tests for the <see cref="Validator"/> class and it's related classes.
+    /// Unit tests for the <see cref="PropertyValidator"/> class and it's related classes.
     ///</summary>
     [TestClass]
     public class ValidatorTest

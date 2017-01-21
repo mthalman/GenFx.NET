@@ -5,7 +5,7 @@ namespace GenFx.Validation
     /// <summary>
     /// Base class for configuration classes that indicate that a configuration property is required to be set.
     /// </summary>
-    public abstract class RequiredValidatorBaseAttribute : ConfigurationValidatorAttribute
+    public abstract class RequiredValidatorBaseAttribute : PropertyValidatorAttribute
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="RequiredValidatorBaseAttribute"/> class.
@@ -15,10 +15,10 @@ namespace GenFx.Validation
         }
 
         /// <summary>
-        /// Returns the associated <see cref="Validator"/> object.
+        /// Returns the associated <see cref="PropertyValidator"/> object.
         /// </summary>
-        /// <returns>The associated <see cref="Validator"/> object.</returns>
-        protected override Validator CreateValidator()
+        /// <returns>The associated <see cref="PropertyValidator"/> object.</returns>
+        protected override PropertyValidator CreateValidator()
         {
             return new RequiredValidator();
         }
@@ -42,7 +42,7 @@ namespace GenFx.Validation
     /// Indicates that the referenced target configuration property is required.
     /// </summary>
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
-    public sealed class RequiredExternalValidatorAttribute : RequiredValidatorBaseAttribute, IExternalConfigurationValidatorAttribute
+    public sealed class RequiredExternalValidatorAttribute : RequiredValidatorBaseAttribute, IExternalConfigurationPropertyValidatorAttribute
     {
         private string targetProperty;
         private Type targetComponentType;

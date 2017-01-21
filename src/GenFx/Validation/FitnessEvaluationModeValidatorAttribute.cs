@@ -6,13 +6,13 @@ namespace GenFx.Validation
     /// Indicates how the attributed <see cref="FitnessEvaluationMode"/> configuration property should be validated when set.
     /// </summary>
     [AttributeUsage(AttributeTargets.Property)]
-    public sealed class FitnessEvaluationModeValidatorAttribute : ConfigurationValidatorAttribute
+    public sealed class FitnessEvaluationModeValidatorAttribute : PropertyValidatorAttribute
     {
         /// <summary>
-        /// Returns the associated <see cref="Validator"/> object.
+        /// Returns the associated <see cref="PropertyValidator"/> object.
         /// </summary>
-        /// <returns>The associated <see cref="Validator"/> object.</returns>
-        protected override Validator CreateValidator()
+        /// <returns>The associated <see cref="PropertyValidator"/> object.</returns>
+        protected override PropertyValidator CreateValidator()
         {
             return new FitnessEvaluationModeValidator();
         }

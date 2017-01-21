@@ -5,7 +5,7 @@ namespace GenFx.Validation
     /// <summary>
     /// Provides validation for a <see cref="System.Double"/> value.
     /// </summary>
-    public sealed class DoubleValidator : Validator
+    public sealed class DoubleValidator : PropertyValidator
     {
         private double minValue;
         private double maxValue;

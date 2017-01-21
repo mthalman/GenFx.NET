@@ -542,49 +542,51 @@ namespace GenFxTests
         /// Tests that the ValidateRequiredComponents method works correctly.
         /// </summary>
         [TestMethod]
-        public void GeneticAlgorithm_ValidateRequiredComponents_ValidCrossover()
+        public void GeneticAlgorithm_ValidateConfiguration_ValidCrossover()
         {
             MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm
             {
                 SelectionOperator = new MockSelectionOperator(),
                 FitnessEvaluator = new MockFitnessEvaluator(),
-                GeneticEntitySeed = new MockEntity(),
+                GeneticEntitySeed = new CrossoverDependentEntity(),
                 PopulationSeed = new MockPopulation(),
                 CrossoverOperator = new MockCrossoverOperator
                 {
                     CrossoverRate = 1
                 }
             };
-            Type testType = typeof(CrossoverDependentClass);
-            algorithm.ValidateRequiredComponents(testType);
+
+            PrivateObject privObj = new PrivateObject(algorithm, new PrivateType(typeof(GeneticAlgorithm)));
+            privObj.Invoke("ValidateConfiguration");
         }
 
         /// <summary>
         /// Tests that an exception is throw when an required configurable type has not been set on the algorithm.
         /// </summary>
         [TestMethod]
-        public void GeneticAlgorithm_ValidateRequiredComponents_InvalidCrossover()
+        public void GeneticAlgorithm_ValidateConfiguration_InvalidCrossover()
         {
             MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm
             {
                 SelectionOperator = new MockSelectionOperator(),
                 FitnessEvaluator = new MockFitnessEvaluator(),
-                GeneticEntitySeed = new MockEntity(),
+                GeneticEntitySeed = new CrossoverDependentEntity2(),
                 PopulationSeed = new MockPopulation(),
                 CrossoverOperator = new MockCrossoverOperator
                 {
                     CrossoverRate = 1
                 }
             };
-            Type testType = typeof(CrossoverDependentClass2);
-            AssertEx.Throws<InvalidOperationException>(() => algorithm.ValidateRequiredComponents(testType));
+
+            PrivateObject privObj = new PrivateObject(algorithm, new PrivateType(typeof(GeneticAlgorithm)));
+            AssertEx.Throws<ValidationException>(() => privObj.Invoke("ValidateConfiguration"));
         }
 
         /// <summary>
         /// Tests that the ValidateRequiredComponents method works correctly.
         /// </summary>
         [TestMethod]
-        public void GeneticAlgorithm_ValidateRequiredComponents_ValidElitism()
+        public void GeneticAlgorithm_ValidateConfiguration_ValidElitism()
         {
             MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm
             {
@@ -595,17 +597,19 @@ namespace GenFxTests
                 ElitismStrategy = new MockElitismStrategy
                 {
                     ElitistRatio = 1
-                }
+                },
+                CrossoverOperator = new ElitismDependentCrossover()
             };
-            Type testType = typeof(ElitismDependentClass);
-            algorithm.ValidateRequiredComponents(testType);
+
+            PrivateObject privObj = new PrivateObject(algorithm, new PrivateType(typeof(GeneticAlgorithm)));
+            privObj.Invoke("ValidateConfiguration");
         }
 
         /// <summary>
         /// Tests that an exception is throw when an required configurable type has not been set on the algorithm.
         /// </summary>
         [TestMethod]
-        public void GeneticAlgorithm_ValidateRequiredComponents_InvalidElitism()
+        public void GeneticAlgorithm_ValidateConfiguration_InvalidElitism()
         {
             MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm
             {
@@ -616,52 +620,55 @@ namespace GenFxTests
                 ElitismStrategy = new MockElitismStrategy
                 {
                     ElitistRatio = 1
-                }
+                },
+                CrossoverOperator = new ElitismDependentCrossover2()
             };
 
-            Type testType = typeof(ElitismDependentClass2);
-            AssertEx.Throws<InvalidOperationException>(() => algorithm.ValidateRequiredComponents(testType));
+            PrivateObject privObj = new PrivateObject(algorithm, new PrivateType(typeof(GeneticAlgorithm)));
+            AssertEx.Throws<ValidationException>(() => privObj.Invoke("ValidateConfiguration"));
         }
 
         /// <summary>
         /// Tests that the ValidateRequiredComponents method works correctly.
         /// </summary>
         [TestMethod]
-        public void GeneticAlgorithm_ValidateRequiredComponents_ValidFitnessEvaluator()
+        public void GeneticAlgorithm_ValidateConfiguration_ValidFitnessEvaluator()
         {
             MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm
             {
-                SelectionOperator = new MockSelectionOperator(),
+                SelectionOperator = new FitnessEvaluatorDependentSelectionOperator(),
                 GeneticEntitySeed = new MockEntity(),
                 PopulationSeed = new MockPopulation(),
                 FitnessEvaluator = new MockFitnessEvaluator()
             };
-            Type testType = typeof(FitnessEvaluatorDependentClass);
-            algorithm.ValidateRequiredComponents(testType);
+
+            PrivateObject privObj = new PrivateObject(algorithm, new PrivateType(typeof(GeneticAlgorithm)));
+            privObj.Invoke("ValidateConfiguration");
         }
 
         /// <summary>
         /// Tests that an exception is throw when an required configurable type has not been set on the algorithm.
         /// </summary>
         [TestMethod]
-        public void GeneticAlgorithm_ValidateRequiredComponents_InvalidFitnessEvaluator()
+        public void GeneticAlgorithm_ValidateConfiguration_InvalidFitnessEvaluator()
         {
             MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm
             {
-                SelectionOperator = new MockSelectionOperator(),
+                SelectionOperator = new FitnessEvaluatorDependentSelectionOperator2(),
                 FitnessEvaluator = new MockFitnessEvaluator(),
                 GeneticEntitySeed = new MockEntity(),
                 PopulationSeed = new MockPopulation(),
             };
-            Type testType = typeof(FitnessEvaluatorDependentClass2);
-            AssertEx.Throws<InvalidOperationException>(() => algorithm.ValidateRequiredComponents(testType));
+
+            PrivateObject privObj = new PrivateObject(algorithm, new PrivateType(typeof(GeneticAlgorithm)));
+            AssertEx.Throws<ValidationException>(() => privObj.Invoke("ValidateConfiguration"));
         }
 
         /// <summary>
         /// Tests that the ValidateRequiredComponents method works correctly.
         /// </summary>
         [TestMethod]
-        public void GeneticAlgorithm_ValidateRequiredComponents_ValidFitnessScalingStrategy()
+        public void GeneticAlgorithm_ValidateConfiguration_ValidFitnessScalingStrategy()
         {
             MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm
             {
@@ -669,17 +676,19 @@ namespace GenFxTests
                 FitnessEvaluator = new MockFitnessEvaluator(),
                 GeneticEntitySeed = new MockEntity(),
                 PopulationSeed = new MockPopulation(),
-                FitnessScalingStrategy = new MockFitnessScalingStrategy()
+                FitnessScalingStrategy = new MockFitnessScalingStrategy(),
+                MutationOperator = new FitnessScalingStrategyDependentMutationOperator()
             };
-            Type testType = typeof(FitnessScalingStrategyDependentClass);
-            algorithm.ValidateRequiredComponents(testType);
+
+            PrivateObject privObj = new PrivateObject(algorithm, new PrivateType(typeof(GeneticAlgorithm)));
+            privObj.Invoke("ValidateConfiguration");
         }
 
         /// <summary>
         /// Tests that an exception is throw when an required configurable type has not been set on the algorithm.
         /// </summary>
         [TestMethod]
-        public void GeneticAlgorithm_ValidateRequiredComponents_InvalidFitnessScalingStrategy()
+        public void GeneticAlgorithm_ValidateConfiguration_InvalidFitnessScalingStrategy()
         {
             MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm
             {
@@ -687,56 +696,60 @@ namespace GenFxTests
                 FitnessEvaluator = new MockFitnessEvaluator(),
                 GeneticEntitySeed = new MockEntity(),
                 PopulationSeed = new MockPopulation(),
-                FitnessScalingStrategy = new MockFitnessScalingStrategy()
+                FitnessScalingStrategy = new MockFitnessScalingStrategy(),
+                MutationOperator = new FitnessScalingStrategyDependentMutationOperator2()
             };
-            Type testType = typeof(FitnessScalingStrategyDependentClass2);
-            AssertEx.Throws<InvalidOperationException>(() => algorithm.ValidateRequiredComponents(testType));
+
+            PrivateObject privObj = new PrivateObject(algorithm, new PrivateType(typeof(GeneticAlgorithm)));
+            AssertEx.Throws<ValidationException>(() => privObj.Invoke("ValidateConfiguration"));
         }
 
         /// <summary>
         /// Tests that the ValidateRequiredComponents method works correctly.
         /// </summary>
         [TestMethod]
-        public void GeneticAlgorithm_ValidateRequiredComponents_ValidEntity()
+        public void GeneticAlgorithm_ValidateConfiguration_ValidEntity()
         {
             MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm
             {
                 SelectionOperator = new MockSelectionOperator(),
                 FitnessEvaluator = new MockFitnessEvaluator(),
-                PopulationSeed = new MockPopulation(),
+                PopulationSeed = new EntityDependentPopulation(),
                 GeneticEntitySeed = new MockEntity()
             };
-            Type testType = typeof(EntityDependentClass);
-            algorithm.ValidateRequiredComponents(testType);
+
+            PrivateObject privObj = new PrivateObject(algorithm, new PrivateType(typeof(GeneticAlgorithm)));
+            privObj.Invoke("ValidateConfiguration");
         }
 
         /// <summary>
         /// Tests that an exception is throw when an required configurable type has not been set on the algorithm.
         /// </summary>
         [TestMethod]
-        public void GeneticAlgorithm_ValidateRequiredComponents_InvalidEntity()
+        public void GeneticAlgorithm_ValidateConfiguration_InvalidEntity()
         {
             MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm
             {
                 SelectionOperator = new MockSelectionOperator(),
                 FitnessEvaluator = new MockFitnessEvaluator(),
                 GeneticEntitySeed = new MockEntity(),
-                PopulationSeed = new MockPopulation()
+                PopulationSeed = new EntityDependentPopulation2()
             };
-            Type testType = typeof(EntityDependentClass2);
-            AssertEx.Throws<InvalidOperationException>(() => algorithm.ValidateRequiredComponents(testType));
+
+            PrivateObject privObj = new PrivateObject(algorithm, new PrivateType(typeof(GeneticAlgorithm)));
+            AssertEx.Throws<ValidationException>(() => privObj.Invoke("ValidateConfiguration"));
         }
 
         /// <summary>
         /// Tests that the ValidateRequiredComponents method works correctly.
         /// </summary>
         [TestMethod]
-        public void GeneticAlgorithm_ValidateRequiredComponents_ValidMutationOperator()
+        public void GeneticAlgorithm_ValidateConfiguration_ValidMutationOperator()
         {
             MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm
             {
                 SelectionOperator = new MockSelectionOperator(),
-                FitnessEvaluator = new MockFitnessEvaluator(),
+                FitnessEvaluator = new MutationOperatorDependentFitnessEvaluation(),
                 GeneticEntitySeed = new MockEntity(),
                 PopulationSeed = new MockPopulation(),
                 MutationOperator = new MockMutationOperator
@@ -744,20 +757,21 @@ namespace GenFxTests
                     MutationRate = 1
                 }
             };
-            Type testType = typeof(MutationOperatorDependentClass);
-            algorithm.ValidateRequiredComponents(testType);
+
+            PrivateObject privObj = new PrivateObject(algorithm, new PrivateType(typeof(GeneticAlgorithm)));
+            privObj.Invoke("ValidateConfiguration");
         }
 
         /// <summary>
         /// Tests that an exception is throw when an required configurable type has not been set on the algorithm.
         /// </summary>
         [TestMethod]
-        public void GeneticAlgorithm_ValidateRequiredComponents_InvalidMutationOperator()
+        public void GeneticAlgorithm_ValidateConfiguration_InvalidMutationOperator()
         {
             MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm
             {
                 SelectionOperator = new MockSelectionOperator(),
-                FitnessEvaluator = new MockFitnessEvaluator(),
+                FitnessEvaluator = new MutationOperatorDependentFitnessEvaluator2(),
                 GeneticEntitySeed = new MockEntity(),
                 PopulationSeed = new MockPopulation(),
                 MutationOperator = new MockMutationOperator
@@ -765,49 +779,54 @@ namespace GenFxTests
                     MutationRate = 1
                 }
             };
-            Type testType = typeof(MutationOperatorDependentClass2);
-            AssertEx.Throws<InvalidOperationException>(() => algorithm.ValidateRequiredComponents(testType));
+
+            PrivateObject privObj = new PrivateObject(algorithm, new PrivateType(typeof(GeneticAlgorithm)));
+            AssertEx.Throws<ValidationException>(() => privObj.Invoke("ValidateConfiguration"));
         }
 
         /// <summary>
         /// Tests that the ValidateRequiredComponents method works correctly.
         /// </summary>
         [TestMethod]
-        public void GeneticAlgorithm_ValidateRequiredComponents_ValidPopulation()
+        public void GeneticAlgorithm_ValidateConfiguration_ValidPopulation()
         {
             MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm
             {
                 SelectionOperator = new MockSelectionOperator(),
                 FitnessEvaluator = new MockFitnessEvaluator(),
                 GeneticEntitySeed = new MockEntity(),
-                PopulationSeed = new MockPopulation()
+                PopulationSeed = new MockPopulation(),
+                FitnessScalingStrategy = new PopulationDependentFitnessScaling()
             };
-            Type testType = typeof(PopulationDependentClass);
-            algorithm.ValidateRequiredComponents(testType);
+
+            PrivateObject privObj = new PrivateObject(algorithm, new PrivateType(typeof(GeneticAlgorithm)));
+            privObj.Invoke("ValidateConfiguration");
         }
 
         /// <summary>
         /// Tests that an exception is throw when an required configurable type has not been set on the algorithm.
         /// </summary>
         [TestMethod]
-        public void GeneticAlgorithm_ValidateRequiredComponents_InvalidPopulation()
+        public void GeneticAlgorithm_ValidateConfiguration_InvalidPopulation()
         {
             MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm
             {
                 SelectionOperator = new MockSelectionOperator(),
                 FitnessEvaluator = new MockFitnessEvaluator(),
                 GeneticEntitySeed = new MockEntity(),
-                PopulationSeed = new MockPopulation()
+                PopulationSeed = new MockPopulation(),
+                FitnessScalingStrategy = new PopulationDependentFitnessScaling2()
             };
-            Type testType = typeof(PopulationDependentClass2);
-            AssertEx.Throws<InvalidOperationException>(() => algorithm.ValidateRequiredComponents(testType));
+
+            PrivateObject privObj = new PrivateObject(algorithm, new PrivateType(typeof(GeneticAlgorithm)));
+            AssertEx.Throws<ValidationException>(() => privObj.Invoke("ValidateConfiguration"));
         }
 
         /// <summary>
         /// Tests that the ValidateRequiredComponents method works correctly.
         /// </summary>
         [TestMethod]
-        public void GeneticAlgorithm_ValidateRequiredComponents_ValidSelectionOperator()
+        public void GeneticAlgorithm_ValidateConfiguration_ValidSelectionOperator()
         {
             MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm
             {
@@ -817,17 +836,19 @@ namespace GenFxTests
                 SelectionOperator = new MockSelectionOperator
                 {
                     SelectionBasedOnFitnessType = FitnessType.Scaled
-                }
+                },
+                Terminator = new SelectionOperatorDependentTerminator()
             };
-            Type testType = typeof(SelectionOperatorDependentClass);
-            algorithm.ValidateRequiredComponents(testType);
+
+            PrivateObject privObj = new PrivateObject(algorithm, new PrivateType(typeof(GeneticAlgorithm)));
+            privObj.Invoke("ValidateConfiguration");
         }
 
         /// <summary>
         /// Tests that an exception is throw when an required configurable type has not been set on the algorithm.
         /// </summary>
         [TestMethod]
-        public void GeneticAlgorithm_ValidateRequiredComponents_InvalidSelectionOperator()
+        public void GeneticAlgorithm_ValidateConfiguration_InvalidSelectionOperator()
         {
             MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm
             {
@@ -837,122 +858,166 @@ namespace GenFxTests
                 SelectionOperator = new MockSelectionOperator
                 {
                     SelectionBasedOnFitnessType = FitnessType.Scaled
-                }
+                },
+                Terminator = new SelectionOperatorDependentTerminator2()
             };
-            Type testType = typeof(SelectionOperatorDependentClass2);
-            AssertEx.Throws<InvalidOperationException>(() => algorithm.ValidateRequiredComponents(testType));
+
+            PrivateObject privObj = new PrivateObject(algorithm, new PrivateType(typeof(GeneticAlgorithm)));
+            AssertEx.Throws<ValidationException>(() => privObj.Invoke("ValidateConfiguration"));
         }
 
         /// <summary>
         /// Tests that the ValidateRequiredComponents method works correctly.
         /// </summary>
         [TestMethod]
-        public void GeneticAlgorithm_ValidateRequiredComponents_ValidStatisticType()
+        public void GeneticAlgorithm_ValidateConfiguration_ValidStatisticType()
         {
             MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm
             {
                 SelectionOperator = new MockSelectionOperator(),
                 FitnessEvaluator = new MockFitnessEvaluator(),
                 GeneticEntitySeed = new MockEntity(),
-                PopulationSeed = new MockPopulation(),
+                PopulationSeed = new StatisticDependentPopulation(),
             };
             algorithm.Statistics.Add(new MockStatistic());
             algorithm.Statistics.Add(new MockStatistic2());
 
-
-            Type testType = typeof(StatisticDependentClass);
-            algorithm.ValidateRequiredComponents(testType);
+            PrivateObject privObj = new PrivateObject(algorithm, new PrivateType(typeof(GeneticAlgorithm)));
+            privObj.Invoke("ValidateConfiguration");
         }
 
         /// <summary>
         /// Tests that an exception is throw when an required configurable type has not been set on the algorithm.
         /// </summary>
         [TestMethod]
-        public void GeneticAlgorithm_ValidateRequiredComponents_InvalidStatisticType()
+        public void GeneticAlgorithm_ValidateConfiguration_InvalidStatisticType()
         {
             MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm
             {
                 SelectionOperator = new MockSelectionOperator(),
                 FitnessEvaluator = new MockFitnessEvaluator(),
                 GeneticEntitySeed = new MockEntity(),
-                PopulationSeed = new MockPopulation(),
+                PopulationSeed = new StatisticDependentPopulation2(),
             };
             algorithm.Statistics.Add(new MockStatistic());
 
-            Type testType = typeof(StatisticDependentClass2);
-            AssertEx.Throws<InvalidOperationException>(() => algorithm.ValidateRequiredComponents(testType));
+            PrivateObject privObj = new PrivateObject(algorithm, new PrivateType(typeof(GeneticAlgorithm)));
+            AssertEx.Throws<ValidationException>(() => privObj.Invoke("ValidateConfiguration"));
         }
 
         /// <summary>
         /// Tests that the ValidateRequiredComponents method works correctly.
         /// </summary>
         [TestMethod]
-        public void GeneticAlgorithm_ValidateRequiredComponents_ValidTerminator()
+        public void GeneticAlgorithm_ValidateConfiguration_ValidPluginType()
         {
             MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm
             {
                 SelectionOperator = new MockSelectionOperator(),
                 FitnessEvaluator = new MockFitnessEvaluator(),
                 GeneticEntitySeed = new MockEntity(),
-                PopulationSeed = new MockPopulation(),
-                Terminator = new MockTerminator()
+                PopulationSeed = new PluginDependentPopulation(),
             };
-            Type testType = typeof(TerminatorDependentClass);
-            algorithm.ValidateRequiredComponents(testType);
+            algorithm.Plugins.Add(new MockPlugin());
+            algorithm.Plugins.Add(new MockPlugin2());
+
+            PrivateObject privObj = new PrivateObject(algorithm, new PrivateType(typeof(GeneticAlgorithm)));
+            privObj.Invoke("ValidateConfiguration");
         }
 
         /// <summary>
         /// Tests that an exception is throw when an required configurable type has not been set on the algorithm.
         /// </summary>
         [TestMethod]
-        public void GeneticAlgorithm_ValidateRequiredComponents_InvalidTerminator()
+        public void GeneticAlgorithm_ValidateConfiguration_InvalidPluginType()
         {
             MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm
             {
                 SelectionOperator = new MockSelectionOperator(),
                 FitnessEvaluator = new MockFitnessEvaluator(),
                 GeneticEntitySeed = new MockEntity(),
-                PopulationSeed = new MockPopulation(),
+                PopulationSeed = new PluginDependentPopulation2(),
+            };
+            algorithm.Plugins.Add(new MockPlugin());
+
+            PrivateObject privObj = new PrivateObject(algorithm, new PrivateType(typeof(GeneticAlgorithm)));
+            AssertEx.Throws<ValidationException>(() => privObj.Invoke("ValidateConfiguration"));
+        }
+
+        /// <summary>
+        /// Tests that the ValidateRequiredComponents method works correctly.
+        /// </summary>
+        [TestMethod]
+        public void GeneticAlgorithm_ValidateConfiguration_ValidTerminator()
+        {
+            MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm
+            {
+                SelectionOperator = new MockSelectionOperator(),
+                FitnessEvaluator = new MockFitnessEvaluator(),
+                GeneticEntitySeed = new MockEntity(),
+                PopulationSeed = new TerminatorDependentPopulation(),
                 Terminator = new MockTerminator()
             };
-            Type testType = typeof(TerminatorDependentClass2);
-            AssertEx.Throws<InvalidOperationException>(() => algorithm.ValidateRequiredComponents(testType));
+
+            PrivateObject privObj = new PrivateObject(algorithm, new PrivateType(typeof(GeneticAlgorithm)));
+            privObj.Invoke("ValidateConfiguration");
+        }
+
+        /// <summary>
+        /// Tests that an exception is throw when an required configurable type has not been set on the algorithm.
+        /// </summary>
+        [TestMethod]
+        public void GeneticAlgorithm_ValidateConfiguration_InvalidTerminator()
+        {
+            MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm
+            {
+                SelectionOperator = new MockSelectionOperator(),
+                FitnessEvaluator = new MockFitnessEvaluator(),
+                GeneticEntitySeed = new MockEntity(),
+                PopulationSeed = new TerminatorDependentPopulation2(),
+                Terminator = new MockTerminator()
+            };
+
+            PrivateObject privObj = new PrivateObject(algorithm, new PrivateType(typeof(GeneticAlgorithm)));
+            AssertEx.Throws<ValidationException>(() => privObj.Invoke("ValidateConfiguration"));
         }
 
         /// <summary>
         /// Tests that the ValidateRequiredComponents method works correctly when overriding a required type of a base class.
         /// </summary>
         [TestMethod]
-        public void GeneticAlgorithm_ValidateRequiredComponents_OverrideRequiredType()
+        public void GeneticAlgorithm_ValidateConfiguration_OverrideRequiredType()
         {
             MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm
             {
                 SelectionOperator = new MockSelectionOperator(),
                 FitnessEvaluator = new MockFitnessEvaluator(),
                 GeneticEntitySeed = new MockEntity(),
-                PopulationSeed = new MockPopulation(),
+                PopulationSeed = new TerminatorDependentDerivedPopulation(),
                 Terminator = new MockTerminator2()
             };
-            Type testType = typeof(TerminatorDependentDerivedClass);
-            algorithm.ValidateRequiredComponents(testType);
+
+            PrivateObject privObj = new PrivateObject(algorithm, new PrivateType(typeof(GeneticAlgorithm)));
+            privObj.Invoke("ValidateConfiguration");
         }
 
         /// <summary>
         /// Tests that the ValidateRequiredComponents method works correctly.
         /// </summary>
         [TestMethod]
-        public void GeneticAlgorithm_ValidateRequiredComponents_UsingBaseTypeAsRequiredType()
+        public void GeneticAlgorithm_ValidateConfiguration_UsingBaseTypeAsRequiredType()
         {
             MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm
             {
                 SelectionOperator = new MockSelectionOperator(),
                 FitnessEvaluator = new MockFitnessEvaluator(),
                 GeneticEntitySeed = new MockEntity(),
-                PopulationSeed = new MockPopulation(),
+                PopulationSeed = new TerminatorDependentPopulation3(),
                 Terminator = new MockTerminator3() // uses derived type of the required type
             };
-            Type testType = typeof(TerminatorDependentClass3);
-            algorithm.ValidateRequiredComponents(testType);
+
+            PrivateObject privObj = new PrivateObject(algorithm, new PrivateType(typeof(GeneticAlgorithm)));
+            privObj.Invoke("ValidateConfiguration");
         }
 
         /// <summary>
@@ -1049,43 +1114,89 @@ namespace GenFxTests
         }
 
         [RequiredCrossoverOperator(typeof(MockCrossoverOperator))]
-        private class CrossoverDependentClass
+        private class CrossoverDependentEntity : GeneticEntity
         {
+            public override string Representation
+            {
+                get
+                {
+                    throw new NotImplementedException();
+                }
+            }
         }
 
         [RequiredCrossoverOperator(typeof(MockCrossoverOperator2))]
-        private class CrossoverDependentClass2
+        private class CrossoverDependentEntity2 : GeneticEntity
         {
+            public override string Representation
+            {
+                get
+                {
+                    throw new NotImplementedException();
+                }
+            }
         }
 
         [RequiredElitismStrategy(typeof(MockElitismStrategy))]
-        private class ElitismDependentClass
+        private class ElitismDependentCrossover : CrossoverOperator
         {
+            public ElitismDependentCrossover() : base(2)
+            {
+            }
+
+            protected override IEnumerable<GeneticEntity> GenerateCrossover(IList<GeneticEntity> parents)
+            {
+                throw new NotImplementedException();
+            }
         }
 
         [RequiredElitismStrategy(typeof(MockElitismStrategy2))]
-        private class ElitismDependentClass2
+        private class ElitismDependentCrossover2 : CrossoverOperator
         {
+            public ElitismDependentCrossover2() : base(2)
+            {
+            }
+
+            protected override IEnumerable<GeneticEntity> GenerateCrossover(IList<GeneticEntity> parents)
+            {
+                throw new NotImplementedException();
+            }
         }
 
         [RequiredFitnessEvaluator(typeof(MockFitnessEvaluator))]
-        private class FitnessEvaluatorDependentClass
+        private class FitnessEvaluatorDependentSelectionOperator : SelectionOperator
         {
+            protected override IEnumerable<GeneticEntity> SelectEntitiesFromPopulation(int entityCount, Population population)
+            {
+                throw new NotImplementedException();
+            }
         }
 
         [RequiredFitnessEvaluator(typeof(MockFitnessEvaluator2))]
-        private class FitnessEvaluatorDependentClass2
+        private class FitnessEvaluatorDependentSelectionOperator2 : SelectionOperator
         {
+            protected override IEnumerable<GeneticEntity> SelectEntitiesFromPopulation(int entityCount, Population population)
+            {
+                throw new NotImplementedException();
+            }
         }
 
         [RequiredFitnessScalingStrategy(typeof(MockFitnessScalingStrategy))]
-        private class FitnessScalingStrategyDependentClass
+        private class FitnessScalingStrategyDependentMutationOperator : MutationOperator
         {
+            protected override bool GenerateMutation(GeneticEntity entity)
+            {
+                throw new NotImplementedException();
+            }
         }
 
         [RequiredFitnessScalingStrategy(typeof(MockFitnessScalingStrategy2))]
-        private class FitnessScalingStrategyDependentClass2
+        private class FitnessScalingStrategyDependentMutationOperator2 : MutationOperator
         {
+            protected override bool GenerateMutation(GeneticEntity entity)
+            {
+                throw new NotImplementedException();
+            }
         }
 
         [RequiredGeneticAlgorithm(typeof(MockGeneticAlgorithm))]
@@ -1098,78 +1209,112 @@ namespace GenFxTests
         {
         }
 
-        [RequiredEntity(typeof(MockEntity))]
-        private class EntityDependentClass
+        [RequiredGeneticEntity(typeof(MockEntity))]
+        private class EntityDependentPopulation : Population
         {
         }
 
-        [RequiredEntity(typeof(MockEntity2))]
-        private class EntityDependentClass2
+        [RequiredGeneticEntity(typeof(MockEntity2))]
+        private class EntityDependentPopulation2 : Population
         {
         }
 
         [RequiredMutationOperator(typeof(MockMutationOperator))]
-        private class MutationOperatorDependentClass
+        private class MutationOperatorDependentFitnessEvaluation : FitnessEvaluator
         {
+            public override Task<double> EvaluateFitnessAsync(GeneticEntity entity)
+            {
+                throw new NotImplementedException();
+            }
         }
 
         [RequiredMutationOperator(typeof(MockMutationOperator2))]
-        private class MutationOperatorDependentClass2
+        private class MutationOperatorDependentFitnessEvaluator2 : FitnessEvaluator
         {
+            public override Task<double> EvaluateFitnessAsync(GeneticEntity entity)
+            {
+                throw new NotImplementedException();
+            }
         }
 
         [RequiredPopulation(typeof(MockPopulation))]
-        private class PopulationDependentClass
+        private class PopulationDependentFitnessScaling : FitnessScalingStrategy
         {
+            protected override void UpdateScaledFitnessValues(Population population)
+            {
+                throw new NotImplementedException();
+            }
         }
 
         [RequiredPopulation(typeof(MockPopulation2))]
-        private class PopulationDependentClass2
+        private class PopulationDependentFitnessScaling2 : FitnessScalingStrategy
         {
+            protected override void UpdateScaledFitnessValues(Population population)
+            {
+                throw new NotImplementedException();
+            }
         }
 
         [RequiredSelectionOperator(typeof(MockSelectionOperator))]
-        private class SelectionOperatorDependentClass
+        private class SelectionOperatorDependentTerminator : Terminator
         {
+            public override bool IsComplete()
+            {
+                throw new NotImplementedException();
+            }
         }
 
         [RequiredSelectionOperator(typeof(MockSelectionOperator2))]
-        private class SelectionOperatorDependentClass2
+        private class SelectionOperatorDependentTerminator2 : Terminator
         {
+            public override bool IsComplete()
+            {
+                throw new NotImplementedException();
+            }
         }
 
         [RequiredStatistic(typeof(MockStatistic))]
-        private class StatisticDependentClass
+        private class StatisticDependentPopulation : Population
         {
         }
 
         [RequiredStatistic(typeof(MockStatistic2))]
-        private class StatisticDependentClass2 : StatisticDependentClass
+        private class StatisticDependentPopulation2 : Population
+        {
+        }
+
+        [RequiredPlugin(typeof(MockPlugin))]
+        private class PluginDependentPopulation : Population
+        {
+        }
+
+        [RequiredPlugin(typeof(MockPlugin2))]
+        private class PluginDependentPopulation2 : Population
         {
         }
 
         [RequiredTerminator(typeof(MockTerminator))]
-        private class TerminatorDependentClass
+        private class TerminatorDependentPopulation : Population
         {
         }
 
         [RequiredTerminator(typeof(MockTerminator2))]
-        private class TerminatorDependentClass2
+        private class TerminatorDependentPopulation2 : Population
         {
         }
 
         [RequiredTerminator(typeof(MockTerminator2Base))]
-        private class TerminatorDependentClass3
+        private class TerminatorDependentPopulation3 : Population
         {
         }
 
         [RequiredTerminator(typeof(MockTerminator))]
-        private class TerminatorDependentBaseClass
+        private class TerminatorDependentBasePopulation : Population
         {
         }
 
         [RequiredTerminator(typeof(MockTerminator2))]
-        private class TerminatorDependentDerivedClass : TerminatorDependentBaseClass
+        private class TerminatorDependentDerivedPopulation : TerminatorDependentBasePopulation
         {
         }
 
@@ -1241,7 +1386,7 @@ namespace GenFxTests
         }
         
         [IntegerExternalValidator(typeof(FakeMutationOperator), "Value")]
-        [CustomExternalValidator(typeof(FakeValidator), typeof(FakeMutationOperator), "Value")]
+        [CustomExternalValidator(typeof(FakeMutationOperator), "Value", typeof(FakeValidator))]
         [DoubleExternalValidator(typeof(FakeMutationOperator), "Value2")]
         private class FakeExternalValidatorTerminator : Terminator
         {
@@ -1251,7 +1396,7 @@ namespace GenFxTests
             }
         }
         
-        private class FakeValidator : Validator
+        private class FakeValidator : PropertyValidator
         {
             public override bool IsValid(object value, string propertyName, object owner, out string errorMessage)
             {

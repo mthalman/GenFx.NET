@@ -21,11 +21,11 @@ namespace GenFxTests
         {
             TestConfigurationValidatorAttribute attrib = new TestConfigurationValidatorAttribute();
 
-            Validator validator = attrib.Validator;
+            PropertyValidator validator = attrib.Validator;
             Assert.IsNotNull(validator, "Validator should be set.");
             Assert.IsInstanceOfType(validator, typeof(TestConfigurationValidator), "Validator should be the test's validator.");
 
-            Validator validator2 = attrib.Validator;
+            PropertyValidator validator2 = attrib.Validator;
             Assert.AreSame(validator, validator2, "Same instance should be returned.");
         }
 
@@ -136,7 +136,7 @@ namespace GenFxTests
         [TestMethod]
         public void CustomValidatorAttribute_Ctor()
         {
-            CustomValidatorAttribute attrib = new CustomValidatorAttribute(typeof(TestConfigurationValidator));
+            CustomPropertyValidatorAttribute attrib = new CustomPropertyValidatorAttribute(typeof(TestConfigurationValidator));
 
             Assert.AreSame(typeof(TestConfigurationValidator), attrib.ValidatorType, "ValidatorType not initialized correctly.");
             Assert.IsInstanceOfType(attrib.Validator, typeof(TestConfigurationValidator), "Validator is not correct type.");
@@ -150,7 +150,7 @@ namespace GenFxTests
         {
             Type configType = typeof(FakeComponent);
             string targetProperty = "Value";
-            CustomExternalValidatorAttribute attrib = new CustomExternalValidatorAttribute(typeof(TestConfigurationValidator), configType, targetProperty);
+            CustomExternalValidatorAttribute attrib = new CustomExternalValidatorAttribute(configType, targetProperty, typeof(TestConfigurationValidator));
 
             Assert.AreSame(typeof(TestConfigurationValidator), attrib.ValidatorType, "ValidatorType not initialized correctly.");
             Assert.IsInstanceOfType(attrib.Validator, typeof(TestConfigurationValidator), "Validator is not correct type.");
@@ -165,18 +165,18 @@ namespace GenFxTests
         [TestMethod]
         public void CustomExternalValidatorAttribute_Ctor_NullArg()
         {
-            AssertEx.Throws<ArgumentNullException>(() => new CustomExternalValidatorAttribute(typeof(TestConfigurationValidator), null, "b"));
+            AssertEx.Throws<ArgumentNullException>(() => new CustomExternalValidatorAttribute(null, "b", typeof(TestConfigurationValidator)));
         }
 
-        private class TestConfigurationValidatorAttribute : ConfigurationValidatorAttribute
+        private class TestConfigurationValidatorAttribute : PropertyValidatorAttribute
         {
-            protected override Validator CreateValidator()
+            protected override PropertyValidator CreateValidator()
             {
                 return new TestConfigurationValidator();
             }
         }
 
-        private class TestConfigurationValidator : Validator
+        private class TestConfigurationValidator : PropertyValidator
         {
             public override bool IsValid(object value, string propertyName, object owner, out string errorMessage)
             {

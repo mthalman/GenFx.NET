@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace BinaryPatternMatching
 {
-    [RequiredEntity(typeof(BinaryStringEntity))]
+    [RequiredGeneticEntity(typeof(BinaryStringEntity))]
     internal class FitnessEvaluator : GenFx.FitnessEvaluator
     {
         private string targetBinary;
 
         [ConfigurationProperty]
-        [CustomValidator(typeof(BinaryStringValidator))]
+        [CustomPropertyValidator(typeof(BinaryStringValidator))]
         public string TargetBinary
         {
             get { return this.targetBinary; }

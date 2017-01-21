@@ -5,6 +5,7 @@ using GenFx;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using GenFxTests.Mocks;
 using GenFxTests.Helpers;
+using GenFx.Validation;
 
 namespace GenFxTests
 {

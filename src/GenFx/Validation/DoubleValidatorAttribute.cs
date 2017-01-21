@@ -5,7 +5,7 @@ namespace GenFx.Validation
     /// <summary>
     /// Base class for classes that indicate how a <see cref="System.Double"/> configuration property should be validated when set.
     /// </summary>
-    public abstract class DoubleValidatorBaseAttribute : ConfigurationValidatorAttribute
+    public abstract class DoubleValidatorBaseAttribute : PropertyValidatorAttribute
     {
         private double minValue = Double.MinValue;
         private double maxValue = Double.MaxValue;
@@ -60,10 +60,10 @@ namespace GenFx.Validation
         }
 
         /// <summary>
-        /// Returns the associated <see cref="Validator"/> object.
+        /// Returns the associated <see cref="PropertyValidator"/> object.
         /// </summary>
-        /// <returns>The associated <see cref="Validator"/> object.</returns>
-        protected override Validator CreateValidator()
+        /// <returns>The associated <see cref="PropertyValidator"/> object.</returns>
+        protected override PropertyValidator CreateValidator()
         {
             return new DoubleValidator(this.minValue, this.isMinValueInclusive, this.maxValue, this.isMaxValueInclusive);
         }
@@ -87,7 +87,7 @@ namespace GenFx.Validation
     /// Indicates how the referenced target <see cref="System.Double"/> configuration property should be validated when set.
     /// </summary>
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
-    public sealed class DoubleExternalValidatorAttribute : DoubleValidatorBaseAttribute, IExternalConfigurationValidatorAttribute
+    public sealed class DoubleExternalValidatorAttribute : DoubleValidatorBaseAttribute, IExternalConfigurationPropertyValidatorAttribute
     {
         private string targetProperty;
         private Type targetComponentType;

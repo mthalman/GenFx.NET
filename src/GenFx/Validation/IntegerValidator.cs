@@ -5,7 +5,7 @@ namespace GenFx.Validation
     /// <summary>
     /// Provides validation for a <see cref="System.Int32"/> value.
     /// </summary>
-    public sealed class IntegerValidator : Validator
+    public sealed class IntegerValidator : PropertyValidator
     {
         /// <summary>
         /// Gets the maximum value the integer can have in order to be valid.

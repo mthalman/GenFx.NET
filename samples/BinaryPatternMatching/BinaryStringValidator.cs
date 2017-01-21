@@ -7,7 +7,7 @@ namespace BinaryPatternMatching
     /// <summary>
     /// Validator used to validate that the value of a component configuration property is a binary string.
     /// </summary>
-    public class BinaryStringValidator : Validator
+    public class BinaryStringValidator : PropertyValidator
     {
         public override bool IsValid(object value, string propertyName, object owner, out string errorMessage)
         {

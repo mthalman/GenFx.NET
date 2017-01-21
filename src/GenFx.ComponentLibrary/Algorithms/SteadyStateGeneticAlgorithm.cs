@@ -31,7 +31,7 @@ namespace GenFx.ComponentLibrary.Algorithms
         /// </value>
         /// <exception cref="ValidationException">Value is not valid.</exception>
         [ConfigurationProperty]
-        [CustomValidator(typeof(PopulationReplacementValueValidator))]
+        [CustomPropertyValidator(typeof(PopulationReplacementValueValidator))]
         public PopulationReplacementValue PopulationReplacementValue
         {
             get { return this.replacementValue; }

@@ -8,14 +8,15 @@ namespace GenFx.ComponentLibrary.Lists
     /// <remarks>
     /// Ensures that there can be no more than two crossover points if <see cref="MultiPointCrossoverOperator.UsePartiallyMatchedCrossover"/> is true.
     /// </remarks>
-    internal class MultiPointCrossoverOperatorCrossoverPointValidator : Validator
+    internal class MultiPointCrossoverOperatorCrossoverPointValidator : ComponentValidator
     {
-        public override bool IsValid(object value, string propertyName, object owner, out string errorMessage)
+        public override bool IsValid(GeneticComponent component, GeneticAlgorithm algorithmContext, out string errorMessage)
         {
             errorMessage = null;
 
-            MultiPointCrossoverOperator config = (MultiPointCrossoverOperator)owner;
-            if (config.UsePartiallyMatchedCrossover && config.CrossoverPointCount > 2)
+            MultiPointCrossoverOperator crossoverOp = (MultiPointCrossoverOperator)component;
+
+            if (crossoverOp.UsePartiallyMatchedCrossover && crossoverOp.CrossoverPointCount > 2)
             {
                 errorMessage = StringUtil.GetFormattedString(Resources.ErrorMsg_MultiPointCrossoverOperationCrossoverPointValidator_ValidationError);
             }

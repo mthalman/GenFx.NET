@@ -5,7 +5,7 @@ namespace GenFx.Validation
     /// <summary>
     /// Indicates how an <see cref="Int32"/> configuration property should be validated when set.
     /// </summary>
-    public abstract class IntegerValidatorBaseAttribute : ConfigurationValidatorAttribute
+    public abstract class IntegerValidatorBaseAttribute : PropertyValidatorAttribute
     {
         /// <summary>
         /// Gets or sets the maximum value the integer property can have in order to be valid.
@@ -35,10 +35,10 @@ namespace GenFx.Validation
         }
 
         /// <summary>
-        /// Returns the associated <see cref="Validator"/> object.
+        /// Returns the associated <see cref="PropertyValidator"/> object.
         /// </summary>
-        /// <returns>The associated <see cref="Validator"/> object.</returns>
-        protected override Validator CreateValidator()
+        /// <returns>The associated <see cref="PropertyValidator"/> object.</returns>
+        protected override PropertyValidator CreateValidator()
         {
             return new IntegerValidator(this.MinValue, this.MaxValue);
         }
@@ -62,7 +62,7 @@ namespace GenFx.Validation
     /// Indicates how the referenced target <see cref="System.Int32"/> property should be validated when set.
     /// </summary>
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
-    public sealed class IntegerExternalValidatorAttribute : IntegerValidatorBaseAttribute, IExternalConfigurationValidatorAttribute
+    public sealed class IntegerExternalValidatorAttribute : IntegerValidatorBaseAttribute, IExternalConfigurationPropertyValidatorAttribute
     {
         private string targetProperty;
         private Type targetComponentType;

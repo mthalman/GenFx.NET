@@ -5,12 +5,12 @@ namespace GenFx.Validation
     /// <summary>
     /// Base class for deriving a validator class so that a value can be verified.
     /// </summary>
-    public abstract class Validator
+    public abstract class PropertyValidator
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="Validator"/> class.
+        /// Initializes a new instance of the <see cref="PropertyValidator"/> class.
         /// </summary>
-        protected Validator()
+        protected PropertyValidator()
         {
         }
 

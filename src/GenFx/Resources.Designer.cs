@@ -289,7 +289,7 @@ namespace GenFx {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The &apos;{0}&apos; type requires a {1} of type &apos;{2}&apos; but the algorithm is configured for type &apos;{3}&apos;..
+        ///   Looks up a localized string similar to The &apos;{0}&apos; type requires a {1} of type &apos;{2}&apos; but the algorithm is not configured with that type..
         /// </summary>
         internal static string ErrorMsg_NoRequiredConfigurableType {
             get {
@@ -375,6 +375,15 @@ namespace GenFx {
         internal static string MutationCommonName {
             get {
                 return ResourceManager.GetString("MutationCommonName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Plugin.
+        /// </summary>
+        internal static string PluginCommonName {
+            get {
+                return ResourceManager.GetString("PluginCommonName", resourceCulture);
             }
         }
         

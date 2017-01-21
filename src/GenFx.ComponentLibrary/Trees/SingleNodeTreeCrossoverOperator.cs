@@ -14,7 +14,7 @@ namespace GenFx.ComponentLibrary.Trees
     /// "B OR C" were to be crossed over at the "OR" node in the first tree and the "C" node in the second tree,
     /// the resulting offspring would be "C AND C" and "B OR (A OR B)".
     /// </remarks>
-    [RequiredEntity(typeof(TreeEntityBase))]
+    [RequiredGeneticEntity(typeof(TreeEntityBase))]
     public class SingleNodeTreeCrossoverOperator : CrossoverOperator
     {
         /// <summary>

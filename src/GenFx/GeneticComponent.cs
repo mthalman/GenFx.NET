@@ -121,7 +121,7 @@ namespace GenFx
                   Resources.ErrorMsg_ComponentConfigurationPropertyNotFound, propertyName, this.GetType().FullName));
             }
 
-            ConfigurationValidatorAttribute[] attribs = (ConfigurationValidatorAttribute[])propertyInfo.GetCustomAttributes(typeof(ConfigurationValidatorAttribute), false);
+            PropertyValidatorAttribute[] attribs = (PropertyValidatorAttribute[])propertyInfo.GetCustomAttributes(typeof(PropertyValidatorAttribute), false);
             for (int i = 0; i < attribs.Length; i++)
             {
                 attribs[i].Validator.EnsureIsValid(this.GetType().Name + Type.Delimiter + propertyInfo.Name, value, this);

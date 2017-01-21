@@ -133,7 +133,7 @@
     <value>Type must be derived from '{0}'.</value>
   </data>
   <data name="ErrorMsg_NoRequiredConfigurableType" xml:space="preserve">
-    <value>The '{0}' type requires a {1} of type '{2}' but the algorithm is configured for type '{3}'.</value>
+    <value>The '{0}' type requires a {1} of type '{2}' but the algorithm is not configured with that type.</value>
   </data>
   <data name="FitnessEvaluatorCommonName" xml:space="preserve">
     <value>Fitness Evaluator</value>
@@ -236,5 +236,8 @@ Actual type: '{2]'</value>
   </data>
   <data name="ErrorMsg_NullReturnValue" xml:space="preserve">
     <value>The result of invoking method '{0}.{1}' is null which is an invalid value.  It must return a non-null value.</value>
+  </data>
+  <data name="PluginCommonName" xml:space="preserve">
+    <value>Plugin</value>
   </data>
 </root>

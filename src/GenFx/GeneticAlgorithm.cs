@@ -37,7 +37,7 @@ namespace GenFx
         private int minimumEnvironmentSize = DefaultEnvironmentSize;
 
         // Mapping of component properties to Validator objects as described by external components.
-        private Dictionary<PropertyInfo, List<Validator>> externalValidationMapping;
+        private Dictionary<PropertyInfo, List<PropertyValidator>> externalValidationMapping;
 
         /// <summary>
         /// Initializes a new instance of this class.
@@ -577,7 +577,11 @@ namespace GenFx
         {
             foreach (GeneticComponent component in this.GetAllComponents())
             {
-                this.ValidateRequiredComponents(component.GetType());
+                ComponentValidatorAttribute[] attribs = (ComponentValidatorAttribute[])component.GetType().GetCustomAttributes(typeof(ComponentValidatorAttribute), true);
+                foreach (ComponentValidatorAttribute attrib in attribs)
+                {
+                    attrib.Validator.EnsureIsValid(component, this);
+                }
             }
         }
 
@@ -622,145 +626,6 @@ namespace GenFx
             yield return this.SelectionOperator;
             yield return this.GeneticEntitySeed;
             yield return this.PopulationSeed;
-        }
-
-        /// <summary>
-        /// Validates that the <see cref="GeneticAlgorithm"/> is configured to use all the types 
-        /// required by <paramref name="type"/> via the <see cref="RequiredComponentAttribute"/>.
-        /// </summary>
-        /// <param name="type">Type whose dependencies are to be validated.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="type"/> is null.</exception>
-        /// <exception cref="InvalidOperationException">
-        /// <paramref name="type"/> has a required type defined via
-        /// the <see cref="RequiredComponentAttribute"/> that the <see cref="GeneticAlgorithm"/> is not
-        /// configured to use.
-        /// </exception>
-        [SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
-        [SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity")]
-        protected internal void ValidateRequiredComponents(Type type)
-        {
-            if (type == null)
-            {
-                throw new ArgumentNullException(nameof(type));
-            }
-
-            RequiredComponentAttribute[] attribs = (RequiredComponentAttribute[])type.GetCustomAttributes(typeof(RequiredComponentAttribute), true);
-            
-            for (int i = 0; i < attribs.Length; i++)
-            {
-                RequiredComponentAttribute attrib = attribs[i];
-                string configurableTypeCommonName = null;
-                string configuredType = null;
-
-                if (attrib is RequiredCrossoverOperatorAttribute)
-                {
-                    if (!attrib.RequiredType.IsAssignableFrom(this.CrossoverOperator.GetType()))
-                    {
-                        configurableTypeCommonName = Resources.CrossoverCommonName;
-                        configuredType = this.CrossoverOperator.GetType().FullName;
-                    }
-                }
-                else if (attrib is RequiredElitismStrategyAttribute)
-                {
-                    if (!attrib.RequiredType.IsAssignableFrom(this.ElitismStrategy.GetType()))
-                    {
-                        configurableTypeCommonName = Resources.ElitismCommonName;
-                        configuredType = this.ElitismStrategy.GetType().FullName;
-                    }
-                }
-                else if (attrib is RequiredFitnessEvaluatorAttribute)
-                {
-                    if (!attrib.RequiredType.IsAssignableFrom(this.FitnessEvaluator.GetType()))
-                    {
-                        configurableTypeCommonName = Resources.FitnessEvaluatorCommonName;
-                        configuredType = this.FitnessEvaluator.GetType().FullName;
-                    }
-                }
-                else if (attrib is RequiredFitnessScalingStrategyAttribute)
-                {
-                    if (!attrib.RequiredType.IsAssignableFrom(this.FitnessScalingStrategy.GetType()))
-                    {
-                        configurableTypeCommonName = Resources.FitnessScalingCommonName;
-                        configuredType = this.FitnessScalingStrategy.GetType().FullName;
-                    }
-                }
-                else if (attrib is RequiredGeneticAlgorithmAttribute)
-                {
-                    if (!attrib.RequiredType.IsAssignableFrom(this.GetType()))
-                    {
-                        configurableTypeCommonName = Resources.GeneticAlgorithmCommonName;
-                        configuredType = this.GetType().FullName;
-                    }
-                }
-                else if (attrib is RequiredEntityAttribute)
-                {
-                    if (!attrib.RequiredType.IsAssignableFrom(this.GeneticEntitySeed.GetType()))
-                    {
-                        configurableTypeCommonName = Resources.EntityCommonName;
-                        configuredType = this.GeneticEntitySeed.GetType().FullName;
-                    }
-                }
-                else if (attrib is RequiredMutationOperatorAttribute)
-                {
-                    if (!attrib.RequiredType.IsAssignableFrom(this.MutationOperator.GetType()))
-                    {
-                        configurableTypeCommonName = Resources.MutationCommonName;
-                        configuredType = this.MutationOperator.GetType().FullName;
-                    }
-                }
-                else if (attrib is RequiredPopulationAttribute)
-                {
-                    if (!attrib.RequiredType.IsAssignableFrom(this.PopulationSeed.GetType()))
-                    {
-                        configurableTypeCommonName = Resources.PopulationCommonName;
-                        configuredType = this.PopulationSeed.GetType().FullName;
-                    }
-                }
-                else if (attrib is RequiredSelectionOperatorAttribute)
-                {
-                    if (!attrib.RequiredType.IsAssignableFrom(this.SelectionOperator.GetType()))
-                    {
-                        configurableTypeCommonName = Resources.SelectionCommonName;
-                        configuredType = this.SelectionOperator.GetType().FullName;
-                    }
-                }
-                else if (attrib is RequiredStatisticAttribute)
-                {
-                    bool foundRequiredType = false;
-                    foreach (Statistic stat in this.Statistics)
-                    {
-                        if (!attribs[i].RequiredType.IsAssignableFrom(stat.GetType()))
-                        {
-                            foundRequiredType = true;
-                            break;
-                        }
-                    }
-
-                    if (!foundRequiredType)
-                    {
-                        configuredType = this.Statistics
-                            .Select(s => s.GetType().FullName)
-                            .Aggregate((type1, type2) => type1 + ", " + type2);
-
-                        configurableTypeCommonName = Resources.StatisticCommonName;
-                    }
-                }
-                else if (attrib is RequiredTerminatorAttribute)
-                {
-                    if (!attrib.RequiredType.IsAssignableFrom(this.Terminator.GetType()))
-                    {
-                        configurableTypeCommonName = Resources.TerminatorCommonName;
-                        configuredType = this.Terminator.GetType().FullName;
-                    }
-                }
-
-                if (configurableTypeCommonName != null)
-                {
-                    throw new InvalidOperationException(
-                        StringUtil.GetFormattedString(Resources.ErrorMsg_NoRequiredConfigurableType,
-                          type.FullName, configurableTypeCommonName.ToLower(CultureInfo.CurrentCulture), attribs[i].RequiredType.FullName, configuredType));
-                }
-            }
         }
         
         /// <summary>
@@ -919,11 +784,11 @@ namespace GenFx
             foreach (PropertyInfo propertyInfo in properties)
             {
                 // Check that the property is valid using the validators described by external components.
-                List<Validator> externalValidators;
+                List<PropertyValidator> externalValidators;
                 if (externalValidationMapping.TryGetValue(propertyInfo, out externalValidators))
                 {
                     object propValue = propertyInfo.GetValue(this, null);
-                    foreach (Validator validator in externalValidators)
+                    foreach (PropertyValidator validator in externalValidators)
                     {
                         validator.EnsureIsValid(component.GetType().Name + Type.Delimiter + propertyInfo.Name, propValue, component);
                     }
@@ -932,11 +797,11 @@ namespace GenFx
         }
 
         /// <summary>
-        /// Compiles the mapping of component configuration properties to <see cref="Validator"/> objects as described by external components.
+        /// Compiles the mapping of component configuration properties to <see cref="PropertyValidator"/> objects as described by external components.
         /// </summary>
         private void CompileExternalValidatorMapping()
         {
-            this.externalValidationMapping = new Dictionary<PropertyInfo, List<Validator>>();
+            this.externalValidationMapping = new Dictionary<PropertyInfo, List<PropertyValidator>>();
 
             foreach (GeneticComponent component in this.GetAllComponents())
             {
@@ -945,7 +810,7 @@ namespace GenFx
         }
 
         /// <summary>
-        /// Compiles the mapping of component configuration properties to <see cref="Validator"/> objects as described by the specified component.
+        /// Compiles the mapping of component configuration properties to <see cref="PropertyValidator"/> objects as described by the specified component.
         /// </summary>
         /// <param name="component">The component to check whether it has defined validators for a configuration property.</param>
         private void CompileExternalValidatorMapping(GeneticComponent component)
@@ -955,14 +820,14 @@ namespace GenFx
                 return;
             }
 
-            IExternalConfigurationValidatorAttribute[] attribs = (IExternalConfigurationValidatorAttribute[])component.GetType().GetCustomAttributes(typeof(IExternalConfigurationValidatorAttribute), true);
-            foreach (IExternalConfigurationValidatorAttribute attrib in attribs)
+            IExternalConfigurationPropertyValidatorAttribute[] attribs = (IExternalConfigurationPropertyValidatorAttribute[])component.GetType().GetCustomAttributes(typeof(IExternalConfigurationPropertyValidatorAttribute), true);
+            foreach (IExternalConfigurationPropertyValidatorAttribute attrib in attribs)
             {
                 PropertyInfo prop = ExternalValidatorAttributeHelper.GetTargetPropertyInfo(attrib.TargetComponentType, attrib.TargetProperty);
-                List<Validator> validators;
+                List<PropertyValidator> validators;
                 if (!this.externalValidationMapping.TryGetValue(prop, out validators))
                 {
-                    validators = new List<Validator>();
+                    validators = new List<PropertyValidator>();
                     this.externalValidationMapping.Add(prop, validators);
                 }
                 validators.Add(attrib.Validator);

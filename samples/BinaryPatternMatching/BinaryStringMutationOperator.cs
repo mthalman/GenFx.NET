@@ -4,7 +4,7 @@ using GenFx.Validation;
 
 namespace BinaryPatternMatching
 {
-    [RequiredEntity(typeof(BinaryStringEntity))]
+    [RequiredGeneticEntity(typeof(BinaryStringEntity))]
     public class BinaryStringMutationOperator : UniformBitMutationOperator
     {
         protected override bool GenerateMutation(GeneticEntity entity)

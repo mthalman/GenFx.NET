@@ -1,5 +1,6 @@
 ﻿using GenFx;
 using GenFx.ComponentLibrary.Terminators;
+using GenFx.Validation;
 using GenFxTests.Helpers;
 using GenFxTests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
