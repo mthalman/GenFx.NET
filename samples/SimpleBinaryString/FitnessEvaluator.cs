@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SimpleBinaryString
 {
-    [RequiredEntity(typeof(BinaryStringEntity))]
+    [RequiredGeneticEntity(typeof(BinaryStringEntity))]
     internal class FitnessEvaluator : GenFx.FitnessEvaluator
     {
         public override Task<double> EvaluateFitnessAsync(GeneticEntity entity)

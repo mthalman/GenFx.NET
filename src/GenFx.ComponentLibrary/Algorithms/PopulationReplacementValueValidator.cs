@@ -6,7 +6,7 @@ namespace GenFx.ComponentLibrary.Algorithms
     /// <summary>
     /// Validator for the <see cref="PopulationReplacementValue"/> type.
     /// </summary>
-    internal class PopulationReplacementValueValidator : Validator
+    internal class PopulationReplacementValueValidator : PropertyValidator
     {
         /// <summary>
         /// Returns whether <paramref name="value"/> is valid.

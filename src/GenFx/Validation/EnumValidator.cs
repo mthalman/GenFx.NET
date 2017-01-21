@@ -5,7 +5,7 @@ namespace GenFx.Validation
     /// <summary>
     /// Base class for classes that validate enum values.
     /// </summary>
-    public abstract class EnumValidator : Validator
+    public abstract class EnumValidator : PropertyValidator
     {
         private Type enumType;
 

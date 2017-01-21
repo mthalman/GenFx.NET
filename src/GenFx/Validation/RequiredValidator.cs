@@ -6,7 +6,7 @@ namespace GenFx.Validation
     /// <summary>
     /// Provides validation for a required value.
     /// </summary>
-    public sealed class RequiredValidator : Validator
+    public sealed class RequiredValidator : PropertyValidator
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="RequiredValidator"/> class.

@@ -9,7 +9,7 @@ namespace GenFx.ComponentLibrary.Lists
     /// <remarks>
     /// Inversion operates upon a list, causing the values of two list positions to become swapped.
     /// </remarks>
-    [RequiredEntity(typeof(ListEntityBase))]
+    [RequiredGeneticEntity(typeof(ListEntityBase))]
     public class InversionOperator : MutationOperator
     {
         /// <summary>

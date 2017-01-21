@@ -10,7 +10,7 @@ namespace GenFx.ComponentLibrary.Lists
     /// Uniform bit mutation operates upon a binary string, causing each bit of the string to
     /// mutate if it meets a certain probability.
     /// </remarks>
-    [RequiredEntity(typeof(ListEntityBase<bool>))]
+    [RequiredGeneticEntity(typeof(ListEntityBase<bool>))]
     public class UniformBitMutationOperator : MutationOperator
     {
         /// <summary>

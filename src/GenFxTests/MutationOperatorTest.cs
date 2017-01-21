@@ -1,4 +1,5 @@
 ﻿using GenFx;
+using GenFx.Validation;
 using GenFxTests.Helpers;
 using GenFxTests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;

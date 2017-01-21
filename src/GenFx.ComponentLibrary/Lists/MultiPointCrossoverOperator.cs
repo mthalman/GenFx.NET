@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 
 namespace GenFx.ComponentLibrary.Lists
 {
@@ -26,7 +25,8 @@ namespace GenFx.ComponentLibrary.Lists
     /// </remarks>
     [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Multi")]
     [SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "MultiPoint")]
-    [RequiredEntity(typeof(ListEntityBase))]
+    [RequiredGeneticEntity(typeof(ListEntityBase))]
+    [CustomComponentValidator(typeof(MultiPointCrossoverOperatorCrossoverPointValidator))]
     public class MultiPointCrossoverOperator : CrossoverOperator
     {
         private const int DefaultCrossoverPointCount = CrossoverRateMin;
@@ -49,7 +49,6 @@ namespace GenFx.ComponentLibrary.Lists
         /// <exception cref="ValidationException">Value is not valid.</exception>
         [ConfigurationProperty]
         [IntegerValidator(MinValue = CrossoverRateMin)]
-        [CustomValidator(typeof(MultiPointCrossoverOperatorCrossoverPointValidator))]
         public int CrossoverPointCount
         {
             get { return this.crossoverPointCount; }
@@ -60,7 +59,6 @@ namespace GenFx.ComponentLibrary.Lists
         /// Gets or sets a value indicating whether to use partially matched crossover.
         /// </summary>
         [ConfigurationProperty]
-        [CustomValidator(typeof(MultiPointCrossoverOperatorCrossoverPointValidator))]
         public bool UsePartiallyMatchedCrossover
         {
             get { return this.usePartiallyMatchedCrossover; }

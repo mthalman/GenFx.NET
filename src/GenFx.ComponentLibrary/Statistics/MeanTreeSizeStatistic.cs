@@ -8,7 +8,7 @@ namespace GenFx.ComponentLibrary.Statistics
     /// Provides the calculation to determine the mean of the tree size of <see cref="TreeEntityBase"/> 
     /// objects contained by a <see cref="Population"/>.
     /// </summary>
-    [RequiredEntity(typeof(TreeEntityBase))]
+    [RequiredGeneticEntity(typeof(TreeEntityBase))]
     public class MeanTreeSizeStatistic : Statistic
     {
         /// <summary>

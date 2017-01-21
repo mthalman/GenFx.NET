@@ -13,7 +13,7 @@ namespace GenFx.ComponentLibrary.Lists
     /// by 001101 and 100011 were to be crossed over at position 2, the resulting offspring would
     /// be 000011 and 101101.
     /// </remarks>
-    [RequiredEntity(typeof(ListEntityBase))]
+    [RequiredGeneticEntity(typeof(ListEntityBase))]
     public class SinglePointCrossoverOperator : CrossoverOperator
     {
         /// <summary>

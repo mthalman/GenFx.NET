@@ -1,7 +1,7 @@
 using System;
 using System.Runtime.Serialization;
 
-namespace GenFx
+namespace GenFx.Validation
 {
     /// <summary>
     /// The exception that is thrown when a property value is invalid.

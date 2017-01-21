@@ -4,10 +4,31 @@ using System.Reflection;
 namespace GenFx.Validation
 {
     /// <summary>
-    /// Helper class to provide functionality for classes that implement <see cref="IExternalConfigurationValidatorAttribute"/>.
+    /// Helper class to provide functionality for classes that implement <see cref="IExternalConfigurationPropertyValidatorAttribute"/>
+    /// and <see cref="IExternalComponentValidatorAttribute"/>.
     /// </summary>
     internal static class ExternalValidatorAttributeHelper
     {
+        /// <summary>
+        /// Validates that the arguments are correctly set.
+        /// </summary>
+        /// <param name="targetComponentType"><see cref="Type"/> of the component configuration containing the property to be validated.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="targetComponentType"/> is null.</exception>
+        /// <exception cref="ArgumentException"><paramref name="targetComponentType"/> does not implement <see cref="GeneticComponent"/>.</exception>
+        public static void ValidateArguments(Type targetComponentType)
+        {
+            if (targetComponentType == null)
+            {
+                throw new ArgumentNullException(nameof(targetComponentType));
+            }
+
+            if (!typeof(GeneticComponent).IsAssignableFrom(targetComponentType))
+            {
+                throw new ArgumentException(StringUtil.GetFormattedString(
+                    Resources.ErrorMsg_ExternalValidator_InvalidTargetType, targetComponentType.FullName, typeof(GeneticComponent).FullName), nameof(targetComponentType));
+            }
+        }
+
         /// <summary>
         /// Validates that the arguments are correctly set.
         /// </summary>
@@ -19,20 +40,11 @@ namespace GenFx.Validation
         /// <exception cref="ArgumentException"><paramref name="targetProperty"/> does not exist on <paramref name="targetComponentType"/>.</exception>
         public static void ValidateArguments(Type targetComponentType, string targetProperty)
         {
-            if (targetComponentType == null)
-            {
-                throw new ArgumentNullException(nameof(targetComponentType));
-            }
+            ExternalValidatorAttributeHelper.ValidateArguments(targetComponentType);
 
             if (String.IsNullOrEmpty(targetProperty))
             {
                 throw new ArgumentException(Resources.ErrorMsg_StringNullOrEmpty, nameof(targetProperty));
-            }
-
-            if (!typeof(GeneticComponent).IsAssignableFrom(targetComponentType))
-            {
-                throw new ArgumentException(StringUtil.GetFormattedString(
-                    Resources.ErrorMsg_ExternalValidator_InvalidTargetType, targetComponentType.FullName, typeof(GeneticComponent).FullName), nameof(targetComponentType));
             }
 
             if (ExternalValidatorAttributeHelper.GetTargetPropertyInfo(targetComponentType, targetProperty) == null)
