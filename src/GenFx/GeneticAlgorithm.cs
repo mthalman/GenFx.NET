@@ -247,9 +247,7 @@ namespace GenFx
 
             this.CompileExternalValidatorMapping();
             this.Validate(this);
-            this.ValidateConfiguration();
             
-
             foreach (GeneticComponentWithAlgorithm component in this.GetAllComponents())
             {
                 component.Initialize(this);
@@ -563,26 +561,6 @@ namespace GenFx
             }
 
             return mutants;
-        }
-
-        /// <summary>
-        /// Validates the correctness of the algorithm's configuration.
-        /// </summary>
-        /// <exception cref="InvalidOperationException">The configuration for a required component has been set.</exception>
-        /// <remarks>
-        /// This only validates that the algorithm object is correct.  It does not validate the state
-        /// of each of the referenced components.
-        /// </remarks>
-        private void ValidateConfiguration()
-        {
-            foreach (GeneticComponent component in this.GetAllComponents())
-            {
-                ComponentValidatorAttribute[] attribs = (ComponentValidatorAttribute[])component.GetType().GetCustomAttributes(typeof(ComponentValidatorAttribute), true);
-                foreach (ComponentValidatorAttribute attrib in attribs)
-                {
-                    attrib.Validator.EnsureIsValid(component, this);
-                }
-            }
         }
 
         private IEnumerable<GeneticComponent> GetAllComponents()

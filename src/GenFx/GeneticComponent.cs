@@ -96,6 +96,12 @@ namespace GenFx
                 // Check that the property is valid using the validators attached directly to the property.
                 this.ValidateProperty(propValue, propertyInfo.Name);
             }
+
+            ComponentValidatorAttribute[] attribs = (ComponentValidatorAttribute[])this.GetType().GetCustomAttributes(typeof(ComponentValidatorAttribute), true);
+            foreach (ComponentValidatorAttribute attrib in attribs)
+            {
+                attrib.Validator.EnsureIsValid(this);
+            }
         }
 
         /// <summary>
