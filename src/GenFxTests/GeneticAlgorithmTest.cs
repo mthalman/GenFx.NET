@@ -556,8 +556,7 @@ namespace GenFxTests
                 }
             };
 
-            PrivateObject privObj = new PrivateObject(algorithm, new PrivateType(typeof(GeneticAlgorithm)));
-            privObj.Invoke("ValidateConfiguration");
+            this.ValidateComponent(algorithm.GeneticEntitySeed, algorithm, false);
         }
 
         /// <summary>
@@ -578,8 +577,7 @@ namespace GenFxTests
                 }
             };
 
-            PrivateObject privObj = new PrivateObject(algorithm, new PrivateType(typeof(GeneticAlgorithm)));
-            AssertEx.Throws<ValidationException>(() => privObj.Invoke("ValidateConfiguration"));
+            this.ValidateComponent(algorithm.GeneticEntitySeed, algorithm, true);
         }
 
         /// <summary>
@@ -601,8 +599,7 @@ namespace GenFxTests
                 CrossoverOperator = new ElitismDependentCrossover()
             };
 
-            PrivateObject privObj = new PrivateObject(algorithm, new PrivateType(typeof(GeneticAlgorithm)));
-            privObj.Invoke("ValidateConfiguration");
+            this.ValidateComponent(algorithm.CrossoverOperator, algorithm, false);
         }
 
         /// <summary>
@@ -624,8 +621,7 @@ namespace GenFxTests
                 CrossoverOperator = new ElitismDependentCrossover2()
             };
 
-            PrivateObject privObj = new PrivateObject(algorithm, new PrivateType(typeof(GeneticAlgorithm)));
-            AssertEx.Throws<ValidationException>(() => privObj.Invoke("ValidateConfiguration"));
+            this.ValidateComponent(algorithm.CrossoverOperator, algorithm, true);
         }
 
         /// <summary>
@@ -642,8 +638,7 @@ namespace GenFxTests
                 FitnessEvaluator = new MockFitnessEvaluator()
             };
 
-            PrivateObject privObj = new PrivateObject(algorithm, new PrivateType(typeof(GeneticAlgorithm)));
-            privObj.Invoke("ValidateConfiguration");
+            this.ValidateComponent(algorithm.SelectionOperator, algorithm, false);
         }
 
         /// <summary>
@@ -660,8 +655,7 @@ namespace GenFxTests
                 PopulationSeed = new MockPopulation(),
             };
 
-            PrivateObject privObj = new PrivateObject(algorithm, new PrivateType(typeof(GeneticAlgorithm)));
-            AssertEx.Throws<ValidationException>(() => privObj.Invoke("ValidateConfiguration"));
+            this.ValidateComponent(algorithm.SelectionOperator, algorithm, true);
         }
 
         /// <summary>
@@ -680,8 +674,7 @@ namespace GenFxTests
                 MutationOperator = new FitnessScalingStrategyDependentMutationOperator()
             };
 
-            PrivateObject privObj = new PrivateObject(algorithm, new PrivateType(typeof(GeneticAlgorithm)));
-            privObj.Invoke("ValidateConfiguration");
+            this.ValidateComponent(algorithm.MutationOperator, algorithm, false);
         }
 
         /// <summary>
@@ -700,8 +693,7 @@ namespace GenFxTests
                 MutationOperator = new FitnessScalingStrategyDependentMutationOperator2()
             };
 
-            PrivateObject privObj = new PrivateObject(algorithm, new PrivateType(typeof(GeneticAlgorithm)));
-            AssertEx.Throws<ValidationException>(() => privObj.Invoke("ValidateConfiguration"));
+            this.ValidateComponent(algorithm.MutationOperator, algorithm, true);
         }
 
         /// <summary>
@@ -718,8 +710,7 @@ namespace GenFxTests
                 GeneticEntitySeed = new MockEntity()
             };
 
-            PrivateObject privObj = new PrivateObject(algorithm, new PrivateType(typeof(GeneticAlgorithm)));
-            privObj.Invoke("ValidateConfiguration");
+            this.ValidateComponent(algorithm.PopulationSeed, algorithm, false);
         }
 
         /// <summary>
@@ -736,8 +727,7 @@ namespace GenFxTests
                 PopulationSeed = new EntityDependentPopulation2()
             };
 
-            PrivateObject privObj = new PrivateObject(algorithm, new PrivateType(typeof(GeneticAlgorithm)));
-            AssertEx.Throws<ValidationException>(() => privObj.Invoke("ValidateConfiguration"));
+            this.ValidateComponent(algorithm.PopulationSeed, algorithm, true);
         }
 
         /// <summary>
@@ -758,8 +748,7 @@ namespace GenFxTests
                 }
             };
 
-            PrivateObject privObj = new PrivateObject(algorithm, new PrivateType(typeof(GeneticAlgorithm)));
-            privObj.Invoke("ValidateConfiguration");
+            this.ValidateComponent(algorithm.FitnessEvaluator, algorithm, false);
         }
 
         /// <summary>
@@ -780,8 +769,7 @@ namespace GenFxTests
                 }
             };
 
-            PrivateObject privObj = new PrivateObject(algorithm, new PrivateType(typeof(GeneticAlgorithm)));
-            AssertEx.Throws<ValidationException>(() => privObj.Invoke("ValidateConfiguration"));
+            this.ValidateComponent(algorithm.FitnessEvaluator, algorithm, true);
         }
 
         /// <summary>
@@ -799,8 +787,7 @@ namespace GenFxTests
                 FitnessScalingStrategy = new PopulationDependentFitnessScaling()
             };
 
-            PrivateObject privObj = new PrivateObject(algorithm, new PrivateType(typeof(GeneticAlgorithm)));
-            privObj.Invoke("ValidateConfiguration");
+            this.ValidateComponent(algorithm.FitnessScalingStrategy, algorithm, false);
         }
 
         /// <summary>
@@ -818,8 +805,7 @@ namespace GenFxTests
                 FitnessScalingStrategy = new PopulationDependentFitnessScaling2()
             };
 
-            PrivateObject privObj = new PrivateObject(algorithm, new PrivateType(typeof(GeneticAlgorithm)));
-            AssertEx.Throws<ValidationException>(() => privObj.Invoke("ValidateConfiguration"));
+            this.ValidateComponent(algorithm.FitnessScalingStrategy, algorithm, true);
         }
 
         /// <summary>
@@ -840,8 +826,7 @@ namespace GenFxTests
                 Terminator = new SelectionOperatorDependentTerminator()
             };
 
-            PrivateObject privObj = new PrivateObject(algorithm, new PrivateType(typeof(GeneticAlgorithm)));
-            privObj.Invoke("ValidateConfiguration");
+            this.ValidateComponent(algorithm.Terminator, algorithm, false);
         }
 
         /// <summary>
@@ -862,8 +847,7 @@ namespace GenFxTests
                 Terminator = new SelectionOperatorDependentTerminator2()
             };
 
-            PrivateObject privObj = new PrivateObject(algorithm, new PrivateType(typeof(GeneticAlgorithm)));
-            AssertEx.Throws<ValidationException>(() => privObj.Invoke("ValidateConfiguration"));
+            this.ValidateComponent(algorithm.Terminator, algorithm, true);
         }
 
         /// <summary>
@@ -882,8 +866,7 @@ namespace GenFxTests
             algorithm.Statistics.Add(new MockStatistic());
             algorithm.Statistics.Add(new MockStatistic2());
 
-            PrivateObject privObj = new PrivateObject(algorithm, new PrivateType(typeof(GeneticAlgorithm)));
-            privObj.Invoke("ValidateConfiguration");
+            this.ValidateComponent(algorithm.PopulationSeed, algorithm, false);
         }
 
         /// <summary>
@@ -901,8 +884,7 @@ namespace GenFxTests
             };
             algorithm.Statistics.Add(new MockStatistic());
 
-            PrivateObject privObj = new PrivateObject(algorithm, new PrivateType(typeof(GeneticAlgorithm)));
-            AssertEx.Throws<ValidationException>(() => privObj.Invoke("ValidateConfiguration"));
+            this.ValidateComponent(algorithm.PopulationSeed, algorithm, true);
         }
 
         /// <summary>
@@ -921,8 +903,7 @@ namespace GenFxTests
             algorithm.Plugins.Add(new MockPlugin());
             algorithm.Plugins.Add(new MockPlugin2());
 
-            PrivateObject privObj = new PrivateObject(algorithm, new PrivateType(typeof(GeneticAlgorithm)));
-            privObj.Invoke("ValidateConfiguration");
+            this.ValidateComponent(algorithm.PopulationSeed, algorithm, false);
         }
 
         /// <summary>
@@ -940,8 +921,7 @@ namespace GenFxTests
             };
             algorithm.Plugins.Add(new MockPlugin());
 
-            PrivateObject privObj = new PrivateObject(algorithm, new PrivateType(typeof(GeneticAlgorithm)));
-            AssertEx.Throws<ValidationException>(() => privObj.Invoke("ValidateConfiguration"));
+            this.ValidateComponent(algorithm.PopulationSeed, algorithm, true);
         }
 
         /// <summary>
@@ -959,8 +939,7 @@ namespace GenFxTests
                 Terminator = new MockTerminator()
             };
 
-            PrivateObject privObj = new PrivateObject(algorithm, new PrivateType(typeof(GeneticAlgorithm)));
-            privObj.Invoke("ValidateConfiguration");
+            this.ValidateComponent(algorithm.PopulationSeed, algorithm, false);
         }
 
         /// <summary>
@@ -978,8 +957,7 @@ namespace GenFxTests
                 Terminator = new MockTerminator()
             };
 
-            PrivateObject privObj = new PrivateObject(algorithm, new PrivateType(typeof(GeneticAlgorithm)));
-            AssertEx.Throws<ValidationException>(() => privObj.Invoke("ValidateConfiguration"));
+            this.ValidateComponent(algorithm.PopulationSeed, algorithm, true);
         }
 
         /// <summary>
@@ -997,8 +975,7 @@ namespace GenFxTests
                 Terminator = new MockTerminator2()
             };
 
-            PrivateObject privObj = new PrivateObject(algorithm, new PrivateType(typeof(GeneticAlgorithm)));
-            privObj.Invoke("ValidateConfiguration");
+            this.ValidateComponent(algorithm.PopulationSeed, algorithm, false);
         }
 
         /// <summary>
@@ -1016,8 +993,7 @@ namespace GenFxTests
                 Terminator = new MockTerminator3() // uses derived type of the required type
             };
 
-            PrivateObject privObj = new PrivateObject(algorithm, new PrivateType(typeof(GeneticAlgorithm)));
-            privObj.Invoke("ValidateConfiguration");
+            this.ValidateComponent(algorithm.PopulationSeed, algorithm, false);
         }
 
         /// <summary>
@@ -1043,6 +1019,20 @@ namespace GenFxTests
             SimpleGeneticAlgorithm target = new SimpleGeneticAlgorithm();
             int val = 0;
             AssertEx.Throws<ValidationException>(() => target.MinimumEnvironmentSize = val);
+        }
+
+        private void ValidateComponent(GeneticComponentWithAlgorithm component, GeneticAlgorithm algorithm, bool validationExceptionExpected)
+        {
+            component.Initialize(algorithm);
+
+            if (validationExceptionExpected)
+            {
+                AssertEx.Throws<ValidationException>(() => component.Validate());
+            }
+            else
+            {
+                component.Validate();
+            }
         }
 
         private static async Task<GeneticAlgorithm> TestInitializeAsync(MockGeneticAlgorithm algorithm, bool initializeExceptionExpected = false)
@@ -1120,7 +1110,7 @@ namespace GenFxTests
             {
                 get
                 {
-                    throw new NotImplementedException();
+                    return null;
                 }
             }
         }
@@ -1132,7 +1122,7 @@ namespace GenFxTests
             {
                 get
                 {
-                    throw new NotImplementedException();
+                    return null;
                 }
             }
         }

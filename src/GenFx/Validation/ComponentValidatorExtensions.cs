@@ -12,8 +12,7 @@ namespace GenFx.Validation
         /// </summary>
         /// <param name="validator"><see cref="ComponentValidator"/> to perform the validation.</param>
         /// <param name="component">The <see cref="GeneticComponent"/> to be validated.</param>
-        /// <param name="algorithmContext">The <see cref="GeneticAlgorithm"/> currently in context.</param>
-        public static void EnsureIsValid(this ComponentValidator validator, GeneticComponent component, GeneticAlgorithm algorithmContext)
+        public static void EnsureIsValid(this ComponentValidator validator, GeneticComponent component)
         {
             if (validator == null)
             {
@@ -21,7 +20,7 @@ namespace GenFx.Validation
             }
 
             string errorMessage;
-            if (!validator.IsValid(component, algorithmContext, out errorMessage))
+            if (!validator.IsValid(component, out errorMessage))
             {
                 throw new ValidationException(errorMessage);
             }

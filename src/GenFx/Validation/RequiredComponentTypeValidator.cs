@@ -51,15 +51,25 @@ namespace GenFx.Validation
         /// Returns whether <paramref name="component"/> is valid.
         /// </summary>
         /// <param name="component"><see cref="GeneticComponent"/> to be validated.</param>
-        /// <param name="algorithmContext">The <see cref="GeneticAlgorithm"/> currently in context.</param>
         /// <param name="errorMessage">Error message that should be displayed if the component fails validation.</param>
         /// <returns>True if <paramref name="component"/> is valid; otherwise, false.</returns>
         [SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "3#")]
-        public override sealed bool IsValid(GeneticComponent component, GeneticAlgorithm algorithmContext, out string errorMessage)
+        public override sealed bool IsValid(GeneticComponent component, out string errorMessage)
         {
             if (component == null)
             {
                 throw new ArgumentNullException(nameof(component));
+            }
+
+            GeneticAlgorithm algorithmContext;
+            GeneticComponentWithAlgorithm componentWithAlg = component as GeneticComponentWithAlgorithm;
+            if (componentWithAlg != null)
+            {
+                algorithmContext = componentWithAlg.Algorithm;
+            }
+            else
+            {
+                algorithmContext = (GeneticAlgorithm)component;
             }
 
             if (!this.HasRequiredComponent(algorithmContext))
