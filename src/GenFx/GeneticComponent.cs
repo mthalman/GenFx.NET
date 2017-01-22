@@ -107,7 +107,7 @@ namespace GenFx
         /// <exception cref="ArgumentException">Property not found on configuration type.</exception>
         /// <exception cref="ValidationException">Property was set to an invalid value.</exception>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed")]
-        private void ValidateProperty(object value, [CallerMemberName] string propertyName = null)
+        protected void ValidateProperty(object value, [CallerMemberName] string propertyName = null)
         {
             if (String.IsNullOrEmpty(propertyName))
             {

@@ -15,7 +15,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleBinaryString", "sampl
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BinaryPatternMatching", "samples\BinaryPatternMatching\BinaryPatternMatching.csproj", "{549BA3FC-51F0-4EC9-8E5E-1EC10FCCDEFB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocSite", "doc\DocSite.csproj", "{BAC5E356-2FA6-4F26-A054-E879D50AA4BD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Documentation", "doc\Documentation.csproj", "{BAC5E356-2FA6-4F26-A054-E879D50AA4BD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
