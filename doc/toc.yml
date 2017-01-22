@@ -1,5 +1,9 @@
 
-- name: Articles
-  href: articles/
-- name: API Documentation
+- name: Documentation
+  href: documentation/
+- name: Tutorials
+  href: tutorials/
+- name: API
   href: obj/api/
+- name: Contributors
+  href: contributors/

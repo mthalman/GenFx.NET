@@ -81,7 +81,6 @@
     <Content Include="tutorials\hello_world.md" />
     <Content Include="tutorials\toc.yml" />
     <Content Include="tutorials\custom_validator.md" />
-    <Content Include="tutorials\required_component_type.md" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

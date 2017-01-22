@@ -27,7 +27,8 @@ namespace SimpleBinaryString
                 GeneticEntitySeed = new BinaryStringEntity
                 {
                     MinimumStartingLength = 20,
-                    MaximumStartingLength = 20
+                    MaximumStartingLength = 20,
+                    IsFixedSize = true
                 },
                 PopulationSeed = new SimplePopulation
                 {
@@ -52,7 +53,9 @@ namespace SimpleBinaryString
                 }
             };
 
-            algorithm.GenerationCreated += Algorithm_GenerationCreated;
+            algorithm.GenerationCreated += 
+                (sender, e) => Console.WriteLine("Generation: {0}", algorithm.CurrentGeneration);
+
             await algorithm.InitializeAsync();
             await algorithm.RunAsync();
 
@@ -70,11 +73,6 @@ namespace SimpleBinaryString
             }
 
             Console.ReadLine();
-        }
-
-        private static void Algorithm_GenerationCreated(object sender, EventArgs e)
-        {
-            Console.WriteLine("Generation: {0}", ((GeneticAlgorithm)sender).CurrentGeneration);
         }
     }
 }
