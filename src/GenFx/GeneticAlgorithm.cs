@@ -272,6 +272,11 @@ namespace GenFx
         {
             this.environment = new GeneticEnvironment(this);
 
+            if (this.terminator == null)
+            {
+                this.terminator = new DefaultTerminator();
+            }
+
             this.CompileExternalValidatorMapping();
             this.Validate(this);
             

@@ -35,10 +35,14 @@ namespace GenFxTests
                 PopulationSeed = new MockPopulation(),
                 GeneticEntitySeed = new MockEntity()
             };
+
             await algorithm.InitializeAsync();
+
             Assert.IsNotNull(algorithm.Environment, "Environment not initialized.");
             PrivateObject accessor = new PrivateObject(algorithm.Environment);
             Assert.AreSame(algorithm, accessor.GetField("algorithm"), "Environment should be initialized with the algorithm.");
+
+            Assert.IsInstanceOfType(algorithm.Terminator, typeof(DefaultTerminator));
         }
 
         /// <summary>
