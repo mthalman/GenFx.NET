@@ -219,6 +219,27 @@ namespace GenFxTests
             Assert.AreEqual(true, entity[0]);
         }
 
+        /// <summary>
+        /// Tests that the component can be serialized and deserialized.
+        /// </summary>
+        [TestMethod]
+        public void Serialization()
+        {
+            BinaryStringEntity entity = new BinaryStringEntity();
+            entity.MinimumStartingLength = entity.MaximumStartingLength = 3;
+            entity.IsFixedSize = true;
+            entity.Initialize(new MockGeneticAlgorithm());
+
+            BinaryStringEntity result = (BinaryStringEntity)SerializationHelper.TestSerialization(entity, new Type[] { typeof(MockGeneticAlgorithm) });
+
+            for (int i = 0; i < 3; i++)
+            {
+                Assert.AreEqual(entity[i], result[i]);
+            }
+
+            Assert.IsTrue(result.IsFixedSize);
+        }
+
         private static void CompareGeneticEntities(TestBinaryStringEntity expectedEntity, TestBinaryStringEntity actualEntity)
         {
             PrivateObject accessor = new PrivateObject(expectedEntity, new PrivateType(typeof(GeneticEntity)));

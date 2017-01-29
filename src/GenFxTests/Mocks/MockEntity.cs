@@ -2,9 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using GenFx;
+using System.Runtime.Serialization;
 
 namespace GenFxTests.Mocks
 {
+    [DataContract]
     class MockEntity : GeneticEntity
     {
         internal string Identifier;
@@ -27,7 +29,8 @@ namespace GenFxTests.Mocks
             ((MockEntity)entity).Identifier = this.Identifier;
         }
     }
-    
+
+    [DataContract]
     class MockEntity2 : GeneticEntity
     {
         public override string Representation

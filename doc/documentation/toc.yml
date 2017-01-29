@@ -12,3 +12,5 @@
     href: customizing_and_extending.md
   - name: Validation
     href: validation.md
+  - name: Serializability
+    href: serializability.md

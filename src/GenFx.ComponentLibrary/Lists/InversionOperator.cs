@@ -1,5 +1,6 @@
 ﻿using GenFx.Validation;
 using System;
+using System.Runtime.Serialization;
 
 namespace GenFx.ComponentLibrary.Lists
 {
@@ -9,6 +10,7 @@ namespace GenFx.ComponentLibrary.Lists
     /// <remarks>
     /// Inversion operates upon a list, causing the values of two list positions to become swapped.
     /// </remarks>
+    [DataContract]
     [RequiredGeneticEntity(typeof(ListEntityBase))]
     public class InversionOperator : MutationOperator
     {

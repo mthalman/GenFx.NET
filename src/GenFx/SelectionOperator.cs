@@ -2,6 +2,7 @@ using GenFx.Validation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 
 namespace GenFx
 {
@@ -14,10 +15,12 @@ namespace GenFx
     /// general strategy is for a entity to have a higher probability of being selected if it has a higher
     /// fitness value.
     /// </remarks>
+    [DataContract]
     public abstract class SelectionOperator : GeneticComponentWithAlgorithm
     {
         private const FitnessType DefaultSelectionBasedOnFitnessType = FitnessType.Scaled;
 
+        [DataMember]
         private FitnessType selectionBasedOnFitnessType = DefaultSelectionBasedOnFitnessType;
 
         /// <summary>

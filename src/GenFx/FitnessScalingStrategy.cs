@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.Serialization;
 
 namespace GenFx
 {
@@ -11,6 +12,7 @@ namespace GenFx
     /// scaling is a method of mapping raw fitness values to scaled fitness values so as to more easily
     /// control the diversity of a population.
     /// </remarks>
+    [DataContract]
     public abstract class FitnessScalingStrategy : GeneticComponentWithAlgorithm
     {
         /// <summary>

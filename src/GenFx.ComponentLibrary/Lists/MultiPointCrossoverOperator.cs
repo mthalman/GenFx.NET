@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Runtime.Serialization;
 
 namespace GenFx.ComponentLibrary.Lists
 {
@@ -23,6 +24,7 @@ namespace GenFx.ComponentLibrary.Lists
     /// So for the example above, this would result in the following offspring: AFEDBC and BDCAEF.  This option is only
     /// available when using two crossover points.
     /// </remarks>
+    [DataContract]
     [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Multi")]
     [SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "MultiPoint")]
     [RequiredGeneticEntity(typeof(ListEntityBase))]
@@ -32,7 +34,10 @@ namespace GenFx.ComponentLibrary.Lists
         private const int DefaultCrossoverPointCount = CrossoverRateMin;
         private const int CrossoverRateMin = 2;
 
+        [DataMember]
         private int crossoverPointCount = DefaultCrossoverPointCount;
+
+        [DataMember]
         private bool usePartiallyMatchedCrossover;
 
         /// <summary>

@@ -1,6 +1,7 @@
 ﻿using GenFx.Validation;
 using System;
 using System.Collections;
+using System.Runtime.Serialization;
 using System.Text;
 
 namespace GenFx.ComponentLibrary.Lists
@@ -14,13 +15,19 @@ namespace GenFx.ComponentLibrary.Lists
     /// representing the list.
     /// </remarks>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix")]
+    [DataContract]
     public abstract class ListEntityBase : GeneticEntity, IList
     {
         private const int DefaultMaxLength = 20;
         private const int DefaultMinLength = 5;
 
+        [DataMember]
         private string representation;
+
+        [DataMember]
         private int minimumStartingLength = DefaultMinLength;
+
+        [DataMember]
         private int maximumStartingLength = DefaultMaxLength;
 
         /// <summary>
@@ -289,36 +296,6 @@ namespace GenFx.ComponentLibrary.Lists
             }
 
             return builder.ToString();
-        }
-
-        /// <summary>
-        /// Restores the entity's state.
-        /// </summary>
-        public override void RestoreState(KeyValueMap state)
-        {
-            if (state == null)
-            {
-                throw new ArgumentNullException(nameof(state));
-            }
-
-            base.RestoreState(state);
-
-            this.representation = (string)state[nameof(this.representation)];
-        }
-
-        /// <summary>
-        /// Saves the entity's state.
-        /// </summary>
-        public override void SetSaveState(KeyValueMap state)
-        {
-            if (state == null)
-            {
-                throw new ArgumentNullException(nameof(state));
-            }
-
-            base.SetSaveState(state);
-
-            state[nameof(this.representation)] = this.representation;
         }
     }
 }

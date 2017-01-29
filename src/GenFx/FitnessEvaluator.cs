@@ -1,4 +1,5 @@
 using GenFx.Validation;
+using System.Runtime.Serialization;
 using System.Threading.Tasks;
 
 namespace GenFx
@@ -13,9 +14,12 @@ namespace GenFx
     /// a goal of a entity with all ones in its string might use a <b>FitnessEvaluator</b> 
     /// that uses the number of ones in a binary string as the fitness value.
     /// </remarks>
+    [DataContract]
     public abstract class FitnessEvaluator : GeneticComponentWithAlgorithm
     {
         private const FitnessEvaluationMode DefaultEvaluationMode = FitnessEvaluationMode.Maximize;
+
+        [DataMember]
         private FitnessEvaluationMode evaluationMode = DefaultEvaluationMode;
 
         /// <summary>

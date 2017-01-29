@@ -53,6 +53,20 @@ namespace GenFxTests
             Assert.IsTrue(terminator.IsComplete(), "Should be complete.");
         }
 
+        /// <summary>
+        /// Tests that the object can be serialized and deserialized.
+        /// </summary>
+        [TestMethod]
+        public void Serialization()
+        {
+            GenerationalTerminator terminator = new GenerationalTerminator();
+            terminator.FinalGeneration = 5;
+
+            GenerationalTerminator result = (GenerationalTerminator)SerializationHelper.TestSerialization(terminator, new Type[0]);
+
+            Assert.AreEqual(terminator.FinalGeneration, result.FinalGeneration);
+        }
+
         private static GeneticAlgorithm GetAlgorithm(int finalGeneration)
         {
             GeneticAlgorithm algorithm = new MockGeneticAlgorithm

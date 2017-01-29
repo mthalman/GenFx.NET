@@ -1,11 +1,13 @@
 ﻿using GenFx.Validation;
 using System;
+using System.Runtime.Serialization;
 
 namespace GenFx.ComponentLibrary.Lists
 {
     /// <summary>
     /// Operates upon a <see cref="ListEntityBase"/> by shifting a random segment of the list to the left or right by one position.
     /// </summary>
+    [DataContract]
     [RequiredGeneticEntity(typeof(ListEntityBase))]
     public class ListShiftMutationOperator : MutationOperator
     {

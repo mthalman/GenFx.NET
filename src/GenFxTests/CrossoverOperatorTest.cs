@@ -95,6 +95,21 @@ namespace GenFxTests
             Assert.AreSame(entity2, geneticEntities[1], "Different entity was returned.");
         }
 
+        /// <summary>
+        /// Tests that the object can be serialized and deserialized.
+        /// </summary>
+        [TestMethod]
+        public void Serialization()
+        {
+            MockCrossoverOperator op = new MockCrossoverOperator();
+            op.CrossoverRate = .5;
+
+            MockCrossoverOperator result = (MockCrossoverOperator)SerializationHelper.TestSerialization(op, new Type[0]);
+            Assert.AreEqual(2, result.RequiredParentCount);
+            Assert.AreEqual(.5, result.CrossoverRate);
+
+        }
+
         private static MockGeneticAlgorithm GetGeneticAlgorithm(double crossoverRate)
         {
             MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm

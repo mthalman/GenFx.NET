@@ -227,7 +227,7 @@ namespace GenFxTests
             selectedEntities = op.SelectEntities(1, population);
             Assert.AreSame(entity3, selectedEntities[0], "Incorrect entity selected.");
         }
-
+        
         private static GeneticAlgorithm GetAlgorithm()
         {
             GeneticAlgorithm algorithm = new MockGeneticAlgorithm

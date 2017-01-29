@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 using System.Text;
 
 namespace GenFx.ComponentLibrary.Lists
@@ -16,6 +17,7 @@ namespace GenFx.ComponentLibrary.Lists
     /// </remarks>
     /// <typeparam name="TItem">Type of the values contained in the list.</typeparam>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix")]
+    [DataContract]
     public abstract class ListEntityBase<TItem> : ListEntityBase, IList<TItem>
     {
         /// <summary>

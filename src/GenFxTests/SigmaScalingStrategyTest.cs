@@ -90,6 +90,20 @@ namespace GenFxTests
             AssertEx.Throws<ArgumentNullException>(() => op.Scale(null));
         }
 
+        /// <summary>
+        /// Tests that the object can be serialized and deserialized.
+        /// </summary>
+        [TestMethod]
+        public void Serialization()
+        {
+            SigmaScalingStrategy strategy = new SigmaScalingStrategy();
+            strategy.Multiplier = 11;
+
+            SigmaScalingStrategy result = (SigmaScalingStrategy)SerializationHelper.TestSerialization(strategy, new Type[0]);
+
+            Assert.AreEqual(strategy.Multiplier, result.Multiplier);
+        }
+
         private void AddEntity(GeneticAlgorithm algorithm, double fitness, Population population)
         {
             MockEntity entity = new MockEntity();

@@ -1,8 +1,11 @@
-﻿namespace GenFx
+﻿using System.Runtime.Serialization;
+
+namespace GenFx
 {
     /// <summary>
     /// Plugin component that provides custom extension functionality.
     /// </summary>
+    [DataContract]
     public abstract class Plugin : GeneticComponentWithAlgorithm
     {
         /// <summary>

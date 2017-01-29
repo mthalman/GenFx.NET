@@ -1,5 +1,6 @@
 using GenFx.Validation;
 using System;
+using System.Runtime.Serialization;
 
 namespace GenFx.ComponentLibrary.Scaling
 {
@@ -7,10 +8,12 @@ namespace GenFx.ComponentLibrary.Scaling
     /// Provides fitness scaling by raising the fitness of a <see cref="GeneticEntity"/> to the power of the
     /// value of the <see cref="ScalingPower"/> property.
     /// </summary>
+    [DataContract]
     public class ExponentialScalingStrategy : FitnessScalingStrategy
     {
         private const double DefaultScalingPower = 1.005;
 
+        [DataMember]
         private double scalingPower = DefaultScalingPower;
 
         /// <summary>

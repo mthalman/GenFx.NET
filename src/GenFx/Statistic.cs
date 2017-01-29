@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Runtime.Serialization;
 
 namespace GenFx
 {
@@ -12,8 +13,10 @@ namespace GenFx
     /// After each generation is created, <see cref="GetResultValue(Population)"/> is
     /// invoked with the <see cref="Population"/> of that generation to calculate its data.
     /// </remarks>
+    [DataContract]
     public abstract class Statistic : GeneticComponentWithAlgorithm
     {
+        [DataMember]
         private Dictionary<int, ObservableCollection<StatisticResult>> populationResults = new Dictionary<int, ObservableCollection<StatisticResult>>();
         
         /// <summary>
@@ -55,37 +58,5 @@ namespace GenFx
         /// This method is called once for each generation.
         /// </remarks>
         public abstract object GetResultValue(Population population);
-
-        /// <summary>
-        /// Restores the state of this component.
-        /// </summary>
-        /// <param name="state">The state of the component to restore from.</param>
-        public override void RestoreState(KeyValueMap state)
-        {
-            if (state == null)
-            {
-                throw new ArgumentNullException(nameof(state));
-            }
-
-            base.RestoreState(state);
-
-            this.populationResults = (Dictionary<int, ObservableCollection<StatisticResult>>)state[nameof(this.populationResults)];
-        }
-
-        /// <summary>
-        /// Sets the serializable state of this component on the state object.
-        /// </summary>
-        /// <param name="state">The object containing the serializable state of this object.</param>
-        public override void SetSaveState(KeyValueMap state)
-        {
-            if (state == null)
-            {
-                throw new ArgumentNullException(nameof(state));
-            }
-
-            base.SetSaveState(state);
-
-            state[nameof(this.populationResults)] = this.populationResults;
-        }
     }
 }

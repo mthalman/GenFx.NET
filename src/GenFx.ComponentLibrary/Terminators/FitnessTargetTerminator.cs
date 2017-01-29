@@ -1,5 +1,6 @@
 using GenFx.Validation;
 using System.Linq;
+using System.Runtime.Serialization;
 
 namespace GenFx.ComponentLibrary.Terminators
 {
@@ -8,11 +9,15 @@ namespace GenFx.ComponentLibrary.Terminators
     /// contains a <see cref="GeneticEntity"/> whose <see cref="GeneticEntity.ScaledFitnessValue"/> property value
     /// matches the <see cref="FitnessTargetTerminator.FitnessTarget"/> property value.
     /// </summary>
+    [DataContract]
     public class FitnessTargetTerminator : Terminator
     {
         private const FitnessType DefaultFitnessValueType = FitnessType.Scaled;
 
+        [DataMember]
         private FitnessType fitnessValueType = DefaultFitnessValueType;
+
+        [DataMember]
         private double fitnessTarget;
 
         /// <summary>

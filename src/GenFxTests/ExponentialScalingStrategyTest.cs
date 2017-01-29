@@ -53,6 +53,20 @@ namespace GenFxTests
             Assert.AreEqual((double)49, entity2.ScaledFitnessValue, "ScaledFitnessValue not set correctly.");
         }
 
+        /// <summary>
+        /// Tests that the object can be serialized and deserialized.
+        /// </summary>
+        [TestMethod]
+        public void Serialization()
+        {
+            ExponentialScalingStrategy strategy = new ExponentialScalingStrategy();
+            strategy.ScalingPower = 5;
+
+            ExponentialScalingStrategy result = (ExponentialScalingStrategy)SerializationHelper.TestSerialization(strategy, new Type[0]);
+
+            Assert.AreEqual(5, result.ScalingPower);
+        }
+
         private static GeneticAlgorithm GetAlgorithm(double scalingPower)
         {
             GeneticAlgorithm algorithm = new MockGeneticAlgorithm

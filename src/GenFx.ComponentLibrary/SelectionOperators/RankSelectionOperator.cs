@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 
 namespace GenFx.ComponentLibrary.SelectionOperators
 {
@@ -17,6 +18,7 @@ namespace GenFx.ComponentLibrary.SelectionOperators
     /// when <b>RankSelectionOperator</b> is being used since absolute differences in fitness are ignored.
     /// </para>
     /// </remarks>
+    [DataContract]
     public class RankSelectionOperator : SelectionOperator
     {
         /// <summary>

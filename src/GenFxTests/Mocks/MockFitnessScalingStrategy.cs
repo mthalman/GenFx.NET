@@ -2,9 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using GenFx;
+using System.Runtime.Serialization;
 
 namespace GenFxTests.Mocks
 {
+    [DataContract]
     class MockFitnessScalingStrategy : FitnessScalingStrategy
     {
         internal int OnScaleCallCount;
@@ -15,6 +17,7 @@ namespace GenFxTests.Mocks
         }
     }
 
+    [DataContract]
     class MockFitnessScalingStrategy2 : FitnessScalingStrategy
     {
         protected override void UpdateScaledFitnessValues(Population population)

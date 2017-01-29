@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 
 namespace GenFx.ComponentLibrary.SelectionOperators
 {
@@ -9,6 +10,7 @@ namespace GenFx.ComponentLibrary.SelectionOperators
     /// selected is directly proportional to its fitness value compared to the rest of the <see cref="Population"/>
     /// to which it belongs.
     /// </summary>
+    [DataContract]
     public class FitnessProportionateSelectionOperator : SelectionOperator
     {
         /// <summary>

@@ -1,3 +1,5 @@
+using System.Runtime.Serialization;
+
 namespace GenFx.ComponentLibrary.Elitism
 {
     /// <summary>
@@ -10,6 +12,7 @@ namespace GenFx.ComponentLibrary.Elitism
     /// select those <see cref="GeneticEntity"/> objects which are determined to be "elite".  The number
     /// of genetic entities chosen is based on the <see cref="ElitismStrategy.ElitistRatio"/> property value.
     /// </remarks>
+    [DataContract]
     public sealed class SimpleElitismStrategy : ElitismStrategy
     {
     }

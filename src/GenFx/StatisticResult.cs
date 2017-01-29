@@ -1,15 +1,24 @@
 using System;
+using System.Runtime.Serialization;
 
 namespace GenFx
 {
     /// <summary>
     /// Represents the result of a statistical calculation for a particular generation of a <see cref="Population"/>.
     /// </summary>
+    [DataContract]
     public class StatisticResult
     {
+        [DataMember]
         private int generationIndex;
+
+        [DataMember]
         private object resultValue;
+
+        [DataMember]
         private int populationId;
+
+        [DataMember]
         private Statistic statistic;
 
         /// <summary>

@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.Serialization;
 using System.Threading.Tasks;
 
 namespace GenFx
@@ -11,9 +12,13 @@ namespace GenFx
     /// operators such as the <see cref="SelectionOperator"/>, <see cref="CrossoverOperator"/>, and
     /// <see cref="MutationOperator"/> act upon genetic entities to bring about change in the system.
     /// </remarks>
+    [DataContract]
     public abstract class GeneticEntity : GeneticComponentWithAlgorithm
     {
+        [DataMember]
         private double rawFitnessValue;
+
+        [DataMember]
         private double scaledFitnessValue;
 
         /// <summary>
@@ -29,6 +34,7 @@ namespace GenFx
         /// Gets or sets the number of generations this entity has survived without being altered.
         /// </summary>
         /// <value>The number of generations this entity has survived without being altered.</value>
+        [DataMember]
         public int Age
         {
             get; set;
@@ -70,42 +76,6 @@ namespace GenFx
             set { this.scaledFitnessValue = value; }
         }
         
-        /// <summary>
-        /// Restores the state of this component.
-        /// </summary>
-        /// <param name="state">The state of the component to restore from.</param>
-        public override void RestoreState(KeyValueMap state)
-        {
-            if (state == null)
-            {
-                throw new ArgumentNullException(nameof(state));
-            }
-
-            base.RestoreState(state);
-
-            this.Age = (int)state[nameof(this.Age)];
-            this.rawFitnessValue = (double)state[nameof(this.rawFitnessValue)];
-            this.scaledFitnessValue = (double)state[nameof(this.scaledFitnessValue)];
-        }
-
-        /// <summary>
-        /// Sets the serializable state of this component on the state object.
-        /// </summary>
-        /// <param name="state">The object containing the serializable state of this object.</param>
-        public override void SetSaveState(KeyValueMap state)
-        {
-            if (state == null)
-            {
-                throw new ArgumentNullException(nameof(state));
-            }
-
-            base.SetSaveState(state);
-
-            state[nameof(this.Age)] = this.Age;
-            state[nameof(this.rawFitnessValue)] = this.rawFitnessValue;
-            state[nameof(this.scaledFitnessValue)] = this.scaledFitnessValue;
-        }
-
         /// <summary>
         /// Evaluates the <see cref="RawFitnessValue"/> of the entity.
         /// </summary>

@@ -93,6 +93,21 @@ namespace GenFxTests
             AssertEx.Throws<ArgumentOutOfRangeException>(() => new PopulationReplacementValue(-1, ReplacementValueKind.FixedCount));
         }
 
+        /// <summary>
+        /// Tests that the object can be serialized and deserialized.
+        /// </summary>
+        [TestMethod]
+        public void Serialization()
+        {
+            SteadyStateGeneticAlgorithm algorithm = new SteadyStateGeneticAlgorithm();
+            algorithm.PopulationReplacementValue = new PopulationReplacementValue(3, ReplacementValueKind.Percentage);
+
+            SteadyStateGeneticAlgorithm result = (SteadyStateGeneticAlgorithm)SerializationHelper.TestSerialization(algorithm, new Type[0]);
+
+            Assert.AreEqual(algorithm.PopulationReplacementValue.Kind, result.PopulationReplacementValue.Kind);
+            Assert.AreEqual(algorithm.PopulationReplacementValue.Value, result.PopulationReplacementValue.Value);
+        }
+
         private static SimplePopulation GetPopulation(GeneticAlgorithm algorithm)
         {
             SimplePopulation population = new SimplePopulation { MinimumPopulationSize = 3 };

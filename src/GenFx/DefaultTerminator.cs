@@ -1,8 +1,11 @@
-﻿namespace GenFx
+﻿using System.Runtime.Serialization;
+
+namespace GenFx
 {
     /// <summary>
     /// Represents a <see cref="Terminator"/> that never completes.
     /// </summary>
+    [DataContract]
     internal class DefaultTerminator : Terminator
     {        
         /// <summary>

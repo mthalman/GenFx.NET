@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.Serialization;
 
 namespace GenFx.ComponentLibrary.Statistics
 {
@@ -6,6 +7,7 @@ namespace GenFx.ComponentLibrary.Statistics
     /// Provides the calculation to determine the highest <see cref="GeneticEntity.ScaledFitnessValue"/> 
     /// in a <see cref="Population"/>.
     /// </summary>
+    [DataContract]
     public class MaximumFitnessStatistic : Statistic
     {
         /// <summary>

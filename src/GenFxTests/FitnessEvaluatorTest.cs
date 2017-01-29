@@ -50,6 +50,20 @@ namespace GenFxTests
             Assert.AreEqual((double)99, actualVal, "Fitness was not evaluated correctly.");
         }
 
+        /// <summary>
+        /// Tests that the object can be serialized and deserialized.
+        /// </summary>
+        [TestMethod]
+        public void Serialization()
+        {
+            MockFitnessEvaluator evaluator = new MockFitnessEvaluator();
+            evaluator.EvaluationMode = FitnessEvaluationMode.Maximize;
+
+            MockFitnessEvaluator result = (MockFitnessEvaluator)SerializationHelper.TestSerialization(evaluator, new Type[0]);
+
+            Assert.AreEqual(evaluator.EvaluationMode, result.EvaluationMode);
+        }
+
         private class FakeFitnessEvaluator : FitnessEvaluator
         {
             public override Task<double> EvaluateFitnessAsync(GeneticEntity entity)

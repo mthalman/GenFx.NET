@@ -5,6 +5,7 @@ using GenFxTests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 using System.Text;
 
 namespace GenFxTests
@@ -127,6 +128,28 @@ namespace GenFxTests
             Assert.AreEqual(node.Value, newNode.Value, "Value not set correctly.");
         }
 
+        /// <summary>
+        /// Tests that the object can be serialized and deserialized.
+        /// </summary>
+        [TestMethod]
+        public void Serialization()
+        {
+            TreeNode node = new TreeNode();
+            node.Value = 3;
+            node.ParentNode = new TreeNode();
+            node.Tree = new TestTreeEntity();
+            node.ChildNodes.Add(new TreeNode());
+
+            TreeNode result = (TreeNode)SerializationHelper.TestSerialization(node, new Type[] {
+                typeof(TestTreeEntity)
+            });
+
+            Assert.AreEqual(node.Value, result.Value);
+            Assert.IsInstanceOfType(node.ParentNode, typeof(TreeNode));
+            Assert.IsInstanceOfType(node.Tree, typeof(TestTreeEntity));
+            Assert.IsInstanceOfType(node.ChildNodes[0], typeof(TreeNode));
+        }
+
         private static GeneticAlgorithm GetAlgorithm()
         {
             GeneticAlgorithm algorithm = new MockGeneticAlgorithm
@@ -139,6 +162,7 @@ namespace GenFxTests
             return algorithm;
         }
 
+        [DataContract]
         private class TestTreeEntity : TreeEntityBase
         {
             public override string Representation

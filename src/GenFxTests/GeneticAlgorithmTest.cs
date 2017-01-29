@@ -7,8 +7,10 @@ using GenFxTests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.Serialization;
 using System.Threading.Tasks;
 
 namespace GenFxTests
@@ -1019,6 +1021,53 @@ namespace GenFxTests
             SimpleGeneticAlgorithm target = new SimpleGeneticAlgorithm();
             int val = 0;
             AssertEx.Throws<ValidationException>(() => target.MinimumEnvironmentSize = val);
+        }
+
+        /// <summary>
+        /// Tests that the <see cref="GeneticAlgorithm"/> can be serialized and deserialized.
+        /// </summary>
+        [TestMethod]
+        public void GeneticAlgorithm_Serialization()
+        {
+            MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm
+            {
+                CrossoverOperator = new MockCrossoverOperator(),
+                ElitismStrategy = new MockElitismStrategy(),
+                FitnessEvaluator = new MockFitnessEvaluator(),
+                FitnessScalingStrategy = new MockFitnessScalingStrategy(),
+                GeneticEntitySeed = new MockEntity(),
+                MinimumEnvironmentSize = 10,
+                MutationOperator = new MockMutationOperator(),
+                PopulationSeed = new MockPopulation(),
+                SelectionOperator = new MockSelectionOperator(),
+                Terminator = new MockTerminator()
+            };
+
+            algorithm.Statistics.Add(new MockStatistic());
+            algorithm.Statistics.Add(new MockStatistic2());
+
+            algorithm.Plugins.Add(new MockPlugin());
+            algorithm.Plugins.Add(new MockPlugin2());
+
+            MockGeneticAlgorithm result = (MockGeneticAlgorithm)SerializationHelper.TestSerialization(
+                algorithm, algorithm.GetAllComponents().Select(c => c.GetType()));
+
+            Assert.AreEqual(10, result.MinimumEnvironmentSize);
+            Assert.IsInstanceOfType(result.CrossoverOperator, typeof(MockCrossoverOperator));
+            Assert.IsInstanceOfType(result.ElitismStrategy, typeof(MockElitismStrategy));
+            Assert.IsInstanceOfType(result.FitnessEvaluator, typeof(MockFitnessEvaluator));
+            Assert.IsInstanceOfType(result.FitnessScalingStrategy, typeof(MockFitnessScalingStrategy));
+            Assert.IsInstanceOfType(result.GeneticEntitySeed, typeof(MockEntity));
+            Assert.IsInstanceOfType(result.MutationOperator, typeof(MockMutationOperator));
+            Assert.IsInstanceOfType(result.PopulationSeed, typeof(MockPopulation));
+            Assert.IsInstanceOfType(result.SelectionOperator, typeof(MockSelectionOperator));
+            Assert.IsInstanceOfType(result.Terminator, typeof(MockTerminator));
+
+            Assert.IsInstanceOfType(result.Statistics[0], typeof(MockStatistic));
+            Assert.IsInstanceOfType(result.Statistics[1], typeof(MockStatistic2));
+
+            Assert.IsInstanceOfType(result.Plugins[0], typeof(MockPlugin));
+            Assert.IsInstanceOfType(result.Plugins[1], typeof(MockPlugin2));
         }
 
         private void ValidateComponent(GeneticComponentWithAlgorithm component, GeneticAlgorithm algorithm, bool validationExceptionExpected)

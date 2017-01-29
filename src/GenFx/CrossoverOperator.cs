@@ -2,6 +2,7 @@ using GenFx.Validation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 
 namespace GenFx
 {
@@ -14,13 +15,17 @@ namespace GenFx
     /// objects to produce one or more new <see cref="GeneticEntity"/> objects.  It is intended to be similar
     /// to biological recombination between two chromosomes.
     /// </remarks>
+    [DataContract]
     public abstract class CrossoverOperator : GeneticComponentWithAlgorithm
     {
         private const double DefaultCrossoverRate = .7;
         private const double CrossoverRateMin = 0;
         private const double CrossoverRateMax = 1;
 
+        [DataMember]
         private int requiredParentCount;
+
+        [DataMember]
         private double crossoverRate = DefaultCrossoverRate;
 
         /// <summary>

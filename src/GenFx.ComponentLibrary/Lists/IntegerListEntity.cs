@@ -1,19 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 
 namespace GenFx.ComponentLibrary.Lists
 {
     /// <summary>
     /// Entity made up of a list of integers.
     /// </summary>
+    [DataContract]
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix")]
     public class IntegerListEntity : ListEntity<int>
     {
         private const int DefaultMinElementValue = 0;
         private const int DefaultMaxElementValue = Int32.MaxValue;
 
+        [DataMember]
         private int minElementValue = DefaultMinElementValue;
+
+        [DataMember]
         private int maxElementValue = DefaultMaxElementValue;
+
+        [DataMember]
         private bool useUniqueElementValues;
         
         /// <summary>

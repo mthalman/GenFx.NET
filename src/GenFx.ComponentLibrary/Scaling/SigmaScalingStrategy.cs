@@ -1,5 +1,6 @@
 using GenFx.Validation;
 using System;
+using System.Runtime.Serialization;
 
 namespace GenFx.ComponentLibrary.Scaling
 {
@@ -12,10 +13,12 @@ namespace GenFx.ComponentLibrary.Scaling
     /// The sigma scaling algorithm is based on the one defined by Goldberg (1989).
     /// </para>
     /// </remarks>
+    [DataContract]
     public class SigmaScalingStrategy : FitnessScalingStrategy
     {
         private const int DefaultMultiplier = 2;
 
+        [DataMember]
         private int multiplier = DefaultMultiplier;
 
         /// <summary>

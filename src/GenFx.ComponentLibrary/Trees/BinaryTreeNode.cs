@@ -1,9 +1,12 @@
+using System.Runtime.Serialization;
+
 namespace GenFx.ComponentLibrary.Trees
 {
     /// <summary>
     /// Represents a generic node in a binary tree with two possible child nodes.
     /// </summary>
     /// <typeparam name="T">Type of value contained by the node.</typeparam>
+    [DataContract]
     public class BinaryTreeNode<T> : TreeNode<T>
     {
         /// <summary>

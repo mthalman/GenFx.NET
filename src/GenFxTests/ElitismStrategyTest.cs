@@ -100,6 +100,20 @@ namespace GenFxTests
             AssertEx.Throws<ArgumentException>(() => strategy.GetEliteEntities(pop));
         }
 
+        /// <summary>
+        /// Tests that the object can be serialized and deserialized.
+        /// </summary>
+        [TestMethod]
+        public void Serialization()
+        {
+            MockElitismStrategy strategy = new Mocks.MockElitismStrategy();
+            strategy.ElitistRatio = 0.3;
+
+            MockElitismStrategy result = (MockElitismStrategy)SerializationHelper.TestSerialization(strategy, new Type[0]);
+
+            Assert.AreEqual(0.3, result.ElitistRatio);
+        }
+
         private static MockGeneticAlgorithm GetGeneticAlgorithm(double elitismRatio)
         {
             MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm

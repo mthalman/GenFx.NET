@@ -6,6 +6,7 @@ using GenFxTests.Helpers;
 using GenFxTests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Runtime.Serialization;
 
 namespace GenFxTests
 {
@@ -56,6 +57,22 @@ namespace GenFxTests
             ValidateScale(entity6, 25);
         }
 
+        /// <summary>
+        /// Tests that the object can be serialized and deserialized.
+        /// </summary>
+        [TestMethod]
+        public void Serialization()
+        {
+            FakeFitnessSharingScalingStrategy strategy = new FakeFitnessSharingScalingStrategy();
+            strategy.ScalingCurvature = 10;
+            strategy.ScalingDistanceCutoff = 5;
+
+            FakeFitnessSharingScalingStrategy result = (FakeFitnessSharingScalingStrategy)SerializationHelper.TestSerialization(strategy, new Type[0]);
+
+            Assert.AreEqual(strategy.ScalingCurvature, result.ScalingCurvature);
+            Assert.AreEqual(strategy.ScalingDistanceCutoff, result.ScalingDistanceCutoff);
+        }
+
         private static void ValidateScale(GeneticEntity entity, double expectedValue)
         {
             Assert.AreEqual(expectedValue, Math.Round(entity.ScaledFitnessValue, 2), "ScaledFitnessValue not scaled correctly.");
@@ -87,6 +104,7 @@ namespace GenFxTests
             return algorithm;
         }
 
+        [DataContract]
         private class FakeFitnessSharingScalingStrategy : FitnessSharingScalingStrategy
         {
             public override double EvaluateFitnessDistance(GeneticEntity entity1, GeneticEntity entity2)

@@ -1,5 +1,6 @@
 ﻿using GenFx;
 using GenFx.ComponentLibrary.Populations;
+using GenFxTests.Helpers;
 using GenFxTests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
@@ -83,6 +84,27 @@ namespace GenFxTests
                 Assert.IsInstanceOfType(environment.Populations[i], typeof(MockPopulation), "Population {0}: Incorrect population type created.", i);
                 Assert.AreEqual(populationSize, environment.Populations[i].Entities.Count, "Population {0}: Incorrect number of genetic entities created.", i);
             }
+        }
+
+        /// <summary>
+        /// Tests that the object can be serialized and deserialized.
+        /// </summary>
+        [TestMethod]
+        public void Serialization()
+        {
+            GeneticEnvironment environment = new GeneticEnvironment(new MockGeneticAlgorithm());
+            environment.Populations.Add(new MockPopulation());
+
+            GeneticEnvironment result = (GeneticEnvironment)SerializationHelper.TestSerialization(environment, new Type[]
+            {
+                typeof(MockGeneticAlgorithm),
+                typeof(MockPopulation)
+            });
+
+            Assert.IsInstanceOfType(result.Populations[0], typeof(MockPopulation));
+
+            PrivateObject privObj = new PrivateObject(environment);
+            Assert.IsInstanceOfType(privObj.GetField("algorithm"), typeof(MockGeneticAlgorithm));
         }
 
         private static SimplePopulation GetPopulation(GeneticAlgorithm algorithm)

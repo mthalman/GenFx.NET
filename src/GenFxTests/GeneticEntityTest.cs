@@ -15,7 +15,7 @@ namespace GenFxTests
     ///to contain all GenFx.GeneticEntity Unit Tests
     ///</summary>
     [TestClass()]
-    public class EntityTest
+    public class GeneticEntityTest
     {
         /// <summary>
         /// Tests that an exception is thrown when a null algorithm is passed.
@@ -117,6 +117,26 @@ namespace GenFxTests
             Assert.AreEqual(entity.Age, newEntity.Age, "Age value not copied correctly.");
             Assert.AreEqual(entity.RawFitnessValue, newEntity.RawFitnessValue, "RawFitnessValue not copied correctly.");
             Assert.AreEqual(entity.ScaledFitnessValue, newEntity.ScaledFitnessValue, "RawFitnessValue not copied correctly.");
+        }
+
+        /// <summary>
+        /// Tests that the object can be serialized and deserialized.
+        /// </summary>
+        [TestMethod]
+        public void Serialization()
+        {
+            MockEntity entity = new MockEntity();
+            entity.Age = 33;
+            entity.ScaledFitnessValue = 2;
+
+            PrivateObject privObj = new PrivateObject(entity, new PrivateType(typeof(GeneticEntity)));
+            privObj.SetField("rawFitnessValue", 7);
+
+            MockEntity result = (MockEntity)SerializationHelper.TestSerialization(entity, new Type[0]);
+
+            Assert.AreEqual(entity.Age, result.Age);
+            Assert.AreEqual(entity.ScaledFitnessValue, result.ScaledFitnessValue);
+            Assert.AreEqual(entity.RawFitnessValue, result.RawFitnessValue);
         }
 
         private class TestEntity : GeneticEntity

@@ -11,21 +11,6 @@ namespace GenFx
     public static class GeneticComponentExtensions
     {
         /// <summary>
-        /// Returns an objects that contains the serializable state of this component.
-        /// </summary>
-        public static KeyValueMap SaveState(this GeneticComponent component)
-        {
-            if (component == null)
-            {
-                throw new ArgumentNullException("component");
-            }
-
-            KeyValueMap state = new KeyValueMap();
-            component.SetSaveState(state);
-            return state;
-        }
-
-        /// <summary>
         /// Creates a new version of the component, copies the configuration state, and initializes it.
         /// </summary>
         /// <param name="component">The component from which to create a new component and the source of the configuration state to be copied.</param>

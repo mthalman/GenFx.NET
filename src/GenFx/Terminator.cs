@@ -1,3 +1,5 @@
+using System.Runtime.Serialization;
+
 namespace GenFx
 {
     /// <summary>
@@ -6,6 +8,7 @@ namespace GenFx
     /// <remarks>
     /// The <b>Terminator</b> class defines when a genetic algorithm should stop executing.
     /// </remarks>
+    [DataContract]
     public abstract class Terminator : GeneticComponentWithAlgorithm
     {
         /// <summary>

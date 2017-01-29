@@ -2,11 +2,14 @@
 using GenFx.ComponentLibrary.Lists;
 using GenFx.Validation;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Threading.Tasks;
 
 namespace SimpleBinaryString
 {
+    [DataContract]
     [RequiredGeneticEntity(typeof(BinaryStringEntity))]
+    [IntegerExternalValidator(typeof(GeneticAlgorithm), nameof(GeneticAlgorithm.MinimumEnvironmentSize), MaxValue = 1)]
     internal class FitnessEvaluator : GenFx.FitnessEvaluator
     {
         public override Task<double> EvaluateFitnessAsync(GeneticEntity entity)

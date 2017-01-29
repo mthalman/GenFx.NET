@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Threading.Tasks;
 
 namespace GenFx
@@ -9,9 +10,13 @@ namespace GenFx
     /// <summary>
     /// Container of all the <see cref="Population"/> objects for a genetic algorithm.  This class cannot be inherited.
     /// </summary>
+    [DataContract]
     public sealed class GeneticEnvironment
     {
+        [DataMember]
         private ObservableCollection<Population> populations = new ObservableCollection<Population>();
+
+        [DataMember]
         private GeneticAlgorithm algorithm;
 
         /// <summary>
@@ -30,38 +35,7 @@ namespace GenFx
         {
             this.algorithm = algorithm;
         }
-
-        /// <summary>
-        /// Saves the state of the environment.
-        /// </summary>
-        public KeyValueMap SaveState()
-        {
-            KeyValueMap state = new KeyValueMap();
-            state[nameof(this.populations)] = new KeyValueMapCollection(this.Populations.Select(p => p.SaveState()).Cast<KeyValueMap>());
-            return state;
-        }
-
-        /// <summary>
-        /// Restores the state of the environment.
-        /// </summary>
-        /// <param name="state">State from which to restore.</param>
-        public void RestoreState(KeyValueMap state)
-        {
-            if (state == null)
-            {
-                throw new ArgumentNullException(nameof(state));
-            }
-
-            this.Populations.Clear();
-
-            foreach (KeyValueMap populationState in (KeyValueMapCollection)state[nameof(this.populations)])
-            {
-                Population population = (Population)this.algorithm.PopulationSeed.CreateNewAndInitialize();
-                population.RestoreState(populationState);
-                this.Populations.Add(population);
-            }
-        }
-
+        
         /// <summary>
         /// Evaluates the fitness of all the <see cref="Population"/> objects contained by this <see cref="GeneticEnvironment"/>
         /// </summary>

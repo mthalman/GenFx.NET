@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Runtime.Serialization;
 
 namespace GenFx.ComponentLibrary.Trees
 {
@@ -10,8 +11,10 @@ namespace GenFx.ComponentLibrary.Trees
     /// The <b>TreeEntity</b> is used to represent genetic entities that require a tree structure, such as
     /// expression trees.  Trees generally do not have a fixed size and can grow infinitely.
     /// </remarks>
+    [DataContract]
     public abstract class TreeEntityBase : GeneticEntity
     {
+        [DataMember]
         private TreeNode rootNode;
         
         /// <summary>
