@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Runtime.Serialization;
 using System.Threading.Tasks;
 
 namespace GenFx.ComponentLibrary.Algorithms
@@ -12,6 +13,7 @@ namespace GenFx.ComponentLibrary.Algorithms
     /// <b>SimpleGeneticAlgorithm</b> can operate multiple <see cref="Population"/> objects but
     /// they run isolated from one another.
     /// </remarks>
+    [DataContract]
     public class SimpleGeneticAlgorithm : GeneticAlgorithm
     {
         /// <summary>

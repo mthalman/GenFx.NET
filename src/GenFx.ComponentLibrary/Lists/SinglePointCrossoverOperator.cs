@@ -1,6 +1,7 @@
 using GenFx.Validation;
 using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 
 namespace GenFx.ComponentLibrary.Lists
 {
@@ -13,6 +14,7 @@ namespace GenFx.ComponentLibrary.Lists
     /// by 001101 and 100011 were to be crossed over at position 2, the resulting offspring would
     /// be 000011 and 101101.
     /// </remarks>
+    [DataContract]
     [RequiredGeneticEntity(typeof(ListEntityBase))]
     public class SinglePointCrossoverOperator : CrossoverOperator
     {

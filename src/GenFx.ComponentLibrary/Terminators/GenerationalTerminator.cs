@@ -1,4 +1,5 @@
 using GenFx.Validation;
+using System.Runtime.Serialization;
 
 namespace GenFx.ComponentLibrary.Terminators
 {
@@ -6,10 +7,12 @@ namespace GenFx.ComponentLibrary.Terminators
     /// Represents a genetic algorithm terminator that stops the algorithm once a target generation
     /// has been reached.
     /// </summary>
+    [DataContract]
     public class GenerationalTerminator : Terminator
     {
         private const int DefaultFinalGeneration = 100;
 
+        [DataMember]
         private int finalGeneration = DefaultFinalGeneration;
 
         /// <summary>

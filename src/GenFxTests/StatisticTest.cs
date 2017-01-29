@@ -90,6 +90,35 @@ namespace GenFxTests
             Assert.AreSame(stat, results[0].Statistic, "Result's Statistic not set correctly.");
         }
 
+        /// <summary>
+        /// Tests that the object can be serialized and deserialized.
+        /// </summary>
+        [TestMethod]
+        public void Serialization()
+        {
+            MockStatistic stat = new MockStatistic();
+
+            PrivateObject privObj = new PrivateObject(stat, new PrivateType(typeof(Statistic)));
+
+            Dictionary<int, ObservableCollection<StatisticResult>> popResults = (Dictionary<int, ObservableCollection<StatisticResult>>)privObj.GetField("populationResults");
+
+            ObservableCollection<StatisticResult> statResults = new ObservableCollection<StatisticResult>();
+            statResults.Add(new StatisticResult(1, 2, 3, stat));
+            popResults.Add(0, statResults);
+
+            MockStatistic result = (MockStatistic)SerializationHelper.TestSerialization(stat, new Type[0]);
+
+            PrivateObject resultPrivObj = new PrivateObject(result, new PrivateType(typeof(Statistic)));
+
+            Dictionary<int, ObservableCollection<StatisticResult>> resultPopResults = (Dictionary<int, ObservableCollection<StatisticResult>>)resultPrivObj.GetField("populationResults");
+
+            ObservableCollection<StatisticResult> resultStatResults = resultPopResults[0];
+            Assert.AreEqual(statResults[0].GenerationIndex, resultStatResults[0].GenerationIndex);
+            Assert.AreEqual(statResults[0].PopulationId, resultStatResults[0].PopulationId);
+            Assert.AreEqual(statResults[0].ResultValue, resultStatResults[0].ResultValue);
+            Assert.AreSame(result, resultStatResults[0].Statistic);
+        }
+
         private class FakeStatistic : Statistic
         {
             internal int GetResultValueCallCount;

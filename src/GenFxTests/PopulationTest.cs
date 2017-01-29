@@ -112,6 +112,51 @@ namespace GenFxTests
             AssertEx.Throws<ValidationException>(() => target.MinimumPopulationSize = 0);
         }
 
+        /// <summary>
+        /// Tests that the object can be serialized and deserialized.
+        /// </summary>
+        [TestMethod]
+        public void Serialization()
+        {
+            MockPopulation population = new MockPopulation
+            {
+                MinimumPopulationSize = 10,
+                Index = 3,
+            };
+
+            population.Entities.Add(new MockEntity());
+
+            PrivateObject privObj = new PrivateObject(population, new PrivateType(typeof(Population)));
+            privObj.SetField("rawMean", 1);
+            privObj.SetField("rawStandardDeviation", 2);
+            privObj.SetField("rawMax", 3);
+            privObj.SetField("rawMin", 4);
+            privObj.SetField("scaledMean", 5);
+            privObj.SetField("scaledStandardDeviation", 6);
+            privObj.SetField("scaledMax", 7);
+            privObj.SetField("scaledMin", 8);
+
+            MockPopulation result = (MockPopulation)SerializationHelper.TestSerialization(population, new Type[]
+            {
+                typeof(MockEntity)
+            });
+
+            PrivateObject resultPrivObj = new PrivateObject(result, new PrivateType(typeof(Population)));
+
+            Assert.AreEqual(population.MinimumPopulationSize, result.MinimumPopulationSize);
+            Assert.AreEqual(population.Index, result.Index);
+            Assert.IsInstanceOfType(result.Entities[0], typeof(MockEntity));
+
+            Assert.AreEqual((double)1, resultPrivObj.GetField("rawMean"));
+            Assert.AreEqual((double)2, resultPrivObj.GetField("rawStandardDeviation"));
+            Assert.AreEqual((double)3, resultPrivObj.GetField("rawMax"));
+            Assert.AreEqual((double)4, resultPrivObj.GetField("rawMin"));
+            Assert.AreEqual((double)5, resultPrivObj.GetField("scaledMean"));
+            Assert.AreEqual((double)6, resultPrivObj.GetField("scaledStandardDeviation"));
+            Assert.AreEqual((double)7, resultPrivObj.GetField("scaledMax"));
+            Assert.AreEqual((double)8, resultPrivObj.GetField("scaledMin"));
+        }
+
         private static async Task TestEvaluateFitnessAsync(bool useScaling)
         {
             GeneticAlgorithm algorithm = new MockGeneticAlgorithm

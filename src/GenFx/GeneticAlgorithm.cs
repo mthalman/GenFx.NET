@@ -3,11 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
-using System.Globalization;
-using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Runtime.Serialization.Formatters.Binary;
+using System.Runtime.Serialization;
 using System.Threading.Tasks;
 
 namespace GenFx
@@ -16,27 +13,57 @@ namespace GenFx
     /// Provides the abstract base class for a type of genetic algorithm.
     /// </summary>
     [SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
+    [DataContract]
     public abstract class GeneticAlgorithm : GeneticComponent
     {
         private const int DefaultEnvironmentSize = 1;
 
+        [DataMember]
         private int currentGeneration;
+
+        [DataMember]
         private GeneticEnvironment environment;
+
+        [DataMember]
         private List<Statistic> statistics = new List<Statistic>();
+
+        [DataMember]
         private List<Plugin> plugins = new List<Plugin>();
+
+        [DataMember]
         private bool isInitialized;
+
+        [DataMember]
         private FitnessEvaluator fitnessEvaluator;
+
+        [DataMember]
         private Terminator terminator;
+
+        [DataMember]
         private FitnessScalingStrategy fitnessScalingStrategy;
+
+        [DataMember]
         private SelectionOperator selectionOperator;
+
+        [DataMember]
         private MutationOperator mutationOperator;
+
+        [DataMember]
         private CrossoverOperator crossoverOperator;
+
+        [DataMember]
         private ElitismStrategy elitismStrategy;
+
+        [DataMember]
         private GeneticEntity geneticEntitySeed;
+
+        [DataMember]
         private Population populationSeed;
+
+        [DataMember]
         private int minimumEnvironmentSize = DefaultEnvironmentSize;
 
-        // Mapping of component properties to Validator objects as described by external components.
+        // Mapping of component properties to Validator objects as described by external components
         private Dictionary<PropertyInfo, List<PropertyValidator>> externalValidationMapping;
 
         /// <summary>
@@ -269,109 +296,7 @@ namespace GenFx
             this.RaiseFitnessEvaluatedEvent();
             this.isInitialized = true;
         }
-
-        /// <summary>
-        /// Saves the state of the algorithm.
-        /// </summary>
-        /// <returns>The saved state of the algorithm.</returns>
-        public byte[] SaveState()
-        {
-            BinaryFormatter formatter = new BinaryFormatter();
-            using (MemoryStream stream = new MemoryStream())
-            {
-                formatter.Serialize(stream, GeneticComponentExtensions.SaveState(this));
-                stream.Flush();
-                return stream.GetBuffer();
-            }
-        }
-
-        /// <summary>
-        /// Restores the state of the algorithm.
-        /// </summary>
-        /// <param name="savedState">The previously saved algorithm state to be restored.</param>
-        public void RestoreState(byte[] savedState)
-        {
-            BinaryFormatter formatter = new BinaryFormatter();
-            using (MemoryStream stream = new MemoryStream(savedState))
-            {
-                KeyValueMap state = (KeyValueMap)formatter.Deserialize(stream);
-                RestoreState(state);
-            }
-        }
         
-        /// <summary>
-        /// Restores the state of the algorithm.
-        /// </summary>
-        public override void RestoreState(KeyValueMap state)
-        {
-            if (state == null)
-            {
-                throw new ArgumentNullException(nameof(state));
-            }
-
-            base.RestoreState(state);
-            
-            this.environment.RestoreState((KeyValueMap)state[nameof(this.environment)]);
-            this.currentGeneration = (int)state[nameof(this.currentGeneration)];
-            this.isInitialized = (bool)state[nameof(this.isInitialized)];
-            this.MinimumEnvironmentSize = (int)state[nameof(this.MinimumEnvironmentSize)];
-
-            KeyValueMapCollection statisticStates = (KeyValueMapCollection)state[nameof(this.Statistics)];
-            for (int i = 0; i < statisticStates.Count; i++)
-            {
-                this.statistics[i].RestoreState(statisticStates[i]);
-            }
-
-            KeyValueMapCollection pluginStates = (KeyValueMapCollection)state[nameof(this.Plugins)];
-            for (int i = 0; i < pluginStates.Count; i++)
-            {
-                this.plugins[i].RestoreState(pluginStates[i]);
-            }
-
-            this.CrossoverOperator?.RestoreState((KeyValueMap)state[nameof(this.CrossoverOperator)]);
-            this.ElitismStrategy?.RestoreState((KeyValueMap)state[nameof(this.ElitismStrategy)]);
-            this.FitnessEvaluator?.RestoreState((KeyValueMap)state[nameof(this.FitnessEvaluator)]);
-            this.FitnessScalingStrategy?.RestoreState((KeyValueMap)state[nameof(this.FitnessScalingStrategy)]);
-            this.MutationOperator?.RestoreState((KeyValueMap)state[nameof(this.MutationOperator)]);
-            this.SelectionOperator?.RestoreState((KeyValueMap)state[nameof(this.SelectionOperator)]);
-            this.Terminator?.RestoreState((KeyValueMap)state[nameof(this.Terminator)]);
-            this.PopulationSeed?.RestoreState((KeyValueMap)state[nameof(this.PopulationSeed)]);
-            this.GeneticEntitySeed?.RestoreState((KeyValueMap)state[nameof(this.GeneticEntitySeed)]);
-        }
-
-        /// <summary>
-        /// Sets the serializable state of this component on the state object.
-        /// </summary>
-        /// <param name="state">The object containing the serializable state of this object.</param>
-        public override void SetSaveState(KeyValueMap state)
-        {
-            if (state == null)
-            {
-                throw new ArgumentNullException(nameof(state));
-            }
-
-            base.SetSaveState(state);
-
-            state[nameof(this.environment)] = this.environment.SaveState();
-            state[nameof(this.currentGeneration)] = this.currentGeneration;
-            state[nameof(this.isInitialized)] = this.isInitialized;
-            state[nameof(this.MinimumEnvironmentSize)] = this.MinimumEnvironmentSize;
-
-            state[nameof(this.Statistics)] = new KeyValueMapCollection(this.statistics.Select(s => s.SaveState()).Cast<KeyValueMap>());
-            state[nameof(this.Plugins)] = new KeyValueMapCollection(this.plugins.Select(s => s.SaveState()).Cast<KeyValueMap>());
-
-            state[nameof(this.CrossoverOperator)] = this.CrossoverOperator?.SaveState();
-            state[nameof(this.ElitismStrategy)] = this.ElitismStrategy?.SaveState();
-            state[nameof(this.FitnessEvaluator)] = this.FitnessEvaluator?.SaveState();
-            state[nameof(this.FitnessEvaluator)] = this.FitnessEvaluator?.SaveState();
-            state[nameof(this.FitnessScalingStrategy)] = this.FitnessScalingStrategy?.SaveState();
-            state[nameof(this.MutationOperator)] = this.MutationOperator?.SaveState();
-            state[nameof(this.SelectionOperator)] = this.SelectionOperator?.SaveState();
-            state[nameof(this.Terminator)] = this.Terminator?.SaveState();
-            state[nameof(this.GeneticEntitySeed)] = this.GeneticEntitySeed?.SaveState();
-            state[nameof(this.PopulationSeed)] = this.PopulationSeed?.SaveState();
-        }
-
         /// <summary>
         /// Executes the genetic algorithm.
         /// </summary>
@@ -563,7 +488,11 @@ namespace GenFx
             return mutants;
         }
 
-        private IEnumerable<GeneticComponent> GetAllComponents()
+        /// <summary>
+        /// Returns all <see cref="GeneticComponent"/> instances contained by this algorithm.
+        /// </summary>
+        /// <returns>All <see cref="GeneticComponent"/> instances contained by this algorithm.</returns>
+        internal IEnumerable<GeneticComponent> GetAllComponents()
         {
             if (this.CrossoverOperator != null)
             {
@@ -696,6 +625,12 @@ namespace GenFx
             }
 
             return isAlgorithmComplete || isCanceled;
+        }
+
+        [OnDeserialized]
+        private void OnDeserialized(StreamingContext context)
+        {
+            this.CompileExternalValidatorMapping();
         }
 
         private void OnAlgorithmCompleted()

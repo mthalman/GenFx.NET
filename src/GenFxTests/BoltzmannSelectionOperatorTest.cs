@@ -6,6 +6,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using GenFxTests.Mocks;
 using GenFxTests.Helpers;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 
 namespace GenFxTests
 {
@@ -98,6 +99,22 @@ namespace GenFxTests
             AssertEx.Throws<OverflowException>(() => op.SelectEntities(1, population));
         }
 
+        /// <summary>
+        /// Tests that the object can be serialized and deserialized.
+        /// </summary>
+        [TestMethod]
+        public void Serialization()
+        {
+            FakeBoltzmannSelectionOperator op = new FakeBoltzmannSelectionOperator();
+            op.InitialTemperature = 1;
+            op.CurrentTemperature = 2;
+
+            FakeBoltzmannSelectionOperator result = (FakeBoltzmannSelectionOperator)SerializationHelper.TestSerialization(op, new Type[0]);
+
+            Assert.AreEqual(1, result.InitialTemperature);
+            Assert.AreEqual(2, result.CurrentTemperature);
+        }
+
         private static MockGeneticAlgorithm GetMockAlgorithm(double initialTemp)
         {
             MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm
@@ -113,7 +130,8 @@ namespace GenFxTests
             };
             return algorithm;
         }
-
+        
+        [DataContract]
         private class FakeBoltzmannSelectionOperator : BoltzmannSelectionOperator
         {
             public override void AdjustTemperature()

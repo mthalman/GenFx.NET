@@ -6,6 +6,7 @@ using GenFx.ComponentLibrary.Trees;
 using GenFx;
 using GenFxTests.Mocks;
 using GenFxTests.Helpers;
+using System.Runtime.Serialization;
 
 namespace GenFxTests
 {
@@ -261,6 +262,24 @@ namespace GenFxTests
             Assert.AreSame(entity2, grandChildNode1.Tree, "Tree not set correctly.");
         }
 
+        /// <summary>
+        /// Tests that the object can be serialized and deserialized.
+        /// </summary>
+        [TestMethod]
+        public void Serialization()
+        {
+            TestTreeEntity entity = new TestTreeEntity();
+
+            PrivateObject privObj = new PrivateObject(entity, new PrivateType(typeof(TreeEntityBase)));
+            TreeNode node = new TreeNode();
+            privObj.SetField("rootNode", node);
+
+            TestTreeEntity result = (TestTreeEntity)SerializationHelper.TestSerialization(entity, new Type[0]);
+
+            Assert.IsInstanceOfType(result.RootNode, typeof(TreeNode));
+        }
+
+        [DataContract]
         private class TestTreeEntity : TreeEntityBase
         {
             public override string Representation

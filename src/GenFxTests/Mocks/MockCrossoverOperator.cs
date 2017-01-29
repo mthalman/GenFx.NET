@@ -2,9 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using GenFx;
+using System.Runtime.Serialization;
 
 namespace GenFxTests.Mocks
 {
+    [DataContract]
     class MockCrossoverOperator : CrossoverOperator
     {
         internal int DoCrossoverCallCount;
@@ -22,7 +24,8 @@ namespace GenFxTests.Mocks
             return geneticEntities;
         }
     }
-    
+
+    [DataContract]
     class MockCrossoverOperator2 : CrossoverOperator
     {
         public MockCrossoverOperator2() : base(2)

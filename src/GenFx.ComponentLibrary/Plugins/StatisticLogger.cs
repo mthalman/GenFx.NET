@@ -3,14 +3,17 @@ using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
+using System.Runtime.Serialization;
 
 namespace GenFx.ComponentLibrary.Plugins
 {
     /// <summary>
     /// Logs statistics for each generation.
     /// </summary>
+    [DataContract]
     public class StatisticLogger : Plugin
     {
+        [DataMember]
         private string traceCategory;
 
         /// <summary>

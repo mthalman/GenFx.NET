@@ -5,12 +5,14 @@ using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Runtime.Serialization;
 
 namespace GenFx
 {
     /// <summary>
     /// Represents a customizable component within the framework.
     /// </summary>
+    [DataContract]
     public abstract class GeneticComponent : INotifyPropertyChanged
     {
         /// <summary>
@@ -31,22 +33,6 @@ namespace GenFx
         public virtual GeneticComponent CreateNew()
         {
             return (GeneticComponent)Activator.CreateInstance(this.GetType());
-        }
-        
-        /// <summary>
-        /// Restores the state of the component.
-        /// </summary>
-        /// <param name="state">The state to restore from.</param>
-        public virtual void RestoreState(KeyValueMap state)
-        {
-        }
-
-        /// <summary>
-        /// Sets the serializable state of this component on the state object.
-        /// </summary>
-        /// <param name="state">The object containing the serializable state of this object.</param>
-        public virtual void SetSaveState(KeyValueMap state)
-        {
         }
 
         /// <summary>

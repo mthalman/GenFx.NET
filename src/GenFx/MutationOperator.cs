@@ -1,5 +1,6 @@
 using GenFx.Validation;
 using System;
+using System.Runtime.Serialization;
 
 namespace GenFx
 {
@@ -12,10 +13,12 @@ namespace GenFx
     /// to the next generation.  Genetic algorithm mutation is intended to be similar to gene copying 
     /// errors in nature.  Mutations are the driver of randomness in a population.
     /// </remarks>
+    [DataContract]
     public abstract class MutationOperator : GeneticComponentWithAlgorithm
     {
         private const double DefaultMutationRate = .001;
 
+        [DataMember]
         private double mutationRate = DefaultMutationRate;
 
         /// <summary>

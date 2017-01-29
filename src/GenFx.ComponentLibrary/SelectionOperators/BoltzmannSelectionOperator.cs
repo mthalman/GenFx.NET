@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 
 namespace GenFx.ComponentLibrary.SelectionOperators
 {
@@ -16,9 +17,13 @@ namespace GenFx.ComponentLibrary.SelectionOperators
     /// Boltzmann selection uses a term called temperature which controls the selection pressure.  A high
     /// temperature means a low selection pressure.
     /// </remarks>
+    [DataContract]
     public abstract class BoltzmannSelectionOperator : SelectionOperator
     {
+        [DataMember]
         private double initialTemperature;
+
+        [DataMember]
         private double currentTemperature;
 
         /// <summary>

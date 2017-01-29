@@ -1,6 +1,7 @@
 ﻿using GenFx;
 using GenFx.ComponentLibrary.Algorithms;
 using GenFx.ComponentLibrary.Populations;
+using GenFxTests.Helpers;
 using GenFxTests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
@@ -115,6 +116,24 @@ namespace GenFxTests
             Assert.AreEqual((double)10, population3.Entities[1].ScaledFitnessValue, "Incorrect entity.");
             Assert.AreEqual((double)8, population3.Entities[2].ScaledFitnessValue, "Incorrect entity.");
             Assert.AreEqual((double)7, population3.Entities[3].ScaledFitnessValue, "Incorrect entity.");
+        }
+
+        /// <summary>
+        /// Tests that the object can be serialized and deserialized.
+        /// </summary>
+        [TestMethod]
+        public void Serialization()
+        {
+            MultiDemeGeneticAlgorithm algorithm = new MultiDemeGeneticAlgorithm
+            {
+                MigrantCount = 11,
+                MigrateEachGeneration = 3
+            };
+
+            MultiDemeGeneticAlgorithm result = (MultiDemeGeneticAlgorithm)SerializationHelper.TestSerialization(algorithm, new Type[0]);
+
+            Assert.AreEqual(algorithm.MigrantCount, result.MigrantCount);
+            Assert.AreEqual(algorithm.MigrateEachGeneration, result.MigrateEachGeneration);
         }
 
         private static SimplePopulation GetPopulation(GeneticAlgorithm algorithm)

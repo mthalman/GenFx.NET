@@ -2,6 +2,7 @@ using GenFx.Validation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 
 namespace GenFx
 {
@@ -15,9 +16,12 @@ namespace GenFx
     /// select those <see cref="GeneticEntity"/> objects which are determined to be "elite".  The number
     /// of genetic entities chosen is based on the <see cref="ElitismStrategy.ElitistRatio"/> property value.
     /// </remarks>
+    [DataContract]
     public abstract class ElitismStrategy : GeneticComponentWithAlgorithm
     {
         private const double DefaultElitistRatio = .1;
+
+        [DataMember]
         private double elitistRatio = DefaultElitistRatio;
 
         /// <summary>

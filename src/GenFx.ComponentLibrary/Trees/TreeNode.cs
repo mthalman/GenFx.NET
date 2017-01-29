@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.Serialization;
 
 namespace GenFx.ComponentLibrary.Trees
 {
@@ -10,11 +11,19 @@ namespace GenFx.ComponentLibrary.Trees
     /// For example, the data in the nodes of an expression tree represent the functions and 
     /// terminators of the expression language.
     /// </remarks>
+    [DataContract]
     public class TreeNode
     {
+        [DataMember]
         private TreeNodeCollection childNodes;
+
+        [DataMember]
         private TreeNode parentNode;
+
+        [DataMember]
         private TreeEntityBase tree;
+
+        [DataMember]
         private object nodeValue;
 
         /// <summary>

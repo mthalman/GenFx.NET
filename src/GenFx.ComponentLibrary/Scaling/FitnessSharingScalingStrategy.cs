@@ -1,5 +1,6 @@
 using GenFx.Validation;
 using System;
+using System.Runtime.Serialization;
 
 namespace GenFx.ComponentLibrary.Scaling
 {
@@ -8,13 +9,19 @@ namespace GenFx.ComponentLibrary.Scaling
     /// objects which are common have a degraded fitness while rare <see cref="GeneticEntity"/> objects are given a boost in
     /// fitness.
     /// </summary>
+    [DataContract]
     public abstract class FitnessSharingScalingStrategy : FitnessScalingStrategy
     {
         private const double DefaultScalingCurvature = 1;
         private const double DefaultScalingDistanceCutoff = 1;
 
+        [DataMember]
         private double[] fitnessDistances;
+
+        [DataMember]
         private double scalingDistanceCutoff = DefaultScalingDistanceCutoff;
+
+        [DataMember]
         private double scalingCurvature = DefaultScalingCurvature;
 
         /// <summary>

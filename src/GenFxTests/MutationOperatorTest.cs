@@ -73,6 +73,22 @@ namespace GenFxTests
             AssertEx.Throws<ArgumentNullException>(() => op.Mutate(null));
         }
 
+        /// <summary>
+        /// Tests that the object can be serialized and deserialized.
+        /// </summary>
+        [TestMethod]
+        public void Serialization()
+        {
+            MockMutationOperator op = new MockMutationOperator
+            {
+                MutationRate = .8
+            };
+
+            MockMutationOperator result = (MockMutationOperator)SerializationHelper.TestSerialization(op, new Type[0]);
+
+            Assert.AreEqual(op.MutationRate, result.MutationRate);
+        }
+
         private static GeneticAlgorithm GetAlgorithm(double mutationRate)
         {
             GeneticAlgorithm algorithm = new MockGeneticAlgorithm

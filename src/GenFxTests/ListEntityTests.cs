@@ -82,5 +82,28 @@ namespace GenFxTests
 
             AssertEx.Throws<ArgumentException>(() => entity.Length = 4);
         }
+
+        /// <summary>
+        /// Tests that the object can be serialized and deserialized.
+        /// </summary>
+        [TestMethod]
+        public void Serialization()
+        {
+            ListEntity<string> entity = new ListEntity<string>();
+            entity.IsFixedSize = true;
+            PrivateObject privObj = new PrivateObject(entity);
+
+            List<string> genes = new List<string> { "a", "b" };
+            privObj.SetField("genes", genes);
+
+            ListEntity<string> result = (ListEntity<string>)SerializationHelper.TestSerialization(entity, new Type[0]);
+
+            Assert.AreEqual(entity.IsFixedSize, result.IsFixedSize);
+
+            PrivateObject resultPrivObj = new PrivateObject(result);
+            List<string> resultGenes = (List<string>)resultPrivObj.GetField("genes");
+            Assert.AreEqual(genes[0], resultGenes[0]);
+            Assert.AreEqual(genes[1], resultGenes[1]);
+        }
     }
 }

@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.Serialization;
 
 namespace GenFx.ComponentLibrary.Terminators
 {
@@ -6,9 +7,13 @@ namespace GenFx.ComponentLibrary.Terminators
     /// Represents a genetic algorithm terminator that stops the algorithm once the specified <see cref="TimeLimit"/>
     /// has been reached.
     /// </summary> 
+    [DataContract]
     public class TimeDurationTerminator : Terminator
     {
+        [DataMember]
         private DateTime timeStarted;
+
+        [DataMember]
         private TimeSpan timeLimit;
 
         /// <summary>

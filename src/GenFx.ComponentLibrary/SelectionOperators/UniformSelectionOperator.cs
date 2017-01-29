@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 
 namespace GenFx.ComponentLibrary.SelectionOperators
 {
@@ -7,6 +8,7 @@ namespace GenFx.ComponentLibrary.SelectionOperators
     /// Provides a selection technique whereby all <see cref="GeneticEntity"/> objects have an equal
     /// probability of being selected regardless of fitness.
     /// </summary>
+    [DataContract]
     public class UniformSelectionOperator : SelectionOperator
     {
         /// <summary>

@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Text;
 using GenFx;
 using System.Threading.Tasks;
+using System.Runtime.Serialization;
 
 namespace GenFxTests.Mocks
 {
+    [DataContract]
     class MockFitnessEvaluator : FitnessEvaluator
     {
         internal int DoEvaluateFitnessCallCount;
@@ -17,7 +19,8 @@ namespace GenFxTests.Mocks
             return Task.FromResult(Double.Parse(mockEntity.Identifier));
         }
     }
-    
+
+    [DataContract]
     class MockFitnessEvaluator2 : FitnessEvaluator
     {
         public override Task<double> EvaluateFitnessAsync(GeneticEntity entity)

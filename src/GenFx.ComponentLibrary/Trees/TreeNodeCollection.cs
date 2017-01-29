@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 
 namespace GenFx.ComponentLibrary.Trees
 {
@@ -8,9 +9,13 @@ namespace GenFx.ComponentLibrary.Trees
     /// Represents an ordered collection of tree nodes.
     /// </summary>
     /// <remarks><b>TreeNodeCollection</b> supports iteration and indexed access.</remarks>
+    [DataContract]
     public sealed class TreeNodeCollection : IList<TreeNode>
     {
+        [DataMember]
         private List<TreeNode> nodes = new List<TreeNode>();
+
+        [DataMember]
         private int? fixedSizeCount;
 
         /// <summary>

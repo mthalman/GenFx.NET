@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.Serialization;
 
 namespace GenFx.ComponentLibrary.Statistics
 {
@@ -6,6 +7,7 @@ namespace GenFx.ComponentLibrary.Statistics
     /// Provides the calculation to determine the standard deviation of the values of the 
     /// <see cref="GeneticEntity.ScaledFitnessValue"/> property in a <see cref="Population"/>.
     /// </summary>
+    [DataContract]
     public class StandardDeviationFitnessStatistic : Statistic
     {
         /// <summary>

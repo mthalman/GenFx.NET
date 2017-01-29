@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Threading.Tasks;
 
 namespace GenFx
@@ -16,21 +17,42 @@ namespace GenFx
     /// Populations can be isolated or interactive with one another through migration depending on
     /// which <see cref="GeneticAlgorithm"/> is used.
     /// </remarks>
+    [DataContract]
     public abstract class Population : GeneticComponentWithAlgorithm
     {
         private const int DefaultPopulationSize = 1;
 
+        [DataMember]
         private ObservableCollection<GeneticEntity> geneticEntities = new ObservableCollection<GeneticEntity>();
+
+        [DataMember]
         private int index;
+
+        [DataMember]
         private double rawMean;
+
+        [DataMember]
         private double rawStandardDeviation;
+
+        [DataMember]
         private double rawMax;
+
+        [DataMember]
         private double rawMin;
+
+        [DataMember]
         private double scaledMean;
+
+        [DataMember]
         private double scaledStandardDeviation;
+
+        [DataMember]
         private double scaledMax;
+
+        [DataMember]
         private double scaledMin;
 
+        [DataMember]
         private int minimumPopulationSize = DefaultPopulationSize;
 
         /// <summary>
@@ -254,65 +276,6 @@ namespace GenFx
             }
 
             return Task.FromResult(true);
-        }
-
-        /// <summary>
-        /// Restores the state of this component.
-        /// </summary>
-        /// <param name="state">The state of the component to restore from.</param>
-        public override void RestoreState(KeyValueMap state)
-        {
-            if (state == null)
-            {
-                throw new ArgumentNullException(nameof(state));
-            }
-
-            base.RestoreState(state);
-
-            this.index = (int)state[nameof(index)];
-            this.rawMax = (double)state[nameof(rawMax)];
-            this.rawMean = (double)state[nameof(rawMean)];
-            this.rawMin = (double)state[nameof(rawMin)];
-            this.scaledMax = (double)state[nameof(scaledMax)];
-            this.scaledMean = (double)state[nameof(scaledMean)];
-            this.scaledMin = (double)state[nameof(scaledMin)];
-            this.scaledStandardDeviation = (double)state[nameof(scaledStandardDeviation)];
-
-            this.Entities.Clear();
-
-            KeyValueMapCollection entityStates = (KeyValueMapCollection)state[nameof(this.geneticEntities)];
-
-            foreach (KeyValueMap entityState in entityStates)
-            {
-                GeneticEntity entity = (GeneticEntity)this.Algorithm.GeneticEntitySeed.CreateNew();
-                entity.RestoreState(entityState);
-                this.Entities.Add(entity);
-            }
-        }
-
-        /// <summary>
-        /// Sets the serializable state of this component on the state object.
-        /// </summary>
-        /// <param name="state">The object containing the serializable state of this object.</param>
-        public override void SetSaveState(KeyValueMap state)
-        {
-            if (state == null)
-            {
-                throw new ArgumentNullException(nameof(state));
-            }
-
-            base.SetSaveState(state);
-
-            state[nameof(index)] = this.index;
-            state[nameof(rawMax)] = this.rawMax;
-            state[nameof(rawMean)] = this.rawMean;
-            state[nameof(rawMin)] = this.rawMin;
-            state[nameof(rawStandardDeviation)] = this.rawStandardDeviation;
-            state[nameof(scaledMax)] = this.scaledMax;
-            state[nameof(scaledMean)] = this.scaledMean;
-            state[nameof(scaledMin)] = this.scaledMin;
-            state[nameof(scaledStandardDeviation)] = this.scaledStandardDeviation;
-            state[nameof(geneticEntities)] = new KeyValueMapCollection(this.Entities.Select(e => e.SaveState()));
         }
 
         /// <summary>

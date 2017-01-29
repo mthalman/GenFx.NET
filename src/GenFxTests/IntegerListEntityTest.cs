@@ -151,6 +151,24 @@ namespace GenFxTests
             Assert.AreEqual(length, entity.Length, "Length not set correctly.");
         }
 
+        /// <summary>
+        /// Tests that the object can be serialized and deserialized.
+        /// </summary>
+        [TestMethod]
+        public void Serialization()
+        {
+            IntegerListEntity entity = new IntegerListEntity();
+            entity.MinElementValue = 10;
+            entity.MaxElementValue = 11;
+            entity.UseUniqueElementValues = true;
+
+            IntegerListEntity result = (IntegerListEntity)SerializationHelper.TestSerialization(entity, new Type[0]);
+
+            Assert.AreEqual(entity.MinElementValue, result.MinElementValue);
+            Assert.AreEqual(entity.MaxElementValue, result.MaxElementValue);
+            Assert.AreEqual(entity.UseUniqueElementValues, result.UseUniqueElementValues);
+        }
+
         private static void CompareGeneticEntities(IntegerListEntity expectedEntity, IntegerListEntity actualEntity)
         {
             Assert.AreNotSame(expectedEntity, actualEntity, "Objects should not be the same instance.");

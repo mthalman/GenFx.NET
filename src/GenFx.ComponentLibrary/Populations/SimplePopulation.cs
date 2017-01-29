@@ -1,3 +1,5 @@
+using System.Runtime.Serialization;
+
 namespace GenFx.ComponentLibrary.Populations
 {
     /// <summary>
@@ -8,6 +10,7 @@ namespace GenFx.ComponentLibrary.Populations
     /// Populations can be isolated or interactive with one another through migration depending on
     /// which <see cref="GeneticAlgorithm"/> is used.
     /// </remarks>
+    [DataContract]
     public class SimplePopulation : Population
     {
     }

@@ -152,5 +152,23 @@ namespace GenFxTests
 
             AssertEx.Throws<ArgumentNullException>(() => target.GetResultValue(null));
         }
+
+        /// <summary>
+        /// Tests that the component can be serialized and deserialized.
+        /// </summary>
+        [TestMethod]
+        public void Serialization()
+        {
+            BestMinimumFitnessStatistic stat = new BestMinimumFitnessStatistic();
+            PrivateObject privObj = new PrivateObject(stat);
+            Dictionary<int, double?> bestMinValues = (Dictionary<int, double?>)privObj.GetField("bestMinValues");
+            bestMinValues.Add(10, 2.4);
+
+            BestMinimumFitnessStatistic result = (BestMinimumFitnessStatistic)SerializationHelper.TestSerialization(stat, new Type[] { typeof(MockEntity) });
+
+            PrivateObject resultPrivObj = new PrivateObject(result);
+            Dictionary<int, double?> resultBestMinValues = (Dictionary<int, double?>)resultPrivObj.GetField("bestMinValues");
+            Assert.AreEqual(2.4, resultBestMinValues[10]);
+        }
     }
 }

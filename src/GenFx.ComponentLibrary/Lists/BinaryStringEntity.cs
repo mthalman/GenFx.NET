@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 
 namespace GenFx.ComponentLibrary.Lists
@@ -10,9 +11,13 @@ namespace GenFx.ComponentLibrary.Lists
     /// </summary>
     /// <remarks>This class uses a <see cref="BitArray"/> data structure to represent the list.</remarks>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix")]
+    [DataContract]
     public class BinaryStringEntity : ListEntityBase<bool>
     {
+        [DataMember]
         private BitArray genes;
+
+        [DataMember]
         private bool isFixedSize;
 
         /// <summary>
@@ -117,26 +122,7 @@ namespace GenFx.ComponentLibrary.Lists
             binStrEntity.genes = (BitArray)this.genes.Clone();
             binStrEntity.UpdateStringRepresentation();
         }
-
-        /// <summary>
-        /// Restores the entity's state.
-        /// </summary>
-        public override void RestoreState(KeyValueMap state)
-        {
-            base.RestoreState(state);
-            this.genes = new BitArray(((string)state[nameof(this.genes)]).Select(c => c == '1' ? true : false).ToArray());
-        }
-
-        /// <summary>
-        /// Saves the entity's state.
-        /// </summary>
-        public override void SetSaveState(KeyValueMap state)
-        {
-            base.SetSaveState(state);
-
-            state[nameof(this.genes)] = this.genes.Cast<bool>().Select(b => b ? "1" : "0").Aggregate((s1, s2) => s1 + s2);
-        }
-
+        
         /// <summary>
         /// Calculates the string representation of the entity.
         /// </summary>

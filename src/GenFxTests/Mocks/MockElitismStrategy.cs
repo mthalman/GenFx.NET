@@ -2,9 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using GenFx;
+using System.Runtime.Serialization;
 
 namespace GenFxTests.Mocks
 {
+    [DataContract]
     class MockElitismStrategy : ElitismStrategy
     {
         internal int GetElitistGeneticEntitiesCallCount;
@@ -16,6 +18,7 @@ namespace GenFxTests.Mocks
         }
     }
 
+    [DataContract]
     class MockElitismStrategy2 : ElitismStrategy
     {
         protected override IList<GeneticEntity> GetEliteGeneticEntitiesCore(Population population)

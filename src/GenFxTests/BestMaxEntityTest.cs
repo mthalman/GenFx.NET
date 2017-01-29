@@ -75,6 +75,24 @@ namespace GenFxTests
             VerifyGetResultValue(1, target, population1, algorithm, "30");
             VerifyGetResultValue(4, target, population2, algorithm, "70");
         }
+
+        /// <summary>
+        /// Tests that the component can be serialized and deserialized.
+        /// </summary>
+        [TestMethod]
+        public void Serialization()
+        {
+            BestMaximumFitnessEntityStatistic stat = new BestMaximumFitnessEntityStatistic();
+            PrivateObject privObj = new PrivateObject(stat);
+            Dictionary<int, GeneticEntity> bestEntities = (Dictionary<int, GeneticEntity>)privObj.GetField("bestEntities");
+            bestEntities.Add(10, new MockEntity());
+
+            BestMaximumFitnessEntityStatistic result = (BestMaximumFitnessEntityStatistic)SerializationHelper.TestSerialization(stat, new Type[] { typeof(MockEntity) });
+
+            PrivateObject resultPrivObj = new PrivateObject(result);
+            Dictionary<int, GeneticEntity> resultBestEntities = (Dictionary<int, GeneticEntity>)resultPrivObj.GetField("bestEntities");
+            Assert.IsInstanceOfType(resultBestEntities[10], typeof(MockEntity));
+        }
         
         private static void VerifyGetResultValue(int multiplier, BestMaximumFitnessEntityStatistic stat, SimplePopulation population, GeneticAlgorithm algorithm, string expectedReturnVal)
         {

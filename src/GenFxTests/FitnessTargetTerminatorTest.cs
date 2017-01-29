@@ -46,6 +46,22 @@ namespace GenFxTests
             Assert.IsTrue(terminator.IsComplete(), "A entity does have the fitness target.");
         }
 
+        /// <summary>
+        /// Tests that the object can be serialized and deserialized.
+        /// </summary>
+        [TestMethod]
+        public void Serialization()
+        {
+            FitnessTargetTerminator terminator = new FitnessTargetTerminator();
+            terminator.FitnessTarget = 20;
+            terminator.FitnessValueType = FitnessType.Raw;
+
+            FitnessTargetTerminator result = (FitnessTargetTerminator)SerializationHelper.TestSerialization(terminator, new Type[0]);
+
+            Assert.AreEqual(terminator.FitnessTarget, result.FitnessTarget);
+            Assert.AreEqual(terminator.FitnessValueType, result.FitnessValueType);
+        }
+
         private static GeneticAlgorithm GetAlgorithm(double fitnessTarget)
         {
             GeneticAlgorithm algorithm = new MockGeneticAlgorithm

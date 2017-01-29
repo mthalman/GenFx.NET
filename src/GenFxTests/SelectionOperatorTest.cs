@@ -73,6 +73,20 @@ namespace GenFxTests
             AssertEx.Throws<ArgumentNullException>(() => op.SelectEntities(1, null));
         }
 
+        /// <summary>
+        /// Tests that the object can be serialized and deserialized.
+        /// </summary>
+        [TestMethod]
+        public void Serialization()
+        {
+            MockSelectionOperator op = new MockSelectionOperator();
+            op.SelectionBasedOnFitnessType = FitnessType.Raw;
+
+            MockSelectionOperator result = (MockSelectionOperator)SerializationHelper.TestSerialization(op, new Type[0]);
+
+            Assert.AreEqual(op.SelectionBasedOnFitnessType, result.SelectionBasedOnFitnessType);
+        }
+
         private GeneticAlgorithm GetAlgorithm()
         {
             GeneticAlgorithm algorithm = new MockGeneticAlgorithm

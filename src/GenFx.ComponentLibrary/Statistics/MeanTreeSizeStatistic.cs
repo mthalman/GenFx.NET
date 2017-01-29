@@ -1,6 +1,7 @@
 using GenFx.ComponentLibrary.Trees;
 using GenFx.Validation;
 using System;
+using System.Runtime.Serialization;
 
 namespace GenFx.ComponentLibrary.Statistics
 {
@@ -8,6 +9,7 @@ namespace GenFx.ComponentLibrary.Statistics
     /// Provides the calculation to determine the mean of the tree size of <see cref="TreeEntityBase"/> 
     /// objects contained by a <see cref="Population"/>.
     /// </summary>
+    [DataContract]
     [RequiredGeneticEntity(typeof(TreeEntityBase))]
     public class MeanTreeSizeStatistic : Statistic
     {

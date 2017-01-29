@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Threading.Tasks;
 
 namespace GenFx.ComponentLibrary.Algorithms
@@ -17,8 +18,10 @@ namespace GenFx.ComponentLibrary.Algorithms
     /// since all high-fitness <see cref="GeneticEntity"/> objects will be moved to the next generation anyways.
     /// </para>
     /// </remarks>
+    [DataContract]
     public class SteadyStateGeneticAlgorithm : GeneticAlgorithm
     {
+        [DataMember]
         private PopulationReplacementValue replacementValue = new PopulationReplacementValue(10, ReplacementValueKind.Percentage);
         
         /// <summary>

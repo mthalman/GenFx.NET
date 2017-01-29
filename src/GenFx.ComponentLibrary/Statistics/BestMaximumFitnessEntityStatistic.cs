@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 
 namespace GenFx.ComponentLibrary.Statistics
 {
@@ -7,8 +8,10 @@ namespace GenFx.ComponentLibrary.Statistics
     /// Provides the calculation to determine the <see cref="GeneticEntity"/> object with the highest
     /// <see cref="GeneticEntity.ScaledFitnessValue"/> found for a <see cref="Population"/> during the entire run of the genetic algorithm.
     /// </summary>
+    [DataContract]
     public class BestMaximumFitnessEntityStatistic : Statistic
     {
+        [DataMember]
         private Dictionary<int, GeneticEntity> bestEntities = new Dictionary<int, GeneticEntity>();
         
         /// <summary>
@@ -48,51 +51,6 @@ namespace GenFx.ComponentLibrary.Statistics
             }
 
             return bestEntity;
-        }
-
-        /// <summary>
-        /// Sets the statistic's state.
-        /// </summary>
-        public override void SetSaveState(KeyValueMap state)
-        {
-            if (state == null)
-            {
-                throw new ArgumentNullException(nameof(state));
-            }
-
-            base.SetSaveState(state);
-
-            Dictionary<int, KeyValueMap> savedEntitiesByPopulation = new Dictionary<int, KeyValueMap>();
-            foreach (KeyValuePair<int, GeneticEntity> kvp in this.bestEntities)
-            {
-                KeyValueMap keyValueMap = new KeyValueMap();
-                kvp.Value.SetSaveState(keyValueMap);
-                savedEntitiesByPopulation.Add(kvp.Key, keyValueMap);
-            }
-
-            state[nameof(this.bestEntities)] = savedEntitiesByPopulation;
-        }
-
-        /// <summary>
-        /// Restores the statistic's state.
-        /// </summary>
-        public override void RestoreState(KeyValueMap state)
-        {
-            if (state == null)
-            {
-                throw new ArgumentNullException(nameof(state));
-            }
-
-            base.RestoreState(state);
-
-            Dictionary<int, KeyValueMap> savedEntitiesByPopulation = (Dictionary<int, KeyValueMap>)state[nameof(this.bestEntities)];
-            this.bestEntities = new Dictionary<int, GeneticEntity>();
-            foreach (KeyValuePair<int, KeyValueMap> kvp in savedEntitiesByPopulation)
-            {
-                GeneticEntity entity = (GeneticEntity)this.Algorithm.GeneticEntitySeed.CreateNew();
-                entity.RestoreState(kvp.Value);
-                this.bestEntities.Add(kvp.Key, entity);
-            }
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 
 namespace GenFx.ComponentLibrary.Lists
 {
@@ -10,9 +11,13 @@ namespace GenFx.ComponentLibrary.Lists
     /// <remarks>This class uses a <see cref="List{TItem}"/> data structure to represent the list.</remarks>
     /// <typeparam name="TItem">Type of the values contained in the list.</typeparam>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix")]
+    [DataContract]
     public class ListEntity<TItem> : ListEntityBase<TItem>
     {
+        [DataMember]
         private bool isFixedSize;
+
+        [DataMember]
         private List<TItem> genes;
 
         /// <summary>
@@ -122,27 +127,7 @@ namespace GenFx.ComponentLibrary.Lists
             listEntity.genes = values.ToList();
             listEntity.UpdateStringRepresentation();
         }
-
-        /// <summary>
-        /// Restores the entity's state.
-        /// </summary>
-        public override void RestoreState(KeyValueMap state)
-        {
-            base.RestoreState(state);
-
-            this.genes = (List<TItem>)state[nameof(this.genes)];
-        }
-
-        /// <summary>
-        /// Saves the entity's state.
-        /// </summary>
-        public override void SetSaveState(KeyValueMap state)
-        {
-            base.SetSaveState(state);
-
-            state[nameof(this.genes)] = this.genes;
-        }
-
+        
         private void EnsureEntityIsInitialized()
         {
             if (this.genes == null)

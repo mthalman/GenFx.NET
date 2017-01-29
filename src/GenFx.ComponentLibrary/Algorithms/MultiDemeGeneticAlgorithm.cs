@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Runtime.Serialization;
 
 namespace GenFx.ComponentLibrary.Algorithms
 {
@@ -17,13 +18,17 @@ namespace GenFx.ComponentLibrary.Algorithms
     /// objects with the highest fitness value are the ones chosen to be migrated.
     /// </para>
     /// </remarks>
+    [DataContract]
     [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Multi")]
     public class MultiDemeGeneticAlgorithm : SimpleGeneticAlgorithm
     {
         private const int DefaultMigrantCount = 0;
         private const int DefaultMigrateEachGeneration = 1;
 
+        [DataMember]
         private int migrantCount = DefaultMigrantCount;
+
+        [DataMember]
         private int migrateEachGeneration = DefaultMigrateEachGeneration;
 
         /// <summary>

@@ -1,5 +1,6 @@
 using GenFx.Validation;
 using System;
+using System.Runtime.Serialization;
 
 namespace GenFx.ComponentLibrary.Lists
 {
@@ -11,6 +12,7 @@ namespace GenFx.ComponentLibrary.Lists
     /// mutate if it meets a certain probability.
     /// </remarks>
     [RequiredGeneticEntity(typeof(ListEntityBase<bool>))]
+    [DataContract]
     public class UniformBitMutationOperator : MutationOperator
     {
         /// <summary>

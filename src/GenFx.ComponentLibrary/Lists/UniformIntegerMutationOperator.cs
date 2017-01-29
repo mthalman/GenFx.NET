@@ -1,5 +1,6 @@
 using GenFx.Validation;
 using System;
+using System.Runtime.Serialization;
 
 namespace GenFx.ComponentLibrary.Lists
 {
@@ -10,6 +11,7 @@ namespace GenFx.ComponentLibrary.Lists
     /// Uniform integer mutation operates upon an integer list, causing each integer of the list to
     /// mutate if it meets a certain probability.
     /// </remarks>
+    [DataContract]
     [RequiredGeneticEntity(typeof(IntegerListEntity))]
     public class UniformIntegerMutationOperator : MutationOperator
     {

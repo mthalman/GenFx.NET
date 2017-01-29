@@ -39,6 +39,26 @@ namespace GenFxTests
             Assert.IsTrue(terminator.IsComplete(), "Time limit has been reached.");
         }
 
+        /// <summary>
+        /// Tests that the object can be serialized and deserialized.
+        /// </summary>
+        [TestMethod]
+        public void Serialization()
+        {
+            TimeDurationTerminator terminator = new TimeDurationTerminator();
+            terminator.TimeLimit = new TimeSpan(123);
+
+            PrivateObject privObj = new PrivateObject(terminator);
+            DateTime now = DateTime.Now;
+            privObj.SetField("timeStarted", now);
+
+            TimeDurationTerminator result = (TimeDurationTerminator)SerializationHelper.TestSerialization(terminator, new Type[0]);
+
+            Assert.AreEqual(terminator.TimeLimit, result.TimeLimit);
+            PrivateObject resultPrivObj = new PrivateObject(result);
+            Assert.AreEqual(now, resultPrivObj.GetField("timeStarted"));
+        }
+
         private static GeneticAlgorithm GetAlgorithm(TimeSpan timeLimit)
         {
             GeneticAlgorithm algorithm = new MockGeneticAlgorithm

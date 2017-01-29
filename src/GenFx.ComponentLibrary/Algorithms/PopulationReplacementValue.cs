@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Globalization;
+using System.Runtime.Serialization;
 
 namespace GenFx.ComponentLibrary.Algorithms
 {
@@ -9,10 +10,14 @@ namespace GenFx.ComponentLibrary.Algorithms
     /// be replaced with the offspring of the previous generation.
     /// </summary>
     /// <seealso cref="SteadyStateGeneticAlgorithm"/>
+    [DataContract]
     [TypeConverter(typeof(PopulationReplacementValueTypeConverter))]
     public struct PopulationReplacementValue
     {
+        [DataMember]
         private int replacementValue;
+
+        [DataMember]
         private ReplacementValueKind kind;
 
         /// <summary>

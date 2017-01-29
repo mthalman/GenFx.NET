@@ -74,6 +74,7 @@
     <Content Include="documentation\base_components.md" />
     <Content Include="documentation\customizing_and_extending.md" />
     <Content Include="documentation\validation.md" />
+    <Content Include="documentation\serializability.md" />
     <None Include="documentation\toc.yml" />
     <Content Include="docfx.json" />
     <Content Include="contributors\toc.yml" />
