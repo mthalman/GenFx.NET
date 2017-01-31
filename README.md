@@ -1,2 +1,2 @@
 # GenFx
-GenFx is a .NET-based genetic algorithm framework that makes designing and executing genetic algorithms easy.
+GenFx.NET is a .NET-based genetic algorithm framework that makes designing and executing genetic algorithms easy.
