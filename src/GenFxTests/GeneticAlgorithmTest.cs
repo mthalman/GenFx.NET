@@ -281,7 +281,7 @@ namespace GenFxTests
                 GeneticEntitySeed = new MockEntity()
             };
 
-            AssertEx.ThrowsAsync<ArgumentException>(() => algorithm.InitializeAsync());
+            await AssertEx.ThrowsAsync<ArgumentException>(() => algorithm.InitializeAsync());
         }
 
         /// <summary>
@@ -319,7 +319,7 @@ namespace GenFxTests
 
             await algorithm.InitializeAsync();
             await algorithm.RunAsync();
-            AssertEx.ThrowsAsync<InvalidOperationException>(async () => await algorithm.RunAsync());
+            await AssertEx.ThrowsAsync<InvalidOperationException>(async () => await algorithm.RunAsync());
         }
 
         /// <summary>
@@ -336,7 +336,7 @@ namespace GenFxTests
                 PopulationSeed = new MockPopulation()
             };
 
-            AssertEx.ThrowsAsync<InvalidOperationException>(async () => await algorithm.RunAsync());
+            await AssertEx.ThrowsAsync<InvalidOperationException>(async () => await algorithm.RunAsync());
         }
 
         /// <summary>
@@ -400,7 +400,7 @@ namespace GenFxTests
             result = await algorithm.StepAsync();
             Assert.IsTrue(result, "Algorithm should be complete.");
 
-            AssertEx.ThrowsAsync<InvalidOperationException>(async () => await algorithm.StepAsync());
+            await AssertEx.ThrowsAsync<InvalidOperationException>(async () => await algorithm.StepAsync());
         }
 
         /// <summary>
@@ -417,7 +417,7 @@ namespace GenFxTests
                 PopulationSeed = new MockPopulation()
             };
 
-            AssertEx.ThrowsAsync<InvalidOperationException>(async () => await algorithm.StepAsync());
+            await AssertEx.ThrowsAsync<InvalidOperationException>(async () => await algorithm.StepAsync());
         }
 
         /// <summary>
