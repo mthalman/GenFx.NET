@@ -71,7 +71,7 @@ Let's move on to the next type of validator that you can customize: component va
 
 In this part of the tutorial, we'll define a component validator which validates that one integer property is greater than another integer property.  A component validator is appropriate for this scenario instead of a property validator because a property validator would validate the property immediately when it is set.  Depending on the order in which the properties are set, you could have a validation error before the consuming code was able to set the next property to the appropriate value.
 
-Since this validator is meant for the whole component, we'll derive our class from [ComponentValidator](xref:GenFx.Validation.ComponentValidator) and implement its [IsValid](xref:GenFx.Validation.ComponentValidator.IsValid(GenFx.GeneticComponent,GenFx.GeneticAlgorithm,System.String@)) method.  For simplicity of the tutorial, we'll implement it such that the validator knows the type of the component from which it will be used.  Here's the code:
+Since this validator is meant for the whole component, we'll derive our class from [ComponentValidator](xref:GenFx.Validation.ComponentValidator) and implement its [IsValid](xref:GenFx.Validation.ComponentValidator.IsValid(GenFx.GeneticComponent,System.String@)) method.  For simplicity of the tutorial, we'll implement it such that the validator knows the type of the component from which it will be used.  Here's the code:
 
     public class GreaterThanValidator : ComponentValidator
     {
