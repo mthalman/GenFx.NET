@@ -266,24 +266,7 @@ namespace GenFxTests
 
             await TestInitializeAsync(algorithm);
         }
-
-        /// <summary>
-        /// Tests that an exception is thrown when a required setting class is missing.
-        /// </summary>
-        [TestMethod]
-        public async Task GeneticAlgorithm_Initialize_ValidateRequiredSetting_Async()
-        {
-            RequiredSettingGeneticAlgorithm algorithm = new RequiredSettingGeneticAlgorithm
-            {
-                SelectionOperator = new MockSelectionOperator(),
-                FitnessEvaluator = new MockFitnessEvaluator(),
-                PopulationSeed = new SimplePopulation(),
-                GeneticEntitySeed = new MockEntity()
-            };
-
-            await AssertEx.ThrowsAsync<ArgumentException>(() => algorithm.InitializeAsync());
-        }
-
+        
         /// <summary>
         /// Tests that the Run method works correctly.
         /// </summary>
@@ -1359,14 +1342,6 @@ namespace GenFxTests
         [RequiredTerminator(typeof(MockTerminator2))]
         private class TerminatorDependentDerivedPopulation : TerminatorDependentBasePopulation
         {
-        }
-
-        private class RequiredSettingGeneticAlgorithm : GeneticAlgorithm
-        {
-            protected override Task CreateNextGenerationAsync(Population population)
-            {
-                throw new Exception("The method or operation is not implemented.");
-            }
         }
         
         private class TestTerminator : Terminator
