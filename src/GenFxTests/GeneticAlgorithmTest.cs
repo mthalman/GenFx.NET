@@ -266,24 +266,7 @@ namespace GenFxTests
 
             await TestInitializeAsync(algorithm);
         }
-
-        /// <summary>
-        /// Tests that an exception is thrown when a required setting class is missing.
-        /// </summary>
-        [TestMethod]
-        public async Task GeneticAlgorithm_Initialize_ValidateRequiredSetting_Async()
-        {
-            RequiredSettingGeneticAlgorithm algorithm = new RequiredSettingGeneticAlgorithm
-            {
-                SelectionOperator = new MockSelectionOperator(),
-                FitnessEvaluator = new MockFitnessEvaluator(),
-                PopulationSeed = new SimplePopulation(),
-                GeneticEntitySeed = new MockEntity()
-            };
-
-            AssertEx.ThrowsAsync<ArgumentException>(() => algorithm.InitializeAsync());
-        }
-
+        
         /// <summary>
         /// Tests that the Run method works correctly.
         /// </summary>
@@ -319,7 +302,7 @@ namespace GenFxTests
 
             await algorithm.InitializeAsync();
             await algorithm.RunAsync();
-            AssertEx.ThrowsAsync<InvalidOperationException>(async () => await algorithm.RunAsync());
+            await AssertEx.ThrowsAsync<InvalidOperationException>(async () => await algorithm.RunAsync());
         }
 
         /// <summary>
@@ -336,7 +319,7 @@ namespace GenFxTests
                 PopulationSeed = new MockPopulation()
             };
 
-            AssertEx.ThrowsAsync<InvalidOperationException>(async () => await algorithm.RunAsync());
+            await AssertEx.ThrowsAsync<InvalidOperationException>(async () => await algorithm.RunAsync());
         }
 
         /// <summary>
@@ -400,7 +383,7 @@ namespace GenFxTests
             result = await algorithm.StepAsync();
             Assert.IsTrue(result, "Algorithm should be complete.");
 
-            AssertEx.ThrowsAsync<InvalidOperationException>(async () => await algorithm.StepAsync());
+            await AssertEx.ThrowsAsync<InvalidOperationException>(async () => await algorithm.StepAsync());
         }
 
         /// <summary>
@@ -417,7 +400,7 @@ namespace GenFxTests
                 PopulationSeed = new MockPopulation()
             };
 
-            AssertEx.ThrowsAsync<InvalidOperationException>(async () => await algorithm.StepAsync());
+            await AssertEx.ThrowsAsync<InvalidOperationException>(async () => await algorithm.StepAsync());
         }
 
         /// <summary>
@@ -1359,14 +1342,6 @@ namespace GenFxTests
         [RequiredTerminator(typeof(MockTerminator2))]
         private class TerminatorDependentDerivedPopulation : TerminatorDependentBasePopulation
         {
-        }
-
-        private class RequiredSettingGeneticAlgorithm : GeneticAlgorithm
-        {
-            protected override Task CreateNextGenerationAsync(Population population)
-            {
-                throw new Exception("The method or operation is not implemented.");
-            }
         }
         
         private class TestTerminator : Terminator
