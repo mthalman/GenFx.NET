@@ -1,0 +1,606 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class GeneticEntity
+   </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class GeneticEntity
+   ">
+    <meta name="generator" content="docfx 2.10.2.0">
+    
+    <link rel="shortcut icon" href="../favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content">
+              
+              
+              <h1 id="GenFx_GeneticEntity" data-uid="GenFx.GeneticEntity">Class GeneticEntity
+              </h1>
+              <div class="markdown level0 summary"><p>Provides the abstract base class for genetic entities in a genetic algorithm.</p>
+</div>
+              <div class="markdown level0 conceptual"></div>
+              <div class="inheritance">
+                <h5>Inheritance</h5>
+                  <div class="level0"><span class="xref">System.Object</span></div>
+                  <div class="level1"><a class="xref" href="GenFx.GeneticComponent.html">GeneticComponent</a></div>
+                  <div class="level2"><a class="xref" href="GenFx.GeneticComponentWithAlgorithm.html">GeneticComponentWithAlgorithm</a></div>
+                  <div class="level3"><span class="xref">GeneticEntity</span></div>
+                  <div class="level4"><a class="xref" href="GenFx.ComponentLibrary.Lists.ListEntityBase.html">ListEntityBase</a></div>
+                  <div class="level4"><a class="xref" href="GenFx.ComponentLibrary.Trees.TreeEntityBase.html">TreeEntityBase</a></div>
+              </div>
+              <div class="inheritedMembers">
+                <h5>Inherited Members</h5>
+                <div>
+                  <a class="xref" href="GenFx.GeneticComponentWithAlgorithm.html#GenFx_GeneticComponentWithAlgorithm_Algorithm">GeneticComponentWithAlgorithm.Algorithm</a>
+                </div>
+                <div>
+                  <a class="xref" href="GenFx.GeneticComponent.html#GenFx_GeneticComponent_PropertyChanged">GeneticComponent.PropertyChanged</a>
+                </div>
+                <div>
+                  <a class="xref" href="GenFx.GeneticComponent.html#GenFx_GeneticComponent_CreateNew">GeneticComponent.CreateNew()</a>
+                </div>
+                <div>
+                  <a class="xref" href="GenFx.GeneticComponent.html#GenFx_GeneticComponent_OnPropertyChanged_System_String_">GeneticComponent.OnPropertyChanged(String)</a>
+                </div>
+                <div>
+                  <a class="xref" href="GenFx.GeneticComponent.html#GenFx_GeneticComponent_SetProperty__1___0____0_System_String_">GeneticComponent.SetProperty&lt;T&gt;(T, T, String)</a>
+                </div>
+                <div>
+                  <a class="xref" href="GenFx.GeneticComponent.html#GenFx_GeneticComponent_Validate">GeneticComponent.Validate()</a>
+                </div>
+                <div>
+                  <a class="xref" href="GenFx.GeneticComponent.html#GenFx_GeneticComponent_ValidateProperty_System_Object_System_String_">GeneticComponent.ValidateProperty(Object, String)</a>
+                </div>
+                <div>
+                  <span class="xref">System.Object.Equals(System.Object)</span>
+                </div>
+                <div>
+                  <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+                </div>
+                <div>
+                  <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+                </div>
+                <div>
+                  <span class="xref">System.Object.GetHashCode()</span>
+                </div>
+                <div>
+                  <span class="xref">System.Object.GetType()</span>
+                </div>
+                <div>
+                  <span class="xref">System.Object.MemberwiseClone()</span>
+                </div>
+              </div>
+              <h6><strong>Namespace</strong>:GenFx</h6>
+              <h6><strong>Assembly</strong>:GenFx.dll</h6>
+              <h5 id="GenFx_GeneticEntity_syntax">Syntax</h5>
+              <div class="codewrapper">
+                <pre><code class="lang-csharp hljs">[DataContract]
+public abstract class GeneticEntity : GeneticComponentWithAlgorithm, INotifyPropertyChanged</code></pre>
+              </div>
+              <h5 id="GenFx_GeneticEntity_remarks"><strong>Remarks</strong></h5>
+              <div class="markdown level0 remarks"><p>A genetic entity in a genetic algorithm represents the &quot;organism&quot; which undergoes evolution.  All the genetic
+operators such as the <a class="xref" href="GenFx.SelectionOperator.html">SelectionOperator</a>, <a class="xref" href="GenFx.CrossoverOperator.html">CrossoverOperator</a>, and
+<a class="xref" href="GenFx.MutationOperator.html">MutationOperator</a> act upon genetic entities to bring about change in the system.</p>
+</div>
+              <h3 id="properties">Properties
+              </h3>
+              <span class="small pull-right mobile-hide">
+                <span class="divider">|</span>
+                <a href="https://github.com/mthalman/GenFx/new/master/doc/apispec/new?filename=GenFx_GeneticEntity_Age.md&amp;value=---%0Auid%3A%20GenFx.GeneticEntity.Age%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+              </span>
+              <span class="small pull-right mobile-hide">
+                <a href="https://github.com/mthalman/GenFx/blob/master/src/GenFx/GeneticEntity.cs/#L37">View Source</a>
+              </span>
+              <a id="GenFx_GeneticEntity_Age_" data-uid="GenFx.GeneticEntity.Age*"></a>
+              <h4 id="GenFx_GeneticEntity_Age" data-uid="GenFx.GeneticEntity.Age">Age</h4>
+              <div class="markdown level1 summary"><p>Gets or sets the number of generations this entity has survived without being altered.</p>
+</div>
+              <div class="markdown level1 conceptual"></div>
+              <h5 class="decalaration">Declaration</h5>
+              <div class="codewrapper">
+                <pre><code class="lang-csharp hljs">[DataMember]
+public int Age { get; set; }</code></pre>
+              </div>
+              <h5 class="propertyValue">Property Value</h5>
+              <table class="table table-bordered table-striped table-condensed">
+                <thead>
+                  <tr>
+                    <th>Type</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span class="xref">System.Int32</span></td>
+                    <td><p>The number of generations this entity has survived without being altered.</p>
+</td>
+                  </tr>
+                </tbody>
+              </table>
+              <span class="small pull-right mobile-hide">
+                <span class="divider">|</span>
+                <a href="https://github.com/mthalman/GenFx/new/master/doc/apispec/new?filename=GenFx_GeneticEntity_RawFitnessValue.md&amp;value=---%0Auid%3A%20GenFx.GeneticEntity.RawFitnessValue%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+              </span>
+              <span class="small pull-right mobile-hide">
+                <a href="https://github.com/mthalman/GenFx/blob/master/src/GenFx/GeneticEntity.cs/#L52">View Source</a>
+              </span>
+              <a id="GenFx_GeneticEntity_RawFitnessValue_" data-uid="GenFx.GeneticEntity.RawFitnessValue*"></a>
+              <h4 id="GenFx_GeneticEntity_RawFitnessValue" data-uid="GenFx.GeneticEntity.RawFitnessValue">RawFitnessValue</h4>
+              <div class="markdown level1 summary"><p>Gets the fitness value of the entity before being scaled by the <a class="xref" href="GenFx.FitnessScalingStrategy.html">FitnessScalingStrategy</a>.</p>
+</div>
+              <div class="markdown level1 conceptual"></div>
+              <h5 class="decalaration">Declaration</h5>
+              <div class="codewrapper">
+                <pre><code class="lang-csharp hljs">public double RawFitnessValue { get; }</code></pre>
+              </div>
+              <h5 class="propertyValue">Property Value</h5>
+              <table class="table table-bordered table-striped table-condensed">
+                <thead>
+                  <tr>
+                    <th>Type</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span class="xref">System.Double</span></td>
+                    <td><p>The fitness value of the entity before being scaled by the <a class="xref" href="GenFx.FitnessScalingStrategy.html">FitnessScalingStrategy</a>.</p>
+</td>
+                  </tr>
+                </tbody>
+              </table>
+              <h5 id="GenFx_GeneticEntity_RawFitnessValue_remarks">Remarks</h5>
+              <div class="markdown level1 remarks"><p>The fitness value is a relative measurement of how close a entity is to meeting the goal
+of the genetic algorithm.</p>
+</div>
+              <h5 id="GenFx_GeneticEntity_RawFitnessValue_seealso">See Also</h5>
+              <div class="seealso">
+                  <div><a class="xref" href="GenFx.FitnessEvaluator.html">FitnessEvaluator</a></div>
+              </div>
+              <span class="small pull-right mobile-hide">
+                <span class="divider">|</span>
+                <a href="https://github.com/mthalman/GenFx/new/master/doc/apispec/new?filename=GenFx_GeneticEntity_Representation.md&amp;value=---%0Auid%3A%20GenFx.GeneticEntity.Representation%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+              </span>
+              <span class="small pull-right mobile-hide">
+                <a href="https://github.com/mthalman/GenFx/blob/master/src/GenFx/GeneticEntity.cs/#L28">View Source</a>
+              </span>
+              <a id="GenFx_GeneticEntity_Representation_" data-uid="GenFx.GeneticEntity.Representation*"></a>
+              <h4 id="GenFx_GeneticEntity_Representation" data-uid="GenFx.GeneticEntity.Representation">Representation</h4>
+              <div class="markdown level1 summary"><p>When overriden in a derived class, gets the string representation of the entity.</p>
+</div>
+              <div class="markdown level1 conceptual"></div>
+              <h5 class="decalaration">Declaration</h5>
+              <div class="codewrapper">
+                <pre><code class="lang-csharp hljs">public abstract string Representation { get; }</code></pre>
+              </div>
+              <h5 class="propertyValue">Property Value</h5>
+              <table class="table table-bordered table-striped table-condensed">
+                <thead>
+                  <tr>
+                    <th>Type</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span class="xref">System.String</span></td>
+                    <td><p>The string representation of the entity.</p>
+</td>
+                  </tr>
+                </tbody>
+              </table>
+              <span class="small pull-right mobile-hide">
+                <span class="divider">|</span>
+                <a href="https://github.com/mthalman/GenFx/new/master/doc/apispec/new?filename=GenFx_GeneticEntity_ScaledFitnessValue.md&amp;value=---%0Auid%3A%20GenFx.GeneticEntity.ScaledFitnessValue%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+              </span>
+              <span class="small pull-right mobile-hide">
+                <a href="https://github.com/mthalman/GenFx/blob/master/src/GenFx/GeneticEntity.cs/#L73">View Source</a>
+              </span>
+              <a id="GenFx_GeneticEntity_ScaledFitnessValue_" data-uid="GenFx.GeneticEntity.ScaledFitnessValue*"></a>
+              <h4 id="GenFx_GeneticEntity_ScaledFitnessValue" data-uid="GenFx.GeneticEntity.ScaledFitnessValue">ScaledFitnessValue</h4>
+              <div class="markdown level1 summary"><p>Gets or sets the fitness value of the entity after it has been scaled by the <a class="xref" href="GenFx.FitnessScalingStrategy.html">FitnessScalingStrategy</a>.</p>
+</div>
+              <div class="markdown level1 conceptual"></div>
+              <h5 class="decalaration">Declaration</h5>
+              <div class="codewrapper">
+                <pre><code class="lang-csharp hljs">public double ScaledFitnessValue { get; set; }</code></pre>
+              </div>
+              <h5 class="propertyValue">Property Value</h5>
+              <table class="table table-bordered table-striped table-condensed">
+                <thead>
+                  <tr>
+                    <th>Type</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span class="xref">System.Double</span></td>
+                    <td><p>The fitness value of the entity after it has been scaled by the <a class="xref" href="GenFx.FitnessScalingStrategy.html">FitnessScalingStrategy</a>.</p>
+</td>
+                  </tr>
+                </tbody>
+              </table>
+              <h5 id="GenFx_GeneticEntity_ScaledFitnessValue_remarks">Remarks</h5>
+              <div class="markdown level1 remarks"><p>
+The fitness value is a relative measurement of how close a entity is to meeting the goal
+of the genetic algorithm.
+</p>
+<p>
+This value is equal to <a class="xref" href="GenFx.GeneticEntity.html#GenFx_GeneticEntity_RawFitnessValue">RawFitnessValue</a> if a 
+<a class="xref" href="GenFx.FitnessScalingStrategy.html">FitnessScalingStrategy</a> is not being used.
+</p>
+</div>
+              <h5 id="GenFx_GeneticEntity_ScaledFitnessValue_seealso">See Also</h5>
+              <div class="seealso">
+                  <div><a class="xref" href="GenFx.FitnessEvaluator.html">FitnessEvaluator</a></div>
+                  <div><a class="xref" href="GenFx.FitnessScalingStrategy.html">FitnessScalingStrategy</a></div>
+              </div>
+              <h3 id="methods">Methods
+              </h3>
+              <span class="small pull-right mobile-hide">
+                <span class="divider">|</span>
+                <a href="https://github.com/mthalman/GenFx/new/master/doc/apispec/new?filename=GenFx_GeneticEntity_Clone.md&amp;value=---%0Auid%3A%20GenFx.GeneticEntity.Clone%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+              </span>
+              <span class="small pull-right mobile-hide">
+                <a href="https://github.com/mthalman/GenFx/blob/master/src/GenFx/GeneticEntity.cs/#L136">View Source</a>
+              </span>
+              <a id="GenFx_GeneticEntity_Clone_" data-uid="GenFx.GeneticEntity.Clone*"></a>
+              <h4 id="GenFx_GeneticEntity_Clone" data-uid="GenFx.GeneticEntity.Clone">Clone()</h4>
+              <div class="markdown level1 summary"><p>Returns a clone of this entity.</p>
+</div>
+              <div class="markdown level1 conceptual"></div>
+              <h5 class="decalaration">Declaration</h5>
+              <div class="codewrapper">
+                <pre><code class="lang-csharp hljs">public GeneticEntity Clone()</code></pre>
+              </div>
+              <h5 class="returns">Returns</h5>
+              <table class="table table-bordered table-striped table-condensed">
+                <thead>
+                  <tr>
+                    <th>Type</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><a class="xref" href="GenFx.GeneticEntity.html">GeneticEntity</a></td>
+                    <td><p>A clone of this entity.</p>
+</td>
+                  </tr>
+                </tbody>
+              </table>
+              <span class="small pull-right mobile-hide">
+                <span class="divider">|</span>
+                <a href="https://github.com/mthalman/GenFx/new/master/doc/apispec/new?filename=GenFx_GeneticEntity_CopyTo_GenFx_GeneticEntity_.md&amp;value=---%0Auid%3A%20GenFx.GeneticEntity.CopyTo(GenFx.GeneticEntity)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+              </span>
+              <span class="small pull-right mobile-hide">
+                <a href="https://github.com/mthalman/GenFx/blob/master/src/GenFx/GeneticEntity.cs/#L161">View Source</a>
+              </span>
+              <a id="GenFx_GeneticEntity_CopyTo_" data-uid="GenFx.GeneticEntity.CopyTo*"></a>
+              <h4 id="GenFx_GeneticEntity_CopyTo_GenFx_GeneticEntity_" data-uid="GenFx.GeneticEntity.CopyTo(GenFx.GeneticEntity)">CopyTo(GeneticEntity)</h4>
+              <div class="markdown level1 summary"><p>Copies the state from this instance to <span class="paramref">entity</span>.</p>
+</div>
+              <div class="markdown level1 conceptual"></div>
+              <h5 class="decalaration">Declaration</h5>
+              <div class="codewrapper">
+                <pre><code class="lang-csharp hljs">public virtual void CopyTo(GeneticEntity entity)</code></pre>
+              </div>
+              <h5 class="parameters">Parameters</h5>
+              <table class="table table-bordered table-striped table-condensed">
+                <thead>
+                  <tr>
+                    <th>Type</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><a class="xref" href="GenFx.GeneticEntity.html">GeneticEntity</a></td>
+                    <td><span class="parametername">entity</span></td>
+                    <td><p><a class="xref" href="GenFx.GeneticEntity.html">GeneticEntity</a> to which state is to be copied.</p>
+</td>
+                  </tr>
+                </tbody>
+              </table>
+              <h5 id="GenFx_GeneticEntity_CopyTo_GenFx_GeneticEntity__remarks">Remarks</h5>
+              <div class="markdown level1 remarks"><p>
+The default implementation of this method is to copy the state of this instance
+to the entity passed in.
+</p>
+<p>
+<strong>Notes to inheritors:</strong> When overriding this method, it is necessary to call the
+<strong>CopyTo</strong> method of the base class.  It is not necessary to copy the state of properties that
+are adorned with the <a class="xref" href="GenFx.ConfigurationPropertyAttribute.html">ConfigurationPropertyAttribute</a>; these properties have their state
+automatically copied as part of the base implementation of this method.
+</p>
+</div>
+              <h5 class="exceptions">Exceptions</h5>
+              <table class="table table-bordered table-striped table-condensed">
+                <thead>
+                  <tr>
+                    <th>Type</th>
+                    <th>Condition</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span class="xref">System.ArgumentNullException</span></td>
+                    <td><p><span class="paramref">entity</span> is null.</p>
+</td>
+                  </tr>
+                </tbody>
+              </table>
+              <span class="small pull-right mobile-hide">
+                <span class="divider">|</span>
+                <a href="https://github.com/mthalman/GenFx/new/master/doc/apispec/new?filename=GenFx_GeneticEntity_EvaluateFitnessAsync.md&amp;value=---%0Auid%3A%20GenFx.GeneticEntity.EvaluateFitnessAsync%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+              </span>
+              <span class="small pull-right mobile-hide">
+                <a href="https://github.com/mthalman/GenFx/blob/master/src/GenFx/GeneticEntity.cs/#L82">View Source</a>
+              </span>
+              <a id="GenFx_GeneticEntity_EvaluateFitnessAsync_" data-uid="GenFx.GeneticEntity.EvaluateFitnessAsync*"></a>
+              <h4 id="GenFx_GeneticEntity_EvaluateFitnessAsync" data-uid="GenFx.GeneticEntity.EvaluateFitnessAsync">EvaluateFitnessAsync()</h4>
+              <div class="markdown level1 summary"><p>Evaluates the <a class="xref" href="GenFx.GeneticEntity.html#GenFx_GeneticEntity_RawFitnessValue">RawFitnessValue</a> of the entity.</p>
+</div>
+              <div class="markdown level1 conceptual"></div>
+              <h5 class="decalaration">Declaration</h5>
+              <div class="codewrapper">
+                <pre><code class="lang-csharp hljs">public Task EvaluateFitnessAsync()</code></pre>
+              </div>
+              <h5 class="returns">Returns</h5>
+              <table class="table table-bordered table-striped table-condensed">
+                <thead>
+                  <tr>
+                    <th>Type</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span class="xref">System.Threading.Tasks.Task</span></td>
+                    <td></td>
+                  </tr>
+                </tbody>
+              </table>
+              <span class="small pull-right mobile-hide">
+                <span class="divider">|</span>
+                <a href="https://github.com/mthalman/GenFx/new/master/doc/apispec/new?filename=GenFx_GeneticEntity_GetFitnessValue_GenFx_FitnessType_.md&amp;value=---%0Auid%3A%20GenFx.GeneticEntity.GetFitnessValue(GenFx.FitnessType)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+              </span>
+              <span class="small pull-right mobile-hide">
+                <a href="https://github.com/mthalman/GenFx/blob/master/src/GenFx/GeneticEntity.cs/#L94">View Source</a>
+              </span>
+              <a id="GenFx_GeneticEntity_GetFitnessValue_" data-uid="GenFx.GeneticEntity.GetFitnessValue*"></a>
+              <h4 id="GenFx_GeneticEntity_GetFitnessValue_GenFx_FitnessType_" data-uid="GenFx.GeneticEntity.GetFitnessValue(GenFx.FitnessType)">GetFitnessValue(FitnessType)</h4>
+              <div class="markdown level1 summary"><p>Returns the appropriate fitness value of the <strong>GeneticEntity</strong> based on the the <span class="paramref">fitnessType</span>.</p>
+</div>
+              <div class="markdown level1 conceptual"></div>
+              <h5 class="decalaration">Declaration</h5>
+              <div class="codewrapper">
+                <pre><code class="lang-csharp hljs">public double GetFitnessValue(FitnessType fitnessType)</code></pre>
+              </div>
+              <h5 class="parameters">Parameters</h5>
+              <table class="table table-bordered table-striped table-condensed">
+                <thead>
+                  <tr>
+                    <th>Type</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><a class="xref" href="GenFx.FitnessType.html">FitnessType</a></td>
+                    <td><span class="parametername">fitnessType</span></td>
+                    <td><p><a class="xref" href="GenFx.FitnessType.html">FitnessType</a> indicating which fitness value to
+    return.</p>
+</td>
+                  </tr>
+                </tbody>
+              </table>
+              <h5 class="returns">Returns</h5>
+              <table class="table table-bordered table-striped table-condensed">
+                <thead>
+                  <tr>
+                    <th>Type</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span class="xref">System.Double</span></td>
+                    <td><p>The appropriate fitness value of the <strong>GeneticEntity</strong>.</p>
+</td>
+                  </tr>
+                </tbody>
+              </table>
+              <h5 class="exceptions">Exceptions</h5>
+              <table class="table table-bordered table-striped table-condensed">
+                <thead>
+                  <tr>
+                    <th>Type</th>
+                    <th>Condition</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span class="xref">System.ArgumentException</span></td>
+                    <td><p><span class="paramref">fitnessType</span> value is undefined.</p>
+</td>
+                  </tr>
+                </tbody>
+              </table>
+              <span class="small pull-right mobile-hide">
+                <span class="divider">|</span>
+                <a href="https://github.com/mthalman/GenFx/new/master/doc/apispec/new?filename=GenFx_GeneticEntity_Initialize_GenFx_GeneticAlgorithm_.md&amp;value=---%0Auid%3A%20GenFx.GeneticEntity.Initialize(GenFx.GeneticAlgorithm)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+              </span>
+              <span class="small pull-right mobile-hide">
+                <a href="https://github.com/mthalman/GenFx/blob/master/src/GenFx/GeneticEntity.cs/#L115">View Source</a>
+              </span>
+              <a id="GenFx_GeneticEntity_Initialize_" data-uid="GenFx.GeneticEntity.Initialize*"></a>
+              <h4 id="GenFx_GeneticEntity_Initialize_GenFx_GeneticAlgorithm_" data-uid="GenFx.GeneticEntity.Initialize(GenFx.GeneticAlgorithm)">Initialize(GeneticAlgorithm)</h4>
+              <div class="markdown level1 summary"><p>Initializes the component to ensure its readiness for algorithm execution.</p>
+</div>
+              <div class="markdown level1 conceptual"></div>
+              <h5 class="decalaration">Declaration</h5>
+              <div class="codewrapper">
+                <pre><code class="lang-csharp hljs">public override void Initialize(GeneticAlgorithm algorithm)</code></pre>
+              </div>
+              <h5 class="parameters">Parameters</h5>
+              <table class="table table-bordered table-striped table-condensed">
+                <thead>
+                  <tr>
+                    <th>Type</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><a class="xref" href="GenFx.GeneticAlgorithm.html">GeneticAlgorithm</a></td>
+                    <td><span class="parametername">algorithm</span></td>
+                    <td><p>The algorithm that is to use this component.</p>
+</td>
+                  </tr>
+                </tbody>
+              </table>
+              <h5 class="overrides">Overrides</h5>
+              <div><a class="xref" href="GenFx.GeneticComponentWithAlgorithm.html#GenFx_GeneticComponentWithAlgorithm_Initialize_GenFx_GeneticAlgorithm_">GeneticComponentWithAlgorithm.Initialize(GeneticAlgorithm)</a></div>
+              <span class="small pull-right mobile-hide">
+                <span class="divider">|</span>
+                <a href="https://github.com/mthalman/GenFx/new/master/doc/apispec/new?filename=GenFx_GeneticEntity_ToString.md&amp;value=---%0Auid%3A%20GenFx.GeneticEntity.ToString%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+              </span>
+              <span class="small pull-right mobile-hide">
+                <a href="https://github.com/mthalman/GenFx/blob/master/src/GenFx/GeneticEntity.cs/#L127">View Source</a>
+              </span>
+              <a id="GenFx_GeneticEntity_ToString_" data-uid="GenFx.GeneticEntity.ToString*"></a>
+              <h4 id="GenFx_GeneticEntity_ToString" data-uid="GenFx.GeneticEntity.ToString">ToString()</h4>
+              <div class="markdown level1 summary"><p>Returns the string representation of the entity.</p>
+</div>
+              <div class="markdown level1 conceptual"></div>
+              <h5 class="decalaration">Declaration</h5>
+              <div class="codewrapper">
+                <pre><code class="lang-csharp hljs">public override string ToString()</code></pre>
+              </div>
+              <h5 class="returns">Returns</h5>
+              <table class="table table-bordered table-striped table-condensed">
+                <thead>
+                  <tr>
+                    <th>Type</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span class="xref">System.String</span></td>
+                    <td><p>The string representation of the entity.</p>
+</td>
+                  </tr>
+                </tbody>
+              </table>
+              <h5 class="overrides">Overrides</h5>
+              <div><span class="xref">System.Object.ToString()</span></div>
+              <h3 id="extensionmethods">Extension Methods</h3>
+              <div>
+                  <a class="xref" href="GenFx.GeneticComponentExtensions.html#GenFx_GeneticComponentExtensions_CreateNewAndInitialize_GenFx_GeneticComponent_">GeneticComponentExtensions.CreateNewAndInitialize(GeneticComponent)</a>
+              </div>
+              <div>
+                  <a class="xref" href="GenFx.GeneticComponentExtensions.html#GenFx_GeneticComponentExtensions_CopyConfigurationStateTo_GenFx_GeneticComponent_GenFx_GeneticComponent_">GeneticComponentExtensions.CopyConfigurationStateTo(GeneticComponent, GeneticComponent)</a>
+              </div>
+            </article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/mthalman/GenFx/new/master/doc/apispec/new?filename=GenFx_GeneticEntity.md&amp;value=---%0Auid%3A%20GenFx.GeneticEntity%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/mthalman/GenFx/blob/master/src/GenFx/GeneticEntity.cs/#L15" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Copyright © 2015-2016 Microsoft<br>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

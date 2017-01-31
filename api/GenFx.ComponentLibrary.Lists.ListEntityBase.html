@@ -1,0 +1,1118 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class ListEntityBase
+   </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class ListEntityBase
+   ">
+    <meta name="generator" content="docfx 2.10.2.0">
+    
+    <link rel="shortcut icon" href="../favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content">
+              
+              
+              <h1 id="GenFx_ComponentLibrary_Lists_ListEntityBase" data-uid="GenFx.ComponentLibrary.Lists.ListEntityBase">Class ListEntityBase
+              </h1>
+              <div class="markdown level0 summary"><p>Base implementation of a list-based entity.</p>
+</div>
+              <div class="markdown level0 conceptual"></div>
+              <div class="inheritance">
+                <h5>Inheritance</h5>
+                  <div class="level0"><span class="xref">System.Object</span></div>
+                  <div class="level1"><a class="xref" href="GenFx.GeneticComponent.html">GeneticComponent</a></div>
+                  <div class="level2"><a class="xref" href="GenFx.GeneticComponentWithAlgorithm.html">GeneticComponentWithAlgorithm</a></div>
+                  <div class="level3"><a class="xref" href="GenFx.GeneticEntity.html">GeneticEntity</a></div>
+                  <div class="level4"><span class="xref">ListEntityBase</span></div>
+                  <div class="level5"><a class="xref" href="GenFx.ComponentLibrary.Lists.ListEntityBase-1.html">ListEntityBase</a>&lt;TItem&gt;</div>
+              </div>
+              <div class="inheritedMembers">
+                <h5>Inherited Members</h5>
+                <div>
+                  <a class="xref" href="GenFx.GeneticEntity.html#GenFx_GeneticEntity_Age">GeneticEntity.Age</a>
+                </div>
+                <div>
+                  <a class="xref" href="GenFx.GeneticEntity.html#GenFx_GeneticEntity_RawFitnessValue">GeneticEntity.RawFitnessValue</a>
+                </div>
+                <div>
+                  <a class="xref" href="GenFx.GeneticEntity.html#GenFx_GeneticEntity_ScaledFitnessValue">GeneticEntity.ScaledFitnessValue</a>
+                </div>
+                <div>
+                  <a class="xref" href="GenFx.GeneticEntity.html#GenFx_GeneticEntity_EvaluateFitnessAsync">GeneticEntity.EvaluateFitnessAsync()</a>
+                </div>
+                <div>
+                  <a class="xref" href="GenFx.GeneticEntity.html#GenFx_GeneticEntity_GetFitnessValue_GenFx_FitnessType_">GeneticEntity.GetFitnessValue(FitnessType)</a>
+                </div>
+                <div>
+                  <a class="xref" href="GenFx.GeneticEntity.html#GenFx_GeneticEntity_Initialize_GenFx_GeneticAlgorithm_">GeneticEntity.Initialize(GeneticAlgorithm)</a>
+                </div>
+                <div>
+                  <a class="xref" href="GenFx.GeneticEntity.html#GenFx_GeneticEntity_ToString">GeneticEntity.ToString()</a>
+                </div>
+                <div>
+                  <a class="xref" href="GenFx.GeneticEntity.html#GenFx_GeneticEntity_Clone">GeneticEntity.Clone()</a>
+                </div>
+                <div>
+                  <a class="xref" href="GenFx.GeneticEntity.html#GenFx_GeneticEntity_CopyTo_GenFx_GeneticEntity_">GeneticEntity.CopyTo(GeneticEntity)</a>
+                </div>
+                <div>
+                  <a class="xref" href="GenFx.GeneticComponentWithAlgorithm.html#GenFx_GeneticComponentWithAlgorithm_Algorithm">GeneticComponentWithAlgorithm.Algorithm</a>
+                </div>
+                <div>
+                  <a class="xref" href="GenFx.GeneticComponent.html#GenFx_GeneticComponent_PropertyChanged">GeneticComponent.PropertyChanged</a>
+                </div>
+                <div>
+                  <a class="xref" href="GenFx.GeneticComponent.html#GenFx_GeneticComponent_CreateNew">GeneticComponent.CreateNew()</a>
+                </div>
+                <div>
+                  <a class="xref" href="GenFx.GeneticComponent.html#GenFx_GeneticComponent_OnPropertyChanged_System_String_">GeneticComponent.OnPropertyChanged(String)</a>
+                </div>
+                <div>
+                  <a class="xref" href="GenFx.GeneticComponent.html#GenFx_GeneticComponent_SetProperty__1___0____0_System_String_">GeneticComponent.SetProperty&lt;T&gt;(T, T, String)</a>
+                </div>
+                <div>
+                  <a class="xref" href="GenFx.GeneticComponent.html#GenFx_GeneticComponent_Validate">GeneticComponent.Validate()</a>
+                </div>
+                <div>
+                  <a class="xref" href="GenFx.GeneticComponent.html#GenFx_GeneticComponent_ValidateProperty_System_Object_System_String_">GeneticComponent.ValidateProperty(Object, String)</a>
+                </div>
+                <div>
+                  <span class="xref">System.Object.Equals(System.Object)</span>
+                </div>
+                <div>
+                  <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+                </div>
+                <div>
+                  <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+                </div>
+                <div>
+                  <span class="xref">System.Object.GetHashCode()</span>
+                </div>
+                <div>
+                  <span class="xref">System.Object.GetType()</span>
+                </div>
+                <div>
+                  <span class="xref">System.Object.MemberwiseClone()</span>
+                </div>
+              </div>
+              <h6><strong>Namespace</strong>:GenFx.ComponentLibrary.Lists</h6>
+              <h6><strong>Assembly</strong>:GenFx.ComponentLibrary.dll</h6>
+              <h5 id="GenFx_ComponentLibrary_Lists_ListEntityBase_syntax">Syntax</h5>
+              <div class="codewrapper">
+                <pre><code class="lang-csharp hljs">[DataContract]
+public abstract class ListEntityBase : GeneticEntity, INotifyPropertyChanged, IList, ICollection, IEnumerable</code></pre>
+              </div>
+              <h5 id="GenFx_ComponentLibrary_Lists_ListEntityBase_remarks"><strong>Remarks</strong></h5>
+              <div class="markdown level0 remarks"><p>This class does not define the list structure.  It only defines the API.  Classes which derive from
+<a class="xref" href="GenFx.ComponentLibrary.Lists.ListEntityBase.html">ListEntityBase</a> are responsible for the definition of the actual data structure
+representing the list.</p>
+</div>
+              <h3 id="properties">Properties
+              </h3>
+              <span class="small pull-right mobile-hide">
+                <span class="divider">|</span>
+                <a href="https://github.com/mthalman/GenFx/new/master/doc/apispec/new?filename=GenFx_ComponentLibrary_Lists_ListEntityBase_IsFixedSize.md&amp;value=---%0Auid%3A%20GenFx.ComponentLibrary.Lists.ListEntityBase.IsFixedSize%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+              </span>
+              <span class="small pull-right mobile-hide">
+                <a href="https://github.com/mthalman/GenFx/blob/master/src/GenFx.ComponentLibrary/Lists/ListEntityBase.cs/#L60">View Source</a>
+              </span>
+              <a id="GenFx_ComponentLibrary_Lists_ListEntityBase_IsFixedSize_" data-uid="GenFx.ComponentLibrary.Lists.ListEntityBase.IsFixedSize*"></a>
+              <h4 id="GenFx_ComponentLibrary_Lists_ListEntityBase_IsFixedSize" data-uid="GenFx.ComponentLibrary.Lists.ListEntityBase.IsFixedSize">IsFixedSize</h4>
+              <div class="markdown level1 summary"><p>When overriden by a derived class, gets or sets a value indicating whether the list is a fixed size.</p>
+</div>
+              <div class="markdown level1 conceptual"></div>
+              <h5 class="decalaration">Declaration</h5>
+              <div class="codewrapper">
+                <pre><code class="lang-csharp hljs">public abstract bool IsFixedSize { get; set; }</code></pre>
+              </div>
+              <h5 class="propertyValue">Property Value</h5>
+              <table class="table table-bordered table-striped table-condensed">
+                <thead>
+                  <tr>
+                    <th>Type</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span class="xref">System.Boolean</span></td>
+                    <td></td>
+                  </tr>
+                </tbody>
+              </table>
+              <h5 class="implements">Implements</h5>
+                  <div><span class="xref">System.Collections.IList.IsFixedSize</span></div>
+              <span class="small pull-right mobile-hide">
+                <span class="divider">|</span>
+                <a href="https://github.com/mthalman/GenFx/new/master/doc/apispec/new?filename=GenFx_ComponentLibrary_Lists_ListEntityBase_IsReadOnly.md&amp;value=---%0Auid%3A%20GenFx.ComponentLibrary.Lists.ListEntityBase.IsReadOnly%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+              </span>
+              <span class="small pull-right mobile-hide">
+                <a href="https://github.com/mthalman/GenFx/blob/master/src/GenFx.ComponentLibrary/Lists/ListEntityBase.cs/#L102">View Source</a>
+              </span>
+              <a id="GenFx_ComponentLibrary_Lists_ListEntityBase_IsReadOnly_" data-uid="GenFx.ComponentLibrary.Lists.ListEntityBase.IsReadOnly*"></a>
+              <h4 id="GenFx_ComponentLibrary_Lists_ListEntityBase_IsReadOnly" data-uid="GenFx.ComponentLibrary.Lists.ListEntityBase.IsReadOnly">IsReadOnly</h4>
+              <div class="markdown level1 summary"><p>Gets a value indicating whether the list is read-only.</p>
+</div>
+              <div class="markdown level1 conceptual"></div>
+              <h5 class="decalaration">Declaration</h5>
+              <div class="codewrapper">
+                <pre><code class="lang-csharp hljs">public bool IsReadOnly { get; }</code></pre>
+              </div>
+              <h5 class="propertyValue">Property Value</h5>
+              <table class="table table-bordered table-striped table-condensed">
+                <thead>
+                  <tr>
+                    <th>Type</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span class="xref">System.Boolean</span></td>
+                    <td></td>
+                  </tr>
+                </tbody>
+              </table>
+              <h5 class="implements">Implements</h5>
+                  <div><span class="xref">System.Collections.IList.IsReadOnly</span></div>
+              <span class="small pull-right mobile-hide">
+                <span class="divider">|</span>
+                <a href="https://github.com/mthalman/GenFx/new/master/doc/apispec/new?filename=GenFx_ComponentLibrary_Lists_ListEntityBase_Length.md&amp;value=---%0Auid%3A%20GenFx.ComponentLibrary.Lists.ListEntityBase.Length%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+              </span>
+              <span class="small pull-right mobile-hide">
+                <a href="https://github.com/mthalman/GenFx/blob/master/src/GenFx.ComponentLibrary/Lists/ListEntityBase.cs/#L95">View Source</a>
+              </span>
+              <a id="GenFx_ComponentLibrary_Lists_ListEntityBase_Length_" data-uid="GenFx.ComponentLibrary.Lists.ListEntityBase.Length*"></a>
+              <h4 id="GenFx_ComponentLibrary_Lists_ListEntityBase_Length" data-uid="GenFx.ComponentLibrary.Lists.ListEntityBase.Length">Length</h4>
+              <div class="markdown level1 summary"><p>When overriden by a derived class, gets or sets the length of the list.</p>
+</div>
+              <div class="markdown level1 conceptual"></div>
+              <h5 class="decalaration">Declaration</h5>
+              <div class="codewrapper">
+                <pre><code class="lang-csharp hljs">public abstract int Length { get; set; }</code></pre>
+              </div>
+              <h5 class="propertyValue">Property Value</h5>
+              <table class="table table-bordered table-striped table-condensed">
+                <thead>
+                  <tr>
+                    <th>Type</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span class="xref">System.Int32</span></td>
+                    <td></td>
+                  </tr>
+                </tbody>
+              </table>
+              <span class="small pull-right mobile-hide">
+                <span class="divider">|</span>
+                <a href="https://github.com/mthalman/GenFx/new/master/doc/apispec/new?filename=GenFx_ComponentLibrary_Lists_ListEntityBase_MaximumStartingLength.md&amp;value=---%0Auid%3A%20GenFx.ComponentLibrary.Lists.ListEntityBase.MaximumStartingLength%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+              </span>
+              <span class="small pull-right mobile-hide">
+                <a href="https://github.com/mthalman/GenFx/blob/master/src/GenFx.ComponentLibrary/Lists/ListEntityBase.cs/#L37">View Source</a>
+              </span>
+              <a id="GenFx_ComponentLibrary_Lists_ListEntityBase_MaximumStartingLength_" data-uid="GenFx.ComponentLibrary.Lists.ListEntityBase.MaximumStartingLength*"></a>
+              <h4 id="GenFx_ComponentLibrary_Lists_ListEntityBase_MaximumStartingLength" data-uid="GenFx.ComponentLibrary.Lists.ListEntityBase.MaximumStartingLength">MaximumStartingLength</h4>
+              <div class="markdown level1 summary"><p>Gets or sets the maximum starting length a new entity can have.</p>
+</div>
+              <div class="markdown level1 conceptual"></div>
+              <h5 class="decalaration">Declaration</h5>
+              <div class="codewrapper">
+                <pre><code class="lang-csharp hljs">[IntegerValidator(MinValue = 1)]
+public int MaximumStartingLength { get; set; }</code></pre>
+              </div>
+              <h5 class="propertyValue">Property Value</h5>
+              <table class="table table-bordered table-striped table-condensed">
+                <thead>
+                  <tr>
+                    <th>Type</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span class="xref">System.Int32</span></td>
+                    <td></td>
+                  </tr>
+                </tbody>
+              </table>
+              <h5 class="exceptions">Exceptions</h5>
+              <table class="table table-bordered table-striped table-condensed">
+                <thead>
+                  <tr>
+                    <th>Type</th>
+                    <th>Condition</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><a class="xref" href="GenFx.Validation.ValidationException.html">ValidationException</a></td>
+                    <td><p>Value is not valid.</p>
+</td>
+                  </tr>
+                </tbody>
+              </table>
+              <span class="small pull-right mobile-hide">
+                <span class="divider">|</span>
+                <a href="https://github.com/mthalman/GenFx/new/master/doc/apispec/new?filename=GenFx_ComponentLibrary_Lists_ListEntityBase_MinimumStartingLength.md&amp;value=---%0Auid%3A%20GenFx.ComponentLibrary.Lists.ListEntityBase.MinimumStartingLength%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+              </span>
+              <span class="small pull-right mobile-hide">
+                <a href="https://github.com/mthalman/GenFx/blob/master/src/GenFx.ComponentLibrary/Lists/ListEntityBase.cs/#L49">View Source</a>
+              </span>
+              <a id="GenFx_ComponentLibrary_Lists_ListEntityBase_MinimumStartingLength_" data-uid="GenFx.ComponentLibrary.Lists.ListEntityBase.MinimumStartingLength*"></a>
+              <h4 id="GenFx_ComponentLibrary_Lists_ListEntityBase_MinimumStartingLength" data-uid="GenFx.ComponentLibrary.Lists.ListEntityBase.MinimumStartingLength">MinimumStartingLength</h4>
+              <div class="markdown level1 summary"><p>Gets or sets the minimum starting length a new entity can have.</p>
+</div>
+              <div class="markdown level1 conceptual"></div>
+              <h5 class="decalaration">Declaration</h5>
+              <div class="codewrapper">
+                <pre><code class="lang-csharp hljs">[IntegerValidator(MinValue = 1)]
+public int MinimumStartingLength { get; set; }</code></pre>
+              </div>
+              <h5 class="propertyValue">Property Value</h5>
+              <table class="table table-bordered table-striped table-condensed">
+                <thead>
+                  <tr>
+                    <th>Type</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span class="xref">System.Int32</span></td>
+                    <td></td>
+                  </tr>
+                </tbody>
+              </table>
+              <h5 class="exceptions">Exceptions</h5>
+              <table class="table table-bordered table-striped table-condensed">
+                <thead>
+                  <tr>
+                    <th>Type</th>
+                    <th>Condition</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><a class="xref" href="GenFx.Validation.ValidationException.html">ValidationException</a></td>
+                    <td><p>Value is not valid.</p>
+</td>
+                  </tr>
+                </tbody>
+              </table>
+              <span class="small pull-right mobile-hide">
+                <span class="divider">|</span>
+                <a href="https://github.com/mthalman/GenFx/new/master/doc/apispec/new?filename=GenFx_ComponentLibrary_Lists_ListEntityBase_Representation.md&amp;value=---%0Auid%3A%20GenFx.ComponentLibrary.Lists.ListEntityBase.Representation%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+              </span>
+              <span class="small pull-right mobile-hide">
+                <a href="https://github.com/mthalman/GenFx/blob/master/src/GenFx.ComponentLibrary/Lists/ListEntityBase.cs/#L66">View Source</a>
+              </span>
+              <a id="GenFx_ComponentLibrary_Lists_ListEntityBase_Representation_" data-uid="GenFx.ComponentLibrary.Lists.ListEntityBase.Representation*"></a>
+              <h4 id="GenFx_ComponentLibrary_Lists_ListEntityBase_Representation" data-uid="GenFx.ComponentLibrary.Lists.ListEntityBase.Representation">Representation</h4>
+              <div class="markdown level1 summary"><p>Returns the list string as a <span class="xref">System.String</span>.</p>
+</div>
+              <div class="markdown level1 conceptual"></div>
+              <h5 class="decalaration">Declaration</h5>
+              <div class="codewrapper">
+                <pre><code class="lang-csharp hljs">public override string Representation { get; }</code></pre>
+              </div>
+              <h5 class="propertyValue">Property Value</h5>
+              <table class="table table-bordered table-striped table-condensed">
+                <thead>
+                  <tr>
+                    <th>Type</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span class="xref">System.String</span></td>
+                    <td></td>
+                  </tr>
+                </tbody>
+              </table>
+              <h5 class="overrides">Overrides</h5>
+              <div><a class="xref" href="GenFx.GeneticEntity.html#GenFx_GeneticEntity_Representation">GeneticEntity.Representation</a></div>
+              <h3 id="methods">Methods
+              </h3>
+              <span class="small pull-right mobile-hide">
+                <span class="divider">|</span>
+                <a href="https://github.com/mthalman/GenFx/new/master/doc/apispec/new?filename=GenFx_ComponentLibrary_Lists_ListEntityBase_Add_System_Object_.md&amp;value=---%0Auid%3A%20GenFx.ComponentLibrary.Lists.ListEntityBase.Add(System.Object)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+              </span>
+              <span class="small pull-right mobile-hide">
+                <a href="https://github.com/mthalman/GenFx/blob/master/src/GenFx.ComponentLibrary/Lists/ListEntityBase.cs/#L137">View Source</a>
+              </span>
+              <a id="GenFx_ComponentLibrary_Lists_ListEntityBase_Add_" data-uid="GenFx.ComponentLibrary.Lists.ListEntityBase.Add*"></a>
+              <h4 id="GenFx_ComponentLibrary_Lists_ListEntityBase_Add_System_Object_" data-uid="GenFx.ComponentLibrary.Lists.ListEntityBase.Add(System.Object)">Add(Object)</h4>
+              <div class="markdown level1 summary"><p>Adds the value to the end of the list.</p>
+</div>
+              <div class="markdown level1 conceptual"></div>
+              <h5 class="decalaration">Declaration</h5>
+              <div class="codewrapper">
+                <pre><code class="lang-csharp hljs">public int Add(object value)</code></pre>
+              </div>
+              <h5 class="parameters">Parameters</h5>
+              <table class="table table-bordered table-striped table-condensed">
+                <thead>
+                  <tr>
+                    <th>Type</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span class="xref">System.Object</span></td>
+                    <td><span class="parametername">value</span></td>
+                    <td><p>Value to add.</p>
+</td>
+                  </tr>
+                </tbody>
+              </table>
+              <h5 class="returns">Returns</h5>
+              <table class="table table-bordered table-striped table-condensed">
+                <thead>
+                  <tr>
+                    <th>Type</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span class="xref">System.Int32</span></td>
+                    <td><p>Index position where the value was added.</p>
+</td>
+                  </tr>
+                </tbody>
+              </table>
+              <h5 class="implements">Implements</h5>
+                  <div><span class="xref">System.Collections.IList.Add(System.Object)</span></div>
+              <span class="small pull-right mobile-hide">
+                <span class="divider">|</span>
+                <a href="https://github.com/mthalman/GenFx/new/master/doc/apispec/new?filename=GenFx_ComponentLibrary_Lists_ListEntityBase_CalculateStringRepresentation.md&amp;value=---%0Auid%3A%20GenFx.ComponentLibrary.Lists.ListEntityBase.CalculateStringRepresentation%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+              </span>
+              <span class="small pull-right mobile-hide">
+                <a href="https://github.com/mthalman/GenFx/blob/master/src/GenFx.ComponentLibrary/Lists/ListEntityBase.cs/#L285">View Source</a>
+              </span>
+              <a id="GenFx_ComponentLibrary_Lists_ListEntityBase_CalculateStringRepresentation_" data-uid="GenFx.ComponentLibrary.Lists.ListEntityBase.CalculateStringRepresentation*"></a>
+              <h4 id="GenFx_ComponentLibrary_Lists_ListEntityBase_CalculateStringRepresentation" data-uid="GenFx.ComponentLibrary.Lists.ListEntityBase.CalculateStringRepresentation">CalculateStringRepresentation()</h4>
+              <div class="markdown level1 summary"><p>Calculates the string representation of the <a class="xref" href="GenFx.ComponentLibrary.Lists.ListEntityBase-1.html">ListEntityBase&lt;TItem&gt;</a>.</p>
+</div>
+              <div class="markdown level1 conceptual"></div>
+              <h5 class="decalaration">Declaration</h5>
+              <div class="codewrapper">
+                <pre><code class="lang-csharp hljs">protected virtual string CalculateStringRepresentation()</code></pre>
+              </div>
+              <h5 class="returns">Returns</h5>
+              <table class="table table-bordered table-striped table-condensed">
+                <thead>
+                  <tr>
+                    <th>Type</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span class="xref">System.String</span></td>
+                    <td><p>The string representation.</p>
+</td>
+                  </tr>
+                </tbody>
+              </table>
+              <span class="small pull-right mobile-hide">
+                <span class="divider">|</span>
+                <a href="https://github.com/mthalman/GenFx/new/master/doc/apispec/new?filename=GenFx_ComponentLibrary_Lists_ListEntityBase_Clear.md&amp;value=---%0Auid%3A%20GenFx.ComponentLibrary.Lists.ListEntityBase.Clear%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+              </span>
+              <span class="small pull-right mobile-hide">
+                <a href="https://github.com/mthalman/GenFx/blob/master/src/GenFx.ComponentLibrary/Lists/ListEntityBase.cs/#L152">View Source</a>
+              </span>
+              <a id="GenFx_ComponentLibrary_Lists_ListEntityBase_Clear_" data-uid="GenFx.ComponentLibrary.Lists.ListEntityBase.Clear*"></a>
+              <h4 id="GenFx_ComponentLibrary_Lists_ListEntityBase_Clear" data-uid="GenFx.ComponentLibrary.Lists.ListEntityBase.Clear">Clear()</h4>
+              <div class="markdown level1 summary"><p>Removes all items from the list.</p>
+</div>
+              <div class="markdown level1 conceptual"></div>
+              <h5 class="decalaration">Declaration</h5>
+              <div class="codewrapper">
+                <pre><code class="lang-csharp hljs">public void Clear()</code></pre>
+              </div>
+              <h5 class="implements">Implements</h5>
+                  <div><span class="xref">System.Collections.IList.Clear()</span></div>
+              <span class="small pull-right mobile-hide">
+                <span class="divider">|</span>
+                <a href="https://github.com/mthalman/GenFx/new/master/doc/apispec/new?filename=GenFx_ComponentLibrary_Lists_ListEntityBase_Contains_System_Object_.md&amp;value=---%0Auid%3A%20GenFx.ComponentLibrary.Lists.ListEntityBase.Contains(System.Object)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+              </span>
+              <span class="small pull-right mobile-hide">
+                <a href="https://github.com/mthalman/GenFx/blob/master/src/GenFx.ComponentLibrary/Lists/ListEntityBase.cs/#L162">View Source</a>
+              </span>
+              <a id="GenFx_ComponentLibrary_Lists_ListEntityBase_Contains_" data-uid="GenFx.ComponentLibrary.Lists.ListEntityBase.Contains*"></a>
+              <h4 id="GenFx_ComponentLibrary_Lists_ListEntityBase_Contains_System_Object_" data-uid="GenFx.ComponentLibrary.Lists.ListEntityBase.Contains(System.Object)">Contains(Object)</h4>
+              <div class="markdown level1 summary"><p>Returns a value indicating whether the specified value is contained in the list.</p>
+</div>
+              <div class="markdown level1 conceptual"></div>
+              <h5 class="decalaration">Declaration</h5>
+              <div class="codewrapper">
+                <pre><code class="lang-csharp hljs">public bool Contains(object value)</code></pre>
+              </div>
+              <h5 class="parameters">Parameters</h5>
+              <table class="table table-bordered table-striped table-condensed">
+                <thead>
+                  <tr>
+                    <th>Type</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span class="xref">System.Object</span></td>
+                    <td><span class="parametername">value</span></td>
+                    <td><p>Value to check.</p>
+</td>
+                  </tr>
+                </tbody>
+              </table>
+              <h5 class="returns">Returns</h5>
+              <table class="table table-bordered table-striped table-condensed">
+                <thead>
+                  <tr>
+                    <th>Type</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span class="xref">System.Boolean</span></td>
+                    <td><p>True if the value is contained in the list; otherwise, false.</p>
+</td>
+                  </tr>
+                </tbody>
+              </table>
+              <h5 class="implements">Implements</h5>
+                  <div><span class="xref">System.Collections.IList.Contains(System.Object)</span></div>
+              <span class="small pull-right mobile-hide">
+                <span class="divider">|</span>
+                <a href="https://github.com/mthalman/GenFx/new/master/doc/apispec/new?filename=GenFx_ComponentLibrary_Lists_ListEntityBase_GetEnumerator.md&amp;value=---%0Auid%3A%20GenFx.ComponentLibrary.Lists.ListEntityBase.GetEnumerator%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+              </span>
+              <span class="small pull-right mobile-hide">
+                <a href="https://github.com/mthalman/GenFx/blob/master/src/GenFx.ComponentLibrary/Lists/ListEntityBase.cs/#L192">View Source</a>
+              </span>
+              <a id="GenFx_ComponentLibrary_Lists_ListEntityBase_GetEnumerator_" data-uid="GenFx.ComponentLibrary.Lists.ListEntityBase.GetEnumerator*"></a>
+              <h4 id="GenFx_ComponentLibrary_Lists_ListEntityBase_GetEnumerator" data-uid="GenFx.ComponentLibrary.Lists.ListEntityBase.GetEnumerator">GetEnumerator()</h4>
+              <div class="markdown level1 summary"><p>Returns an enumerator that iterates the items in the list.</p>
+</div>
+              <div class="markdown level1 conceptual"></div>
+              <h5 class="decalaration">Declaration</h5>
+              <div class="codewrapper">
+                <pre><code class="lang-csharp hljs">public IEnumerator GetEnumerator()</code></pre>
+              </div>
+              <h5 class="returns">Returns</h5>
+              <table class="table table-bordered table-striped table-condensed">
+                <thead>
+                  <tr>
+                    <th>Type</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span class="xref">System.Collections.IEnumerator</span></td>
+                    <td><p>An enumerator that iterates the items in the list.</p>
+</td>
+                  </tr>
+                </tbody>
+              </table>
+              <h5 class="implements">Implements</h5>
+                  <div><span class="xref">System.Collections.IEnumerable.GetEnumerator()</span></div>
+              <span class="small pull-right mobile-hide">
+                <span class="divider">|</span>
+                <a href="https://github.com/mthalman/GenFx/new/master/doc/apispec/new?filename=GenFx_ComponentLibrary_Lists_ListEntityBase_GetInitialLength.md&amp;value=---%0Auid%3A%20GenFx.ComponentLibrary.Lists.ListEntityBase.GetInitialLength%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+              </span>
+              <span class="small pull-right mobile-hide">
+                <a href="https://github.com/mthalman/GenFx/blob/master/src/GenFx.ComponentLibrary/Lists/ListEntityBase.cs/#L112">View Source</a>
+              </span>
+              <a id="GenFx_ComponentLibrary_Lists_ListEntityBase_GetInitialLength_" data-uid="GenFx.ComponentLibrary.Lists.ListEntityBase.GetInitialLength*"></a>
+              <h4 id="GenFx_ComponentLibrary_Lists_ListEntityBase_GetInitialLength" data-uid="GenFx.ComponentLibrary.Lists.ListEntityBase.GetInitialLength">GetInitialLength()</h4>
+              <div class="markdown level1 summary"><p>Returns the initial length to use for the list.</p>
+</div>
+              <div class="markdown level1 conceptual"></div>
+              <h5 class="decalaration">Declaration</h5>
+              <div class="codewrapper">
+                <pre><code class="lang-csharp hljs">protected int GetInitialLength()</code></pre>
+              </div>
+              <h5 class="returns">Returns</h5>
+              <table class="table table-bordered table-striped table-condensed">
+                <thead>
+                  <tr>
+                    <th>Type</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span class="xref">System.Int32</span></td>
+                    <td><p>The initial length to use for the list.</p>
+</td>
+                  </tr>
+                </tbody>
+              </table>
+              <span class="small pull-right mobile-hide">
+                <span class="divider">|</span>
+                <a href="https://github.com/mthalman/GenFx/new/master/doc/apispec/new?filename=GenFx_ComponentLibrary_Lists_ListEntityBase_GetValue_System_Int32_.md&amp;value=---%0Auid%3A%20GenFx.ComponentLibrary.Lists.ListEntityBase.GetValue(System.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+              </span>
+              <span class="small pull-right mobile-hide">
+                <a href="https://github.com/mthalman/GenFx/blob/master/src/GenFx.ComponentLibrary/Lists/ListEntityBase.cs/#L83">View Source</a>
+              </span>
+              <a id="GenFx_ComponentLibrary_Lists_ListEntityBase_GetValue_" data-uid="GenFx.ComponentLibrary.Lists.ListEntityBase.GetValue*"></a>
+              <h4 id="GenFx_ComponentLibrary_Lists_ListEntityBase_GetValue_System_Int32_" data-uid="GenFx.ComponentLibrary.Lists.ListEntityBase.GetValue(System.Int32)">GetValue(Int32)</h4>
+              <div class="markdown level1 summary"><p>Returns the list element at the specified index.</p>
+</div>
+              <div class="markdown level1 conceptual"></div>
+              <h5 class="decalaration">Declaration</h5>
+              <div class="codewrapper">
+                <pre><code class="lang-csharp hljs">public abstract object GetValue(int index)</code></pre>
+              </div>
+              <h5 class="parameters">Parameters</h5>
+              <table class="table table-bordered table-striped table-condensed">
+                <thead>
+                  <tr>
+                    <th>Type</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span class="xref">System.Int32</span></td>
+                    <td><span class="parametername">index</span></td>
+                    <td><p>The zero-based index of the list element to get.</p>
+</td>
+                  </tr>
+                </tbody>
+              </table>
+              <h5 class="returns">Returns</h5>
+              <table class="table table-bordered table-striped table-condensed">
+                <thead>
+                  <tr>
+                    <th>Type</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span class="xref">System.Object</span></td>
+                    <td><p>The list element at the specified index.</p>
+</td>
+                  </tr>
+                </tbody>
+              </table>
+              <span class="small pull-right mobile-hide">
+                <span class="divider">|</span>
+                <a href="https://github.com/mthalman/GenFx/new/master/doc/apispec/new?filename=GenFx_ComponentLibrary_Lists_ListEntityBase_IndexOf_System_Object_.md&amp;value=---%0Auid%3A%20GenFx.ComponentLibrary.Lists.ListEntityBase.IndexOf(System.Object)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+              </span>
+              <span class="small pull-right mobile-hide">
+                <a href="https://github.com/mthalman/GenFx/blob/master/src/GenFx.ComponentLibrary/Lists/ListEntityBase.cs/#L205">View Source</a>
+              </span>
+              <a id="GenFx_ComponentLibrary_Lists_ListEntityBase_IndexOf_" data-uid="GenFx.ComponentLibrary.Lists.ListEntityBase.IndexOf*"></a>
+              <h4 id="GenFx_ComponentLibrary_Lists_ListEntityBase_IndexOf_System_Object_" data-uid="GenFx.ComponentLibrary.Lists.ListEntityBase.IndexOf(System.Object)">IndexOf(Object)</h4>
+              <div class="markdown level1 summary"><p>Determines the index of a specified value in the list.</p>
+</div>
+              <div class="markdown level1 conceptual"></div>
+              <h5 class="decalaration">Declaration</h5>
+              <div class="codewrapper">
+                <pre><code class="lang-csharp hljs">public int IndexOf(object value)</code></pre>
+              </div>
+              <h5 class="parameters">Parameters</h5>
+              <table class="table table-bordered table-striped table-condensed">
+                <thead>
+                  <tr>
+                    <th>Type</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span class="xref">System.Object</span></td>
+                    <td><span class="parametername">value</span></td>
+                    <td><p>The value to locate in the list.</p>
+</td>
+                  </tr>
+                </tbody>
+              </table>
+              <h5 class="returns">Returns</h5>
+              <table class="table table-bordered table-striped table-condensed">
+                <thead>
+                  <tr>
+                    <th>Type</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span class="xref">System.Int32</span></td>
+                    <td><p>The index of the item if it exists; otherwise, returns -1.</p>
+</td>
+                  </tr>
+                </tbody>
+              </table>
+              <h5 class="implements">Implements</h5>
+                  <div><span class="xref">System.Collections.IList.IndexOf(System.Object)</span></div>
+              <span class="small pull-right mobile-hide">
+                <span class="divider">|</span>
+                <a href="https://github.com/mthalman/GenFx/new/master/doc/apispec/new?filename=GenFx_ComponentLibrary_Lists_ListEntityBase_Insert_System_Int32_System_Object_.md&amp;value=---%0Auid%3A%20GenFx.ComponentLibrary.Lists.ListEntityBase.Insert(System.Int32%2CSystem.Object)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+              </span>
+              <span class="small pull-right mobile-hide">
+                <a href="https://github.com/mthalman/GenFx/blob/master/src/GenFx.ComponentLibrary/Lists/ListEntityBase.cs/#L223">View Source</a>
+              </span>
+              <a id="GenFx_ComponentLibrary_Lists_ListEntityBase_Insert_" data-uid="GenFx.ComponentLibrary.Lists.ListEntityBase.Insert*"></a>
+              <h4 id="GenFx_ComponentLibrary_Lists_ListEntityBase_Insert_System_Int32_System_Object_" data-uid="GenFx.ComponentLibrary.Lists.ListEntityBase.Insert(System.Int32,System.Object)">Insert(Int32, Object)</h4>
+              <div class="markdown level1 summary"><p>Inserts the value at the specified index.</p>
+</div>
+              <div class="markdown level1 conceptual"></div>
+              <h5 class="decalaration">Declaration</h5>
+              <div class="codewrapper">
+                <pre><code class="lang-csharp hljs">public void Insert(int index, object value)</code></pre>
+              </div>
+              <h5 class="parameters">Parameters</h5>
+              <table class="table table-bordered table-striped table-condensed">
+                <thead>
+                  <tr>
+                    <th>Type</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span class="xref">System.Int32</span></td>
+                    <td><span class="parametername">index</span></td>
+                    <td><p>Index within the list where the value should be inserted.</p>
+</td>
+                  </tr>
+                  <tr>
+                    <td><span class="xref">System.Object</span></td>
+                    <td><span class="parametername">value</span></td>
+                    <td><p>The value to be inserted.</p>
+</td>
+                  </tr>
+                </tbody>
+              </table>
+              <h5 class="implements">Implements</h5>
+                  <div><span class="xref">System.Collections.IList.Insert(System.Int32, System.Object)</span></div>
+              <span class="small pull-right mobile-hide">
+                <span class="divider">|</span>
+                <a href="https://github.com/mthalman/GenFx/new/master/doc/apispec/new?filename=GenFx_ComponentLibrary_Lists_ListEntityBase_Remove_System_Object_.md&amp;value=---%0Auid%3A%20GenFx.ComponentLibrary.Lists.ListEntityBase.Remove(System.Object)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+              </span>
+              <span class="small pull-right mobile-hide">
+                <a href="https://github.com/mthalman/GenFx/blob/master/src/GenFx.ComponentLibrary/Lists/ListEntityBase.cs/#L253">View Source</a>
+              </span>
+              <a id="GenFx_ComponentLibrary_Lists_ListEntityBase_Remove_" data-uid="GenFx.ComponentLibrary.Lists.ListEntityBase.Remove*"></a>
+              <h4 id="GenFx_ComponentLibrary_Lists_ListEntityBase_Remove_System_Object_" data-uid="GenFx.ComponentLibrary.Lists.ListEntityBase.Remove(System.Object)">Remove(Object)</h4>
+              <div class="markdown level1 summary"><p>Removes the specified value from the list.</p>
+</div>
+              <div class="markdown level1 conceptual"></div>
+              <h5 class="decalaration">Declaration</h5>
+              <div class="codewrapper">
+                <pre><code class="lang-csharp hljs">public void Remove(object value)</code></pre>
+              </div>
+              <h5 class="parameters">Parameters</h5>
+              <table class="table table-bordered table-striped table-condensed">
+                <thead>
+                  <tr>
+                    <th>Type</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span class="xref">System.Object</span></td>
+                    <td><span class="parametername">value</span></td>
+                    <td><p>Value to be removed.</p>
+</td>
+                  </tr>
+                </tbody>
+              </table>
+              <h5 class="implements">Implements</h5>
+                  <div><span class="xref">System.Collections.IList.Remove(System.Object)</span></div>
+              <span class="small pull-right mobile-hide">
+                <span class="divider">|</span>
+                <a href="https://github.com/mthalman/GenFx/new/master/doc/apispec/new?filename=GenFx_ComponentLibrary_Lists_ListEntityBase_RemoveAt_System_Int32_.md&amp;value=---%0Auid%3A%20GenFx.ComponentLibrary.Lists.ListEntityBase.RemoveAt(System.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+              </span>
+              <span class="small pull-right mobile-hide">
+                <a href="https://github.com/mthalman/GenFx/blob/master/src/GenFx.ComponentLibrary/Lists/ListEntityBase.cs/#L262">View Source</a>
+              </span>
+              <a id="GenFx_ComponentLibrary_Lists_ListEntityBase_RemoveAt_" data-uid="GenFx.ComponentLibrary.Lists.ListEntityBase.RemoveAt*"></a>
+              <h4 id="GenFx_ComponentLibrary_Lists_ListEntityBase_RemoveAt_System_Int32_" data-uid="GenFx.ComponentLibrary.Lists.ListEntityBase.RemoveAt(System.Int32)">RemoveAt(Int32)</h4>
+              <div class="markdown level1 summary"><p>Removes the value at the specified index within the list.</p>
+</div>
+              <div class="markdown level1 conceptual"></div>
+              <h5 class="decalaration">Declaration</h5>
+              <div class="codewrapper">
+                <pre><code class="lang-csharp hljs">public void RemoveAt(int index)</code></pre>
+              </div>
+              <h5 class="parameters">Parameters</h5>
+              <table class="table table-bordered table-striped table-condensed">
+                <thead>
+                  <tr>
+                    <th>Type</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span class="xref">System.Int32</span></td>
+                    <td><span class="parametername">index</span></td>
+                    <td><p>Index position of the value to be removed.</p>
+</td>
+                  </tr>
+                </tbody>
+              </table>
+              <h5 class="implements">Implements</h5>
+                  <div><span class="xref">System.Collections.IList.RemoveAt(System.Int32)</span></div>
+              <span class="small pull-right mobile-hide">
+                <span class="divider">|</span>
+                <a href="https://github.com/mthalman/GenFx/new/master/doc/apispec/new?filename=GenFx_ComponentLibrary_Lists_ListEntityBase_SetValue_System_Int32_System_Object_.md&amp;value=---%0Auid%3A%20GenFx.ComponentLibrary.Lists.ListEntityBase.SetValue(System.Int32%2CSystem.Object)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+              </span>
+              <span class="small pull-right mobile-hide">
+                <a href="https://github.com/mthalman/GenFx/blob/master/src/GenFx.ComponentLibrary/Lists/ListEntityBase.cs/#L90">View Source</a>
+              </span>
+              <a id="GenFx_ComponentLibrary_Lists_ListEntityBase_SetValue_" data-uid="GenFx.ComponentLibrary.Lists.ListEntityBase.SetValue*"></a>
+              <h4 id="GenFx_ComponentLibrary_Lists_ListEntityBase_SetValue_System_Int32_System_Object_" data-uid="GenFx.ComponentLibrary.Lists.ListEntityBase.SetValue(System.Int32,System.Object)">SetValue(Int32, Object)</h4>
+              <div class="markdown level1 summary"><p>Sets the list element at the specified index.</p>
+</div>
+              <div class="markdown level1 conceptual"></div>
+              <h5 class="decalaration">Declaration</h5>
+              <div class="codewrapper">
+                <pre><code class="lang-csharp hljs">public abstract void SetValue(int index, object value)</code></pre>
+              </div>
+              <h5 class="parameters">Parameters</h5>
+              <table class="table table-bordered table-striped table-condensed">
+                <thead>
+                  <tr>
+                    <th>Type</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span class="xref">System.Int32</span></td>
+                    <td><span class="parametername">index</span></td>
+                    <td><p>The zero-based index of the list element to set.</p>
+</td>
+                  </tr>
+                  <tr>
+                    <td><span class="xref">System.Object</span></td>
+                    <td><span class="parametername">value</span></td>
+                    <td><p>The value to set at the index.</p>
+</td>
+                  </tr>
+                </tbody>
+              </table>
+              <span class="small pull-right mobile-hide">
+                <span class="divider">|</span>
+                <a href="https://github.com/mthalman/GenFx/new/master/doc/apispec/new?filename=GenFx_ComponentLibrary_Lists_ListEntityBase_UpdateStringRepresentation.md&amp;value=---%0Auid%3A%20GenFx.ComponentLibrary.Lists.ListEntityBase.UpdateStringRepresentation%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+              </span>
+              <span class="small pull-right mobile-hide">
+                <a href="https://github.com/mthalman/GenFx/blob/master/src/GenFx.ComponentLibrary/Lists/ListEntityBase.cs/#L276">View Source</a>
+              </span>
+              <a id="GenFx_ComponentLibrary_Lists_ListEntityBase_UpdateStringRepresentation_" data-uid="GenFx.ComponentLibrary.Lists.ListEntityBase.UpdateStringRepresentation*"></a>
+              <h4 id="GenFx_ComponentLibrary_Lists_ListEntityBase_UpdateStringRepresentation" data-uid="GenFx.ComponentLibrary.Lists.ListEntityBase.UpdateStringRepresentation">UpdateStringRepresentation()</h4>
+              <div class="markdown level1 summary"><p>Stores a cached string representation of the <a class="xref" href="GenFx.ComponentLibrary.Lists.ListEntityBase-1.html">ListEntityBase&lt;TItem&gt;</a>.</p>
+</div>
+              <div class="markdown level1 conceptual"></div>
+              <h5 class="decalaration">Declaration</h5>
+              <div class="codewrapper">
+                <pre><code class="lang-csharp hljs">protected void UpdateStringRepresentation()</code></pre>
+              </div>
+              <h3 id="eii">Explicit Interface Implementations
+              </h3>
+              <span class="small pull-right mobile-hide">
+                <span class="divider">|</span>
+                <a href="https://github.com/mthalman/GenFx/new/master/doc/apispec/new?filename=GenFx_ComponentLibrary_Lists_ListEntityBase_System_Collections_ICollection_CopyTo_System_Array_System_Int32_.md&amp;value=---%0Auid%3A%20GenFx.ComponentLibrary.Lists.ListEntityBase.System%23Collections%23ICollection%23CopyTo(System.Array%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+              </span>
+              <span class="small pull-right mobile-hide">
+                <a href="https://github.com/mthalman/GenFx/blob/master/src/GenFx.ComponentLibrary/Lists/ListEntityBase.cs/#L175">View Source</a>
+              </span>
+              <a id="GenFx_ComponentLibrary_Lists_ListEntityBase_System_Collections_ICollection_CopyTo_" data-uid="GenFx.ComponentLibrary.Lists.ListEntityBase.System#Collections#ICollection#CopyTo*"></a>
+              <h4 id="GenFx_ComponentLibrary_Lists_ListEntityBase_System_Collections_ICollection_CopyTo_System_Array_System_Int32_" data-uid="GenFx.ComponentLibrary.Lists.ListEntityBase.System#Collections#ICollection#CopyTo(System.Array,System.Int32)">ICollection.CopyTo(Array, Int32)</h4>
+              <div class="markdown level1 summary"></div>
+              <div class="markdown level1 conceptual"></div>
+              <h5 class="decalaration">Declaration</h5>
+              <div class="codewrapper">
+                <pre><code class="lang-csharp hljs">void ICollection.CopyTo(Array array, int index)</code></pre>
+              </div>
+              <h5 class="parameters">Parameters</h5>
+              <table class="table table-bordered table-striped table-condensed">
+                <thead>
+                  <tr>
+                    <th>Type</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span class="xref">System.Array</span></td>
+                    <td><span class="parametername">array</span></td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td><span class="xref">System.Int32</span></td>
+                    <td><span class="parametername">index</span></td>
+                    <td></td>
+                  </tr>
+                </tbody>
+              </table>
+              <h5 class="implements">Implements</h5>
+                  <div><span class="xref">System.Collections.ICollection.CopyTo(System.Array, System.Int32)</span></div>
+              <span class="small pull-right mobile-hide">
+                <span class="divider">|</span>
+                <a href="https://github.com/mthalman/GenFx/new/master/doc/apispec/new?filename=GenFx_ComponentLibrary_Lists_ListEntityBase_System_Collections_ICollection_Count.md&amp;value=---%0Auid%3A%20GenFx.ComponentLibrary.Lists.ListEntityBase.System%23Collections%23ICollection%23Count%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+              </span>
+              <span class="small pull-right mobile-hide">
+                <a href="https://github.com/mthalman/GenFx/blob/master/src/GenFx.ComponentLibrary/Lists/ListEntityBase.cs/#L97">View Source</a>
+              </span>
+              <a id="GenFx_ComponentLibrary_Lists_ListEntityBase_System_Collections_ICollection_Count_" data-uid="GenFx.ComponentLibrary.Lists.ListEntityBase.System#Collections#ICollection#Count*"></a>
+              <h4 id="GenFx_ComponentLibrary_Lists_ListEntityBase_System_Collections_ICollection_Count" data-uid="GenFx.ComponentLibrary.Lists.ListEntityBase.System#Collections#ICollection#Count">ICollection.Count</h4>
+              <div class="markdown level1 summary"></div>
+              <div class="markdown level1 conceptual"></div>
+              <h5 class="decalaration">Declaration</h5>
+              <div class="codewrapper">
+                <pre><code class="lang-csharp hljs">int ICollection.Count { get; }</code></pre>
+              </div>
+              <h5 class="returns">Returns</h5>
+              <table class="table table-bordered table-striped table-condensed">
+                <thead>
+                  <tr>
+                    <th>Type</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span class="xref">System.Int32</span></td>
+                    <td></td>
+                  </tr>
+                </tbody>
+              </table>
+              <h5 class="implements">Implements</h5>
+                  <div><span class="xref">System.Collections.ICollection.Count</span></div>
+              <span class="small pull-right mobile-hide">
+                <span class="divider">|</span>
+                <a href="https://github.com/mthalman/GenFx/new/master/doc/apispec/new?filename=GenFx_ComponentLibrary_Lists_ListEntityBase_System_Collections_ICollection_IsSynchronized.md&amp;value=---%0Auid%3A%20GenFx.ComponentLibrary.Lists.ListEntityBase.System%23Collections%23ICollection%23IsSynchronized%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+              </span>
+              <span class="small pull-right mobile-hide">
+                <a href="https://github.com/mthalman/GenFx/blob/master/src/GenFx.ComponentLibrary/Lists/ListEntityBase.cs/#L104">View Source</a>
+              </span>
+              <a id="GenFx_ComponentLibrary_Lists_ListEntityBase_System_Collections_ICollection_IsSynchronized_" data-uid="GenFx.ComponentLibrary.Lists.ListEntityBase.System#Collections#ICollection#IsSynchronized*"></a>
+              <h4 id="GenFx_ComponentLibrary_Lists_ListEntityBase_System_Collections_ICollection_IsSynchronized" data-uid="GenFx.ComponentLibrary.Lists.ListEntityBase.System#Collections#ICollection#IsSynchronized">ICollection.IsSynchronized</h4>
+              <div class="markdown level1 summary"></div>
+              <div class="markdown level1 conceptual"></div>
+              <h5 class="decalaration">Declaration</h5>
+              <div class="codewrapper">
+                <pre><code class="lang-csharp hljs">bool ICollection.IsSynchronized { get; }</code></pre>
+              </div>
+              <h5 class="returns">Returns</h5>
+              <table class="table table-bordered table-striped table-condensed">
+                <thead>
+                  <tr>
+                    <th>Type</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span class="xref">System.Boolean</span></td>
+                    <td></td>
+                  </tr>
+                </tbody>
+              </table>
+              <h5 class="implements">Implements</h5>
+                  <div><span class="xref">System.Collections.ICollection.IsSynchronized</span></div>
+              <span class="small pull-right mobile-hide">
+                <span class="divider">|</span>
+                <a href="https://github.com/mthalman/GenFx/new/master/doc/apispec/new?filename=GenFx_ComponentLibrary_Lists_ListEntityBase_System_Collections_ICollection_SyncRoot.md&amp;value=---%0Auid%3A%20GenFx.ComponentLibrary.Lists.ListEntityBase.System%23Collections%23ICollection%23SyncRoot%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+              </span>
+              <span class="small pull-right mobile-hide">
+                <a href="https://github.com/mthalman/GenFx/blob/master/src/GenFx.ComponentLibrary/Lists/ListEntityBase.cs/#L106">View Source</a>
+              </span>
+              <a id="GenFx_ComponentLibrary_Lists_ListEntityBase_System_Collections_ICollection_SyncRoot_" data-uid="GenFx.ComponentLibrary.Lists.ListEntityBase.System#Collections#ICollection#SyncRoot*"></a>
+              <h4 id="GenFx_ComponentLibrary_Lists_ListEntityBase_System_Collections_ICollection_SyncRoot" data-uid="GenFx.ComponentLibrary.Lists.ListEntityBase.System#Collections#ICollection#SyncRoot">ICollection.SyncRoot</h4>
+              <div class="markdown level1 summary"></div>
+              <div class="markdown level1 conceptual"></div>
+              <h5 class="decalaration">Declaration</h5>
+              <div class="codewrapper">
+                <pre><code class="lang-csharp hljs">object ICollection.SyncRoot { get; }</code></pre>
+              </div>
+              <h5 class="returns">Returns</h5>
+              <table class="table table-bordered table-striped table-condensed">
+                <thead>
+                  <tr>
+                    <th>Type</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span class="xref">System.Object</span></td>
+                    <td></td>
+                  </tr>
+                </tbody>
+              </table>
+              <h5 class="implements">Implements</h5>
+                  <div><span class="xref">System.Collections.ICollection.SyncRoot</span></div>
+              <span class="small pull-right mobile-hide">
+                <span class="divider">|</span>
+                <a href="https://github.com/mthalman/GenFx/new/master/doc/apispec/new?filename=GenFx_ComponentLibrary_Lists_ListEntityBase_System_Collections_IList_Item_System_Int32_.md&amp;value=---%0Auid%3A%20GenFx.ComponentLibrary.Lists.ListEntityBase.System%23Collections%23IList%23Item(System.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+              </span>
+              <span class="small pull-right mobile-hide">
+                <a href="https://github.com/mthalman/GenFx/blob/master/src/GenFx.ComponentLibrary/Lists/ListEntityBase.cs/#L72">View Source</a>
+              </span>
+              <a id="GenFx_ComponentLibrary_Lists_ListEntityBase_System_Collections_IList_Item_" data-uid="GenFx.ComponentLibrary.Lists.ListEntityBase.System#Collections#IList#Item*"></a>
+              <h4 id="GenFx_ComponentLibrary_Lists_ListEntityBase_System_Collections_IList_Item_System_Int32_" data-uid="GenFx.ComponentLibrary.Lists.ListEntityBase.System#Collections#IList#Item(System.Int32)">IList.Item[Int32]</h4>
+              <div class="markdown level1 summary"><p>Gets or sets the list element at the specified index.</p>
+</div>
+              <div class="markdown level1 conceptual"></div>
+              <h5 class="decalaration">Declaration</h5>
+              <div class="codewrapper">
+                <pre><code class="lang-csharp hljs">object IList.this[int index] { get; set; }</code></pre>
+              </div>
+              <h5 class="parameters">Parameters</h5>
+              <table class="table table-bordered table-striped table-condensed">
+                <thead>
+                  <tr>
+                    <th>Type</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span class="xref">System.Int32</span></td>
+                    <td><span class="parametername">index</span></td>
+                    <td><p>The zero-based index of the list element to get or set.</p>
+</td>
+                  </tr>
+                </tbody>
+              </table>
+              <h5 class="returns">Returns</h5>
+              <table class="table table-bordered table-striped table-condensed">
+                <thead>
+                  <tr>
+                    <th>Type</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span class="xref">System.Object</span></td>
+                    <td></td>
+                  </tr>
+                </tbody>
+              </table>
+              <h5 class="implements">Implements</h5>
+                  <div><span class="xref">System.Collections.IList.Item[System.Int32]</span></div>
+            </article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/mthalman/GenFx/new/master/doc/apispec/new?filename=GenFx_ComponentLibrary_Lists_ListEntityBase.md&amp;value=---%0Auid%3A%20GenFx.ComponentLibrary.Lists.ListEntityBase%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/mthalman/GenFx/blob/master/src/GenFx.ComponentLibrary/Lists/ListEntityBase.cs/#L17" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Copyright © 2015-2016 Microsoft<br>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

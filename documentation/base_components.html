@@ -1,0 +1,163 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>GenFx Base Components </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="GenFx Base Components ">
+    <meta name="generator" content="docfx 2.10.2.0">
+    
+    <link rel="shortcut icon" href="../favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+              <h1 id="genfx-base-components">GenFx Base Components</h1>
+              
+<p>GenFx implements a set of base components for the features that are common to genetic algorithms.</p>
+<p>List of components:</p>
+<ul>
+<li><a href="#genetic-algorithm">Genetic Algorithm</a></li>
+<li><a href="#genetic-entity">Genetic Entity</a></li>
+<li><a href="#population">Population</a></li>
+<li><a href="#fitness-evaluator">Fitness Evaluator</a></li>
+<li><a href="#selection-operator">Selection Operator</a></li>
+<li><a href="#crossover-operator">Crossover Operator</a></li>
+<li><a href="#mutation-operator">Mutation Operator</a></li>
+<li><a href="#elitism-strategy">Elitism Strategy</a></li>
+<li><a href="#fitness-scaling-strategy">Fitness Scaling Strategy</a></li>
+<li><a href="#terminator">Terminator</a></li>
+<li><a href="#statistic">Statistic</a></li>
+<li><a href="#plugin">Plugin</a></li>
+</ul>
+<h2 id="genetic-algorithm">Genetic Algorithm</h2>
+<p>The genetic algorithm component is the root component that is used to configure and execute a GA. It is configured to reference all the other components that are to be used during execution. It defines the logic which drives the execution of the GA as well as providing extension points that can be used to respond to the algorithm&#39;s lifecycle.</p>
+<h3 id="genetic-algorithm-lifecyle">Genetic Algorithm Lifecyle</h3>
+<p>The lifecycle of a genetic algorithm consists of the following phases:</p>
+<ol>
+<li><strong>Initialize</strong><br>Performs the necessary validation steps and generates the initial environment.</li>
+<li><strong>Calculate fitness</strong><br>Calculates the fitness of the initial environment.</li>
+<li><strong>Create a new generation</strong><br>Consists of a set of sub-phases which can vary according to the type of algorithm used and its configuration:<ol>
+<li><strong>Select entities</strong><br>Uses the selection operator to choose entities that are to either be moved to the next generation or modified according to other operators.</li>
+<li><strong>Apply operators</strong><br>Applies operators such as crossover and mutation to the selected entities.  These operators can potentially modify the state of those entities based on randomization.</li>
+<li><strong>Calculate fitness</strong><br>Calculates the fitness of the new generation.</li>
+</ol>
+</li>
+<li><strong>Check for termination</strong><br>Terminates the algorithm if the configured condition has been met.</li>
+</ol>
+<h2 id="genetic-entity">Genetic Entity</h2>
+<p>A genetic entity represents the unit that undergoes evolution within a GA.  It contains state which represents the encoding of the solution the GA is intended to test.  For example, a genetic entity could be a list of integers where the list of integers represent the ordered set of cities which are to be traveled in an algorithm tackling the classic Traveling Salesman problem.</p>
+<h2 id="population">Population</h2>
+<p>A population is simply a collection of genetic entities.  A genetic algorithm can contain multiple populations in its environment. Typically, the genetic entities contained within a particular entity evolve amongst themselves, isolated from other populations.  But it is possible for there to be intermixing between populations via logic controlled by the genetic algorithm.</p>
+<h2 id="fitness-evaluator">Fitness Evaluator</h2>
+<p> A fitness evaluator calculates the fitness of a genetic entity. The fitness of an entity is a relative measurement of how close it is to meeting the goal of the genetic algorithm.  For example, a genetic algorithm that uses binary strings to reach a goal of an entity with all ones in its string might use a fitness evaluator that counts the number of ones in a binary string as the fitness value.</p>
+<p> In GenFx, the fitness evaluator is responsible for calculating the <em>raw</em> fitness value. GenFx also has the concept of a <em>scaled</em> fitness value which is optionally calculated by a <a href="#fitness-scaling-strategy">fitness scaling strategy</a>.</p>
+<h2 id="selection-operator">Selection Operator</h2>
+<p> A selection operator is responsible for selecting entities to be used for populating the next generation. Typically, the selection is based on fitness of the entity where entities with better fitness values have a greater chance of being selected.</p>
+<h2 id="crossover-operator">Crossover Operator</h2>
+<p> A crossover operator acts upon two or more entities to produce offspring which are then added to the next generation.  A crossover operator combines parts of the parent entities to produce one or more child entities.  A crossover operator doesn&#39;t always take action; it defines a crossover rate value which determines the percentage chance that a crossover actually occurs for a given set of parents. The crossover operator is optional when executing a GA in GenFx.</p>
+<h2 id="mutation-operator">Mutation Operator</h2>
+<p> A mutation operator acts upon a single entity by modifying it in some way, typically randomly.  For example, a mutation operator could mutate a binary string by changing a bit value from 0 to 1. A mutation operator doesn&#39;t always take action; it defines a mutation rate value which determines the percentage chance that a mutation actually occurs.  This mutation rate applies to each component (or allele in GA theory language) of the entity, meaning that each component has a chance to become mutated (in the case of a binary string, a bit would be what is referred to as a component). The mutation operator is optional when executing a GA in GenFx.</p>
+<h2 id="elitism-strategy">Elitism Strategy</h2>
+<p> An elitism strategy is responsible for determining which entities, if any, are allowed to be added to the next generation without any modification. Typically, the intent of such a strategy is to allow a small amount of entities that have good fitness values to be passed along so that their good fitness is not potentially lost through the crossover and mutation operators. The elitism strategy is optional when executing a GA in GenFx.</p>
+<h2 id="fitness-scaling-strategy">Fitness Scaling Strategy</h2>
+<p> A fitness scaling strategy applies a calculation, using the raw fitness values of the entities in a population, to assign a scaled fitness value to each entity. Fitness scaling is a technique that can be used to prevent the problem of premature convergence where too much emphasis is placed on the highly fit genetic entities in early generations causing a loss of diversity. Thus, it provides the ability to control the magnitude of fitness differences within a population. The elitism strategy is optional when executing a GA in GenFx.</p>
+<h2 id="terminator">Terminator</h2>
+<p> A terminator is simply a way to determine when the genetic algorithm should finish. A terminator is optional when executing a GA in GenFx but the lack of one means that the algorithm will execute indefinitely.</p>
+<h2 id="statistic">Statistic</h2>
+<p> A statistic is a component which tracks data about the state of the algorithm during execution.  Statistics provide a good way to determine how well a genetic algorithm is running and useful for troubleshooting and analysis.</p>
+<h2 id="plugin">Plugin</h2>
+<p> A plugin is simply a component which provides custom behavior in response to events within the genetic algorithm lifecycle.  For example, a plugin could store all entity state for each generation in a database so that it can be analyzed later.</p>
+
+            </article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/mthalman/GenFx/blob/master/doc/documentation/base_components.md/#L1" class="contribution-link">Improve this Doc</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Copyright © 2015-2016 Microsoft<br>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

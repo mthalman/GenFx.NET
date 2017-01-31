@@ -1,0 +1,227 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Custom Validator </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Custom Validator ">
+    <meta name="generator" content="docfx 2.10.2.0">
+    
+    <link rel="shortcut icon" href="../favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+              <h1 id="custom-validator">Custom Validator</h1>
+              
+<p>GenFx provides a validation model that lets you provide validation for properties and components as a whole.  This ensures a component is using values that it expects which is useful when you are building shareable components for others to use or if you just want to make sure you don&#39;t mistakenly configure your own components.</p>
+<h2 id="property-validator">Property Validator</h2>
+<p>In the first part of this tutorial, we&#39;re going to author a validator for integer properties that ensures the property can only be set to an even number.</p>
+<p>Since this validator is meant for properties, we&#39;ll derive our class from <a class="xref" href="../api/GenFx.Validation.PropertyValidator.html">PropertyValidator</a> and implement its <a class="xref" href="../api/GenFx.Validation.PropertyValidator.html#GenFx_Validation_PropertyValidator_IsValid_System_Object_System_String_System_Object_System_String__">IsValid</a> method:</p>
+<pre><code>public class EvenNumberValidator : PropertyValidator
+{
+    public override bool IsValid(object value, string propertyName,
+        object owner, out string errorMessage)
+    {
+        if (!(value is int))
+        {
+            errorMessage = propertyName + &quot; was not set to an Int32 value.&quot;;
+            return false;
+        }
+        else if ((int)value % 2)
+        {
+            errorMessage = propertyName + &quot; must be set to an even number.&quot;;
+            return false;
+        }
+
+        errorMessage = null;
+        return true;
+    }
+}
+</code></pre><p>Now that we have a validator, we can use it one of two ways:</p>
+<ul>
+<li>Define a custom attribute class that can be used for the properties to which we want to apply this validation.</li>
+<li>Make use of the built-in <a class="xref" href="../api/GenFx.Validation.CustomPropertyValidatorAttribute.html">CustomPropertyValidatorAttribute</a> that can target any kind of property validator.</li>
+</ul>
+<p>Let&#39;s explore both of these options to see how they work.  First, let&#39;s create a custom attribute class.  GenFx provides a convenient base class for property validator attributes to make this a pretty simple implementation:</p>
+<pre><code>[AttributeUsage(AttributeTargets.Property)]
+public class EvenNumberValidatorAttribute : PropertyValidatorAttribute
+{
+    protected override PropertyValidator CreateValidator()
+    {
+        return new EvenNumberValidator();
+    }
+}
+</code></pre><p>This is how that attribute would be used on a component property:</p>
+<pre><code>private int myProperty;
+
+[EvenNumberValidator]
+public int MyProperty
+{
+    get { return this.myProperty; }
+    set { this.SetProperty(ref this.myProperty, value); }
+}
+</code></pre><p>Invocation of the <code>EvenNumberValidator</code> would automatically occur when <a class="xref" href="../api/GenFx.GeneticComponent.html#GenFx_GeneticComponent_SetProperty__1___0____0_System_String_">SetProperty</a> is called to ensure the value is valid.</p>
+<p>The other approach to take is to use <a class="xref" href="../api/GenFx.Validation.CustomPropertyValidatorAttribute.html">CustomPropertyValidatorAttribute</a> instead of defining our own custom attribute.  This approach doesn&#39;t yield as elegant of an API, especially if your validator requires arguments, but it&#39;s a quick way to get things up and running.  Here is how that would look:</p>
+<pre><code>private int myProperty;
+
+[CustomPropertyValidator(typeof(EvenNumberValidator)]
+public int MyProperty
+{
+    get { return this.myProperty; }
+    set { this.SetProperty(ref this.myProperty, value); }
+}
+</code></pre><h2 id="component-validator">Component Validator</h2>
+<p>Let&#39;s move on to the next type of validator that you can customize: component validator.  With a component validator, you validate the component as a whole; it&#39;s not tied to a specific property as is the case with a property validator.</p>
+<p>In this part of the tutorial, we&#39;ll define a component validator which validates that one integer property is greater than another integer property.  A component validator is appropriate for this scenario instead of a property validator because a property validator would validate the property immediately when it is set.  Depending on the order in which the properties are set, you could have a validation error before the consuming code was able to set the next property to the appropriate value.</p>
+<p>Since this validator is meant for the whole component, we&#39;ll derive our class from <a class="xref" href="../api/GenFx.Validation.ComponentValidator.html">ComponentValidator</a> and implement its <a class="xref" href="../api/GenFx.Validation.ComponentValidator.html#GenFx_Validation_ComponentValidator_IsValid_GenFx_GeneticComponent_System_String__">IsValid</a> method.  For simplicity of the tutorial, we&#39;ll implement it such that the validator knows the type of the component from which it will be used.  Here&#39;s the code:</p>
+<pre><code>public class GreaterThanValidator : ComponentValidator
+{
+    public override bool IsValid(GeneticComponent component, out string errorMessage)
+    {
+        MyGeneticEntity entity = (MyGeneticEntity)component;
+
+        if (entity.Value1 &lt;= entity.Value2)
+        {
+            errorMessage = &quot;Value1 must be greater than Value2.&quot;;
+            return false;
+        }
+
+        errorMessage = null;
+        return true;
+    }
+}
+</code></pre><p>Now that we have a validator, we can use it one of two ways:</p>
+<ul>
+<li>Define a custom attribute class that can be used for the component to which we want to apply this validation.</li>
+<li>Make use of the built-in <a class="xref" href="../api/GenFx.Validation.CustomComponentValidatorAttribute.html">CustomComponentValidatorAttribute</a> that can target any kind of component validator.</li>
+</ul>
+<p>Let&#39;s explore both of these options to see how they work.  First, let&#39;s create a custom attribute class.  GenFx provides a convenient base class for component validator attributes to make this a pretty simple implementation:</p>
+<pre><code>[AttributeUsage(AttributeTargets.Class)]
+public class GreaterThanValidatorAttribute : ComponentValidatorAttribute
+{
+    protected override ComponentValidator CreateValidator()
+    {
+        return new GreaterThanValidator();
+    }
+}
+</code></pre><p>This is how that attribute would be used on a component:</p>
+<pre><code>[GreaterThanValidator]
+public class MyGeneticEntity : GeneticEntity
+{
+    private string value1;
+    private string value2;
+
+    public int Value1
+    {
+        get { return this.value1; }
+        set { this.SetProperty(ref this.value1, value); }
+    }
+
+    public int Value2
+    {
+        get { return this.value1; }
+        set { this.SetProperty(ref this.value1, value); }
+    }
+}
+</code></pre><p>Invocation of the <code>GreaterThanValidator</code> would automatically occur when the GA is initialized.</p>
+<p>The other approach to take is to use <a class="xref" href="../api/GenFx.Validation.CustomComponentValidatorAttribute.html">CustomComponentValidatorAttribute</a> instead of defining our own custom attribute.  This approach doesn&#39;t yield as elegant of an API, especially if your validator requires arguments, but it&#39;s a quick way to get things up and running.  Here is how that would look:</p>
+<pre><code>[CustomComponentValidator(typeof(GreaterThanValidator))]
+public class MyGeneticEntity : GeneticEntity
+{
+    /* Same code as before... */
+}
+</code></pre><p>To learn more about the validation API, check out the the <a class="xref" href="../api/GenFx.Validation.html">Validation namespace</a>.</p>
+
+            </article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/mthalman/GenFx/blob/master/doc/tutorials/custom_validator.md/#L1" class="contribution-link">Improve this Doc</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Copyright © 2015-2016 Microsoft<br>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

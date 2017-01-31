@@ -1,0 +1,1298 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class GeneticAlgorithm
+   </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class GeneticAlgorithm
+   ">
+    <meta name="generator" content="docfx 2.10.2.0">
+    
+    <link rel="shortcut icon" href="../favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content">
+              
+              
+              <h1 id="GenFx_GeneticAlgorithm" data-uid="GenFx.GeneticAlgorithm">Class GeneticAlgorithm
+              </h1>
+              <div class="markdown level0 summary"><p>Provides the abstract base class for a type of genetic algorithm.</p>
+</div>
+              <div class="markdown level0 conceptual"></div>
+              <div class="inheritance">
+                <h5>Inheritance</h5>
+                  <div class="level0"><span class="xref">System.Object</span></div>
+                  <div class="level1"><a class="xref" href="GenFx.GeneticComponent.html">GeneticComponent</a></div>
+                  <div class="level2"><span class="xref">GeneticAlgorithm</span></div>
+                  <div class="level3"><a class="xref" href="GenFx.ComponentLibrary.Algorithms.SimpleGeneticAlgorithm.html">SimpleGeneticAlgorithm</a></div>
+                  <div class="level3"><a class="xref" href="GenFx.ComponentLibrary.Algorithms.SteadyStateGeneticAlgorithm.html">SteadyStateGeneticAlgorithm</a></div>
+              </div>
+              <div class="inheritedMembers">
+                <h5>Inherited Members</h5>
+                <div>
+                  <a class="xref" href="GenFx.GeneticComponent.html#GenFx_GeneticComponent_PropertyChanged">GeneticComponent.PropertyChanged</a>
+                </div>
+                <div>
+                  <a class="xref" href="GenFx.GeneticComponent.html#GenFx_GeneticComponent_CreateNew">GeneticComponent.CreateNew()</a>
+                </div>
+                <div>
+                  <a class="xref" href="GenFx.GeneticComponent.html#GenFx_GeneticComponent_OnPropertyChanged_System_String_">GeneticComponent.OnPropertyChanged(String)</a>
+                </div>
+                <div>
+                  <a class="xref" href="GenFx.GeneticComponent.html#GenFx_GeneticComponent_SetProperty__1___0____0_System_String_">GeneticComponent.SetProperty&lt;T&gt;(T, T, String)</a>
+                </div>
+                <div>
+                  <a class="xref" href="GenFx.GeneticComponent.html#GenFx_GeneticComponent_Validate">GeneticComponent.Validate()</a>
+                </div>
+                <div>
+                  <a class="xref" href="GenFx.GeneticComponent.html#GenFx_GeneticComponent_ValidateProperty_System_Object_System_String_">GeneticComponent.ValidateProperty(Object, String)</a>
+                </div>
+                <div>
+                  <span class="xref">System.Object.ToString()</span>
+                </div>
+                <div>
+                  <span class="xref">System.Object.Equals(System.Object)</span>
+                </div>
+                <div>
+                  <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+                </div>
+                <div>
+                  <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+                </div>
+                <div>
+                  <span class="xref">System.Object.GetHashCode()</span>
+                </div>
+                <div>
+                  <span class="xref">System.Object.GetType()</span>
+                </div>
+                <div>
+                  <span class="xref">System.Object.MemberwiseClone()</span>
+                </div>
+              </div>
+              <h6><strong>Namespace</strong>:GenFx</h6>
+              <h6><strong>Assembly</strong>:GenFx.dll</h6>
+              <h5 id="GenFx_GeneticAlgorithm_syntax">Syntax</h5>
+              <div class="codewrapper">
+                <pre><code class="lang-csharp hljs">[DataContract]
+public abstract class GeneticAlgorithm : GeneticComponent, INotifyPropertyChanged</code></pre>
+              </div>
+              <h3 id="constructors">Constructors
+              </h3>
+              <span class="small pull-right mobile-hide">
+                <span class="divider">|</span>
+                <a href="https://github.com/mthalman/GenFx/new/master/doc/apispec/new?filename=GenFx_GeneticAlgorithm__ctor.md&amp;value=---%0Auid%3A%20GenFx.GeneticAlgorithm.%23ctor%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+              </span>
+              <span class="small pull-right mobile-hide">
+                <a href="https://github.com/mthalman/GenFx/blob/master/src/GenFx/GeneticAlgorithm.cs/#L72">View Source</a>
+              </span>
+              <a id="GenFx_GeneticAlgorithm__ctor_" data-uid="GenFx.GeneticAlgorithm.#ctor*"></a>
+              <h4 id="GenFx_GeneticAlgorithm__ctor" data-uid="GenFx.GeneticAlgorithm.#ctor">GeneticAlgorithm()</h4>
+              <div class="markdown level1 summary"><p>Initializes a new instance of this class.</p>
+</div>
+              <div class="markdown level1 conceptual"></div>
+              <h5 class="decalaration">Declaration</h5>
+              <div class="codewrapper">
+                <pre><code class="lang-csharp hljs">protected GeneticAlgorithm()</code></pre>
+              </div>
+              <h3 id="properties">Properties
+              </h3>
+              <span class="small pull-right mobile-hide">
+                <span class="divider">|</span>
+                <a href="https://github.com/mthalman/GenFx/new/master/doc/apispec/new?filename=GenFx_GeneticAlgorithm_CrossoverOperator.md&amp;value=---%0Auid%3A%20GenFx.GeneticAlgorithm.CrossoverOperator%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+              </span>
+              <span class="small pull-right mobile-hide">
+                <a href="https://github.com/mthalman/GenFx/blob/master/src/GenFx/GeneticAlgorithm.cs/#L172">View Source</a>
+              </span>
+              <a id="GenFx_GeneticAlgorithm_CrossoverOperator_" data-uid="GenFx.GeneticAlgorithm.CrossoverOperator*"></a>
+              <h4 id="GenFx_GeneticAlgorithm_CrossoverOperator" data-uid="GenFx.GeneticAlgorithm.CrossoverOperator">CrossoverOperator</h4>
+              <div class="markdown level1 summary"><p>Gets the <a class="xref" href="GenFx.CrossoverOperator.html">CrossoverOperator</a> to be used by the algorithm.</p>
+</div>
+              <div class="markdown level1 conceptual"></div>
+              <h5 class="decalaration">Declaration</h5>
+              <div class="codewrapper">
+                <pre><code class="lang-csharp hljs">public CrossoverOperator CrossoverOperator { get; set; }</code></pre>
+              </div>
+              <h5 class="propertyValue">Property Value</h5>
+              <table class="table table-bordered table-striped table-condensed">
+                <thead>
+                  <tr>
+                    <th>Type</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><a class="xref" href="GenFx.CrossoverOperator.html">CrossoverOperator</a></td>
+                    <td></td>
+                  </tr>
+                </tbody>
+              </table>
+              <span class="small pull-right mobile-hide">
+                <span class="divider">|</span>
+                <a href="https://github.com/mthalman/GenFx/new/master/doc/apispec/new?filename=GenFx_GeneticAlgorithm_CurrentGeneration.md&amp;value=---%0Auid%3A%20GenFx.GeneticAlgorithm.CurrentGeneration%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+              </span>
+              <span class="small pull-right mobile-hide">
+                <a href="https://github.com/mthalman/GenFx/blob/master/src/GenFx/GeneticAlgorithm.cs/#L251">View Source</a>
+              </span>
+              <a id="GenFx_GeneticAlgorithm_CurrentGeneration_" data-uid="GenFx.GeneticAlgorithm.CurrentGeneration*"></a>
+              <h4 id="GenFx_GeneticAlgorithm_CurrentGeneration" data-uid="GenFx.GeneticAlgorithm.CurrentGeneration">CurrentGeneration</h4>
+              <div class="markdown level1 summary"><p>Gets the index of the generation reached so far during execution of the genetic algorithm.</p>
+</div>
+              <div class="markdown level1 conceptual"></div>
+              <h5 class="decalaration">Declaration</h5>
+              <div class="codewrapper">
+                <pre><code class="lang-csharp hljs">public int CurrentGeneration { get; }</code></pre>
+              </div>
+              <h5 class="propertyValue">Property Value</h5>
+              <table class="table table-bordered table-striped table-condensed">
+                <thead>
+                  <tr>
+                    <th>Type</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span class="xref">System.Int32</span></td>
+                    <td><p>The index of the generation reached so far during execution of the genetic algorithm.</p>
+</td>
+                  </tr>
+                </tbody>
+              </table>
+              <span class="small pull-right mobile-hide">
+                <span class="divider">|</span>
+                <a href="https://github.com/mthalman/GenFx/new/master/doc/apispec/new?filename=GenFx_GeneticAlgorithm_ElitismStrategy.md&amp;value=---%0Auid%3A%20GenFx.GeneticAlgorithm.ElitismStrategy%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+              </span>
+              <span class="small pull-right mobile-hide">
+                <a href="https://github.com/mthalman/GenFx/blob/master/src/GenFx/GeneticAlgorithm.cs/#L182">View Source</a>
+              </span>
+              <a id="GenFx_GeneticAlgorithm_ElitismStrategy_" data-uid="GenFx.GeneticAlgorithm.ElitismStrategy*"></a>
+              <h4 id="GenFx_GeneticAlgorithm_ElitismStrategy" data-uid="GenFx.GeneticAlgorithm.ElitismStrategy">ElitismStrategy</h4>
+              <div class="markdown level1 summary"><p>Gets the <a class="xref" href="GenFx.ElitismStrategy.html">ElitismStrategy</a> to be used by the algorithm.</p>
+</div>
+              <div class="markdown level1 conceptual"></div>
+              <h5 class="decalaration">Declaration</h5>
+              <div class="codewrapper">
+                <pre><code class="lang-csharp hljs">public ElitismStrategy ElitismStrategy { get; set; }</code></pre>
+              </div>
+              <h5 class="propertyValue">Property Value</h5>
+              <table class="table table-bordered table-striped table-condensed">
+                <thead>
+                  <tr>
+                    <th>Type</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><a class="xref" href="GenFx.ElitismStrategy.html">ElitismStrategy</a></td>
+                    <td></td>
+                  </tr>
+                </tbody>
+              </table>
+              <span class="small pull-right mobile-hide">
+                <span class="divider">|</span>
+                <a href="https://github.com/mthalman/GenFx/new/master/doc/apispec/new?filename=GenFx_GeneticAlgorithm_Environment.md&amp;value=---%0Auid%3A%20GenFx.GeneticAlgorithm.Environment%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+              </span>
+              <span class="small pull-right mobile-hide">
+                <a href="https://github.com/mthalman/GenFx/blob/master/src/GenFx/GeneticAlgorithm.cs/#L240">View Source</a>
+              </span>
+              <a id="GenFx_GeneticAlgorithm_Environment_" data-uid="GenFx.GeneticAlgorithm.Environment*"></a>
+              <h4 id="GenFx_GeneticAlgorithm_Environment" data-uid="GenFx.GeneticAlgorithm.Environment">Environment</h4>
+              <div class="markdown level1 summary"><p>Gets the <a class="xref" href="GenFx.GeneticEnvironment.html">GeneticEnvironment</a> being used by this object.</p>
+</div>
+              <div class="markdown level1 conceptual"></div>
+              <h5 class="decalaration">Declaration</h5>
+              <div class="codewrapper">
+                <pre><code class="lang-csharp hljs">public GeneticEnvironment Environment { get; }</code></pre>
+              </div>
+              <h5 class="propertyValue">Property Value</h5>
+              <table class="table table-bordered table-striped table-condensed">
+                <thead>
+                  <tr>
+                    <th>Type</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><a class="xref" href="GenFx.GeneticEnvironment.html">GeneticEnvironment</a></td>
+                    <td></td>
+                  </tr>
+                </tbody>
+              </table>
+              <span class="small pull-right mobile-hide">
+                <span class="divider">|</span>
+                <a href="https://github.com/mthalman/GenFx/new/master/doc/apispec/new?filename=GenFx_GeneticAlgorithm_FitnessEvaluator.md&amp;value=---%0Auid%3A%20GenFx.GeneticAlgorithm.FitnessEvaluator%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+              </span>
+              <span class="small pull-right mobile-hide">
+                <a href="https://github.com/mthalman/GenFx/blob/master/src/GenFx/GeneticAlgorithm.cs/#L120">View Source</a>
+              </span>
+              <a id="GenFx_GeneticAlgorithm_FitnessEvaluator_" data-uid="GenFx.GeneticAlgorithm.FitnessEvaluator*"></a>
+              <h4 id="GenFx_GeneticAlgorithm_FitnessEvaluator" data-uid="GenFx.GeneticAlgorithm.FitnessEvaluator">FitnessEvaluator</h4>
+              <div class="markdown level1 summary"><p>Gets the <a class="xref" href="GenFx.GeneticAlgorithm.html#GenFx_GeneticAlgorithm_FitnessEvaluator">FitnessEvaluator</a> to be used by the algorithm.</p>
+</div>
+              <div class="markdown level1 conceptual"></div>
+              <h5 class="decalaration">Declaration</h5>
+              <div class="codewrapper">
+                <pre><code class="lang-csharp hljs">[RequiredValidator]
+public FitnessEvaluator FitnessEvaluator { get; set; }</code></pre>
+              </div>
+              <h5 class="propertyValue">Property Value</h5>
+              <table class="table table-bordered table-striped table-condensed">
+                <thead>
+                  <tr>
+                    <th>Type</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><a class="xref" href="GenFx.FitnessEvaluator.html">FitnessEvaluator</a></td>
+                    <td></td>
+                  </tr>
+                </tbody>
+              </table>
+              <span class="small pull-right mobile-hide">
+                <span class="divider">|</span>
+                <a href="https://github.com/mthalman/GenFx/new/master/doc/apispec/new?filename=GenFx_GeneticAlgorithm_FitnessScalingStrategy.md&amp;value=---%0Auid%3A%20GenFx.GeneticAlgorithm.FitnessScalingStrategy%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+              </span>
+              <span class="small pull-right mobile-hide">
+                <a href="https://github.com/mthalman/GenFx/blob/master/src/GenFx/GeneticAlgorithm.cs/#L141">View Source</a>
+              </span>
+              <a id="GenFx_GeneticAlgorithm_FitnessScalingStrategy_" data-uid="GenFx.GeneticAlgorithm.FitnessScalingStrategy*"></a>
+              <h4 id="GenFx_GeneticAlgorithm_FitnessScalingStrategy" data-uid="GenFx.GeneticAlgorithm.FitnessScalingStrategy">FitnessScalingStrategy</h4>
+              <div class="markdown level1 summary"><p>Gets the <a class="xref" href="GenFx.FitnessScalingStrategy.html">FitnessScalingStrategy</a> to be used by the algorithm.</p>
+</div>
+              <div class="markdown level1 conceptual"></div>
+              <h5 class="decalaration">Declaration</h5>
+              <div class="codewrapper">
+                <pre><code class="lang-csharp hljs">public FitnessScalingStrategy FitnessScalingStrategy { get; set; }</code></pre>
+              </div>
+              <h5 class="propertyValue">Property Value</h5>
+              <table class="table table-bordered table-striped table-condensed">
+                <thead>
+                  <tr>
+                    <th>Type</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><a class="xref" href="GenFx.FitnessScalingStrategy.html">FitnessScalingStrategy</a></td>
+                    <td></td>
+                  </tr>
+                </tbody>
+              </table>
+              <span class="small pull-right mobile-hide">
+                <span class="divider">|</span>
+                <a href="https://github.com/mthalman/GenFx/new/master/doc/apispec/new?filename=GenFx_GeneticAlgorithm_GeneticEntitySeed.md&amp;value=---%0Auid%3A%20GenFx.GeneticAlgorithm.GeneticEntitySeed%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+              </span>
+              <span class="small pull-right mobile-hide">
+                <a href="https://github.com/mthalman/GenFx/blob/master/src/GenFx/GeneticAlgorithm.cs/#L196">View Source</a>
+              </span>
+              <a id="GenFx_GeneticAlgorithm_GeneticEntitySeed_" data-uid="GenFx.GeneticAlgorithm.GeneticEntitySeed*"></a>
+              <h4 id="GenFx_GeneticAlgorithm_GeneticEntitySeed" data-uid="GenFx.GeneticAlgorithm.GeneticEntitySeed">GeneticEntitySeed</h4>
+              <div class="markdown level1 summary"><p>Gets the <a class="xref" href="GenFx.GeneticEntity.html">GeneticEntity</a> to be used by the algorithm.</p>
+</div>
+              <div class="markdown level1 conceptual"></div>
+              <h5 class="decalaration">Declaration</h5>
+              <div class="codewrapper">
+                <pre><code class="lang-csharp hljs">[RequiredValidator]
+public GeneticEntity GeneticEntitySeed { get; set; }</code></pre>
+              </div>
+              <h5 class="propertyValue">Property Value</h5>
+              <table class="table table-bordered table-striped table-condensed">
+                <thead>
+                  <tr>
+                    <th>Type</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><a class="xref" href="GenFx.GeneticEntity.html">GeneticEntity</a></td>
+                    <td></td>
+                  </tr>
+                </tbody>
+              </table>
+              <h5 id="GenFx_GeneticAlgorithm_GeneticEntitySeed_remarks">Remarks</h5>
+              <div class="markdown level1 remarks"><p>This instance is only used for its configuration property values and to generate
+additional genetic entities.</p>
+</div>
+              <span class="small pull-right mobile-hide">
+                <span class="divider">|</span>
+                <a href="https://github.com/mthalman/GenFx/new/master/doc/apispec/new?filename=GenFx_GeneticAlgorithm_IsInitialized.md&amp;value=---%0Auid%3A%20GenFx.GeneticAlgorithm.IsInitialized%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+              </span>
+              <span class="small pull-right mobile-hide">
+                <a href="https://github.com/mthalman/GenFx/blob/master/src/GenFx/GeneticAlgorithm.cs/#L259">View Source</a>
+              </span>
+              <a id="GenFx_GeneticAlgorithm_IsInitialized_" data-uid="GenFx.GeneticAlgorithm.IsInitialized*"></a>
+              <h4 id="GenFx_GeneticAlgorithm_IsInitialized" data-uid="GenFx.GeneticAlgorithm.IsInitialized">IsInitialized</h4>
+              <div class="markdown level1 summary"><p>Gets a value indicating whether the algorithm is initialized.</p>
+</div>
+              <div class="markdown level1 conceptual"></div>
+              <h5 class="decalaration">Declaration</h5>
+              <div class="codewrapper">
+                <pre><code class="lang-csharp hljs">public bool IsInitialized { get; }</code></pre>
+              </div>
+              <h5 class="propertyValue">Property Value</h5>
+              <table class="table table-bordered table-striped table-condensed">
+                <thead>
+                  <tr>
+                    <th>Type</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span class="xref">System.Boolean</span></td>
+                    <td></td>
+                  </tr>
+                </tbody>
+              </table>
+              <span class="small pull-right mobile-hide">
+                <span class="divider">|</span>
+                <a href="https://github.com/mthalman/GenFx/new/master/doc/apispec/new?filename=GenFx_GeneticAlgorithm_MinimumEnvironmentSize.md&amp;value=---%0Auid%3A%20GenFx.GeneticAlgorithm.MinimumEnvironmentSize%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+              </span>
+              <span class="small pull-right mobile-hide">
+                <a href="https://github.com/mthalman/GenFx/blob/master/src/GenFx/GeneticAlgorithm.cs/#L109">View Source</a>
+              </span>
+              <a id="GenFx_GeneticAlgorithm_MinimumEnvironmentSize_" data-uid="GenFx.GeneticAlgorithm.MinimumEnvironmentSize*"></a>
+              <h4 id="GenFx_GeneticAlgorithm_MinimumEnvironmentSize" data-uid="GenFx.GeneticAlgorithm.MinimumEnvironmentSize">MinimumEnvironmentSize</h4>
+              <div class="markdown level1 summary"><p>Gets or sets the minimum number of <a class="xref" href="GenFx.Population.html">Population</a> objects that are contained by the <a class="xref" href="GenFx.GeneticEnvironment.html">GeneticEnvironment</a>.</p>
+</div>
+              <div class="markdown level1 conceptual"></div>
+              <h5 class="decalaration">Declaration</h5>
+              <div class="codewrapper">
+                <pre><code class="lang-csharp hljs">[IntegerValidator(MinValue = 1)]
+public int MinimumEnvironmentSize { get; set; }</code></pre>
+              </div>
+              <h5 class="propertyValue">Property Value</h5>
+              <table class="table table-bordered table-striped table-condensed">
+                <thead>
+                  <tr>
+                    <th>Type</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span class="xref">System.Int32</span></td>
+                    <td><p>The number of populations that are contained by the <a class="xref" href="GenFx.GeneticEnvironment.html">GeneticEnvironment</a>.
+This value is defaulted to 1 and must be greater or equal to 1.</p>
+</td>
+                  </tr>
+                </tbody>
+              </table>
+              <h5 class="exceptions">Exceptions</h5>
+              <table class="table table-bordered table-striped table-condensed">
+                <thead>
+                  <tr>
+                    <th>Type</th>
+                    <th>Condition</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><a class="xref" href="GenFx.Validation.ValidationException.html">ValidationException</a></td>
+                    <td><p>Value is not valid.</p>
+</td>
+                  </tr>
+                </tbody>
+              </table>
+              <span class="small pull-right mobile-hide">
+                <span class="divider">|</span>
+                <a href="https://github.com/mthalman/GenFx/new/master/doc/apispec/new?filename=GenFx_GeneticAlgorithm_MutationOperator.md&amp;value=---%0Auid%3A%20GenFx.GeneticAlgorithm.MutationOperator%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+              </span>
+              <span class="small pull-right mobile-hide">
+                <a href="https://github.com/mthalman/GenFx/blob/master/src/GenFx/GeneticAlgorithm.cs/#L162">View Source</a>
+              </span>
+              <a id="GenFx_GeneticAlgorithm_MutationOperator_" data-uid="GenFx.GeneticAlgorithm.MutationOperator*"></a>
+              <h4 id="GenFx_GeneticAlgorithm_MutationOperator" data-uid="GenFx.GeneticAlgorithm.MutationOperator">MutationOperator</h4>
+              <div class="markdown level1 summary"><p>Gets the <a class="xref" href="GenFx.MutationOperator.html">MutationOperator</a> to be used by the algorithm.</p>
+</div>
+              <div class="markdown level1 conceptual"></div>
+              <h5 class="decalaration">Declaration</h5>
+              <div class="codewrapper">
+                <pre><code class="lang-csharp hljs">public MutationOperator MutationOperator { get; set; }</code></pre>
+              </div>
+              <h5 class="propertyValue">Property Value</h5>
+              <table class="table table-bordered table-striped table-condensed">
+                <thead>
+                  <tr>
+                    <th>Type</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><a class="xref" href="GenFx.MutationOperator.html">MutationOperator</a></td>
+                    <td></td>
+                  </tr>
+                </tbody>
+              </table>
+              <span class="small pull-right mobile-hide">
+                <span class="divider">|</span>
+                <a href="https://github.com/mthalman/GenFx/new/master/doc/apispec/new?filename=GenFx_GeneticAlgorithm_Plugins.md&amp;value=---%0Auid%3A%20GenFx.GeneticAlgorithm.Plugins%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+              </span>
+              <span class="small pull-right mobile-hide">
+                <a href="https://github.com/mthalman/GenFx/blob/master/src/GenFx/GeneticAlgorithm.cs/#L231">View Source</a>
+              </span>
+              <a id="GenFx_GeneticAlgorithm_Plugins_" data-uid="GenFx.GeneticAlgorithm.Plugins*"></a>
+              <h4 id="GenFx_GeneticAlgorithm_Plugins" data-uid="GenFx.GeneticAlgorithm.Plugins">Plugins</h4>
+              <div class="markdown level1 summary"><p>Gets the collection of plugins to be used by the genetic algorithm.</p>
+</div>
+              <div class="markdown level1 conceptual"></div>
+              <h5 class="decalaration">Declaration</h5>
+              <div class="codewrapper">
+                <pre><code class="lang-csharp hljs">public IList&lt;Plugin&gt; Plugins { get; }</code></pre>
+              </div>
+              <h5 class="propertyValue">Property Value</h5>
+              <table class="table table-bordered table-striped table-condensed">
+                <thead>
+                  <tr>
+                    <th>Type</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span class="xref">System.Collections.Generic.IList</span>&lt;<a class="xref" href="GenFx.Plugin.html">Plugin</a>&gt;</td>
+                    <td></td>
+                  </tr>
+                </tbody>
+              </table>
+              <span class="small pull-right mobile-hide">
+                <span class="divider">|</span>
+                <a href="https://github.com/mthalman/GenFx/new/master/doc/apispec/new?filename=GenFx_GeneticAlgorithm_PopulationSeed.md&amp;value=---%0Auid%3A%20GenFx.GeneticAlgorithm.PopulationSeed%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+              </span>
+              <span class="small pull-right mobile-hide">
+                <a href="https://github.com/mthalman/GenFx/blob/master/src/GenFx/GeneticAlgorithm.cs/#L211">View Source</a>
+              </span>
+              <a id="GenFx_GeneticAlgorithm_PopulationSeed_" data-uid="GenFx.GeneticAlgorithm.PopulationSeed*"></a>
+              <h4 id="GenFx_GeneticAlgorithm_PopulationSeed" data-uid="GenFx.GeneticAlgorithm.PopulationSeed">PopulationSeed</h4>
+              <div class="markdown level1 summary"><p>Gets the <a class="xref" href="GenFx.Population.html">Population</a> to be used by the algorithm.</p>
+</div>
+              <div class="markdown level1 conceptual"></div>
+              <h5 class="decalaration">Declaration</h5>
+              <div class="codewrapper">
+                <pre><code class="lang-csharp hljs">[RequiredValidator]
+public Population PopulationSeed { get; set; }</code></pre>
+              </div>
+              <h5 class="propertyValue">Property Value</h5>
+              <table class="table table-bordered table-striped table-condensed">
+                <thead>
+                  <tr>
+                    <th>Type</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><a class="xref" href="GenFx.Population.html">Population</a></td>
+                    <td></td>
+                  </tr>
+                </tbody>
+              </table>
+              <h5 id="GenFx_GeneticAlgorithm_PopulationSeed_remarks">Remarks</h5>
+              <div class="markdown level1 remarks"><p>This instance is only used for its configuration property values and to generate
+additional populations.</p>
+</div>
+              <span class="small pull-right mobile-hide">
+                <span class="divider">|</span>
+                <a href="https://github.com/mthalman/GenFx/new/master/doc/apispec/new?filename=GenFx_GeneticAlgorithm_SelectionOperator.md&amp;value=---%0Auid%3A%20GenFx.GeneticAlgorithm.SelectionOperator%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+              </span>
+              <span class="small pull-right mobile-hide">
+                <a href="https://github.com/mthalman/GenFx/blob/master/src/GenFx/GeneticAlgorithm.cs/#L151">View Source</a>
+              </span>
+              <a id="GenFx_GeneticAlgorithm_SelectionOperator_" data-uid="GenFx.GeneticAlgorithm.SelectionOperator*"></a>
+              <h4 id="GenFx_GeneticAlgorithm_SelectionOperator" data-uid="GenFx.GeneticAlgorithm.SelectionOperator">SelectionOperator</h4>
+              <div class="markdown level1 summary"><p>Gets the <a class="xref" href="GenFx.SelectionOperator.html">SelectionOperator</a> to be used by the algorithm.</p>
+</div>
+              <div class="markdown level1 conceptual"></div>
+              <h5 class="decalaration">Declaration</h5>
+              <div class="codewrapper">
+                <pre><code class="lang-csharp hljs">[RequiredValidator]
+public SelectionOperator SelectionOperator { get; set; }</code></pre>
+              </div>
+              <h5 class="propertyValue">Property Value</h5>
+              <table class="table table-bordered table-striped table-condensed">
+                <thead>
+                  <tr>
+                    <th>Type</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><a class="xref" href="GenFx.SelectionOperator.html">SelectionOperator</a></td>
+                    <td></td>
+                  </tr>
+                </tbody>
+              </table>
+              <span class="small pull-right mobile-hide">
+                <span class="divider">|</span>
+                <a href="https://github.com/mthalman/GenFx/new/master/doc/apispec/new?filename=GenFx_GeneticAlgorithm_Statistics.md&amp;value=---%0Auid%3A%20GenFx.GeneticAlgorithm.Statistics%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+              </span>
+              <span class="small pull-right mobile-hide">
+                <a href="https://github.com/mthalman/GenFx/blob/master/src/GenFx/GeneticAlgorithm.cs/#L222">View Source</a>
+              </span>
+              <a id="GenFx_GeneticAlgorithm_Statistics_" data-uid="GenFx.GeneticAlgorithm.Statistics*"></a>
+              <h4 id="GenFx_GeneticAlgorithm_Statistics" data-uid="GenFx.GeneticAlgorithm.Statistics">Statistics</h4>
+              <div class="markdown level1 summary"><p>Gets the collection of statistics to be calculated for the genetic algorithm.</p>
+</div>
+              <div class="markdown level1 conceptual"></div>
+              <h5 class="decalaration">Declaration</h5>
+              <div class="codewrapper">
+                <pre><code class="lang-csharp hljs">public IList&lt;Statistic&gt; Statistics { get; }</code></pre>
+              </div>
+              <h5 class="propertyValue">Property Value</h5>
+              <table class="table table-bordered table-striped table-condensed">
+                <thead>
+                  <tr>
+                    <th>Type</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span class="xref">System.Collections.Generic.IList</span>&lt;<a class="xref" href="GenFx.Statistic.html">Statistic</a>&gt;</td>
+                    <td></td>
+                  </tr>
+                </tbody>
+              </table>
+              <span class="small pull-right mobile-hide">
+                <span class="divider">|</span>
+                <a href="https://github.com/mthalman/GenFx/new/master/doc/apispec/new?filename=GenFx_GeneticAlgorithm_Terminator.md&amp;value=---%0Auid%3A%20GenFx.GeneticAlgorithm.Terminator%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+              </span>
+              <span class="small pull-right mobile-hide">
+                <a href="https://github.com/mthalman/GenFx/blob/master/src/GenFx/GeneticAlgorithm.cs/#L131">View Source</a>
+              </span>
+              <a id="GenFx_GeneticAlgorithm_Terminator_" data-uid="GenFx.GeneticAlgorithm.Terminator*"></a>
+              <h4 id="GenFx_GeneticAlgorithm_Terminator" data-uid="GenFx.GeneticAlgorithm.Terminator">Terminator</h4>
+              <div class="markdown level1 summary"><p>Gets the <a class="xref" href="GenFx.Terminator.html">Terminator</a> to be used by the algorithm.</p>
+</div>
+              <div class="markdown level1 conceptual"></div>
+              <h5 class="decalaration">Declaration</h5>
+              <div class="codewrapper">
+                <pre><code class="lang-csharp hljs">public Terminator Terminator { get; set; }</code></pre>
+              </div>
+              <h5 class="propertyValue">Property Value</h5>
+              <table class="table table-bordered table-striped table-condensed">
+                <thead>
+                  <tr>
+                    <th>Type</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><a class="xref" href="GenFx.Terminator.html">Terminator</a></td>
+                    <td></td>
+                  </tr>
+                </tbody>
+              </table>
+              <h3 id="methods">Methods
+              </h3>
+              <span class="small pull-right mobile-hide">
+                <span class="divider">|</span>
+                <a href="https://github.com/mthalman/GenFx/new/master/doc/apispec/new?filename=GenFx_GeneticAlgorithm_ApplyCrossover_GenFx_Population_System_Collections_Generic_IList_GenFx_GeneticEntity__.md&amp;value=---%0Auid%3A%20GenFx.GeneticAlgorithm.ApplyCrossover(GenFx.Population%2CSystem.Collections.Generic.IList%7BGenFx.GeneticEntity%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+              </span>
+              <span class="small pull-right mobile-hide">
+                <a href="https://github.com/mthalman/GenFx/blob/master/src/GenFx/GeneticAlgorithm.cs/#L421">View Source</a>
+              </span>
+              <a id="GenFx_GeneticAlgorithm_ApplyCrossover_" data-uid="GenFx.GeneticAlgorithm.ApplyCrossover*"></a>
+              <h4 id="GenFx_GeneticAlgorithm_ApplyCrossover_GenFx_Population_System_Collections_Generic_IList_GenFx_GeneticEntity__" data-uid="GenFx.GeneticAlgorithm.ApplyCrossover(GenFx.Population,System.Collections.Generic.IList{GenFx.GeneticEntity})">ApplyCrossover(Population, IList&lt;GeneticEntity&gt;)</h4>
+              <div class="markdown level1 summary"><p>Applies the <a class="xref" href="GenFx.CrossoverOperator.html">CrossoverOperator</a>, if one is set, to the genetic entities.</p>
+</div>
+              <div class="markdown level1 conceptual"></div>
+              <h5 class="decalaration">Declaration</h5>
+              <div class="codewrapper">
+                <pre><code class="lang-csharp hljs">protected IList&lt;GeneticEntity&gt; ApplyCrossover(Population population, IList&lt;GeneticEntity&gt; parents)</code></pre>
+              </div>
+              <h5 class="parameters">Parameters</h5>
+              <table class="table table-bordered table-striped table-condensed">
+                <thead>
+                  <tr>
+                    <th>Type</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><a class="xref" href="GenFx.Population.html">Population</a></td>
+                    <td><span class="parametername">population</span></td>
+                    <td><p>Current population.</p>
+</td>
+                  </tr>
+                  <tr>
+                    <td><span class="xref">System.Collections.Generic.IList</span>&lt;<a class="xref" href="GenFx.GeneticEntity.html">GeneticEntity</a>&gt;</td>
+                    <td><span class="parametername">parents</span></td>
+                    <td><p>Parents to which to apply the crossover operation.</p>
+</td>
+                  </tr>
+                </tbody>
+              </table>
+              <h5 class="returns">Returns</h5>
+              <table class="table table-bordered table-striped table-condensed">
+                <thead>
+                  <tr>
+                    <th>Type</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span class="xref">System.Collections.Generic.IList</span>&lt;<a class="xref" href="GenFx.GeneticEntity.html">GeneticEntity</a>&gt;</td>
+                    <td><p>List of entities after the crossover was applied.</p>
+</td>
+                  </tr>
+                </tbody>
+              </table>
+              <span class="small pull-right mobile-hide">
+                <span class="divider">|</span>
+                <a href="https://github.com/mthalman/GenFx/new/master/doc/apispec/new?filename=GenFx_GeneticAlgorithm_ApplyElitism_GenFx_Population_.md&amp;value=---%0Auid%3A%20GenFx.GeneticAlgorithm.ApplyElitism(GenFx.Population)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+              </span>
+              <span class="small pull-right mobile-hide">
+                <a href="https://github.com/mthalman/GenFx/blob/master/src/GenFx/GeneticAlgorithm.cs/#L374">View Source</a>
+              </span>
+              <a id="GenFx_GeneticAlgorithm_ApplyElitism_" data-uid="GenFx.GeneticAlgorithm.ApplyElitism*"></a>
+              <h4 id="GenFx_GeneticAlgorithm_ApplyElitism_GenFx_Population_" data-uid="GenFx.GeneticAlgorithm.ApplyElitism(GenFx.Population)">ApplyElitism(Population)</h4>
+              <div class="markdown level1 summary"><p>Helper method used to apply the <a class="xref" href="GenFx.ElitismStrategy.html">ElitismStrategy</a>, if one is set, to the <span class="paramref">currentPopulation</span>.</p>
+</div>
+              <div class="markdown level1 conceptual"></div>
+              <h5 class="decalaration">Declaration</h5>
+              <div class="codewrapper">
+                <pre><code class="lang-csharp hljs">protected IList&lt;GeneticEntity&gt; ApplyElitism(Population currentPopulation)</code></pre>
+              </div>
+              <h5 class="parameters">Parameters</h5>
+              <table class="table table-bordered table-striped table-condensed">
+                <thead>
+                  <tr>
+                    <th>Type</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><a class="xref" href="GenFx.Population.html">Population</a></td>
+                    <td><span class="parametername">currentPopulation</span></td>
+                    <td><p><a class="xref" href="GenFx.Population.html">Population</a> from which to select the
+    elite entities.</p>
+</td>
+                  </tr>
+                </tbody>
+              </table>
+              <h5 class="returns">Returns</h5>
+              <table class="table table-bordered table-striped table-condensed">
+                <thead>
+                  <tr>
+                    <th>Type</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span class="xref">System.Collections.Generic.IList</span>&lt;<a class="xref" href="GenFx.GeneticEntity.html">GeneticEntity</a>&gt;</td>
+                    <td><p>The collection of entities, if any, that are elite.</p>
+</td>
+                  </tr>
+                </tbody>
+              </table>
+              <h5 class="exceptions">Exceptions</h5>
+              <table class="table table-bordered table-striped table-condensed">
+                <thead>
+                  <tr>
+                    <th>Type</th>
+                    <th>Condition</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span class="xref">System.ArgumentNullException</span></td>
+                    <td><p><span class="paramref">currentPopulation</span> is null.</p>
+</td>
+                  </tr>
+                </tbody>
+              </table>
+              <span class="small pull-right mobile-hide">
+                <span class="divider">|</span>
+                <a href="https://github.com/mthalman/GenFx/new/master/doc/apispec/new?filename=GenFx_GeneticAlgorithm_ApplyMutation_System_Collections_Generic_IList_GenFx_GeneticEntity__.md&amp;value=---%0Auid%3A%20GenFx.GeneticAlgorithm.ApplyMutation(System.Collections.Generic.IList%7BGenFx.GeneticEntity%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+              </span>
+              <span class="small pull-right mobile-hide">
+                <a href="https://github.com/mthalman/GenFx/blob/master/src/GenFx/GeneticAlgorithm.cs/#L474">View Source</a>
+              </span>
+              <a id="GenFx_GeneticAlgorithm_ApplyMutation_" data-uid="GenFx.GeneticAlgorithm.ApplyMutation*"></a>
+              <h4 id="GenFx_GeneticAlgorithm_ApplyMutation_System_Collections_Generic_IList_GenFx_GeneticEntity__" data-uid="GenFx.GeneticAlgorithm.ApplyMutation(System.Collections.Generic.IList{GenFx.GeneticEntity})">ApplyMutation(IList&lt;GeneticEntity&gt;)</h4>
+              <div class="markdown level1 summary"><p>Applies the <a class="xref" href="GenFx.MutationOperator.html">MutationOperator</a>, if one is set, to the <span class="paramref">entities</span>.</p>
+</div>
+              <div class="markdown level1 conceptual"></div>
+              <h5 class="decalaration">Declaration</h5>
+              <div class="codewrapper">
+                <pre><code class="lang-csharp hljs">protected IList&lt;GeneticEntity&gt; ApplyMutation(IList&lt;GeneticEntity&gt; entities)</code></pre>
+              </div>
+              <h5 class="parameters">Parameters</h5>
+              <table class="table table-bordered table-striped table-condensed">
+                <thead>
+                  <tr>
+                    <th>Type</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span class="xref">System.Collections.Generic.IList</span>&lt;<a class="xref" href="GenFx.GeneticEntity.html">GeneticEntity</a>&gt;</td>
+                    <td><span class="parametername">entities</span></td>
+                    <td><p>List of entities to be potentially mutated.</p>
+</td>
+                  </tr>
+                </tbody>
+              </table>
+              <h5 class="returns">Returns</h5>
+              <table class="table table-bordered table-striped table-condensed">
+                <thead>
+                  <tr>
+                    <th>Type</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span class="xref">System.Collections.Generic.IList</span>&lt;<a class="xref" href="GenFx.GeneticEntity.html">GeneticEntity</a>&gt;</td>
+                    <td><p>List of entities after the mutation was applied.</p>
+</td>
+                  </tr>
+                </tbody>
+              </table>
+              <h5 class="exceptions">Exceptions</h5>
+              <table class="table table-bordered table-striped table-condensed">
+                <thead>
+                  <tr>
+                    <th>Type</th>
+                    <th>Condition</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span class="xref">System.ArgumentNullException</span></td>
+                    <td><p><span class="paramref">entities</span> is null.</p>
+</td>
+                  </tr>
+                </tbody>
+              </table>
+              <span class="small pull-right mobile-hide">
+                <span class="divider">|</span>
+                <a href="https://github.com/mthalman/GenFx/new/master/doc/apispec/new?filename=GenFx_GeneticAlgorithm_ApplySelection_System_Int32_GenFx_Population_.md&amp;value=---%0Auid%3A%20GenFx.GeneticAlgorithm.ApplySelection(System.Int32%2CGenFx.Population)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+              </span>
+              <span class="small pull-right mobile-hide">
+                <a href="https://github.com/mthalman/GenFx/blob/master/src/GenFx/GeneticAlgorithm.cs/#L362">View Source</a>
+              </span>
+              <a id="GenFx_GeneticAlgorithm_ApplySelection_" data-uid="GenFx.GeneticAlgorithm.ApplySelection*"></a>
+              <h4 id="GenFx_GeneticAlgorithm_ApplySelection_System_Int32_GenFx_Population_" data-uid="GenFx.GeneticAlgorithm.ApplySelection(System.Int32,GenFx.Population)">ApplySelection(Int32, Population)</h4>
+              <div class="markdown level1 summary"><p>Helper method used to apply the <a class="xref" href="GenFx.SelectionOperator.html">SelectionOperator</a>.</p>
+</div>
+              <div class="markdown level1 conceptual"></div>
+              <h5 class="decalaration">Declaration</h5>
+              <div class="codewrapper">
+                <pre><code class="lang-csharp hljs">protected IList&lt;GeneticEntity&gt; ApplySelection(int entityCount, Population currentPopulation)</code></pre>
+              </div>
+              <h5 class="parameters">Parameters</h5>
+              <table class="table table-bordered table-striped table-condensed">
+                <thead>
+                  <tr>
+                    <th>Type</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span class="xref">System.Int32</span></td>
+                    <td><span class="parametername">entityCount</span></td>
+                    <td><p>Number of <a class="xref" href="GenFx.GeneticEntity.html">GeneticEntity</a> objects to select from the population.</p>
+</td>
+                  </tr>
+                  <tr>
+                    <td><a class="xref" href="GenFx.Population.html">Population</a></td>
+                    <td><span class="parametername">currentPopulation</span></td>
+                    <td><p><a class="xref" href="GenFx.Population.html">Population</a> containing the <a class="xref" href="GenFx.GeneticEntity.html">GeneticEntity</a> objects from which to select.</p>
+</td>
+                  </tr>
+                </tbody>
+              </table>
+              <h5 class="returns">Returns</h5>
+              <table class="table table-bordered table-striped table-condensed">
+                <thead>
+                  <tr>
+                    <th>Type</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span class="xref">System.Collections.Generic.IList</span>&lt;<a class="xref" href="GenFx.GeneticEntity.html">GeneticEntity</a>&gt;</td>
+                    <td><p>The selected <a class="xref" href="GenFx.GeneticEntity.html">GeneticEntity</a> objects.</p>
+</td>
+                  </tr>
+                </tbody>
+              </table>
+              <span class="small pull-right mobile-hide">
+                <span class="divider">|</span>
+                <a href="https://github.com/mthalman/GenFx/new/master/doc/apispec/new?filename=GenFx_GeneticAlgorithm_Complete.md&amp;value=---%0Auid%3A%20GenFx.GeneticAlgorithm.Complete%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+              </span>
+              <span class="small pull-right mobile-hide">
+                <a href="https://github.com/mthalman/GenFx/blob/master/src/GenFx/GeneticAlgorithm.cs/#L344">View Source</a>
+              </span>
+              <a id="GenFx_GeneticAlgorithm_Complete_" data-uid="GenFx.GeneticAlgorithm.Complete*"></a>
+              <h4 id="GenFx_GeneticAlgorithm_Complete" data-uid="GenFx.GeneticAlgorithm.Complete">Complete()</h4>
+              <div class="markdown level1 summary"><p>Completes the execution of the algorithm.</p>
+</div>
+              <div class="markdown level1 conceptual"></div>
+              <h5 class="decalaration">Declaration</h5>
+              <div class="codewrapper">
+                <pre><code class="lang-csharp hljs">public void Complete()</code></pre>
+              </div>
+              <span class="small pull-right mobile-hide">
+                <span class="divider">|</span>
+                <a href="https://github.com/mthalman/GenFx/new/master/doc/apispec/new?filename=GenFx_GeneticAlgorithm_CreateNextGenerationAsync_GenFx_Population_.md&amp;value=---%0Auid%3A%20GenFx.GeneticAlgorithm.CreateNextGenerationAsync(GenFx.Population)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+              </span>
+              <span class="small pull-right mobile-hide">
+                <a href="https://github.com/mthalman/GenFx/blob/master/src/GenFx/GeneticAlgorithm.cs/#L354">View Source</a>
+              </span>
+              <a id="GenFx_GeneticAlgorithm_CreateNextGenerationAsync_" data-uid="GenFx.GeneticAlgorithm.CreateNextGenerationAsync*"></a>
+              <h4 id="GenFx_GeneticAlgorithm_CreateNextGenerationAsync_GenFx_Population_" data-uid="GenFx.GeneticAlgorithm.CreateNextGenerationAsync(GenFx.Population)">CreateNextGenerationAsync(Population)</h4>
+              <div class="markdown level1 summary"><p>When overriden in a derived class, modifies <span class="paramref">population</span> to become the next generation
+of entities.</p>
+</div>
+              <div class="markdown level1 conceptual"></div>
+              <h5 class="decalaration">Declaration</h5>
+              <div class="codewrapper">
+                <pre><code class="lang-csharp hljs">protected abstract Task CreateNextGenerationAsync(Population population)</code></pre>
+              </div>
+              <h5 class="parameters">Parameters</h5>
+              <table class="table table-bordered table-striped table-condensed">
+                <thead>
+                  <tr>
+                    <th>Type</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><a class="xref" href="GenFx.Population.html">Population</a></td>
+                    <td><span class="parametername">population</span></td>
+                    <td><p>The current <a class="xref" href="GenFx.Population.html">Population</a> to be modified.</p>
+</td>
+                  </tr>
+                </tbody>
+              </table>
+              <h5 class="returns">Returns</h5>
+              <table class="table table-bordered table-striped table-condensed">
+                <thead>
+                  <tr>
+                    <th>Type</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span class="xref">System.Threading.Tasks.Task</span></td>
+                    <td></td>
+                  </tr>
+                </tbody>
+              </table>
+              <span class="small pull-right mobile-hide">
+                <span class="divider">|</span>
+                <a href="https://github.com/mthalman/GenFx/new/master/doc/apispec/new?filename=GenFx_GeneticAlgorithm_InitializeAsync.md&amp;value=---%0Auid%3A%20GenFx.GeneticAlgorithm.InitializeAsync%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+              </span>
+              <span class="small pull-right mobile-hide">
+                <a href="https://github.com/mthalman/GenFx/blob/master/src/GenFx/GeneticAlgorithm.cs/#L270">View Source</a>
+              </span>
+              <a id="GenFx_GeneticAlgorithm_InitializeAsync_" data-uid="GenFx.GeneticAlgorithm.InitializeAsync*"></a>
+              <h4 id="GenFx_GeneticAlgorithm_InitializeAsync" data-uid="GenFx.GeneticAlgorithm.InitializeAsync">InitializeAsync()</h4>
+              <div class="markdown level1 summary"><p>Initializes the genetic algorithm with a starting <a class="xref" href="GenFx.GeneticEnvironment.html">GeneticEnvironment</a>.</p>
+</div>
+              <div class="markdown level1 conceptual"></div>
+              <h5 class="decalaration">Declaration</h5>
+              <div class="codewrapper">
+                <pre><code class="lang-csharp hljs">public Task InitializeAsync()</code></pre>
+              </div>
+              <h5 class="returns">Returns</h5>
+              <table class="table table-bordered table-striped table-condensed">
+                <thead>
+                  <tr>
+                    <th>Type</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span class="xref">System.Threading.Tasks.Task</span></td>
+                    <td></td>
+                  </tr>
+                </tbody>
+              </table>
+              <h5 class="exceptions">Exceptions</h5>
+              <table class="table table-bordered table-striped table-condensed">
+                <thead>
+                  <tr>
+                    <th>Type</th>
+                    <th>Condition</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><a class="xref" href="GenFx.Validation.ValidationException.html">ValidationException</a></td>
+                    <td><p>The state of a component&#39;s configuration is invalid.</p>
+</td>
+                  </tr>
+                  <tr>
+                    <td><span class="xref">System.InvalidOperationException</span></td>
+                    <td><p>The configuration for a required component has not been set.</p>
+</td>
+                  </tr>
+                  <tr>
+                    <td><span class="xref">System.InvalidOperationException</span></td>
+                    <td><p>An exception occured while instantiating a component.</p>
+</td>
+                  </tr>
+                </tbody>
+              </table>
+              <span class="small pull-right mobile-hide">
+                <span class="divider">|</span>
+                <a href="https://github.com/mthalman/GenFx/new/master/doc/apispec/new?filename=GenFx_GeneticAlgorithm_RunAsync.md&amp;value=---%0Auid%3A%20GenFx.GeneticAlgorithm.RunAsync%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+              </span>
+              <span class="small pull-right mobile-hide">
+                <a href="https://github.com/mthalman/GenFx/blob/master/src/GenFx/GeneticAlgorithm.cs/#L313">View Source</a>
+              </span>
+              <a id="GenFx_GeneticAlgorithm_RunAsync_" data-uid="GenFx.GeneticAlgorithm.RunAsync*"></a>
+              <h4 id="GenFx_GeneticAlgorithm_RunAsync" data-uid="GenFx.GeneticAlgorithm.RunAsync">RunAsync()</h4>
+              <div class="markdown level1 summary"><p>Executes the genetic algorithm.</p>
+</div>
+              <div class="markdown level1 conceptual"></div>
+              <h5 class="decalaration">Declaration</h5>
+              <div class="codewrapper">
+                <pre><code class="lang-csharp hljs">public Task RunAsync()</code></pre>
+              </div>
+              <h5 class="returns">Returns</h5>
+              <table class="table table-bordered table-striped table-condensed">
+                <thead>
+                  <tr>
+                    <th>Type</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span class="xref">System.Threading.Tasks.Task</span></td>
+                    <td></td>
+                  </tr>
+                </tbody>
+              </table>
+              <h5 id="GenFx_GeneticAlgorithm_RunAsync_remarks">Remarks</h5>
+              <div class="markdown level1 remarks"><p>The execution will continue until the <a class="xref" href="GenFx.Terminator.html#GenFx_Terminator_IsComplete">IsComplete()</a> method returns
+true or <span class="xref">System.ComponentModel.CancelEventArgs.Cancel</span> property is set to true.</p>
+</div>
+              <h5 class="exceptions">Exceptions</h5>
+              <table class="table table-bordered table-striped table-condensed">
+                <thead>
+                  <tr>
+                    <th>Type</th>
+                    <th>Condition</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span class="xref">System.InvalidOperationException</span></td>
+                    <td><p>The algorithm has not been initialized.</p>
+</td>
+                  </tr>
+                </tbody>
+              </table>
+              <span class="small pull-right mobile-hide">
+                <span class="divider">|</span>
+                <a href="https://github.com/mthalman/GenFx/new/master/doc/apispec/new?filename=GenFx_GeneticAlgorithm_StepAsync.md&amp;value=---%0Auid%3A%20GenFx.GeneticAlgorithm.StepAsync%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+              </span>
+              <span class="small pull-right mobile-hide">
+                <a href="https://github.com/mthalman/GenFx/blob/master/src/GenFx/GeneticAlgorithm.cs/#L335">View Source</a>
+              </span>
+              <a id="GenFx_GeneticAlgorithm_StepAsync_" data-uid="GenFx.GeneticAlgorithm.StepAsync*"></a>
+              <h4 id="GenFx_GeneticAlgorithm_StepAsync" data-uid="GenFx.GeneticAlgorithm.StepAsync">StepAsync()</h4>
+              <div class="markdown level1 summary"><p>Executes one generation of the genetic algorithm.</p>
+</div>
+              <div class="markdown level1 conceptual"></div>
+              <h5 class="decalaration">Declaration</h5>
+              <div class="codewrapper">
+                <pre><code class="lang-csharp hljs">public Task&lt;bool&gt; StepAsync()</code></pre>
+              </div>
+              <h5 class="returns">Returns</h5>
+              <table class="table table-bordered table-striped table-condensed">
+                <thead>
+                  <tr>
+                    <th>Type</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<span class="xref">System.Boolean</span>&gt;</td>
+                    <td><p>True if the genetic algorithm has completed its execution; otherwise, false.</p>
+</td>
+                  </tr>
+                </tbody>
+              </table>
+              <h5 id="GenFx_GeneticAlgorithm_StepAsync_remarks">Remarks</h5>
+              <div class="markdown level1 remarks"><p>Subsequent calls to either <a class="xref" href="GenFx.GeneticAlgorithm.html#GenFx_GeneticAlgorithm_RunAsync">RunAsync()</a> or <a class="xref" href="GenFx.GeneticAlgorithm.html#GenFx_GeneticAlgorithm_StepAsync">StepAsync()</a> will resume execution from
+where the previous <a class="xref" href="GenFx.GeneticAlgorithm.html#GenFx_GeneticAlgorithm_StepAsync">StepAsync()</a> call left off.</p>
+</div>
+              <h5 class="exceptions">Exceptions</h5>
+              <table class="table table-bordered table-striped table-condensed">
+                <thead>
+                  <tr>
+                    <th>Type</th>
+                    <th>Condition</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span class="xref">System.InvalidOperationException</span></td>
+                    <td><p>The algorithm has not been initialized.</p>
+</td>
+                  </tr>
+                </tbody>
+              </table>
+              <h3 id="events">Events
+              </h3>
+              <span class="small pull-right mobile-hide">
+                <span class="divider">|</span>
+                <a href="https://github.com/mthalman/GenFx/new/master/doc/apispec/new?filename=GenFx_GeneticAlgorithm_AlgorithmCompleted.md&amp;value=---%0Auid%3A%20GenFx.GeneticAlgorithm.AlgorithmCompleted%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+              </span>
+              <span class="small pull-right mobile-hide">
+                <a href="https://github.com/mthalman/GenFx/blob/master/src/GenFx/GeneticAlgorithm.cs/#L90">View Source</a>
+              </span>
+              <h4 id="GenFx_GeneticAlgorithm_AlgorithmCompleted" data-uid="GenFx.GeneticAlgorithm.AlgorithmCompleted">AlgorithmCompleted</h4>
+              <div class="markdown level1 summary"><p>Occurs when execution of the algorithm completes.</p>
+</div>
+              <div class="markdown level1 conceptual"></div>
+              <h5 class="decalaration">Declaration</h5>
+              <div class="codewrapper">
+                <pre><code class="lang-csharp hljs">public event EventHandler AlgorithmCompleted</code></pre>
+              </div>
+              <h5 class="eventType">Event Type</h5>
+              <table class="table table-bordered table-striped table-condensed">
+                <thead>
+                  <tr>
+                    <th>Type</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span class="xref">System.EventHandler</span></td>
+                    <td></td>
+                  </tr>
+                </tbody>
+              </table>
+              <span class="small pull-right mobile-hide">
+                <span class="divider">|</span>
+                <a href="https://github.com/mthalman/GenFx/new/master/doc/apispec/new?filename=GenFx_GeneticAlgorithm_AlgorithmStarting.md&amp;value=---%0Auid%3A%20GenFx.GeneticAlgorithm.AlgorithmStarting%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+              </span>
+              <span class="small pull-right mobile-hide">
+                <a href="https://github.com/mthalman/GenFx/blob/master/src/GenFx/GeneticAlgorithm.cs/#L99">View Source</a>
+              </span>
+              <h4 id="GenFx_GeneticAlgorithm_AlgorithmStarting" data-uid="GenFx.GeneticAlgorithm.AlgorithmStarting">AlgorithmStarting</h4>
+              <div class="markdown level1 summary"><p>Occurs when the algorithm is about to begin execution.</p>
+</div>
+              <div class="markdown level1 conceptual"></div>
+              <h5 class="decalaration">Declaration</h5>
+              <div class="codewrapper">
+                <pre><code class="lang-csharp hljs">public event EventHandler AlgorithmStarting</code></pre>
+              </div>
+              <h5 class="eventType">Event Type</h5>
+              <table class="table table-bordered table-striped table-condensed">
+                <thead>
+                  <tr>
+                    <th>Type</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span class="xref">System.EventHandler</span></td>
+                    <td></td>
+                  </tr>
+                </tbody>
+              </table>
+              <h5 id="GenFx_GeneticAlgorithm_AlgorithmStarting_remarks">Remarks</h5>
+              <div class="markdown level1 remarks"><p>This event only occurs when the algorithm is first started after having been initialized.
+It does not occur when resuming execution after a pause.</p>
+</div>
+              <span class="small pull-right mobile-hide">
+                <span class="divider">|</span>
+                <a href="https://github.com/mthalman/GenFx/new/master/doc/apispec/new?filename=GenFx_GeneticAlgorithm_FitnessEvaluated.md&amp;value=---%0Auid%3A%20GenFx.GeneticAlgorithm.FitnessEvaluated%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+              </span>
+              <span class="small pull-right mobile-hide">
+                <a href="https://github.com/mthalman/GenFx/blob/master/src/GenFx/GeneticAlgorithm.cs/#L80">View Source</a>
+              </span>
+              <h4 id="GenFx_GeneticAlgorithm_FitnessEvaluated" data-uid="GenFx.GeneticAlgorithm.FitnessEvaluated">FitnessEvaluated</h4>
+              <div class="markdown level1 summary"><p>Occurs when the fitness of an environment has been evaluated.</p>
+</div>
+              <div class="markdown level1 conceptual"></div>
+              <h5 class="decalaration">Declaration</h5>
+              <div class="codewrapper">
+                <pre><code class="lang-csharp hljs">public event EventHandler&lt;EnvironmentFitnessEvaluatedEventArgs&gt; FitnessEvaluated</code></pre>
+              </div>
+              <h5 class="eventType">Event Type</h5>
+              <table class="table table-bordered table-striped table-condensed">
+                <thead>
+                  <tr>
+                    <th>Type</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span class="xref">System.EventHandler</span>&lt;<a class="xref" href="GenFx.EnvironmentFitnessEvaluatedEventArgs.html">EnvironmentFitnessEvaluatedEventArgs</a>&gt;</td>
+                    <td></td>
+                  </tr>
+                </tbody>
+              </table>
+              <span class="small pull-right mobile-hide">
+                <span class="divider">|</span>
+                <a href="https://github.com/mthalman/GenFx/new/master/doc/apispec/new?filename=GenFx_GeneticAlgorithm_GenerationCreated.md&amp;value=---%0Auid%3A%20GenFx.GeneticAlgorithm.GenerationCreated%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+              </span>
+              <span class="small pull-right mobile-hide">
+                <a href="https://github.com/mthalman/GenFx/blob/master/src/GenFx/GeneticAlgorithm.cs/#L85">View Source</a>
+              </span>
+              <h4 id="GenFx_GeneticAlgorithm_GenerationCreated" data-uid="GenFx.GeneticAlgorithm.GenerationCreated">GenerationCreated</h4>
+              <div class="markdown level1 summary"><p>Occurs when a new generation has been created (but its fitness has not yet been evaluated).</p>
+</div>
+              <div class="markdown level1 conceptual"></div>
+              <h5 class="decalaration">Declaration</h5>
+              <div class="codewrapper">
+                <pre><code class="lang-csharp hljs">public event EventHandler GenerationCreated</code></pre>
+              </div>
+              <h5 class="eventType">Event Type</h5>
+              <table class="table table-bordered table-striped table-condensed">
+                <thead>
+                  <tr>
+                    <th>Type</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span class="xref">System.EventHandler</span></td>
+                    <td></td>
+                  </tr>
+                </tbody>
+              </table>
+              <h3 id="extensionmethods">Extension Methods</h3>
+              <div>
+                  <a class="xref" href="GenFx.GeneticComponentExtensions.html#GenFx_GeneticComponentExtensions_CreateNewAndInitialize_GenFx_GeneticComponent_">GeneticComponentExtensions.CreateNewAndInitialize(GeneticComponent)</a>
+              </div>
+              <div>
+                  <a class="xref" href="GenFx.GeneticComponentExtensions.html#GenFx_GeneticComponentExtensions_CopyConfigurationStateTo_GenFx_GeneticComponent_GenFx_GeneticComponent_">GeneticComponentExtensions.CopyConfigurationStateTo(GeneticComponent, GeneticComponent)</a>
+              </div>
+            </article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/mthalman/GenFx/new/master/doc/apispec/new?filename=GenFx_GeneticAlgorithm.md&amp;value=---%0Auid%3A%20GenFx.GeneticAlgorithm%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/mthalman/GenFx/blob/master/src/GenFx/GeneticAlgorithm.cs/#L15" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Copyright © 2015-2016 Microsoft<br>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

@@ -1,0 +1,246 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Create a Hello World Genetic Algorithm </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Create a Hello World Genetic Algorithm ">
+    <meta name="generator" content="docfx 2.10.2.0">
+    
+    <link rel="shortcut icon" href="../favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+              <h1 id="create-a-hello-world-genetic-algorithm">Create a Hello World Genetic Algorithm</h1>
+              
+<p>In this tutorial, we&#39;ll create a very simple genetic algorithm (GA) to help you learn the basics of how to configure and execute a GA using GenFx.</p>
+<p>In this GA, the goal will be to generate a binary string that contains only true bit values.</p>
+<h2 id="1-create-your-project">1: Create Your Project</h2>
+<p>First, create a C# Console Application project named SimpleBinaryString.  Then you&#39;ll want to add the GenFx.NET NuGet package to your project.</p>
+<h2 id="2-create-the-fitness-evalutor">2: Create the Fitness Evalutor</h2>
+<p>Now that we&#39;ve got our project initialized with GenFx, let&#39;s first define the GA&#39;s <a href="../documentation/base_components.html#fitness-evaluator">fitness evaluator</a>.  The implementation will be simple: just count the number of &#39;true&#39; bits in the binary string entity.  Add a new C# file named MyFitnessEvaluator.cs and paste in this code:</p>
+<pre><code>using GenFx;
+using GenFx.ComponentLibrary.Lists;
+using GenFx.Validation;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace SimpleBinaryString
+{
+    [RequiredGeneticEntity(typeof(BinaryStringEntity))]
+    internal class MyFitnessEvaluator : FitnessEvaluator
+    {
+        public override Task&lt;double&gt; EvaluateFitnessAsync(GeneticEntity entity)
+        {
+            BinaryStringEntity binStrEntity = (BinaryStringEntity)entity;
+
+            // The entity&#39;s fitness is equal to the number of &quot;true&quot; bits it contains
+            // (i.e. a bit representing a 1 value).
+            return Task.FromResult&lt;double&gt;(binStrEntity.Count(bit =&gt; bit == true));
+        }
+    }
+}
+</code></pre><p> Let&#39;s examine some of the code here...</p>
+<ul>
+<li>Notice that the class has a <a class="xref" href="../api/GenFx.Validation.RequiredGeneticEntityAttribute.html">RequiredGeneticEntityAttribute</a> attribute, specifying the <a class="xref" href="../api/GenFx.ComponentLibrary.Lists.BinaryStringEntity.html">BinaryStringEntity</a> type. This informs GenFx that this fitness evaluator requires the GA to use a <a class="xref" href="../api/GenFx.ComponentLibrary.Lists.BinaryStringEntity.html">BinaryStringEntity</a> in order to function properly.  GenFx will validate that the GA is configured with that entity type at runtime.</li>
+<li>In order for this class to be recognized as a fitness evaluator in GenFx, it derives from <a class="xref" href="../api/GenFx.FitnessEvaluator.html">FitnessEvaluator</a>.</li>
+<li>The <a class="xref" href="../api/GenFx.FitnessEvaluator.html">FitnessEvaluator</a> base class is abstract and so this derived class must implement the <a class="xref" href="../api/GenFx.FitnessEvaluator.html#GenFx_FitnessEvaluator_EvaluateFitnessAsync_GenFx_GeneticEntity_">EvaluateFitnessAsync</a> method. This method returns a <code>System.Double</code> value representing the fitness value of the entity.  A fitness value is whatever you want it to be; it&#39;s specific to the problem you&#39;re intending to solve.</li>
+<li>The method implementation is able to infer that the entity being passed to it is of type <a class="xref" href="../api/GenFx.ComponentLibrary.Lists.BinaryStringEntity.html">BinaryStringEntity</a> since it had declared the <a class="xref" href="../api/GenFx.Validation.RequiredGeneticEntityAttribute.html">RequiredGeneticEntityAttribute</a> attribute.  So the method casts it to that type in order to access the &#39;bits&#39; of the entity.</li>
+<li>The last line of the method uses LINQ to count the number of &#39;true&#39; bits in the entity.  Since this method uses the Task-based asynchronous programming model, it returns <code>Task&lt;double&gt;</code>.  Since this method isn&#39;t executing any asynchronous behavior, we just wrap the result value we want to return in a <code>Task</code>.</li>
+</ul>
+<h2 id="3-configure-the-algorithm">3. Configure the Algorithm</h2>
+<p>Now it&#39;s time to actually configure our GA with all the components that it should use. First, let&#39;s update the <code>Main</code> method in your Program.cs file to handle the execution of some asynchronous code. Update the code in your Program.cs file so that it looks like this:</p>
+<pre><code>static void Main(string[] args)
+{
+    RunAlgorithmAsync().Wait();
+}
+
+private static async Task RunAlgorithmAsync()
+{
+}
+</code></pre><p>The rest of the code that we&#39;ll be adding should be placed inside the <code>RunAlgorithmAsync</code> method. Add the following code to that method:</p>
+<pre><code>SimpleGeneticAlgorithm algorithm = new SimpleGeneticAlgorithm
+{
+    MinimumEnvironmentSize = 1,
+    FitnessEvaluator = new MyFitnessEvaluator(),
+    GeneticEntitySeed = new BinaryStringEntity
+    {
+        MinimumStartingLength = 20,
+        MaximumStartingLength = 20,
+        IsFixedSize = true
+    },
+    PopulationSeed = new SimplePopulation
+    {
+        MinimumPopulationSize = 100
+    },
+    SelectionOperator = new FitnessProportionateSelectionOperator
+    {
+        SelectionBasedOnFitnessType = FitnessType.Raw
+    },
+    CrossoverOperator = new SinglePointCrossoverOperator
+    {
+        CrossoverRate = 0.8
+    },
+    MutationOperator = new UniformBitMutationOperator
+    {
+        MutationRate = 0.01
+    },
+    Terminator = new FitnessTargetTerminator
+    {
+        FitnessTarget = 20,
+        FitnessValueType = FitnessType.Raw
+    }
+};
+</code></pre><p>First, notice that <a class="xref" href="../api/GenFx.ComponentLibrary.Algorithms.SimpleGeneticAlgorithm.html">SimpleGeneticAlgorithm</a> is the type of algorithm being created. GenFx defines several algorithm types and this is the most basic of them. Now let&#39;s go through each of the <a href="../documentation/component_model.html#configuration">configuration properties</a> that are set on the algorithm object:</p>
+<ul>
+<li><a class="xref" href="../api/GenFx.GeneticAlgorithm.html#GenFx_GeneticAlgorithm_MinimumEnvironmentSize">MinimumEnvironmentSize</a>: This is configuring the GA so that its environment contains only one population of entities.  GenFx supports more than one, but for purposes of simplicity, we&#39;ll only use a single population.</li>
+<li><a class="xref" href="../api/GenFx.GeneticAlgorithm.html#GenFx_GeneticAlgorithm_FitnessEvaluator">FitnessEvaluator</a>: This is configuring the GA to use the fitness evalutor that was defined above.</li>
+<li><a class="xref" href="../api/GenFx.GeneticAlgorithm.html#GenFx_GeneticAlgorithm_GeneticEntitySeed">GeneticEntitySeed</a>: This is configuring the GA to use a <a class="xref" href="../api/GenFx.ComponentLibrary.Lists.BinaryStringEntity.html">BinaryStringEntity</a>. In addition, that entity is configured with the following:<ul>
+<li><a class="xref" href="../api/GenFx.ComponentLibrary.Lists.ListEntityBase.html#GenFx_ComponentLibrary_Lists_ListEntityBase_MinimumStartingLength">MinimumStartingLength</a>: Indicates the minimum length the binary string should have when first being initialized with a random set of bits.</li>
+<li><a class="xref" href="../api/GenFx.ComponentLibrary.Lists.ListEntityBase.html#GenFx_ComponentLibrary_Lists_ListEntityBase_MaximumStartingLength">MaximumStartingLength</a>: Indicates the maximum length the binary string can have when first being initialized with a random set of bits.</li>
+<li><a class="xref" href="../api/GenFx.ComponentLibrary.Lists.ListEntityBase.html#GenFx_ComponentLibrary_Lists_ListEntityBase_IsFixedSize">IsFixedSize</a>: Indicates that the binary string is a fixed size; the number of bits cannot increase or decrease once its been initialized.</li>
+</ul>
+</li>
+<li><a class="xref" href="../api/GenFx.GeneticAlgorithm.html#GenFx_GeneticAlgorithm_PopulationSeed">PopulationSeed</a>: This is configuring the GA to use a <a class="xref" href="../api/GenFx.ComponentLibrary.Populations.SimplePopulation.html">SimplePopulation</a> to contain the genetic entities.</li>
+<li><a class="xref" href="../api/GenFx.GeneticAlgorithm.html#GenFx_GeneticAlgorithm_SelectionOperator">SelectionOperator</a>: This is configuring the GA to use a <a class="xref" href="../api/GenFx.ComponentLibrary.SelectionOperators.FitnessProportionateSelectionOperator.html">FitnessProportionateSelectionOperator</a> to select entities from the population to move to the next generation. This type of selection operator bases an entities chances of being selected on its fitness value; the better its fitness value, the better chance it has of being selected. In addition, the selection operator is configured with the following:<ul>
+<li><a class="xref" href="../api/GenFx.SelectionOperator.html#GenFx_SelectionOperator_SelectionBasedOnFitnessType">SelectionBasedOnFitnessType</a>: Indicates that the operator should use the entity&#39;s raw fitness value to base its selection logic from. To keep things simple in this GA, we&#39;re only using raw fitness values; there is no fitness scaling going on.</li>
+</ul>
+</li>
+<li><a class="xref" href="../api/GenFx.GeneticAlgorithm.html#GenFx_GeneticAlgorithm_CrossoverOperator">CrossoverOperator</a>: This is configuring the GA to use a <a class="xref" href="../api/GenFx.ComponentLibrary.Lists.SinglePointCrossoverOperator.html">SinglePointCrossoverOperator</a> to perform crossover operations.  This operator type works with list-based entities to choose a single list element position and swaps the elements on either side of that point between the two entities.  In addition, the crossover operator is configured with the following:<ul>
+<li><a class="xref" href="../api/GenFx.CrossoverOperator.html#GenFx_CrossoverOperator_CrossoverRate">CrossoverRate</a>: Indicates the percentage chance that a crossover will occur for a given set of parent genetic entities.</li>
+</ul>
+</li>
+<li><a class="xref" href="../api/GenFx.GeneticAlgorithm.html#GenFx_GeneticAlgorithm_MutationOperator">MutationOperator</a>: This is configuring the GA to use a <a class="xref" href="../api/GenFx.ComponentLibrary.Lists.UniformBitMutationOperator.html">UniformBitMutationOperator</a> to perform mutation operations.  This operator type works by potentially flipping the bit value for each bit in a binary string.  In addition, the crossover operator is configured with the following:<ul>
+<li><a class="xref" href="../api/GenFx.MutationOperator.html#GenFx_MutationOperator_MutationRate">MutationRate</a>: Indicates the percentage chance that a mutation will occur for each value unit within a genetic entity.  Since we&#39;re using a binary string, that means each bit in the binary string would have a chance to become mutated.</li>
+</ul>
+</li>
+<li><a class="xref" href="../api/GenFx.GeneticAlgorithm.html#GenFx_GeneticAlgorithm_Terminator">Terminator</a>: This is configuring the GA to use a <a class="xref" href="../api/GenFx.ComponentLibrary.Terminators.FitnessTargetTerminator.html">FitnessTargetTerminator</a> which terminates the GA once the specified fitness value has been reached by any entity. In addition, the terminator is configured with the following:<ul>
+<li><a class="xref" href="../api/GenFx.ComponentLibrary.Terminators.FitnessTargetTerminator.html#GenFx_ComponentLibrary_Terminators_FitnessTargetTerminator_FitnessTarget">FitnessTarget</a>: Indicates the fitness value an entity must have in order for GA to stop.</li>
+<li><a class="xref" href="../api/GenFx.ComponentLibrary.Terminators.FitnessTargetTerminator.html#GenFx_ComponentLibrary_Terminators_FitnessTargetTerminator_FitnessValueType">FitnessValueType</a>: Indicates the type of fitness value to check.  In this case, we only care about raw fitness values.</li>
+</ul>
+</li>
+</ul>
+<h2 id="4-execute-the-algorithm-and-process-results">4. Execute the Algorithm and Process Results</h2>
+<p>Now it&#39;s time to see this GA in action.  Let&#39;s execute it and see what the results give us. Append this code to what you&#39;ve already added in the <code>RunAlgorithmAsync</code> method:</p>
+<pre><code>algorithm.GenerationCreated += 
+    (sender, e) =&gt; Console.WriteLine(&quot;Generation: {0}&quot;, algorithm.CurrentGeneration);
+
+await algorithm.InitializeAsync();
+await algorithm.RunAsync();
+
+IEnumerable&lt;GeneticEntity&gt; top10Entities =
+    algorithm.Environment.Populations[0].Entities.GetEntitiesSortedByFitness(
+        FitnessType.Raw, FitnessEvaluationMode.Maximize)
+    .Reverse()
+    .Take(10);
+
+Console.WriteLine();
+Console.WriteLine(&quot;Top 10 entities:&quot;);
+foreach (GeneticEntity entity in top10Entities)
+{
+    Console.WriteLine(&quot;Bits: &quot; + entity.Representation + &quot;, Fitness: &quot; + entity.RawFitnessValue);
+}
+
+Console.ReadLine();
+</code></pre><p>A few notes about this code:</p>
+<ul>
+<li>The <a class="xref" href="../api/GenFx.GeneticAlgorithm.html#GenFx_GeneticAlgorithm_GenerationCreated">GenerationCreated</a> event is being subscribed to here so that we can see in the console output what generation is currently being executed.</li>
+<li>Before an algorithm can be run, it must be initialized by calling the <a class="xref" href="../api/GenFx.GeneticAlgorithm.html#GenFx_GeneticAlgorithm_InitializeAsync">InitializeAsync</a> method. Once it&#39;s been initialized you can call the <a class="xref" href="../api/GenFx.GeneticAlgorithm.html#GenFx_GeneticAlgorithm_RunAsync">RunAsync</a> method, in which case the algorithm is run until terminated by the configured terminator, or the <a class="xref" href="../api/GenFx.GeneticAlgorithm.html#GenFx_GeneticAlgorithm_StepAsync">StepAsync</a> method which runs the algorithm to produce only a single generation each time it is called.</li>
+<li>When the algorithm finishes, we collect the top 10 entities with the best fitness values.  Since the terminator was in charge of terminating the algorithm, we know that at least one of those entities has met our goal of containing all &#39;true&#39; bits.</li>
+<li>The top 10 entities are then printed out to the console using their string representations and fitness values.</li>
+</ul>
+<p>That&#39;s it!  You&#39;ve just executed your first genetic algorithm with GenFx!</p>
+
+            </article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/mthalman/GenFx/blob/master/doc/tutorials/hello_world.md/#L1" class="contribution-link">Improve this Doc</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Copyright © 2015-2016 Microsoft<br>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>
