@@ -109,6 +109,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\version.cs">
+      <Link>version.cs</Link>
+    </Compile>
     <Compile Include="ConfigurationPropertyAttribute.cs" />
     <Compile Include="CrossoverOperator.cs" />
     <Compile Include="ElitismStrategy.cs" />
