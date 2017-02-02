@@ -12,4 +12,8 @@
     <copyright>Copyright 2017 Matt Thalman</copyright>
     <tags>geneticalgorithm genfx</tags>
   </metadata>
+  <files>
+    <file src="GenFx\bin\Release\GenFx.dll" target="lib\net452" />
+    <file src="GenFx.ComponentLibrary\bin\Release\GenFx.ComponentLibrary.dll" target="lib\net452" />
+  </files>
 </package>
