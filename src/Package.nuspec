@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<package>
+  <metadata>
+    <id>GenFx.NET</id>
+    <version>0.1.0</version>
+    <authors>Matt Thalman</authors>
+    <owners>Matt Thalman</owners>
+    <licenseUrl>https://github.com/mthalman/GenFx.NET/blob/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/mthalman/GenFx.NET</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>GenFx.NET is a .NET-based genetic algorithm framework that makes designing and executing genetic algorithms easy.</description>
+    <copyright>Copyright 2017 Matt Thalman</copyright>
+    <tags>geneticalgorithm genfx</tags>
+  </metadata>
+  <files>
+    <file src="GenFx\bin\Release\GenFx.dll" target="lib\net452" />
+    <file src="GenFx.ComponentLibrary\bin\Release\GenFx.ComponentLibrary.dll" target="lib\net452" />
+  </files>
+</package>
