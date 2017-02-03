@@ -2,4 +2,7 @@ param(
 	[string]$AssemblyFilePath
 )
 
-$env:GenFxVersion = (Get-Item $AssemblyFilePath).VersionInfo.FileVersion
+$fileVersion = (Get-Item $AssemblyFilePath).VersionInfo.FileVersion
+
+Write-Host ("##vso[task.setvariable variable=GenFxVersion;]$fileVersion");
+
