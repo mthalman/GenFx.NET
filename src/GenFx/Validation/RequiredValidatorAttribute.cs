@@ -44,15 +44,15 @@ namespace GenFx.Validation
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
     public sealed class RequiredExternalValidatorAttribute : RequiredValidatorBaseAttribute, IExternalConfigurationPropertyValidatorAttribute
     {
-        private string targetProperty;
+        private string targetPropertyName;
         private Type targetComponentType;
 
         /// <summary>
         /// Gets the name of the property of the component configuration type to be validated.
         /// </summary>
-        public string TargetProperty
+        public string TargetPropertyName
         {
-            get { return this.targetProperty; }
+            get { return this.targetPropertyName; }
         }
 
         /// <summary>
@@ -67,17 +67,17 @@ namespace GenFx.Validation
         /// Initializes a new instance of the <see cref="RequiredExternalValidatorAttribute"/> class.
         /// </summary>
         /// <param name="targetComponentType"><see cref="Type"/> of the component containing the property to be validated. This type must implement <see cref="GeneticComponent"/>.</param>
-        /// <param name="targetProperty">Property of the <paramref name="targetComponentType"/> to be validated.</param>
+        /// <param name="targetPropertyName">Property of the <paramref name="targetComponentType"/> to be validated.</param>
         /// <exception cref="ArgumentNullException"><paramref name="targetComponentType"/> is null.</exception>
-        /// <exception cref="ArgumentException"><paramref name="targetProperty"/> is null or empty.</exception>
+        /// <exception cref="ArgumentException"><paramref name="targetPropertyName"/> is null or empty.</exception>
         /// <exception cref="ArgumentException"><paramref name="targetComponentType"/> does not implement <see cref="GeneticComponent"/>.</exception>
-        /// <exception cref="ArgumentException"><paramref name="targetProperty"/> does not exist on <paramref name="targetComponentType"/>.</exception>
-        public RequiredExternalValidatorAttribute(Type targetComponentType, string targetProperty)
+        /// <exception cref="ArgumentException"><paramref name="targetPropertyName"/> does not exist on <paramref name="targetComponentType"/>.</exception>
+        public RequiredExternalValidatorAttribute(Type targetComponentType, string targetPropertyName)
         {
-            ExternalValidatorAttributeHelper.ValidateArguments(targetComponentType, targetProperty);
+            ExternalValidatorAttributeHelper.ValidateArguments(targetComponentType, targetPropertyName);
 
             this.targetComponentType = targetComponentType;
-            this.targetProperty = targetProperty;
+            this.targetPropertyName = targetPropertyName;
         }
     }
 }

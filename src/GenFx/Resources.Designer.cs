@@ -135,7 +135,7 @@ namespace GenFx {
         /// <summary>
         ///   Looks up a localized string similar to The object returned from &apos;{0}.{1}&apos; is of an incorrect type.
         ///Expected type: &apos;{0}&apos;
-        ///Actual type: &apos;{2]&apos;.
+        ///Actual type: &apos;{2}&apos;.
         /// </summary>
         internal static string ErrorMsg_CreateNewComponentWrongType {
             get {
@@ -158,6 +158,15 @@ namespace GenFx {
         internal static string ErrorMsg_EntityListEmpty {
             get {
                 return ResourceManager.GetString("ErrorMsg_EntityListEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; is not an enum type..
+        /// </summary>
+        internal static string ErrorMsg_EnumValidator_NotEnumType {
+            get {
+                return ResourceManager.GetString("ErrorMsg_EnumValidator_NotEnumType", resourceCulture);
             }
         }
         
@@ -194,6 +203,15 @@ namespace GenFx {
         internal static string ErrorMsg_IncorrectDerivedType {
             get {
                 return ResourceManager.GetString("ErrorMsg_IncorrectDerivedType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Property &apos;{0}&apos; must be equal to &apos;{1}&apos;..
+        /// </summary>
+        internal static string ErrorMsg_InvalidBooleanProperty {
+            get {
+                return ResourceManager.GetString("ErrorMsg_InvalidBooleanProperty", resourceCulture);
             }
         }
         
@@ -303,6 +321,15 @@ namespace GenFx {
         internal static string ErrorMsg_NullReturnValue {
             get {
                 return ResourceManager.GetString("ErrorMsg_NullReturnValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The specified component must either by of type &apos;{0}&apos; or &apos;{0}&apos; and have a reference to a non-null &apos;{0}&apos;..
+        /// </summary>
+        internal static string ErrorMsg_RequiredComponentValidator_NoAlgorithm {
+            get {
+                return ResourceManager.GetString("ErrorMsg_RequiredComponentValidator_NoAlgorithm", resourceCulture);
             }
         }
         

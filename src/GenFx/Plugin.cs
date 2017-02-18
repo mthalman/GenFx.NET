@@ -1,4 +1,5 @@
-﻿using System.Runtime.Serialization;
+﻿using System;
+using System.Runtime.Serialization;
 
 namespace GenFx
 {
@@ -9,25 +10,53 @@ namespace GenFx
     public abstract class Plugin : GeneticComponentWithAlgorithm
     {
         /// <summary>
+        /// Initializes the component to ensure its readiness for algorithm execution.
+        /// </summary>
+        /// <param name="algorithm">The algorithm that is to use this component.</param>
+        public override void Initialize(GeneticAlgorithm algorithm)
+        {
+            base.Initialize(algorithm);
+
+            algorithm.FitnessEvaluated += Algorithm_FitnessEvaluated;
+            algorithm.AlgorithmStarting += Algorithm_AlgorithmStarting;
+            algorithm.AlgorithmCompleted += Algorithm_AlgorithmCompleted;
+        }
+
+        private void Algorithm_AlgorithmCompleted(object sender, EventArgs e)
+        {
+            this.OnAlgorithmCompleted();
+        }
+
+        private void Algorithm_AlgorithmStarting(object sender, EventArgs e)
+        {
+            this.OnAlgorithmStarting();
+        }
+
+        private void Algorithm_FitnessEvaluated(object sender, EnvironmentFitnessEvaluatedEventArgs e)
+        {
+            this.OnFitnessEvaluated(e.Environment, e.GenerationIndex);
+        }
+
+        /// <summary>
         /// Handles the event when the fitness of an environment has been evaluated.
         /// </summary>
         /// <param name="environment">The environment which has had its fitness evaluated..</param>
         /// <param name="generationIndex">Index value of the current generation in the environment.</param>
-        public virtual void OnFitnessEvaluated(GeneticEnvironment environment, int generationIndex)
+        protected virtual void OnFitnessEvaluated(GeneticEnvironment environment, int generationIndex)
         {
         }
 
         /// <summary>
         /// Handles the event when a genetic algorithm is about to start execution.
         /// </summary>
-        public virtual void OnAlgorithmStarting()
+        protected virtual void OnAlgorithmStarting()
         {
         }
 
         /// <summary>
         /// Handles the event when a genetic algorithm has finished executing.
         /// </summary>
-        public virtual void OnAlgorithmCompleted()
+        protected virtual void OnAlgorithmCompleted()
         {
         }
     }

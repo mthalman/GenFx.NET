@@ -68,18 +68,10 @@ namespace GenFx
             /// has a fitness value less than the second entity.  Greater than zero if the first entity
             /// has a fitness value greater than the second entity.
             /// </returns>
+            [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
+            [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
             public int Compare(GeneticEntity x, GeneticEntity y)
             {
-                if (x == null)
-                {
-                    throw new ArgumentNullException(nameof(x));
-                }
-
-                if (y == null)
-                {
-                    throw new ArgumentNullException(nameof(y));
-                }
-
                 return x.GetFitnessValue(this.sortBasis).CompareTo(y.GetFitnessValue(this.sortBasis));
             }
         }

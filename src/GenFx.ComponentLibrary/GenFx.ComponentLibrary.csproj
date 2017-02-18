@@ -89,11 +89,11 @@
     <Compile Include="Algorithms\PopulationReplacementValue.cs" />
     <Compile Include="Algorithms\PopulationReplacementValueValidator.cs" />
     <Compile Include="Algorithms\ReplacementValueKind.cs" />
-    <Compile Include="Algorithms\ReplacementValueKindValidator.cs" />
     <Compile Include="Algorithms\SimpleGeneticAlgorithm.cs" />
     <Compile Include="Algorithms\SteadyStateGeneticAlgorithm.cs" />
     <Compile Include="Elitism\SimpleElitismStrategy.cs" />
     <Compile Include="Lists\BinaryStringEntity.cs" />
+    <Compile Include="Lists\ListStartingLengthValidator.cs" />
     <Compile Include="Lists\UniformBitMutationOperator.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Lists\InversionOperator.cs" />
@@ -151,6 +151,7 @@
     <Compile Include="Trees\SingleNodeTreeCrossoverOperator.cs" />
     <Compile Include="Trees\TreeEntityExtensions.cs" />
     <Compile Include="Trees\TreeNode.cs" />
+    <Compile Include="Trees\TreeNode.OfT.cs" />
     <Compile Include="Trees\TreeNodeCollection.cs" />
     <Compile Include="Trees\TreeHelper.cs" />
   </ItemGroup>

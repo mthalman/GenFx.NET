@@ -120,7 +120,6 @@
     <Compile Include="GeneticComponent.cs" />
     <Compile Include="GeneticComponentExtensions.cs" />
     <Compile Include="DefaultTerminator.cs" />
-    <Compile Include="EnumerableExtensions.cs" />
     <Compile Include="FitnessEvaluationMode.cs" />
     <Compile Include="GeneticAlgorithm.cs" />
     <Compile Include="GeneticComponentWithAlgorithm.cs" />
@@ -141,6 +140,8 @@
     <Compile Include="Validation\IExternalConfigurationPropertyValidatorAttribute.cs" />
     <Compile Include="Validation\ComponentValidatorAttribute.cs" />
     <Compile Include="Validation\ComponentValidatorExtensions.cs" />
+    <Compile Include="Validation\BooleanValidator.cs" />
+    <Compile Include="Validation\BooleanValidatorAttribute.cs" />
     <Compile Include="Validation\RequiredComponentTypeValidator.cs" />
     <Compile Include="Validation\RequiredPopulationValidator.cs" />
     <Compile Include="Validation\RequiredTerminatorValidator.cs" />
@@ -181,7 +182,6 @@
     <Compile Include="Validation\IntegerValidatorAttribute.cs" />
     <Compile Include="Validation\PropertyValidator.cs" />
     <Compile Include="Validation\PropertyValidatorAttribute.cs" />
-    <Compile Include="ConvertUtil.cs" />
     <Compile Include="EnumHelper.cs" />
     <Compile Include="FitnessType.cs" />
     <Compile Include="GeneticEntityCollectionExtensions.cs" />

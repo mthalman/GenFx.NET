@@ -18,6 +18,8 @@ namespace GenFx.ComponentLibrary.Lists
     /// </remarks>
     [DataContract]
     [RequiredGeneticEntity(typeof(ListEntityBase))]
+    [BooleanExternalValidator(typeof(ListEntityBase), nameof(ListEntityBase.IsFixedSize), false)]
+    [BooleanExternalValidator(typeof(ListEntityBase), nameof(ListEntityBase.RequiresUniqueElementValues), false)]
     public class VariableSinglePointCrossoverOperator : CrossoverOperator
     {
         /// <summary>

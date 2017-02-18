@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 
 namespace GenFx.Validation
 {
@@ -90,6 +91,7 @@ namespace GenFx.Validation
         /// <param name="owner">The object that owns the property being validated.</param>
         /// <returns>true if <paramref name="value"/> is valid; otherwise, false.</returns>
         /// <exception cref="ArgumentException"><paramref name="propertyName"/> is null.</exception>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
         public override bool IsValid(object value, string propertyName, object owner, out string errorMessage)
         {
             if (String.IsNullOrEmpty(propertyName))
@@ -99,39 +101,42 @@ namespace GenFx.Validation
 
             bool isValid = true;
 
-            double dblValue;
-            if (!ConvertUtil.TryConvert<double>(value, out dblValue))
+            if (!(value is double) && !(value is int))
             {
                 isValid = false;
             }
-
-            if (this.isMinValueInclusive)
-            {
-                if (dblValue < this.minValue)
-                {
-                    isValid = false;
-                }
-            }
             else
             {
-                if (dblValue <= this.minValue)
-                {
-                    isValid = false;
-                }
-            }
+                double dblValue = Convert.ToDouble(value, CultureInfo.CurrentCulture);
 
-            if (this.isMaxValueInclusive)
-            {
-                if (dblValue > this.maxValue)
+                if (this.isMinValueInclusive)
                 {
-                    isValid = false;
+                    if (dblValue < this.minValue)
+                    {
+                        isValid = false;
+                    }
                 }
-            }
-            else
-            {
-                if (dblValue >= this.maxValue)
+                else
                 {
-                    isValid = false;
+                    if (dblValue <= this.minValue)
+                    {
+                        isValid = false;
+                    }
+                }
+
+                if (this.isMaxValueInclusive)
+                {
+                    if (dblValue > this.maxValue)
+                    {
+                        isValid = false;
+                    }
+                }
+                else
+                {
+                    if (dblValue >= this.maxValue)
+                    {
+                        isValid = false;
+                    }
                 }
             }
 

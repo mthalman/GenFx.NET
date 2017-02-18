@@ -289,12 +289,7 @@ namespace GenFx
             this.environment.Populations.Clear();
 
             this.currentGeneration = 0;
-
-            foreach (Plugin plugin in this.Plugins)
-            {
-                plugin.OnAlgorithmStarting();
-            }
-
+            
             await this.environment.InitializeAsync();
             this.OnGenerationCreated();
             await this.environment.EvaluateFitnessAsync();
@@ -320,8 +315,6 @@ namespace GenFx
                 cancelRun = await this.StepCoreAsync();
             }
         }
-
-
 
         /// <summary>
         /// Executes one generation of the genetic algorithm.
@@ -387,31 +380,7 @@ namespace GenFx
                 return new List<GeneticEntity>();
             }
         }
-
-        ///// <summary>
-        ///// Selects entities from the population and applies
-        ///// the <see cref="GenFx.CrossoverOperator"/> and <see cref="GenFx.MutationOperator"/>, if they exist, to the selected
-        ///// entities.
-        ///// </summary>
-        ///// <param name="population"><see cref="Population"/> from which to select the entities.</param>
-        ///// <returns>
-        ///// List of entities that were selected from the <paramref name="population"/>
-        ///// and potentially modified through crossover and mutation.
-        ///// </returns>
-        ///// <exception cref="ArgumentNullException"><paramref name="population"/> is null.</exception>
-        //protected IList<GeneticEntity> SelectGeneticEntitiesAndApplyCrossoverAndMutation(Population population)
-        //{
-        //    if (population == null)
-        //    {
-        //        throw new ArgumentNullException(nameof(population));
-        //    }
-
-        //    IList<GeneticEntity> parents = this.SelectionOperator.SelectEntities(population.MinimumPopulationSize, population).ToList();
-        //    IList<GeneticEntity> offspring = this.ApplyCrossover(population, parents);
-        //    offspring = this.ApplyMutation(offspring);
-        //    return offspring;
-        //}
-
+        
         /// <summary>
         /// Applies the <see cref="GenFx.CrossoverOperator"/>, if one is set, to the genetic entities.
         /// </summary>
@@ -558,10 +527,7 @@ namespace GenFx
         /// <returns>True if the user has canceled continued execution of the genetic algorithm; otherwise, false.</returns>
         private bool RaiseFitnessEvaluatedEvent()
         {
-            foreach (Plugin plugin in this.Plugins)
-            {
-                plugin.OnFitnessEvaluated(this.environment, this.currentGeneration);
-            }
+            this.CalculateStats(this.environment, this.currentGeneration);
 
             EnvironmentFitnessEvaluatedEventArgs e = new EnvironmentFitnessEvaluatedEventArgs(this.environment, this.currentGeneration);
             this.OnFitnessEvaluated(e);
@@ -574,8 +540,6 @@ namespace GenFx
         /// <param name="e"><see cref="EnvironmentFitnessEvaluatedEventArgs"/> to be passed to the <see cref="FitnessEvaluated"/> event.</param>
         private void OnFitnessEvaluated(EnvironmentFitnessEvaluatedEventArgs e)
         {
-            this.CalculateStats(e.Environment, e.GenerationIndex);
-
             this.FitnessEvaluated?.Invoke(this, e);
         }
 
@@ -641,11 +605,6 @@ namespace GenFx
         private void OnAlgorithmCompleted()
         {
             this.AlgorithmCompleted?.Invoke(this, EventArgs.Empty);
-
-            foreach (Plugin plugin in this.Plugins)
-            {
-                plugin.OnAlgorithmCompleted();
-            }
         }
 
         /// <summary>
@@ -690,27 +649,28 @@ namespace GenFx
         /// <param name="component">The <see cref="GeneticComponent"/> to validate.</param>
         private void Validate(GeneticComponent component)
         {
-            if (component == null)
-            {
-                throw new ArgumentNullException(nameof(component));
-            }
-
             component.Validate();
 
-            IEnumerable<PropertyInfo> properties = component.GetType()
-                .GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.FlattenHierarchy);
-            foreach (PropertyInfo propertyInfo in properties)
+            Type currentType = component.GetType();
+            while (currentType != typeof(GeneticComponent))
             {
-                // Check that the property is valid using the validators described by external components.
-                List<PropertyValidator> externalValidators;
-                if (externalValidationMapping.TryGetValue(propertyInfo, out externalValidators))
+                IEnumerable<PropertyInfo> properties = currentType
+                    .GetProperties(BindingFlags.Public | BindingFlags.Instance);
+                foreach (PropertyInfo propertyInfo in properties)
                 {
-                    object propValue = propertyInfo.GetValue(this, null);
-                    foreach (PropertyValidator validator in externalValidators)
+                    // Check that the property is valid using the validators described by external components.
+                    List<PropertyValidator> externalValidators;
+                    if (externalValidationMapping.TryGetValue(propertyInfo, out externalValidators))
                     {
-                        validator.EnsureIsValid(component.GetType().Name + Type.Delimiter + propertyInfo.Name, propValue, component);
+                        object propValue = propertyInfo.GetValue(component, null);
+                        foreach (PropertyValidator validator in externalValidators)
+                        {
+                            validator.EnsureIsValid(component.GetType().Name + Type.Delimiter + propertyInfo.Name, propValue, component);
+                        }
                     }
                 }
+
+                currentType = currentType.BaseType;
             }
         }
 
@@ -725,6 +685,8 @@ namespace GenFx
             {
                 this.CompileExternalValidatorMapping(component);
             }
+
+            this.CompileExternalValidatorMapping(this);
         }
 
         /// <summary>
@@ -741,7 +703,7 @@ namespace GenFx
             IExternalConfigurationPropertyValidatorAttribute[] attribs = (IExternalConfigurationPropertyValidatorAttribute[])component.GetType().GetCustomAttributes(typeof(IExternalConfigurationPropertyValidatorAttribute), true);
             foreach (IExternalConfigurationPropertyValidatorAttribute attrib in attribs)
             {
-                PropertyInfo prop = ExternalValidatorAttributeHelper.GetTargetPropertyInfo(attrib.TargetComponentType, attrib.TargetProperty);
+                PropertyInfo prop = ExternalValidatorAttributeHelper.GetTargetPropertyInfo(attrib.TargetComponentType, attrib.TargetPropertyName);
                 List<PropertyValidator> validators;
                 if (!this.externalValidationMapping.TryGetValue(prop, out validators))
                 {

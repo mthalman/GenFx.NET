@@ -66,10 +66,7 @@ namespace GenFx.ComponentLibrary.Scaling
             }
 
             int entityCount = population.Entities.Count;
-            if (this.fitnessDistances == null || entityCount > this.fitnessDistances.Length)
-            {
-                this.fitnessDistances = new double[(int)Math.Pow(entityCount, 2)];
-            }
+            this.fitnessDistances = new double[(int)Math.Pow(entityCount, 2)];
 
             // Collect the fitness distances between genetic entities
             for (int i = 0; i < entityCount; i++)

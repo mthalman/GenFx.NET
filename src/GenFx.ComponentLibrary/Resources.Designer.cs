@@ -250,6 +250,15 @@ namespace GenFx.ComponentLibrary {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This class does not support the use of unique element values..
+        /// </summary>
+        internal static string ErrorMsg_UseUniqueElementValuesNotSupported {
+            get {
+                return ResourceManager.GetString("ErrorMsg_UseUniqueElementValuesNotSupported", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The index must be greater or equal to zero and less than or equal to the length..
         /// </summary>
         internal static string ErrorMsg_VariableLengthListEntity_InsertBit_OutOfRange {

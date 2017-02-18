@@ -61,9 +61,13 @@ namespace GenFx.ComponentLibrary.Scaling
             // Goldberg, 1989
             double val = geneticEntity.RawFitnessValue - (mean - this.Multiplier * standardDeviation);
             if (val < 0)
+            {
                 return 0;
+            }
             else
+            {
                 return val;
+            }
         }
     }
 }

@@ -21,6 +21,11 @@ namespace GenFx.Validation
                 throw new ArgumentNullException(nameof(enumType));
             }
 
+            if (!enumType.IsEnum)
+            {
+                throw new ArgumentException(StringUtil.GetFormattedString(Resources.ErrorMsg_EnumValidator_NotEnumType, enumType));
+            }
+
             this.enumType = enumType;
         }
         

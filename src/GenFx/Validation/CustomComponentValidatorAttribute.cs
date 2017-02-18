@@ -155,7 +155,7 @@ namespace GenFx.Validation
         /// </summary>
         /// <param name="targetComponentType"><see cref="Type"/> of the component containing the property to be validated. This type must implement <see cref="GeneticComponent"/>.</param>
         /// <param name="validatorType"><see cref="Type"/> of validator for the configuration property. This
-        /// type must derive from <see cref="PropertyValidator"/>.</param>
+        /// type must derive from <see cref="ComponentValidator"/>.</param>
         /// <exception cref="ArgumentNullException"><paramref name="validatorType"/> is null.</exception>
         /// <exception cref="ArgumentNullException"><paramref name="targetComponentType"/> is null.</exception>
         /// <exception cref="ArgumentException"><paramref name="targetComponentType"/> does not implement <see cref="GeneticComponent"/>.</exception>
@@ -170,7 +170,7 @@ namespace GenFx.Validation
         /// </summary>
         /// <param name="targetComponentType"><see cref="Type"/> of the component containing the property to be validated. This type must implement <see cref="GeneticComponent"/>.</param>
         /// <param name="validatorType"><see cref="Type"/> of validator for the configuration property. This
-        /// type must derive from <see cref="PropertyValidator"/>.</param>
+        /// type must derive from <see cref="ComponentValidator"/>.</param>
         /// <param name="validatorConstructorArguments">
         /// The arguments to pass to the constructor the associated <see cref="ComponentValidator"/>.
         /// </param>

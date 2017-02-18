@@ -51,6 +51,7 @@ namespace GenFx.Validation
         /// <param name="errorMessage">Error message that should be displayed if the property fails validation.</param>
         /// <returns>true if <paramref name="value"/> is valid; otherwise, false.</returns>
         /// <exception cref="ArgumentException"><paramref name="propertyName"/> is null or empty.</exception>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
         public override bool IsValid(object value, string propertyName, object owner, out string errorMessage)
         {
             if (String.IsNullOrEmpty(propertyName))
@@ -60,19 +61,22 @@ namespace GenFx.Validation
 
             bool isValid;
 
-            int intValue;
-            if (!ConvertUtil.TryConvert<int>(value, out intValue))
+            if (!(value is int))
             {
                 isValid = false;
-            }
-
-            if (intValue >= this.MinValue && intValue <= this.MaxValue)
-            {
-                isValid = true;
             }
             else
             {
-                isValid = false;
+                int intValue = (int)value;
+
+                if (intValue >= this.MinValue && intValue <= this.MaxValue)
+                {
+                    isValid = true;
+                }
+                else
+                {
+                    isValid = false;
+                }
             }
 
             if (!isValid)

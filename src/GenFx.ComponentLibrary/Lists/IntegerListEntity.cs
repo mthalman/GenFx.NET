@@ -47,7 +47,7 @@ namespace GenFx.ComponentLibrary.Lists
         /// Gets or sets a value indicating whether each of the element values should be unique for the entity.
         /// </summary>
         [ConfigurationProperty]
-        public bool UseUniqueElementValues
+        public override bool RequiresUniqueElementValues
         {
             get { return this.useUniqueElementValues; }
             set { this.SetProperty(ref this.useUniqueElementValues, value); }
@@ -61,7 +61,7 @@ namespace GenFx.ComponentLibrary.Lists
         {
             base.Initialize(algorithm);
 
-            if (this.UseUniqueElementValues)
+            if (this.RequiresUniqueElementValues)
             {
                 List<int> availableInts = new List<int>();
                 for (int i = this.MinElementValue; i <= this.MaxElementValue; i++)

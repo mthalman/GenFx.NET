@@ -6,9 +6,7 @@ using GenFx.ComponentLibrary.SelectionOperators;
 using GenFx.ComponentLibrary.Terminators;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Runtime.Serialization;
 using System.Threading.Tasks;
 
 namespace SimpleBinaryString
@@ -47,43 +45,17 @@ namespace SimpleBinaryString
                 MutationOperator = new UniformBitMutationOperator
                 {
                     MutationRate = 0.01
+                },
+                Terminator = new FitnessTargetTerminator
+                {
+                    FitnessTarget = 20
                 }
             };
-
-            DataContractSerializer serializer = new DataContractSerializer(typeof(SimpleGeneticAlgorithm),
-                new DataContractSerializerSettings
-                {
-                    PreserveObjectReferences = true,
-                    KnownTypes = new Type[]
-                    {
-                        typeof(SinglePointCrossoverOperator),
-                        typeof(FitnessEvaluator),
-                        typeof(BinaryStringEntity),
-                        typeof(UniformBitMutationOperator),
-                        typeof(SimplePopulation),
-                        typeof(FitnessProportionateSelectionOperator),
-                        typeof(FitnessTargetTerminator)
-                    }
-                }
-                );
-
-                algorithm.GenerationCreated +=
-                    (sender, e) => Console.WriteLine("Generation: {0}", algorithm.CurrentGeneration);
+            
+            algorithm.GenerationCreated +=
+                (sender, e) => Console.WriteLine("Generation: {0}", algorithm.CurrentGeneration);
 
             await algorithm.InitializeAsync();
-            File.Delete(@"C:\Users\matha\Desktop\test.xml");
-            using (FileStream stream = File.OpenWrite(@"C:\Users\matha\Desktop\test.xml"))
-            {
-                serializer.WriteObject(stream, algorithm);
-                stream.Flush();
-                stream.Close();
-            }
-
-            using (FileStream stream = File.OpenRead(@"C:\Users\matha\Desktop\test.xml"))
-            {
-                var obj = serializer.ReadObject(stream);
-            }
-
             await algorithm.RunAsync();
 
             IEnumerable<GeneticEntity> top10Entities =

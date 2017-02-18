@@ -31,7 +31,7 @@ namespace GenFx.ComponentLibrary.Plugins
         /// <summary>
         /// Handles the event when a genetic algorithm is about to start execution.
         /// </summary>
-        public override void OnAlgorithmStarting()
+        protected override void OnAlgorithmStarting()
         {
             this.WriteTrace(Resources.StatisticLogger_AlgorithmStarted);
         }
@@ -39,7 +39,7 @@ namespace GenFx.ComponentLibrary.Plugins
         /// <summary>
         /// Handles the event when a genetic algorithm has finished executing.
         /// </summary>
-        public override void OnAlgorithmCompleted()
+        protected override void OnAlgorithmCompleted()
         {
             this.WriteTrace(Resources.StatisticLogger_AlgorithmCompleted);
         }
@@ -49,7 +49,7 @@ namespace GenFx.ComponentLibrary.Plugins
         /// </summary>
         /// <param name="environment">The environment representing the generation that was created.</param>
         /// <param name="generationIndex">Index value of the generation that was created.</param>
-        public override void OnFitnessEvaluated(GeneticEnvironment environment, int generationIndex)
+        protected override void OnFitnessEvaluated(GeneticEnvironment environment, int generationIndex)
         {
             if (environment == null)
             {
@@ -63,8 +63,9 @@ namespace GenFx.ComponentLibrary.Plugins
                     string statVal = stat.GetResultValue(population).ToString();
 
                     string statName;
+                    // TypeDescriptor will always provide a DisplayNameAttribute, even if one isn't declared on the type.
                     DisplayNameAttribute attrib = (DisplayNameAttribute)TypeDescriptor.GetAttributes(stat)[typeof(DisplayNameAttribute)];
-                    if (attrib != null && !String.IsNullOrEmpty(attrib.DisplayName))
+                    if (!String.IsNullOrEmpty(attrib.DisplayName))
                     {
                         statName = attrib.DisplayName;
                     }

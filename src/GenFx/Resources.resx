@@ -232,12 +232,21 @@
   <data name="ErrorMsg_CreateNewComponentWrongType" xml:space="preserve">
     <value>The object returned from '{0}.{1}' is of an incorrect type.
 Expected type: '{0}'
-Actual type: '{2]'</value>
+Actual type: '{2}'</value>
   </data>
   <data name="ErrorMsg_NullReturnValue" xml:space="preserve">
     <value>The result of invoking method '{0}.{1}' is null which is an invalid value.  It must return a non-null value.</value>
   </data>
   <data name="PluginCommonName" xml:space="preserve">
     <value>Plugin</value>
+  </data>
+  <data name="ErrorMsg_EnumValidator_NotEnumType" xml:space="preserve">
+    <value>'{0}' is not an enum type.</value>
+  </data>
+  <data name="ErrorMsg_RequiredComponentValidator_NoAlgorithm" xml:space="preserve">
+    <value>The specified component must either by of type '{0}' or '{0}' and have a reference to a non-null '{0}'.</value>
+  </data>
+  <data name="ErrorMsg_InvalidBooleanProperty" xml:space="preserve">
+    <value>Property '{0}' must be equal to '{1}'.</value>
   </data>
 </root>

@@ -33,22 +33,32 @@ namespace GenFx.ComponentLibrary.Trees
             TreeNode node1ParentNode = node1.ParentNode;
             TreeEntityBase node1Tree = node1.Tree;
 
-            TreeHelper.MoveNodeToTree(node1, node2Tree, node2, node2ParentNode);
-            TreeHelper.MoveNodeToTree(node2, node1Tree, node1, node1ParentNode);
+            TreeHelper.ReplaceNodeInTree(node1, node2Tree, node2, node2ParentNode);
+            TreeHelper.ReplaceNodeInTree(node2, node1Tree, node1, node1ParentNode);
         }
 
         /// <summary>
-        /// Moves <paramref name="movingNode"/> with all of its children to the location of <paramref name="locationNode"/>.
+        /// Replaces <paramref name="locationNode"/> by moving <paramref name="movingNode"/> with all of its children to the location of <paramref name="locationNode"/>.
         /// </summary>
         /// <param name="movingNode"><see cref="TreeNode"/> to be moved.</param>
         /// <param name="locationNodeTree"><see cref="TreeEntityBase"/> containing the <paramref name="locationNode"/>.</param>
         /// <param name="locationNode"><see cref="TreeNode"/> where <paramref name="movingNode"/> should be moved to.</param>
         /// <param name="locationParentNode"><see cref="TreeNode"/> of the parent of <paramref name="locationNode"/>.</param>
-        public static void MoveNodeToTree(TreeNode movingNode, TreeEntityBase locationNodeTree, TreeNode locationNode, TreeNode locationParentNode)
+        public static void ReplaceNodeInTree(TreeNode movingNode, TreeEntityBase locationNodeTree, TreeNode locationNode, TreeNode locationParentNode)
         {
+            if (movingNode == null)
+            {
+                throw new ArgumentNullException(nameof(movingNode));
+            }
+
             if (locationNodeTree == null)
             {
                 throw new ArgumentNullException(nameof(locationNodeTree));
+            }
+
+            if (locationNode == null)
+            {
+                throw new ArgumentNullException(nameof(locationNode));
             }
 
             if (locationParentNode == null)
