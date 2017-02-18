@@ -11,6 +11,9 @@ namespace TestCommon.Mocks
     {
         public string Identifier;
 
+        [ConfigurationProperty]
+        public int TestProperty { get; set; }
+
         public override string Representation
         {
             get { return this.Identifier; }

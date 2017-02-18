@@ -76,16 +76,21 @@ namespace GenFx.Tests
             {
                 FitnessEvaluator = new MockFitnessEvaluator(),
                 SelectionOperator = new MockSelectionOperator(),
-                GeneticEntitySeed = new MockEntity(),
+                GeneticEntitySeed = new MockEntity
+                {
+                    TestProperty = 3
+                },
                 PopulationSeed = new MockPopulation
                 {
                     MinimumPopulationSize = 10
                 }
             };
+            algorithm.GeneticEntitySeed.Initialize(algorithm);
             MockPopulation population = new MockPopulation();
             population.Initialize(algorithm);
             await population.InitializeAsync();
             Assert.AreEqual(algorithm.PopulationSeed.MinimumPopulationSize, population.Entities.Count, "Population not generated correctly.");
+            Assert.AreEqual(3, ((MockEntity)population.Entities[0]).TestProperty);
         }
 
         /// <summary>

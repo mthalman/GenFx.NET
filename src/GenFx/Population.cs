@@ -270,8 +270,7 @@ namespace GenFx
         {
             for (int i = 0; i < this.Algorithm.PopulationSeed.MinimumPopulationSize; i++)
             {
-                GeneticEntity entity = (GeneticEntity)this.Algorithm.GeneticEntitySeed.CreateNew();
-                entity.Initialize(this.Algorithm);
+                GeneticEntity entity = (GeneticEntity)this.Algorithm.GeneticEntitySeed.CreateNewAndInitialize();
                 this.geneticEntities.Add(entity);
             }
 

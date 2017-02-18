@@ -69,6 +69,7 @@ namespace GenFx.Tests
                     MinimumPopulationSize = populationSize
                 }
             };
+            algorithm.GeneticEntitySeed.Initialize(algorithm);
             algorithm.PopulationSeed.Initialize(algorithm);
 
             GeneticEnvironment environment = new GeneticEnvironment(algorithm);
