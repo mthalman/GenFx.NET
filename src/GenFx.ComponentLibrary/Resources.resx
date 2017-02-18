@@ -117,17 +117,11 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="ErrorMsg_BinaryStringEntityLengthCannotBeChanged" xml:space="preserve">
-    <value>The length of this binary string cannot be changed.</value>
-  </data>
   <data name="ErrorMsg_BoltzmannTotalOverflow" xml:space="preserve">
     <value>Calculation in {0} resulted in overflow.  This can often happen if Temperature setting is less than one.</value>
   </data>
   <data name="ErrorMsg_EmptyList" xml:space="preserve">
     <value>String cannot be null or empty.</value>
-  </data>
-  <data name="ErrorMsg_EntityCopyToTypeMismatch" xml:space="preserve">
-    <value>The entity must be of type '{0}'.</value>
   </data>
   <data name="ErrorMsg_EntityListEmpty" xml:space="preserve">
     <value>Entity list cannot be empty.</value>

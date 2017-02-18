@@ -61,15 +61,6 @@ namespace GenFx.ComponentLibrary {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The length of this binary string cannot be changed..
-        /// </summary>
-        internal static string ErrorMsg_BinaryStringEntityLengthCannotBeChanged {
-            get {
-                return ResourceManager.GetString("ErrorMsg_BinaryStringEntityLengthCannotBeChanged", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Calculation in {0} resulted in overflow.  This can often happen if Temperature setting is less than one..
         /// </summary>
         internal static string ErrorMsg_BoltzmannTotalOverflow {
@@ -84,15 +75,6 @@ namespace GenFx.ComponentLibrary {
         internal static string ErrorMsg_EmptyList {
             get {
                 return ResourceManager.GetString("ErrorMsg_EmptyList", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The entity must be of type &apos;{0}&apos;..
-        /// </summary>
-        internal static string ErrorMsg_EntityCopyToTypeMismatch {
-            get {
-                return ResourceManager.GetString("ErrorMsg_EntityCopyToTypeMismatch", resourceCulture);
             }
         }
         
