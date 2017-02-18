@@ -2,6 +2,7 @@ using GenFx.Validation;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Runtime.Serialization;
 
 namespace GenFx.ComponentLibrary.Trees
@@ -65,19 +66,7 @@ namespace GenFx.ComponentLibrary.Trees
         private static TreeNode GetSwapNode(TreeEntityBase tree, int nodePosition)
         {
             Debug.Assert(nodePosition < tree.GetSize(), "nodePosition must be less than the size of the tree.");
-            int nodeIndex = 0;
-            TreeNode foundNode = null;
-            foreach (TreeNode node in tree.GetPrefixTree())
-            {
-                if (nodeIndex == nodePosition)
-                {
-                    foundNode = node;
-                    break;
-                }
-                nodeIndex++;
-            }
-
-            return foundNode;
+            return tree.GetPrefixTree().Where((node, index) => index == nodePosition).FirstOrDefault();
         }
     }
 }

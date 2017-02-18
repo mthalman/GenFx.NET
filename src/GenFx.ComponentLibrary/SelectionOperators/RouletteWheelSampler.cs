@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 
 namespace GenFx.ComponentLibrary.SelectionOperators
 {
@@ -77,18 +78,10 @@ namespace GenFx.ComponentLibrary.SelectionOperators
         {
             double percentTarget = RandomNumberService.Instance.GetDouble() * 100;
 
-            GeneticEntity entity = null;
-
-            foreach (EntityPercentageRange range in percentageRanges)
-            {
-                if ((percentTarget >= range.MinValue && percentTarget < range.MaxValue) || 100 == percentTarget && percentTarget == range.MaxValue)
-                {
-                    entity = range.Entity;
-                    break;
-                }
-            }
-            
-            return entity;
+            return percentageRanges
+                .Where(r => (percentTarget >= r.MinValue && percentTarget < r.MaxValue) || 100 == percentTarget && percentTarget == r.MaxValue)
+                .Select(r => r.Entity)
+                .FirstOrDefault();
         }
 
         /// <summary>
