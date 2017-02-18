@@ -69,7 +69,15 @@ namespace GenFx.Validation
             }
             else
             {
-                algorithmContext = (GeneticAlgorithm)component;
+                algorithmContext = component as GeneticAlgorithm;
+            }
+
+            if (algorithmContext == null)
+            {
+                throw new ArgumentException(
+                    StringUtil.GetFormattedString(Resources.ErrorMsg_RequiredComponentValidator_NoAlgorithm,
+                        typeof(GeneticAlgorithm), typeof(GeneticComponentWithAlgorithm)),
+                    nameof(component));
             }
 
             if (!this.HasRequiredComponent(algorithmContext))

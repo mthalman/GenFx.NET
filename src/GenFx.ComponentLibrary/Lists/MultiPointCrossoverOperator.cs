@@ -15,14 +15,14 @@ namespace GenFx.ComponentLibrary.Lists
     /// by ADCFBE and BFEACD were to be crossed over at position 2 and 4, the resulting offspring would
     /// be AFEFBE and BDCACD.
     /// 
-    /// An option of multi-point crossover is partially-matched crossover support.  With this option, it assumes
-    /// each of the elements in the list is unique for that entity and the resulting offspring must share that
-    /// unique characteristic.  Using the example above, the two parent entities have unique elements but the 
-    /// offspring do not (offspring 1, for example, has 2 F's and 2 E's).  By using the partially matched crossover
-    /// option, it would ensure the offspring have unique elements.  It does this by swapping out the original element
+    /// If the entity makes use of unique elements (<see cref="ListEntityBase.RequiresUniqueElementValues"/> is set to true),
+    /// then a technique called partially-matched crossover is used.  With this technique, ensures that the resulting offspring
+    /// also contains a unique set of element values.  Using the example above, the two parent entities have unique elements but the 
+    /// offspring do not (offspring 1, for example, has 2 F's and 2 E's).  By using the partially matched crossover,
+    /// it would ensure the offspring have unique elements.  It does this by swapping out the original element
     /// that is a duplicate and swapping it out with the element at the same position of the duplicate on the other parent.
-    /// So for the example above, this would result in the following offspring: AFEDBC and BDCAEF.  This option is only
-    /// available when using two crossover points.
+    /// So for the example above, this would result in the following offspring: AFEDBC and BDCAEF.  This technique is only
+    /// used when there are two crossover points.
     /// </remarks>
     [DataContract]
     [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Multi")]
@@ -36,9 +36,6 @@ namespace GenFx.ComponentLibrary.Lists
 
         [DataMember]
         private int crossoverPointCount = DefaultCrossoverPointCount;
-
-        [DataMember]
-        private bool usePartiallyMatchedCrossover;
 
         /// <summary>
         /// Initializes a new instance of this class.
@@ -59,17 +56,7 @@ namespace GenFx.ComponentLibrary.Lists
             get { return this.crossoverPointCount; }
             set { this.SetProperty(ref this.crossoverPointCount, value); }
         }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether to use partially matched crossover.
-        /// </summary>
-        [ConfigurationProperty]
-        public bool UsePartiallyMatchedCrossover
-        {
-            get { return this.usePartiallyMatchedCrossover; }
-            set { this.SetProperty(ref this.usePartiallyMatchedCrossover, value); }
-        }
-
+        
         /// <summary>
         /// Executes a single-point crossover between two list-based entities.
         /// </summary>
@@ -92,13 +79,15 @@ namespace GenFx.ComponentLibrary.Lists
 
             List<int> crossoverLoci = new List<int>();
 
+            int minLength = Math.Min(entity1Length, entity2Length);
+
             // Generate the set of crossover points.
             for (int i = 0; i < this.CrossoverPointCount; i++)
             {
                 int crossoverLocus;
                 do
                 {
-                    crossoverLocus = RandomNumberService.Instance.GetRandomValue(Math.Min(entity1Length, entity2Length));
+                    crossoverLocus = RandomNumberService.Instance.GetRandomValue(minLength);
                 } while (crossoverLoci.Contains(crossoverLocus));
 
                 crossoverLoci.Add(crossoverLocus);
@@ -108,13 +97,21 @@ namespace GenFx.ComponentLibrary.Lists
 
             IList<GeneticEntity> crossoverOffspring = new List<GeneticEntity>();
 
+            // If the number of crossover points is odd and the lengths of the entities are not the
+            // same, the crossover will cause the lengths of the entities to be swapped.
+            bool entityLengthsAreSwapped = (this.CrossoverPointCount % 2 != 0 && entity1Length != entity2Length);
+
             int maxLength = Math.Max(entity1Length, entity2Length);
 
-            // Normalize the lists into a common length
-            if (entity1Length != entity2Length)
+            if (entityLengthsAreSwapped)
             {
-                listEntity1.Length = maxLength;
-                listEntity2.Length = maxLength;
+                // Normalize the lists into a common length
+                if (entity1Length != entity2Length)
+                {
+                    listEntity1.Length = maxLength;
+                    listEntity2.Length = maxLength;
+                }
+
             }
 
             ListEntityBase originalEntity1 = (ListEntityBase)listEntity1.Clone();
@@ -123,7 +120,7 @@ namespace GenFx.ComponentLibrary.Lists
             ListEntityBase entity1Source = listEntity1;
             ListEntityBase entity2Source = listEntity2;
 
-            for (int i = 0; i < maxLength; i++)
+            for (int i = crossoverLoci[0]; i < maxLength; i++)
             {
                 // If this is a crossover point, swap the source entities
                 if (crossoverLoci.Contains(i))
@@ -140,36 +137,77 @@ namespace GenFx.ComponentLibrary.Lists
                     }
                 }
 
-                object entity1SourceVal = entity1Source.GetValue(i);
-                object entity2SourceVal = entity2Source.GetValue(i);
+                object entity1SourceVal = null;
+                object entity2SourceVal = null;
 
-                if (this.UsePartiallyMatchedCrossover)
+                if (i < listEntity1.Length)
                 {
-                    if (listEntity1 != entity1Source && listEntity1.Contains(entity1SourceVal))
-                    {
-                        int index = originalEntity2.IndexOf(entity1SourceVal);
-                        entity1SourceVal = originalEntity1.GetValue(index);
-                    }
-
-                    if (listEntity2 != entity2Source && listEntity2.Contains(entity2SourceVal))
-                    {
-                        int index = originalEntity1.IndexOf(entity2SourceVal);
-                        entity2SourceVal = originalEntity2.GetValue(index);
-                    }
+                    entity1SourceVal = this.GetEntityValue(i, listEntity1, entity1Source, originalEntity1, originalEntity2);
                 }
-
-                listEntity1.SetValue(i, entity1SourceVal);
-                listEntity2.SetValue(i, entity2SourceVal);
+                
+                if (i < listEntity2.Length)
+                {
+                    entity2SourceVal = this.GetEntityValue(i, listEntity2, entity2Source, originalEntity2, originalEntity1);
+                }
+                
+                if (i < listEntity1.Length)
+                {
+                    listEntity1.SetValue(i, entity1SourceVal);
+                }
+                
+                if (i < listEntity2.Length)
+                {
+                    listEntity2.SetValue(i, entity2SourceVal);
+                }
             }
 
-            // Set the length based on their swapped length
-            listEntity1.Length = entity2Length;
-            listEntity2.Length = entity1Length;
+            if (entityLengthsAreSwapped)
+            {
+                // Set the length based on their swapped length
+                listEntity1.Length = entity2Length;
+                listEntity2.Length = entity1Length;
+            }
 
             crossoverOffspring.Add(listEntity1);
             crossoverOffspring.Add(listEntity2);
 
             return crossoverOffspring;
+        }
+
+        private object GetEntityValue(int index, ListEntityBase entity, ListEntityBase sourceEntity, ListEntityBase originalEntity, ListEntityBase originalOtherEntity)
+        {
+            object entitySourceVal = sourceEntity.GetValue(index);
+
+            if (((ListEntityBase)this.Algorithm.GeneticEntitySeed).RequiresUniqueElementValues)
+            {
+                while (ContainsValue(entity, entitySourceVal, index - 1))
+                {
+                    int duplicateValueIndex = originalOtherEntity.IndexOf(entitySourceVal);
+                    entitySourceVal = originalEntity.GetValue(duplicateValueIndex);
+                }
+            }
+
+            return entitySourceVal;
+        }
+
+        /// <summary>
+        /// Returns whether the entity contains the specified value.
+        /// </summary>
+        /// <param name="entity">Entity to use.</param>
+        /// <param name="value">Value to search for.</param>
+        /// <param name="maxIndex">The max index to iterate to when searching for the value.</param>
+        /// <returns>True if the value was found; otherwise, false.</returns>
+        private static bool ContainsValue(ListEntityBase entity, object value, int maxIndex)
+        {
+            for (int i = 0; i <= maxIndex; i++)
+            {
+                if (Object.Equals(entity.GetValue(i), value))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 }

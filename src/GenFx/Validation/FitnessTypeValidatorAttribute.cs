@@ -3,7 +3,7 @@
 namespace GenFx.Validation
 {
     /// <summary>
-    /// Indicates how the attributed <see cref="FitnessType"/> configuration property should be validated when set.
+    /// Indicates how the attributed <see cref="FitnessType"/> property should be validated when set.
     /// </summary>
     [AttributeUsage(AttributeTargets.Property)]
     public sealed class FitnessTypeValidatorAttribute : PropertyValidatorAttribute

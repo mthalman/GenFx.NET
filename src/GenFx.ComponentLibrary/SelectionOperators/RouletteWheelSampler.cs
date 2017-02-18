@@ -77,15 +77,18 @@ namespace GenFx.ComponentLibrary.SelectionOperators
         {
             double percentTarget = RandomNumberService.Instance.GetDouble() * 100;
 
+            GeneticEntity entity = null;
+
             foreach (EntityPercentageRange range in percentageRanges)
             {
                 if ((percentTarget >= range.MinValue && percentTarget < range.MaxValue) || 100 == percentTarget && percentTarget == range.MaxValue)
                 {
-                    return range.Entity;
+                    entity = range.Entity;
+                    break;
                 }
             }
-            Debug.Fail("No genetic entities have a range within the target.");
-            return null;
+            
+            return entity;
         }
 
         /// <summary>

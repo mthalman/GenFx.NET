@@ -66,16 +66,18 @@ namespace GenFx.ComponentLibrary.Trees
         {
             Debug.Assert(nodePosition < tree.GetSize(), "nodePosition must be less than the size of the tree.");
             int nodeIndex = 0;
+            TreeNode foundNode = null;
             foreach (TreeNode node in tree.GetPrefixTree())
             {
                 if (nodeIndex == nodePosition)
                 {
-                    return node;
+                    foundNode = node;
+                    break;
                 }
                 nodeIndex++;
             }
 
-            return null;
+            return foundNode;
         }
     }
 }

@@ -138,17 +138,17 @@ namespace GenFx.Validation
     /// type, this class can be used instead.
     /// </remarks>
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
-    public sealed class CustomExternalValidatorAttribute : CustomPropertyValidatorBaseAttribute, IExternalConfigurationPropertyValidatorAttribute
+    public sealed class CustomExternalPropertyValidatorAttribute : CustomPropertyValidatorBaseAttribute, IExternalConfigurationPropertyValidatorAttribute
     {
-        private string targetProperty;
+        private string targetPropertyName;
         private Type targetComponentType;
 
         /// <summary>
         /// Gets the name of the property of the component configuration type to be validated.
         /// </summary>
-        public string TargetProperty
+        public string TargetPropertyName
         {
-            get { return this.targetProperty; }
+            get { return this.targetPropertyName; }
         }
 
         /// <summary>
@@ -160,28 +160,28 @@ namespace GenFx.Validation
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CustomExternalValidatorAttribute"/> class.
+        /// Initializes a new instance of the <see cref="CustomExternalPropertyValidatorAttribute"/> class.
         /// </summary>
         /// <param name="targetComponentType"><see cref="Type"/> of the component containing the property to be validated. This type must implement <see cref="GeneticComponent"/>.</param>
-        /// <param name="targetProperty">Property of the <paramref name="targetComponentType"/> to be validated.</param>
+        /// <param name="targetPropertyName">Property of the <paramref name="targetComponentType"/> to be validated.</param>
         /// <param name="validatorType"><see cref="Type"/> of validator for the configuration property. This
         /// type must derive from <see cref="PropertyValidator"/>.</param>
         /// <exception cref="ArgumentNullException"><paramref name="validatorType"/> is null.</exception>
         /// <exception cref="ArgumentNullException"><paramref name="targetComponentType"/> is null.</exception>
-        /// <exception cref="ArgumentException"><paramref name="targetProperty"/> is null or empty.</exception>
+        /// <exception cref="ArgumentException"><paramref name="targetPropertyName"/> is null or empty.</exception>
         /// <exception cref="ArgumentException"><paramref name="targetComponentType"/> does not implement <see cref="GeneticComponent"/>.</exception>
-        /// <exception cref="ArgumentException"><paramref name="targetProperty"/> does not exist on <paramref name="targetComponentType"/>.</exception>
+        /// <exception cref="ArgumentException"><paramref name="targetPropertyName"/> does not exist on <paramref name="targetComponentType"/>.</exception>
         /// <exception cref="ArgumentException"><paramref name="validatorType"/> does not derive from <see cref="PropertyValidator"/>.</exception>
-        public CustomExternalValidatorAttribute(Type targetComponentType, string targetProperty, Type validatorType)
-            : this(targetComponentType, targetProperty, validatorType, new object[0])
+        public CustomExternalPropertyValidatorAttribute(Type targetComponentType, string targetPropertyName, Type validatorType)
+            : this(targetComponentType, targetPropertyName, validatorType, new object[0])
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CustomExternalValidatorAttribute"/> class.
+        /// Initializes a new instance of the <see cref="CustomExternalPropertyValidatorAttribute"/> class.
         /// </summary>
         /// <param name="targetComponentType"><see cref="Type"/> of the component containing the property to be validated. This type must implement <see cref="GeneticComponent"/>.</param>
-        /// <param name="targetProperty">Property of the <paramref name="targetComponentType"/> to be validated.</param>
+        /// <param name="targetPropertyName">Property of the <paramref name="targetComponentType"/> to be validated.</param>
         /// <param name="validatorType"><see cref="Type"/> of validator for the configuration property. This
         /// type must derive from <see cref="PropertyValidator"/>.</param>
         /// <param name="validatorConstructorArguments">
@@ -189,17 +189,17 @@ namespace GenFx.Validation
         /// </param>
         /// <exception cref="ArgumentNullException"><paramref name="validatorType"/> is null.</exception>
         /// <exception cref="ArgumentNullException"><paramref name="targetComponentType"/> is null.</exception>
-        /// <exception cref="ArgumentException"><paramref name="targetProperty"/> is null or empty.</exception>
+        /// <exception cref="ArgumentException"><paramref name="targetPropertyName"/> is null or empty.</exception>
         /// <exception cref="ArgumentException"><paramref name="targetComponentType"/> does not implement <see cref="GeneticComponent"/>.</exception>
-        /// <exception cref="ArgumentException"><paramref name="targetProperty"/> does not exist on <paramref name="targetComponentType"/>.</exception>
+        /// <exception cref="ArgumentException"><paramref name="targetPropertyName"/> does not exist on <paramref name="targetComponentType"/>.</exception>
         /// <exception cref="ArgumentException"><paramref name="validatorType"/> does not derive from <see cref="PropertyValidator"/>.</exception>
-        public CustomExternalValidatorAttribute(Type targetComponentType, string targetProperty, Type validatorType, params object[] validatorConstructorArguments)
+        public CustomExternalPropertyValidatorAttribute(Type targetComponentType, string targetPropertyName, Type validatorType, params object[] validatorConstructorArguments)
             : base(validatorType, validatorConstructorArguments)
         {
-            ExternalValidatorAttributeHelper.ValidateArguments(targetComponentType, targetProperty);
+            ExternalValidatorAttributeHelper.ValidateArguments(targetComponentType, targetPropertyName);
 
             this.targetComponentType = targetComponentType;
-            this.targetProperty = targetProperty;
+            this.targetPropertyName = targetPropertyName;
         }
     }
 }

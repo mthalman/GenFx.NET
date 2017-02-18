@@ -22,7 +22,7 @@ namespace GenFx.Validation
         /// Gets the name of the property of the component configuration type to be validated.
         /// </summary>
         /// <seealso cref="TargetComponentType"/>
-        string TargetProperty
+        string TargetPropertyName
         {
             get;
         }

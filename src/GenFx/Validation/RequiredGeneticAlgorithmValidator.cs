@@ -13,7 +13,7 @@ namespace GenFx.Validation
         /// </summary>
         /// <param name="requiredGeneticAlgorithmType">The genetic algorithm type that is required by the component in context.</param>
         public RequiredGeneticAlgorithmValidator(Type requiredGeneticAlgorithmType)
-            : base(requiredGeneticAlgorithmType, typeof(FitnessScalingStrategy))
+            : base(requiredGeneticAlgorithmType, typeof(GeneticAlgorithm))
         {
         }
 

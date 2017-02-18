@@ -31,6 +31,19 @@ namespace GenFx.ComponentLibrary.Lists
         }
 
         /// <summary>
+        /// Gets or sets a value indicating whether each of the element values should be unique for the entity.
+        /// </summary>
+        /// <remarks>
+        /// <see cref="BinaryStringEntity"/> does not support the use of unique element values since there are only
+        /// two element values available.
+        /// </remarks>
+        public override bool RequiresUniqueElementValues
+        {
+            get { return false; }
+            set { throw new NotSupportedException(Resources.ErrorMsg_UseUniqueElementValuesNotSupported); }
+        }
+
+        /// <summary>
         /// Gets or sets the length of the binary string.
         /// </summary>
         /// <remarks>

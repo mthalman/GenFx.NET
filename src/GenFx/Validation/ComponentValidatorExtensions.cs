@@ -19,6 +19,11 @@ namespace GenFx.Validation
                 throw new ArgumentNullException(nameof(validator));
             }
 
+            if (component == null)
+            {
+                throw new ArgumentNullException(nameof(component));
+            }
+
             string errorMessage;
             if (!validator.IsValid(component, out errorMessage))
             {

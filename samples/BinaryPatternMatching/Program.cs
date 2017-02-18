@@ -52,7 +52,7 @@ namespace BinaryPatternMatching
                 Terminator = new FitnessTargetTerminator
                 {
                     FitnessTarget = 0,
-                    FitnessValueType = FitnessType.Raw
+                    FitnessType = FitnessType.Raw
                 }
             };
             algorithm.GenerationCreated += Algorithm_GenerationCreated;

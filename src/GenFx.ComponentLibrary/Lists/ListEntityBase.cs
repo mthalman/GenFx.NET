@@ -16,6 +16,7 @@ namespace GenFx.ComponentLibrary.Lists
     /// </remarks>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix")]
     [DataContract]
+    [CustomComponentValidator(typeof(ListStartingLengthValidator))]
     public abstract class ListEntityBase : GeneticEntity, IList
     {
         private const int DefaultMaxLength = 20;
@@ -57,8 +58,12 @@ namespace GenFx.ComponentLibrary.Lists
         /// <summary>
         /// When overriden by a derived class, gets or sets a value indicating whether the list is a fixed size.
         /// </summary>
-        [ConfigurationProperty]
         public abstract bool IsFixedSize { get; set; }
+
+        /// <summary>
+        /// When override by a derived class, gets or sets a value indicating whether each of the element values should be unique for the entity.
+        /// </summary>
+        public abstract bool RequiresUniqueElementValues { get; set; }
 
         /// <summary>
         /// Returns the list string as a <see cref="String"/>.
@@ -112,15 +117,6 @@ namespace GenFx.ComponentLibrary.Lists
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate")]
         protected int GetInitialLength()
         {
-            if (this.MinimumStartingLength > this.MaximumStartingLength)
-            {
-                throw new ValidationException(
-                    StringUtil.GetFormattedString(
-                    Resources.ErrorMsg_MismatchedMinMaxValues,
-                    nameof(this.MinimumStartingLength),
-                    nameof(this.MaximumStartingLength)));
-            }
-
             if (this.MinimumStartingLength == this.MaximumStartingLength)
             {
                 return this.MinimumStartingLength;
@@ -163,7 +159,7 @@ namespace GenFx.ComponentLibrary.Lists
         {
             for (int i = 0; i < this.Length; i++)
             {
-                if ((object)this.GetValue(i) == value)
+                if (Object.Equals(this.GetValue(i), value))
                 {
                     return true;
                 }
@@ -179,9 +175,14 @@ namespace GenFx.ComponentLibrary.Lists
                 throw new ArgumentNullException(nameof(array));
             }
 
+            if (index < 0 || index >= this.Length)
+            {
+                throw new ArgumentOutOfRangeException(nameof(index));
+            }
+
             for (int i = index; i < this.Length; i++)
             {
-                array.SetValue(this.GetValue(i), i);
+                array.SetValue(this.GetValue(i), i - index);
             }
         }
 
@@ -206,7 +207,7 @@ namespace GenFx.ComponentLibrary.Lists
         {
             for (int i = 0; i < this.Length; i++)
             {
-                if (this.GetValue(i) == value)
+                if (Object.Equals(this.GetValue(i), value))
                 {
                     return i;
                 }
@@ -252,7 +253,13 @@ namespace GenFx.ComponentLibrary.Lists
         /// <param name="value">Value to be removed.</param>
         public void Remove(object value)
         {
-            ((IList)this).RemoveAt(((IList)this).IndexOf(value));
+            int index = ((IList)this).IndexOf(value);
+            if (index < 0)
+            {
+                return;
+            }
+
+            ((IList)this).RemoveAt(index);
         }
         
         /// <summary>
@@ -261,6 +268,11 @@ namespace GenFx.ComponentLibrary.Lists
         /// <param name="index">Index position of the value to be removed.</param>
         public void RemoveAt(int index)
         {
+            if (index >= this.Length)
+            {
+                throw new ArgumentOutOfRangeException(nameof(index));
+            }
+
             // Move all the items one position down and remove the last item by reducing the length
             for (int i = index; i < this.Length - 1; i++)
             {

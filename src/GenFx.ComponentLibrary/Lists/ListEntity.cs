@@ -12,7 +12,7 @@ namespace GenFx.ComponentLibrary.Lists
     /// <typeparam name="TItem">Type of the values contained in the list.</typeparam>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix")]
     [DataContract]
-    public class ListEntity<TItem> : ListEntityBase<TItem>
+    public abstract class ListEntity<TItem> : ListEntityBase<TItem>
     {
         [DataMember]
         private bool isFixedSize;

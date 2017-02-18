@@ -6,7 +6,7 @@ namespace GenFx.ComponentLibrary.Lists
     /// Validates the crossover point-related properties of <see cref="MultiPointCrossoverOperator"/>.
     /// </summary>
     /// <remarks>
-    /// Ensures that there can be no more than two crossover points if <see cref="MultiPointCrossoverOperator.UsePartiallyMatchedCrossover"/> is true.
+    /// Ensures that there can be no more than two crossover points if <see cref="ListEntityBase.RequiresUniqueElementValues"/> is true.
     /// </remarks>
     internal class MultiPointCrossoverOperatorCrossoverPointValidator : ComponentValidator
     {
@@ -22,7 +22,8 @@ namespace GenFx.ComponentLibrary.Lists
 
             MultiPointCrossoverOperator crossoverOp = (MultiPointCrossoverOperator)component;
 
-            if (crossoverOp.UsePartiallyMatchedCrossover && crossoverOp.CrossoverPointCount > 2)
+            if (((ListEntityBase)crossoverOp.Algorithm.GeneticEntitySeed).RequiresUniqueElementValues &&
+                crossoverOp.CrossoverPointCount > 2)
             {
                 errorMessage = StringUtil.GetFormattedString(Resources.ErrorMsg_MultiPointCrossoverOperationCrossoverPointValidator_ValidationError);
             }

@@ -15,7 +15,7 @@ namespace GenFx.ComponentLibrary.Terminators
         private const FitnessType DefaultFitnessValueType = FitnessType.Scaled;
 
         [DataMember]
-        private FitnessType fitnessValueType = DefaultFitnessValueType;
+        private FitnessType fitnessType = DefaultFitnessValueType;
 
         [DataMember]
         private double fitnessTarget;
@@ -32,15 +32,15 @@ namespace GenFx.ComponentLibrary.Terminators
         }
 
         /// <summary>
-        /// Gets or sets the <see cref="FitnessType"/> to base termination on.
+        /// Gets or sets the <see cref="GenFx.FitnessType"/> to base termination on.
         /// </summary>
         /// <exception cref="ValidationException">Value is not valid.</exception>
         [ConfigurationProperty]
         [FitnessTypeValidator]
-        public FitnessType FitnessValueType
+        public FitnessType FitnessType
         {
-            get { return this.fitnessValueType; }
-            set { this.SetProperty(ref this.fitnessValueType, value); }
+            get { return this.fitnessType; }
+            set { this.SetProperty(ref this.fitnessType, value); }
         }
 
         /// <summary>
@@ -60,7 +60,7 @@ namespace GenFx.ComponentLibrary.Terminators
         /// <returns>The fitness value to base termination on.</returns>
         private double GetFitnessValue(GeneticEntity entity)
         {
-            if (this.FitnessValueType == FitnessType.Raw)
+            if (this.FitnessType == FitnessType.Raw)
             {
                 return entity.RawFitnessValue;
             }
