@@ -5,19 +5,19 @@ using System.Runtime.Serialization;
 namespace TestCommon.Mocks
 {
     [DataContract]
-    public class MockStatistic : Statistic
+    public class MockMetric : Metric
     {
-        public bool StatisticEvaluated;
+        public bool MetricEvaluated;
         
         public override object GetResultValue(Population population)
         {
-            this.StatisticEvaluated = true;
+            this.MetricEvaluated = true;
             return "foo";
         }
     }
 
     [DataContract]
-    public class MockStatistic2 : Statistic
+    public class MockMetric2 : Metric
     {
         public override object GetResultValue(Population population)
         {

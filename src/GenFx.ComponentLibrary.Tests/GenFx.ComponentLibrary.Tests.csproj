@@ -55,9 +55,9 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="BestMaxEntityTest.cs" />
-    <Compile Include="BestMaxStatisticTest.cs" />
-    <Compile Include="BestMinStatisticTest.cs" />
+    <Compile Include="BestMaximumFitnessEntityTest.cs" />
+    <Compile Include="BestMaximumFitnessTest.cs" />
+    <Compile Include="BestMinimumFitnessTest.cs" />
     <Compile Include="BinaryStringEntityTest.cs" />
     <Compile Include="BinaryTreeNodeTest.cs" />
     <Compile Include="BoltzmannSelectionOperatorTest.cs" />
@@ -75,10 +75,10 @@
     <Compile Include="ListEntityTests.cs" />
     <Compile Include="ListShiftMutationOperatorTest.cs" />
     <Compile Include="ListStartingLengthValidatorTest.cs" />
-    <Compile Include="MaxStatisticTest.cs" />
-    <Compile Include="MeanStatisticTest.cs" />
+    <Compile Include="MaximumFitnessTest.cs" />
+    <Compile Include="MeanFitnessTest.cs" />
     <Compile Include="MeanTreeSizeTest.cs" />
-    <Compile Include="MinStatisticTest.cs" />
+    <Compile Include="MinimumFitnessTest.cs" />
     <Compile Include="MultiDemeGeneticAlgorithmTest.cs" />
     <Compile Include="MultiPointCrossoverOperatorCrossoverPointValidatorTest.cs" />
     <Compile Include="MultiPointCrossoverOperatorTest.cs" />
@@ -91,8 +91,8 @@
     <Compile Include="SimpleGeneticAlgorithmTest.cs" />
     <Compile Include="SingleNodeTreeCrossoverOperatorTest.cs" />
     <Compile Include="SinglePointCrossoverOperatorTest.cs" />
-    <Compile Include="StandardDeviationFitnessStatisticTest.cs" />
-    <Compile Include="StatisticLoggerTest.cs" />
+    <Compile Include="FitnessStandardDeviationTest.cs" />
+    <Compile Include="MetricLoggerTest.cs" />
     <Compile Include="SteadyStateGeneticAlgorithmTest.cs" />
     <Compile Include="TimeDurationTerminatorTest.cs" />
     <Compile Include="TreeEntityBaseTest.cs" />

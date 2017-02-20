@@ -61,7 +61,7 @@ namespace GenFx.Tests
                 SelectionOperator = new MockSelectionOperator(),
                 Terminator = new MockTerminator()
             };
-            algorithm.Statistics.Add(new MockStatistic());
+            algorithm.Metrics.Add(new MockMetric());
             await TestInitializeAsync(algorithm);
         }
 
@@ -83,7 +83,7 @@ namespace GenFx.Tests
                 SelectionOperator = new MockSelectionOperator(),
                 Terminator = new MockTerminator()
             };
-            algorithm.Statistics.Add(new MockStatistic());
+            algorithm.Metrics.Add(new MockMetric());
             await TestInitializeAsync(algorithm);
         }
 
@@ -105,7 +105,7 @@ namespace GenFx.Tests
                 SelectionOperator = new MockSelectionOperator(),
                 Terminator = new MockTerminator()
             };
-            algorithm.Statistics.Add(new MockStatistic());
+            algorithm.Metrics.Add(new MockMetric());
             await TestInitializeAsync(algorithm, true);
         }
 
@@ -127,7 +127,7 @@ namespace GenFx.Tests
                 SelectionOperator = new MockSelectionOperator(),
                 Terminator = new MockTerminator()
             };
-            algorithm.Statistics.Add(new MockStatistic());
+            algorithm.Metrics.Add(new MockMetric());
             await TestInitializeAsync(algorithm);
         }
 
@@ -149,7 +149,7 @@ namespace GenFx.Tests
                 SelectionOperator = new MockSelectionOperator(),
                 Terminator = new MockTerminator()
             };
-            algorithm.Statistics.Add(new MockStatistic());
+            algorithm.Metrics.Add(new MockMetric());
             await TestInitializeAsync(algorithm, true);
         }
 
@@ -171,7 +171,7 @@ namespace GenFx.Tests
                 SelectionOperator = new MockSelectionOperator(),
                 Terminator = new MockTerminator()
             };
-            algorithm.Statistics.Add(new MockStatistic());
+            algorithm.Metrics.Add(new MockMetric());
             await TestInitializeAsync(algorithm);
         }
 
@@ -193,7 +193,7 @@ namespace GenFx.Tests
                 SelectionOperator = new MockSelectionOperator(),
                 Terminator = new MockTerminator()
             };
-            algorithm.Statistics.Add(new MockStatistic());
+            algorithm.Metrics.Add(new MockMetric());
             await TestInitializeAsync(algorithm, true);
         }
 
@@ -215,7 +215,7 @@ namespace GenFx.Tests
                 //SelectionOperator = new MockSelectionOperator(),
                 Terminator = new MockTerminator()
             };
-            algorithm.Statistics.Add(new MockStatistic());
+            algorithm.Metrics.Add(new MockMetric());
 
             await TestInitializeAsync(algorithm, true);
         }
@@ -224,7 +224,7 @@ namespace GenFx.Tests
         /// Tests that the Initialize method works correctly.
         /// </summary>
         [TestMethod]
-        public async Task GeneticAlgorithm_Initialize_NoStatisticType_Async()
+        public async Task GeneticAlgorithm_Initialize_NoMetricType_Async()
         {
             MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm
             {
@@ -238,7 +238,7 @@ namespace GenFx.Tests
                 SelectionOperator = new MockSelectionOperator(),
                 Terminator = new MockTerminator()
             };
-            //algorithm.Statistics.Add(new MockStatistic());
+            //algorithm.Metrics.Add(new MockMetric());
 
             await TestInitializeAsync(algorithm);
         }
@@ -260,7 +260,7 @@ namespace GenFx.Tests
                 PopulationSeed = new MockPopulation(),
                 SelectionOperator = new MockSelectionOperator(),
             };
-            algorithm.Statistics.Add(new MockStatistic());
+            algorithm.Metrics.Add(new MockMetric());
 
             await TestInitializeAsync(algorithm);
         }
@@ -841,17 +841,17 @@ namespace GenFx.Tests
         /// Tests that the ValidateRequiredComponents method works correctly.
         /// </summary>
         [TestMethod]
-        public void GeneticAlgorithm_ValidateConfiguration_ValidStatisticType()
+        public void GeneticAlgorithm_ValidateConfiguration_ValidMetricType()
         {
             MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm
             {
                 SelectionOperator = new MockSelectionOperator(),
                 FitnessEvaluator = new MockFitnessEvaluator(),
                 GeneticEntitySeed = new MockEntity(),
-                PopulationSeed = new StatisticDependentPopulation(),
+                PopulationSeed = new MetricDependentPopulation(),
             };
-            algorithm.Statistics.Add(new MockStatistic());
-            algorithm.Statistics.Add(new MockStatistic2());
+            algorithm.Metrics.Add(new MockMetric());
+            algorithm.Metrics.Add(new MockMetric2());
 
             this.ValidateComponent(algorithm.PopulationSeed, algorithm, false);
         }
@@ -860,16 +860,16 @@ namespace GenFx.Tests
         /// Tests that an exception is throw when an required configurable type has not been set on the algorithm.
         /// </summary>
         [TestMethod]
-        public void GeneticAlgorithm_ValidateConfiguration_InvalidStatisticType()
+        public void GeneticAlgorithm_ValidateConfiguration_InvalidMetricType()
         {
             MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm
             {
                 SelectionOperator = new MockSelectionOperator(),
                 FitnessEvaluator = new MockFitnessEvaluator(),
                 GeneticEntitySeed = new MockEntity(),
-                PopulationSeed = new StatisticDependentPopulation2(),
+                PopulationSeed = new MetricDependentPopulation2(),
             };
-            algorithm.Statistics.Add(new MockStatistic());
+            algorithm.Metrics.Add(new MockMetric());
 
             this.ValidateComponent(algorithm.PopulationSeed, algorithm, true);
         }
@@ -1028,8 +1028,8 @@ namespace GenFx.Tests
                 Terminator = new MockTerminator()
             };
 
-            algorithm.Statistics.Add(new MockStatistic());
-            algorithm.Statistics.Add(new MockStatistic2());
+            algorithm.Metrics.Add(new MockMetric());
+            algorithm.Metrics.Add(new MockMetric2());
 
             algorithm.Plugins.Add(new MockPlugin());
             algorithm.Plugins.Add(new MockPlugin2());
@@ -1048,8 +1048,8 @@ namespace GenFx.Tests
             Assert.IsInstanceOfType(result.SelectionOperator, typeof(MockSelectionOperator));
             Assert.IsInstanceOfType(result.Terminator, typeof(MockTerminator));
 
-            Assert.IsInstanceOfType(result.Statistics[0], typeof(MockStatistic));
-            Assert.IsInstanceOfType(result.Statistics[1], typeof(MockStatistic2));
+            Assert.IsInstanceOfType(result.Metrics[0], typeof(MockMetric));
+            Assert.IsInstanceOfType(result.Metrics[1], typeof(MockMetric2));
 
             Assert.IsInstanceOfType(result.Plugins[0], typeof(MockPlugin));
             Assert.IsInstanceOfType(result.Plugins[1], typeof(MockPlugin2));
@@ -1119,7 +1119,7 @@ namespace GenFx.Tests
             };
 
             algorithm.Plugins.Add(new CustomPlugin());
-            algorithm.Statistics.Add(new CustomStatistic());
+            algorithm.Metrics.Add(new CustomMetric());
 
             // Ensure the algorithm can be initialized without error
             await algorithm.InitializeAsync();
@@ -1189,6 +1189,74 @@ namespace GenFx.Tests
             Assert.IsTrue(plugin.OnAlgorithmCompletedWasCalled);
         }
 
+        /// <summary>
+        /// Tests that metrics are sorted according to dependencies.
+        /// </summary>
+        [TestMethod]
+        public async Task GeneticAlgorithm_InitializeAsync_SortMetrics()
+        {
+            MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm
+            {
+                SelectionOperator = new MockSelectionOperator(),
+                FitnessEvaluator = new MockFitnessEvaluator(),
+                PopulationSeed = new MockPopulation(),
+                GeneticEntitySeed = new MockEntity()
+            };
+
+            Metric1 metric1;
+            Metric2 metric2;
+            Metric3 metric3;
+            Metric4 metric4;
+            Metric5 metric5;
+
+            algorithm.Metrics.AddRange(new Metric[]
+            {
+                metric1 = new Metric1(),
+                metric2 = new Metric2(),
+                metric3 = new Metric3(),
+                metric4 = new Metric4(),
+                metric5 = new Metric5(),
+            });
+
+            await algorithm.InitializeAsync();
+
+            PrivateObject accessor = new PrivateObject(algorithm, new PrivateType(typeof(GeneticAlgorithm)));
+            List<Metric> metrics = (List<Metric>)accessor.GetField("sortedMetrics");
+
+            CollectionAssert.AreEqual(new Metric[]
+            {
+                metric5,
+                metric3,
+                metric2,
+                metric4,
+                metric1
+            }, metrics);
+        }
+
+        /// <summary>
+        /// Tests that an exception is thrown when a cycle is detected while sorting metrics.
+        /// </summary>
+        [TestMethod]
+        public async Task GeneticAlgorithm_InitializeAsync_SortMetrics_Cycle()
+        {
+            MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm
+            {
+                SelectionOperator = new MockSelectionOperator(),
+                FitnessEvaluator = new MockFitnessEvaluator(),
+                PopulationSeed = new MockPopulation(),
+                GeneticEntitySeed = new MockEntity()
+            };
+
+            algorithm.Metrics.AddRange(new Metric[]
+            {
+                new CycleMetric1(),
+                new CycleMetric2(),
+                new CycleMetric3(),
+            });
+
+            await AssertEx.ThrowsAsync<InvalidOperationException>(() => algorithm.InitializeAsync());
+        }
+
         private async Task TestExternalConfigurationPropertyValidation(GeneticAlgorithm algorithm, ICustomComponent component)
         {
             component.MyProperty = -1;
@@ -1236,8 +1304,8 @@ namespace GenFx.Tests
             MockEntity entity = (MockEntity)algorithm.Environment.Populations[0].Entities[0];
             double entityId = Double.Parse(entity.Identifier);
             Assert.AreEqual(entityId, entity.RawFitnessValue, "Entity fitness was not evaluated.");
-            if (algorithm.Statistics.Count > 0)
-                Assert.IsTrue(((MockStatistic)algorithm.Statistics.OfType<MockStatistic>().FirstOrDefault()).StatisticEvaluated, "Statistics were not evaluated.");
+            if (algorithm.Metrics.Count > 0)
+                Assert.IsTrue(((MockMetric)algorithm.Metrics.OfType<MockMetric>().FirstOrDefault()).MetricEvaluated, "Metrics were not evaluated.");
             Assert.IsTrue(eventCalled, "GenerationCreated event was not raised.");
             return algorithm;
         }
@@ -1273,7 +1341,7 @@ namespace GenFx.Tests
             algorithm.FitnessEvaluator = new MockFitnessEvaluator();
             algorithm.FitnessScalingStrategy = new MockFitnessScalingStrategy();
             algorithm.GeneticEntitySeed = new MockEntity();
-            algorithm.Statistics.Add(new MockStatistic());
+            algorithm.Metrics.Add(new MockMetric());
             algorithm.Terminator = new TestTerminator();
             return algorithm;
         }
@@ -1438,13 +1506,13 @@ namespace GenFx.Tests
             }
         }
 
-        [RequiredStatistic(typeof(MockStatistic))]
-        private class StatisticDependentPopulation : Population
+        [RequiredMetric(typeof(MockMetric))]
+        private class MetricDependentPopulation : Population
         {
         }
 
-        [RequiredStatistic(typeof(MockStatistic2))]
-        private class StatisticDependentPopulation2 : Population
+        [RequiredMetric(typeof(MockMetric2))]
+        private class MetricDependentPopulation2 : Population
         {
         }
 
@@ -1657,7 +1725,7 @@ namespace GenFx.Tests
             public int MyProperty { get; set; }
         }
 
-        [IntegerExternalValidator(typeof(CustomStatistic), "MyProperty", MinValue = 0)]
+        [IntegerExternalValidator(typeof(CustomMetric), "MyProperty", MinValue = 0)]
         private class CustomSelectionOperator : SelectionOperator, ICustomComponent
         {
             public int MyProperty { get; set; }
@@ -1669,7 +1737,7 @@ namespace GenFx.Tests
         }
 
         [IntegerExternalValidator(typeof(CustomTerminator), "MyProperty", MinValue = 0)]
-        private class CustomStatistic : Statistic, ICustomComponent
+        private class CustomMetric : Metric, ICustomComponent
         {
             public int MyProperty { get; set; }
 
@@ -1698,6 +1766,77 @@ namespace GenFx.Tests
             {
                 this.OnAlgorithmCompletedWasCalled = true;
                 base.OnAlgorithmCompleted();
+            }
+        }
+
+        [RequiredMetric(typeof(Metric2))]
+        private class Metric1 : Metric
+        {
+            public override object GetResultValue(Population population)
+            {
+                return 0;
+            }
+        }
+
+        [RequiredMetric(typeof(Metric3))]
+        private class Metric2 : Metric
+        {
+            public override object GetResultValue(Population population)
+            {
+                return 0;
+            }
+        }
+
+        [RequiredMetric(typeof(Metric5))]
+        private class Metric3 : Metric
+        {
+            public override object GetResultValue(Population population)
+            {
+                return 0;
+            }
+        }
+
+        [RequiredMetric(typeof(Metric3))]
+        private class Metric4 : Metric
+        {
+            public override object GetResultValue(Population population)
+            {
+                return 0;
+            }
+        }
+
+        private class Metric5 : Metric
+        {
+            public override object GetResultValue(Population population)
+            {
+                return 0;
+            }
+        }
+
+        [RequiredMetric(typeof(CycleMetric2))]
+        private class CycleMetric1 : Metric
+        {
+            public override object GetResultValue(Population population)
+            {
+                return 0;
+            }
+        }
+
+        [RequiredMetric(typeof(CycleMetric3))]
+        private class CycleMetric2 : Metric
+        {
+            public override object GetResultValue(Population population)
+            {
+                return 0;
+            }
+        }
+
+        [RequiredMetric(typeof(CycleMetric1))]
+        private class CycleMetric3: Metric
+        {
+            public override object GetResultValue(Population population)
+            {
+                return 0;
             }
         }
     }

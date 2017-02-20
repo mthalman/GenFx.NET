@@ -24,7 +24,7 @@ namespace GenFx.Tests
 
             if (num1 == num2)
             {
-                // Try again for good measure.
+                // Try again for good metric.
                 num2 = RandomNumberService.Instance.GetRandomValue(100);
             }
 

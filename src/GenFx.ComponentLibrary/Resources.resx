@@ -183,15 +183,15 @@
   <data name="ErrorMsg_VariableLengthListEntity_RemoveBit_OutOfRange" xml:space="preserve">
     <value>The index must be greater or equal to zero and less than the length.</value>
   </data>
-  <data name="StatisticLogger_AlgorithmCompleted" xml:space="preserve">
+  <data name="MetricLogger_AlgorithmCompleted" xml:space="preserve">
     <value>Algorithm completed.</value>
   </data>
-  <data name="StatisticLogger_AlgorithmStarted" xml:space="preserve">
+  <data name="MetricLogger_AlgorithmStarted" xml:space="preserve">
     <value>Algorithm started.</value>
   </data>
-  <data name="StatisticLogger_StatTrace" xml:space="preserve">
-    <value>Statistic Name: {0}
-Statistic Value: {1}
+  <data name="MetricLogger_StatTrace" xml:space="preserve">
+    <value>Metric Name: {0}
+Metric Value: {1}
 Population Index: {2}
 Generation Index: {3}</value>
   </data>

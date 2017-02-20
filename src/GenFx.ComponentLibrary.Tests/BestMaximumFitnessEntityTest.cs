@@ -1,27 +1,24 @@
-﻿using GenFx;
+﻿using GenFx.ComponentLibrary.Metrics;
 using GenFx.ComponentLibrary.Populations;
-using GenFx.ComponentLibrary.Statistics;
-using TestCommon.Helpers;
-using TestCommon.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
-using System.Text;
+using TestCommon.Helpers;
+using TestCommon.Mocks;
 
 namespace GenFx.ComponentLibrary.Tests
 {
     /// <summary>
-    ///This is a test class for GenFx.ComponentLibrary.Statistics.BestMaxEntity and is intended
-    ///to contain all GenFx.ComponentLibrary.Statistics.BestMaxEntity Unit Tests
+    /// Contains unit tests for the <see cref="BestMaximumFitnessEntity"/> class.
     ///</summary>
-    [TestClass()]
-    public class BestMaxEntityTest
+    [TestClass]
+    public class BestMaximumFitnessEntityTest
     {
         /// <summary>
-        /// Tests that an exception will be thrown when a null population is passed to BestMaxEntity.GetResultValue.
+        /// Tests that an exception will be thrown when a null population is passed to <see cref="BestMaximumFitnessEntity.GetResultValue"/>.
         /// </summary>
-        [TestMethod()]
-        public void GetResultValue_NullPopulation()
+        [TestMethod]
+        public void BestMaximumFitnessEntityGetResultValue_NullPopulation()
         {
             GeneticAlgorithm algorithm = new MockGeneticAlgorithm
             {
@@ -30,18 +27,18 @@ namespace GenFx.ComponentLibrary.Tests
                 PopulationSeed = new MockPopulation(),
                 FitnessEvaluator = new MockFitnessEvaluator(),
             };
-            algorithm.Statistics.Add(new BestMaximumFitnessEntityStatistic());
-            BestMaximumFitnessEntityStatistic target = new BestMaximumFitnessEntityStatistic();
+            algorithm.Metrics.Add(new BestMaximumFitnessEntity());
+            BestMaximumFitnessEntity target = new BestMaximumFitnessEntity();
             target.Initialize(algorithm);
 
             AssertEx.Throws<ArgumentNullException>(() => target.GetResultValue(null));
         }
 
         /// <summary>
-        /// Tests that the correct value is returned from BestMaxEntity.GetResultValue.
+        /// Tests that the correct value is returned from <see cref="BestMaximumFitnessEntity.GetResultValue"/>.
         /// </summary>
-        [TestMethod()]
-        public void GetResultValue()
+        [TestMethod]
+        public void BestMaximumFitnessEntity_GetResultValue()
         {
             GeneticAlgorithm algorithm = new MockGeneticAlgorithm
             {
@@ -50,9 +47,9 @@ namespace GenFx.ComponentLibrary.Tests
                 GeneticEntitySeed = new MockEntity(),
                 PopulationSeed = new SimplePopulation(),
             };
-            algorithm.Statistics.Add(new BestMaximumFitnessEntityStatistic());
+            algorithm.Metrics.Add(new BestMaximumFitnessEntity());
 
-            BestMaximumFitnessEntityStatistic target = new BestMaximumFitnessEntityStatistic();
+            BestMaximumFitnessEntity target = new BestMaximumFitnessEntity();
             target.Initialize(algorithm);
 
             SimplePopulation population1 = new SimplePopulation()
@@ -80,21 +77,21 @@ namespace GenFx.ComponentLibrary.Tests
         /// Tests that the component can be serialized and deserialized.
         /// </summary>
         [TestMethod]
-        public void BestMaximumFitnessEntityStatistic_Serialization()
+        public void BestMaximumFitnessEntity_Serialization()
         {
-            BestMaximumFitnessEntityStatistic stat = new BestMaximumFitnessEntityStatistic();
-            PrivateObject privObj = new PrivateObject(stat);
+            BestMaximumFitnessEntity metric = new BestMaximumFitnessEntity();
+            PrivateObject privObj = new PrivateObject(metric);
             Dictionary<int, GeneticEntity> bestEntities = (Dictionary<int, GeneticEntity>)privObj.GetField("bestEntities");
             bestEntities.Add(10, new MockEntity());
 
-            BestMaximumFitnessEntityStatistic result = (BestMaximumFitnessEntityStatistic)SerializationHelper.TestSerialization(stat, new Type[] { typeof(MockEntity) });
+            BestMaximumFitnessEntity result = (BestMaximumFitnessEntity)SerializationHelper.TestSerialization(metric, new Type[] { typeof(MockEntity) });
 
             PrivateObject resultPrivObj = new PrivateObject(result);
             Dictionary<int, GeneticEntity> resultBestEntities = (Dictionary<int, GeneticEntity>)resultPrivObj.GetField("bestEntities");
             Assert.IsInstanceOfType(resultBestEntities[10], typeof(MockEntity));
         }
         
-        private static void VerifyGetResultValue(int multiplier, BestMaximumFitnessEntityStatistic stat, SimplePopulation population, GeneticAlgorithm algorithm, string expectedReturnVal)
+        private static void VerifyGetResultValue(int multiplier, BestMaximumFitnessEntity metric, SimplePopulation population, GeneticAlgorithm algorithm, string expectedReturnVal)
         {
             for (int i = 0; i < 5; i++)
             {
@@ -114,7 +111,7 @@ namespace GenFx.ComponentLibrary.Tests
                 population.Entities.Add(entity);
             }
 
-            object representation = stat.GetResultValue(population);
+            object representation = metric.GetResultValue(population);
 
             Assert.AreEqual(expectedReturnVal, representation.ToString());
         }

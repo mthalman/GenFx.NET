@@ -48,7 +48,7 @@ namespace GenFx.ComponentLibrary.Scaling
 
             foreach (GeneticEntity geneticEntity in population.Entities)
             {
-                double scaledFitness = this.GetSigmaScaleValue(geneticEntity, population.RawMean, population.RawStandardDeviation);
+                double scaledFitness = this.GetSigmaScaleValue(geneticEntity, population.RawMean.Value, population.RawStandardDeviation.Value);
                 geneticEntity.ScaledFitnessValue = scaledFitness;
             }
         }

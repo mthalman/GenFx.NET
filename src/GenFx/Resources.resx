@@ -156,8 +156,8 @@
   <data name="SelectionCommonName" xml:space="preserve">
     <value>Selection Operator</value>
   </data>
-  <data name="StatisticCommonName" xml:space="preserve">
-    <value>Statistic</value>
+  <data name="MetricCommonName" xml:space="preserve">
+    <value>Metric</value>
   </data>
   <data name="TerminatorCommonName" xml:space="preserve">
     <value>Terminator</value>
@@ -248,5 +248,8 @@ Actual type: '{2}'</value>
   </data>
   <data name="ErrorMsg_InvalidBooleanProperty" xml:space="preserve">
     <value>Property '{0}' must be equal to '{1}'.</value>
+  </data>
+  <data name="ErrorMsg_CycleInMetricDependencyGraph" xml:space="preserve">
+    <value>A cycle was detected in the dependency graph associated with metric type '{0}'.  This occurs when metrics depend upon each other either directly or indirectly.  Remove this dependency.</value>
   </data>
 </root>

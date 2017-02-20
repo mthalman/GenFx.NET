@@ -87,7 +87,7 @@
     <Compile Include="RequiredGeneticAlgorithmAttributeTest.cs" />
     <Compile Include="RequiredGeneticAlgorithmValidatorTest.cs" />
     <Compile Include="RequiredValidatorTest.cs" />
-    <Compile Include="StatisticResultTest.cs" />
+    <Compile Include="MetricResultTest.cs" />
     <Compile Include="StringExtensions.cs" />
     <Compile Include="CrossoverOperatorTest.cs" />
     <Compile Include="ElitismStrategyTest.cs" />
@@ -105,7 +105,7 @@
     <Compile Include="RequiredComponentTypeAttributeTest.cs" />
     <Compile Include="SelectionOperatorTest.cs" />
     <Compile Include="SettingValidatorAttributeTest.cs" />
-    <Compile Include="StatisticTest.cs" />
+    <Compile Include="MetricTest.cs" />
     <Compile Include="StringUtilTest.cs" />
     <Compile Include="TerminatorTest.cs" />
     <Compile Include="ValidationExceptionTest.cs" />
