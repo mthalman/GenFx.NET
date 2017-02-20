@@ -13,7 +13,7 @@ List of components:
 * [Elitism Strategy](#elitism-strategy)
 * [Fitness Scaling Strategy](#fitness-scaling-strategy)
 * [Terminator](#terminator)
-* [Statistic](#statistic)
+* [Metric](#metric)
 * [Plugin](#plugin)
 
 ## Genetic Algorithm
@@ -65,8 +65,8 @@ A population is simply a collection of genetic entities.  A genetic algorithm ca
  ## Terminator
  A terminator is simply a way to determine when the genetic algorithm should finish. A terminator is optional when executing a GA in GenFx but the lack of one means that the algorithm will execute indefinitely.
 
- ## Statistic
- A statistic is a component which tracks data about the state of the algorithm during execution.  Statistics provide a good way to determine how well a genetic algorithm is running and useful for troubleshooting and analysis.
+ ## Metric
+ A metric is a component which tracks data about the state of the algorithm's populations during execution.  Metrics provide a good way to determine how well a genetic algorithm is running and useful for troubleshooting and analysis.
 
  ## Plugin
  A plugin is simply a component which provides custom behavior in response to events within the genetic algorithm lifecycle.  For example, a plugin could store all entity state for each generation in a database so that it can be analyzed later.

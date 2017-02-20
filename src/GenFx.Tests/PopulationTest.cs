@@ -52,20 +52,14 @@ namespace GenFx.Tests
         /// Tests that the EvaluateFitness method works correctly.
         /// </summary>
         [TestMethod]
-        public async Task Population_EvaluateFitness_NoScaling_Async()
+        public async Task Population_EvaluateFitness()
         {
-            await TestEvaluateFitnessAsync(false);
+            await TestEvaluateFitnessAsync(false, false);
+            await TestEvaluateFitnessAsync(false, true);
+            await TestEvaluateFitnessAsync(true, false);
+            await TestEvaluateFitnessAsync(true, true);
         }
-
-        /// <summary>
-        /// Tests that the EvaluateFitness method works correctly.
-        /// </summary>
-        [TestMethod]
-        public async Task Population_EvaluateFitness_Scaling_Async()
-        {
-            await TestEvaluateFitnessAsync(true);
-        }
-
+        
         /// <summary>
         /// Tests that the Initialize method works correctly.
         /// </summary>
@@ -131,14 +125,10 @@ namespace GenFx.Tests
             population.Entities.Add(new MockEntity());
 
             PrivateObject privObj = new PrivateObject(population, new PrivateType(typeof(Population)));
-            privObj.SetField("rawMean", 1);
-            privObj.SetField("rawStandardDeviation", 2);
-            privObj.SetField("rawMax", 3);
-            privObj.SetField("rawMin", 4);
-            privObj.SetField("scaledMean", 5);
-            privObj.SetField("scaledStandardDeviation", 6);
-            privObj.SetField("scaledMax", 7);
-            privObj.SetField("scaledMin", 8);
+            privObj.SetField("rawMean", (double)1);
+            privObj.SetField("rawStandardDeviation", (double)2);
+            privObj.SetField("rawMax", (double)3);
+            privObj.SetField("rawMin", (double)4);
 
             MockPopulation result = (MockPopulation)SerializationHelper.TestSerialization(population, new Type[]
             {
@@ -155,13 +145,9 @@ namespace GenFx.Tests
             Assert.AreEqual((double)2, resultPrivObj.GetField("rawStandardDeviation"));
             Assert.AreEqual((double)3, resultPrivObj.GetField("rawMax"));
             Assert.AreEqual((double)4, resultPrivObj.GetField("rawMin"));
-            Assert.AreEqual((double)5, resultPrivObj.GetField("scaledMean"));
-            Assert.AreEqual((double)6, resultPrivObj.GetField("scaledStandardDeviation"));
-            Assert.AreEqual((double)7, resultPrivObj.GetField("scaledMax"));
-            Assert.AreEqual((double)8, resultPrivObj.GetField("scaledMin"));
         }
 
-        private static async Task TestEvaluateFitnessAsync(bool useScaling)
+        private static async Task TestEvaluateFitnessAsync(bool useScaling, bool useMetric)
         {
             GeneticAlgorithm algorithm = new MockGeneticAlgorithm
             {
@@ -174,6 +160,11 @@ namespace GenFx.Tests
             if (useScaling)
             {
                 algorithm.FitnessScalingStrategy = new FakeFitnessScalingStrategy();
+            }
+
+            if (useMetric)
+            {
+                algorithm.Metrics.Add(new MockMetric());
             }
 
             algorithm.FitnessEvaluator = new MockFitnessEvaluator();
@@ -212,13 +203,19 @@ namespace GenFx.Tests
                 Assert.AreEqual(entity2.RawFitnessValue, entity2.ScaledFitnessValue, "ScaledFitnessValue not set correctly.");
             }
 
-            Assert.AreEqual(entity2.RawFitnessValue, population.RawMax, "RawMax not set correctly.");
-            Assert.AreEqual(entity1.RawFitnessValue, population.RawMin, "RawMax not set correctly.");
-            Assert.AreEqual((entity1.RawFitnessValue + entity2.RawFitnessValue) / 2, population.RawMean, "RawMean not set correctly.");
-
-            Assert.AreEqual(entity2.ScaledFitnessValue, population.ScaledMax, "ScaledMax not set correctly.");
-            Assert.AreEqual(entity1.ScaledFitnessValue, population.ScaledMin, "ScaledMin not set correctly.");
-            Assert.AreEqual((entity1.ScaledFitnessValue + entity2.ScaledFitnessValue) / 2, population.ScaledMean, "ScaledMean not set correctly.");
+            if (!useMetric && !useScaling)
+            {
+                Assert.IsFalse(population.RawMax.HasValue, "RawMax not set correctly.");
+                Assert.IsFalse(population.RawMin.HasValue, "RawMax not set correctly.");
+                Assert.IsFalse(population.RawMean.HasValue, "RawMean not set correctly.");
+                Assert.IsFalse(population.RawStandardDeviation.HasValue, "RawStandardDeviation not set correctly.");
+            }
+            else
+            {
+                Assert.AreEqual(entity2.RawFitnessValue, population.RawMax, "RawMax not set correctly.");
+                Assert.AreEqual(entity1.RawFitnessValue, population.RawMin, "RawMax not set correctly.");
+                Assert.AreEqual((entity1.RawFitnessValue + entity2.RawFitnessValue) / 2, population.RawMean, "RawMean not set correctly.");
+            }
         }
 
         private class FakeFitnessScalingStrategy : FitnessScalingStrategy

@@ -54,7 +54,7 @@ namespace GenFx.ComponentLibrary.Tests
             AddEntity(algorithm, 0, population);
 
             populationAccessor.SetField("rawMean", (double)(4 + 10 + 20) / 4);
-            populationAccessor.SetField("rawStandardDeviation", populationAccessor.Invoke("GetStandardDeviation", population.RawMean, false));
+            populationAccessor.SetField("rawStandardDeviation", MathHelper.GetStandardDeviation(population.Entities, population.RawMean.Value, FitnessType.Raw));
 
             strategy.Scale(population);
 
@@ -82,7 +82,7 @@ namespace GenFx.ComponentLibrary.Tests
             AddEntity(algorithm, 0, population);
 
             populationAccessor.SetField("rawMean", (double)(4 + 10 + 20) / 4);
-            populationAccessor.SetField("rawStandardDeviation", populationAccessor.Invoke("GetStandardDeviation", population.RawMean, false));
+            populationAccessor.SetField("rawStandardDeviation", MathHelper.GetStandardDeviation(population.Entities, population.RawMean.Value, FitnessType.Raw));
 
             strategy.Scale(population);
 

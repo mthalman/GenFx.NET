@@ -29,29 +29,17 @@ namespace GenFx
         private int index;
 
         [DataMember]
-        private double rawMean;
+        private double? rawMean;
 
         [DataMember]
-        private double rawStandardDeviation;
+        private double? rawStandardDeviation;
 
         [DataMember]
-        private double rawMax;
+        private double? rawMax;
 
         [DataMember]
-        private double rawMin;
-
-        [DataMember]
-        private double scaledMean;
-
-        [DataMember]
-        private double scaledStandardDeviation;
-
-        [DataMember]
-        private double scaledMax;
-
-        [DataMember]
-        private double scaledMin;
-
+        private double? rawMin;
+        
         [DataMember]
         private int minimumPopulationSize = DefaultPopulationSize;
 
@@ -70,36 +58,17 @@ namespace GenFx
             get { return this.minimumPopulationSize; }
             set { this.SetProperty(ref this.minimumPopulationSize, value); }
         }
-
-        /// <summary>
-        /// Gets the minimum <see cref="GeneticEntity.ScaledFitnessValue"/> in the entire population of genetic entities.
-        /// </summary>
-        /// <value>
-        /// The minimum <see cref="GeneticEntity.ScaledFitnessValue"/> in the entire population of genetic entities.
-        /// </value>
-        public double ScaledMin
-        {
-            get { return this.scaledMin; }
-        }
-
-        /// <summary>
-        /// Gets the maximum <see cref="GeneticEntity.ScaledFitnessValue"/> in the entire population of genetic entities.
-        /// </summary>
-        /// <value>
-        /// The maximum <see cref="GeneticEntity.ScaledFitnessValue"/> in the entire population of genetic entities.
-        /// </value>
-        public double ScaledMax
-        {
-            get { return this.scaledMax; }
-        }
-
+        
         /// <summary>
         /// Gets the minimum <see cref="GeneticEntity.RawFitnessValue"/> in the entire population of genetic entities.
         /// </summary>
         /// <value>
         /// The minimum <see cref="GeneticEntity.RawFitnessValue"/> in the entire population of genetic entities.
         /// </value>
-        public double RawMin
+        /// <remarks>
+        /// This value is not set if the algorithm is not configured to use metrics or a fitness scaling strategy.
+        /// </remarks>
+        public double? RawMin
         {
             get { return this.rawMin; }
         }
@@ -110,31 +79,12 @@ namespace GenFx
         /// <value>
         /// The maximum <see cref="GeneticEntity.RawFitnessValue"/> in the entire population of genetic entities.
         /// </value>
-        public double RawMax
+        /// <remarks>
+        /// This value is not set if the algorithm is not configured to use metrics or a fitness scaling strategy.
+        /// </remarks>
+        public double? RawMax
         {
             get { return this.rawMax; }
-        }
-
-        /// <summary>
-        /// Gets the standard deviation of all the <see cref="GeneticEntity.ScaledFitnessValue"/> values in the entire population of genetic entities.
-        /// </summary>
-        /// <value>
-        /// The standard deviation of all the <see cref="GeneticEntity.ScaledFitnessValue"/> values in the entire population of genetic entities.
-        /// </value>
-        public double ScaledStandardDeviation
-        {
-            get { return this.scaledStandardDeviation; }
-        }
-
-        /// <summary>
-        /// Gets the mean of all the <see cref="GeneticEntity.ScaledFitnessValue"/> values in the entire population of genetic entities.
-        /// </summary>
-        /// <value>
-        /// The mean of all the <see cref="GeneticEntity.ScaledFitnessValue"/> values in the entire population of genetic entities.
-        /// </value>
-        public double ScaledMean
-        {
-            get { return this.scaledMean; }
         }
 
         /// <summary>
@@ -143,7 +93,10 @@ namespace GenFx
         /// <value>
         /// The standard deviation of all the <see cref="GeneticEntity.RawFitnessValue"/> values in the entire population of genetic entities.
         /// </value>
-        public double RawStandardDeviation
+        /// <remarks>
+        /// This value is not set if the algorithm is not configured to use metrics or a fitness scaling strategy.
+        /// </remarks>
+        public double? RawStandardDeviation
         {
             get { return this.rawStandardDeviation; }
         }
@@ -154,7 +107,10 @@ namespace GenFx
         /// <value>
         /// The mean of all the <see cref="GeneticEntity.RawFitnessValue"/> values in the entire population of genetic entities.
         /// </value>
-        public double RawMean
+        /// <remarks>
+        /// This value is not set if the algorithm is not configured to use metrics or a fitness scaling strategy.
+        /// </remarks>
+        public double? RawMean
         {
             get { return this.rawMean; }
         }
@@ -203,48 +159,33 @@ namespace GenFx
             // Wait for all entities to evaluate their fitness values
             await Task.WhenAll(fitnessEvalTasks);
 
-            for (int i = 0; i < this.geneticEntities.Count; i++)
+            // There's no need to perform these calculations if there aren't any metrics or a fitness scaling strategy.
+            if (this.Algorithm.Metrics.Any() || this.Algorithm.FitnessScalingStrategy != null)
             {
-                // Calculate the stats based on raw fitness value
-                rawSum += this.geneticEntities[i].RawFitnessValue;
+                for (int i = 0; i < this.geneticEntities.Count; i++)
+                {
+                    // Calculate the metrics based on raw fitness value
+                    rawSum += this.geneticEntities[i].RawFitnessValue;
 
-                if (i == 0 || this.geneticEntities[i].RawFitnessValue > this.rawMax)
-                {
-                    this.rawMax = this.scaledMax = this.geneticEntities[i].RawFitnessValue;
+                    if (i == 0 || this.geneticEntities[i].RawFitnessValue > this.rawMax)
+                    {
+                        this.rawMax = this.geneticEntities[i].RawFitnessValue;
+                    }
+                    if (i == 0 || this.geneticEntities[i].RawFitnessValue < this.rawMin)
+                    {
+                        this.rawMin = this.geneticEntities[i].RawFitnessValue;
+                    }
                 }
-                if (i == 0 || this.geneticEntities[i].RawFitnessValue < this.rawMin)
-                {
-                    this.rawMin = this.scaledMin = this.geneticEntities[i].RawFitnessValue;
-                }
+
+                // Calculate the metrics based on raw fitness value
+                this.rawMean = rawSum / this.geneticEntities.Count;
+                this.rawStandardDeviation = MathHelper.GetStandardDeviation(this.geneticEntities, this.rawMean.Value, FitnessType.Raw);
             }
-
-            // Calculate the stats based on raw fitness value
-            this.rawMean = this.scaledMean = rawSum / this.geneticEntities.Count;
-            this.rawStandardDeviation = this.scaledStandardDeviation = this.GetStandardDeviation(this.rawMean, false);
 
             if (this.Algorithm.FitnessScalingStrategy != null)
             {
                 // Scale the fitness values of the population.
                 this.Algorithm.FitnessScalingStrategy.Scale(this);
-
-                // Calculate the stats based on scaled fitness value
-                double scaledSum = 0;
-                for (int i = 0; i < this.geneticEntities.Count; i++)
-                {
-                    scaledSum += this.geneticEntities[i].ScaledFitnessValue;
-
-                    if (i == 0 || this.geneticEntities[i].ScaledFitnessValue > this.scaledMax)
-                    {
-                        this.scaledMax = this.geneticEntities[i].ScaledFitnessValue;
-                    }
-                    if (i == 0 || this.geneticEntities[i].ScaledFitnessValue < this.scaledMin)
-                    {
-                        this.scaledMin = this.geneticEntities[i].ScaledFitnessValue;
-                    }
-
-                    this.scaledMean = scaledSum / this.geneticEntities.Count;
-                    this.scaledStandardDeviation = this.GetStandardDeviation(this.scaledMean, true);
-                }
             }
         }
 
@@ -275,32 +216,6 @@ namespace GenFx
             }
 
             return Task.FromResult(true);
-        }
-
-        /// <summary>
-        /// Returns the standard deviation of the raw fitness value for the population.
-        /// </summary>
-        /// <param name="mean">Mean raw fitness value for the population.</param>
-        /// <param name="useScaledValues">Whether to use scaled fitness values as opposed to raw.</param>
-        /// <returns>The standard deviation of the raw fitness value for the population.</returns>
-        private double GetStandardDeviation(double mean, bool useScaledValues)
-        {
-            double diffSums = 0;
-            for (int i = 0; i < this.geneticEntities.Count; i++)
-            {
-                double val;
-                if (useScaledValues)
-                {
-                    val = this.geneticEntities[i].ScaledFitnessValue - mean;
-                }
-                else
-                {
-                    val = this.geneticEntities[i].RawFitnessValue - mean;
-                }
-                val = Math.Pow(val, 2);
-                diffSums += val;
-            }
-            return Math.Sqrt(diffSums / this.geneticEntities.Count);
         }
     }
 }

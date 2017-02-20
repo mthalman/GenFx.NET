@@ -8,10 +8,10 @@ using System.Runtime.Serialization;
 namespace GenFx.ComponentLibrary.Plugins
 {
     /// <summary>
-    /// Logs statistics for each generation.
+    /// Logs metrics for each generation.
     /// </summary>
     [DataContract]
-    public class StatisticLogger : Plugin
+    public class MetricLogger : Plugin
     {
         [DataMember]
         private string traceCategory;
@@ -33,7 +33,7 @@ namespace GenFx.ComponentLibrary.Plugins
         /// </summary>
         protected override void OnAlgorithmStarting()
         {
-            this.WriteTrace(Resources.StatisticLogger_AlgorithmStarted);
+            this.WriteTrace(Resources.MetricLogger_AlgorithmStarted);
         }
 
         /// <summary>
@@ -41,7 +41,7 @@ namespace GenFx.ComponentLibrary.Plugins
         /// </summary>
         protected override void OnAlgorithmCompleted()
         {
-            this.WriteTrace(Resources.StatisticLogger_AlgorithmCompleted);
+            this.WriteTrace(Resources.MetricLogger_AlgorithmCompleted);
         }
 
         /// <summary>
@@ -58,24 +58,24 @@ namespace GenFx.ComponentLibrary.Plugins
 
             foreach (Population population in environment.Populations)
             {
-                foreach (Statistic stat in this.Algorithm.Statistics)
+                foreach (Metric metric in this.Algorithm.Metrics)
                 {
-                    string statVal = stat.GetResultValue(population).ToString();
+                    string metricVal = metric.GetResultValue(population).ToString();
 
-                    string statName;
+                    string metricName;
                     // TypeDescriptor will always provide a DisplayNameAttribute, even if one isn't declared on the type.
-                    DisplayNameAttribute attrib = (DisplayNameAttribute)TypeDescriptor.GetAttributes(stat)[typeof(DisplayNameAttribute)];
+                    DisplayNameAttribute attrib = (DisplayNameAttribute)TypeDescriptor.GetAttributes(metric)[typeof(DisplayNameAttribute)];
                     if (!String.IsNullOrEmpty(attrib.DisplayName))
                     {
-                        statName = attrib.DisplayName;
+                        metricName = attrib.DisplayName;
                     }
                     else
                     {
-                        statName = stat.ToString();
+                        metricName = metric.ToString();
                     }
 
-                    this.WriteTrace(String.Format(CultureInfo.CurrentCulture, Resources.StatisticLogger_StatTrace,
-                        statName, statVal, population.Index, generationIndex));
+                    this.WriteTrace(String.Format(CultureInfo.CurrentCulture, Resources.MetricLogger_StatTrace,
+                        metricName, metricVal, population.Index, generationIndex));
                 }
             }
         }

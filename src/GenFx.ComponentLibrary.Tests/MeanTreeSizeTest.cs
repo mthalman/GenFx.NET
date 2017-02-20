@@ -1,27 +1,23 @@
-﻿using GenFx;
+﻿using GenFx.ComponentLibrary.Metrics;
 using GenFx.ComponentLibrary.Populations;
-using GenFx.ComponentLibrary.Statistics;
 using GenFx.ComponentLibrary.Trees;
-using TestCommon.Helpers;
-using TestCommon.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using System.Collections.Generic;
-using System.Text;
+using TestCommon.Helpers;
+using TestCommon.Mocks;
 
 namespace GenFx.ComponentLibrary.Tests
 {
     /// <summary>
-    /// This is a test class for GenFx.ComponentLibrary.Statistics.MeanTreeSize and is intended
-    /// to contain all GenFx.ComponentLibrary.Statistics.MeanTreeSize Unit Tests
+    /// Contains unit tests for the <see cref="MeanTreeSize"/> class.
     /// </summary>
-    [TestClass()]
+    [TestClass]
     public class MeanTreeSizeTest
     {
         /// <summary>
         /// Tests that the GetResultValue method works correctly.
         /// </summary>
-        [TestMethod()]
+        [TestMethod]
         public void MeanTreeSize_GetResultValue()
         {
             GeneticAlgorithm algorithm = new MockGeneticAlgorithm
@@ -31,9 +27,9 @@ namespace GenFx.ComponentLibrary.Tests
                 GeneticEntitySeed = new TestTreeEntity(),
                 PopulationSeed = new SimplePopulation(),
             };
-            algorithm.Statistics.Add(new MeanTreeSizeStatistic());
+            algorithm.Metrics.Add(new MeanTreeSize());
 
-            MeanTreeSizeStatistic target = new MeanTreeSizeStatistic();
+            MeanTreeSize target = new MeanTreeSize();
             target.Initialize(algorithm);
             SimplePopulation population = new SimplePopulation();
             population.Initialize(algorithm);
@@ -65,7 +61,7 @@ namespace GenFx.ComponentLibrary.Tests
         /// <summary>
         /// Tests that an exception is thrown when a null population is passed.
         /// </summary>
-        [TestMethod()]
+        [TestMethod]
         public void MeanTreeSize_GetResultValue_NullPopulation()
         {
             GeneticAlgorithm algorithm = new MockGeneticAlgorithm
@@ -75,9 +71,9 @@ namespace GenFx.ComponentLibrary.Tests
                 GeneticEntitySeed = new TestTreeEntity(),
                 PopulationSeed = new SimplePopulation(),
             };
-            algorithm.Statistics.Add(new MeanTreeSizeStatistic());
+            algorithm.Metrics.Add(new MeanTreeSize());
 
-            MeanTreeSizeStatistic target = new MeanTreeSizeStatistic();
+            MeanTreeSize target = new MeanTreeSize();
             target.Initialize(algorithm);
             AssertEx.Throws<ArgumentNullException>(() => target.GetResultValue(null));
         }

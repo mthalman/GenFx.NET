@@ -126,12 +126,13 @@
     <Compile Include="GeneticEntity.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="CollectionExtensions.cs" />
+    <Compile Include="MathHelper.cs" />
     <Compile Include="MutationOperator.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="Population.cs" />
     <Compile Include="SelectionOperator.cs" />
-    <Compile Include="Statistic.cs" />
-    <Compile Include="StatisticExtensions.cs" />
+    <Compile Include="Metric.cs" />
+    <Compile Include="MetricExtensions.cs" />
     <Compile Include="StringUtil.cs" />
     <Compile Include="Terminator.cs" />
     <Compile Include="Validation\ComponentValidator.cs" />
@@ -145,7 +146,7 @@
     <Compile Include="Validation\RequiredComponentTypeValidator.cs" />
     <Compile Include="Validation\RequiredPopulationValidator.cs" />
     <Compile Include="Validation\RequiredTerminatorValidator.cs" />
-    <Compile Include="Validation\RequiredStatisticValidator.cs" />
+    <Compile Include="Validation\RequiredMetricValidator.cs" />
     <Compile Include="Validation\RequiredSelectionOperatorValidator.cs" />
     <Compile Include="Validation\RequiredPluginValidator.cs" />
     <Compile Include="Validation\RequiredMutationOperatorValidator.cs" />
@@ -165,7 +166,7 @@
     <Compile Include="Validation\RequiredPluginAttribute.cs" />
     <Compile Include="Validation\RequiredPopulationAttribute.cs" />
     <Compile Include="Validation\RequiredSelectionOperatorAttribute.cs" />
-    <Compile Include="Validation\RequiredStatisticAttribute.cs" />
+    <Compile Include="Validation\RequiredMetricAttribute.cs" />
     <Compile Include="Validation\RequiredTerminatorAttribute.cs" />
     <Compile Include="Validation\RequiredValidator.cs" />
     <Compile Include="Validation\RequiredValidatorAttribute.cs" />
@@ -201,7 +202,7 @@
     <Compile Include="RandomNumberService.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="StatisticResult.cs">
+    <Compile Include="MetricResult.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Validation\ValidationException.cs" />

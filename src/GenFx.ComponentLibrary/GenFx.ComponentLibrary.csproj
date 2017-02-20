@@ -107,7 +107,7 @@
     <Compile Include="Lists\ListEntity.cs" />
     <Compile Include="Lists\UniformIntegerMutationOperator.cs" />
     <Compile Include="Lists\VariableSinglePointCrossoverOperator.cs" />
-    <Compile Include="Plugins\StatisticLogger.cs" />
+    <Compile Include="Plugins\MetricLogger.cs" />
     <Compile Include="Populations\SimplePopulation.cs" />
     <Compile Include="Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -123,22 +123,22 @@
     <Compile Include="SelectionOperators\RouletteWheelSampler.cs" />
     <Compile Include="Scaling\SigmaScalingStrategy.cs" />
     <Compile Include="SelectionOperators\UniformSelectionOperator.cs" />
-    <Compile Include="Statistics\BestMaximumFitnessEntityStatistic.cs" />
-    <Compile Include="Statistics\BestMaximumFitnessStatistic.cs">
+    <Compile Include="Metrics\BestMaximumFitnessEntity.cs" />
+    <Compile Include="Metrics\BestMaximumFitness.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Statistics\BestMinimumFitnessStatistic.cs" />
-    <Compile Include="Statistics\MaximumFitnessStatistic.cs">
+    <Compile Include="Metrics\BestMinimumFitness.cs" />
+    <Compile Include="Metrics\MaximumFitness.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Statistics\MeanFitnessStatistic.cs">
+    <Compile Include="Metrics\MeanFitness.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Statistics\MeanTreeSizeStatistic.cs" />
-    <Compile Include="Statistics\MinimumFitnessStatistic.cs">
+    <Compile Include="Metrics\MeanTreeSize.cs" />
+    <Compile Include="Metrics\MinimumFitness.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Statistics\StandardDeviationFitnessStatistic.cs">
+    <Compile Include="Metrics\FitnessStandardDeviation.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Terminators\FitnessTargetTerminator.cs" />

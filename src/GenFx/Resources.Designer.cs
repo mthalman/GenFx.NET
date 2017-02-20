@@ -144,6 +144,15 @@ namespace GenFx {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to A cycle was detected in the dependency graph associated with metric type &apos;{0}&apos;.  This occurs when metrics depend upon each other either directly or indirectly.  Remove this dependency..
+        /// </summary>
+        internal static string ErrorMsg_CycleInMetricDependencyGraph {
+            get {
+                return ResourceManager.GetString("ErrorMsg_CycleInMetricDependencyGraph", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Object of type &apos;{0}&apos; already exists in collection..
         /// </summary>
         internal static string ErrorMsg_DuplicateConfiguration {
@@ -397,6 +406,15 @@ namespace GenFx {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Metric.
+        /// </summary>
+        internal static string MetricCommonName {
+            get {
+                return ResourceManager.GetString("MetricCommonName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Mutation Operator.
         /// </summary>
         internal static string MutationCommonName {
@@ -429,15 +447,6 @@ namespace GenFx {
         internal static string SelectionCommonName {
             get {
                 return ResourceManager.GetString("SelectionCommonName", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Statistic.
-        /// </summary>
-        internal static string StatisticCommonName {
-            get {
-                return ResourceManager.GetString("StatisticCommonName", resourceCulture);
             }
         }
         

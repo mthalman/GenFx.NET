@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Threading.Tasks;
@@ -25,7 +26,10 @@ namespace GenFx
         private GeneticEnvironment environment;
 
         [DataMember]
-        private List<Statistic> statistics = new List<Statistic>();
+        private List<Metric> metrics = new List<Metric>();
+
+        [DataMember]
+        private List<Metric> sortedMetrics = new List<Metric>();
 
         [DataMember]
         private List<Plugin> plugins = new List<Plugin>();
@@ -217,12 +221,12 @@ namespace GenFx
         }
 
         /// <summary>
-        /// Gets the collection of statistics to be calculated for the genetic algorithm.
+        /// Gets the collection of metrics to be calculated for the genetic algorithm.
         /// </summary>
         [ConfigurationProperty]
-        public IList<Statistic> Statistics
+        public IList<Metric> Metrics
         {
-            get { return this.statistics; }
+            get { return this.metrics; }
         }
 
         /// <summary>
@@ -285,6 +289,8 @@ namespace GenFx
                 component.Initialize(this);
                 this.Validate(component);
             }
+
+            this.SortMetrics();
 
             this.environment.Populations.Clear();
 
@@ -488,9 +494,9 @@ namespace GenFx
                 yield return this.MutationOperator;
             }
 
-            foreach (Statistic stat in this.Statistics)
+            foreach (Metric metric in this.Metrics)
             {
-                yield return stat;
+                yield return metric;
             }
 
             foreach (Plugin pluginConfig in this.Plugins)
@@ -508,7 +514,113 @@ namespace GenFx
             yield return this.GeneticEntitySeed;
             yield return this.PopulationSeed;
         }
-        
+
+        /// <summary>
+        /// Sorts the metrics according to their dependencies.
+        /// </summary>
+        private void SortMetrics()
+        {
+            this.sortedMetrics = new List<Metric>();
+            List<MetricNode> roots = new List<MetricNode>();
+            Dictionary<Type, MetricNode> collectedMetricTypes = new Dictionary<Type, GenFx.GeneticAlgorithm.MetricNode>();
+            foreach (Type metricType in this.metrics.Select(m => m.GetType()))
+            {
+                CollectMetricTypeGraphs(metricType, roots, collectedMetricTypes);
+            }
+
+            // Iterate through the nodes in the graphs, breadth first, and add them to the list
+            // of sorted metric.  Since we're iterating them in this way, they are inherently sorted.
+            Queue<MetricNode> nodesToIterate = new Queue<MetricNode>(roots);
+            while (nodesToIterate.Any())
+            {
+                MetricNode node = nodesToIterate.Dequeue();
+
+                Metric metric = this.metrics.First(m => m.GetType() == node.MetricType);
+                this.sortedMetrics.Add(metric);
+
+                foreach (MetricNode dependentNode in node.Dependencies)
+                {
+                    nodesToIterate.Enqueue(dependentNode);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Collects the roots of the set of graphs that make up the metric type dependencies.
+        /// </summary>
+        /// <param name="metricType">Type of <see cref="Metric"/> to process.</param>
+        /// <param name="roots">List of collected root nodes.</param>
+        /// <param name="collectedMetricTypes">Mapping of metric types and their nodes that have been collected so far.</param>
+        /// <returns>The <see cref="MetricNode"/> associated with <paramref name="metricType"/>.</returns>
+        private static MetricNode CollectMetricTypeGraphs(Type metricType, List<MetricNode> roots, Dictionary<Type, MetricNode> collectedMetricTypes)
+        {
+            MetricNode metricNode;
+            if (collectedMetricTypes.TryGetValue(metricType, out metricNode))
+            {
+                // We've encountered a type that we've processed already.  Ensure that this isn't
+                // the result of a cycle in the graph.
+                DetectMetricTypeDependencyCycle(metricNode, metricNode);
+                return metricNode;
+            }
+
+            List<Type> metricTypeDependencies = GetMetricTypeDependencies(metricType);
+
+            if (!metricTypeDependencies.Any())
+            {
+                MetricNode root = new MetricNode(metricType);
+                roots.Add(root);
+                metricNode = root;
+                collectedMetricTypes.Add(metricType, metricNode);
+            }
+            else
+            {
+                MetricNode node = new MetricNode(metricType);
+                collectedMetricTypes.Add(metricType, node);
+                foreach (Type dependency in metricTypeDependencies)
+                {
+                    MetricNode dependencyNode = CollectMetricTypeGraphs(dependency, roots, collectedMetricTypes);
+                    dependencyNode.Dependencies.Add(node);
+                }
+
+                metricNode = node;
+            }
+
+            return metricNode;
+        }
+
+        /// <summary>
+        /// Detects whether there's a cycle in the metric type dependency graph and throws an exception
+        /// if there is.
+        /// </summary>
+        /// <param name="currentNode">The node to search dependencies of.</param>
+        /// <param name="nodeToSearch">The node to search for a match of.</param>
+        private static void DetectMetricTypeDependencyCycle(MetricNode currentNode, MetricNode nodeToSearch)
+        {
+            foreach (MetricNode dependentNode in currentNode.Dependencies)
+            {
+                if (dependentNode.MetricType == nodeToSearch.MetricType)
+                {
+                    throw new InvalidOperationException(
+                        StringUtil.GetFormattedString(Resources.ErrorMsg_CycleInMetricDependencyGraph, nodeToSearch.MetricType));
+                }
+
+                DetectMetricTypeDependencyCycle(dependentNode, nodeToSearch);
+            }
+        }
+
+        /// <summary>
+        /// Returns the list of <see cref="Metric"/> types that the <paramref name="metricType"/>
+        /// is dependent upon.
+        /// </summary>
+        /// <param name="metricType">A type of <see cref="Metric"/> to search dependencies for.</param>
+        /// <returns></returns>
+        private static List<Type> GetMetricTypeDependencies(Type metricType)
+        {
+            RequiredMetricAttribute[] attribs = (RequiredMetricAttribute[])metricType
+                    .GetCustomAttributes(typeof(RequiredMetricAttribute), true);
+            return attribs.Select(a => a.RequiredType).ToList();
+        }
+
         /// <summary>
         /// Throws an exception if the algorithm is not initialized.
         /// </summary>
@@ -608,13 +720,13 @@ namespace GenFx
         }
 
         /// <summary>
-        /// Calculates the statistics for a generation.
+        /// Calculates the metrics for a generation.
         /// </summary>
         private void CalculateStats(GeneticEnvironment geneticEnvironment, int generationIndex)
         {
-            foreach (Statistic statistic in this.statistics)
+            foreach (Metric metric in this.sortedMetrics)
             {
-                statistic.Calculate(geneticEnvironment, generationIndex);
+                metric.Calculate(geneticEnvironment, generationIndex);
             }
         }
         
@@ -711,6 +823,22 @@ namespace GenFx
                     this.externalValidationMapping.Add(prop, validators);
                 }
                 validators.Add(attrib.Validator);
+            }
+        }
+
+        /// <summary>
+        /// Represents a node within the dependency graph of <see cref="Metric"/> types used by
+        /// algorithm.
+        /// </summary>
+        private class MetricNode
+        {
+            public Type MetricType { get; private set; }
+            public List<MetricNode> Dependencies { get; private set; }
+
+            public MetricNode(Type metricType)
+            {
+                this.MetricType = metricType;
+                this.Dependencies = new List<MetricNode>();
             }
         }
     }

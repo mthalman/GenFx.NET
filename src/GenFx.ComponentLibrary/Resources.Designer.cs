@@ -261,30 +261,30 @@ namespace GenFx.ComponentLibrary {
         /// <summary>
         ///   Looks up a localized string similar to Algorithm completed..
         /// </summary>
-        internal static string StatisticLogger_AlgorithmCompleted {
+        internal static string MetricLogger_AlgorithmCompleted {
             get {
-                return ResourceManager.GetString("StatisticLogger_AlgorithmCompleted", resourceCulture);
+                return ResourceManager.GetString("MetricLogger_AlgorithmCompleted", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Algorithm started..
         /// </summary>
-        internal static string StatisticLogger_AlgorithmStarted {
+        internal static string MetricLogger_AlgorithmStarted {
             get {
-                return ResourceManager.GetString("StatisticLogger_AlgorithmStarted", resourceCulture);
+                return ResourceManager.GetString("MetricLogger_AlgorithmStarted", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Statistic Name: {0}
-        ///Statistic Value: {1}
+        ///   Looks up a localized string similar to Metric Name: {0}
+        ///Metric Value: {1}
         ///Population Index: {2}
         ///Generation Index: {3}.
         /// </summary>
-        internal static string StatisticLogger_StatTrace {
+        internal static string MetricLogger_StatTrace {
             get {
-                return ResourceManager.GetString("StatisticLogger_StatTrace", resourceCulture);
+                return ResourceManager.GetString("MetricLogger_StatTrace", resourceCulture);
             }
         }
     }

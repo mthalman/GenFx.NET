@@ -2,14 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 
-namespace GenFx.ComponentLibrary.Statistics
+namespace GenFx.ComponentLibrary.Metrics
 {
     /// <summary>
     /// Provides the calculation to determine the <see cref="GeneticEntity"/> object with the highest
     /// <see cref="GeneticEntity.ScaledFitnessValue"/> found for a <see cref="Population"/> during the entire run of the genetic algorithm.
     /// </summary>
     [DataContract]
-    public class BestMaximumFitnessEntityStatistic : Statistic
+    public class BestMaximumFitnessEntity : Metric
     {
         [DataMember]
         private Dictionary<int, GeneticEntity> bestEntities = new Dictionary<int, GeneticEntity>();
@@ -18,7 +18,7 @@ namespace GenFx.ComponentLibrary.Statistics
         /// Calculates to determine the <see cref="GeneticEntity"/> object with the highest
         /// <see cref="GeneticEntity.ScaledFitnessValue"/> found for a <see cref="Population"/> during the entire run of the genetic algorithm.
         /// </summary>
-        /// <param name="population"><see cref="Population"/> from which to derive the statistic.</param>
+        /// <param name="population"><see cref="Population"/> from which to derive the metric.</param>
         /// <returns>String representation of the <see cref="GeneticEntity"/> with the highest <see cref="GeneticEntity.ScaledFitnessValue"/>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="population"/> is null.</exception>
         public override object GetResultValue(Population population)

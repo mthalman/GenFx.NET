@@ -57,7 +57,7 @@
     <Compile Include="Mocks\MockPlugin.cs" />
     <Compile Include="Mocks\MockPopulation.cs" />
     <Compile Include="Mocks\MockSelectionOperator.cs" />
-    <Compile Include="Mocks\MockStatistic.cs" />
+    <Compile Include="Mocks\MockMetric.cs" />
     <Compile Include="Mocks\MockTerminator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

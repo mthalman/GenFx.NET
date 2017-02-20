@@ -4,10 +4,10 @@ using System.Runtime.Serialization;
 namespace GenFx
 {
     /// <summary>
-    /// Represents the result of a statistical calculation for a particular generation of a <see cref="Population"/>.
+    /// Represents the result of a metrical calculation for a particular generation of a <see cref="Population"/>.
     /// </summary>
     [DataContract]
-    public class StatisticResult
+    public class MetricResult
     {
         [DataMember]
         private int generationIndex;
@@ -19,15 +19,15 @@ namespace GenFx
         private int populationIndex;
 
         [DataMember]
-        private Statistic statistic;
+        private Metric metric;
 
         /// <summary>
-        /// Gets the <see cref="Statistic"/> to which this result belongs.
+        /// Gets the <see cref="Metric"/> to which this result belongs.
         /// </summary>
-        /// <value>The <see cref="Statistic"/> to which this result belongs.</value>
-        public Statistic Statistic
+        /// <value>The <see cref="Metric"/> to which this result belongs.</value>
+        public Metric Metric
         {
-            get { return this.statistic; }
+            get { return this.metric; }
         }
 
         /// <summary>
@@ -40,35 +40,35 @@ namespace GenFx
         }
 
         /// <summary>
-        /// Gets the value of the calculated statistic.
+        /// Gets the value of the calculated metric.
         /// </summary>
-        /// <value>The value of the calculated statistic.</value>
+        /// <value>The value of the calculated metric.</value>
         public object ResultValue
         {
             get { return this.resultValue; }
         }
 
         /// <summary>
-        /// Gets the index of the population on which this statistic result is calculated.
+        /// Gets the index of the population on which this metric result is calculated.
         /// </summary>
-        /// <value>The index of the population on which this statistic result is calculated.</value>
+        /// <value>The index of the population on which this metric result is calculated.</value>
         public int PopulationIndex
         {
             get { return this.populationIndex; }
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="StatisticResult"/> class.
+        /// Initializes a new instance of the <see cref="MetricResult"/> class.
         /// </summary>
         /// <param name="generationIndex">The index of the generation.</param>
-        /// <param name="populationIndex">The index of the population on which this statistic result is calculated.</param>
-        /// <param name="resultValue">The value of the calculated statistic.</param>
-        /// <param name="statistic">The <see cref="Statistic"/> to which this result belongs.</param>
+        /// <param name="populationIndex">The index of the population on which this metric result is calculated.</param>
+        /// <param name="resultValue">The value of the calculated metric.</param>
+        /// <param name="metric">The <see cref="Metric"/> to which this result belongs.</param>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="generationIndex"/> is less than zero.</exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="populationIndex"/> is less than zero.</exception>
         /// <exception cref="ArgumentNullException"><paramref name="resultValue"/> is null.</exception>
-        /// <exception cref="ArgumentNullException"><paramref name="statistic"/> is null.</exception>
-        public StatisticResult(int generationIndex, int populationIndex, object resultValue, Statistic statistic)
+        /// <exception cref="ArgumentNullException"><paramref name="metric"/> is null.</exception>
+        public MetricResult(int generationIndex, int populationIndex, object resultValue, Metric metric)
         {
             if (generationIndex < 0)
             {
@@ -85,15 +85,15 @@ namespace GenFx
                 throw new ArgumentNullException(nameof(resultValue));
             }
 
-            if (statistic == null)
+            if (metric == null)
             {
-                throw new ArgumentNullException(nameof(statistic));
+                throw new ArgumentNullException(nameof(metric));
             }
 
             this.generationIndex = generationIndex;
             this.populationIndex = populationIndex;
             this.resultValue = resultValue;
-            this.statistic = statistic;
+            this.metric = metric;
         }
     }
 }

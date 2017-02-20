@@ -12,10 +12,10 @@ using System.ComponentModel;
 namespace GenFx.ComponentLibrary.Tests
 {
     /// <summary>
-    /// Contains unit tests for the <see cref="StatisticLogger"/> class.
+    /// Contains unit tests for the <see cref="MetricLogger"/> class.
     /// </summary>
     [TestClass]
-    public class StatisticLoggerTest
+    public class MetricLoggerTest
     {
         private TestTraceListener traceListener;
 
@@ -33,12 +33,12 @@ namespace GenFx.ComponentLibrary.Tests
         }
 
         /// <summary>
-        /// Tests that the <see cref="StatisticLogger"/> can be validated successfully.
+        /// Tests that the <see cref="MetricLogger"/> can be validated successfully.
         /// </summary>
         [TestMethod]
-        public void StatisticLogger_Validation()
+        public void MetricLogger_Validation()
         {
-            StatisticLogger logger = new StatisticLogger
+            MetricLogger logger = new MetricLogger
             {
                 TraceCategory = "test"
             };
@@ -47,22 +47,22 @@ namespace GenFx.ComponentLibrary.Tests
         }
 
         /// <summary>
-        /// Tests that validation fails when no value is provided for <see cref="StatisticLogger.TraceCategory"/>.
+        /// Tests that validation fails when no value is provided for <see cref="MetricLogger.TraceCategory"/>.
         /// </summary>
         [TestMethod]
-        public void StatisticLogger_Validation_MissingTraceCategory()
+        public void MetricLogger_Validation_MissingTraceCategory()
         {
-            StatisticLogger logger = new StatisticLogger();
+            MetricLogger logger = new MetricLogger();
             AssertEx.Throws<ValidationException>(() => logger.Validate());
         }
 
         /// <summary>
-        /// Tests that the <see cref="StatisticLogger.OnAlgorithmStarting"/> method works correctly.
+        /// Tests that the <see cref="MetricLogger.OnAlgorithmStarting"/> method works correctly.
         /// </summary>
         [TestMethod]
-        public void StatisticLogger_AlgorithmStarting()
+        public void MetricLogger_AlgorithmStarting()
         {
-            StatisticLogger logger = new StatisticLogger
+            MetricLogger logger = new MetricLogger
             {
                 TraceCategory = "test"
             };
@@ -73,16 +73,16 @@ namespace GenFx.ComponentLibrary.Tests
             accessor.Invoke("OnAlgorithmStarting");
 
             Assert.IsTrue(this.traceListener.Output.ToString().StartsWith(logger.TraceCategory));
-            Assert.IsTrue(this.traceListener.Output.ToString().Contains(Resources.StatisticLogger_AlgorithmStarted));
+            Assert.IsTrue(this.traceListener.Output.ToString().Contains(Resources.MetricLogger_AlgorithmStarted));
         }
 
         /// <summary>
-        /// Tests that the <see cref="StatisticLogger.OnAlgorithmCompleted"/> method works correctly.
+        /// Tests that the <see cref="MetricLogger.OnAlgorithmCompleted"/> method works correctly.
         /// </summary>
         [TestMethod]
-        public void StatisticLogger_AlgorithmCompleted()
+        public void MetricLogger_AlgorithmCompleted()
         {
-            StatisticLogger logger = new StatisticLogger
+            MetricLogger logger = new MetricLogger
             {
                 TraceCategory = "test"
             };
@@ -93,21 +93,21 @@ namespace GenFx.ComponentLibrary.Tests
             accessor.Invoke("OnAlgorithmCompleted");
 
             Assert.IsTrue(this.traceListener.Output.ToString().StartsWith(logger.TraceCategory));
-            Assert.IsTrue(this.traceListener.Output.ToString().Contains(Resources.StatisticLogger_AlgorithmCompleted));
+            Assert.IsTrue(this.traceListener.Output.ToString().Contains(Resources.MetricLogger_AlgorithmCompleted));
         }
 
         /// <summary>
-        /// Tests that the <see cref="StatisticLogger.OnFitnessEvaluated"/> method works correctly.
+        /// Tests that the <see cref="MetricLogger.OnFitnessEvaluated"/> method works correctly.
         /// </summary>
         [TestMethod]
-        public void StatisticLogger_FitnessEvaluated()
+        public void MetricLogger_FitnessEvaluated()
         {
             MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm();
-            algorithm.Statistics.Add(new TestStatistic1());
-            algorithm.Statistics.Add(new TestStatistic2());
-            algorithm.Statistics.Add(new TestStatistic3());
+            algorithm.Metrics.Add(new TestMetric1());
+            algorithm.Metrics.Add(new TestMetric2());
+            algorithm.Metrics.Add(new TestMetric3());
 
-            StatisticLogger logger = new StatisticLogger
+            MetricLogger logger = new MetricLogger
             {
                 TraceCategory = "test"
             };
@@ -124,32 +124,32 @@ namespace GenFx.ComponentLibrary.Tests
 
             string[] lines = this.traceListener.Output.ToString().Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
             Assert.AreEqual(24, lines.Length);
-            this.VerifyStatisticOutput(lines.Take(4).ToArray(), logger.TraceCategory, "Stat 1", "1:0", 0, 0);
-            this.VerifyStatisticOutput(lines.Skip(4).Take(4).ToArray(), logger.TraceCategory, "Stat 2", "2:0", 0, 0);
-            this.VerifyStatisticOutput(lines.Skip(8).Take(4).ToArray(), logger.TraceCategory, typeof(TestStatistic3).FullName, "3:0", 0, 0);
-            this.VerifyStatisticOutput(lines.Skip(12).Take(4).ToArray(), logger.TraceCategory, "Stat 1", "1:1", 1, 0);
-            this.VerifyStatisticOutput(lines.Skip(16).Take(4).ToArray(), logger.TraceCategory, "Stat 2", "2:1", 1, 0);
-            this.VerifyStatisticOutput(lines.Skip(20).Take(4).ToArray(), logger.TraceCategory, typeof(TestStatistic3).FullName, "3:1", 1, 0);
+            this.VerifyMetricOutput(lines.Take(4).ToArray(), logger.TraceCategory, "Metric 1", "1:0", 0, 0);
+            this.VerifyMetricOutput(lines.Skip(4).Take(4).ToArray(), logger.TraceCategory, "Metric 2", "2:0", 0, 0);
+            this.VerifyMetricOutput(lines.Skip(8).Take(4).ToArray(), logger.TraceCategory, typeof(TestMetric3).FullName, "3:0", 0, 0);
+            this.VerifyMetricOutput(lines.Skip(12).Take(4).ToArray(), logger.TraceCategory, "Metric 1", "1:1", 1, 0);
+            this.VerifyMetricOutput(lines.Skip(16).Take(4).ToArray(), logger.TraceCategory, "Metric 2", "2:1", 1, 0);
+            this.VerifyMetricOutput(lines.Skip(20).Take(4).ToArray(), logger.TraceCategory, typeof(TestMetric3).FullName, "3:1", 1, 0);
         }
 
         /// <summary>
-        /// Tests that an exception is thrown when passing a null environment to <see cref="StatisticLogger.OnFitnessEvaluated"/>.
+        /// Tests that an exception is thrown when passing a null environment to <see cref="MetricLogger.OnFitnessEvaluated"/>.
         /// </summary>
         [TestMethod]
-        public void StatisticLogger_OnFitnessEvaluated_NullEnvironment()
+        public void MetricLogger_OnFitnessEvaluated_NullEnvironment()
         {
-            StatisticLogger logger = new StatisticLogger();
+            MetricLogger logger = new MetricLogger();
             PrivateObject accessor = new PrivateObject(logger);
             AssertEx.Throws<ArgumentNullException>(() => accessor.Invoke("OnFitnessEvaluated", null, 0));
         }
 
-        private void VerifyStatisticOutput(string[] statOutput, string traceCategory, string statName, string statValue, int populationIndex, int generationIndex)
+        private void VerifyMetricOutput(string[] metricOutput, string traceCategory, string metricName, string metricValue, int populationIndex, int generationIndex)
         {
-            Assert.IsTrue(statOutput[0].StartsWith(traceCategory));
-            Assert.IsTrue(statOutput[0].Contains("Statistic Name: " + statName));
-            Assert.AreEqual("Statistic Value: " + statValue, statOutput[1]);
-            Assert.AreEqual("Population Index: " + populationIndex, statOutput[2]);
-            Assert.AreEqual("Generation Index: " + generationIndex, statOutput[3]);
+            Assert.IsTrue(metricOutput[0].StartsWith(traceCategory));
+            Assert.IsTrue(metricOutput[0].Contains("Metric Name: " + metricName));
+            Assert.AreEqual("Metric Value: " + metricValue, metricOutput[1]);
+            Assert.AreEqual("Population Index: " + populationIndex, metricOutput[2]);
+            Assert.AreEqual("Generation Index: " + generationIndex, metricOutput[3]);
         }
 
         private class TestTraceListener : TraceListener
@@ -167,8 +167,8 @@ namespace GenFx.ComponentLibrary.Tests
             }
         }
 
-        [DisplayName("Stat 1")]
-        private class TestStatistic1 : Statistic
+        [DisplayName("Metric 1")]
+        private class TestMetric1 : Metric
         {
             public override object GetResultValue(Population population)
             {
@@ -176,7 +176,7 @@ namespace GenFx.ComponentLibrary.Tests
             }
         }
 
-        private class TestStatistic2 : Statistic
+        private class TestMetric2 : Metric
         {
             public override object GetResultValue(Population population)
             {
@@ -185,12 +185,12 @@ namespace GenFx.ComponentLibrary.Tests
 
             public override string ToString()
             {
-                return "Stat 2";
+                return "Metric 2";
             }
         }
 
         [DisplayName]
-        private class TestStatistic3 : Statistic
+        private class TestMetric3 : Metric
         {
             public override object GetResultValue(Population population)
             {
