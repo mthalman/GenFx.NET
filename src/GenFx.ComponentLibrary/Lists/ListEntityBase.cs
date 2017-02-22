@@ -283,6 +283,34 @@ namespace GenFx.ComponentLibrary.Lists
         }
 
         /// <summary>
+        /// Compares the current object with another object of the same type.
+        /// </summary>
+        /// <param name="other">An object to compare with this object.</param>
+        /// <returns>
+        /// A value that indicates the relative order of the objects being compared. The
+        /// return value has the following meanings:
+        ///  * Less than zero: This object is less than <paramref name="other"/>.
+        ///  * Zero: This object is equal to <paramref name="other"/>.
+        ///  * Greater than zero: This object is greater than <paramref name="other"/>.
+        ///  </returns>
+        public override int CompareTo(GeneticEntity other)
+        {
+            if (other == null)
+            {
+                return 1;
+            }
+
+            ListEntityBase listEntityBase = other as ListEntityBase;
+            if (listEntityBase == null)
+            {
+                throw new ArgumentException(StringUtil.GetFormattedString(
+                    Resources.ErrorMsg_ObjectIsWrongType, typeof(ListEntityBase)), nameof(other));
+            }
+
+            return ComparisonHelper.CompareLists(this, listEntityBase);
+        }
+
+        /// <summary>
         /// Stores a cached string representation of the <see cref="ListEntityBase{TItem}"/>.
         /// </summary>
         protected void UpdateStringRepresentation()

@@ -179,6 +179,7 @@ namespace GenFx.ComponentLibrary.Tests
         }
 
         private class TestEntity<T> : ListEntityBase<T>
+            where T : IComparable
         {
             public List<T> InnerList = new List<T>();
 

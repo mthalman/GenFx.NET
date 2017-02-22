@@ -1356,6 +1356,11 @@ namespace GenFx.Tests
                     return null;
                 }
             }
+
+            public override int CompareTo(GeneticEntity other)
+            {
+                throw new NotImplementedException();
+            }
         }
 
         [RequiredCrossoverOperator(typeof(MockCrossoverOperator2))]
@@ -1367,6 +1372,11 @@ namespace GenFx.Tests
                 {
                     return null;
                 }
+            }
+
+            public override int CompareTo(GeneticEntity other)
+            {
+                throw new NotImplementedException();
             }
         }
 
@@ -1699,6 +1709,11 @@ namespace GenFx.Tests
                 {
                     return null;
                 }
+            }
+
+            public override int CompareTo(GeneticEntity other)
+            {
+                throw new NotImplementedException();
             }
         }
 

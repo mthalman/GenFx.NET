@@ -168,11 +168,17 @@
   <data name="ErrorMsg_NullItemInList" xml:space="preserve">
     <value>Null item was contained in the list.</value>
   </data>
+  <data name="ErrorMsg_ObjectIsWrongType" xml:space="preserve">
+    <value>Object must be of type '{0}'.</value>
+  </data>
   <data name="ErrorMsg_PopulationReplacementValue_LessThanZero" xml:space="preserve">
     <value>Number of objects to be replaced must be a non-negative integer.  The value provided was '{0}'.</value>
   </data>
   <data name="ErrorMsg_TreeNodeCollectionCountError" xml:space="preserve">
     <value>The number of nodes in this collection is fixed and cannot be changed.</value>
+  </data>
+  <data name="ErrorMsg_TreeNodeValueNotComparable" xml:space="preserve">
+    <value>The tree node value '{0}' must implement System.IComparable.</value>
   </data>
   <data name="ErrorMsg_UseUniqueElementValuesNotSupported" xml:space="preserve">
     <value>This class does not support the use of unique element values.</value>

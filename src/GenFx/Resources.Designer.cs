@@ -316,6 +316,15 @@ namespace GenFx {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to List item &apos;{0}&apos; cannot be compared because it does not implement System.IComparable..
+        /// </summary>
+        internal static string ErrorMsg_ListItemNotComparable {
+            get {
+                return ResourceManager.GetString("ErrorMsg_ListItemNotComparable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The &apos;{0}&apos; type requires a {1} of type &apos;{2}&apos; but the algorithm is not configured with that type..
         /// </summary>
         internal static string ErrorMsg_NoRequiredConfigurableType {
@@ -330,6 +339,15 @@ namespace GenFx {
         internal static string ErrorMsg_NullReturnValue {
             get {
                 return ResourceManager.GetString("ErrorMsg_NullReturnValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Object must be of type &apos;{0}&apos;..
+        /// </summary>
+        internal static string ErrorMsg_ObjectIsWrongType {
+            get {
+                return ResourceManager.GetString("ErrorMsg_ObjectIsWrongType", resourceCulture);
             }
         }
         

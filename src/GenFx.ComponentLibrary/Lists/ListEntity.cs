@@ -13,6 +13,7 @@ namespace GenFx.ComponentLibrary.Lists
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix")]
     [DataContract]
     public abstract class ListEntity<TItem> : ListEntityBase<TItem>
+        where TItem : IComparable
     {
         [DataMember]
         private bool isFixedSize;

@@ -126,6 +126,7 @@ namespace GenFx.ComponentLibrary.Tests
 
         [DataContract]
         private class TestListEntity<T> : ListEntity<T>
+            where T : IComparable
         {
             public override bool RequiresUniqueElementValues
             {

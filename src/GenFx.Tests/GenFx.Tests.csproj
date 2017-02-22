@@ -65,6 +65,7 @@
   </Choose>
   <ItemGroup>
     <Compile Include="CollectionExtensionsTest.cs" />
+    <Compile Include="ComparisonHelperTest.cs" />
     <Compile Include="ComponentValidatorExtensionsTest.cs" />
     <Compile Include="CustomExternalPropertyValidatorAttributeTest.cs" />
     <Compile Include="CustomPropertyValidatorAttributeTest.cs" />

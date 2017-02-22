@@ -31,6 +31,11 @@ namespace TestCommon.Mocks
             base.CopyTo(entity);
             ((MockEntity)entity).Identifier = this.Identifier;
         }
+
+        public override int CompareTo(GeneticEntity other)
+        {
+            return Object.ReferenceEquals(this, other) ? 0 : 1;
+        }
     }
 
     [DataContract]
@@ -40,7 +45,12 @@ namespace TestCommon.Mocks
         {
             get { throw new Exception(); }
         }
-        
+
+        public override int CompareTo(GeneticEntity other)
+        {
+            throw new NotImplementedException();
+        }
+
         public override void CopyTo(GeneticEntity entity)
         {
             throw new Exception();

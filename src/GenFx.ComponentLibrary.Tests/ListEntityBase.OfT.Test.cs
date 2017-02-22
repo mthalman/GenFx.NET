@@ -3,9 +3,8 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TestCommon.Helpers;
+using TestCommon.Mocks;
 
 namespace GenFx.ComponentLibrary.Tests
 {
@@ -146,7 +145,139 @@ namespace GenFx.ComponentLibrary.Tests
             Assert.AreEqual(3, ((ICollection<int>)entity).Count);
         }
 
+        /// <summary>
+        /// Tests that the <see cref="ListEntityBase{TItem}.CompareTo"/> method works correctly.
+        /// </summary>
+        [TestMethod]
+        public void ListEntityBaseOfT_CompareTo_Equal()
+        {
+            TestEntity<string> entity1 = new TestEntity<string>();
+            entity1.Add("a");
+            entity1.Add(null);
+            entity1.Add("b");
+            entity1.Add(null);
+
+            TestEntity<string> entity2 = new TestEntity<string>();
+            entity2.Add("a");
+            entity2.Add(null);
+            entity2.Add("b");
+            entity2.Add(null);
+
+            int result = entity1.CompareTo(entity2);
+            Assert.AreEqual(0, result);
+        }
+
+        /// <summary>
+        /// Tests that the <see cref="ListEntityBase{TItem}.CompareTo"/> method works correctly.
+        /// </summary>
+        [TestMethod]
+        public void ListEntityBaseOfT_CompareTo_LessThan()
+        {
+            TestEntity<string> entity1 = new TestEntity<string>();
+            entity1.Add("a");
+            entity1.Add(null);
+            entity1.Add("a");
+            entity1.Add(null);
+
+            TestEntity<string> entity2 = new TestEntity<string>();
+            entity2.Add("a");
+            entity2.Add(null);
+            entity2.Add("b");
+            entity2.Add(null);
+
+            int result = entity1.CompareTo(entity2);
+            Assert.AreEqual(-1, result);
+        }
+
+        /// <summary>
+        /// Tests that the <see cref="ListEntityBase{TItem}.CompareTo"/> method works correctly.
+        /// </summary>
+        [TestMethod]
+        public void ListEntityBaseOfT_CompareTo_GreaterThan()
+        {
+            TestEntity<string> entity1 = new TestEntity<string>();
+            entity1.Add("a");
+            entity1.Add(null);
+            entity1.Add("c");
+            entity1.Add(null);
+
+            TestEntity<string> entity2 = new TestEntity<string>();
+            entity2.Add("a");
+            entity2.Add(null);
+            entity2.Add("b");
+            entity2.Add(null);
+
+            int result = entity1.CompareTo(entity2);
+            Assert.AreEqual(1, result);
+        }
+
+        /// <summary>
+        /// Tests that the <see cref="ListEntityBase{TItem}.CompareTo"/> method works correctly.
+        /// </summary>
+        [TestMethod]
+        public void ListEntityBaseOfT_CompareTo_ShorterLength()
+        {
+            TestEntity<string> entity1 = new TestEntity<string>();
+            entity1.Add("a");
+            entity1.Add(null);
+            entity1.Add("b");
+
+            TestEntity<string> entity2 = new TestEntity<string>();
+            entity2.Add("a");
+            entity2.Add(null);
+            entity2.Add("b");
+            entity2.Add(null);
+
+            int result = entity1.CompareTo(entity2);
+            Assert.AreEqual(-1, result);
+        }
+
+        /// <summary>
+        /// Tests that the <see cref="ListEntityBase{TItem}.CompareTo"/> method works correctly.
+        /// </summary>
+        [TestMethod]
+        public void ListEntityBaseOfT_CompareTo_LongerLength()
+        {
+            TestEntity<string> entity1 = new TestEntity<string>();
+            entity1.Add("a");
+            entity1.Add(null);
+            entity1.Add("b");
+            entity1.Add(null);
+            entity1.Add("c");
+
+            TestEntity<string> entity2 = new TestEntity<string>();
+            entity2.Add("a");
+            entity2.Add(null);
+            entity2.Add("b");
+            entity2.Add(null);
+
+            int result = entity1.CompareTo(entity2);
+            Assert.AreEqual(1, result);
+        }
+
+        /// <summary>
+        /// Tests that the <see cref="ListEntityBase{TItem}.CompareTo"/> method works correctly.
+        /// </summary>
+        [TestMethod]
+        public void ListEntityBaseOfT_CompareTo_Null()
+        {
+            TestEntity<string> entity1 = new TestEntity<string>();
+            int result = entity1.CompareTo((GeneticEntity)null);
+            Assert.AreEqual(1, result);
+        }
+
+        /// <summary>
+        /// Tests that an exception is thrown when passing an invalid entity to <see cref="ListEntityBase{TItem}.CompareTo"/> method works correctly.
+        /// </summary>
+        [TestMethod]
+        public void ListEntityBaseOfT_CompareTo_InvalidEntity()
+        {
+            TestEntity<string> entity1 = new TestEntity<string>();
+            AssertEx.Throws<ArgumentException>(() => entity1.CompareTo(new MockEntity()));
+        }
+
         private class TestEntity<T> : ListEntityBase<T>
+            where T : IComparable
         {
             public List<T> InnerList = new List<T>();
 

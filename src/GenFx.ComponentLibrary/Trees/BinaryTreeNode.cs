@@ -1,3 +1,4 @@
+using System;
 using System.Runtime.Serialization;
 
 namespace GenFx.ComponentLibrary.Trees
@@ -8,6 +9,7 @@ namespace GenFx.ComponentLibrary.Trees
     /// <typeparam name="T">Type of value contained by the node.</typeparam>
     [DataContract]
     public class BinaryTreeNode<T> : TreeNode<T>
+        where T : IComparable
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="BinaryTreeNode{T}"/> class.
