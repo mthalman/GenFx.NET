@@ -239,6 +239,91 @@ namespace GenFx.ComponentLibrary.Tests
             Assert.IsInstanceOfType(result.RootNode, typeof(TreeNode));
         }
 
+        /// <summary>
+        /// Tests that the <see cref="TreeEntityBase.CompareTo"/> method works correctly.
+        /// </summary>
+        [TestMethod]
+        public void TreeEntityBase_CompareTo_Equal()
+        {
+            TestTreeEntity entity1 = CreateTestTree();
+            TestTreeEntity entity2 = CreateTestTree();
+
+            int result = entity1.CompareTo(entity2);
+            Assert.AreEqual(0, result);
+        }
+
+        /// <summary>
+        /// Tests that the <see cref="TreeEntityBase.CompareTo"/> method works correctly.
+        /// </summary>
+        [TestMethod]
+        public void TreeEntityBase_CompareTo_GreaterTree()
+        {
+            TestTreeEntity entity1 = CreateTestTree();
+            entity1.RootNode.ChildNodes.RemoveAt(0);
+            TestTreeEntity entity2 = CreateTestTree();
+
+            int result = entity1.CompareTo(entity2);
+            Assert.AreEqual(1, result);
+        }
+
+        /// <summary>
+        /// Tests that the <see cref="TreeEntityBase.CompareTo"/> method works correctly.
+        /// </summary>
+        [TestMethod]
+        public void TreeEntityBase_CompareTo_LesserTree()
+        {
+            TestTreeEntity entity1 = CreateTestTree();
+            TestTreeEntity entity2 = CreateTestTree();
+            entity2.RootNode.ChildNodes.RemoveAt(0);
+
+            int result = entity1.CompareTo(entity2);
+            Assert.AreEqual(-1, result);
+        }
+
+        /// <summary>
+        /// Tests that the <see cref="TreeEntityBase.CompareTo"/> method works correctly.
+        /// </summary>
+        [TestMethod]
+        public void TreeEntityBase_CompareTo_Null()
+        {
+            TestTreeEntity entity1 = CreateTestTree();
+
+            int result = entity1.CompareTo(null);
+            Assert.AreEqual(1, result);
+        }
+
+        /// <summary>
+        /// Tests that an exception is thrown when passing an invalid entity to <see cref="TreeEntityBase.CompareTo"/>.
+        /// </summary>
+        [TestMethod]
+        public void TreeEntityBase_CompareTo_InvalidEntity()
+        {
+            TestTreeEntity entity1 = CreateTestTree();
+            AssertEx.Throws<ArgumentException>(() => entity1.CompareTo(new MockEntity()));
+        }
+
+        private static TestTreeEntity CreateTestTree()
+        {
+            TestTreeEntity entity = new TestTreeEntity();
+            TreeNode root = new TreeNode();
+            root.Value = 1;
+            entity.SetRootNode(root);
+
+            TreeNode node2 = new TreeNode();
+            node2.Value = 2;
+            root.ChildNodes.Add(node2);
+
+            TreeNode node3 = new TreeNode();
+            node3.Value = 3;
+            root.ChildNodes.Add(node3);
+
+            TreeNode node4 = new TreeNode();
+            node4.Value = 4;
+            node3.ChildNodes.Add(node4);
+
+            return entity;
+        }
+
         [DataContract]
         private class TestTreeEntity : TreeEntityBase
         {

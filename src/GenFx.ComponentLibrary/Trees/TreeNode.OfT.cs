@@ -7,6 +7,7 @@ namespace GenFx.ComponentLibrary.Trees
     /// </summary>
     /// <typeparam name="T">Type of value contained by the node.</typeparam>
     public class TreeNode<T> : TreeNode
+        where T : IComparable
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="TreeNode{T}"/> class.

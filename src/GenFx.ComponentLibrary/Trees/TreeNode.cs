@@ -60,7 +60,15 @@ namespace GenFx.ComponentLibrary.Trees
         public object Value
         {
             get { return this.nodeValue; }
-            set { this.nodeValue = value; }
+            set
+            {
+                if (value != null && !(value is IComparable))
+                {
+                    throw new ArgumentException(Resources.ErrorMsg_TreeNodeValueNotComparable, nameof(value));
+                }
+
+                this.nodeValue = value;
+            }
         }
 
         /// <summary>

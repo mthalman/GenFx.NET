@@ -1,5 +1,8 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using System.Runtime.Serialization;
 
 namespace GenFx.ComponentLibrary.Trees
@@ -62,6 +65,39 @@ namespace GenFx.ComponentLibrary.Trees
             this.rootNode.ParentNode = null;
             node.Tree = this;
             TreeHelper.SetTreeForChildNodes(node);
+        }
+
+        /// <summary>
+        /// Compares the current object with another object of the same type.
+        /// </summary>
+        /// <param name="other">An object to compare with this object.</param>
+        /// <returns>
+        /// A value that indicates the relative order of the objects being compared. The
+        /// return value has the following meanings:
+        ///  * Less than zero: This object is less than <paramref name="other"/>.
+        ///  * Zero: This object is equal to <paramref name="other"/>.
+        ///  * Greater than zero: This object is greater than <paramref name="other"/>.
+        ///  </returns>
+        public override int CompareTo(GeneticEntity other)
+        {
+            if (other == null)
+            {
+                return 1;
+            }
+
+            TreeEntityBase treeEntityBase = other as TreeEntityBase;
+            if (treeEntityBase == null)
+            {
+                throw new ArgumentException(StringUtil.GetFormattedString(
+                    Resources.ErrorMsg_ObjectIsWrongType, typeof(TreeEntityBase)), nameof(other));
+            }
+
+            List<TreeNode> thisTree = this.GetPrefixTree().ToList();
+            List<TreeNode> otherTree = treeEntityBase.GetPrefixTree().ToList();
+
+            return ComparisonHelper.CompareLists(
+                (IList)thisTree.Select(n => n.Value).ToList(),
+                (IList)otherTree.Select(n => n.Value).ToList());
         }
     }
 }

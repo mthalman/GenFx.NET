@@ -1,3 +1,4 @@
+using System;
 using System.Runtime.Serialization;
 
 namespace GenFx.ComponentLibrary.Trees
@@ -9,6 +10,7 @@ namespace GenFx.ComponentLibrary.Trees
     [DataContract]
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1005:AvoidExcessiveParametersOnGenericTypes")]
     public abstract class BinaryTreeEntity<TValue> : TreeEntity<BinaryTreeNode<TValue>>
+        where TValue : IComparable
     {
     }
 }

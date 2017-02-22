@@ -214,6 +214,15 @@ namespace GenFx.ComponentLibrary {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Object must be of type &apos;{0}&apos;..
+        /// </summary>
+        internal static string ErrorMsg_ObjectIsWrongType {
+            get {
+                return ResourceManager.GetString("ErrorMsg_ObjectIsWrongType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Number of objects to be replaced must be a non-negative integer.  The value provided was &apos;{0}&apos;..
         /// </summary>
         internal static string ErrorMsg_PopulationReplacementValue_LessThanZero {
@@ -228,6 +237,15 @@ namespace GenFx.ComponentLibrary {
         internal static string ErrorMsg_TreeNodeCollectionCountError {
             get {
                 return ResourceManager.GetString("ErrorMsg_TreeNodeCollectionCountError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The tree node value &apos;{0}&apos; must implement System.IComparable..
+        /// </summary>
+        internal static string ErrorMsg_TreeNodeValueNotComparable {
+            get {
+                return ResourceManager.GetString("ErrorMsg_TreeNodeValueNotComparable", resourceCulture);
             }
         }
         

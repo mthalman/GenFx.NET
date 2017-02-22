@@ -13,7 +13,8 @@ namespace GenFx
     /// <see cref="MutationOperator"/> act upon genetic entities to bring about change in the system.
     /// </remarks>
     [DataContract]
-    public abstract class GeneticEntity : GeneticComponentWithAlgorithm
+    public abstract class GeneticEntity : GeneticComponentWithAlgorithm, IComparable<GeneticEntity>,
+        IComparable, IEquatable<GeneticEntity>
     {
         [DataMember]
         private double rawFitnessValue;
@@ -170,6 +171,131 @@ namespace GenFx
             entity.Age = this.Age;
             entity.rawFitnessValue = this.rawFitnessValue;
             entity.scaledFitnessValue = this.scaledFitnessValue;
+        }
+
+        /// <summary>
+        /// Compares the current object with another object of the same type.
+        /// </summary>
+        /// <param name="other">An object to compare with this object.</param>
+        /// <returns>
+        /// A value that indicates the relative order of the objects being compared. The
+        /// return value has the following meanings:
+        ///  * Less than zero: This object is less than <paramref name="other"/>.
+        ///  * Zero: This object is equal to <paramref name="other"/>.
+        ///  * Greater than zero: This object is greater than <paramref name="other"/>.
+        ///  </returns>
+        public abstract int CompareTo(GeneticEntity other);
+
+        /// <summary>
+        /// Compares the current object with another object.
+        /// </summary>
+        /// <param name="obj">An object to compare with this object.</param>
+        /// <returns>
+        /// A value that indicates the relative order of the objects being compared. The
+        /// return value has the following meanings:
+        ///  * Less than zero: This object is less than <paramref name="obj"/>.
+        ///  * Zero: This object is equal to <paramref name="obj"/>
+        ///  * Greater than zero: This object is greater than <paramref name="obj"/>.
+        ///  </returns>
+        public int CompareTo(object obj)
+        {
+            if (obj == null)
+            {
+                return 1;
+            }
+
+            GeneticEntity entity = obj as GeneticEntity;
+            if (entity == null)
+            {
+                throw new ArgumentException(StringUtil.GetFormattedString(
+                    Resources.ErrorMsg_ObjectIsWrongType, typeof(GeneticEntity)), nameof(obj));
+            }
+
+            return this.CompareTo(entity);
+        }
+
+        /// <summary>
+        /// Indicates whether the current object is equal to another object.
+        /// </summary>
+        /// <param name="obj">An object to compare with this object.</param>
+        /// <returns>true if the current object is equal to <paramref name="obj"/>; otherwise, false.</returns>
+        public override bool Equals(object obj)
+        {
+            if (obj == null)
+            {
+                return false;
+            }
+
+            GeneticEntity entity = obj as GeneticEntity;
+            if (entity == null)
+            {
+                return false;
+            }
+
+            return this.Equals(entity);
+        }
+
+        /// <summary>
+        /// Serves as the default hash function.
+        /// </summary>
+        /// <returns>A hash code for the current object.</returns>
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+
+        /// <summary>
+        /// Indicates whether the current object is equal to another object of the same type.
+        /// </summary>
+        /// <param name="other">An object to compare with this object.</param>
+        /// <returns>true if the current object is equal to <paramref name="other"/>; otherwise, false.</returns>
+        public bool Equals(GeneticEntity other)
+        {
+            return this.CompareTo(other) == 0;
+        }
+
+        /// <summary>
+        /// Compares two <see cref="GeneticEntity"/> objects for equality.
+        /// </summary>
+        /// <param name="obj1">The first <see cref="GeneticEntity"/> object to compare.</param>
+        /// <param name="obj2">The second <see cref="GeneticEntity"/> object to compare.</param>
+        /// <returns>true if the two <see cref="GeneticEntity"/> objects are equal; otherwise, false.</returns>
+        public static bool operator ==(GeneticEntity obj1, GeneticEntity obj2)
+        {
+            return ComparisonHelper.CompareObjects(obj1, obj2) == 0;
+        }
+
+        /// <summary>
+        /// Compares two <see cref="GeneticEntity"/> objects for inequality.
+        /// </summary>
+        /// <param name="obj1">The first <see cref="GeneticEntity"/> object to compare.</param>
+        /// <param name="obj2">The second <see cref="GeneticEntity"/> object to compare.</param>
+        /// <returns>true if the two <see cref="GeneticEntity"/> objects are not equal; otherwise, false.</returns>
+        public static bool operator !=(GeneticEntity obj1, GeneticEntity obj2)
+        {
+            return ComparisonHelper.CompareObjects(obj1, obj2) != 0;
+        }
+
+        /// <summary>
+        /// Compares two <see cref="GeneticEntity"/> objects to determine if <paramref name="obj1"/> is less than <paramref name="obj2"/>.
+        /// </summary>
+        /// <param name="obj1">The first <see cref="GeneticEntity"/> object to compare.</param>
+        /// <param name="obj2">The second <see cref="GeneticEntity"/> object to compare.</param>
+        /// <returns>true if <paramref name="obj1"/> is less than <paramref name="obj2"/>; otherwise, false.</returns>
+        public static bool operator <(GeneticEntity obj1, GeneticEntity obj2)
+        {
+            return ComparisonHelper.CompareObjects(obj1, obj2) < 0;
+        }
+
+        /// <summary>
+        /// Compares two <see cref="GeneticEntity"/> objects to determine if <paramref name="obj1"/> is greater than <paramref name="obj2"/>.
+        /// </summary>
+        /// <param name="obj1">The first <see cref="GeneticEntity"/> object to compare.</param>
+        /// <param name="obj2">The second <see cref="GeneticEntity"/> object to compare.</param>
+        /// <returns>true if <paramref name="obj1"/> is greater than <paramref name="obj2"/>; otherwise, false.</returns>
+        public static bool operator >(GeneticEntity obj1, GeneticEntity obj2)
+        {
+            return ComparisonHelper.CompareObjects(obj1, obj2) > 0;
         }
     }
 }

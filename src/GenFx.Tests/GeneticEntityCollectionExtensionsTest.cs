@@ -206,6 +206,11 @@ namespace GenFx.Tests
                     throw new NotImplementedException();
                 }
             }
+
+            public override int CompareTo(GeneticEntity other)
+            {
+                throw new NotImplementedException();
+            }
         }
 
         private class TestFitnessEvalutor : FitnessEvaluator

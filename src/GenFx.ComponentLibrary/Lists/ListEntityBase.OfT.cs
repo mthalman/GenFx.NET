@@ -1,9 +1,7 @@
-﻿using GenFx.Validation;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
-using System.Text;
 
 namespace GenFx.ComponentLibrary.Lists
 {
@@ -19,6 +17,7 @@ namespace GenFx.ComponentLibrary.Lists
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix")]
     [DataContract]
     public abstract class ListEntityBase<TItem> : ListEntityBase, IList<TItem>
+        where TItem : IComparable
     {
         /// <summary>
         /// Gets or sets the list element at the specified index.
@@ -47,13 +46,13 @@ namespace GenFx.ComponentLibrary.Lists
         /// <param name="value">The value to set at the index.</param>
         public sealed override void SetValue(int index, object value)
         {
-            if (!(value is TItem))
+            if (value == null && default(TItem) != null)
             {
-                if (value == null)
-                {
-                    throw new ArgumentNullException(nameof(value));
-                }
+                throw new ArgumentNullException(nameof(value));
+            }
 
+            if (value != null && !(value is TItem))
+            {
                 throw new ArgumentException(nameof(value),
                     StringUtil.GetFormattedString(Resources.ErrorMsg_ListEntityBase_InvalidItemType, value.GetType(), typeof(TItem)));
             }
@@ -125,6 +124,34 @@ namespace GenFx.ComponentLibrary.Lists
             int count = list.Count;
             list.Remove(item);
             return list.Count != count;
+        }
+
+        /// <summary>
+        /// Compares the current object with another object of the same type.
+        /// </summary>
+        /// <param name="other">An object to compare with this object.</param>
+        /// <returns>
+        /// A value that indicates the relative order of the objects being compared. The
+        /// return value has the following meanings:
+        ///  * Less than zero: This object is less than <paramref name="other"/>.
+        ///  * Zero: This object is equal to <paramref name="other"/>.
+        ///  * Greater than zero: This object is greater than <paramref name="other"/>.
+        ///  </returns>
+        public override int CompareTo(GeneticEntity other)
+        {
+            if (other == null)
+            {
+                return 1;
+            }
+
+            ListEntityBase<TItem> listEntityBase = other as ListEntityBase<TItem>;
+            if (listEntityBase == null)
+            {
+                throw new ArgumentException(StringUtil.GetFormattedString(
+                    Resources.ErrorMsg_ObjectIsWrongType, typeof(ListEntityBase<TItem>)), nameof(other));
+            }
+
+            return ComparisonHelper.CompareLists<TItem>(this, listEntityBase);
         }
     }
 }

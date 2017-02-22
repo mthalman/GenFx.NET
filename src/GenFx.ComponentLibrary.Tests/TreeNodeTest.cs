@@ -219,6 +219,16 @@ namespace GenFx.ComponentLibrary.Tests
             Assert.IsInstanceOfType(node.ChildNodes[0], typeof(TreeNode));
         }
 
+        /// <summary>
+        /// Tests that an exception is thrown when trying to set <see cref="TreeNode.Value"/> to an invalid value.
+        /// </summary>
+        [TestMethod]
+        public void TreeNode_InvalidValue()
+        {
+            TreeNode node = new TreeNode();
+            AssertEx.Throws<ArgumentException>(() => node.Value = new TreeNodeTest());
+        }
+
         private static GeneticAlgorithm GetAlgorithm()
         {
             GeneticAlgorithm algorithm = new MockGeneticAlgorithm

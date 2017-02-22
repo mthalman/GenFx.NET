@@ -1,9 +1,5 @@
-﻿using GenFx;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Text;
 using System.Threading.Tasks;
 using TestCommon.Helpers;
 using TestCommon.Mocks;
@@ -11,9 +7,8 @@ using TestCommon.Mocks;
 namespace GenFx.Tests
 {
     /// <summary>
-    ///This is a test class for GenFx.GeneticEntity and is intended
-    ///to contain all GenFx.GeneticEntity Unit Tests
-    ///</summary>
+    /// Contains unit tests for the <see cref="GeneticEntity"/> class.
+    /// </summary>
     [TestClass()]
     public class GeneticEntityTest
     {
@@ -149,11 +144,142 @@ namespace GenFx.Tests
             AssertEx.Throws<ArgumentException>(() => entity.GetFitnessValue((FitnessType)3));
         }
 
+        /// <summary>
+        /// Tests that the <see cref="GeneticEntity.CompareTo(object)"/> method invokes the 
+        /// <see cref="GeneticEntity.CompareTo(GeneticEntity)"/> method.
+        /// </summary>
+        [TestMethod]
+        public void GeneticEntity_CompareTo()
+        {
+            Assert.AreEqual(44, new TestEntity(44).CompareTo((object)new TestEntity()));
+        }
+
+        /// <summary>
+        /// Tests that the correct value is returned when passing null to <see cref="GeneticEntity.CompareTo(object)"/>.
+        /// </summary>
+        [TestMethod]
+        public void GeneticEntity_CompareTo_Null()
+        {
+            Assert.AreEqual(1, new TestEntity(44).CompareTo((object)null));
+        }
+
+        /// <summary>
+        /// Tests that an exception is thrown when passing a non entity to <see cref="GeneticEntity.CompareTo(object)"/>.
+        /// </summary>
+        [TestMethod]
+        public void GeneticEntity_CompareTo_InvalidEntity()
+        {
+            TestEntity entity = new TestEntity();
+            AssertEx.Throws<ArgumentException>(() => entity.CompareTo((object)"test"));
+        }
+
+        /// <summary>
+        /// Tests that the <see cref="GeneticEntity.Equals(object)"/> method works correctly.
+        /// </summary>
+        [TestMethod]
+        public void GeneticEntity_EqualsObject()
+        {
+            Assert.IsFalse(new TestEntity(1).Equals((object)new TestEntity()));
+            Assert.IsFalse(new TestEntity(-1).Equals((object)new TestEntity()));
+            Assert.IsTrue(new TestEntity(0).Equals((object)new TestEntity()));
+            Assert.IsFalse(new TestEntity(0).Equals((object)null));
+            Assert.IsFalse(new TestEntity(0).Equals((object)"test"));
+        }
+
+        /// <summary>
+        /// Tests that the <see cref="GeneticEntity.Equals(GeneticEntity)"/> method works correctly.
+        /// </summary>
+        [TestMethod]
+        public void GeneticEntity_EqualsGeneticEntity()
+        {
+            Assert.IsFalse(new TestEntity(1).Equals(new TestEntity()));
+            Assert.IsFalse(new TestEntity(-1).Equals(new TestEntity()));
+            Assert.IsTrue(new TestEntity(0).Equals(new TestEntity()));
+            Assert.IsFalse(new TestEntity(1).Equals((GeneticEntity)null));
+        }
+
+        /// <summary>
+        /// Tests that the equality operator works correctly.
+        /// </summary>
+        [TestMethod]
+        public void GeneticEntity_EqualityOperator()
+        {
+            Assert.IsFalse(new TestEntity(1) == new TestEntity());
+            Assert.IsFalse(new TestEntity(-1) == new TestEntity());
+            Assert.IsTrue(new TestEntity(0) == new TestEntity());
+            Assert.IsFalse(new TestEntity(0) == null);
+            Assert.IsFalse(null == new TestEntity(0));
+            Assert.IsTrue((GeneticEntity)null == (GeneticEntity)null);
+        }
+
+        /// <summary>
+        /// Tests that the inequality operator works correctly.
+        /// </summary>
+        [TestMethod]
+        public void GeneticEntity_InequalityOperator()
+        {
+            Assert.IsTrue(new TestEntity(1) != new TestEntity());
+            Assert.IsTrue(new TestEntity(-1) != new TestEntity());
+            Assert.IsFalse(new TestEntity(0) != new TestEntity());
+            Assert.IsTrue(new TestEntity(0) != null);
+            Assert.IsTrue(null != new TestEntity(0));
+            Assert.IsFalse((GeneticEntity)null != (GeneticEntity)null);
+        }
+
+        /// <summary>
+        /// Tests that the less than operator works correctly.
+        /// </summary>
+        [TestMethod]
+        public void GeneticEntity_LessThanOperator()
+        {
+            Assert.IsFalse(new TestEntity(1) < new TestEntity());
+            Assert.IsTrue(new TestEntity(-1) < new TestEntity());
+            Assert.IsFalse(new TestEntity(0) < new TestEntity(0));
+            Assert.IsFalse(new TestEntity(0) < null);
+            Assert.IsTrue(null < new TestEntity(0));
+            Assert.IsFalse((GeneticEntity)null < (GeneticEntity)null);
+        }
+
+        /// <summary>
+        /// Tests that the greater than operator works correctly.
+        /// </summary>
+        [TestMethod]
+        public void GeneticEntity_GreaterThanOperator()
+        {
+            Assert.IsTrue(new TestEntity(1) > new TestEntity());
+            Assert.IsFalse(new TestEntity(-1) > new TestEntity());
+            Assert.IsFalse(new TestEntity(0) > new TestEntity(0));
+            Assert.IsTrue(new TestEntity(0) > null);
+            Assert.IsFalse(null > new TestEntity(0));
+            Assert.IsFalse((GeneticEntity)null > (GeneticEntity)null);
+        }
+
+        /// <summary>
+        /// Tests that the <see cref="GeneticEntity.GetHashCode"/> method works correctly.
+        /// </summary>
+        [TestMethod]
+        public void GeneticEntity_GetHashCode()
+        {
+            Assert.AreNotEqual(0, new TestEntity().GetHashCode());
+        }
+
         private class TestEntity : GeneticEntity
         {
+            private int compareToResult;
+
+            public TestEntity(int compareToResult = 0)
+            {
+                this.compareToResult = compareToResult;
+            }
+
             public override string Representation
             {
                 get { throw new Exception("The method or operation is not implemented."); }
+            }
+
+            public override int CompareTo(GeneticEntity other)
+            {
+                return this.compareToResult;
             }
         }
     }
