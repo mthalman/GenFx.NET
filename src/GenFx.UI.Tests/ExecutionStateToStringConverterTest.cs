@@ -26,6 +26,9 @@ namespace GenFx.UI.Tests
                 Assert.IsInstanceOfType(result, typeof(string));
             }
 
+            result = converter.Convert((ExecutionState)20, null, null, null);
+            Assert.IsNull(result);
+
             result = converter.Convert(null, null, null, null);
             Assert.IsNull(result);
         }

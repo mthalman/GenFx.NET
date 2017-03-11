@@ -38,6 +38,9 @@ namespace GenFx.UI.Converters
                     case FitnessType.Raw:
                         returnValue = EnumsViewModel.FitnessTypeRaw;
                         break;
+                    default:
+                        returnValue = null;
+                        break;
                 }
             }
             else if (value.GetType() == typeof(FitnessSortOption))
@@ -50,6 +53,9 @@ namespace GenFx.UI.Converters
                         break;
                     case FitnessSortOption.Fitness:
                         returnValue = EnumsViewModel.FitnessSortByFitness;
+                        break;
+                    default:
+                        returnValue = null;
                         break;
                 }
             }

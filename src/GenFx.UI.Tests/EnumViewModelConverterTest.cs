@@ -33,7 +33,13 @@ namespace GenFx.UI.Tests
                 Assert.AreEqual(val, viewModel.Value);
                 Assert.IsTrue(!(String.IsNullOrEmpty(viewModel.DisplayName)));
             }
-            
+
+            result = converter.Convert((FitnessType)20, null, null, null);
+            Assert.IsNull(result);
+
+            result = converter.Convert((FitnessSortOption)20, null, null, null);
+            Assert.IsNull(result);
+
             result = converter.Convert(null, null, null, null);
             Assert.IsNull(result);
         }
