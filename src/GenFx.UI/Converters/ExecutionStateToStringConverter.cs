@@ -44,6 +44,9 @@ namespace GenFx.UI.Converters
                 case ExecutionState.Running:
                     displayValue = Resources.ExecutionState_Running;
                     break;
+                default:
+                    displayValue = null;
+                    break;
             }
 
             return displayValue;
