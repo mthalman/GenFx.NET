@@ -1,11 +1,7 @@
-﻿using GenFx;
-using GenFx.Validation;
+﻿using GenFx.Validation;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Reflection;
 using TestCommon.Helpers;
 
 namespace GenFx.Tests
@@ -84,10 +80,10 @@ namespace GenFx.Tests
         }
 
         /// <summary>
-        /// Verifies that the <see cref="GeneticComponent.ValidateProperty"/> method works correctly.
+        /// Verifies that the <see cref="GeneticComponent.ValidateProperty(object, string)"/> method works correctly.
         /// </summary>
         [TestMethod]
-        public void GeneticComponent_ValidateProperty()
+        public void GeneticComponent_ValidateProperty_Name()
         {
             TestComponent component = new TestComponent();
             
@@ -100,26 +96,52 @@ namespace GenFx.Tests
 
         /// <summary>
         /// Verifies that an exception is thrown when passing a null or empty property name to
-        /// <see cref="GeneticComponent.ValidateProperty"/>.
+        /// <see cref="GeneticComponent.ValidateProperty(object, string)"/>.
         /// </summary>
         [TestMethod]
-        public void GeneticComponent_ValidateProperty_NullOrEmptyPropertyName()
+        public void GeneticComponent_ValidateProperty_Name_NullOrEmptyPropertyName()
         {
             TestComponent component = new TestComponent();
-            AssertEx.Throws<ArgumentException>(() => component.TestValidateProperty(1, null));
+            AssertEx.Throws<ArgumentException>(() => component.TestValidateProperty(1, (string)null));
 
             AssertEx.Throws<ArgumentException>(() => component.TestValidateProperty(1, String.Empty));
         }
 
         /// <summary>
         /// Verifies that an exception is thrown when passing property name of a property that doesn't
-        /// exist to <see cref="GeneticComponent.ValidateProperty"/>.
+        /// exist to <see cref="GeneticComponent.ValidateProperty(object, string)"/>.
         /// </summary>
         [TestMethod]
-        public void GeneticComponent_ValidateProperty_NonExistentProperty()
+        public void GeneticComponent_ValidateProperty_Name_NonExistentProperty()
         {
             TestComponent component = new TestComponent();
             AssertEx.Throws<ArgumentException>(() => component.TestValidateProperty(1, "Nothing"));
+        }
+
+        /// <summary>
+        /// Verifies that the <see cref="GeneticComponent.ValidateProperty(object, PropertyInfo)"/> method works correctly.
+        /// </summary>
+        [TestMethod]
+        public void GeneticComponent_ValidateProperty_PropertyInfo()
+        {
+            TestComponent component = new TestComponent();
+
+            // is valid
+            component.TestValidateProperty(1, nameof(component.IntValue));
+
+            // is not valid
+            AssertEx.Throws<ValidationException>(() => component.TestValidateProperty(11, component.GetType().GetProperty(nameof(component.IntValue))));
+        }
+
+        /// <summary>
+        /// Verifies that an exception is thrown when passing a null or empty property name to
+        /// <see cref="GeneticComponent.ValidateProperty(object, PropertyInfo)"/>.
+        /// </summary>
+        [TestMethod]
+        public void GeneticComponent_ValidateProperty_PropertyInfo_NullOrEmptyPropertyName()
+        {
+            TestComponent component = new TestComponent();
+            AssertEx.Throws<ArgumentNullException>(() => component.TestValidateProperty(1, (PropertyInfo)null));
         }
 
         /// <summary>
@@ -167,6 +189,11 @@ namespace GenFx.Tests
             public void TestValidateProperty(object value, string propertyName)
             {
                 this.ValidateProperty(value, propertyName);
+            }
+
+            public void TestValidateProperty(object value, PropertyInfo propertyInfo)
+            {
+                this.ValidateProperty(value, propertyInfo);
             }
         }
 

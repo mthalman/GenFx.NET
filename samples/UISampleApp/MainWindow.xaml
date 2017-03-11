@@ -1,0 +1,30 @@
+﻿<Window x:Class="UISampleApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:UISampleApp"
+        xmlns:genfx="clr-namespace:GenFx.UI.Controls;assembly=GenFx.UI"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="350" Width="525">
+    <DockPanel>
+        <genfx:ExecutionPanel DockPanel.Dock="Top"
+                              ExecutionContext="{Binding Context}" />
+        <genfx:AlgorithmStatusBar DockPanel.Dock="Bottom"
+                                  ExecutionContext="{Binding Context}" />
+        <Grid DockPanel.Dock="Left">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <genfx:PopulationSelector Grid.Row="0"
+                                      x:Name="populationSelector"
+                                      Environment="{Binding Context.GeneticAlgorithm.Environment}" />
+            <genfx:PopulationViewer Grid.Row="1"
+                                    Population="{Binding SelectedPopulation, ElementName=populationSelector}"
+                                    ExecutionState="{Binding Context.ExecutionState}" />
+        </Grid>
+        <genfx:FitnessChart DockPanel.Dock="Right"
+                            Population="{Binding SelectedPopulation, ElementName=populationSelector}" />
+    </DockPanel>
+</Window>

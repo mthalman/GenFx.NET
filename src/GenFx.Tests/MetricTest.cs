@@ -73,13 +73,13 @@ namespace GenFx.Tests
             ObservableCollection<MetricResult> results = metric.GetResults(0);
             Assert.AreEqual(2, results.Count, "Incorrect number of results.");
             Assert.AreEqual(0, results[0].GenerationIndex, "Result's GenerationIndex not set correctly.");
-            Assert.AreEqual(0, results[0].PopulationIndex, "Result's PopulationId not set correctly.");
+            Assert.AreEqual(0, results[0].PopulationIndex, "Result's PopulationIndex not set correctly.");
             Assert.AreEqual(1, results[0].ResultValue, "Result's ResultValue not set correctly.");
             Assert.AreSame(metric, results[0].Metric, "Result's Metric not set correctly.");
 
             results = metric.GetResults(1);
             Assert.AreEqual(0, results[0].GenerationIndex, "Result's GenerationIndex not set correctly.");
-            Assert.AreEqual(1, results[0].PopulationIndex, "Result's PopulationId not set correctly.");
+            Assert.AreEqual(1, results[0].PopulationIndex, "Result's PopulationIndex not set correctly.");
             Assert.AreEqual(2, results[0].ResultValue, "Result's ResultValue not set correctly.");
             Assert.AreSame(metric, results[0].Metric, "Result's Metric not set correctly.");
         }

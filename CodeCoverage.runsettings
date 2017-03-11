@@ -10,6 +10,8 @@
                 <ModulePath>.*GenFx\.Tests\.dll$</ModulePath>
                 <ModulePath>.*GenFx\.ComponentLibrary\.Tests\.dll$</ModulePath>
                 <ModulePath>.*TestCommon\.dll$</ModulePath>
+                <ModulePath>.*GenFx\.UI\.Tests\.dll$</ModulePath>
+                <ModulePath>.*oxyplot\.dll$</ModulePath>
               </Exclude>
             </ModulePaths>
             <Attributes>

@@ -280,11 +280,11 @@ namespace GenFx {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Population ID must be greater than or equal to zero..
+        ///   Looks up a localized string similar to Population index must be greater than or equal to zero..
         /// </summary>
-        internal static string ErrorMsg_InvalidPopulationID {
+        internal static string ErrorMsg_InvalidPopulationIndex {
             get {
-                return ResourceManager.GetString("ErrorMsg_InvalidPopulationID", resourceCulture);
+                return ResourceManager.GetString("ErrorMsg_InvalidPopulationIndex", resourceCulture);
             }
         }
         

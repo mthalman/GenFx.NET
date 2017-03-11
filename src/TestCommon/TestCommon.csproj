@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Helpers\AssertEx.cs" />
+    <Compile Include="Helpers\PropertyChangedHelper.cs" />
     <Compile Include="Helpers\SerializationHelper.cs" />
     <Compile Include="Mocks\MockCrossoverOperator.cs" />
     <Compile Include="Mocks\MockElitismStrategy.cs" />
