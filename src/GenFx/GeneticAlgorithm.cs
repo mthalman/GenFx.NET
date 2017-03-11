@@ -244,6 +244,7 @@ namespace GenFx
         public GeneticEnvironment Environment
         {
             get { return this.environment; }
+            private set { this.SetProperty(ref this.environment, value); }
         }
 
         /// <summary>
@@ -255,6 +256,7 @@ namespace GenFx
         public int CurrentGeneration
         {
             get { return this.currentGeneration; }
+            private set { this.SetProperty(ref this.currentGeneration, value); }
         }
         
         /// <summary>
@@ -274,7 +276,7 @@ namespace GenFx
         [SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
         public async Task InitializeAsync()
         {
-            this.environment = new GeneticEnvironment(this);
+            this.Environment = new GeneticEnvironment(this);
 
             if (this.terminator == null)
             {
@@ -294,7 +296,7 @@ namespace GenFx
 
             this.environment.Populations.Clear();
 
-            this.currentGeneration = 0;
+            this.CurrentGeneration = 0;
             
             await this.environment.InitializeAsync();
             this.OnGenerationCreated();
@@ -748,7 +750,7 @@ namespace GenFx
             }
 
             await Task.WhenAll(createGenerationTasks);
-            this.currentGeneration++;
+            this.CurrentGeneration++;
             this.OnGenerationCreated();
 
             await this.environment.EvaluateFitnessAsync();

@@ -1,7 +1,6 @@
 using GenFx.Validation;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
@@ -13,13 +12,8 @@ namespace GenFx
     /// Represents a customizable component within the framework.
     /// </summary>
     [DataContract]
-    public abstract class GeneticComponent : INotifyPropertyChanged
+    public abstract class GeneticComponent : ObservableObject
     {
-        /// <summary>
-        /// Occurs when a property value changes.
-        /// </summary>
-        public event PropertyChangedEventHandler PropertyChanged;
-
         /// <summary>
         /// Creates a new instance of the same component type as this object.
         /// </summary>
@@ -36,23 +30,7 @@ namespace GenFx
         }
 
         /// <summary>
-        /// Raises the <see cref="PropertyChanged"/> event.
-        /// </summary>
-        /// <param name="propertyName">The name of the property.</param>
-        /// <exception cref="ArgumentException"><paramref name="propertyName"/> is null or empty.</exception>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed")]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            if (String.IsNullOrEmpty(propertyName))
-            {
-                throw new ArgumentException(Resources.ErrorMsg_StringNullOrEmpty, nameof(propertyName));
-            }
-
-            this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-        /// <summary>
-        /// Sets the state of a property.  This handles validation and event raising.
+        /// Sets the state of a property.
         /// </summary>
         /// <param name="fieldValue">Backing field value of the property.</param>
         /// <param name="newValue">New value being assigned to the property.</param>
@@ -60,11 +38,10 @@ namespace GenFx
         /// <typeparam name="T">Type of the property.</typeparam>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "0#")]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed")]
-        protected void SetProperty<T>(ref T fieldValue, T newValue, [CallerMemberName] string propertyName = null)
+        protected override void SetProperty<T>(ref T fieldValue, T newValue, [CallerMemberName] string propertyName = null)
         {
             this.ValidateProperty(newValue, propertyName);
-            fieldValue = newValue;
-            this.OnPropertyChanged(propertyName);
+            base.SetProperty(ref fieldValue, newValue, propertyName);
         }
 
         /// <summary>
@@ -80,7 +57,7 @@ namespace GenFx
                 object propValue = propertyInfo.GetValue(this, null);
 
                 // Check that the property is valid using the validators attached directly to the property.
-                this.ValidateProperty(propValue, propertyInfo.Name);
+                this.ValidateProperty(propValue, propertyInfo);
             }
 
             ComponentValidatorAttribute[] attribs = (ComponentValidatorAttribute[])this.GetType().GetCustomAttributes(typeof(ComponentValidatorAttribute), true);
@@ -111,6 +88,25 @@ namespace GenFx
             {
                 throw new ArgumentException(StringUtil.GetFormattedString(
                   Resources.ErrorMsg_ComponentConfigurationPropertyNotFound, propertyName, this.GetType().FullName));
+            }
+
+            this.ValidateProperty(value, propertyInfo);
+        }
+
+        /// <summary>
+        /// Verifies that the value is a valid value for the property.
+        /// </summary>
+        /// <param name="value">Value being set to the property.</param>
+        /// <param name="propertyInfo">The <see cref="PropertyInfo"/> of the property to validate.</param>
+        /// <exception cref="ArgumentException"><paramref name="propertyInfo"/> is null.</exception>
+        /// <exception cref="ArgumentException">Property not found on configuration type.</exception>
+        /// <exception cref="ValidationException">Property was set to an invalid value.</exception>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed")]
+        protected void ValidateProperty(object value, PropertyInfo propertyInfo)
+        {
+            if (propertyInfo == null)
+            {
+                throw new ArgumentNullException(nameof(propertyInfo));
             }
 
             PropertyValidatorAttribute[] attribs = (PropertyValidatorAttribute[])propertyInfo.GetCustomAttributes(typeof(PropertyValidatorAttribute), false);

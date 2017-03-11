@@ -217,8 +217,8 @@
   <data name="ErrorMsg_InvalidGenerationIndex" xml:space="preserve">
     <value>Generation index must be greater than or equal to zero.</value>
   </data>
-  <data name="ErrorMsg_InvalidPopulationID" xml:space="preserve">
-    <value>Population ID must be greater than or equal to zero.</value>
+  <data name="ErrorMsg_InvalidPopulationIndex" xml:space="preserve">
+    <value>Population index must be greater than or equal to zero.</value>
   </data>
   <data name="ErrorMsg_RequiredPropertyNotSet" xml:space="preserve">
     <value>Configuration property '{0}' must be set.</value>

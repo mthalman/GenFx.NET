@@ -131,6 +131,7 @@
     <Compile Include="MutationOperator.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="Population.cs" />
+    <Compile Include="ObservableObject.cs" />
     <Compile Include="SelectionOperator.cs" />
     <Compile Include="Metric.cs" />
     <Compile Include="MetricExtensions.cs" />

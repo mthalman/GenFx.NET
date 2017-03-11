@@ -77,7 +77,7 @@ namespace GenFx
 
             if (populationIndex < 0)
             {
-                throw new ArgumentOutOfRangeException(nameof(populationIndex), populationIndex, Resources.ErrorMsg_InvalidPopulationID);
+                throw new ArgumentOutOfRangeException(nameof(populationIndex), populationIndex, Resources.ErrorMsg_InvalidPopulationIndex);
             }
 
             if (resultValue == null)

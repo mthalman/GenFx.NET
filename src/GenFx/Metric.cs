@@ -38,19 +38,19 @@ namespace GenFx
         /// <summary>
         /// Returns the metric results of the indicated population for this metric.
         /// </summary>
-        /// <param name="populationId">ID of the population for which to return metric results.</param>
+        /// <param name="populationIndex">Index of the population for which to return metric results.</param>
         /// <returns>Collection of <see cref="MetricResult"/> objects.</returns>
         /// <remarks>
         /// Each <see cref="MetricResult"/> object in the collection is associated
         /// with one generation of the population.
         /// </remarks>
-        public ObservableCollection<MetricResult> GetResults(int populationId)
+        public ObservableCollection<MetricResult> GetResults(int populationIndex)
         {
             ObservableCollection<MetricResult> results;
-            if (!this.populationResults.TryGetValue(populationId, out results))
+            if (!this.populationResults.TryGetValue(populationIndex, out results))
             {
                 results = new ObservableCollection<MetricResult>();
-                this.populationResults.Add(populationId, results);
+                this.populationResults.Add(populationIndex, results);
             }
             return results;
         }
