@@ -6,11 +6,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Threading;
 
 namespace GenFx.UI.Controls
 {
     /// <summary>
-    /// Control that provides the status of the execution of a <see cref="GeneticAlgorithm"/>.
+    /// Control that charts the fitness values of a population.
     /// </summary>
     public class FitnessChart : Control
     {
@@ -281,8 +282,11 @@ namespace GenFx.UI.Controls
                 }
             }
 
-            this.PlotModel.InvalidatePlot(true);
-            
+            this.Dispatcher.Invoke(() =>
+            {
+                this.PlotModel.InvalidatePlot(true);
+            }, DispatcherPriority.Background);
+
             this.stopwatch?.Restart();
         }
     }

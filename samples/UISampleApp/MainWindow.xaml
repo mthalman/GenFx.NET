@@ -8,23 +8,55 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525">
     <DockPanel>
-        <genfx:ExecutionPanel DockPanel.Dock="Top"
-                              ExecutionContext="{Binding Context}" />
+        
         <genfx:AlgorithmStatusBar DockPanel.Dock="Bottom"
                                   ExecutionContext="{Binding Context}" />
-        <Grid DockPanel.Dock="Left">
+        <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="10" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-            <genfx:PopulationSelector Grid.Row="0"
+
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition  />
+                    <ColumnDefinition Width="10" />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                
+                <Grid Grid.Column="0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    
+                    <genfx:ExecutionPanel Grid.Row="0"
+                                  ExecutionContext="{Binding Context}" />
+                    <genfx:PopulationSelector Grid.Row="1"
                                       x:Name="populationSelector"
                                       Environment="{Binding Context.GeneticAlgorithm.Environment}" />
-            <genfx:PopulationViewer Grid.Row="1"
+                    <genfx:PopulationViewer Grid.Row="2"
                                     Population="{Binding SelectedPopulation, ElementName=populationSelector}"
                                     ExecutionState="{Binding Context.ExecutionState}" />
-        </Grid>
-        <genfx:FitnessChart DockPanel.Dock="Right"
+                </Grid>
+
+                <GridSplitter Grid.Column="1"
+                              Width="2"
+                              HorizontalAlignment="Stretch" />
+
+                <genfx:FitnessChart Grid.Column="2"
                             Population="{Binding SelectedPopulation, ElementName=populationSelector}" />
+            </Grid>
+
+            <GridSplitter Grid.Row="1"
+                          Height="2"
+                          HorizontalAlignment="Stretch" />
+
+            <genfx:MetricsChart Grid.Row="2"
+                                Algorithm="{Binding Context.GeneticAlgorithm}"
+                                Population="{Binding SelectedPopulation, ElementName=populationSelector}" />
+        </Grid>
     </DockPanel>
 </Window>

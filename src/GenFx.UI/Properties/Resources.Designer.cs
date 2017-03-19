@@ -158,5 +158,23 @@ namespace GenFx.UI.Properties {
                 return ResourceManager.GetString("FitnessType_Scaled", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Generation.
+        /// </summary>
+        internal static string MetricsChart_XAxisTitle {
+            get {
+                return ResourceManager.GetString("MetricsChart_XAxisTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Metric Value.
+        /// </summary>
+        internal static string MetricsChart_YAxisTitle {
+            get {
+                return ResourceManager.GetString("MetricsChart_YAxisTitle", resourceCulture);
+            }
+        }
     }
 }

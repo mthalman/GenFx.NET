@@ -86,6 +86,22 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Controls\AlgorithmStatusBar.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\EnvironmentViewer.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ExecutionPanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\FitnessChart.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Themes\Generic.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -93,6 +109,7 @@
     <Compile Include="..\version.cs">
       <Link>version.cs</Link>
     </Compile>
+    <Compile Include="Controls\MetricsChart.cs" />
     <Compile Include="Controls\AlgorithmStatusBar.cs" />
     <Compile Include="Controls\FitnessChart.cs" />
     <Compile Include="Controls\PopulationSelector.cs" />
@@ -105,10 +122,23 @@
     <Compile Include="Converters\NullToVisibilityConverter.cs" />
     <Compile Include="Converters\RequireNonNegativeIntegerConverter.cs" />
     <Compile Include="Converters\NullToBooleanConverter.cs" />
+    <Compile Include="DisplayNameHelper.cs" />
     <Compile Include="ExecutionContext.cs" />
     <Compile Include="Controls\ExecutionPanel.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Controls\MetricsChart.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\PopulationSelector.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\PopulationViewer.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FitnessSortOption.cs" />
