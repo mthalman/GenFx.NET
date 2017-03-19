@@ -78,9 +78,11 @@
     <Compile Include="AlgorithmStatusBarTest.cs" />
     <Compile Include="DefaultStopwatchFactoryTest.cs" />
     <Compile Include="DefaultStopwatchTest.cs" />
+    <Compile Include="DisplayNameHelperTest.cs" />
     <Compile Include="EnumViewModelTest.cs" />
     <Compile Include="EnumsViewModelTest.cs" />
     <Compile Include="EnumViewModelConverterTest.cs" />
+    <Compile Include="MetricsChartTest.cs" />
     <Compile Include="FitnessChartTest.cs" />
     <Compile Include="NullToVisibilityConverter.cs" />
     <Compile Include="ExecutionStateToStringConverterTest.cs" />

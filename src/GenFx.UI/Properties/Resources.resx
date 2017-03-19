@@ -150,4 +150,10 @@
   <data name="FitnessType_Scaled" xml:space="preserve">
     <value>Scaled</value>
   </data>
+  <data name="MetricsChart_XAxisTitle" xml:space="preserve">
+    <value>Generation</value>
+  </data>
+  <data name="MetricsChart_YAxisTitle" xml:space="preserve">
+    <value>Metric Value</value>
+  </data>
 </root>

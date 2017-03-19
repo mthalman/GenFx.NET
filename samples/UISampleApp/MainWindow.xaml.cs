@@ -1,11 +1,13 @@
 ﻿using GenFx;
 using GenFx.ComponentLibrary.Algorithms;
 using GenFx.ComponentLibrary.Lists;
+using GenFx.ComponentLibrary.Metrics;
 using GenFx.ComponentLibrary.Populations;
 using GenFx.ComponentLibrary.SelectionOperators;
 using GenFx.ComponentLibrary.Terminators;
 using GenFx.UI;
 using GenFx.Validation;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
@@ -35,7 +37,7 @@ namespace UISampleApp
             get { return this.currentGeneration; }
             set { this.SetProperty(ref this.currentGeneration, value); }
         }
-
+        
         public ViewModel()
         {
             SimpleGeneticAlgorithm algorithm = new SimpleGeneticAlgorithm
@@ -69,6 +71,9 @@ namespace UISampleApp
                 //    FinalGeneration = 5
                 //}
             };
+
+            algorithm.Metrics.Add(new MeanFitness());
+            algorithm.Metrics.Add(new MaximumFitness());
 
             algorithm.GenerationCreated += Algorithm_GenerationCreated;
 

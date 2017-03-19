@@ -1,0 +1,55 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:GenFx.UI.Controls"
+                    xmlns:converters="clr-namespace:GenFx.UI.Converters">
+    <converters:ExecutionStateToStringConverter x:Key="executionStateToStringConverter" />
+    <converters:NullToVisibilityConverter x:Key="nullToVisibilityConverter" ValueForNull="Collapsed" ValueForNonNull="Visible" />
+
+    <Style TargetType="Separator" x:Key="separatorStyle"
+           BasedOn="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}">
+        <Setter Property="Margin" Value="2,0" />
+    </Style>
+    
+    <Style TargetType="{x:Type local:AlgorithmStatusBar}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type local:AlgorithmStatusBar}">
+                    <StatusBar DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:AlgorithmStatusBar}}}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="80" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Grid.Column="0"
+                                       Text="{Binding ExecutionContext.ExecutionState, Converter={StaticResource executionStateToStringConverter}}" />
+
+                            <StackPanel Grid.Column="1"
+                                        Orientation="Horizontal">
+                                <Separator Style="{StaticResource separatorStyle}"/>
+                                <TextBlock Text="Generation:"
+                                           Margin="5,0" />
+                                <TextBlock Text="{Binding ExecutionContext.GeneticAlgorithm.CurrentGeneration}"
+                                           Margin="0,0,5,0"/>
+                            </StackPanel>
+
+                            <DockPanel LastChildFill="True" Grid.Column="2"
+                                       Visibility="{Binding ExecutionContext.AlgorithmException, Converter={StaticResource nullToVisibilityConverter}}">
+                                <Separator DockPanel.Dock="Left"
+                                           Style="{StaticResource separatorStyle}" />
+                                <TextBlock Text="&#xE171;"
+                                           FontFamily="Segoe UI Symbol"
+                                           Foreground="Red" />
+                                <TextBlock TextTrimming="CharacterEllipsis"
+                                           Foreground="Red" 
+                                           ToolTip="{Binding ExecutionContext.AlgorithmException.Message}"
+                                           Text="{Binding ExecutionContext.AlgorithmException.Message}" />
+                            </DockPanel>
+                        </Grid>
+                    </StatusBar>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>

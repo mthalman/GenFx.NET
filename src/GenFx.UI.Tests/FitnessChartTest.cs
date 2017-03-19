@@ -1,17 +1,13 @@
 ﻿using GenFx.UI.Controls;
-using GenFx.UI.Tests.Helpers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using OxyPlot;
 using OxyPlot.Axes;
 using OxyPlot.Series;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using TestCommon.Helpers;
 
 namespace GenFx.UI.Tests
 {
