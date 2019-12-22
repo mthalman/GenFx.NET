@@ -1,5 +1,4 @@
 ﻿using GenFx.UI.Controls;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using OxyPlot;
 using OxyPlot.Axes;
@@ -7,40 +6,40 @@ using OxyPlot.Series;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
+using TestCommon;
+using Xunit;
 
 namespace GenFx.UI.Tests
 {
     /// <summary>
     /// Contains unit tests for the <see cref="MetricsChart"/> class.
     /// </summary>
-    [TestClass]
     public class MetricsChartTest
     {
         /// <summary>
         /// Tests that the ctor initializes the state correctly.
         /// </summary>
-        [TestMethod]
+        [StaFact]
         public void MetricsChart_Ctor()
         {
             MetricsChart chart = new MetricsChart();
-            Assert.IsNull(chart.Population);
-            Assert.IsNull(chart.Algorithm);
-            Assert.IsNull(chart.SelectedMetrics);
+            Assert.Null(chart.Population);
+            Assert.Null(chart.Algorithm);
+            Assert.Null(chart.SelectedMetrics);
 
             PlotModel model = chart.PlotModel;
 
-            Assert.AreEqual(2, model.Axes.Count);
-            Assert.IsInstanceOfType(model.Axes[0], typeof(LinearAxis));
-            Assert.IsInstanceOfType(model.Axes[1], typeof(LinearAxis));
+            Assert.Equal(2, model.Axes.Count);
+            Assert.IsType<LinearAxis>(model.Axes[0]);
+            Assert.IsType<LinearAxis>(model.Axes[1]);
         }
 
         /// <summary>
         /// Tests that the chart refreshes when the algorithm changes from null.
         /// </summary>
-        [TestMethod]
+        [StaFact]
         public void MetricsChart_OnAlgorithmChanged_FromNull()
         {
             TestPopulation population = new TestPopulation();
@@ -75,11 +74,11 @@ namespace GenFx.UI.Tests
             {
                 if (metric == metric1)
                 {
-                    CollectionAssert.AreEqual(metric1Results, (ICollection)series.ItemsSource);
+                    Assert.Equal(metric1Results, (ICollection)series.ItemsSource);
                 }
                 else if (metric == metric2)
                 {
-                    CollectionAssert.AreEqual(metric2Results, (ICollection)series.ItemsSource);
+                    Assert.Equal(metric2Results, (ICollection)series.ItemsSource);
                 }
             });
         }
@@ -87,7 +86,7 @@ namespace GenFx.UI.Tests
         /// <summary>
         /// Tests that the chart refreshes when the algorithm changes from a previous algorithm.
         /// </summary>
-        [TestMethod]
+        [StaFact]
         public void MetricsChart_OnAlgorithmChanged_FromOtherAlgorithm()
         {
             TestPopulation population = new TestPopulation();
@@ -123,11 +122,11 @@ namespace GenFx.UI.Tests
             {
                 if (metric == metric1)
                 {
-                    CollectionAssert.AreEqual(metric1Results, (ICollection)series.ItemsSource);
+                    Assert.Equal(metric1Results, (ICollection)series.ItemsSource);
                 }
                 else if (metric == metric2)
                 {
-                    CollectionAssert.AreEqual(metric2Results, (ICollection)series.ItemsSource);
+                    Assert.Equal(metric2Results, (ICollection)series.ItemsSource);
                 }
             });
         }
@@ -135,7 +134,7 @@ namespace GenFx.UI.Tests
         /// <summary>
         /// Tests that the chart refreshes when the population changes from null.
         /// </summary>
-        [TestMethod]
+        [StaFact]
         public void MetricsChart_OnPopulationChanged_FromNull()
         {
             TestPopulation population = new TestPopulation();
@@ -170,11 +169,11 @@ namespace GenFx.UI.Tests
             {
                 if (metric == metric1)
                 {
-                    CollectionAssert.AreEqual(metric1Results, (ICollection)series.ItemsSource);
+                    Assert.Equal(metric1Results, (ICollection)series.ItemsSource);
                 }
                 else if (metric == metric2)
                 {
-                    CollectionAssert.AreEqual(metric2Results, (ICollection)series.ItemsSource);
+                    Assert.Equal(metric2Results, (ICollection)series.ItemsSource);
                 }
             });
         }
@@ -182,7 +181,7 @@ namespace GenFx.UI.Tests
         /// <summary>
         /// Tests that the chart refreshes when the population changes from a previous population.
         /// </summary>
-        [TestMethod]
+        [StaFact]
         public void MetricsChart_OnPopulationChanged_FromOtherPopulation()
         {
             TestPopulation population = new TestPopulation();
@@ -219,11 +218,11 @@ namespace GenFx.UI.Tests
             {
                 if (metric == metric1)
                 {
-                    CollectionAssert.AreEqual(metric1Results, (ICollection)series.ItemsSource);
+                    Assert.Equal(metric1Results, (ICollection)series.ItemsSource);
                 }
                 else if (metric == metric2)
                 {
-                    CollectionAssert.AreEqual(metric2Results, (ICollection)series.ItemsSource);
+                    Assert.Equal(metric2Results, (ICollection)series.ItemsSource);
                 }
             });
         }
@@ -231,7 +230,7 @@ namespace GenFx.UI.Tests
         /// <summary>
         /// Tests that the chart does not add a series for a metric that doesn't produce values convertible to double.
         /// </summary>
-        [TestMethod]
+        [StaFact]
         public void MetricsChart_MetricWithNonDoubleResult()
         {
             TestPopulation population = new TestPopulation();
@@ -260,14 +259,14 @@ namespace GenFx.UI.Tests
             chart.Algorithm = algorithm;
             chart.Population = population;
 
-            Assert.AreEqual(1, chart.PlotModel.Series.Count);
-            CollectionAssert.AreEqual(metric2Results, (ICollection)((LineSeries)chart.PlotModel.Series[0]).ItemsSource);
+            Assert.Single(chart.PlotModel.Series);
+            Assert.Equal(metric2Results, (ICollection)((LineSeries)chart.PlotModel.Series[0]).ItemsSource);
         }
 
         /// <summary>
         /// Tests that the chart refreshes the series when the fitness is evaluated for the initial generation.
         /// </summary>
-        [TestMethod]
+        [StaFact]
         public void MetricsChart_RefreshSeriesOnFitnessEvaluated()
         {
             TestPopulation population = new TestPopulation();
@@ -287,7 +286,7 @@ namespace GenFx.UI.Tests
             chart.Algorithm = algorithm;
             chart.Population = population;
 
-            Assert.AreEqual(1, chart.PlotModel.Series.Count);
+            Assert.Single(chart.PlotModel.Series);
 
             // Clear the series to ensure it gets refreshed when the fitness is evaluated
             chart.PlotModel.Series.Clear();
@@ -296,13 +295,13 @@ namespace GenFx.UI.Tests
             algorithmAccessor.Invoke("OnFitnessEvaluated",
                 new EnvironmentFitnessEvaluatedEventArgs(new GeneticEnvironment(algorithm), 0));
 
-            Assert.AreEqual(1, chart.PlotModel.Series.Count);
+            Assert.Single(chart.PlotModel.Series);
         }
 
         /// <summary>
         /// Tests that the chart refreshes the series when the fitness is evaluated after the initial generation.
         /// </summary>
-        [TestMethod]
+        [StaFact]
         public void MetricsChart_RefreshPlotOnFitnessEvaluated()
         {
             TestPopulation population = new TestPopulation();
@@ -322,7 +321,7 @@ namespace GenFx.UI.Tests
             chart.Algorithm = algorithm;
             chart.Population = population;
 
-            Assert.AreEqual(1, chart.PlotModel.Series.Count);
+            Assert.Single(chart.PlotModel.Series);
 
             // Clear the series to ensure it doesn't gets refreshed when the fitness is evaluated
             chart.PlotModel.Series.Clear();
@@ -331,13 +330,13 @@ namespace GenFx.UI.Tests
             algorithmAccessor.Invoke("OnFitnessEvaluated",
                 new EnvironmentFitnessEvaluatedEventArgs(new GeneticEnvironment(algorithm), 1));
 
-            Assert.AreEqual(0, chart.PlotModel.Series.Count);
+            Assert.Empty(chart.PlotModel.Series);
         }
 
         /// <summary>
         /// Tests that the chart refreshes the series when the <see cref="MetricsChart.SelectedMetrics"/> property changes.
         /// </summary>
-        [TestMethod]
+        [StaFact]
         public void MetricsChart_OnSelectedMetricsChanged()
         {
             TestPopulation population = new TestPopulation();
@@ -367,13 +366,13 @@ namespace GenFx.UI.Tests
             chart.Algorithm = algorithm;
             chart.Population = population;
 
-            Assert.AreEqual(2, chart.PlotModel.Series.Count);
+            Assert.Equal(2, chart.PlotModel.Series.Count);
 
             chart.PlotModel.Series.Clear();
 
             chart.SelectedMetrics = new List<Metric> { algorithm.Metrics[0] };
 
-            Assert.AreEqual(1, chart.PlotModel.Series.Count);
+            Assert.Single(chart.PlotModel.Series);
         }
 
         private static void VerifyChartRefresh(
@@ -386,13 +385,13 @@ namespace GenFx.UI.Tests
             initializeChart(chart);
 
             // Verify the default state of the chart
-            Assert.AreEqual(0, chart.PlotModel.Series.Count);
+            Assert.Empty(chart.PlotModel.Series);
 
             triggerRefresh(chart);
 
             // Verify the chart has been refreshed
             Metric[] metrics = (chart.SelectedMetrics != null ? chart.SelectedMetrics : chart.Algorithm.Metrics).ToArray();
-            Assert.AreEqual(metrics.Length, chart.PlotModel.Series.Count);
+            Assert.Equal(metrics.Length, chart.PlotModel.Series.Count);
             for (int i = 0; i < metrics.Length; i++)
             {
                 verifySeries(metrics[i], (LineSeries)chart.PlotModel.Series[i]);

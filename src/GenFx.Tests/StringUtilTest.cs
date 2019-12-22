@@ -1,9 +1,6 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Text;
-using System.Collections.Generic;
-using GenFx;
+﻿using System;
 using System.Reflection;
+using Xunit;
 
 namespace GenFx.Tests
 {
@@ -11,14 +8,12 @@ namespace GenFx.Tests
     ///This is a test class for GenFx.StringUtil and is intended
     ///to contain all GenFx.StringUtil Unit Tests
     ///</summary>
-    [TestClass()]
     public class StringUtilTest
     {
-
         /// <summary>
         /// Tests that the GetFormattedString method works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void StringUtil_GetFormattedString()
         {
             Type stringUtilType = typeof(GeneticAlgorithm).Assembly.GetType("GenFx.StringUtil");
@@ -26,7 +21,7 @@ namespace GenFx.Tests
 
             object result = method.Invoke(null, new object[] { @"Test\n{0}\t{1}.", new string[] { "1", "2" } });
 
-            Assert.AreEqual("Test\n1\t2.", result, "Incorrect string result.");
+            Assert.Equal("Test\n1\t2.", result);
         }
 
     }

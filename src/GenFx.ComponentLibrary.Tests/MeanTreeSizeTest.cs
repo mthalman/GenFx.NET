@@ -1,23 +1,21 @@
 ﻿using GenFx.ComponentLibrary.Metrics;
 using GenFx.ComponentLibrary.Populations;
 using GenFx.ComponentLibrary.Trees;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using TestCommon.Helpers;
 using TestCommon.Mocks;
+using Xunit;
 
 namespace GenFx.ComponentLibrary.Tests
 {
     /// <summary>
     /// Contains unit tests for the <see cref="MeanTreeSize"/> class.
     /// </summary>
-    [TestClass]
     public class MeanTreeSizeTest
     {
         /// <summary>
         /// Tests that the GetResultValue method works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void MeanTreeSize_GetResultValue()
         {
             GeneticAlgorithm algorithm = new MockGeneticAlgorithm
@@ -55,13 +53,13 @@ namespace GenFx.ComponentLibrary.Tests
 
             object result = target.GetResultValue(population);
 
-            Assert.AreEqual(2.33, Math.Round((double)result, 2), "Incorrect result value.");
+            Assert.Equal(2.33, Math.Round((double)result, 2));
         }
 
         /// <summary>
         /// Tests that an exception is thrown when a null population is passed.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void MeanTreeSize_GetResultValue_NullPopulation()
         {
             GeneticAlgorithm algorithm = new MockGeneticAlgorithm
@@ -75,7 +73,7 @@ namespace GenFx.ComponentLibrary.Tests
 
             MeanTreeSize target = new MeanTreeSize();
             target.Initialize(algorithm);
-            AssertEx.Throws<ArgumentNullException>(() => target.GetResultValue(null));
+            Assert.Throws<ArgumentNullException>(() => target.GetResultValue(null));
         }
 
         private class TestTreeEntity : TreeEntity<TreeNode>

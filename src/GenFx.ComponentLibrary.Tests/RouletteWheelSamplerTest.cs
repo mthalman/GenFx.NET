@@ -1,21 +1,18 @@
 ﻿using GenFx.ComponentLibrary.SelectionOperators;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using TestCommon.Helpers;
 using TestCommon.Mocks;
+using Xunit;
 
 namespace GenFx.ComponentLibrary.Tests
 {
     /// <summary>
     /// Contains unit tests for the <see cref="RouletteWheelSampler"/> class.
     /// </summary>
-    [TestClass()]
-    public class RouletteWheelSamplerTest
+    public class RouletteWheelSamplerTest : IDisposable
     {
-        [TestCleanup]
-        public void Cleanup()
+        public void Dispose()
         {
             RandomNumberService.Instance = new RandomNumberService();
         }
@@ -23,7 +20,7 @@ namespace GenFx.ComponentLibrary.Tests
         /// <summary>
         /// Tests that the GetEntity method works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void RouletteWheelSampler_GetEntity()
         {
             MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm
@@ -53,41 +50,41 @@ namespace GenFx.ComponentLibrary.Tests
 
             randomUtil.Ratio = 0;
             GeneticEntity sampledEntity = RouletteWheelSampler.GetEntity(slices);
-            Assert.AreSame(entity1, sampledEntity, "Incorrect entity instance returned.");
+            Assert.Same(entity1, sampledEntity);
 
             randomUtil.Ratio = .39999;
             sampledEntity = RouletteWheelSampler.GetEntity(slices);
-            Assert.AreSame(entity1, sampledEntity, "Incorrect entity instance returned.");
+            Assert.Same(entity1, sampledEntity);
 
             randomUtil.Ratio = .4;
             sampledEntity = RouletteWheelSampler.GetEntity(slices);
-            Assert.AreSame(entity2, sampledEntity, "Incorrect entity instance returned.");
+            Assert.Same(entity2, sampledEntity);
 
             randomUtil.Ratio = .59999;
             sampledEntity = RouletteWheelSampler.GetEntity(slices);
-            Assert.AreSame(entity2, sampledEntity, "Incorrect entity instance returned.");
+            Assert.Same(entity2, sampledEntity);
 
             randomUtil.Ratio = .6;
             sampledEntity = RouletteWheelSampler.GetEntity(slices);
-            Assert.AreSame(entity3, sampledEntity, "Incorrect entity instance returned.");
+            Assert.Same(entity3, sampledEntity);
 
             randomUtil.Ratio = .69999;
             sampledEntity = RouletteWheelSampler.GetEntity(slices);
-            Assert.AreSame(entity3, sampledEntity, "Incorrect entity instance returned.");
+            Assert.Same(entity3, sampledEntity);
 
             randomUtil.Ratio = .7;
             sampledEntity = RouletteWheelSampler.GetEntity(slices);
-            Assert.AreSame(entity4, sampledEntity, "Incorrect entity instance returned.");
+            Assert.Same(entity4, sampledEntity);
 
             randomUtil.Ratio = 1;
             sampledEntity = RouletteWheelSampler.GetEntity(slices);
-            Assert.AreSame(entity4, sampledEntity, "Incorrect entity instance returned.");
+            Assert.Same(entity4, sampledEntity);
         }
 
         /// <summary>
         /// Tests that the GetEntity method returns a random entity when no wheel slices sizes are set.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void RouletteWheelSampler_GetEntity_NoSizes()
         {
             MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm
@@ -117,35 +114,35 @@ namespace GenFx.ComponentLibrary.Tests
             RandomNumberService.Instance = randomUtil;
             randomUtil.RandomValue = 2;
             GeneticEntity sampledEntity = RouletteWheelSampler.GetEntity(slices);
-            Assert.AreEqual(randomUtil.MaxValuePassed, 4, "Incorrect max value passed.");
-            Assert.AreSame(entity3, sampledEntity, "Incorrect entity returned.");
+            Assert.Equal(4, randomUtil.MaxValuePassed);
+            Assert.Same(entity3, sampledEntity);
         }
 
         /// <summary>
         /// Tests that an exception is thrown when a null collection is passed.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void RouletteWheelSampler_GetEntity_NullCollection()
         {
-            AssertEx.Throws<ArgumentNullException>(() => RouletteWheelSampler.GetEntity(null));
+            Assert.Throws<ArgumentNullException>(() => RouletteWheelSampler.GetEntity(null));
         }
 
         /// <summary>
         /// Tests that an exception is thrown when an empty collection is passed.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void RouletteWheelSampler_GetEntity_EmptyCollection()
         {
-            AssertEx.Throws<ArgumentException>(() => RouletteWheelSampler.GetEntity(new List<WheelSlice>()));
+            Assert.Throws<ArgumentException>(() => RouletteWheelSampler.GetEntity(new List<WheelSlice>()));
         }
 
         /// <summary>
         /// Tests that an exception is thrown when a null wheel slice is passed.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void RouletteWheelSampler_GetEntity_NullWheelSlice()
         {
-            AssertEx.Throws<ArgumentException>(() => RouletteWheelSampler.GetEntity(new WheelSlice[] { null }.ToList()));
+            Assert.Throws<ArgumentException>(() => RouletteWheelSampler.GetEntity(new WheelSlice[] { null }.ToList()));
         }
 
         private class TestRandomUtil : IRandomNumberService

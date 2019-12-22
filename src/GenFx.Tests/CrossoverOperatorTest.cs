@@ -1,11 +1,10 @@
-﻿using GenFx;
-using GenFx.Validation;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using GenFx.Validation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using TestCommon.Helpers;
 using TestCommon.Mocks;
+using Xunit;
 
 namespace GenFx.Tests
 {
@@ -13,43 +12,42 @@ namespace GenFx.Tests
     ///This is a test class for GenFx.CrossoverOperator and is intended
     ///to contain all GenFx.CrossoverOperator Unit Tests
     ///</summary>
-    [TestClass()]
     public class CrossoverOperatorTest
     {
         /// <summary>
         /// Tests that an exception is thrown when a null algorithm is passed.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void CrossoverOperator_Ctor_NullAlgorithm()
         {
             FakeCrossoverOperator op = new FakeCrossoverOperator();
-            AssertEx.Throws<ArgumentNullException>(() => op.Initialize(null));
+            Assert.Throws<ArgumentNullException>(() => op.Initialize(null));
         }
 
         /// <summary>
         /// Tests that an exception is thrown when an invalid value is used for the CrossoverRate setting.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void CrossoverOperator_Ctor_InvalidSetting1()
         {
             FakeCrossoverOperator config = new FakeCrossoverOperator();
-            AssertEx.Throws<ValidationException>(() => config.CrossoverRate = 2);
+            Assert.Throws<ValidationException>(() => config.CrossoverRate = 2);
         }
 
         /// <summary>
         /// Tests that an exception is thrown when an invalid value is used for the CrossoverRate setting.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void CrossoverOperator_Ctor_InvalidSetting2()
         {
             FakeCrossoverOperator config = new FakeCrossoverOperator();
-            AssertEx.Throws<ValidationException>(()=> config.CrossoverRate = -1);
+            Assert.Throws<ValidationException>(()=> config.CrossoverRate = -1);
         }
 
         /// <summary>
         /// Tests that the crossover works correctly when the crossover rate is hit.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void CrossoverOperator_Crossover()
         {
             double crossoverRate = 1; // force crossover to occur
@@ -65,19 +63,19 @@ namespace GenFx.Tests
             entity2.Age = 5;
             entity2.Identifier = "3";
             IList<GeneticEntity> geneticEntities = op.Crossover(new GeneticEntity[] { entity1, entity2 }).ToList();
-            Assert.AreNotSame(entity1, geneticEntities[1], "Clone was not called correctly.");
-            Assert.AreNotSame(entity2, geneticEntities[0], "Clone was not called correctly.");
-            Assert.AreEqual(entity1.Identifier, ((MockEntity)geneticEntities[1]).Identifier, "Entity value was not swapped.");
-            Assert.AreEqual(entity2.Identifier, ((MockEntity)geneticEntities[0]).Identifier, "Entity value was not swapped.");
+            Assert.NotSame(entity1, geneticEntities[1]);
+            Assert.NotSame(entity2, geneticEntities[0]);
+            Assert.Equal(entity1.Identifier, ((MockEntity)geneticEntities[1]).Identifier);
+            Assert.Equal(entity2.Identifier, ((MockEntity)geneticEntities[0]).Identifier);
 
-            Assert.AreEqual(0, geneticEntities[0].Age, "Age should have been reset.");
-            Assert.AreEqual(0, geneticEntities[1].Age, "Age should have been reset.");
+            Assert.Equal(0, geneticEntities[0].Age);
+            Assert.Equal(0, geneticEntities[1].Age);
         }
 
         /// <summary>
         /// Tests that the crossover works correctly when the crossover rate is not hit.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void CrossoverOperator_Crossover_NoOp()
         {
             double crossoverRate = 0; // force crossover not to occur
@@ -91,49 +89,53 @@ namespace GenFx.Tests
             entity2.Initialize(algorithm);
             entity2.Identifier = "3";
             IList<GeneticEntity> geneticEntities = op.Crossover(new GeneticEntity[] { entity1, entity2 }).ToList();
-            Assert.AreSame(entity1, geneticEntities[0], "Different entity was returned.");
-            Assert.AreSame(entity2, geneticEntities[1], "Different entity was returned.");
+            Assert.Same(entity1, geneticEntities[0]);
+            Assert.Same(entity2, geneticEntities[1]);
         }
 
         /// <summary>
         /// Tests that the object can be serialized and deserialized.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void CrossoverOperator_Serialization()
         {
-            MockCrossoverOperator op = new MockCrossoverOperator();
-            op.CrossoverRate = .5;
+            MockCrossoverOperator op = new MockCrossoverOperator
+            {
+                CrossoverRate = .5
+            };
 
             MockCrossoverOperator result = (MockCrossoverOperator)SerializationHelper.TestSerialization(op, new Type[0]);
-            Assert.AreEqual(2, result.RequiredParentCount);
-            Assert.AreEqual(.5, result.CrossoverRate);
+            Assert.Equal(2, result.RequiredParentCount);
+            Assert.Equal(.5, result.CrossoverRate);
         }
 
         /// <summary>
         /// Tests that an exception is thrown when null parents are provided to crossover.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void CrossoverOperator_NullParents()
         {
             MockCrossoverOperator op = new MockCrossoverOperator();
-            AssertEx.Throws<ArgumentNullException>(() => op.Crossover(null));
+            Assert.Throws<ArgumentNullException>(() => op.Crossover(null));
         }
 
         /// <summary>
         /// Tests that an exception is thrown when null is returned by the derived <see cref="CrossoverOperator.GenerateCrossover(IList{GeneticEntity})"/> method.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void CrossoverOperator_NullCrossoverResult()
         {
-            MockCrossoverOperator3 op = new MockCrossoverOperator3();
-            op.CrossoverRate = 1;
+            MockCrossoverOperator3 op = new MockCrossoverOperator3
+            {
+                CrossoverRate = 1
+            };
             List<GeneticEntity> parents = new List<GeneticEntity>
             {
                 new MockEntity(),
                 new MockEntity(),
             };
-            AssertEx.Throws<InvalidOperationException>(() => op.Crossover(parents));
-            Assert.IsTrue(op.GenerateCrossoverCalled);
+            Assert.Throws<InvalidOperationException>(() => op.Crossover(parents));
+            Assert.True(op.GenerateCrossoverCalled);
         }
 
         private static MockGeneticAlgorithm GetGeneticAlgorithm(double crossoverRate)
@@ -162,9 +164,11 @@ namespace GenFx.Tests
             {
                 MockEntity mockEntity1 = (MockEntity)parents[0];
                 MockEntity mockEntity2 = (MockEntity)parents[1];
-                List<GeneticEntity> geneticEntities = new List<GeneticEntity>();
-                geneticEntities.Add(mockEntity2);
-                geneticEntities.Add(mockEntity1);
+                List<GeneticEntity> geneticEntities = new List<GeneticEntity>
+                {
+                    mockEntity2,
+                    mockEntity1
+                };
                 return geneticEntities;
             }
         }

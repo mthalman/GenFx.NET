@@ -1,45 +1,44 @@
-﻿using GenFx;
-using GenFx.ComponentLibrary.Algorithms;
+﻿using GenFx.ComponentLibrary.Algorithms;
 using GenFx.ComponentLibrary.Populations;
 using GenFx.Validation;
-using TestCommon.Helpers;
-using TestCommon.Mocks;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Threading.Tasks;
+using TestCommon;
+using TestCommon.Helpers;
+using TestCommon.Mocks;
+using Xunit;
 
 namespace GenFx.ComponentLibrary.Tests
 {
     /// <summary>
     /// Contains unit tests for the <see cref="SteadyStateGeneticAlgorithm"/> class.
     /// </summary>
-    [TestClass]
     public class SteadyStateGeneticAlgorithmTest
     {
         /// <summary>
         /// Tests that an exception is thrown when an invalid value is used for the PopulationReplacement setting.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void SteadyStateGeneticAlgorithm_Initialize_InvalidPopulationReplacement()
         {
-            AssertEx.Throws<ArgumentOutOfRangeException>(() => new PopulationReplacementValue(-1, ReplacementValueKind.FixedCount));
+            Assert.Throws<ArgumentOutOfRangeException>(() => new PopulationReplacementValue(-1, ReplacementValueKind.FixedCount));
         }
 
         /// <summary>
         /// Tests that an exception is thrown when an invalid value is used for the PopulationReplacement setting.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void SteadyStateGeneticAlgorithm_Initialize_InvalidPopulationReplacement2()
         {
             SteadyStateGeneticAlgorithm config = new SteadyStateGeneticAlgorithm();
             PopulationReplacementValue val = new PopulationReplacementValue(101, ReplacementValueKind.Percentage);
-            AssertEx.Throws<ValidationException>(() => config.PopulationReplacementValue = val);
+            Assert.Throws<ValidationException>(() => config.PopulationReplacementValue = val);
         }
 
         /// <summary>
         /// Tests that the CreateNextGeneration method works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public async Task SteadyStateGeneticAlgorithm_CreateNextGeneration_FixedCount()
         {
             SteadyStateGeneticAlgorithm algorithm = new SteadyStateGeneticAlgorithm
@@ -77,16 +76,16 @@ namespace GenFx.ComponentLibrary.Tests
             int prevPopCount = population.Entities.Count;
             await (Task)ssAccessor.Invoke("CreateNextGenerationAsync", population);
 
-            Assert.AreEqual(1, ((MockSelectionOperator)algorithm.SelectionOperator).DoSelectCallCount, "Selection not called correctly.");
-            Assert.AreEqual(1, ((MockCrossoverOperator)algorithm.CrossoverOperator).DoCrossoverCallCount, "Crossover not called correctly.");
-            Assert.AreEqual(2, ((MockMutationOperator)algorithm.MutationOperator).DoMutateCallCount, "Mutation not called correctly.");
-            Assert.AreEqual(prevPopCount, population.Entities.Count, "New population not created correctly.");
+            Assert.Equal(1, ((MockSelectionOperator)algorithm.SelectionOperator).DoSelectCallCount);
+            Assert.Equal(1, ((MockCrossoverOperator)algorithm.CrossoverOperator).DoCrossoverCallCount);
+            Assert.Equal(2, ((MockMutationOperator)algorithm.MutationOperator).DoMutateCallCount);
+            Assert.Equal(prevPopCount, population.Entities.Count);
         }
 
         /// <summary>
         /// Tests that the CreateNextGeneration method works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public async Task SteadyStateGeneticAlgorithm_CreateNextGeneration_Percentage()
         {
             SteadyStateGeneticAlgorithm algorithm = new SteadyStateGeneticAlgorithm
@@ -124,36 +123,38 @@ namespace GenFx.ComponentLibrary.Tests
             int prevPopCount = population.Entities.Count;
             await (Task)ssAccessor.Invoke("CreateNextGenerationAsync", population);
 
-            Assert.AreEqual(1, ((MockSelectionOperator)algorithm.SelectionOperator).DoSelectCallCount, "Selection not called correctly.");
-            Assert.AreEqual(1, ((MockCrossoverOperator)algorithm.CrossoverOperator).DoCrossoverCallCount, "Crossover not called correctly.");
-            Assert.AreEqual(2, ((MockMutationOperator)algorithm.MutationOperator).DoMutateCallCount, "Mutation not called correctly.");
-            Assert.AreEqual(prevPopCount, population.Entities.Count, "New population not created correctly.");
+            Assert.Equal(1, ((MockSelectionOperator)algorithm.SelectionOperator).DoSelectCallCount);
+            Assert.Equal(1, ((MockCrossoverOperator)algorithm.CrossoverOperator).DoCrossoverCallCount);
+            Assert.Equal(2, ((MockMutationOperator)algorithm.MutationOperator).DoMutateCallCount);
+            Assert.Equal(prevPopCount, population.Entities.Count);
         }
 
         /// <summary>
         /// Tests that the CreateNextGeneration method works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public async Task SteadyStateGeneticAlgorithm_CreateNextGeneration_NullPopulation()
         {
             SteadyStateGeneticAlgorithm algorithm = new SteadyStateGeneticAlgorithm();
             PrivateObject accessor = new PrivateObject(algorithm);
-            await AssertEx.ThrowsAsync<ArgumentNullException>(() => (Task)accessor.Invoke("CreateNextGenerationAsync", (Population)null));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => (Task)accessor.Invoke("CreateNextGenerationAsync", (Population)null));
         }
         
         /// <summary>
         /// Tests that the object can be serialized and deserialized.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void SteadyStateGeneticAlgorithm_Serialization()
         {
-            SteadyStateGeneticAlgorithm algorithm = new SteadyStateGeneticAlgorithm();
-            algorithm.PopulationReplacementValue = new PopulationReplacementValue(3, ReplacementValueKind.Percentage);
+            SteadyStateGeneticAlgorithm algorithm = new SteadyStateGeneticAlgorithm
+            {
+                PopulationReplacementValue = new PopulationReplacementValue(3, ReplacementValueKind.Percentage)
+            };
 
             SteadyStateGeneticAlgorithm result = (SteadyStateGeneticAlgorithm)SerializationHelper.TestSerialization(algorithm, new Type[0]);
 
-            Assert.AreEqual(algorithm.PopulationReplacementValue.Kind, result.PopulationReplacementValue.Kind);
-            Assert.AreEqual(algorithm.PopulationReplacementValue.Value, result.PopulationReplacementValue.Value);
+            Assert.Equal(algorithm.PopulationReplacementValue.Kind, result.PopulationReplacementValue.Kind);
+            Assert.Equal(algorithm.PopulationReplacementValue.Value, result.PopulationReplacementValue.Value);
         }
 
         private static SimplePopulation GetPopulation(GeneticAlgorithm algorithm, int populationSize)

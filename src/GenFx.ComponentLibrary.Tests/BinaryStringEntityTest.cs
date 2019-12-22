@@ -1,20 +1,19 @@
 using GenFx.ComponentLibrary.Lists;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections;
+using TestCommon;
 using TestCommon.Helpers;
 using TestCommon.Mocks;
+using Xunit;
 
 namespace GenFx.ComponentLibrary.Tests
 {
     /// <summary>
     /// Contains unit tests for the <see cref="BinaryStringEntity"/> class.
     ///</summary>
-    [TestClass]
-    public class BinaryStringEntityTest
+    public class BinaryStringEntityTest : IDisposable
     {
-        [TestCleanup]
-        public void Cleanup()
+        public void Dispose()
         {
             RandomNumberService.Instance = new RandomNumberService();
         }
@@ -22,20 +21,20 @@ namespace GenFx.ComponentLibrary.Tests
         /// <summary>
         /// Tests that the UpdateStringRepresentation method works correctly.
         /// </summary>
-        [TestMethod()]
+        [Fact]
         public void BinaryStringEntity_UpdateStringRepresentation()
         {
             TestBinaryStringEntity entity = GetEntity();
             PrivateObject accessor = new PrivateObject(entity);
             accessor.Invoke("UpdateStringRepresentation");
 
-            Assert.AreEqual("1010", entity.Representation, "Representation was not calculated correctly.");
+            Assert.Equal("1010", entity.Representation);
         }
 
         /// <summary>
         /// Tests that the Clone method works correctly.
         /// </summary>
-        [TestMethod()]
+        [Fact]
         public void BinaryStringEntity_Clone()
         {
             TestBinaryStringEntity entity = GetEntity();
@@ -46,7 +45,7 @@ namespace GenFx.ComponentLibrary.Tests
         /// <summary>
         /// Tests that the CopyTo method works correctly.
         /// </summary>
-        [TestMethod()]
+        [Fact]
         public void BinaryStringEntity_CopyTo()
         {
             TestBinaryStringEntity entity = GetEntity();
@@ -61,18 +60,18 @@ namespace GenFx.ComponentLibrary.Tests
         /// <summary>
         /// Tests that an exception is thrown when a null entity is passed.
         /// </summary>
-        [TestMethod()]
+        [Fact]
         public void BinaryStringEntity_CopyTo_NullEntity()
         {
             TestBinaryStringEntity entity = GetEntity();
 
-            AssertEx.Throws<ArgumentNullException>(() => entity.CopyTo(null));
+            Assert.Throws<ArgumentNullException>(() => entity.CopyTo(null));
         }
 
         /// <summary>
         /// Tests that the constructor initializes the state correctly.
         /// </summary>
-        [TestMethod()]
+        [Fact]
         public void BinaryStringEntity_Ctor()
         {
             int size = 3;
@@ -80,27 +79,27 @@ namespace GenFx.ComponentLibrary.Tests
             TestBinaryStringEntity entity = new TestBinaryStringEntity { MinimumStartingLength = size, MaximumStartingLength = size };
             entity.Initialize(algorithm);
             PrivateObject accessor = new PrivateObject(entity, new PrivateType(typeof(BinaryStringEntity)));
-            Assert.AreEqual(size, entity.Length, "Length not initialized correctly.");
-            Assert.AreEqual(size, ((BitArray)accessor.GetField("genes")).Length, "Genes not initialized correctly.");
+            Assert.Equal(size, entity.Length);
+            Assert.Equal(size, ((BitArray)accessor.GetField("genes")).Length);
         }
 
         /// <summary>
         /// Tests that the Initialize method works correctly.
         /// </summary>
-        [TestMethod()]
+        [Fact]
         public void BinaryStringEntity_Initialize()
         {
             GeneticAlgorithm algorithm = GetAlgorithm(4);
             TestBinaryStringEntity entity = new TestBinaryStringEntity { MinimumStartingLength = 4, MaximumStartingLength = 4 };
             RandomNumberService.Instance = new TestRandomUtil();
             entity.Initialize(algorithm);
-            Assert.AreEqual("1010", entity.Representation, "Entity not initialized correctly.");
+            Assert.Equal("1010", entity.Representation);
         }
 
         /// <summary>
         /// Tests that the indexer works correctly.
         ///</summary>
-        [TestMethod()]
+        [Fact]
         public void BinaryStringEntity_Indexer()
         {
             GeneticAlgorithm algorithm = GetAlgorithm(3);
@@ -115,26 +114,26 @@ namespace GenFx.ComponentLibrary.Tests
             }
 
             entity[0] = true;
-            Assert.IsTrue(genes[0], "Genes not set correctly.");
-            Assert.IsFalse(genes[1], "Genes not set correctly.");
-            Assert.IsFalse(genes[2], "Genes not set correctly.");
-            Assert.IsTrue(entity[0], "Indexer returned incorrect value.");
+            Assert.True(genes[0]);
+            Assert.False(genes[1]);
+            Assert.False(genes[2]);
+            Assert.True(entity[0]);
             entity[1] = true;
-            Assert.IsTrue(genes[0], "Genes not set correctly.");
-            Assert.IsTrue(genes[1], "Genes not set correctly.");
-            Assert.IsFalse(genes[2], "Genes not set correctly.");
-            Assert.IsTrue(entity[1], "Indexer returned incorrect value.");
+            Assert.True(genes[0]);
+            Assert.True(genes[1]);
+            Assert.False(genes[2]);
+            Assert.True(entity[1]);
             entity[2] = true;
-            Assert.IsTrue(genes[0], "Genes not set correctly.");
-            Assert.IsTrue(genes[1], "Genes not set correctly.");
-            Assert.IsTrue(genes[2], "Genes not set correctly.");
-            Assert.IsTrue(entity[2], "Indexer returned incorrect value.");
+            Assert.True(genes[0]);
+            Assert.True(genes[1]);
+            Assert.True(genes[2]);
+            Assert.True(entity[2]);
         }
 
         /// <summary>
         /// Tests that the Length property works correctly.
         ///</summary>
-        [TestMethod()]
+        [Fact]
         public void BinaryStringEntity_Length()
         {
             int length = 50;
@@ -142,16 +141,16 @@ namespace GenFx.ComponentLibrary.Tests
 
             TestBinaryStringEntity entity = new TestBinaryStringEntity { MinimumStartingLength = length, MaximumStartingLength = length };
             entity.Initialize(algorithm);
-            Assert.AreEqual(length, entity.Length, "Length not set correctly.");
+            Assert.Equal(length, entity.Length);
 
             entity.Length = length;
-            Assert.AreEqual(length, entity.Length, "Length not set correctly.");
+            Assert.Equal(length, entity.Length);
         }
 
         /// <summary>
         /// Tests that an exception is thrown when the Length is set to a different value when the string is fixed size.
         ///</summary>
-        [TestMethod()]
+        [Fact]
         public void BinaryStringEntity_Length_SetToDifferentValue()
         {
             int length = 50;
@@ -164,13 +163,13 @@ namespace GenFx.ComponentLibrary.Tests
                 IsFixedSize = true
             };
             entity.Initialize(algorithm);
-            AssertEx.Throws<ArgumentException>(() => entity.Length = 51);
+            Assert.Throws<ArgumentException>(() => entity.Length = 51);
         }
 
         /// <summary>
         /// Tests that the length can be expanded to contain more items.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void BinaryStringEntity_SetLengthToExpand()
         {
             BinaryStringEntity entity = new BinaryStringEntity
@@ -181,19 +180,19 @@ namespace GenFx.ComponentLibrary.Tests
 
             entity.Initialize(new MockGeneticAlgorithm());
 
-            Assert.AreEqual(2, entity.Length);
+            Assert.Equal(2, entity.Length);
 
             entity.Length = 4;
-            Assert.AreEqual(4, entity.Length);
+            Assert.Equal(4, entity.Length);
 
-            Assert.AreEqual(false, entity[2]);
-            Assert.AreEqual(false, entity[3]);
+            Assert.False(entity[2]);
+            Assert.False(entity[3]);
         }
 
         /// <summary>
         /// Tests that the length can be contracted to decrease the number of items.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void BinaryStringEntity_SetLengthToContract()
         {
             BinaryStringEntity entity = new BinaryStringEntity
@@ -203,21 +202,21 @@ namespace GenFx.ComponentLibrary.Tests
             };
 
             entity.Initialize(new MockGeneticAlgorithm());
-            Assert.AreEqual(4, entity.Length);
+            Assert.Equal(4, entity.Length);
 
             entity[0] = true;
-            Assert.AreEqual(true, entity[0]);
+            Assert.True(entity[0]);
 
             entity.Length = 1;
-            Assert.AreEqual(1, entity.Length);
+            Assert.Equal(1, entity.Length);
 
-            Assert.AreEqual(true, entity[0]);
+            Assert.True(entity[0]);
         }
 
         /// <summary>
         /// Tests that the component can be serialized and deserialized.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void BinaryStringEntity_Serialization()
         {
             BinaryStringEntity entity = new BinaryStringEntity();
@@ -229,23 +228,23 @@ namespace GenFx.ComponentLibrary.Tests
 
             for (int i = 0; i < 3; i++)
             {
-                Assert.AreEqual(entity[i], result[i]);
+                Assert.Equal(entity[i], result[i]);
             }
 
-            Assert.IsTrue(result.IsFixedSize);
+            Assert.True(result.IsFixedSize);
         }
 
         /// <summary>
         /// Tests that an exception is thrown when attempting to access state when the entity is not initialized.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void BinaryStringEntity_Uninitialized()
         {
             BinaryStringEntity entity = new BinaryStringEntity();
-            AssertEx.Throws<InvalidOperationException>(() => { object x = entity[0]; });
-            AssertEx.Throws<InvalidOperationException>(() => { entity[0] = true; });
-            AssertEx.Throws<InvalidOperationException>(() => { int x = entity.Length; });
-            AssertEx.Throws<InvalidOperationException>(() =>
+            Assert.Throws<InvalidOperationException>(() => { object x = entity[0]; });
+            Assert.Throws<InvalidOperationException>(() => { entity[0] = true; });
+            Assert.Throws<InvalidOperationException>(() => { int x = entity.Length; });
+            Assert.Throws<InvalidOperationException>(() =>
             {
                 BinaryStringEntity entity2 = new BinaryStringEntity();
                 entity.CopyTo(entity2);
@@ -255,7 +254,7 @@ namespace GenFx.ComponentLibrary.Tests
         /// <summary>
         /// Tests that the <see cref="BinaryStringEntity.Genes"/> property works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void BinaryStringEntity_Genes()
         {
             TestBinaryStringEntity entity = new TestBinaryStringEntity
@@ -266,39 +265,39 @@ namespace GenFx.ComponentLibrary.Tests
             entity.Initialize(new MockGeneticAlgorithm());
 
             BitArray bits = entity.GetGenes();
-            Assert.AreEqual(entity.Length, bits.Length);
+            Assert.Equal(entity.Length, bits.Length);
 
             for (int i = 0; i < bits.Length; i++)
             {
-                Assert.AreEqual(entity[i], bits[i]);
+                Assert.Equal(entity[i], bits[i]);
             }
         }
 
         /// <summary>
         /// Tests that the <see cref="BinaryStringEntity.RequiresUniqueElementValues"/> property works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void BinaryStringEntity_UseUniqueElementValues()
         {
             BinaryStringEntity entity = new BinaryStringEntity();
-            Assert.IsFalse(entity.RequiresUniqueElementValues);
-            AssertEx.Throws<NotSupportedException>(() => entity.RequiresUniqueElementValues = true);
+            Assert.False(entity.RequiresUniqueElementValues);
+            Assert.Throws<NotSupportedException>(() => entity.RequiresUniqueElementValues = true);
         }
 
         private static void CompareGeneticEntities(TestBinaryStringEntity expectedEntity, TestBinaryStringEntity actualEntity)
         {
             PrivateObject accessor = new PrivateObject(expectedEntity, new PrivateType(typeof(GeneticEntity)));
             PrivateObject actualEntityAccessor = new PrivateObject(actualEntity, new PrivateType(typeof(GeneticEntity)));
-            Assert.AreNotSame(expectedEntity, actualEntity, "Objects should not be the same instance.");
-            Assert.AreEqual(expectedEntity.Representation, actualEntity.Representation, "Representation not cloned correctly.");
-            Assert.AreEqual(expectedEntity[0], actualEntity[0], "Binary value not set correctly.");
-            Assert.AreEqual(expectedEntity[1], actualEntity[1], "Binary value not set correctly.");
-            Assert.AreEqual(expectedEntity[2], actualEntity[2], "Binary value not set correctly.");
-            Assert.AreEqual(expectedEntity[3], actualEntity[3], "Binary value not set correctly.");
-            Assert.AreSame(accessor.GetProperty("Algorithm"), actualEntityAccessor.GetProperty("Algorithm"), "Algorithms should be the same instance.");
-            Assert.AreEqual(expectedEntity.Age, actualEntity.Age, "Age not set correctly.");
-            Assert.AreEqual(accessor.GetField("rawFitnessValue"), actualEntityAccessor.GetField("rawFitnessValue"), "Raw fitness not set correctly.");
-            Assert.AreEqual(expectedEntity.ScaledFitnessValue, actualEntity.ScaledFitnessValue, "Scaled fitness not set correctly.");
+            Assert.NotSame(expectedEntity, actualEntity);
+            Assert.Equal(expectedEntity.Representation, actualEntity.Representation);
+            Assert.Equal(expectedEntity[0], actualEntity[0]);
+            Assert.Equal(expectedEntity[1], actualEntity[1]);
+            Assert.Equal(expectedEntity[2], actualEntity[2]);
+            Assert.Equal(expectedEntity[3], actualEntity[3]);
+            Assert.Same(accessor.GetProperty("Algorithm"), actualEntityAccessor.GetProperty("Algorithm"));
+            Assert.Equal(expectedEntity.Age, actualEntity.Age);
+            Assert.Equal(accessor.GetField("rawFitnessValue"), actualEntityAccessor.GetField("rawFitnessValue"));
+            Assert.Equal(expectedEntity.ScaledFitnessValue, actualEntity.ScaledFitnessValue);
         }
 
         private static TestBinaryStringEntity GetEntity()

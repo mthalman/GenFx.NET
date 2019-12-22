@@ -1,18 +1,17 @@
 ﻿using GenFx.ComponentLibrary.Lists;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 
 namespace GenFx.ComponentLibrary.Tests
 {
     /// <summary>
     /// Contains unit tests for the <see cref="ListStartingLengthValidator"/> class.
     /// </summary>
-    [TestClass]
     public class ListStartingLengthValidatorTest
     {
         /// <summary>
         /// Tests that the <see cref="ListStartingLengthValidator.IsValid"/> method works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void ListStartingLengthValidator_IsValid()
         {
             ListStartingLengthValidator validator = new ListStartingLengthValidator();
@@ -23,10 +22,9 @@ namespace GenFx.ComponentLibrary.Tests
                 MaximumStartingLength = 6
             };
 
-            string errorMessage;
-            bool result = validator.IsValid(entity, out errorMessage);
-            Assert.IsTrue(result);
-            Assert.IsNull(errorMessage);
+            bool result = validator.IsValid(entity, out string errorMessage);
+            Assert.True(result);
+            Assert.Null(errorMessage);
 
             entity = new BinaryStringEntity
             {
@@ -34,8 +32,8 @@ namespace GenFx.ComponentLibrary.Tests
                 MaximumStartingLength = 5
             };
             result = validator.IsValid(entity, out errorMessage);
-            Assert.IsFalse(result);
-            Assert.IsNotNull(errorMessage);
+            Assert.False(result);
+            Assert.NotNull(errorMessage);
         }
     }
 }

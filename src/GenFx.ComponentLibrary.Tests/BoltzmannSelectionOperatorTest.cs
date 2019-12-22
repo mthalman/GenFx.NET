@@ -1,13 +1,13 @@
-﻿using System;
-using System.Linq;
-using GenFx;
-using GenFx.ComponentLibrary.SelectionOperators;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using TestCommon.Mocks;
-using TestCommon.Helpers;
+﻿using GenFx.ComponentLibrary.SelectionOperators;
+using System;
 using System.Collections.Generic;
-using System.Runtime.Serialization;
+using System.Linq;
 using System.Reflection;
+using System.Runtime.Serialization;
+using TestCommon;
+using TestCommon.Helpers;
+using TestCommon.Mocks;
+using Xunit;
 
 namespace GenFx.ComponentLibrary.Tests
 {
@@ -15,13 +15,12 @@ namespace GenFx.ComponentLibrary.Tests
     ///This is a test class for GenFx.ComponentLibrary.SelectionOperators.BoltzmannSelectionOperator and is intended
     ///to contain all GenFx.ComponentLibrary.SelectionOperators.BoltzmannSelectionOperator Unit Tests
     ///</summary>
-    [TestClass()]
     public class BoltzmannSelectionOperatorTest
     {
         /// <summary>
         /// Tests that the constructor initializes the state correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void BoltzmannSelectionOperator_Ctor()
         {
             double initialTemp = 10;
@@ -29,13 +28,13 @@ namespace GenFx.ComponentLibrary.Tests
 
             FakeBoltzmannSelectionOperator op = new FakeBoltzmannSelectionOperator { InitialTemperature = initialTemp };
             op.Initialize(algorithm);
-            Assert.AreEqual(initialTemp, op.GetTemp(), "Initial temperature was not initialized correctly.");
+            Assert.Equal(initialTemp, op.GetTemp());
         }
         
         /// <summary>
         /// Tests that the Select method correctly returns a GeneticEntity.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void BoltzmannSelectionOperator_Select()
         {
             double initialTemp = 10;
@@ -55,14 +54,14 @@ namespace GenFx.ComponentLibrary.Tests
             population.Entities.Add(entity2);
 
             IEnumerable<GeneticEntity> entities = op.SelectEntities(2, population);
-            Assert.IsNotNull(entities, "An entity should have been selected.");
-            Assert.IsTrue(entities.Count() > 0, "An entity should have been selected.");
+            Assert.NotNull(entities);
+            Assert.True(entities.Count() > 0, "An entity should have been selected.");
         }
 
         /// <summary>
         /// Tests that the temperature is adjusted correctly for each generation.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void BoltzmannSelectionOperator_Temperature()
         {
             double initialTemp = 10;
@@ -76,7 +75,7 @@ namespace GenFx.ComponentLibrary.Tests
             for (int i = 0; i < 10; i++)
             {
                 algorithm.RaiseGenerationCreatedEvent();
-                Assert.AreEqual(op.GetTemp(), currentTemp + 1, "Loop index {0}: Temperature was not adjusted correctly.", i);
+                Assert.Equal(op.GetTemp(), currentTemp + 1);
                 currentTemp++;
             }
         }
@@ -84,7 +83,7 @@ namespace GenFx.ComponentLibrary.Tests
         /// <summary>
         /// Tests that an exception is thrown when the calculation has an overflow.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void BoltzmannSelectionOperator_Select_Overflow()
         {
             double initialTemp = .0000001;
@@ -97,34 +96,36 @@ namespace GenFx.ComponentLibrary.Tests
             entity.Initialize(algorithm);
             entity.ScaledFitnessValue = 1;
             population.Entities.Add(entity);
-            AssertEx.Throws<OverflowException>(() => op.SelectEntities(1, population));
+            Assert.Throws<OverflowException>(() => op.SelectEntities(1, population));
         }
 
         /// <summary>
         /// Tests that the object can be serialized and deserialized.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void BoltzmannSelectionOperator_Serialization()
         {
-            FakeBoltzmannSelectionOperator op = new FakeBoltzmannSelectionOperator();
-            op.InitialTemperature = 1;
-            op.CurrentTemperature = 2;
+            FakeBoltzmannSelectionOperator op = new FakeBoltzmannSelectionOperator
+            {
+                InitialTemperature = 1,
+                CurrentTemperature = 2
+            };
 
             FakeBoltzmannSelectionOperator result = (FakeBoltzmannSelectionOperator)SerializationHelper.TestSerialization(op, new Type[0]);
 
-            Assert.AreEqual(1, result.InitialTemperature);
-            Assert.AreEqual(2, result.CurrentTemperature);
+            Assert.Equal(1, result.InitialTemperature);
+            Assert.Equal(2, result.CurrentTemperature);
         }
 
         /// <summary>
         /// Tests that an exception is thrown when passing a null population to <see cref="BoltzmannSelectionOperator.SelectEntitiesFromPopulation"/>.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void BoltzmannSelectionOperator_SelectEntitiesFromPopulation_NullPopulation()
         {
             FakeBoltzmannSelectionOperator op = new FakeBoltzmannSelectionOperator();
             PrivateObject accessor = new PrivateObject(op, new PrivateType(typeof(BoltzmannSelectionOperator)));
-            AssertEx.Throws<ArgumentNullException>(() => accessor.Invoke("SelectEntitiesFromPopulation", BindingFlags.Instance | BindingFlags.NonPublic, (int)0, (Population)null));
+            Assert.Throws<ArgumentNullException>(() => accessor.Invoke("SelectEntitiesFromPopulation", (int)0, (Population)null));
         }
 
         private static MockGeneticAlgorithm GetMockAlgorithm(double initialTemp)

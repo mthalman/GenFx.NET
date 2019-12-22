@@ -1,171 +1,168 @@
-using System;
-using System.ComponentModel;
 using GenFx.Validation;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using TestCommon.Helpers;
-using GenFx;
+using System;
+using TestCommon;
+using Xunit;
 
 namespace GenFx.Tests
 {
-    /// <summary>
-    /// 
-    ///</summary>
-    [TestClass]
     public class ComponentValidatorAttributeTest
     {
         /// <summary>
         /// Tests that the Validator property works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void ComponentValidatorAttribute_Validator()
         {
             TestConfigurationValidatorAttribute attrib = new TestConfigurationValidatorAttribute();
 
             PropertyValidator validator = attrib.Validator;
-            Assert.IsNotNull(validator, "Validator should be set.");
-            Assert.IsInstanceOfType(validator, typeof(TestConfigurationValidator), "Validator should be the test's validator.");
+            Assert.NotNull(validator);
+            Assert.IsType<TestConfigurationValidator>(validator);
 
             PropertyValidator validator2 = attrib.Validator;
-            Assert.AreSame(validator, validator2, "Same instance should be returned.");
+            Assert.Same(validator, validator2);
         }
 
         /// <summary>
         /// Tests that the constructor initializes the state correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void IntegerValidatorAttribute_Ctor()
         {
             IntegerValidatorAttribute attrib = new IntegerValidatorAttribute();
 
-            Assert.AreEqual(Int32.MinValue, attrib.MinValue, "MinValue not initialized correctly.");
-            Assert.AreEqual(Int32.MaxValue, attrib.MaxValue, "MinValue not initialized correctly.");
-            Assert.IsInstanceOfType(attrib.Validator, typeof(IntegerValidator), "Validator is not correct type.");
+            Assert.Equal(Int32.MinValue, attrib.MinValue);
+            Assert.Equal(Int32.MaxValue, attrib.MaxValue);
+            Assert.IsType<IntegerValidator>(attrib.Validator);
         }
 
         /// <summary>
         /// Tests that the constructor initializes the state correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void IntegerExternalValidatorAttribute_Ctor()
         {
             Type configType = typeof(FakeComponent);
             string targetProperty = "Value";
             IntegerExternalValidatorAttribute attrib = new IntegerExternalValidatorAttribute(configType, targetProperty);
 
-            Assert.AreEqual(Int32.MinValue, attrib.MinValue, "MinValue not initialized correctly.");
-            Assert.AreEqual(Int32.MaxValue, attrib.MaxValue, "MinValue not initialized correctly.");
-            Assert.IsInstanceOfType(attrib.Validator, typeof(IntegerValidator), "Validator is not correct type.");
-            Assert.AreSame(configType, attrib.TargetComponentType, "TargetComponentConfigurationType not initialized correctly.");
-            Assert.AreEqual(targetProperty, attrib.TargetPropertyName, "TargetProperty not initialized correctly.");
+            Assert.Equal(Int32.MinValue, attrib.MinValue);
+            Assert.Equal(Int32.MaxValue, attrib.MaxValue);
+            Assert.IsType<IntegerValidator>(attrib.Validator);
+            Assert.Same(configType, attrib.TargetComponentType);
+            Assert.Equal(targetProperty, attrib.TargetPropertyName);
         }
 
         /// <summary>
         /// Tests that the constructor throws when a null arg is passed.
         /// </summary>
         /// <remarks>The rest of the validation tests are handled by <see cref="ExternalValidatorAttributeHelperTest"/>.</remarks>
-        [TestMethod]
+        [Fact]
         public void IntegerExternalValidatorAttribute_Ctor_NullArg()
         {
-            AssertEx.Throws<ArgumentNullException>(() => new IntegerExternalValidatorAttribute(null, "b"));
+            Assert.Throws<ArgumentNullException>(() => new IntegerExternalValidatorAttribute(null, "b"));
         }
 
         /// <summary>
         /// Tests that the constructor initializes the state correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void DoubleValidatorAttribute_Ctor()
         {
             DoubleValidatorAttribute attrib = new DoubleValidatorAttribute();
 
-            Assert.AreEqual(Double.MinValue, attrib.MinValue, "MinValue not initialized correctly.");
-            Assert.AreEqual(Double.MaxValue, attrib.MaxValue, "MinValue not initialized correctly.");
-            Assert.IsTrue(attrib.IsMinValueInclusive, "IsMinValueInclusive not initialized correctly."); Assert.IsTrue(attrib.IsMinValueInclusive, "IsMinValueInclusive not initialized correctly.");
-            Assert.IsTrue(attrib.IsMaxValueInclusive, "IsMaxValueInclusive not initialized correctly.");
-            Assert.IsInstanceOfType(attrib.Validator, typeof(DoubleValidator), "Validator is not correct type.");
+            Assert.Equal(Double.MinValue, attrib.MinValue);
+            Assert.Equal(Double.MaxValue, attrib.MaxValue);
+            Assert.True(attrib.IsMinValueInclusive);
+            Assert.True(attrib.IsMinValueInclusive);
+            Assert.True(attrib.IsMaxValueInclusive);
+            Assert.IsType<DoubleValidator>(attrib.Validator);
         }
 
         /// <summary>
         /// Tests that the Min/Max-Value properties work correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void DoubleValidatorAttribute_MinMax()
         {
-            DoubleValidatorAttribute attrib = new DoubleValidatorAttribute();
-            attrib.MinValue = 10;
-            attrib.MaxValue = 20;
-            attrib.IsMaxValueInclusive = false;
-            attrib.IsMinValueInclusive = false;
+            DoubleValidatorAttribute attrib = new DoubleValidatorAttribute
+            {
+                MinValue = 10,
+                MaxValue = 20,
+                IsMaxValueInclusive = false,
+                IsMinValueInclusive = false
+            };
 
             PrivateObject accessor = new PrivateObject(attrib.Validator);
-            Assert.AreEqual(attrib.MinValue, accessor.GetField("minValue"), "MinValue not set correctly on Validator.");
-            Assert.AreEqual(attrib.MaxValue, accessor.GetField("maxValue"), "MaxValue not set correctly on Validator.");
-            Assert.AreEqual(attrib.IsMinValueInclusive, accessor.GetField("isMinValueInclusive"), "IsMinValueInclusive not set correctly on Validator.");
-            Assert.AreEqual(attrib.IsMaxValueInclusive, accessor.GetField("isMaxValueInclusive"), "IsMaxValueInclusive not set correctly on Validator.");
+            Assert.Equal(attrib.MinValue, accessor.GetField("minValue"));
+            Assert.Equal(attrib.MaxValue, accessor.GetField("maxValue"));
+            Assert.Equal(attrib.IsMinValueInclusive, accessor.GetField("isMinValueInclusive"));
+            Assert.Equal(attrib.IsMaxValueInclusive, accessor.GetField("isMaxValueInclusive"));
         }
 
         /// <summary>
         /// Tests that the constructor initializes the state correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void DoubleExternalValidatorAttribute_Ctor()
         {
             Type configType = typeof(FakeComponent);
             string targetProperty = "Value";
             DoubleExternalValidatorAttribute attrib = new DoubleExternalValidatorAttribute(configType, targetProperty);
 
-            Assert.AreEqual(Double.MinValue, attrib.MinValue, "MinValue not initialized correctly.");
-            Assert.AreEqual(Double.MaxValue, attrib.MaxValue, "MinValue not initialized correctly.");
-            Assert.IsInstanceOfType(attrib.Validator, typeof(DoubleValidator), "Validator is not correct type.");
-            Assert.AreSame(configType, attrib.TargetComponentType, "TargetComponentType not initialized correctly.");
-            Assert.AreEqual(targetProperty, attrib.TargetPropertyName, "TargetProperty not initialized correctly.");
+            Assert.Equal(Double.MinValue, attrib.MinValue);
+            Assert.Equal(Double.MaxValue, attrib.MaxValue);
+            Assert.IsType<DoubleValidator>(attrib.Validator);
+            Assert.Same(configType, attrib.TargetComponentType);
+            Assert.Equal(targetProperty, attrib.TargetPropertyName);
         }
 
         /// <summary>
         /// Tests that the constructor throws when a null arg is passed.
         /// </summary>
         /// <remarks>The rest of the validation tests are handled by <see cref="ExternalValidatorAttributeHelperTest"/>.</remarks>
-        [TestMethod]
+        [Fact]
         public void DoubleExternalValidatorAttribute_Ctor_NullArg()
         {
-            AssertEx.Throws<ArgumentNullException>(() => new DoubleExternalValidatorAttribute(null, "b"));
+            Assert.Throws<ArgumentNullException>(() => new DoubleExternalValidatorAttribute(null, "b"));
         }
 
         /// <summary>
         /// Tests that the constructor initializes the state correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void CustomValidatorAttribute_Ctor()
         {
             CustomPropertyValidatorAttribute attrib = new CustomPropertyValidatorAttribute(typeof(TestConfigurationValidator));
 
-            Assert.AreSame(typeof(TestConfigurationValidator), attrib.ValidatorType, "ValidatorType not initialized correctly.");
-            Assert.IsInstanceOfType(attrib.Validator, typeof(TestConfigurationValidator), "Validator is not correct type.");
+            Assert.Same(typeof(TestConfigurationValidator), attrib.ValidatorType);
+            Assert.IsType<TestConfigurationValidator>(attrib.Validator);
         }
 
         /// <summary>
         /// Tests that the constructor initializes the state correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void CustomExternalValidatorAttribute_Ctor()
         {
             Type configType = typeof(FakeComponent);
             string targetProperty = "Value";
             CustomExternalPropertyValidatorAttribute attrib = new CustomExternalPropertyValidatorAttribute(configType, targetProperty, typeof(TestConfigurationValidator));
 
-            Assert.AreSame(typeof(TestConfigurationValidator), attrib.ValidatorType, "ValidatorType not initialized correctly.");
-            Assert.IsInstanceOfType(attrib.Validator, typeof(TestConfigurationValidator), "Validator is not correct type.");
-            Assert.AreSame(configType, attrib.TargetComponentType, "TargetComponentConfigurationType not initialized correctly.");
-            Assert.AreEqual(targetProperty, attrib.TargetPropertyName, "TargetProperty not initialized correctly.");
+            Assert.Same(typeof(TestConfigurationValidator), attrib.ValidatorType);
+            Assert.IsType<TestConfigurationValidator>(attrib.Validator);
+            Assert.Same(configType, attrib.TargetComponentType);
+            Assert.Equal(targetProperty, attrib.TargetPropertyName);
         }
 
         /// <summary>
         /// Tests that the constructor throws when a null arg is passed.
         /// </summary>
         /// <remarks>The rest of the validation tests are handled by <see cref="ExternalValidatorAttributeHelperTest"/>.</remarks>
-        [TestMethod]
+        [Fact]
         public void CustomExternalValidatorAttribute_Ctor_NullArg()
         {
-            AssertEx.Throws<ArgumentNullException>(() => new CustomExternalPropertyValidatorAttribute(null, "b", typeof(TestConfigurationValidator)));
+            Assert.Throws<ArgumentNullException>(() => new CustomExternalPropertyValidatorAttribute(null, "b", typeof(TestConfigurationValidator)));
         }
 
         private class TestConfigurationValidatorAttribute : PropertyValidatorAttribute

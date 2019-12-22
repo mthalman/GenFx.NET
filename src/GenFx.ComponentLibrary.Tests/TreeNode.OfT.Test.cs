@@ -1,20 +1,18 @@
 ﻿using GenFx.ComponentLibrary.Trees;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using TestCommon.Helpers;
+using Xunit;
 
 namespace GenFx.ComponentLibrary.Tests
 {
     /// <summary>
     /// Contains unit tests for the <see cref="TreeNode{T}"/> class.
     /// </summary>
-    [TestClass]
     public class TreeNodeOfTTest
     {
         /// <summary>
         /// Tests that the <see cref="TreeNode{T}.Clone"/> method works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void TreeNodeOfT_Clone()
         {
             TestTreeEntity entity = new TestTreeEntity();
@@ -27,21 +25,21 @@ namespace GenFx.ComponentLibrary.Tests
             newEntity.SetRootNode(newParent);
             TreeNode clone = node.Clone(newEntity, newParent);
 
-            Assert.AreNotSame(node, clone, "Nodes should not be same instance.");
-            Assert.AreNotSame(node.ChildNodes[0], clone.ChildNodes[0], "Nodes should not be same instance.");
-            Assert.AreSame(newEntity, clone.Tree, "Tree not set correctly.");
-            Assert.AreSame(newParent, clone.ParentNode, "Parent node not set correctly.");
-            Assert.AreEqual(node.Value, clone.Value, "Value not set correctly.");
+            Assert.NotSame(node, clone);
+            Assert.NotSame(node.ChildNodes[0], clone.ChildNodes[0]);
+            Assert.Same(newEntity, clone.Tree);
+            Assert.Same(newParent, clone.ParentNode);
+            Assert.Equal(node.Value, clone.Value);
         }
 
         /// <summary>
         /// Tests that an exception is thrown when passing a null tree.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void TreeNodeOfT_Clone_NullTree()
         {
             TreeNode<int> node = new TreeNode<int>();
-            AssertEx.Throws<ArgumentNullException>(() => node.Clone(null, new TreeNode<int>()));
+            Assert.Throws<ArgumentNullException>(() => node.Clone(null, new TreeNode<int>()));
         }
 
         private class TestTreeEntity : TreeEntityBase

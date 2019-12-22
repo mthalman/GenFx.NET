@@ -1,6 +1,6 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
+﻿using System;
 using System.ComponentModel;
+using Xunit;
 
 namespace TestCommon.Helpers
 {
@@ -25,20 +25,20 @@ namespace TestCommon.Helpers
             obj.PropertyChanged += (sender, e) =>
             {
                 propertyChangedEventRaised = true;
-                Assert.AreEqual(propertyName, e.PropertyName);
+                Assert.Equal(propertyName, e.PropertyName);
             };
 
             setProperty(newValue);
 
-            Assert.IsTrue(propertyChangedEventRaised);
+            Assert.True(propertyChangedEventRaised);
 
             if (newValue.GetType().IsValueType)
             {
-                Assert.AreEqual(newValue, getProperty());
+                Assert.Equal(newValue, getProperty());
             }
             else
             {
-                Assert.AreSame(newValue, getProperty());
+                Assert.Equal(newValue, getProperty());
             }
         }
     }

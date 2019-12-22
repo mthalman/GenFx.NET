@@ -1,21 +1,20 @@
 using GenFx.ComponentLibrary.Lists;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using TestCommon;
 using TestCommon.Helpers;
 using TestCommon.Mocks;
+using Xunit;
 
 namespace GenFx.ComponentLibrary.Tests
 {
     /// <summary>
     /// Contains unit tests for the <see cref="IntegerListEntity"/> class.
     ///</summary>
-    [TestClass]
-    public class IntegerListEntityTest
+    public class IntegerListEntityTest : IDisposable
     {
-        [TestCleanup]
-        public void Cleanup()
+        public void Dispose()
         {
             RandomNumberService.Instance = new RandomNumberService();
         }
@@ -23,20 +22,20 @@ namespace GenFx.ComponentLibrary.Tests
         /// <summary>
         /// Tests that the UpdateStringRepresentation method works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void IntegerListEntity_UpdateStringRepresentation()
         {
             IntegerListEntity entity = GetEntity();
             PrivateObject accessor = new PrivateObject(entity);
             accessor.Invoke("UpdateStringRepresentation");
 
-            Assert.AreEqual("5, 3, 10, 127", entity.Representation, "Representation was not calculated correctly.");
+            Assert.Equal("5, 3, 10, 127", entity.Representation);
         }
 
         /// <summary>
         /// Tests that the Clone method works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void IntegerListEntity_Clone()
         {
             IntegerListEntity entity = GetEntity();
@@ -47,7 +46,7 @@ namespace GenFx.ComponentLibrary.Tests
         /// <summary>
         /// Tests that the CopyTo method works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void IntegerListEntity_CopyTo()
         {
             IntegerListEntity entity = GetEntity();
@@ -62,18 +61,18 @@ namespace GenFx.ComponentLibrary.Tests
         /// <summary>
         /// Tests that an exception is thrown when a null entity is passed.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void IntegerListEntity_CopyTo_NullEntity()
         {
             IntegerListEntity entity = GetEntity();
 
-            AssertEx.Throws<ArgumentNullException>(() => entity.CopyTo(null));
+            Assert.Throws<ArgumentNullException>(() => entity.CopyTo(null));
         }
 
         /// <summary>
         /// Tests that the constructor initializes the state correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void IntegerListEntity_Ctor()
         {
             int size = 3;
@@ -81,14 +80,14 @@ namespace GenFx.ComponentLibrary.Tests
             IntegerListEntity entity = new TestIntegerListEntity { MinimumStartingLength = size, MaximumStartingLength = size };
             entity.Initialize(algorithm);
             PrivateObject accessor = new PrivateObject(entity, new PrivateType(typeof(ListEntity<int>)));
-            Assert.AreEqual(size, entity.Length, "Length not initialized correctly.");
-            Assert.AreEqual(size, ((List<int>)accessor.GetField("genes")).Count, "Genes not initialized correctly.");
+            Assert.Equal(size, entity.Length);
+            Assert.Equal(size, ((List<int>)accessor.GetField("genes")).Count);
         }
 
         /// <summary>
         /// Tests that the Initialize method works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void IntegerListEntity_Initialize()
         {
             RandomNumberService.Instance = new TestRandomUtil();
@@ -97,13 +96,13 @@ namespace GenFx.ComponentLibrary.Tests
             IntegerListEntity entity = new TestIntegerListEntity { MinimumStartingLength = 4, MaximumStartingLength = 4 };
             entity.Initialize(algorithm);
             
-            Assert.AreEqual("1, 2, 3, 4", entity.Representation, "Entity not initialized correctly.");
+            Assert.Equal("1, 2, 3, 4", entity.Representation);
         }
 
         /// <summary>
         /// Tests that the indexer works correctly.
         ///</summary>
-        [TestMethod]
+        [Fact]
         public void IntegerListEntity_Indexer()
         {
             GeneticAlgorithm algorithm = GetAlgorithm(3);
@@ -117,26 +116,26 @@ namespace GenFx.ComponentLibrary.Tests
             }
 
             entity[0] = 1;
-            Assert.AreEqual(1, genes[0], "Genes not set correctly.");
-            Assert.AreEqual(0, genes[1], "Genes not set correctly.");
-            Assert.AreEqual(0, genes[2], "Genes not set correctly.");
-            Assert.AreEqual(1, entity[0], "Indexer returned incorrect value.");
+            Assert.Equal(1, genes[0]);
+            Assert.Equal(0, genes[1]);
+            Assert.Equal(0, genes[2]);
+            Assert.Equal(1, entity[0]);
             entity[1] = 2;
-            Assert.AreEqual(1, genes[0], "Genes not set correctly.");
-            Assert.AreEqual(2, genes[1], "Genes not set correctly.");
-            Assert.AreEqual(0, genes[2], "Genes not set correctly.");
-            Assert.AreEqual(2, entity[1], "Indexer returned incorrect value.");
+            Assert.Equal(1, genes[0]);
+            Assert.Equal(2, genes[1]);
+            Assert.Equal(0, genes[2]);
+            Assert.Equal(2, entity[1]);
             entity[2] = 3;
-            Assert.AreEqual(1, genes[0], "Genes not set correctly.");
-            Assert.AreEqual(2, genes[1], "Genes not set correctly.");
-            Assert.AreEqual(3, genes[2], "Genes not set correctly.");
-            Assert.AreEqual(3, entity[2], "Indexer returned incorrect value.");
+            Assert.Equal(1, genes[0]);
+            Assert.Equal(2, genes[1]);
+            Assert.Equal(3, genes[2]);
+            Assert.Equal(3, entity[2]);
         }
 
         /// <summary>
         /// Tests that the Length property works correctly.
         ///</summary>
-        [TestMethod]
+        [Fact]
         public void IntegerListEntity_Length()
         {
             int length = 50;
@@ -144,16 +143,16 @@ namespace GenFx.ComponentLibrary.Tests
 
             IntegerListEntity entity = new TestIntegerListEntity { MinimumStartingLength = length, MaximumStartingLength = length };
             entity.Initialize(algorithm);
-            Assert.AreEqual(length, entity.Length, "Length not set correctly.");
+            Assert.Equal(length, entity.Length);
 
             entity.Length = length;
-            Assert.AreEqual(length, entity.Length, "Length not set correctly.");
+            Assert.Equal(length, entity.Length);
         }
 
         /// <summary>
         /// Tests that the object can be serialized and deserialized.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void IntegerListEntity_Serialization()
         {
             IntegerListEntity entity = new IntegerListEntity();
@@ -163,16 +162,16 @@ namespace GenFx.ComponentLibrary.Tests
 
             IntegerListEntity result = (IntegerListEntity)SerializationHelper.TestSerialization(entity, new Type[0]);
 
-            Assert.AreEqual(entity.MinElementValue, result.MinElementValue);
-            Assert.AreEqual(entity.MaxElementValue, result.MaxElementValue);
-            Assert.AreEqual(entity.RequiresUniqueElementValues, result.RequiresUniqueElementValues);
+            Assert.Equal(entity.MinElementValue, result.MinElementValue);
+            Assert.Equal(entity.MaxElementValue, result.MaxElementValue);
+            Assert.Equal(entity.RequiresUniqueElementValues, result.RequiresUniqueElementValues);
         }
 
         /// <summary>
         /// Ensures that the <see cref="IntegerListEntity.RequiresUniqueElementValues"/> property produces
         /// an entity that contains all unique element values when initialized.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void IntegerListEntity_Initialize_UniqueValues()
         {
             IntegerListEntity entity = new IntegerListEntity
@@ -187,21 +186,21 @@ namespace GenFx.ComponentLibrary.Tests
             for (int i = 0; i < 10; i++)
             {
                 entity.Initialize(new MockGeneticAlgorithm());
-                Assert.AreEqual(10, entity.Distinct().Count());
+                Assert.Equal(10, entity.Distinct().Count());
             }
         }
 
         private static void CompareGeneticEntities(IntegerListEntity expectedEntity, IntegerListEntity actualEntity)
         {
-            Assert.AreNotSame(expectedEntity, actualEntity, "Objects should not be the same instance.");
-            Assert.AreEqual(expectedEntity.Representation, actualEntity.Representation, "Representation not cloned correctly.");
-            Assert.AreEqual(expectedEntity[0], actualEntity[0], "Binary value not set correctly.");
-            Assert.AreEqual(expectedEntity[1], actualEntity[1], "Binary value not set correctly.");
-            Assert.AreEqual(expectedEntity[2], actualEntity[2], "Binary value not set correctly.");
-            Assert.AreEqual(expectedEntity[3], actualEntity[3], "Binary value not set correctly.");
-            Assert.AreEqual(expectedEntity.Age, actualEntity.Age, "Age not set correctly.");
-            Assert.AreEqual(expectedEntity.RawFitnessValue, actualEntity.RawFitnessValue, "Raw fitness not set correctly.");
-            Assert.AreEqual(expectedEntity.ScaledFitnessValue, actualEntity.ScaledFitnessValue, "Scaled fitness not set correctly.");
+            Assert.NotSame(expectedEntity, actualEntity);
+            Assert.Equal(expectedEntity.Representation, actualEntity.Representation);
+            Assert.Equal(expectedEntity[0], actualEntity[0]);
+            Assert.Equal(expectedEntity[1], actualEntity[1]);
+            Assert.Equal(expectedEntity[2], actualEntity[2]);
+            Assert.Equal(expectedEntity[3], actualEntity[3]);
+            Assert.Equal(expectedEntity.Age, actualEntity.Age);
+            Assert.Equal(expectedEntity.RawFitnessValue, actualEntity.RawFitnessValue);
+            Assert.Equal(expectedEntity.ScaledFitnessValue, actualEntity.ScaledFitnessValue);
         }
 
         private static IntegerListEntity GetEntity()

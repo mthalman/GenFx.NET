@@ -1,11 +1,7 @@
-﻿using GenFx;
-using TestCommon.Helpers;
+﻿using System;
+using TestCommon;
 using TestCommon.Mocks;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Text;
+using Xunit;
 
 namespace GenFx.Tests
 {
@@ -13,13 +9,12 @@ namespace GenFx.Tests
     ///This is a test class for GenFx.Terminator and is intended
     ///to contain all GenFx.Terminator Unit Tests
     ///</summary>
-    [TestClass()]
     public class TerminatorTest
     {
         /// <summary>
         /// Tests that the constructor initializes the state correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void Terminator_Ctor()
         {
             GeneticAlgorithm algorithm = new MockGeneticAlgorithm
@@ -33,17 +28,17 @@ namespace GenFx.Tests
             MockTerminator terminator = new MockTerminator();
             terminator.Initialize(algorithm);
             PrivateObject accessor = new PrivateObject(terminator, new PrivateType(typeof(Terminator)));
-            Assert.AreSame(algorithm, accessor.GetProperty("Algorithm"), "Algorithm not set correctly.");
+            Assert.Same(algorithm, accessor.GetProperty("Algorithm"));
         }
 
         /// <summary>
         /// Tests that an exception is thrown when a null algorithm is passed.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void Terminator_Ctor_NullAlgorithm()
         {
             MockTerminator terminator = new MockTerminator();
-            AssertEx.Throws<ArgumentNullException>(() => terminator.Initialize(null));
+            Assert.Throws<ArgumentNullException>(() => terminator.Initialize(null));
         }
 
         private class TestTerminator : Terminator

@@ -1,15 +1,13 @@
-﻿using GenFx;
-using GenFx.Validation;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using GenFx.Validation;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.Serialization;
 using System.Threading.Tasks;
+using TestCommon;
 using TestCommon.Helpers;
 using TestCommon.Mocks;
+using Xunit;
 
 namespace GenFx.Tests
 {
@@ -17,13 +15,12 @@ namespace GenFx.Tests
     /// This is a test class for GenFx.GeneticAlgorithm and is intended
     /// to contain all GenFx.GeneticAlgorithm Unit Tests
     /// </summary>
-    [TestClass()]
     public class GeneticAlgorithmTest
     {
         /// <summary>
         /// Tests that the InitializeAsync initializes the state correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public async Task GeneticAlgorithm_InitializeAsync()
         {
             MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm
@@ -36,17 +33,17 @@ namespace GenFx.Tests
 
             await algorithm.InitializeAsync();
 
-            Assert.IsNotNull(algorithm.Environment, "Environment not initialized.");
+            Assert.NotNull(algorithm.Environment);
             PrivateObject accessor = new PrivateObject(algorithm.Environment);
-            Assert.AreSame(algorithm, accessor.GetField("algorithm"), "Environment should be initialized with the algorithm.");
+            Assert.Same(algorithm, accessor.GetField("algorithm"));
 
-            Assert.IsInstanceOfType(algorithm.Terminator, typeof(DefaultTerminator));
+            Assert.IsType<DefaultTerminator>(algorithm.Terminator);
         }
 
         /// <summary>
         /// Tests that the Initialize method works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public async Task GeneticAlgorithm_Initialize_NoCrossover_Async()
         {
             MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm
@@ -68,7 +65,7 @@ namespace GenFx.Tests
         /// <summary>
         /// Tests that the Initialize method works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public async Task GeneticAlgorithm_Initialize_NoElitism_Async()
         {
             MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm
@@ -90,7 +87,7 @@ namespace GenFx.Tests
         /// <summary>
         /// Tests that the Initialize method works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public async Task GeneticAlgorithm_Initialize_NoFitnessEvaluator_Async()
         {
             MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm
@@ -112,7 +109,7 @@ namespace GenFx.Tests
         /// <summary>
         /// Tests that the Initialize method works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public async Task GeneticAlgorithm_Initialize_NoFitnessScalingStrategy_Async()
         {
             MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm
@@ -134,7 +131,7 @@ namespace GenFx.Tests
         /// <summary>
         /// Tests that the Initialize method works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public async Task GeneticAlgorithm_Initialize_NoEntityType_Async()
         {
             MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm
@@ -156,7 +153,7 @@ namespace GenFx.Tests
         /// <summary>
         /// Tests that the Initialize method works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public async Task GeneticAlgorithm_Initialize_NoMutationOperatorType_Async()
         {
             MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm
@@ -178,7 +175,7 @@ namespace GenFx.Tests
         /// <summary>
         /// Tests that the Initialize method works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public async Task GeneticAlgorithm_Initialize_NoPopulationType_Async()
         {
             MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm
@@ -200,7 +197,7 @@ namespace GenFx.Tests
         /// <summary>
         /// Tests that the Initialize method works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public async Task GeneticAlgorithm_Initialize_NoSelectionOperatorType_Async()
         {
             MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm
@@ -223,7 +220,7 @@ namespace GenFx.Tests
         /// <summary>
         /// Tests that the Initialize method works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public async Task GeneticAlgorithm_Initialize_NoMetricType_Async()
         {
             MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm
@@ -246,7 +243,7 @@ namespace GenFx.Tests
         /// <summary>
         /// Tests that the Initialize method works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public async Task GeneticAlgorithm_Initialize_NoTerminatorType_Async()
         {
             MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm
@@ -268,7 +265,7 @@ namespace GenFx.Tests
         /// <summary>
         /// Tests that the Run method works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public async Task GeneticAlgorithm_Run_Async()
         {
             int eventHandlerCallCount = 0;
@@ -280,33 +277,33 @@ namespace GenFx.Tests
             });
             await algorithm.RunAsync();
 
-            Assert.AreEqual(3, eventHandlerCallCount, "GenerationCreated event not called enough times.");
-            Assert.AreEqual(3, algorithm.CurrentGeneration, "Algorithm did not run for enough generations.");
-            Assert.AreEqual(0, ((MockCrossoverOperator)algorithm.CrossoverOperator).DoCrossoverCallCount, "Crossover call count not correct.");
-            Assert.AreEqual(0, ((MockElitismStrategy)algorithm.ElitismStrategy).GetElitistGeneticEntitiesCallCount, "Elitism call count not correct.");
-            Assert.AreEqual(800, ((MockFitnessEvaluator)algorithm.FitnessEvaluator).DoEvaluateFitnessCallCount, "FitnessEvaluator call count not correct.");
-            Assert.AreEqual(8, ((MockFitnessScalingStrategy)algorithm.FitnessScalingStrategy).OnScaleCallCount, "FitnessScaling call count not correct.");
-            Assert.AreEqual(0, ((MockMutationOperator)algorithm.MutationOperator).DoMutateCallCount, "Mutation call count not correct.");
-            Assert.AreEqual(0, ((MockSelectionOperator)algorithm.SelectionOperator).DoSelectCallCount, "Selection call count not correct.");
+            Assert.Equal(3, eventHandlerCallCount);
+            Assert.Equal(3, algorithm.CurrentGeneration);
+            Assert.Equal(0, ((MockCrossoverOperator)algorithm.CrossoverOperator).DoCrossoverCallCount);
+            Assert.Equal(0, ((MockElitismStrategy)algorithm.ElitismStrategy).GetElitistGeneticEntitiesCallCount);
+            Assert.Equal(800, ((MockFitnessEvaluator)algorithm.FitnessEvaluator).DoEvaluateFitnessCallCount);
+            Assert.Equal(8, ((MockFitnessScalingStrategy)algorithm.FitnessScalingStrategy).OnScaleCallCount);
+            Assert.Equal(0, ((MockMutationOperator)algorithm.MutationOperator).DoMutateCallCount);
+            Assert.Equal(0, ((MockSelectionOperator)algorithm.SelectionOperator).DoSelectCallCount);
         }
 
         /// <summary>
         /// Tests that an exception is thrown when calling Run twice without initializing in between.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public async Task GeneticAlgorithm_Run_Twice_NoInitialize_Async()
         {
             TestGeneticAlgorithm algorithm = GetAlgorithm();
 
             await algorithm.InitializeAsync();
             await algorithm.RunAsync();
-            await AssertEx.ThrowsAsync<InvalidOperationException>(async () => await algorithm.RunAsync());
+            await Assert.ThrowsAsync<InvalidOperationException>(async () => await algorithm.RunAsync());
         }
 
         /// <summary>
         /// Tests that an exception is thrown when calling Run without first calling Initialize.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public async Task GeneticAlgorithm_Run_NoInitialize_Async()
         {
             TestGeneticAlgorithm algorithm = new TestGeneticAlgorithm
@@ -317,13 +314,13 @@ namespace GenFx.Tests
                 PopulationSeed = new MockPopulation()
             };
 
-            await AssertEx.ThrowsAsync<InvalidOperationException>(async () => await algorithm.RunAsync());
+            await Assert.ThrowsAsync<InvalidOperationException>(async () => await algorithm.RunAsync());
         }
 
         /// <summary>
         /// Tests that the Step method works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public async Task GeneticAlgorithm_Step_Async()
         {
             TestGeneticAlgorithm algorithm = GetAlgorithm();
@@ -336,58 +333,58 @@ namespace GenFx.Tests
             });
             bool stepResult = await algorithm.StepAsync();
 
-            Assert.IsFalse(stepResult, "Algorithm should not be complete yet.");
+            Assert.False(stepResult, "Algorithm should not be complete yet.");
 
-            Assert.AreEqual(1, eventHandlerCallCount, "GenerationCreated event not called enough times.");
-            Assert.AreEqual(1, algorithm.CurrentGeneration, "Algorithm did not run for enough generations.");
-            Assert.AreEqual(0, ((MockCrossoverOperator)algorithm.CrossoverOperator).DoCrossoverCallCount, "Crossover call count not correct.");
-            Assert.AreEqual(0, ((MockElitismStrategy)algorithm.ElitismStrategy).GetElitistGeneticEntitiesCallCount, "Elitism call count not correct.");
-            Assert.AreEqual(400, ((MockFitnessEvaluator)algorithm.FitnessEvaluator).DoEvaluateFitnessCallCount, "FitnessEvaluator call count not correct.");
-            Assert.AreEqual(4, ((MockFitnessScalingStrategy)algorithm.FitnessScalingStrategy).OnScaleCallCount, "FitnessScaling call count not correct.");
-            Assert.AreEqual(0, ((MockMutationOperator)algorithm.MutationOperator).DoMutateCallCount, "Mutation call count not correct.");
-            Assert.AreEqual(0, ((MockSelectionOperator)algorithm.SelectionOperator).DoSelectCallCount, "Selection call count not correct.");
-
-            stepResult = await algorithm.StepAsync();
-            Assert.IsFalse(stepResult, "Algorithm should not be complete yet.");
+            Assert.Equal(1, eventHandlerCallCount);
+            Assert.Equal(1, algorithm.CurrentGeneration);
+            Assert.Equal(0, ((MockCrossoverOperator)algorithm.CrossoverOperator).DoCrossoverCallCount);
+            Assert.Equal(0, ((MockElitismStrategy)algorithm.ElitismStrategy).GetElitistGeneticEntitiesCallCount);
+            Assert.Equal(400, ((MockFitnessEvaluator)algorithm.FitnessEvaluator).DoEvaluateFitnessCallCount);
+            Assert.Equal(4, ((MockFitnessScalingStrategy)algorithm.FitnessScalingStrategy).OnScaleCallCount);
+            Assert.Equal(0, ((MockMutationOperator)algorithm.MutationOperator).DoMutateCallCount);
+            Assert.Equal(0, ((MockSelectionOperator)algorithm.SelectionOperator).DoSelectCallCount);
 
             stepResult = await algorithm.StepAsync();
-            Assert.IsTrue(stepResult, "Algorithm should be complete.");
+            Assert.False(stepResult, "Algorithm should not be complete yet.");
 
-            Assert.AreEqual(3, eventHandlerCallCount, "GenerationCreated event not called enough times.");
-            Assert.AreEqual(3, algorithm.CurrentGeneration, "Algorithm did not run for enough generations.");
-            Assert.AreEqual(0, ((MockCrossoverOperator)algorithm.CrossoverOperator).DoCrossoverCallCount, "Crossover call count not correct.");
-            Assert.AreEqual(0, ((MockElitismStrategy)algorithm.ElitismStrategy).GetElitistGeneticEntitiesCallCount, "Elitism call count not correct.");
-            Assert.AreEqual(800, ((MockFitnessEvaluator)algorithm.FitnessEvaluator).DoEvaluateFitnessCallCount, "FitnessEvaluator call count not correct.");
-            Assert.AreEqual(8, ((MockFitnessScalingStrategy)algorithm.FitnessScalingStrategy).OnScaleCallCount, "FitnessScaling call count not correct.");
-            Assert.AreEqual(0, ((MockMutationOperator)algorithm.MutationOperator).DoMutateCallCount, "Mutation call count not correct.");
-            Assert.AreEqual(0, ((MockSelectionOperator)algorithm.SelectionOperator).DoSelectCallCount, "Selection call count not correct.");
+            stepResult = await algorithm.StepAsync();
+            Assert.True(stepResult, "Algorithm should be complete.");
+
+            Assert.Equal(3, eventHandlerCallCount);
+            Assert.Equal(3, algorithm.CurrentGeneration);
+            Assert.Equal(0, ((MockCrossoverOperator)algorithm.CrossoverOperator).DoCrossoverCallCount);
+            Assert.Equal(0, ((MockElitismStrategy)algorithm.ElitismStrategy).GetElitistGeneticEntitiesCallCount);
+            Assert.Equal(800, ((MockFitnessEvaluator)algorithm.FitnessEvaluator).DoEvaluateFitnessCallCount);
+            Assert.Equal(8, ((MockFitnessScalingStrategy)algorithm.FitnessScalingStrategy).OnScaleCallCount);
+            Assert.Equal(0, ((MockMutationOperator)algorithm.MutationOperator).DoMutateCallCount);
+            Assert.Equal(0, ((MockSelectionOperator)algorithm.SelectionOperator).DoSelectCallCount);
         }
 
         /// <summary>
         /// Tests that an exception is thrown when Step is called too many times with no initialize in between.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public async Task GeneticAlgorithm_Step_Overbounds_NoInitialize_Async()
         {
             TestGeneticAlgorithm algorithm = GetAlgorithm();
 
             await algorithm.InitializeAsync();
             bool result = await algorithm.StepAsync();
-            Assert.IsFalse(result, "Algorithm should not be complete.");
+            Assert.False(result, "Algorithm should not be complete.");
 
             result = await algorithm.StepAsync();
-            Assert.IsFalse(result, "Algorithm should not be complete.");
+            Assert.False(result, "Algorithm should not be complete.");
 
             result = await algorithm.StepAsync();
-            Assert.IsTrue(result, "Algorithm should be complete.");
+            Assert.True(result, "Algorithm should be complete.");
 
-            await AssertEx.ThrowsAsync<InvalidOperationException>(async () => await algorithm.StepAsync());
+            await Assert.ThrowsAsync<InvalidOperationException>(async () => await algorithm.StepAsync());
         }
 
         /// <summary>
         /// Tests that an exception is thrown when calling Run without first calling Initialize.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public async Task GeneticAlgorithm_Step_NoInitialize_Async()
         {
             TestGeneticAlgorithm algorithm = new TestGeneticAlgorithm
@@ -398,13 +395,13 @@ namespace GenFx.Tests
                 PopulationSeed = new MockPopulation()
             };
 
-            await AssertEx.ThrowsAsync<InvalidOperationException>(async () => await algorithm.StepAsync());
+            await Assert.ThrowsAsync<InvalidOperationException>(async () => await algorithm.StepAsync());
         }
 
         /// <summary>
         /// Tests that the ApplyElitism method works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void GeneticAlgorithm_ApplyElitism()
         {
             TestGeneticAlgorithm algorithm = new TestGeneticAlgorithm
@@ -443,13 +440,13 @@ namespace GenFx.Tests
                 population.Entities.Add(entity);
             }
             IList<GeneticEntity> entities = (IList<GeneticEntity>)accessor.Invoke("ApplyElitism", population);
-            Assert.AreEqual(expectedEliteCount, entities.Count);
+            Assert.Equal(expectedEliteCount, entities.Count);
         }
 
         /// <summary>
         /// Tests that the ApplyCrossover method works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void GeneticAlgorithm_ApplyCrossover()
         {
             GeneticAlgorithm algorithm = new TestGeneticAlgorithm
@@ -476,14 +473,14 @@ namespace GenFx.Tests
             entity2.Initialize(algorithm);
             IList<GeneticEntity> geneticEntities = (IList<GeneticEntity>)algAccessor.Invoke("ApplyCrossover", algorithm.PopulationSeed, new GeneticEntity[] { entity1, entity2 });
 
-            Assert.AreEqual(2, geneticEntities.Count, "Incorrect number of genetic entities returned.");
-            Assert.AreEqual(1, crossoverOp.DoCrossoverCallCount, "Crossover not called correctly.");
+            Assert.Equal(2, geneticEntities.Count);
+            Assert.Equal(1, crossoverOp.DoCrossoverCallCount);
         }
 
         /// <summary>
         /// Tests that the ApplyMutation method works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void GeneticAlgorithm_ApplyMutation()
         {
             TestGeneticAlgorithm algorithm = new TestGeneticAlgorithm
@@ -517,18 +514,18 @@ namespace GenFx.Tests
 
             IList<GeneticEntity> mutants = (IList<GeneticEntity>)accessor.Invoke("ApplyMutation", geneticEntities);
 
-            Assert.AreEqual(geneticEntities.Count, mutants.Count, "Incorrect number of genetic entities returned.");
+            Assert.Equal(geneticEntities.Count, mutants.Count);
             if (algorithm.MutationOperator != null)
             {
                 MockMutationOperator mutationOp = (MockMutationOperator)algorithm.MutationOperator;
-                Assert.AreEqual(expectedMutationCount, mutationOp.DoMutateCallCount, "Mutation not called correctly.");
+                Assert.Equal(expectedMutationCount, mutationOp.DoMutateCallCount);
             }
         }
 
         /// <summary>
         /// Tests that the ValidateRequiredComponents method works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void GeneticAlgorithm_ValidateConfiguration_ValidCrossover()
         {
             MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm
@@ -549,7 +546,7 @@ namespace GenFx.Tests
         /// <summary>
         /// Tests that an exception is throw when an required configurable type has not been set on the algorithm.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void GeneticAlgorithm_ValidateConfiguration_InvalidCrossover()
         {
             MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm
@@ -570,7 +567,7 @@ namespace GenFx.Tests
         /// <summary>
         /// Tests that the ValidateRequiredComponents method works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void GeneticAlgorithm_ValidateConfiguration_ValidElitism()
         {
             MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm
@@ -592,7 +589,7 @@ namespace GenFx.Tests
         /// <summary>
         /// Tests that an exception is throw when an required configurable type has not been set on the algorithm.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void GeneticAlgorithm_ValidateConfiguration_InvalidElitism()
         {
             MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm
@@ -614,7 +611,7 @@ namespace GenFx.Tests
         /// <summary>
         /// Tests that the ValidateRequiredComponents method works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void GeneticAlgorithm_ValidateConfiguration_ValidFitnessEvaluator()
         {
             MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm
@@ -631,7 +628,7 @@ namespace GenFx.Tests
         /// <summary>
         /// Tests that an exception is throw when an required configurable type has not been set on the algorithm.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void GeneticAlgorithm_ValidateConfiguration_InvalidFitnessEvaluator()
         {
             MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm
@@ -648,7 +645,7 @@ namespace GenFx.Tests
         /// <summary>
         /// Tests that the ValidateRequiredComponents method works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void GeneticAlgorithm_ValidateConfiguration_ValidFitnessScalingStrategy()
         {
             MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm
@@ -667,7 +664,7 @@ namespace GenFx.Tests
         /// <summary>
         /// Tests that an exception is throw when an required configurable type has not been set on the algorithm.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void GeneticAlgorithm_ValidateConfiguration_InvalidFitnessScalingStrategy()
         {
             MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm
@@ -686,7 +683,7 @@ namespace GenFx.Tests
         /// <summary>
         /// Tests that the ValidateRequiredComponents method works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void GeneticAlgorithm_ValidateConfiguration_ValidEntity()
         {
             MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm
@@ -703,7 +700,7 @@ namespace GenFx.Tests
         /// <summary>
         /// Tests that an exception is throw when an required configurable type has not been set on the algorithm.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void GeneticAlgorithm_ValidateConfiguration_InvalidEntity()
         {
             MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm
@@ -720,7 +717,7 @@ namespace GenFx.Tests
         /// <summary>
         /// Tests that the ValidateRequiredComponents method works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void GeneticAlgorithm_ValidateConfiguration_ValidMutationOperator()
         {
             MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm
@@ -741,7 +738,7 @@ namespace GenFx.Tests
         /// <summary>
         /// Tests that an exception is throw when an required configurable type has not been set on the algorithm.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void GeneticAlgorithm_ValidateConfiguration_InvalidMutationOperator()
         {
             MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm
@@ -762,7 +759,7 @@ namespace GenFx.Tests
         /// <summary>
         /// Tests that the ValidateRequiredComponents method works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void GeneticAlgorithm_ValidateConfiguration_ValidPopulation()
         {
             MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm
@@ -780,7 +777,7 @@ namespace GenFx.Tests
         /// <summary>
         /// Tests that an exception is throw when an required configurable type has not been set on the algorithm.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void GeneticAlgorithm_ValidateConfiguration_InvalidPopulation()
         {
             MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm
@@ -798,7 +795,7 @@ namespace GenFx.Tests
         /// <summary>
         /// Tests that the ValidateRequiredComponents method works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void GeneticAlgorithm_ValidateConfiguration_ValidSelectionOperator()
         {
             MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm
@@ -819,7 +816,7 @@ namespace GenFx.Tests
         /// <summary>
         /// Tests that an exception is throw when an required configurable type has not been set on the algorithm.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void GeneticAlgorithm_ValidateConfiguration_InvalidSelectionOperator()
         {
             MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm
@@ -840,7 +837,7 @@ namespace GenFx.Tests
         /// <summary>
         /// Tests that the ValidateRequiredComponents method works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void GeneticAlgorithm_ValidateConfiguration_ValidMetricType()
         {
             MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm
@@ -859,7 +856,7 @@ namespace GenFx.Tests
         /// <summary>
         /// Tests that an exception is throw when an required configurable type has not been set on the algorithm.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void GeneticAlgorithm_ValidateConfiguration_InvalidMetricType()
         {
             MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm
@@ -877,7 +874,7 @@ namespace GenFx.Tests
         /// <summary>
         /// Tests that the ValidateRequiredComponents method works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void GeneticAlgorithm_ValidateConfiguration_ValidPluginType()
         {
             MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm
@@ -896,7 +893,7 @@ namespace GenFx.Tests
         /// <summary>
         /// Tests that an exception is throw when an required configurable type has not been set on the algorithm.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void GeneticAlgorithm_ValidateConfiguration_InvalidPluginType()
         {
             MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm
@@ -914,7 +911,7 @@ namespace GenFx.Tests
         /// <summary>
         /// Tests that the ValidateRequiredComponents method works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void GeneticAlgorithm_ValidateConfiguration_ValidTerminator()
         {
             MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm
@@ -932,7 +929,7 @@ namespace GenFx.Tests
         /// <summary>
         /// Tests that an exception is throw when an required configurable type has not been set on the algorithm.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void GeneticAlgorithm_ValidateConfiguration_InvalidTerminator()
         {
             MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm
@@ -950,7 +947,7 @@ namespace GenFx.Tests
         /// <summary>
         /// Tests that the ValidateRequiredComponents method works correctly when overriding a required type of a base class.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void GeneticAlgorithm_ValidateConfiguration_OverrideRequiredType()
         {
             MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm
@@ -968,7 +965,7 @@ namespace GenFx.Tests
         /// <summary>
         /// Tests that the ValidateRequiredComponents method works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void GeneticAlgorithm_ValidateConfiguration_UsingBaseTypeAsRequiredType()
         {
             MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm
@@ -986,32 +983,32 @@ namespace GenFx.Tests
         /// <summary>
         /// Tests that GeneticAlgorithmConfiguration.EnvironmentSize can be set to valid value.
         ///</summary>
-        [TestMethod()]
+        [Fact]
         public void EnvironmentSizeTest_Valid()
         {
             MockGeneticAlgorithm target = new MockGeneticAlgorithm();
             int val = 2;
             target.MinimumEnvironmentSize = val;
 
-            Assert.AreEqual(val, target.MinimumEnvironmentSize, "EnvironmentSize was not set correctly.");
+            Assert.Equal(val, target.MinimumEnvironmentSize);
         }
 
         /// <summary>
         /// Tests that an exception is thrown when GeneticAlgorithmConfiguration.EnvironmentSize is set to 
         /// an invalid value.
         ///</summary>
-        [TestMethod()]
+        [Fact]
         public void EnvironmentSizeTest_Invalid()
         {
             MockGeneticAlgorithm target = new MockGeneticAlgorithm();
             int val = 0;
-            AssertEx.Throws<ValidationException>(() => target.MinimumEnvironmentSize = val);
+            Assert.Throws<ValidationException>(() => target.MinimumEnvironmentSize = val);
         }
 
         /// <summary>
         /// Tests that the <see cref="GeneticAlgorithm"/> can be serialized and deserialized.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void GeneticAlgorithm_Serialization()
         {
             MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm
@@ -1037,72 +1034,72 @@ namespace GenFx.Tests
             MockGeneticAlgorithm result = (MockGeneticAlgorithm)SerializationHelper.TestSerialization(
                 algorithm, algorithm.GetAllComponents().Select(c => c.GetType()));
 
-            Assert.AreEqual(10, result.MinimumEnvironmentSize);
-            Assert.IsInstanceOfType(result.CrossoverOperator, typeof(MockCrossoverOperator));
-            Assert.IsInstanceOfType(result.ElitismStrategy, typeof(MockElitismStrategy));
-            Assert.IsInstanceOfType(result.FitnessEvaluator, typeof(MockFitnessEvaluator));
-            Assert.IsInstanceOfType(result.FitnessScalingStrategy, typeof(MockFitnessScalingStrategy));
-            Assert.IsInstanceOfType(result.GeneticEntitySeed, typeof(MockEntity));
-            Assert.IsInstanceOfType(result.MutationOperator, typeof(MockMutationOperator));
-            Assert.IsInstanceOfType(result.PopulationSeed, typeof(MockPopulation));
-            Assert.IsInstanceOfType(result.SelectionOperator, typeof(MockSelectionOperator));
-            Assert.IsInstanceOfType(result.Terminator, typeof(MockTerminator));
+            Assert.Equal(10, result.MinimumEnvironmentSize);
+            Assert.IsType<MockCrossoverOperator>(result.CrossoverOperator);
+            Assert.IsType<MockElitismStrategy>(result.ElitismStrategy);
+            Assert.IsType<MockFitnessEvaluator>(result.FitnessEvaluator);
+            Assert.IsType<MockFitnessScalingStrategy>(result.FitnessScalingStrategy);
+            Assert.IsType<MockEntity>(result.GeneticEntitySeed);
+            Assert.IsType<MockMutationOperator>(result.MutationOperator);
+            Assert.IsType<MockPopulation>(result.PopulationSeed);
+            Assert.IsType<MockSelectionOperator>(result.SelectionOperator);
+            Assert.IsType<MockTerminator>(result.Terminator);
 
-            Assert.IsInstanceOfType(result.Metrics[0], typeof(MockMetric));
-            Assert.IsInstanceOfType(result.Metrics[1], typeof(MockMetric2));
+            Assert.IsType<MockMetric>(result.Metrics[0]);
+            Assert.IsType<MockMetric2>(result.Metrics[1]);
 
-            Assert.IsInstanceOfType(result.Plugins[0], typeof(MockPlugin));
-            Assert.IsInstanceOfType(result.Plugins[1], typeof(MockPlugin2));
+            Assert.IsType<MockPlugin>(result.Plugins[0]);
+            Assert.IsType<MockPlugin2>(result.Plugins[1]);
         }
 
         /// <summary>
         /// Tests that an exception is thrown when a null population is passed to <see cref="GeneticAlgorithm.ApplyCrossover"/>.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void GeneticAlgorithm_ApplyCrossover_NullPopulation()
         {
             MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm();
 
-            AssertEx.Throws<ArgumentNullException>(() => algorithm.TestApplyCrossover(null, new List<GeneticEntity>()));
+            Assert.Throws<ArgumentNullException>(() => algorithm.TestApplyCrossover(null, new List<GeneticEntity>()));
         }
 
         /// <summary>
         /// Tests that an exception is thrown when null parents are passed to <see cref="GeneticAlgorithm.ApplyCrossover"/>.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void GeneticAlgorithm_ApplyCrossover_NullParents()
         {
             MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm();
 
-            AssertEx.Throws<ArgumentNullException>(() => algorithm.TestApplyCrossover(new MockPopulation(), null));
+            Assert.Throws<ArgumentNullException>(() => algorithm.TestApplyCrossover(new MockPopulation(), null));
         }
 
         /// <summary>
         /// Tests that an exception is thrown when a null population is passed to <see cref="GeneticAlgorithm.ApplyElitism"/>.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void GeneticAlgorithm_ApplyElitism_NullPopulation()
         {
             MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm();
 
-            AssertEx.Throws<ArgumentNullException>(() => algorithm.TestApplyElitism(null));
+            Assert.Throws<ArgumentNullException>(() => algorithm.TestApplyElitism(null));
         }
 
         /// <summary>
         /// Tests that an exception is thrown when null parents are passed to <see cref="GeneticAlgorithm.ApplyMutation"/>.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void GeneticAlgorithm_ApplyMutation_NullPopulation()
         {
             MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm();
 
-            AssertEx.Throws<ArgumentNullException>(() => algorithm.TestApplyMutation(null));
+            Assert.Throws<ArgumentNullException>(() => algorithm.TestApplyMutation(null));
         }
 
         /// <summary>
         /// Tests that external configuration properties are validated when the algorithm is initialized.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public async Task GeneticAlgorithm_ExternalConfigurationPropertyValidation()
         {
             CustomGeneticAlgorithm algorithm = new CustomGeneticAlgorithm
@@ -1136,7 +1133,7 @@ namespace GenFx.Tests
         /// Tests that the <see cref="GeneticAlgorithm.AlgorithmCompleted"/> event is raised correctly
         /// when the user manually "completes" the algorithm.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void GeneticAlgorithm_AlgorithmCompletedEvent_Manual()
         {
             MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm();
@@ -1152,15 +1149,15 @@ namespace GenFx.Tests
 
             algorithm.Complete();
 
-            Assert.IsTrue(eventRaised);
-            Assert.IsTrue(plugin.OnAlgorithmCompletedWasCalled);
+            Assert.True(eventRaised);
+            Assert.True(plugin.OnAlgorithmCompletedWasCalled);
         }
 
         /// <summary>
         /// Tests that the <see cref="GeneticAlgorithm.AlgorithmCompleted"/> event is raised correctly
         /// when the algorithm naturally finishes its execution via the terminator.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public async Task GeneticAlgorithm_AlgorithmCompletedEvent_ViaNaturalCompletion()
         {
             MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm
@@ -1185,14 +1182,14 @@ namespace GenFx.Tests
 
             algorithm.Complete();
 
-            Assert.IsTrue(eventRaised);
-            Assert.IsTrue(plugin.OnAlgorithmCompletedWasCalled);
+            Assert.True(eventRaised);
+            Assert.True(plugin.OnAlgorithmCompletedWasCalled);
         }
 
         /// <summary>
         /// Tests that metrics are sorted according to dependencies.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public async Task GeneticAlgorithm_InitializeAsync_SortMetrics()
         {
             MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm
@@ -1223,7 +1220,7 @@ namespace GenFx.Tests
             PrivateObject accessor = new PrivateObject(algorithm, new PrivateType(typeof(GeneticAlgorithm)));
             List<Metric> metrics = (List<Metric>)accessor.GetField("sortedMetrics");
 
-            CollectionAssert.AreEqual(new Metric[]
+            Assert.Equal(new Metric[]
             {
                 metric5,
                 metric3,
@@ -1236,7 +1233,7 @@ namespace GenFx.Tests
         /// <summary>
         /// Tests that an exception is thrown when a cycle is detected while sorting metrics.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public async Task GeneticAlgorithm_InitializeAsync_SortMetrics_Cycle()
         {
             MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm
@@ -1254,13 +1251,13 @@ namespace GenFx.Tests
                 new CycleMetric3(),
             });
 
-            await AssertEx.ThrowsAsync<InvalidOperationException>(() => algorithm.InitializeAsync());
+            await Assert.ThrowsAsync<InvalidOperationException>(() => algorithm.InitializeAsync());
         }
 
         private async Task TestExternalConfigurationPropertyValidation(GeneticAlgorithm algorithm, ICustomComponent component)
         {
             component.MyProperty = -1;
-            await AssertEx.ThrowsAsync<ValidationException>(() => algorithm.InitializeAsync());
+            await Assert.ThrowsAsync<ValidationException>(() => algorithm.InitializeAsync());
             component.MyProperty = 0;
         }
 
@@ -1270,7 +1267,7 @@ namespace GenFx.Tests
 
             if (validationExceptionExpected)
             {
-                AssertEx.Throws<ValidationException>(() => component.Validate());
+                Assert.Throws<ValidationException>(() => component.Validate());
             }
             else
             {
@@ -1288,7 +1285,7 @@ namespace GenFx.Tests
 
             if (initializeExceptionExpected)
             {
-                await AssertEx.ThrowsAsync<ValidationException>(() => algorithm.InitializeAsync());
+                await Assert.ThrowsAsync<ValidationException>(() => algorithm.InitializeAsync());
                 return null;
             }
             else
@@ -1296,17 +1293,17 @@ namespace GenFx.Tests
                 await algorithm.InitializeAsync();
             }
 
-            Assert.AreEqual(0, algorithm.CurrentGeneration, "Generation should be initialized.");
+            Assert.Equal(0, algorithm.CurrentGeneration);
 
-            Assert.AreEqual(algorithm.MinimumEnvironmentSize, algorithm.Environment.Populations.Count, "Environment not initialized correctly.");
-            Assert.AreEqual(algorithm.PopulationSeed.MinimumPopulationSize, algorithm.Environment.Populations[0].Entities.Count, "Population not initialized correctly.");
+            Assert.Equal(algorithm.MinimumEnvironmentSize, algorithm.Environment.Populations.Count);
+            Assert.Equal(algorithm.PopulationSeed.MinimumPopulationSize, algorithm.Environment.Populations[0].Entities.Count);
 
             MockEntity entity = (MockEntity)algorithm.Environment.Populations[0].Entities[0];
             double entityId = Double.Parse(entity.Identifier);
-            Assert.AreEqual(entityId, entity.RawFitnessValue, "Entity fitness was not evaluated.");
+            Assert.Equal(entityId, entity.RawFitnessValue);
             if (algorithm.Metrics.Count > 0)
-                Assert.IsTrue(((MockMetric)algorithm.Metrics.OfType<MockMetric>().FirstOrDefault()).MetricEvaluated, "Metrics were not evaluated.");
-            Assert.IsTrue(eventCalled, "GenerationCreated event was not raised.");
+                Assert.True(((MockMetric)algorithm.Metrics.OfType<MockMetric>().FirstOrDefault()).MetricEvaluated, "Metrics were not evaluated.");
+            Assert.True(eventCalled, "GenerationCreated event was not raised.");
             return algorithm;
         }
 

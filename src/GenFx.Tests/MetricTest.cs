@@ -1,23 +1,23 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using TestCommon;
 using TestCommon.Helpers;
 using TestCommon.Mocks;
+using Xunit;
 
 namespace GenFx.Tests
 {
     /// <summary>
     /// Contains unit tests for the <see cref="Metric"/> class.
     /// </summary>
-    [TestClass]
     public class MetricTest
     {
         /// <summary>
         /// Tests that the constructor correctly initializes the state.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void Metric_Ctor()
         {
             GeneticAlgorithm algorithm = new MockGeneticAlgorithm
@@ -33,23 +33,23 @@ namespace GenFx.Tests
             Metric metric = new MockMetric();
             metric.Initialize(algorithm);
             PrivateObject accessor = new PrivateObject(metric, new PrivateType(typeof(Metric)));
-            Assert.AreSame(accessor.GetProperty("Algorithm"), algorithm, "Algorithm not set correctly.");
+            Assert.Same(accessor.GetProperty("Algorithm"), algorithm);
         }
 
         /// <summary>
         /// Tests that an exception is thrown when a null algorithm is passed.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void Metric_Ctor_NullAlgorithm()
         {
             MockMetric metric = new MockMetric();
-            AssertEx.Throws<ArgumentNullException>(() => metric.Initialize(null));
+            Assert.Throws<ArgumentNullException>(() => metric.Initialize(null));
         }
 
         /// <summary>
         /// Tests that the Calculate method works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public async Task Metric_Calculate()
         {
             GeneticAlgorithm algorithm = new MockGeneticAlgorithm
@@ -68,26 +68,26 @@ namespace GenFx.Tests
             FakeMetric metric = (FakeMetric)algorithm.Metrics[0];
             metric.Calculate(algorithm.Environment, 1);
 
-            Assert.AreEqual(4, metric.GetResultValueCallCount, "Metric not called correctly.");
+            Assert.Equal(4, metric.GetResultValueCallCount);
 
             ObservableCollection<MetricResult> results = metric.GetResults(0);
-            Assert.AreEqual(2, results.Count, "Incorrect number of results.");
-            Assert.AreEqual(0, results[0].GenerationIndex, "Result's GenerationIndex not set correctly.");
-            Assert.AreEqual(0, results[0].PopulationIndex, "Result's PopulationIndex not set correctly.");
-            Assert.AreEqual(1, results[0].ResultValue, "Result's ResultValue not set correctly.");
-            Assert.AreSame(metric, results[0].Metric, "Result's Metric not set correctly.");
+            Assert.Equal(2, results.Count);
+            Assert.Equal(0, results[0].GenerationIndex);
+            Assert.Equal(0, results[0].PopulationIndex);
+            Assert.Equal(1, results[0].ResultValue);
+            Assert.Same(metric, results[0].Metric);
 
             results = metric.GetResults(1);
-            Assert.AreEqual(0, results[0].GenerationIndex, "Result's GenerationIndex not set correctly.");
-            Assert.AreEqual(1, results[0].PopulationIndex, "Result's PopulationIndex not set correctly.");
-            Assert.AreEqual(2, results[0].ResultValue, "Result's ResultValue not set correctly.");
-            Assert.AreSame(metric, results[0].Metric, "Result's Metric not set correctly.");
+            Assert.Equal(0, results[0].GenerationIndex);
+            Assert.Equal(1, results[0].PopulationIndex);
+            Assert.Equal(2, results[0].ResultValue);
+            Assert.Same(metric, results[0].Metric);
         }
 
         /// <summary>
         /// Tests that the object can be serialized and deserialized.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void Metric_Serialization()
         {
             MockMetric metric = new MockMetric();
@@ -96,8 +96,10 @@ namespace GenFx.Tests
 
             Dictionary<int, ObservableCollection<MetricResult>> popResults = (Dictionary<int, ObservableCollection<MetricResult>>)privObj.GetField("populationResults");
 
-            ObservableCollection<MetricResult> metricResults = new ObservableCollection<MetricResult>();
-            metricResults.Add(new MetricResult(1, 2, 3, metric));
+            ObservableCollection<MetricResult> metricResults = new ObservableCollection<MetricResult>
+            {
+                new MetricResult(1, 2, 3, metric)
+            };
             popResults.Add(0, metricResults);
 
             MockMetric result = (MockMetric)SerializationHelper.TestSerialization(metric, new Type[0]);
@@ -107,10 +109,10 @@ namespace GenFx.Tests
             Dictionary<int, ObservableCollection<MetricResult>> resultPopResults = (Dictionary<int, ObservableCollection<MetricResult>>)resultPrivObj.GetField("populationResults");
 
             ObservableCollection<MetricResult> resultStatResults = resultPopResults[0];
-            Assert.AreEqual(metricResults[0].GenerationIndex, resultStatResults[0].GenerationIndex);
-            Assert.AreEqual(metricResults[0].PopulationIndex, resultStatResults[0].PopulationIndex);
-            Assert.AreEqual(metricResults[0].ResultValue, resultStatResults[0].ResultValue);
-            Assert.AreSame(result, resultStatResults[0].Metric);
+            Assert.Equal(metricResults[0].GenerationIndex, resultStatResults[0].GenerationIndex);
+            Assert.Equal(metricResults[0].PopulationIndex, resultStatResults[0].PopulationIndex);
+            Assert.Equal(metricResults[0].ResultValue, resultStatResults[0].ResultValue);
+            Assert.Same(result, resultStatResults[0].Metric);
         }
 
         private class FakeMetric : Metric

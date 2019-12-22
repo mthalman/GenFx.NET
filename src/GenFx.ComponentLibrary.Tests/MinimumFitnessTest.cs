@@ -1,22 +1,21 @@
 ﻿using GenFx.ComponentLibrary.Metrics;
 using GenFx.ComponentLibrary.Populations;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using TestCommon.Helpers;
+using TestCommon;
 using TestCommon.Mocks;
+using Xunit;
 
 namespace GenFx.ComponentLibrary.Tests
 {
     /// <summary>
     /// Contains unit tests for the <see cref="MinimumFitness"/> class.
     /// </summary>
-    [TestClass]
     public class MinimumFitnessTest
     {
         /// <summary>
         /// Tests that the <see cref="MinimumFitness.GetResultValue"/> method works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void MinimumFitness_GetResultValue_NoScaling()
         {
             MinimumFitness metric = new MinimumFitness();
@@ -26,13 +25,13 @@ namespace GenFx.ComponentLibrary.Tests
             PrivateObject populationAccessor = new PrivateObject(population, new PrivateType(typeof(Population)));
             populationAccessor.SetField("rawMin", (double)2);
             object result = metric.GetResultValue(population);
-            Assert.AreEqual((double)2, result);
+            Assert.Equal((double)2, result);
         }
 
         /// <summary>
         /// Tests that the <see cref="MinimumFitness.GetResultValue"/> method works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void MinimumFitness_GetResultValue_WithScaling()
         {
             MinimumFitness metric = new MinimumFitness();
@@ -44,13 +43,13 @@ namespace GenFx.ComponentLibrary.Tests
             population.Entities.Add(new MockEntity { ScaledFitnessValue = 15 });
             population.Entities.Add(new MockEntity { ScaledFitnessValue = 13 });
             object result = metric.GetResultValue(population);
-            Assert.AreEqual((double)10, result);
+            Assert.Equal((double)10, result);
         }
 
         /// <summary>
         /// Tests that an exception is thrown when a null population is passed.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void MinimumFitness_GetResultValue_NullPopulation()
         {
             MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm
@@ -64,7 +63,7 @@ namespace GenFx.ComponentLibrary.Tests
 
             MinimumFitness target = new MinimumFitness();
             target.Initialize(algorithm);
-            AssertEx.Throws<ArgumentNullException>(() => target.GetResultValue(null));
+            Assert.Throws<ArgumentNullException>(() => target.GetResultValue(null));
         }
     }
 }

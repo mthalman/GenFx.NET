@@ -1,57 +1,50 @@
-﻿using GenFx;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TestCommon.Helpers;
+﻿using System;
 using TestCommon.Mocks;
+using Xunit;
 
 namespace GenFx.Tests
 {
     /// <summary>
     /// Contains unit tests for the <see cref="GeneticComponentExtensions"/> class.
     /// </summary>
-    [TestClass]
     public class GeneticComponentExtensionsTest
     {
         /// <summary>
         /// Tests that the <see cref="GeneticComponentExtensions.CreateNewAndInitialize"/> works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void GeneticComponentExtensions_CreateNewAndInitialize()
         {
             TestComponent component = new TestComponent();
             component.MyProperty = 5;
             TestComponent newComponent = (TestComponent)GeneticComponentExtensions.CreateNewAndInitialize(component);
 
-            Assert.AreNotSame(component, newComponent);
-            Assert.AreEqual(component.MyProperty, newComponent.MyProperty);
+            Assert.NotSame(component, newComponent);
+            Assert.Equal(component.MyProperty, newComponent.MyProperty);
 
             TestComponentWithAlgorithm componentWithAlg = new TestComponentWithAlgorithm();
             MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm();
             componentWithAlg.Initialize(algorithm);
             TestComponentWithAlgorithm newComponentWithAlg = (TestComponentWithAlgorithm)GeneticComponentExtensions.CreateNewAndInitialize(componentWithAlg);
 
-            Assert.AreNotSame(componentWithAlg, newComponentWithAlg);
-            Assert.AreSame(componentWithAlg.Algorithm, newComponentWithAlg.Algorithm);
-            Assert.IsTrue(componentWithAlg.InitializeCalled);
+            Assert.NotSame(componentWithAlg, newComponentWithAlg);
+            Assert.Same(componentWithAlg.Algorithm, newComponentWithAlg.Algorithm);
+            Assert.True(componentWithAlg.InitializeCalled);
         }
 
         /// <summary>
         /// Tests that an exception is thrown when a null component is passed to <see cref="GeneticComponentExtensions.CreateNewAndInitialize" />.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void GeneticComponentExtensions_CreateNewAndInitialize_NullComponent()
         {
-            AssertEx.Throws<ArgumentNullException>(() => GeneticComponentExtensions.CreateNewAndInitialize(null));
+            Assert.Throws<ArgumentNullException>(() => GeneticComponentExtensions.CreateNewAndInitialize(null));
         }
 
         /// <summary>
         /// Tests that an exception is thrown a null value is returned from <see cref="GeneticComponent.CreateNew"/>.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void GeneticComponentExtensions_CreateNewAndInitialize_NullCreateNewResult()
         {
             TestComponentWithCustomizableCreateNew component = new TestComponentWithCustomizableCreateNew
@@ -59,13 +52,13 @@ namespace GenFx.Tests
                 CreateNewReturnValue = null
             };
 
-            AssertEx.Throws<InvalidOperationException>(() => GeneticComponentExtensions.CreateNewAndInitialize(component));
+            Assert.Throws<InvalidOperationException>(() => GeneticComponentExtensions.CreateNewAndInitialize(component));
         }
 
         /// <summary>
         /// Tests that an exception is thrown a value of the wrong type is returned from <see cref="GeneticComponent.CreateNew"/>.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void GeneticComponentExtensions_CreateNewAndInitialize_CreateNewWrongType()
         {
             TestComponentWithCustomizableCreateNew component = new TestComponentWithCustomizableCreateNew
@@ -73,13 +66,13 @@ namespace GenFx.Tests
                 CreateNewReturnValue = new TestComponent()
             };
 
-            AssertEx.Throws<InvalidOperationException>(() => GeneticComponentExtensions.CreateNewAndInitialize(component));
+            Assert.Throws<InvalidOperationException>(() => GeneticComponentExtensions.CreateNewAndInitialize(component));
         }
 
         /// <summary>
         /// Tests that the <see cref="GeneticComponentExtensions.CopyConfigurationStateTo"/> method works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void GeneticComponentExtensions_CopyConfigurationStateTo()
         {
             TestComponent source = new TestComponent
@@ -91,35 +84,35 @@ namespace GenFx.Tests
 
             GeneticComponentExtensions.CopyConfigurationStateTo(source, target);
 
-            Assert.AreEqual(source.MyProperty, target.MyProperty);
+            Assert.Equal(source.MyProperty, target.MyProperty);
         }
 
         /// <summary>
         /// Tests that an exception is thrown when a component with misconfigured configuration property is passed to <see cref="GeneticComponentExtensions.CopyConfigurationStateTo"/>.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void GeneticComponentExtensions_CopyConfigurationStateTo_MisconfiguredConfigProperty()
         {
-            AssertEx.Throws<InvalidOperationException>(() => GeneticComponentExtensions.CopyConfigurationStateTo(new MisconfiguredTestComponent(), new MisconfiguredTestComponent()));
-            AssertEx.Throws<InvalidOperationException>(() => GeneticComponentExtensions.CopyConfigurationStateTo(new MisconfiguredTest2Component(), new MisconfiguredTest2Component()));
+            Assert.Throws<InvalidOperationException>(() => GeneticComponentExtensions.CopyConfigurationStateTo(new MisconfiguredTestComponent(), new MisconfiguredTestComponent()));
+            Assert.Throws<InvalidOperationException>(() => GeneticComponentExtensions.CopyConfigurationStateTo(new MisconfiguredTest2Component(), new MisconfiguredTest2Component()));
         }
 
         /// <summary>
         /// Tests that an exception is thrown when a null source is passed to <see cref="GeneticComponentExtensions.CopyConfigurationStateTo"/>.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void GeneticComponentExtensions_CopyConfigurationStateTo_NullSource()
         {
-            AssertEx.Throws<ArgumentNullException>(() => GeneticComponentExtensions.CopyConfigurationStateTo(null, new TestComponent()));
+            Assert.Throws<ArgumentNullException>(() => GeneticComponentExtensions.CopyConfigurationStateTo(null, new TestComponent()));
         }
 
         /// <summary>
         /// Tests that an exception is thrown when a null target is passed to <see cref="GeneticComponentExtensions.CopyConfigurationStateTo"/>.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void GeneticComponentExtensions_CopyConfigurationStateTo_NullTarget()
         {
-            AssertEx.Throws<ArgumentNullException>(() => GeneticComponentExtensions.CopyConfigurationStateTo(new TestComponent(), null));
+            Assert.Throws<ArgumentNullException>(() => GeneticComponentExtensions.CopyConfigurationStateTo(new TestComponent(), null));
         }
 
         private class TestComponent : GeneticComponent

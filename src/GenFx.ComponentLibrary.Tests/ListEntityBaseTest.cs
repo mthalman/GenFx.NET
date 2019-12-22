@@ -1,23 +1,20 @@
 ﻿using GenFx.ComponentLibrary.Lists;
 using GenFx.Validation;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using TestCommon.Helpers;
 using TestCommon.Mocks;
+using Xunit;
 
 namespace GenFx.ComponentLibrary.Tests
 {
     /// <summary>
     /// Contains unit tests for the <see cref="ListEntityBase"/> class.
     /// </summary>
-    [TestClass]
-    public class ListEntityBaseTest
+    public class ListEntityBaseTest : IDisposable
     {
-        [TestCleanup]
-        public void Cleanup()
+        public void Dispose()
         {
             RandomNumberService.Instance = new RandomNumberService();
         }
@@ -25,63 +22,63 @@ namespace GenFx.ComponentLibrary.Tests
         /// <summary>
         /// Tests that the <see cref="ListEntityBase.Add"/> method works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void ListEntityBase_Add()
         {
             TestEntity entity = new TestEntity();
             int index = entity.Add(2);
-            Assert.AreEqual(0, index);
-            Assert.AreEqual(1, entity.InnerList.Count);
-            Assert.AreEqual(2, entity.InnerList[0]);
+            Assert.Equal(0, index);
+            Assert.Single(entity.InnerList);
+            Assert.Equal(2, entity.InnerList[0]);
 
             index = entity.Add("test");
-            Assert.AreEqual(1, index);
-            Assert.AreEqual(2, entity.InnerList.Count);
-            Assert.AreEqual(2, entity.InnerList[0]);
-            Assert.AreEqual("test", entity.InnerList[1]);
+            Assert.Equal(1, index);
+            Assert.Equal(2, entity.InnerList.Count);
+            Assert.Equal(2, entity.InnerList[0]);
+            Assert.Equal("test", entity.InnerList[1]);
         }
 
         /// <summary>
         /// Tests that an exception is thrown when the <see cref="ListEntityBase.Add"/> method is called for a fixed size list.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void ListEntityBase_Add_FixedSize()
         {
             TestEntity entity = new TestEntity { IsFixedSize = true };
-            AssertEx.Throws<NotSupportedException>(() => entity.Add(2));
+            Assert.Throws<NotSupportedException>(() => entity.Add(2));
         }
 
         /// <summary>
         /// Tests that the <see cref="ListEntityBase.Clear"/> method works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void ListEntityBase_Clear()
         {
             TestEntity entity = new TestEntity();
             entity.InnerList.AddRange(Enumerable.Range(1, 5).Cast<object>());
             entity.Clear();
-            Assert.AreEqual(0, entity.InnerList.Count);
+            Assert.Empty(entity.InnerList);
         }
 
         /// <summary>
         /// Tests that the <see cref="ListEntityBase.Contains"/> method works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void ListEntityBase_Contains()
         {
             TestEntity entity = new TestEntity();
             entity.InnerList.AddRange(Enumerable.Range(1, 5).Cast<object>());
-            Assert.IsTrue(entity.Contains(1));
-            Assert.IsTrue(entity.Contains(3));
-            Assert.IsTrue(entity.Contains(5));
-            Assert.IsFalse(entity.Contains(6));
-            Assert.IsFalse(entity.Contains("1"));
+            Assert.True(entity.Contains(1));
+            Assert.True(entity.Contains(3));
+            Assert.True(entity.Contains(5));
+            Assert.False(entity.Contains(6));
+            Assert.False(entity.Contains("1"));
         }
 
         /// <summary>
         /// Tests that the <see cref="ListEntityBase.GetInitialLength"/> method works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void ListEntityBase_GetInitialLength_DifferentStartingLengths()
         {
             TestEntity entity = new TestEntity
@@ -95,16 +92,16 @@ namespace GenFx.ComponentLibrary.Tests
             random.RandomValue = 4;
 
             int result = entity.GetInitialLength();
-            Assert.AreEqual(4, result);
+            Assert.Equal(4, result);
 
-            Assert.AreEqual(entity.MinimumStartingLength, random.MinValue);
-            Assert.AreEqual(entity.MaximumStartingLength + 1, random.MaxValue);
+            Assert.Equal(entity.MinimumStartingLength, random.MinValue);
+            Assert.Equal(entity.MaximumStartingLength + 1, random.MaxValue);
         }
 
         /// <summary>
         /// Tests that the <see cref="ListEntityBase.GetInitialLength"/> method works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void ListEntityBase_GetInitialLength_SameStartingLengths()
         {
             TestEntity entity = new TestEntity
@@ -114,13 +111,13 @@ namespace GenFx.ComponentLibrary.Tests
             };
 
             int result = entity.GetInitialLength();
-            Assert.AreEqual(5, result);
+            Assert.Equal(5, result);
         }
 
         /// <summary>
         /// Tests that no validation exception is thrown when the entity has valid starting lengths.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void ListEntityBase_ValidStartingLengths()
         {
             TestEntity entity = new TestEntity
@@ -134,7 +131,7 @@ namespace GenFx.ComponentLibrary.Tests
         /// <summary>
         /// Tests that a validation exception is thrown when the entity has invalid starting lengths.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void ListEntityBase_InvalidStartingLengths()
         {
             TestEntity entity = new TestEntity
@@ -142,30 +139,30 @@ namespace GenFx.ComponentLibrary.Tests
                 MinimumStartingLength = 2,
                 MaximumStartingLength = 1
             };
-            AssertEx.Throws<ValidationException>(() => entity.Validate());
+            Assert.Throws<ValidationException>(() => entity.Validate());
         }
 
         /// <summary>
         /// Tests that the <see cref="ListEntityBase.IndexOf"/> method works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void ListEntityBase_IndexOf()
         {
             TestEntity entity = new TestEntity();
             entity.InnerList.AddRange(Enumerable.Range(3, 3).Cast<object>());
-            Assert.AreEqual(0, entity.IndexOf(3));
-            Assert.AreEqual(2, entity.IndexOf(5));
-            Assert.AreEqual(-1, entity.IndexOf(2));
-            Assert.AreEqual(-1, entity.IndexOf("3"));
+            Assert.Equal(0, entity.IndexOf(3));
+            Assert.Equal(2, entity.IndexOf(5));
+            Assert.Equal(-1, entity.IndexOf(2));
+            Assert.Equal(-1, entity.IndexOf("3"));
 
             entity.InnerList.Add(3);
-            Assert.AreEqual(0, entity.IndexOf(3));
+            Assert.Equal(0, entity.IndexOf(3));
         }
 
         /// <summary>
         /// Tests that the <see cref="ListEntityBase.Insert"/> method works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void ListEntityBase_Insert()
         {
             TestEntity entity = new TestEntity();
@@ -173,18 +170,18 @@ namespace GenFx.ComponentLibrary.Tests
             entity.Insert(1, 20);
             entity.Insert(0, 5);
 
-            Assert.AreEqual(5, entity.InnerList[0]);
-            Assert.AreEqual(10, entity.InnerList[1]);
-            Assert.AreEqual(20, entity.InnerList[2]);
+            Assert.Equal(5, entity.InnerList[0]);
+            Assert.Equal(10, entity.InnerList[1]);
+            Assert.Equal(20, entity.InnerList[2]);
 
-            AssertEx.Throws<ArgumentOutOfRangeException>(() => entity.Insert(5, 1));
-            AssertEx.Throws<ArgumentOutOfRangeException>(() => entity.Insert(-1, 1));
+            Assert.Throws<ArgumentOutOfRangeException>(() => entity.Insert(5, 1));
+            Assert.Throws<ArgumentOutOfRangeException>(() => entity.Insert(-1, 1));
         }
 
         /// <summary>
         /// Tests that the <see cref="ListEntityBase.Remove"/> method works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void ListEntityBase_Remove()
         {
             TestEntity entity = new TestEntity();
@@ -193,25 +190,25 @@ namespace GenFx.ComponentLibrary.Tests
 
             entity.Remove(3);
 
-            Assert.AreEqual(3, entity.InnerList.Count);
-            Assert.AreEqual(4, entity.InnerList[0]);
-            Assert.AreEqual(5, entity.InnerList[1]);
-            Assert.AreEqual(3, entity.InnerList[2]);
+            Assert.Equal(3, entity.InnerList.Count);
+            Assert.Equal(4, entity.InnerList[0]);
+            Assert.Equal(5, entity.InnerList[1]);
+            Assert.Equal(3, entity.InnerList[2]);
 
             entity.Remove(0);
             entity.Remove("test");
-            Assert.AreEqual(3, entity.InnerList.Count);
+            Assert.Equal(3, entity.InnerList.Count);
 
             entity.Remove(3);
             entity.Remove(4);
             entity.Remove(5);
-            Assert.AreEqual(0, entity.InnerList.Count);
+            Assert.Empty(entity.InnerList);
         }
 
         /// <summary>
         /// Tests that the <see cref="ListEntityBase.RemoveAt"/> method works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void ListEntityBase_RemoveAt()
         {
             TestEntity entity = new TestEntity();
@@ -219,22 +216,22 @@ namespace GenFx.ComponentLibrary.Tests
 
             entity.RemoveAt(1);
 
-            Assert.AreEqual(2, entity.InnerList.Count);
-            Assert.AreEqual(3, entity.InnerList[0]);
-            Assert.AreEqual(5, entity.InnerList[1]);
+            Assert.Equal(2, entity.InnerList.Count);
+            Assert.Equal(3, entity.InnerList[0]);
+            Assert.Equal(5, entity.InnerList[1]);
 
-            AssertEx.Throws<ArgumentOutOfRangeException>(() => entity.RemoveAt(-1));
-            AssertEx.Throws<ArgumentOutOfRangeException>(() => entity.RemoveAt(2));
+            Assert.Throws<ArgumentOutOfRangeException>(() => entity.RemoveAt(-1));
+            Assert.Throws<ArgumentOutOfRangeException>(() => entity.RemoveAt(2));
 
             entity.RemoveAt(0);
             entity.RemoveAt(0);
-            Assert.AreEqual(0, entity.InnerList.Count);
+            Assert.Empty(entity.InnerList);
         }
 
         /// <summary>
         /// Tests that the <see cref="ICollection.CopyTo"/> method works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void ListEntityBase_CopyTo()
         {
             TestEntity entity = new TestEntity();
@@ -242,75 +239,75 @@ namespace GenFx.ComponentLibrary.Tests
 
             int[] destination = new int[entity.InnerList.Count];
             ((ICollection)entity).CopyTo(destination, 0);
-            CollectionAssert.AreEqual(new int[] { 3, 4, 5 }, destination);
+            Assert.Equal(new int[] { 3, 4, 5 }, destination);
 
             destination = new int[entity.InnerList.Count - 1];
             ((ICollection)entity).CopyTo(destination, 1);
-            CollectionAssert.AreEqual(new int[] { 4, 5 }, destination);
+            Assert.Equal(new int[] { 4, 5 }, destination);
 
-            AssertEx.Throws<ArgumentNullException>(() => ((ICollection)entity).CopyTo(null, 1));
-            AssertEx.Throws<ArgumentOutOfRangeException>(() => ((ICollection)entity).CopyTo(destination, 3));
-            AssertEx.Throws<ArgumentOutOfRangeException>(() => ((ICollection)entity).CopyTo(destination, -1));
+            Assert.Throws<ArgumentNullException>(() => ((ICollection)entity).CopyTo(null, 1));
+            Assert.Throws<ArgumentOutOfRangeException>(() => ((ICollection)entity).CopyTo(destination, 3));
+            Assert.Throws<ArgumentOutOfRangeException>(() => ((ICollection)entity).CopyTo(destination, -1));
         }
 
         /// <summary>
         /// Tests that the <see cref="ListEntityBase.GetEnumerator"/> method works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void ListEntityBase_GetEnumerator()
         {
             TestEntity entity = new TestEntity();
             entity.InnerList.AddRange(Enumerable.Range(3, 3).Cast<object>());
 
             List<object> list = new List<object>(entity.Cast<object>());
-            CollectionAssert.AreEqual(new object[] { 3, 4, 5 }, list);
+            Assert.Equal(new object[] { 3, 4, 5 }, list);
         }
 
         /// <summary>
         /// Tests that the <see cref="ICollection.Count"/> property works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void ListEntityBase_ICollection_Count()
         {
             TestEntity entity = new TestEntity();
             entity.InnerList.AddRange(Enumerable.Range(1, 3).Cast<object>());
-            Assert.AreEqual(3, ((ICollection)entity).Count);
+            Assert.Equal(3, ((ICollection)entity).Count);
         }
 
         /// <summary>
         /// Tests that the <see cref="ListEntityBase.IsReadOnly"/> property works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void ListEntityBase_IsReadOnly()
         {
             TestEntity entity = new TestEntity();
-            Assert.IsFalse(entity.IsReadOnly);
+            Assert.False(entity.IsReadOnly);
         }
 
         /// <summary>
         /// Tests that the <see cref="ICollection.IsSynchronized"/> property works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void ListEntityBase_IsSynchronized()
         {
             TestEntity entity = new TestEntity();
-            Assert.IsFalse(((ICollection)entity).IsSynchronized);
+            Assert.False(((ICollection)entity).IsSynchronized);
         }
 
         /// <summary>
         /// Tests that the <see cref="ICollection.SyncRoot"/> property works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void ListEntityBase_SyncRoot()
         {
             TestEntity entity = new TestEntity();
-            Assert.IsNull(((ICollection)entity).SyncRoot);
+            Assert.Null(((ICollection)entity).SyncRoot);
         }
 
         /// <summary>
         /// Tests that the <see cref="IList.this"/> property works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void ListEntityBase_IList_Indexer()
         {
             TestEntity entity = new TestEntity();
@@ -318,151 +315,171 @@ namespace GenFx.ComponentLibrary.Tests
 
             IList list = (IList)entity;
             list[0] = 1;
-            CollectionAssert.AreEqual(new object[] { 1, null, null }, entity.InnerList);
+            Assert.Equal(new object[] { 1, null, null }, entity.InnerList);
 
             list[0] = 2;
-            CollectionAssert.AreEqual(new object[] { 2, null, null }, entity.InnerList);
+            Assert.Equal(new object[] { 2, null, null }, entity.InnerList);
 
             list[1] = 2;
-            CollectionAssert.AreEqual(new object[] { 2, 2, null }, entity.InnerList);
+            Assert.Equal(new object[] { 2, 2, null }, entity.InnerList);
 
             list[2] = 3;
-            CollectionAssert.AreEqual(new object[] { 2, 2, 3 }, entity.InnerList);
+            Assert.Equal(new object[] { 2, 2, 3 }, entity.InnerList);
 
-            Assert.AreEqual(2, list[0]);
-            Assert.AreEqual(2, list[1]);
-            Assert.AreEqual(3, list[2]);
+            Assert.Equal(2, list[0]);
+            Assert.Equal(2, list[1]);
+            Assert.Equal(3, list[2]);
         }
 
         /// <summary>
         /// Tests that the <see cref="ListEntityBase.CompareTo"/> method works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void ListEntityBase_CompareTo_Equal()
         {
-            TestEntity entity1 = new TestEntity();
-            entity1.Add(1);
-            entity1.Add(null);
-            entity1.Add(2);
-            entity1.Add(null);
+            TestEntity entity1 = new TestEntity
+            {
+                1,
+                null,
+                2,
+                null
+            };
 
-            TestEntity entity2 = new TestEntity();
-            entity2.Add(1);
-            entity2.Add(null);
-            entity2.Add(2);
-            entity2.Add(null);
+            TestEntity entity2 = new TestEntity
+            {
+                1,
+                null,
+                2,
+                null
+            };
 
             int result = entity1.CompareTo(entity2);
-            Assert.AreEqual(0, result);
+            Assert.Equal(0, result);
         }
 
         /// <summary>
         /// Tests that the <see cref="ListEntityBase.CompareTo"/> method works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void ListEntityBase_CompareTo_LessThan()
         {
-            TestEntity entity1 = new TestEntity();
-            entity1.Add(1);
-            entity1.Add(null);
-            entity1.Add(1);
-            entity1.Add(null);
+            TestEntity entity1 = new TestEntity
+            {
+                1,
+                null,
+                1,
+                null
+            };
 
-            TestEntity entity2 = new TestEntity();
-            entity2.Add(1);
-            entity2.Add(null);
-            entity2.Add(2);
-            entity2.Add(null);
+            TestEntity entity2 = new TestEntity
+            {
+                1,
+                null,
+                2,
+                null
+            };
 
             int result = entity1.CompareTo(entity2);
-            Assert.AreEqual(-1, result);
+            Assert.Equal(-1, result);
         }
 
         /// <summary>
         /// Tests that the <see cref="ListEntityBase.CompareTo"/> method works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void ListEntityBase_CompareTo_GreaterThan()
         {
-            TestEntity entity1 = new TestEntity();
-            entity1.Add(1);
-            entity1.Add(null);
-            entity1.Add(3);
-            entity1.Add(null);
+            TestEntity entity1 = new TestEntity
+            {
+                1,
+                null,
+                3,
+                null
+            };
 
-            TestEntity entity2 = new TestEntity();
-            entity2.Add(1);
-            entity2.Add(null);
-            entity2.Add(2);
-            entity2.Add(null);
+            TestEntity entity2 = new TestEntity
+            {
+                1,
+                null,
+                2,
+                null
+            };
 
             int result = entity1.CompareTo(entity2);
-            Assert.AreEqual(1, result);
+            Assert.Equal(1, result);
         }
 
         /// <summary>
         /// Tests that the <see cref="ListEntityBase.CompareTo"/> method works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void ListEntityBase_CompareTo_ShorterLength()
         {
-            TestEntity entity1 = new TestEntity();
-            entity1.Add(1);
-            entity1.Add(null);
-            entity1.Add(2);
+            TestEntity entity1 = new TestEntity
+            {
+                1,
+                null,
+                2
+            };
 
-            TestEntity entity2 = new TestEntity();
-            entity2.Add(1);
-            entity2.Add(null);
-            entity2.Add(2);
-            entity2.Add(null);
+            TestEntity entity2 = new TestEntity
+            {
+                1,
+                null,
+                2,
+                null
+            };
 
             int result = entity1.CompareTo(entity2);
-            Assert.AreEqual(-1, result);
+            Assert.Equal(-1, result);
         }
 
         /// <summary>
         /// Tests that the <see cref="ListEntityBase.CompareTo"/> method works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void ListEntityBase_CompareTo_LongerLength()
         {
-            TestEntity entity1 = new TestEntity();
-            entity1.Add(1);
-            entity1.Add(null);
-            entity1.Add(2);
-            entity1.Add(null);
-            entity1.Add(3);
+            TestEntity entity1 = new TestEntity
+            {
+                1,
+                null,
+                2,
+                null,
+                3
+            };
 
-            TestEntity entity2 = new TestEntity();
-            entity2.Add(1);
-            entity2.Add(null);
-            entity2.Add(2);
-            entity2.Add(null);
+            TestEntity entity2 = new TestEntity
+            {
+                1,
+                null,
+                2,
+                null
+            };
 
             int result = entity1.CompareTo(entity2);
-            Assert.AreEqual(1, result);
+            Assert.Equal(1, result);
         }
 
         /// <summary>
         /// Tests that the <see cref="ListEntityBase.CompareTo"/> method works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void ListEntityBase_CompareTo_Null()
         {
             TestEntity entity1 = new TestEntity();
             int result = entity1.CompareTo((GeneticEntity)null);
-            Assert.AreEqual(1, result);
+            Assert.Equal(1, result);
         }
 
         /// <summary>
         /// Tests that an exception is thrown when passing an invalid entity to <see cref="ListEntityBase.CompareTo"/> method works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void ListEntityBase_CompareTo_InvalidEntity()
         {
             TestEntity entity1 = new TestEntity();
-            AssertEx.Throws<ArgumentException>(() => entity1.CompareTo(new MockEntity()));
+            Assert.Throws<ArgumentException>(() => entity1.CompareTo(new MockEntity()));
         }
 
         private class TestEntity : ListEntityBase

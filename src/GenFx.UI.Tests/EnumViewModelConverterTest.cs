@@ -1,22 +1,21 @@
 ﻿using GenFx.UI.Converters;
 using GenFx.UI.ViewModels;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Xunit;
 
 namespace GenFx.UI.Tests
 {
     /// <summary>
     /// Contains unit tests for the <see cref="EnumViewModelConverter"/> class.
     /// </summary>
-    [TestClass]
     public class EnumViewModelConverterTest
     {
         /// <summary>
         /// Tests that the <see cref="EnumViewModelConverter.Convert"/> method works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void EnumViewModelConverter_Convert()
         {
             EnumViewModelConverter converter = new EnumViewModelConverter();
@@ -30,24 +29,24 @@ namespace GenFx.UI.Tests
             {
                 result = converter.Convert(val, null, null, null);
                 EnumViewModel viewModel = (EnumViewModel)result;
-                Assert.AreEqual(val, viewModel.Value);
-                Assert.IsTrue(!(String.IsNullOrEmpty(viewModel.DisplayName)));
+                Assert.Equal(val, viewModel.Value);
+                Assert.True(!(String.IsNullOrEmpty(viewModel.DisplayName)));
             }
 
             result = converter.Convert((FitnessType)20, null, null, null);
-            Assert.IsNull(result);
+            Assert.Null(result);
 
             result = converter.Convert((FitnessSortOption)20, null, null, null);
-            Assert.IsNull(result);
+            Assert.Null(result);
 
             result = converter.Convert(null, null, null, null);
-            Assert.IsNull(result);
+            Assert.Null(result);
         }
 
         /// <summary>
         /// Tests that the <see cref="EnumViewModelConverter.ConvertBack"/> method works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void EnumViewModelConverter_ConvertBack()
         {
             EnumViewModelConverter converter = new EnumViewModelConverter();
@@ -55,10 +54,10 @@ namespace GenFx.UI.Tests
 
             EnumViewModel viewModel = new EnumViewModel(FitnessType.Raw, "Test");
             result = converter.ConvertBack(viewModel, null, null, null);
-            Assert.AreEqual(viewModel.Value, result);
+            Assert.Equal(viewModel.Value, result);
 
             result = converter.ConvertBack(null, null, null, null);
-            Assert.IsNull(result);
+            Assert.Null(result);
         }
     }
 }

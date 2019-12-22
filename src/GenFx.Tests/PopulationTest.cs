@@ -1,13 +1,10 @@
-﻿using GenFx;
-using GenFx.Validation;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using GenFx.Validation;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Text;
 using System.Threading.Tasks;
+using TestCommon;
 using TestCommon.Helpers;
 using TestCommon.Mocks;
+using Xunit;
 
 namespace GenFx.Tests
 {
@@ -15,13 +12,12 @@ namespace GenFx.Tests
     /// This is a test class for GenFx.Population and is intended
     /// to contain all GenFx.Population Unit Tests
     /// </summary>
-    [TestClass()]
     public class PopulationTest
     {
         /// <summary>
         /// Tests that the constructor initializes the state correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void Population_Ctor()
         {
             GeneticAlgorithm algorithm = new MockGeneticAlgorithm
@@ -35,23 +31,23 @@ namespace GenFx.Tests
             population.Initialize(algorithm);
             PrivateObject accessor = new PrivateObject(population);
 
-            Assert.AreSame(algorithm, accessor.GetProperty("Algorithm"), "Algorithm not initialized correctly.");
+            Assert.Same(algorithm, accessor.GetProperty("Algorithm"));
         }
 
         /// <summary>
         /// Tests that an exception is thrown when a null algorithm is passed.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void Population_Ctor_NullAlgorithm()
         {
             MockPopulation population = new MockPopulation();
-            AssertEx.Throws<ArgumentNullException>(() => population.Initialize(null));
+            Assert.Throws<ArgumentNullException>(() => population.Initialize(null));
         }
 
         /// <summary>
         /// Tests that the EvaluateFitness method works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public async Task Population_EvaluateFitness()
         {
             await TestEvaluateFitnessAsync(false, false);
@@ -63,7 +59,7 @@ namespace GenFx.Tests
         /// <summary>
         /// Tests that the Initialize method works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public async Task Population_Initialize_Async()
         {
             GeneticAlgorithm algorithm = new MockGeneticAlgorithm
@@ -83,37 +79,37 @@ namespace GenFx.Tests
             MockPopulation population = new MockPopulation();
             population.Initialize(algorithm);
             await population.InitializeAsync();
-            Assert.AreEqual(algorithm.PopulationSeed.MinimumPopulationSize, population.Entities.Count, "Population not generated correctly.");
-            Assert.AreEqual(3, ((MockEntity)population.Entities[0]).TestProperty);
+            Assert.Equal(algorithm.PopulationSeed.MinimumPopulationSize, population.Entities.Count);
+            Assert.Equal(3, ((MockEntity)population.Entities[0]).TestProperty);
         }
 
         /// <summary>
         /// Tests that PopulationConfiguration.PopulationSize can be set to a valid value.
         ///</summary>
-        [TestMethod()]
+        [Fact]
         public void PopulationSizeTest_Valid()
         {
             MockPopulation target = new MockPopulation();
             int val = 100;
             target.MinimumPopulationSize = val;
-            Assert.AreEqual(val, target.MinimumPopulationSize, "PopulationSize was not set correctly.");
+            Assert.Equal(val, target.MinimumPopulationSize);
         }
 
         /// <summary>
         /// Tests that an exception is thrown when ComponentConfigurationSet.PopulationSize is 
         /// set to an invalid value.
         ///</summary>
-        [TestMethod()]
+        [Fact]
         public void PopulationSizeTest_Invalid()
         {
             MockPopulation target = new MockPopulation();
-            AssertEx.Throws<ValidationException>(() => target.MinimumPopulationSize = 0);
+            Assert.Throws<ValidationException>(() => target.MinimumPopulationSize = 0);
         }
 
         /// <summary>
         /// Tests that the object can be serialized and deserialized.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void Population_Serialization()
         {
             MockPopulation population = new MockPopulation
@@ -137,14 +133,14 @@ namespace GenFx.Tests
 
             PrivateObject resultPrivObj = new PrivateObject(result, new PrivateType(typeof(Population)));
 
-            Assert.AreEqual(population.MinimumPopulationSize, result.MinimumPopulationSize);
-            Assert.AreEqual(population.Index, result.Index);
-            Assert.IsInstanceOfType(result.Entities[0], typeof(MockEntity));
+            Assert.Equal(population.MinimumPopulationSize, result.MinimumPopulationSize);
+            Assert.Equal(population.Index, result.Index);
+            Assert.IsType<MockEntity>(result.Entities[0]);
 
-            Assert.AreEqual((double)1, resultPrivObj.GetField("rawMean"));
-            Assert.AreEqual((double)2, resultPrivObj.GetField("rawStandardDeviation"));
-            Assert.AreEqual((double)3, resultPrivObj.GetField("rawMax"));
-            Assert.AreEqual((double)4, resultPrivObj.GetField("rawMin"));
+            Assert.Equal((double)1, resultPrivObj.GetField("rawMean"));
+            Assert.Equal((double)2, resultPrivObj.GetField("rawStandardDeviation"));
+            Assert.Equal((double)3, resultPrivObj.GetField("rawMax"));
+            Assert.Equal((double)4, resultPrivObj.GetField("rawMin"));
         }
 
         private static async Task TestEvaluateFitnessAsync(bool useScaling, bool useMetric)
@@ -189,32 +185,32 @@ namespace GenFx.Tests
 
             await population.EvaluateFitnessAsync();
 
-            Assert.AreEqual((double)123, entity1.RawFitnessValue, "RawFitnessValue not set correctly.");
-            Assert.AreEqual((double)456, entity2.RawFitnessValue, "RawFitnessValue not set correctly.");
+            Assert.Equal((double)123, entity1.RawFitnessValue);
+            Assert.Equal((double)456, entity2.RawFitnessValue);
 
             if (useScaling)
             {
-                Assert.AreEqual(entity1.RawFitnessValue - 1, entity1.ScaledFitnessValue, "ScaledFitnessValue not set correctly.");
-                Assert.AreEqual(entity2.RawFitnessValue - 1, entity2.ScaledFitnessValue, "ScaledFitnessValue not set correctly.");
+                Assert.Equal(entity1.RawFitnessValue - 1, entity1.ScaledFitnessValue);
+                Assert.Equal(entity2.RawFitnessValue - 1, entity2.ScaledFitnessValue);
             }
             else
             {
-                Assert.AreEqual(entity1.RawFitnessValue, entity1.ScaledFitnessValue, "ScaledFitnessValue not set correctly.");
-                Assert.AreEqual(entity2.RawFitnessValue, entity2.ScaledFitnessValue, "ScaledFitnessValue not set correctly.");
+                Assert.Equal(entity1.RawFitnessValue, entity1.ScaledFitnessValue);
+                Assert.Equal(entity2.RawFitnessValue, entity2.ScaledFitnessValue);
             }
 
             if (!useMetric && !useScaling)
             {
-                Assert.IsFalse(population.RawMax.HasValue, "RawMax not set correctly.");
-                Assert.IsFalse(population.RawMin.HasValue, "RawMax not set correctly.");
-                Assert.IsFalse(population.RawMean.HasValue, "RawMean not set correctly.");
-                Assert.IsFalse(population.RawStandardDeviation.HasValue, "RawStandardDeviation not set correctly.");
+                Assert.False(population.RawMax.HasValue, "RawMax not set correctly.");
+                Assert.False(population.RawMin.HasValue, "RawMax not set correctly.");
+                Assert.False(population.RawMean.HasValue, "RawMean not set correctly.");
+                Assert.False(population.RawStandardDeviation.HasValue, "RawStandardDeviation not set correctly.");
             }
             else
             {
-                Assert.AreEqual(entity2.RawFitnessValue, population.RawMax, "RawMax not set correctly.");
-                Assert.AreEqual(entity1.RawFitnessValue, population.RawMin, "RawMax not set correctly.");
-                Assert.AreEqual((entity1.RawFitnessValue + entity2.RawFitnessValue) / 2, population.RawMean, "RawMean not set correctly.");
+                Assert.Equal(entity2.RawFitnessValue, population.RawMax);
+                Assert.Equal(entity1.RawFitnessValue, population.RawMin);
+                Assert.Equal((entity1.RawFitnessValue + entity2.RawFitnessValue) / 2, population.RawMean);
             }
         }
 

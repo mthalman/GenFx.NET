@@ -55,12 +55,7 @@ namespace GenFx.Validation
         /// <exception cref="ArgumentException"><paramref name="validatorType"/> does not derive from <see cref="PropertyValidator"/>.</exception>
         protected CustomPropertyValidatorBaseAttribute(Type validatorType, params object[] validatorConstructorArguments)
         {
-            if (validatorType == null)
-            {
-                throw new ArgumentNullException(nameof(validatorType));
-            }
-
-            this.ValidatorType = validatorType;
+            this.ValidatorType = validatorType ?? throw new ArgumentNullException(nameof(validatorType));
             this.ValidatorConstructorArguments = validatorConstructorArguments;
 
             if (!this.ValidatorType.IsSubclassOf(typeof(PropertyValidator)))

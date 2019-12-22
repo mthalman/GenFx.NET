@@ -1,11 +1,6 @@
-﻿using GenFx;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Text;
-using TestCommon.Helpers;
+﻿using System;
 using TestCommon.Mocks;
+using Xunit;
 
 namespace GenFx.Tests
 {
@@ -13,24 +8,23 @@ namespace GenFx.Tests
     /// This is a test class for GenFx.FitnessScalingStrategy and is intended
     /// to contain all GenFx.FitnessScalingStrategy Unit Tests
     /// </summary>
-    [TestClass()]
     public class FitnessScalingStrategyTest
     {
         /// <summary>
         /// Tests that an exception is thrown when a null algorithm is passed.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void FitnessScalingStrategy_Ctor_NullAlgorithm()
         {
             MockFitnessScalingStrategy strategy = new MockFitnessScalingStrategy();
             
-            AssertEx.Throws<ArgumentNullException>(() => strategy.Initialize(null));
+            Assert.Throws<ArgumentNullException>(() => strategy.Initialize(null));
         }
 
         /// <summary>
         /// Tests that the Scale method works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void FitnessScalingStrategy_Scale()
         {
             GeneticAlgorithm algorithm = GetAlgorithm();
@@ -43,25 +37,25 @@ namespace GenFx.Tests
             population.Entities.Add(entity);
             strategy.Scale(population);
 
-            Assert.IsTrue(strategy.OnScaleCalled, "ScaleCore was not called.");
+            Assert.True(strategy.OnScaleCalled, "ScaleCore was not called.");
         }
 
         /// <summary>
         /// Tests that an exception is thrown when a null population is passed.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void FitnessScalingStrategy_Scale_NullPopulation()
         {
             GeneticAlgorithm algorithm = GetAlgorithm();
             FakeFitnessScalingStrategy2 strategy = new FakeFitnessScalingStrategy2();
             strategy.Initialize(algorithm);
-            AssertEx.Throws<ArgumentNullException>(() => strategy.Scale(null));
+            Assert.Throws<ArgumentNullException>(() => strategy.Scale(null));
         }
 
         /// <summary>
         /// Tests that an exception is thrown when an empty population is passed.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void FitnessScalingStrategy_Scale_EmptyPopulation()
         {
             GeneticAlgorithm algorithm = GetAlgorithm();
@@ -69,7 +63,7 @@ namespace GenFx.Tests
             strategy.Initialize(algorithm);
             MockPopulation population = new MockPopulation();
             population.Initialize(algorithm);
-            AssertEx.Throws<ArgumentException>(() => strategy.Scale(population));
+            Assert.Throws<ArgumentException>(() => strategy.Scale(population));
         }
 
         private static GeneticAlgorithm GetAlgorithm()

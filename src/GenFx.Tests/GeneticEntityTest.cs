@@ -1,31 +1,31 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
+﻿using System;
 using System.Threading.Tasks;
+using TestCommon;
 using TestCommon.Helpers;
 using TestCommon.Mocks;
+using Xunit;
 
 namespace GenFx.Tests
 {
     /// <summary>
     /// Contains unit tests for the <see cref="GeneticEntity"/> class.
     /// </summary>
-    [TestClass()]
     public class GeneticEntityTest
     {
         /// <summary>
         /// Tests that an exception is thrown when a null algorithm is passed.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void Entity_Ctor_NullAlgorithm()
         {
             MockEntity entity = new MockEntity();
-            AssertEx.Throws<ArgumentNullException>(() => entity.Initialize(null));
+            Assert.Throws<ArgumentNullException>(() => entity.Initialize(null));
         }
 
         /// <summary>
         /// Tests that the EvaluateFitness method works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public async Task Entity_EvaluateFitness_Async()
         {
             GeneticAlgorithm algorithm = new MockGeneticAlgorithm
@@ -41,14 +41,14 @@ namespace GenFx.Tests
             entity.Initialize(algorithm);
             entity.Identifier = "123";
             await entity.EvaluateFitnessAsync();
-            Assert.AreEqual((double)123, entity.RawFitnessValue, "RawFitnessValue not set correctly.");
-            Assert.AreEqual((double)123, entity.ScaledFitnessValue, "ScaledFitnessValue not set correctly.");
+            Assert.Equal((double)123, entity.RawFitnessValue);
+            Assert.Equal((double)123, entity.ScaledFitnessValue);
         }
 
         /// <summary>
         /// Tests that the GetFitnessValue method works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void Entity_GetFitnessValue()
         {
             GeneticAlgorithm algorithm = new MockGeneticAlgorithm
@@ -63,14 +63,14 @@ namespace GenFx.Tests
             PrivateObject accessor = new PrivateObject(entity, new PrivateType(typeof(GeneticEntity)));
             entity.ScaledFitnessValue = 12;
             accessor.SetField("rawFitnessValue", 10);
-            Assert.AreEqual(entity.ScaledFitnessValue, entity.GetFitnessValue(FitnessType.Scaled), "Incorrect fitness value returned.");
-            Assert.AreEqual(accessor.GetField("rawFitnessValue"), entity.GetFitnessValue(FitnessType.Raw), "Incorrect fitness value returned.");
+            Assert.Equal(entity.ScaledFitnessValue, entity.GetFitnessValue(FitnessType.Scaled));
+            Assert.Equal(accessor.GetField("rawFitnessValue"), entity.GetFitnessValue(FitnessType.Raw));
         }
 
         /// <summary>
         /// Tests that the Initialize method works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void Entity_Initialize()
         {
             GeneticAlgorithm algorithm = new MockGeneticAlgorithm
@@ -82,13 +82,13 @@ namespace GenFx.Tests
             };
             MockEntity entity = new MockEntity();
             entity.Initialize(algorithm);
-            Assert.AreEqual("11111", entity.Identifier, "Entity not initialized correctly.");
+            Assert.Equal("11111", entity.Identifier);
         }
 
         /// <summary>
         /// Tests that the CopyTo method works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void Entity_CopyTo()
         {
             GeneticAlgorithm algorithm = new MockGeneticAlgorithm
@@ -109,15 +109,15 @@ namespace GenFx.Tests
             newEntity.Initialize(algorithm);
             entity.CopyTo(newEntity);
 
-            Assert.AreEqual(entity.Age, newEntity.Age, "Age value not copied correctly.");
-            Assert.AreEqual(entity.RawFitnessValue, newEntity.RawFitnessValue, "RawFitnessValue not copied correctly.");
-            Assert.AreEqual(entity.ScaledFitnessValue, newEntity.ScaledFitnessValue, "RawFitnessValue not copied correctly.");
+            Assert.Equal(entity.Age, newEntity.Age);
+            Assert.Equal(entity.RawFitnessValue, newEntity.RawFitnessValue);
+            Assert.Equal(entity.ScaledFitnessValue, newEntity.ScaledFitnessValue);
         }
 
         /// <summary>
         /// Tests that the object can be serialized and deserialized.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void GeneticEntity_Serialization()
         {
             MockEntity entity = new MockEntity();
@@ -129,138 +129,138 @@ namespace GenFx.Tests
 
             MockEntity result = (MockEntity)SerializationHelper.TestSerialization(entity, new Type[0]);
 
-            Assert.AreEqual(entity.Age, result.Age);
-            Assert.AreEqual(entity.ScaledFitnessValue, result.ScaledFitnessValue);
-            Assert.AreEqual(entity.RawFitnessValue, result.RawFitnessValue);
+            Assert.Equal(entity.Age, result.Age);
+            Assert.Equal(entity.ScaledFitnessValue, result.ScaledFitnessValue);
+            Assert.Equal(entity.RawFitnessValue, result.RawFitnessValue);
         }
 
         /// <summary>
         /// Tests that an exception is thrown when an invalid fitness type is passed to <see cref="GeneticEntity.GetFitnessValue"/>.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void GeneticEntity_GetFitnessValue_InvalidFitnessType()
         {
             TestEntity entity = new TestEntity();
-            AssertEx.Throws<ArgumentException>(() => entity.GetFitnessValue((FitnessType)3));
+            Assert.Throws<ArgumentException>(() => entity.GetFitnessValue((FitnessType)3));
         }
 
         /// <summary>
         /// Tests that the <see cref="GeneticEntity.CompareTo(object)"/> method invokes the 
         /// <see cref="GeneticEntity.CompareTo(GeneticEntity)"/> method.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void GeneticEntity_CompareTo()
         {
-            Assert.AreEqual(44, new TestEntity(44).CompareTo((object)new TestEntity()));
+            Assert.Equal(44, new TestEntity(44).CompareTo((object)new TestEntity()));
         }
 
         /// <summary>
         /// Tests that the correct value is returned when passing null to <see cref="GeneticEntity.CompareTo(object)"/>.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void GeneticEntity_CompareTo_Null()
         {
-            Assert.AreEqual(1, new TestEntity(44).CompareTo((object)null));
+            Assert.Equal(1, new TestEntity(44).CompareTo((object)null));
         }
 
         /// <summary>
         /// Tests that an exception is thrown when passing a non entity to <see cref="GeneticEntity.CompareTo(object)"/>.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void GeneticEntity_CompareTo_InvalidEntity()
         {
             TestEntity entity = new TestEntity();
-            AssertEx.Throws<ArgumentException>(() => entity.CompareTo((object)"test"));
+            Assert.Throws<ArgumentException>(() => entity.CompareTo((object)"test"));
         }
 
         /// <summary>
         /// Tests that the <see cref="GeneticEntity.Equals(object)"/> method works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void GeneticEntity_EqualsObject()
         {
-            Assert.IsFalse(new TestEntity(1).Equals((object)new TestEntity()));
-            Assert.IsFalse(new TestEntity(-1).Equals((object)new TestEntity()));
-            Assert.IsTrue(new TestEntity(0).Equals((object)new TestEntity()));
-            Assert.IsFalse(new TestEntity(0).Equals((object)null));
-            Assert.IsFalse(new TestEntity(0).Equals((object)"test"));
+            Assert.False(new TestEntity(1).Equals((object)new TestEntity()));
+            Assert.False(new TestEntity(-1).Equals((object)new TestEntity()));
+            Assert.True(new TestEntity(0).Equals((object)new TestEntity()));
+            Assert.False(new TestEntity(0).Equals((object)null));
+            Assert.False(new TestEntity(0).Equals((object)"test"));
         }
 
         /// <summary>
         /// Tests that the <see cref="GeneticEntity.Equals(GeneticEntity)"/> method works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void GeneticEntity_EqualsGeneticEntity()
         {
-            Assert.IsFalse(new TestEntity(1).Equals(new TestEntity()));
-            Assert.IsFalse(new TestEntity(-1).Equals(new TestEntity()));
-            Assert.IsTrue(new TestEntity(0).Equals(new TestEntity()));
-            Assert.IsFalse(new TestEntity(1).Equals((GeneticEntity)null));
+            Assert.False(new TestEntity(1).Equals(new TestEntity()));
+            Assert.False(new TestEntity(-1).Equals(new TestEntity()));
+            Assert.True(new TestEntity(0).Equals(new TestEntity()));
+            Assert.False(new TestEntity(1).Equals((GeneticEntity)null));
         }
 
         /// <summary>
         /// Tests that the equality operator works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void GeneticEntity_EqualityOperator()
         {
-            Assert.IsFalse(new TestEntity(1) == new TestEntity());
-            Assert.IsFalse(new TestEntity(-1) == new TestEntity());
-            Assert.IsTrue(new TestEntity(0) == new TestEntity());
-            Assert.IsFalse(new TestEntity(0) == null);
-            Assert.IsFalse(null == new TestEntity(0));
-            Assert.IsTrue((GeneticEntity)null == (GeneticEntity)null);
+            Assert.False(new TestEntity(1) == new TestEntity());
+            Assert.False(new TestEntity(-1) == new TestEntity());
+            Assert.True(new TestEntity(0) == new TestEntity());
+            Assert.False(new TestEntity(0) == null);
+            Assert.False(null == new TestEntity(0));
+            Assert.True((GeneticEntity)null == (GeneticEntity)null);
         }
 
         /// <summary>
         /// Tests that the inequality operator works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void GeneticEntity_InequalityOperator()
         {
-            Assert.IsTrue(new TestEntity(1) != new TestEntity());
-            Assert.IsTrue(new TestEntity(-1) != new TestEntity());
-            Assert.IsFalse(new TestEntity(0) != new TestEntity());
-            Assert.IsTrue(new TestEntity(0) != null);
-            Assert.IsTrue(null != new TestEntity(0));
-            Assert.IsFalse((GeneticEntity)null != (GeneticEntity)null);
+            Assert.True(new TestEntity(1) != new TestEntity());
+            Assert.True(new TestEntity(-1) != new TestEntity());
+            Assert.False(new TestEntity(0) != new TestEntity());
+            Assert.True(new TestEntity(0) != null);
+            Assert.True(null != new TestEntity(0));
+            Assert.False((GeneticEntity)null != (GeneticEntity)null);
         }
 
         /// <summary>
         /// Tests that the less than operator works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void GeneticEntity_LessThanOperator()
         {
-            Assert.IsFalse(new TestEntity(1) < new TestEntity());
-            Assert.IsTrue(new TestEntity(-1) < new TestEntity());
-            Assert.IsFalse(new TestEntity(0) < new TestEntity(0));
-            Assert.IsFalse(new TestEntity(0) < null);
-            Assert.IsTrue(null < new TestEntity(0));
-            Assert.IsFalse((GeneticEntity)null < (GeneticEntity)null);
+            Assert.False(new TestEntity(1) < new TestEntity());
+            Assert.True(new TestEntity(-1) < new TestEntity());
+            Assert.False(new TestEntity(0) < new TestEntity(0));
+            Assert.False(new TestEntity(0) < null);
+            Assert.True(null < new TestEntity(0));
+            Assert.False((GeneticEntity)null < (GeneticEntity)null);
         }
 
         /// <summary>
         /// Tests that the greater than operator works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void GeneticEntity_GreaterThanOperator()
         {
-            Assert.IsTrue(new TestEntity(1) > new TestEntity());
-            Assert.IsFalse(new TestEntity(-1) > new TestEntity());
-            Assert.IsFalse(new TestEntity(0) > new TestEntity(0));
-            Assert.IsTrue(new TestEntity(0) > null);
-            Assert.IsFalse(null > new TestEntity(0));
-            Assert.IsFalse((GeneticEntity)null > (GeneticEntity)null);
+            Assert.True(new TestEntity(1) > new TestEntity());
+            Assert.False(new TestEntity(-1) > new TestEntity());
+            Assert.False(new TestEntity(0) > new TestEntity(0));
+            Assert.True(new TestEntity(0) > null);
+            Assert.False(null > new TestEntity(0));
+            Assert.False((GeneticEntity)null > (GeneticEntity)null);
         }
 
         /// <summary>
         /// Tests that the <see cref="GeneticEntity.GetHashCode"/> method works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void GeneticEntity_GetHashCode()
         {
-            Assert.AreNotEqual(0, new TestEntity().GetHashCode());
+            Assert.NotEqual(0, new TestEntity().GetHashCode());
         }
 
         private class TestEntity : GeneticEntity

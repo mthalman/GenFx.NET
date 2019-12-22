@@ -1,24 +1,20 @@
 ﻿using GenFx.ComponentLibrary.Trees;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TestCommon.Helpers;
+using Xunit;
 
 namespace GenFx.ComponentLibrary.Tests
 {
     /// <summary>
     /// Contains unit tests for the <see cref="TreeEntityExtensions"/> class.
     /// </summary>
-    [TestClass]
     public class TreeEntityExtensionsTest
     {
         /// <summary>
         /// Tests that the <see cref="TreeEntityExtensions.GetPostfixTree"/> method works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void TreeEntityExtensions_GetPostfixTree()
         {
             TestTree tree = new TestTree();
@@ -38,7 +34,7 @@ namespace GenFx.ComponentLibrary.Tests
             node3.AppendChild(node6);
 
             List<TreeNode> list = TreeEntityExtensions.GetPostfixTree(tree).ToList();
-            CollectionAssert.AreEqual(new TreeNode[]
+            Assert.Equal(new TreeNode[]
             {
                 node4,
                 node2,
@@ -52,16 +48,16 @@ namespace GenFx.ComponentLibrary.Tests
         /// <summary>
         /// Tests that an exception is thrown when passing a null tree.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void TreeEntityExtensions_GetPostfixTree_NullTree()
         {
-            AssertEx.Throws<ArgumentNullException>(() => TreeEntityExtensions.GetPostfixTree(null));
+            Assert.Throws<ArgumentNullException>(() => TreeEntityExtensions.GetPostfixTree(null));
         }
 
         /// <summary>
         /// Tests that the <see cref="TreeEntityExtensions.GetPrefixTree"/> method works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void TreeEntityExtensions_GetPrefixTree()
         {
             TestTree tree = new TestTree();
@@ -81,7 +77,7 @@ namespace GenFx.ComponentLibrary.Tests
             node3.AppendChild(node6);
 
             List<TreeNode> list = TreeEntityExtensions.GetPrefixTree(tree).ToList();
-            CollectionAssert.AreEqual(new TreeNode[]
+            Assert.Equal(new TreeNode[]
             {
                 node1,
                 node2,
@@ -95,16 +91,16 @@ namespace GenFx.ComponentLibrary.Tests
         /// <summary>
         /// Tests that an exception is thrown when passing a null tree.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void TreeEntityExtensions_GetPrefixTree_NullTree()
         {
-            AssertEx.Throws<ArgumentNullException>(() => TreeEntityExtensions.GetPrefixTree(null));
+            Assert.Throws<ArgumentNullException>(() => TreeEntityExtensions.GetPrefixTree(null));
         }
 
         /// <summary>
         /// Tests that the <see cref="TreeEntityExtensions.GetSize"/> method works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void TreeEntityExtensions_GetSize()
         {
             TestTree tree = new TestTree();
@@ -124,16 +120,16 @@ namespace GenFx.ComponentLibrary.Tests
             node3.AppendChild(node6);
 
             int size = TreeEntityExtensions.GetSize(tree);
-            Assert.AreEqual(6, size);
+            Assert.Equal(6, size);
         }
 
         /// <summary>
         /// Tests that an exception is thrown when passing a null tree.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void TreeEntityExtensions_GetSize_NullTree()
         {
-            AssertEx.Throws<ArgumentNullException>(() => TreeEntityExtensions.GetSize(null));
+            Assert.Throws<ArgumentNullException>(() => TreeEntityExtensions.GetSize(null));
         }
 
         private class TestTree : TreeEntityBase

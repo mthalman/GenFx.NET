@@ -1,64 +1,57 @@
 ﻿using GenFx.Validation;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TestCommon.Helpers;
+using Xunit;
 
 namespace GenFx.ComponentLibrary.Tests
 {
     /// <summary>
     /// Contains unit tests for the <see cref="BooleanValidator"/> class.
     /// </summary>
-    [TestClass]
     public class BooleanValidatorTest
     {
         /// <summary>
         /// Tests that the ctor initializes the state correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void BooleanValidator_Ctor()
         {
             BooleanValidator validator = new BooleanValidator(false);
-            Assert.IsFalse(validator.RequiredValue);
+            Assert.False(validator.RequiredValue);
 
             validator = new BooleanValidator(true);
-            Assert.IsTrue(validator.RequiredValue);
+            Assert.True(validator.RequiredValue);
         }
 
         /// <summary>
         /// Tests that the <see cref="BooleanValidator.IsValid"/> method works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void BooleanValidator_IsValid()
         {
             BooleanValidator validator = new BooleanValidator(false);
-            string errorMessage;
-            bool result = validator.IsValid(true, "test", this, out errorMessage);
-            Assert.IsFalse(result);
-            Assert.IsNotNull(errorMessage);
+            bool result = validator.IsValid(true, "test", this, out string errorMessage);
+            Assert.False(result);
+            Assert.NotNull(errorMessage);
 
             result = validator.IsValid("false", "test", this, out errorMessage);
-            Assert.IsFalse(result);
-            Assert.IsNotNull(errorMessage);
+            Assert.False(result);
+            Assert.NotNull(errorMessage);
 
             result = validator.IsValid(false, "test", this, out errorMessage);
-            Assert.IsTrue(result);
-            Assert.IsNull(errorMessage);
+            Assert.True(result);
+            Assert.Null(errorMessage);
         }
 
         /// <summary>
         /// Tests that an exception is thrown when passing a null or empty property name to <see cref="BooleanValidator.IsValid"/>.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void BooleanValidator_IsValid_NullPropertyName()
         {
             BooleanValidator validator = new BooleanValidator(false);
             string errorMessage;
-            AssertEx.Throws<ArgumentException>(() => validator.IsValid(true, null, this, out errorMessage));
-            AssertEx.Throws<ArgumentException>(() => validator.IsValid(true, String.Empty, this, out errorMessage));
+            Assert.Throws<ArgumentException>(() => validator.IsValid(true, null, this, out errorMessage));
+            Assert.Throws<ArgumentException>(() => validator.IsValid(true, String.Empty, this, out errorMessage));
         }
     }
 }

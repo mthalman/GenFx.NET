@@ -1,13 +1,12 @@
-﻿using GenFx;
-using GenFx.ComponentLibrary.Populations;
+﻿using GenFx.ComponentLibrary.Populations;
 using GenFx.ComponentLibrary.SelectionOperators;
-using TestCommon.Mocks;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using TestCommon.Helpers;
 using System.Reflection;
+using TestCommon;
+using TestCommon.Mocks;
+using Xunit;
 
 namespace GenFx.ComponentLibrary.Tests
 {
@@ -15,11 +14,9 @@ namespace GenFx.ComponentLibrary.Tests
     /// This is a test class for GenFx.ComponentLibrary.SelectionOperators.FitnessProportionateSelectionOperator and is intended
     /// to contain all GenFx.ComponentLibrary.SelectionOperators.FitnessProportionateSelectionOperator Unit Tests
     /// </summary>
-    [TestClass()]
-    public class FitnessProportionateSelectionOperatorTest
+    public class FitnessProportionateSelectionOperatorTest : IDisposable
     {
-        [TestCleanup]
-        public void Cleanup()
+        public void Dispose()
         {
             RandomNumberService.Instance = new RandomNumberService();
         }
@@ -27,7 +24,7 @@ namespace GenFx.ComponentLibrary.Tests
         /// <summary>
         /// Tests that the Select method works correctly.
         /// </summary>
-        [TestMethod()]
+        [Fact]
         public void FitnessProportionateSelectionOperator_Select()
         {
             GeneticAlgorithm algorithm = GetAlgorithm();
@@ -52,33 +49,33 @@ namespace GenFx.ComponentLibrary.Tests
 
             randomUtil.RandomRatio = 0;
             IList<GeneticEntity> selectedEntities = op.SelectEntities(1, population);
-            Assert.AreSame(entity1, selectedEntities[0], "Incorrect entity selected.");
+            Assert.Same(entity1, selectedEntities[0]);
 
             randomUtil.RandomRatio = .099999;
             selectedEntities = op.SelectEntities(1, population);
-            Assert.AreSame(entity1, selectedEntities[0], "Incorrect entity selected.");
+            Assert.Same(entity1, selectedEntities[0]);
 
             randomUtil.RandomRatio = .1;
             selectedEntities = op.SelectEntities(1, population);
-            Assert.AreSame(entity2, selectedEntities[0], "Incorrect entity selected.");
+            Assert.Same(entity2, selectedEntities[0]);
 
             randomUtil.RandomRatio = .599999;
             selectedEntities = op.SelectEntities(1, population);
-            Assert.AreSame(entity2, selectedEntities[0], "Incorrect entity selected.");
+            Assert.Same(entity2, selectedEntities[0]);
 
             randomUtil.RandomRatio = .6;
             selectedEntities = op.SelectEntities(1, population);
-            Assert.AreSame(entity3, selectedEntities[0], "Incorrect entity selected.");
+            Assert.Same(entity3, selectedEntities[0]);
 
             randomUtil.RandomRatio = 1;
             selectedEntities = op.SelectEntities(1, population);
-            Assert.AreSame(entity3, selectedEntities[0], "Incorrect entity selected.");
+            Assert.Same(entity3, selectedEntities[0]);
         }
 
         /// <summary>
         /// Tests that the Select method works correctly when trying to minimize the fitness.
         /// </summary>
-        [TestMethod()]
+        [Fact]
         public void FitnessProportionateSelectionOperator_Select_MinimizeFitness()
         {
             GeneticAlgorithm algorithm = GetAlgorithm();
@@ -105,33 +102,33 @@ namespace GenFx.ComponentLibrary.Tests
 
             randomUtil.RandomRatio = 0;
             IList<GeneticEntity> selectedEntities = op.SelectEntities(1, population).ToList();
-            Assert.AreSame(entity2, selectedEntities[0], "Incorrect entity selected.");
+            Assert.Same(entity2, selectedEntities[0]);
 
             randomUtil.RandomRatio = .099999;
             selectedEntities = op.SelectEntities(1, population);
-            Assert.AreSame(entity2, selectedEntities[0], "Incorrect entity selected.");
+            Assert.Same(entity2, selectedEntities[0]);
 
             randomUtil.RandomRatio = .1;
             selectedEntities = op.SelectEntities(1, population);
-            Assert.AreSame(entity3, selectedEntities[0], "Incorrect entity selected.");
+            Assert.Same(entity3, selectedEntities[0]);
 
             randomUtil.RandomRatio = .499999;
             selectedEntities = op.SelectEntities(1, population);
-            Assert.AreSame(entity3, selectedEntities[0], "Incorrect entity selected.");
+            Assert.Same(entity3, selectedEntities[0]);
 
             randomUtil.RandomRatio = .5;
             selectedEntities = op.SelectEntities(1, population);
-            Assert.AreSame(entity1, selectedEntities[0], "Incorrect entity selected.");
+            Assert.Same(entity1, selectedEntities[0]);
 
             randomUtil.RandomRatio = 1;
             selectedEntities = op.SelectEntities(1, population);
-            Assert.AreSame(entity1, selectedEntities[0], "Incorrect entity selected.");
+            Assert.Same(entity1, selectedEntities[0]);
         }
 
         /// <summary>
         /// Tests that the Select method works correctly when there exists a fitness value equal to zero.
         /// </summary>
-        [TestMethod()]
+        [Fact]
         public void FitnessProportionateSelectionOperator_Select_FitnessValueZero()
         {
             GeneticAlgorithm algorithm = GetAlgorithm();
@@ -156,33 +153,33 @@ namespace GenFx.ComponentLibrary.Tests
 
             randomUtil.RandomRatio = 0;
             IList<GeneticEntity> selectedEntities = op.SelectEntities(1, population);
-            Assert.AreSame(entity1, selectedEntities[0], "Incorrect entity selected.");
+            Assert.Same(entity1, selectedEntities[0]);
 
             randomUtil.RandomRatio = .199999;
             selectedEntities = op.SelectEntities(1, population);
-            Assert.AreSame(entity1, selectedEntities[0], "Incorrect entity selected.");
+            Assert.Same(entity1, selectedEntities[0]);
 
             randomUtil.RandomRatio = .2;
             selectedEntities = op.SelectEntities(1, population);
-            Assert.AreSame(entity2, selectedEntities[0], "Incorrect entity selected.");
+            Assert.Same(entity2, selectedEntities[0]);
 
             randomUtil.RandomRatio = .299999;
             selectedEntities = op.SelectEntities(1, population);
-            Assert.AreSame(entity2, selectedEntities[0], "Incorrect entity selected.");
+            Assert.Same(entity2, selectedEntities[0]);
 
             randomUtil.RandomRatio = .3;
             selectedEntities = op.SelectEntities(1, population);
-            Assert.AreSame(entity3, selectedEntities[0], "Incorrect entity selected.");
+            Assert.Same(entity3, selectedEntities[0]);
 
             randomUtil.RandomRatio = 1;
             selectedEntities = op.SelectEntities(1, population);
-            Assert.AreSame(entity3, selectedEntities[0], "Incorrect entity selected.");
+            Assert.Same(entity3, selectedEntities[0]);
         }
 
         /// <summary>
         /// Tests that the Select method works correctly when there exists a fitness value less than zero.
         /// </summary>
-        [TestMethod()]
+        [Fact]
         public void FitnessProportionateSelectionOperator_Select_FitnessValueNegative()
         {
             GeneticAlgorithm algorithm = GetAlgorithm();
@@ -207,38 +204,38 @@ namespace GenFx.ComponentLibrary.Tests
 
             randomUtil.RandomRatio = 0;
             IList<GeneticEntity> selectedEntities = op.SelectEntities(1, population);
-            Assert.AreSame(entity1, selectedEntities[0], "Incorrect entity selected.");
+            Assert.Same(entity1, selectedEntities[0]);
 
             randomUtil.RandomRatio = .099999;
             selectedEntities = op.SelectEntities(1, population);
-            Assert.AreSame(entity1, selectedEntities[0], "Incorrect entity selected.");
+            Assert.Same(entity1, selectedEntities[0]);
 
             randomUtil.RandomRatio = .1;
             selectedEntities = op.SelectEntities(1, population);
-            Assert.AreSame(entity2, selectedEntities[0], "Incorrect entity selected.");
+            Assert.Same(entity2, selectedEntities[0]);
 
             randomUtil.RandomRatio = .399999;
             selectedEntities = op.SelectEntities(1, population);
-            Assert.AreSame(entity2, selectedEntities[0], "Incorrect entity selected.");
+            Assert.Same(entity2, selectedEntities[0]);
 
             randomUtil.RandomRatio = .4;
             selectedEntities = op.SelectEntities(1, population);
-            Assert.AreSame(entity3, selectedEntities[0], "Incorrect entity selected.");
+            Assert.Same(entity3, selectedEntities[0]);
 
             randomUtil.RandomRatio = 1;
             selectedEntities = op.SelectEntities(1, population);
-            Assert.AreSame(entity3, selectedEntities[0], "Incorrect entity selected.");
+            Assert.Same(entity3, selectedEntities[0]);
         }
 
         /// <summary>
         /// Tests that an exception is thrown when passing a null population to <see cref="FitnessProportionateSelectionOperator.SelectEntitiesFromPopulation"/>.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void FitnessProportionateSelectionOperator_SelectEntitiesFromPopulation_NullPopulation()
         {
             FitnessProportionateSelectionOperator op = new FitnessProportionateSelectionOperator();
             PrivateObject accessor = new PrivateObject(op);
-            AssertEx.Throws<ArgumentNullException>(() => accessor.Invoke("SelectEntitiesFromPopulation", BindingFlags.Instance | BindingFlags.NonPublic, (int)0, (Population)null));
+            Assert.Throws<ArgumentNullException>(() => accessor.Invoke("SelectEntitiesFromPopulation", (int)0, (Population)null));
         }
 
         private static GeneticAlgorithm GetAlgorithm()

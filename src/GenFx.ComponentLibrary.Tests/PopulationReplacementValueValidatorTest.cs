@@ -1,18 +1,17 @@
 ﻿using GenFx.ComponentLibrary.Algorithms;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 
 namespace GenFx.ComponentLibrary.Tests
 {
     /// <summary>
     /// Contains unit tests for the <see cref="PopulationReplacementValueValidator"/> struct.
     /// </summary>
-    [TestClass]
     public class PopulationReplacementValueValidatorTest
     {
         /// <summary>
         /// Tests that the <see cref="PopulationReplacementValueValidator.IsValid"/> method works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void PopulationReplacementValueValidator_IsValid()
         {
             PopulationReplacementValue val = new PopulationReplacementValue(100, ReplacementValueKind.FixedCount);
@@ -31,16 +30,15 @@ namespace GenFx.ComponentLibrary.Tests
         private void TestValidator(object val, bool isExpectedToBeValid)
         {
             PopulationReplacementValueValidator validator = new PopulationReplacementValueValidator();
-            string errorMessage;
-            bool result = validator.IsValid(val, "Prop", this, out errorMessage);
-            Assert.AreEqual(isExpectedToBeValid, result);
+            bool result = validator.IsValid(val, "Prop", this, out string errorMessage);
+            Assert.Equal(isExpectedToBeValid, result);
             if (isExpectedToBeValid)
             {
-                Assert.IsNull(errorMessage);
+                Assert.Null(errorMessage);
             }
             else
             {
-                Assert.IsNotNull(errorMessage);
+                Assert.NotNull(errorMessage);
             }
         }
     }

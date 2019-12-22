@@ -1,57 +1,52 @@
-using GenFx;
 using GenFx.Validation;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using System.Collections.Generic;
-using System.Text;
-using TestCommon.Helpers;
 using TestCommon.Mocks;
+using Xunit;
 
 namespace GenFx.Tests
 {
     /// <summary>
     /// Summary description for RequiredConfigurableTypeAttributeTest
     /// </summary>
-    [TestClass]
     public class RequiredComponentTypeAttributeTest
     {
         /// <summary>
         /// Tests that the constructor initializes the state correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void RequiredConfigurableTypeAttribute_Ctor()
         {
             TestRequiredComponentTypeAttribute attrib = new TestRequiredComponentTypeAttribute(
               typeof(MockSelectionOperator), typeof(SelectionOperator));
 
-            Assert.AreSame(typeof(MockSelectionOperator), attrib.RequiredType, "RequiredType not set correctly.");
+            Assert.Same(typeof(MockSelectionOperator), attrib.RequiredType);
         }
 
         /// <summary>
         /// Tests that an exception is thrown if the required type is null.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void RequiredConfigurableTypeAttribute_Ctor_NullRequiredType()
         {
-            AssertEx.Throws<ArgumentNullException>(() => new TestRequiredComponentTypeAttribute(null, typeof(CrossoverOperator)));
+            Assert.Throws<ArgumentNullException>(() => new TestRequiredComponentTypeAttribute(null, typeof(CrossoverOperator)));
         }
 
         /// <summary>
         /// Tests that an exception is thrown if the base type is null.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void RequiredConfigurableTypeAttribute_Ctor_NullBaseType()
         {
-            AssertEx.Throws<ArgumentNullException>(() => new TestRequiredComponentTypeAttribute(typeof(MockSelectionOperator), null));
+            Assert.Throws<ArgumentNullException>(() => new TestRequiredComponentTypeAttribute(typeof(MockSelectionOperator), null));
         }
 
         /// <summary>
         /// Tests that an exception is thrown if the required type is not a type of the base type.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void RequiredConfigurableTypeAttribute_Ctor_InvalidType()
         {
-            AssertEx.Throws<ArgumentException>(() => new TestRequiredComponentTypeAttribute(typeof(MockSelectionOperator), typeof(CrossoverOperator)));
+            Assert.Throws<ArgumentException>(() => new TestRequiredComponentTypeAttribute(typeof(MockSelectionOperator), typeof(CrossoverOperator)));
         }
 
         private class TestRequiredComponentTypeAttribute : RequiredComponentTypeAttribute

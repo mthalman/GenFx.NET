@@ -1,21 +1,20 @@
 ﻿using GenFx.ComponentLibrary.Lists;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using TestCommon.Helpers;
+using TestCommon;
 using TestCommon.Mocks;
+using Xunit;
 
 namespace GenFx.ComponentLibrary.Tests
 {
     /// <summary>
     /// Contains unit tests for the <see cref="UniformIntegerMutationOperator"/> class.
     ///</summary>
-    [TestClass]
     public class UniformIntegerMutationOperatorTest
     {
         /// <summary>
         /// Tests that the Mutate method works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void UniformIntegerMutationOperatorTest_Mutate()
         {
             MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm
@@ -46,19 +45,19 @@ namespace GenFx.ComponentLibrary.Tests
             entity[3] = 1;
             GeneticEntity mutant = op.Mutate(entity);
 
-            Assert.AreEqual("2, 2, 1, 2", mutant.Representation, "Mutation not called correctly.");
-            Assert.AreEqual(0, mutant.Age, "Age should have been reset.");
+            Assert.Equal("2, 2, 1, 2", mutant.Representation);
+            Assert.Equal(0, mutant.Age);
         }
 
         /// <summary>
         /// Tests that an exception is thrown when passing a null entity to <see cref="UniformIntegerMutationOperator.GenerateMutation"/>.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void UniformIntegerMutationOperator_GenerateMutation_NullEntity()
         {
             UniformIntegerMutationOperator op = new UniformIntegerMutationOperator();
             PrivateObject accessor = new PrivateObject(op);
-            AssertEx.Throws<ArgumentNullException>(() => accessor.Invoke("GenerateMutation", (GeneticEntity)null));
+            Assert.Throws<ArgumentNullException>(() => accessor.Invoke("GenerateMutation", (GeneticEntity)null));
         }
     }
 }

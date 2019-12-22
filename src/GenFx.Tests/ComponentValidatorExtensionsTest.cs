@@ -1,26 +1,19 @@
-﻿using GenFx;
-using GenFx.Validation;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using GenFx.Validation;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TestCommon.Helpers;
 using TestCommon.Mocks;
+using Xunit;
 
 namespace GenFx.Tests
 {
     /// <summary>
     /// Contains unit tests for the <see cref="ComponentValidatorExtensions"/> class.
     /// </summary>
-    [TestClass]
     public class ComponentValidatorExtensionsTest
     {
         /// <summary>
         /// Tests that the <see cref="ComponentValidatorExtensions.EnsureIsValid"/> method works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void ComponentValidatorExtensions_EnsureIsValid()
         {
             MockEntity entity = new MockEntity();
@@ -30,26 +23,26 @@ namespace GenFx.Tests
             string errorMessage = "my error";
             validator = new TestValidator(entity, false, errorMessage);
 
-            AssertEx.Throws<ValidationException>(() => ComponentValidatorExtensions.EnsureIsValid(validator, entity));
+            Assert.Throws<ValidationException>(() => ComponentValidatorExtensions.EnsureIsValid(validator, entity));
         }
 
         /// <summary>
         /// Tests that an exception is thrown when passing a null validator to <see cref="ComponentValidatorExtensions.EnsureIsValid"/>.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void ComponentValidatorExtensions_EnsureIsValid_NullValidator()
         {
-            AssertEx.Throws<ArgumentNullException>(() => ComponentValidatorExtensions.EnsureIsValid(null, new MockEntity()));
+            Assert.Throws<ArgumentNullException>(() => ComponentValidatorExtensions.EnsureIsValid(null, new MockEntity()));
         }
 
         /// <summary>
         /// Tests that an exception is thrown when passing a null component to <see cref="ComponentValidatorExtensions.EnsureIsValid"/>.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void ComponentValidatorExtensions_EnsureIsValid_NullComponent()
         {
             TestValidator validator = new TestValidator(null, true, null);
-            AssertEx.Throws<ArgumentNullException>(() => ComponentValidatorExtensions.EnsureIsValid(validator, null));
+            Assert.Throws<ArgumentNullException>(() => ComponentValidatorExtensions.EnsureIsValid(validator, null));
         }
 
         private class TestValidator : ComponentValidator
@@ -67,7 +60,7 @@ namespace GenFx.Tests
 
             public override bool IsValid(GeneticComponent component, out string errorMessage)
             {
-                Assert.AreSame(this.component, component);
+                Assert.Same(this.component, component);
                 errorMessage = this.errorMessage;
                 return this.isValid;
             }

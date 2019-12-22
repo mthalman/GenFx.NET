@@ -1,154 +1,18 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{8B6C0492-1DED-4D48-B476-E4F175328AC3}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>GenFx.ComponentLibrary.Tests</RootNamespace>
-    <AssemblyName>GenFx.ComponentLibrary.Tests</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
-    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
-    <ReferencePath>$(ProgramFiles)\Common Files\microsoft shared\VSTT\$(VisualStudioVersion)\UITestExtensionPackages</ReferencePath>
-    <IsCodedUITest>False</IsCodedUITest>
-    <TestProjectType>UnitTest</TestProjectType>
-  </PropertyGroup>
-  <PropertyGroup>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <IsPackable>false</IsPackable>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>../../build/GenFx.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Runtime.Serialization" />
-  </ItemGroup>
-  <Choose>
-    <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
-      <ItemGroup>
-        <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
-      </ItemGroup>
-    </When>
-    <Otherwise>
-      <ItemGroup>
-        <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework" />
-      </ItemGroup>
-    </Otherwise>
-  </Choose>
-  <ItemGroup>
-    <Compile Include="BestMaximumFitnessEntityTest.cs" />
-    <Compile Include="BestMaximumFitnessTest.cs" />
-    <Compile Include="BestMinimumFitnessTest.cs" />
-    <Compile Include="BinaryStringEntityTest.cs" />
-    <Compile Include="BinaryTreeNodeTest.cs" />
-    <Compile Include="BoltzmannSelectionOperatorTest.cs" />
-    <Compile Include="BooleanExternalValidatorAttributeTest.cs" />
-    <Compile Include="BooleanValidatorAttributeTest.cs" />
-    <Compile Include="BooleanValidatorTest.cs" />
-    <Compile Include="ExponentialScalingStrategyTest.cs" />
-    <Compile Include="FitnessProportionateSelectionOperatorTest.cs" />
-    <Compile Include="FitnessSharingScalingStrategyTest.cs" />
-    <Compile Include="FitnessTargetTerminatorTest.cs" />
-    <Compile Include="GenerationalTerminatorTest.cs" />
-    <Compile Include="IntegerListEntityTest.cs" />
-    <Compile Include="InversionOperatorTest.cs" />
-    <Compile Include="ListEntityBaseTest.cs" />
-    <Compile Include="ListEntityTests.cs" />
-    <Compile Include="ListShiftMutationOperatorTest.cs" />
-    <Compile Include="ListStartingLengthValidatorTest.cs" />
-    <Compile Include="MaximumFitnessTest.cs" />
-    <Compile Include="MeanFitnessTest.cs" />
-    <Compile Include="MeanTreeSizeTest.cs" />
-    <Compile Include="MinimumFitnessTest.cs" />
-    <Compile Include="MultiDemeGeneticAlgorithmTest.cs" />
-    <Compile Include="MultiPointCrossoverOperatorCrossoverPointValidatorTest.cs" />
-    <Compile Include="MultiPointCrossoverOperatorTest.cs" />
-    <Compile Include="PopulationReplacementValueValidatorTest.cs" />
-    <Compile Include="PopulationReplacementValueTest.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RankSelectionOperatorTest.cs" />
-    <Compile Include="RouletteWheelSamplerTest.cs" />
-    <Compile Include="SigmaScalingStrategyTest.cs" />
-    <Compile Include="SimpleGeneticAlgorithmTest.cs" />
-    <Compile Include="SingleNodeTreeCrossoverOperatorTest.cs" />
-    <Compile Include="SinglePointCrossoverOperatorTest.cs" />
-    <Compile Include="FitnessStandardDeviationTest.cs" />
-    <Compile Include="MetricLoggerTest.cs" />
-    <Compile Include="SteadyStateGeneticAlgorithmTest.cs" />
-    <Compile Include="TimeDurationTerminatorTest.cs" />
-    <Compile Include="TreeEntityBaseTest.cs" />
-    <Compile Include="TreeHelperTest.cs" />
-    <Compile Include="TreeEntityExtensionsTest.cs" />
-    <Compile Include="TreeNode.OfT.Test.cs" />
-    <Compile Include="TreeNodeCollectionTest.cs" />
-    <Compile Include="TreeNodeTest.cs" />
-    <Compile Include="UniformBitMutationOperatorTest.cs" />
-    <Compile Include="UniformIntegerMutationOperatorTest.cs" />
-    <Compile Include="UniformSelectionOperatorTest.cs" />
-    <Compile Include="VariableSinglePointCrossoverOperatorTest.cs" />
-    <Compile Include="WheelSliceTest.cs" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.3.0" />
+    <PackageReference Include="Moq" Version="4.10.1" />
+    <PackageReference Include="xunit" Version="2.4.1" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.1" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\GenFx.ComponentLibrary\GenFx.ComponentLibrary.csproj">
-      <Project>{e4385621-4392-4c87-9eff-dba1cbaea894}</Project>
-      <Name>GenFx.ComponentLibrary</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\GenFx\GenFx.csproj">
-      <Project>{919af5af-702b-4d89-a4a4-0c94cfaf8f95}</Project>
-      <Name>GenFx</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\TestCommon\TestCommon.csproj">
-      <Project>{0e55a8d0-81ad-46d0-a08c-635cfe14a8f8}</Project>
-      <Name>TestCommon</Name>
-    </ProjectReference>
+    <ProjectReference Include="..\GenFx.ComponentLibrary\GenFx.ComponentLibrary.csproj" />
+    <ProjectReference Include="..\TestCommon\TestCommon.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="ListEntityBase.OfT.Test.cs" />
-  </ItemGroup>
-  <Choose>
-    <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
-      <ItemGroup>
-        <Reference Include="Microsoft.VisualStudio.QualityTools.CodedUITestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-          <Private>False</Private>
-        </Reference>
-        <Reference Include="Microsoft.VisualStudio.TestTools.UITest.Common, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-          <Private>False</Private>
-        </Reference>
-        <Reference Include="Microsoft.VisualStudio.TestTools.UITest.Extension, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-          <Private>False</Private>
-        </Reference>
-        <Reference Include="Microsoft.VisualStudio.TestTools.UITesting, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-          <Private>False</Private>
-        </Reference>
-      </ItemGroup>
-    </When>
-  </Choose>
-  <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>

@@ -1,12 +1,12 @@
-﻿using GenFx;
-using GenFx.ComponentLibrary.Populations;
+﻿using GenFx.ComponentLibrary.Populations;
 using GenFx.ComponentLibrary.Scaling;
 using GenFx.Validation;
-using TestCommon.Helpers;
-using TestCommon.Mocks;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Runtime.Serialization;
+using TestCommon;
+using TestCommon.Helpers;
+using TestCommon.Mocks;
+using Xunit;
 
 namespace GenFx.ComponentLibrary.Tests
 {
@@ -14,24 +14,25 @@ namespace GenFx.ComponentLibrary.Tests
     /// This is a test class for GenFx.ComponentLibrary.Scaling.FitnessSharingScalingStrategy and is intended
     /// to contain all GenFx.ComponentLibrary.Scaling.FitnessSharingScalingStrategy Unit Tests
     /// </summary>
-    [TestClass()]
     public class FitnessSharingScalingStrategyTest
     {
         // <summary>
         /// Tests that an exception is thrown when an invalid value is used for the cutoff setting.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void FitnessSharingScalingStrategy_Ctor_InvalidCutoffSetting()
         {
-            FakeFitnessSharingScalingStrategy config = new FakeFitnessSharingScalingStrategy();
-            config.ScalingCurvature = 3;
-            AssertEx.Throws<ValidationException>(() => config.ScalingDistanceCutoff = 0);
+            FakeFitnessSharingScalingStrategy config = new FakeFitnessSharingScalingStrategy
+            {
+                ScalingCurvature = 3
+            };
+            Assert.Throws<ValidationException>(() => config.ScalingDistanceCutoff = 0);
         }
 
         /// <summary>
         /// Tests that the Scale method works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void FitnessSharingScalingStrategy_Scale()
         {
             double scalingCurvature = .8;
@@ -73,33 +74,35 @@ namespace GenFx.ComponentLibrary.Tests
         /// <summary>
         /// Tests that the object can be serialized and deserialized.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void FitnessSharingScalingStrategy_Serialization()
         {
-            FakeFitnessSharingScalingStrategy strategy = new FakeFitnessSharingScalingStrategy();
-            strategy.ScalingCurvature = 10;
-            strategy.ScalingDistanceCutoff = 5;
+            FakeFitnessSharingScalingStrategy strategy = new FakeFitnessSharingScalingStrategy
+            {
+                ScalingCurvature = 10,
+                ScalingDistanceCutoff = 5
+            };
 
             FakeFitnessSharingScalingStrategy result = (FakeFitnessSharingScalingStrategy)SerializationHelper.TestSerialization(strategy, new Type[0]);
 
-            Assert.AreEqual(strategy.ScalingCurvature, result.ScalingCurvature);
-            Assert.AreEqual(strategy.ScalingDistanceCutoff, result.ScalingDistanceCutoff);
+            Assert.Equal(strategy.ScalingCurvature, result.ScalingCurvature);
+            Assert.Equal(strategy.ScalingDistanceCutoff, result.ScalingDistanceCutoff);
         }
 
         /// <summary>
         /// Tests that an exception is thrown when passing a null population to <see cref="FitnessSharingScalingStrategy.UpdateScaledFitnessValues"/>.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void FitnessSharingScalingStrategy_UpdateScaledFitnessValues_NullPopulation()
         {
             FakeFitnessSharingScalingStrategy strategy = new FakeFitnessSharingScalingStrategy();
             PrivateObject accessor = new PrivateObject(strategy);
-            AssertEx.Throws<ArgumentNullException>(() => accessor.Invoke("UpdateScaledFitnessValues", (Population)null));
+            Assert.Throws<ArgumentNullException>(() => accessor.Invoke("UpdateScaledFitnessValues", (Population)null));
         }
 
         private static void ValidateScale(GeneticEntity entity, double expectedValue)
         {
-            Assert.AreEqual(expectedValue, Math.Round(entity.ScaledFitnessValue, 2), "ScaledFitnessValue not scaled correctly.");
+            Assert.Equal(expectedValue, Math.Round(entity.ScaledFitnessValue, 2));
         }
 
         private static GeneticEntity AddEntity(GeneticAlgorithm algorithm, SimplePopulation population, double scaledFitnessValue)

@@ -1,24 +1,21 @@
-﻿using GenFx;
-using GenFx.ComponentLibrary.Lists;
-using TestCommon.Mocks;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using GenFx.ComponentLibrary.Lists;
+using GenFx.Validation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using TestCommon.Helpers;
-using GenFx.Validation;
 using System.Threading.Tasks;
+using TestCommon;
+using TestCommon.Mocks;
+using Xunit;
 
 namespace GenFx.ComponentLibrary.Tests
 {
     /// <summary>
     /// Contains unit tests for the <see cref="SinglePointCrossoverOperator"/> class.
     /// </summary>
-    [TestClass()]
-    public class SinglePointCrossoverOperatorTest
+    public class SinglePointCrossoverOperatorTest : IDisposable
     {
-        [TestCleanup]
-        public void Cleanup()
+        public void Dispose()
         {
             RandomNumberService.Instance = new RandomNumberService();
         }
@@ -26,7 +23,7 @@ namespace GenFx.ComponentLibrary.Tests
         /// <summary>
         /// Tests that the Crossover method works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void SinglePointCrossoverOperator_GenerateCrossover_SameLength()
         {
             MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm
@@ -70,8 +67,8 @@ namespace GenFx.ComponentLibrary.Tests
             BinaryStringEntity resultEntity1 = (BinaryStringEntity)result[0];
             BinaryStringEntity resultEntity2 = (BinaryStringEntity)result[1];
 
-            Assert.AreEqual("1100", resultEntity1.Representation, "Crossover not correct.");
-            Assert.AreEqual("1001", resultEntity2.Representation, "Crossover not correct.");
+            Assert.Equal("1100", resultEntity1.Representation);
+            Assert.Equal("1001", resultEntity2.Representation);
 
             randomUtil.RandomVal = 3;
             result = op.Crossover(new GeneticEntity[] { entity1, entity2 }).ToList();
@@ -79,14 +76,14 @@ namespace GenFx.ComponentLibrary.Tests
             resultEntity1 = (BinaryStringEntity)result[0];
             resultEntity2 = (BinaryStringEntity)result[1];
 
-            Assert.AreEqual("1000", resultEntity1.Representation, "Crossover not correct.");
-            Assert.AreEqual("1101", resultEntity2.Representation, "Crossover not correct.");
+            Assert.Equal("1000", resultEntity1.Representation);
+            Assert.Equal("1101", resultEntity2.Representation);
         }
 
         /// <summary>
         /// Tests that the <see cref="SinglePointCrossoverOperator.GenerateCrossover"/> method works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void SinglePointCrossoverOperator_GenerateCrossover_DifferentLength()
         {
             MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm
@@ -132,8 +129,8 @@ namespace GenFx.ComponentLibrary.Tests
             BinaryStringEntity resultEntity1 = (BinaryStringEntity)result[0];
             BinaryStringEntity resultEntity2 = (BinaryStringEntity)result[1];
 
-            Assert.AreEqual("1100", resultEntity1.Representation, "Crossover not correct.");
-            Assert.AreEqual("10011", resultEntity2.Representation, "Crossover not correct.");
+            Assert.Equal("1100", resultEntity1.Representation);
+            Assert.Equal("10011", resultEntity2.Representation);
 
             randomUtil.RandomVal = 3;
             result = op.Crossover(new GeneticEntity[] { entity1, entity2 }).ToList();
@@ -141,26 +138,26 @@ namespace GenFx.ComponentLibrary.Tests
             resultEntity1 = (BinaryStringEntity)result[0];
             resultEntity2 = (BinaryStringEntity)result[1];
 
-            Assert.AreEqual("1000", resultEntity1.Representation, "Crossover not correct.");
-            Assert.AreEqual("11011", resultEntity2.Representation, "Crossover not correct.");
+            Assert.Equal("1000", resultEntity1.Representation);
+            Assert.Equal("11011", resultEntity2.Representation);
         }
 
         /// <summary>
         /// Tests that an exception is thrown when passing null parents to <see cref="SinglePointCrossoverOperator.GenerateCrossover"/>.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void SinglePointCrossoverOperator_GenerateCrossover_NullParents()
         {
             SinglePointCrossoverOperator op = new SinglePointCrossoverOperator();
             PrivateObject accessor = new PrivateObject(op);
-            AssertEx.Throws<ArgumentNullException>(() => accessor.Invoke("GenerateCrossover", (IList<GeneticEntity>)null));
+            Assert.Throws<ArgumentNullException>(() => accessor.Invoke("GenerateCrossover", (IList<GeneticEntity>)null));
         }
 
         /// <summary>
         /// Tests that no validation exception is thrown if the operator is used with an
         /// algorithm that is configured with a <see cref="ListEntityBase"/>.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void SinglePointCrossoverOperator_Validation_WithListEntityBase()
         {
             SinglePointCrossoverOperator op = new SinglePointCrossoverOperator();
@@ -177,7 +174,7 @@ namespace GenFx.ComponentLibrary.Tests
         /// Tests that a validation exception is thrown if the operator is used with an
         /// algorithm that is not configured with a <see cref="ListEntityBase"/>.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void SinglePointCrossoverOperator_Validation_WithoutListEntityBase()
         {
             SinglePointCrossoverOperator op = new SinglePointCrossoverOperator();
@@ -187,14 +184,14 @@ namespace GenFx.ComponentLibrary.Tests
             };
             op.Initialize(algorithm);
 
-            AssertEx.Throws<ValidationException>(() => op.Validate());
+            Assert.Throws<ValidationException>(() => op.Validate());
         }
 
         /// <summary>
         /// Tests that a validation exception is thrown if the operator is used with an
         /// algorithm that is configured with a <see cref="ListEntityBase"/> that requires unique element values.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public async Task SinglePointCrossoverOperator_Validation_RequiresUniqueElementValues()
         {
             MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm
@@ -213,7 +210,7 @@ namespace GenFx.ComponentLibrary.Tests
                 CrossoverOperator = new SinglePointCrossoverOperator()
             };
 
-            await AssertEx.ThrowsAsync<ValidationException>(() => algorithm.InitializeAsync());
+            await Assert.ThrowsAsync<ValidationException>(() => algorithm.InitializeAsync());
         }
 
         private class TestRandomUtil : IRandomNumberService

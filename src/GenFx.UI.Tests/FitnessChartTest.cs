@@ -1,5 +1,4 @@
 ﻿using GenFx.UI.Controls;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using OxyPlot;
 using OxyPlot.Axes;
@@ -8,40 +7,41 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TestCommon;
+using Xunit;
 
 namespace GenFx.UI.Tests
 {
     /// <summary>
     /// Contains unit tests for the <see cref="FitnessChart"/> class.
     /// </summary>
-    [TestClass]
     public class FitnessChartTest
     {
         /// <summary>
         /// Tests that the ctor initializes the state correctly.
         /// </summary>
-        [TestMethod]
+        [StaFact]
         public void FitnessChart_Ctor()
         {
             FitnessChart chart = new FitnessChart();
-            Assert.IsNull(chart.Population);
-            Assert.AreEqual(FitnessType.Scaled, chart.FitnessType);
-            Assert.AreEqual(FitnessSortOption.Entity, chart.FitnessSortOption);
+            Assert.Null(chart.Population);
+            Assert.Equal(FitnessType.Scaled, chart.FitnessType);
+            Assert.Equal(FitnessSortOption.Entity, chart.FitnessSortOption);
 
             PlotModel model = chart.PlotModel;
 
-            Assert.AreEqual(2, model.Axes.Count);
-            Assert.IsInstanceOfType(model.Axes[0], typeof(CategoryAxis));
-            Assert.IsInstanceOfType(model.Axes[1], typeof(LinearAxis));
+            Assert.Equal(2, model.Axes.Count);
+            Assert.IsType<CategoryAxis>(model.Axes[0]);
+            Assert.IsType<LinearAxis>(model.Axes[1]);
 
-            Assert.AreEqual(1, model.Series.Count);
-            Assert.IsInstanceOfType(model.Series[0], typeof(ColumnSeries));
+            Assert.Single(model.Series);
+            Assert.IsType<ColumnSeries>(model.Series[0]);
         }
 
         /// <summary>
         /// Tests that the chart is refreshed when <see cref="FitnessChart.FitnessType"/> changes.
         /// </summary>
-        [TestMethod]
+        [StaFact]
         public void FitnessChart_OnFitnessTypeChanged()
         {
             FitnessChart chart = new FitnessChart();
@@ -52,13 +52,13 @@ namespace GenFx.UI.Tests
 
             chart.FitnessType = FitnessType.Raw;
 
-            Assert.AreEqual(0, axis.Labels.Count);
+            Assert.Empty(axis.Labels);
         }
 
         /// <summary>
         /// Tests that the chart is refreshed when <see cref="FitnessChart.FitnessSortOption"/> changes.
         /// </summary>
-        [TestMethod]
+        [StaFact]
         public void FitnessChart_OnFitnessSortOptionChanged()
         {
             FitnessChart chart = new FitnessChart();
@@ -69,14 +69,14 @@ namespace GenFx.UI.Tests
 
             chart.FitnessSortOption = FitnessSortOption.Fitness;
 
-            Assert.AreEqual(0, axis.Labels.Count);
+            Assert.Empty(axis.Labels);
         }
 
         /// <summary>
         /// Tests that the chart is not refreshed when <see cref="FitnessChart.Population"/> is set to a
         /// non-populated population.
         /// </summary>
-        [TestMethod]
+        [StaFact]
         public void FitnessChart_OnPopulationChanged_NonPopulated()
         {
             FitnessChart chart = new FitnessChart();
@@ -89,14 +89,14 @@ namespace GenFx.UI.Tests
             population.Initialize(Mock.Of<GeneticAlgorithm>());
             chart.Population = population;
 
-            Assert.AreEqual("test", axis.Labels[0]);
+            Assert.Equal("test", axis.Labels[0]);
         }
 
         /// <summary>
         /// Tests that the chart is refreshed when <see cref="FitnessChart.Population"/> is set to a
         /// populated population.
         /// </summary>
-        [TestMethod]
+        [StaFact]
         public async Task FitnessChart_OnPopulationChanged_Populated()
         {
             await TestRefreshChartScenario(FitnessType.Scaled, FitnessSortOption.Entity, true, true, true, true);
@@ -217,19 +217,19 @@ namespace GenFx.UI.Tests
 
             if (fitnessType == FitnessType.Scaled)
             {
-                Assert.AreEqual(nameof(GeneticEntity.ScaledFitnessValue), columnSeries.ValueField);
+                Assert.Equal(nameof(GeneticEntity.ScaledFitnessValue), columnSeries.ValueField);
             }
             else
             {
-                Assert.AreEqual(nameof(GeneticEntity.RawFitnessValue), columnSeries.ValueField);
+                Assert.Equal(nameof(GeneticEntity.RawFitnessValue), columnSeries.ValueField);
             }
             
-            CollectionAssert.AreEqual(sortedEntities, columnSeries.ItemsSource.Cast<object>().ToList());
+            Assert.Equal(sortedEntities, columnSeries.ItemsSource.Cast<object>().ToList());
 
-            Assert.AreEqual(algorithm.PopulationSeed.MinimumPopulationSize, axis.Labels.Count);
+            Assert.Equal(algorithm.PopulationSeed.MinimumPopulationSize, axis.Labels.Count);
             for (int i = 0; i < algorithm.PopulationSeed.MinimumPopulationSize; i++)
             {
-                Assert.AreEqual("", axis.Labels[i]);
+                Assert.Equal("", axis.Labels[i]);
             }
 
             if (createNewGeneration)
@@ -245,7 +245,7 @@ namespace GenFx.UI.Tests
 
                 if (elapseTime)
                 {
-                    CollectionAssert.AreNotEqual(sortedEntities,
+                    Assert.NotEqual(sortedEntities,
                         columnSeries.ItemsSource.Cast<object>().ToList());
                 }
             }
@@ -264,19 +264,19 @@ namespace GenFx.UI.Tests
 
                 if (createNewGeneration && elapseTime)
                 {
-                    CollectionAssert.AreNotEqual(sortedEntities,
+                    Assert.NotEqual(sortedEntities,
                         columnSeries.ItemsSource.Cast<object>().ToList());
                 }
                 else
                 {
-                    CollectionAssert.AreEqual(sortedEntities,
+                    Assert.Equal(sortedEntities,
                         columnSeries.ItemsSource.Cast<object>().ToList());
                 }
             }
 
             // Set the population to null to verify the series gets cleared
             chart.Population = null;
-            Assert.IsNull(columnSeries.ItemsSource);
+            Assert.Null(columnSeries.ItemsSource);
         }
 
         private class TestSelectionOperator : SelectionOperator

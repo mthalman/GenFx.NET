@@ -1,12 +1,8 @@
-﻿using GenFx;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Text;
+﻿using System;
 using System.Threading.Tasks;
 using TestCommon.Helpers;
 using TestCommon.Mocks;
+using Xunit;
 
 namespace GenFx.Tests
 {
@@ -14,24 +10,22 @@ namespace GenFx.Tests
     /// This is a test class for GenFx.FitnessEvaluator and is intended
     /// to contain all GenFx.FitnessEvaluator Unit Tests
     /// </summary>
-    [TestClass()]
     public class FitnessEvaluatorTest
     {
-
         /// <summary>
         /// Tests that an exception is thrown when a null algorithm is passed.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void FitnessEvaluator_Ctor_NullAlgorithm()
         {
             MockFitnessEvaluator eval = new MockFitnessEvaluator();
-            AssertEx.Throws<ArgumentNullException>(() => eval.Initialize(null));
+            Assert.Throws<ArgumentNullException>(() => eval.Initialize(null));
         }
 
         /// <summary>
         /// Tests that the EvaluateFitness method works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public async Task FitnessEvaluator_EvaluateFitness_Async()
         {
             MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm
@@ -47,13 +41,13 @@ namespace GenFx.Tests
             entity.Initialize(algorithm);
             double actualVal = await evaluator.EvaluateFitnessAsync(entity);
 
-            Assert.AreEqual((double)99, actualVal, "Fitness was not evaluated correctly.");
+            Assert.Equal((double)99, actualVal);
         }
 
         /// <summary>
         /// Tests that the object can be serialized and deserialized.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void FitnessEvaluator_Serialization()
         {
             MockFitnessEvaluator evaluator = new MockFitnessEvaluator();
@@ -61,7 +55,7 @@ namespace GenFx.Tests
 
             MockFitnessEvaluator result = (MockFitnessEvaluator)SerializationHelper.TestSerialization(evaluator, new Type[0]);
 
-            Assert.AreEqual(evaluator.EvaluationMode, result.EvaluationMode);
+            Assert.Equal(evaluator.EvaluationMode, result.EvaluationMode);
         }
 
         private class FakeFitnessEvaluator : FitnessEvaluator

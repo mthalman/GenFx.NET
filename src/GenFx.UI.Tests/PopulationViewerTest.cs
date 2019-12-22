@@ -1,32 +1,31 @@
 ﻿using GenFx.UI.Controls;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System.Linq;
+using Xunit;
 
 namespace GenFx.UI.Tests
 {
     /// <summary>
     /// Contains unit tests for the <see cref="PopulationViewer"/> class.
     /// </summary>
-    [TestClass]
     public class PopulationViewerTest
     {
         /// <summary>
         /// Tests that the ctor initializes the state correctly.
         /// </summary>
-        [TestMethod]
+        [StaFact]
         public void PopulationViewer_Ctor()
         {
             PopulationViewer viewer = new PopulationViewer();
-            Assert.AreEqual(ExecutionState.Idle, viewer.ExecutionState);
-            Assert.IsNull(viewer.Population);
-            Assert.IsNull(viewer.SelectedPopulationEntities);
+            Assert.Equal(ExecutionState.Idle, viewer.ExecutionState);
+            Assert.Null(viewer.Population);
+            Assert.Null(viewer.SelectedPopulationEntities);
         }
 
         /// <summary>
         /// Tests that the entities are updated when the state is changed.
         /// </summary>
-        [TestMethod]
+        [StaFact]
         public void PopulationViewer_OnExecutionStateChanged()
         {
             TestStateTransition(ExecutionState.Running, ExecutionState.Paused, true);
@@ -41,7 +40,7 @@ namespace GenFx.UI.Tests
         /// <summary>
         /// Tests that the entities are updated when the population is changed if the state is idle or paused.
         /// </summary>
-        [TestMethod]
+        [StaFact]
         public void PopulationViewer_OnSelectedPopulationChanged()
         {
             TestPopulationChange(ExecutionState.Idle, true);
@@ -54,7 +53,7 @@ namespace GenFx.UI.Tests
         /// <summary>
         /// Tests that the entities are not updated when the population is replacing a null poulation.
         /// </summary>
-        [TestMethod]
+        [StaFact]
         public void PopulationViewer_OnSelectedPopulationChanged_InitialPopulation()
         {
             PopulationViewer viewer = new PopulationViewer();
@@ -65,13 +64,13 @@ namespace GenFx.UI.Tests
             population.Entities.Add(Mock.Of<GeneticEntity>());
 
             viewer.Population = population;
-            Assert.IsNull(viewer.SelectedPopulationEntities);
+            Assert.Null(viewer.SelectedPopulationEntities);
         }
 
         /// <summary>
         /// Tests that the entities are updated when the population is set to null.
         /// </summary>
-        [TestMethod]
+        [StaFact]
         public void PopulationViewer_OnSelectedPopulationChanged_NullPopulation()
         {
             PopulationViewer viewer = new PopulationViewer();
@@ -84,10 +83,10 @@ namespace GenFx.UI.Tests
             population.Entities.Add(Mock.Of<GeneticEntity>());
 
             viewer.Population = population;
-            CollectionAssert.AreEqual(population.Entities, viewer.SelectedPopulationEntities.ToList());
+            Assert.Equal(population.Entities, viewer.SelectedPopulationEntities.ToList());
 
             viewer.Population = null;
-            Assert.IsNull(viewer.SelectedPopulationEntities);
+            Assert.Null(viewer.SelectedPopulationEntities);
         }
 
         private static void TestStateTransition(ExecutionState fromState, ExecutionState toState, bool expectEntitiesToUpdate)
@@ -105,11 +104,11 @@ namespace GenFx.UI.Tests
 
             if (expectEntitiesToUpdate)
             {
-                CollectionAssert.AreEqual(population.Entities, viewer.SelectedPopulationEntities.ToList());
+                Assert.Equal(population.Entities, viewer.SelectedPopulationEntities.ToList());
             }
             else
             {
-                Assert.IsNull(viewer.SelectedPopulationEntities);
+                Assert.Null(viewer.SelectedPopulationEntities);
             }
         }
 
@@ -132,11 +131,11 @@ namespace GenFx.UI.Tests
 
             if (expectEntitiesToUpdate)
             {
-                CollectionAssert.AreEqual(population2.Entities, viewer.SelectedPopulationEntities.ToList());
+                Assert.Equal(population2.Entities, viewer.SelectedPopulationEntities.ToList());
             }
             else
             {
-                Assert.IsNull(viewer.SelectedPopulationEntities);
+                Assert.Null(viewer.SelectedPopulationEntities);
             }
         }
 

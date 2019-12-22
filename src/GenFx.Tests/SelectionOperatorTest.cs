@@ -1,9 +1,8 @@
-﻿using GenFx;
+﻿using System;
+using System.Collections.Generic;
 using TestCommon.Helpers;
 using TestCommon.Mocks;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
+using Xunit;
 
 namespace GenFx.Tests
 {
@@ -11,23 +10,22 @@ namespace GenFx.Tests
     ///This is a test class for GenFx.SelectionOperator and is intended
     ///to contain all GenFx.SelectionOperator Unit Tests
     ///</summary>
-    [TestClass()]
     public class SelectionOperatorTest
     {
         /// <summary>
         /// Tests that an exception is thrown when a null algorithm is passed.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void SelectionOperator_Ctor_NullAlgorithm()
         {
             MockSelectionOperator op = new MockSelectionOperator();
-            AssertEx.Throws<ArgumentNullException>(() => op.Initialize(null));
+            Assert.Throws<ArgumentNullException>(() => op.Initialize(null));
         }
 
         /// <summary>
         /// Tests that the Select method works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void SelectionOperator_Select()
         {
             GeneticAlgorithm algorithm = GetAlgorithm();
@@ -42,14 +40,14 @@ namespace GenFx.Tests
             population.Entities.Add(entity1);
             population.Entities.Add(entity2);
             IList<GeneticEntity> selectedEntities = op.SelectEntities(1, population);
-            Assert.AreSame(entity1, selectedEntities[0], "Incorrect entity selected.");
-            Assert.AreEqual(1, op.DoSelectCallCount, "Selection not called correctly.");
+            Assert.Same(entity1, selectedEntities[0]);
+            Assert.Equal(1, op.DoSelectCallCount);
         }
 
         /// <summary>
         /// Tests that an exception is thrown when an empty population is passed.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void SelectionOperator_Select_EmptyPopulation()
         {
             GeneticAlgorithm algorithm = GetAlgorithm();
@@ -57,46 +55,48 @@ namespace GenFx.Tests
             op.Initialize(algorithm);
             MockPopulation population = new MockPopulation();
             population.Initialize(algorithm);
-            AssertEx.Throws<ArgumentException>(() => op.SelectEntities(1, population));
+            Assert.Throws<ArgumentException>(() => op.SelectEntities(1, population));
         }
 
         /// <summary>
         /// Tests that an exception is thrown when a null population is passed.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void SelectionOperator_Select_NullPopulation()
         {
             GeneticAlgorithm algorithm = GetAlgorithm();
             MockSelectionOperator op = new MockSelectionOperator();
             op.Initialize(algorithm);
-            AssertEx.Throws<ArgumentNullException>(() => op.SelectEntities(1, null));
+            Assert.Throws<ArgumentNullException>(() => op.SelectEntities(1, null));
         }
 
         /// <summary>
         /// Tests that the object can be serialized and deserialized.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void SelectionOperator_Serialization()
         {
-            MockSelectionOperator op = new MockSelectionOperator();
-            op.SelectionBasedOnFitnessType = FitnessType.Raw;
+            MockSelectionOperator op = new MockSelectionOperator
+            {
+                SelectionBasedOnFitnessType = FitnessType.Raw
+            };
 
             MockSelectionOperator result = (MockSelectionOperator)SerializationHelper.TestSerialization(op, new Type[0]);
 
-            Assert.AreEqual(op.SelectionBasedOnFitnessType, result.SelectionBasedOnFitnessType);
+            Assert.Equal(op.SelectionBasedOnFitnessType, result.SelectionBasedOnFitnessType);
         }
 
         /// <summary>
         /// Tests that an exception is thrown when the result of <see cref="SelectionOperator.SelectEntitiesFromPopulation"/>
         /// is null while executing <see cref="SelectionOperator.SelectEntities"/>.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void SelectionOperator_SelectEntities_NullSelectionResult()
         {
             MockSelectionOperator2 op = new MockSelectionOperator2();
             MockPopulation population = new MockPopulation();
             population.Entities.Add(new MockEntity());
-            AssertEx.Throws<InvalidOperationException>(() => op.SelectEntities(0, population));
+            Assert.Throws<InvalidOperationException>(() => op.SelectEntities(0, population));
         }
 
         private GeneticAlgorithm GetAlgorithm()

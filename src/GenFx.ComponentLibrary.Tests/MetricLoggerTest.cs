@@ -1,33 +1,30 @@
 ﻿using GenFx.ComponentLibrary.Plugins;
 using GenFx.Validation;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Diagnostics;
-using TestCommon.Helpers;
 using System;
+using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using TestCommon;
 using TestCommon.Mocks;
-using System.ComponentModel;
+using Xunit;
 
 namespace GenFx.ComponentLibrary.Tests
 {
     /// <summary>
     /// Contains unit tests for the <see cref="MetricLogger"/> class.
     /// </summary>
-    [TestClass]
-    public class MetricLoggerTest
+    public class MetricLoggerTest : IDisposable
     {
-        private TestTraceListener traceListener;
+        private readonly TestTraceListener traceListener;
 
-        [TestInitialize]
-        public void TestInitialize()
+        public MetricLoggerTest()
         {
             this.traceListener = new TestTraceListener();
             Trace.Listeners.Add(this.traceListener);
         }
 
-        [TestCleanup]
-        public void TestCleanup()
+        public void Dispose()
         {
             Trace.Listeners.Remove(this.traceListener);
         }
@@ -35,7 +32,7 @@ namespace GenFx.ComponentLibrary.Tests
         /// <summary>
         /// Tests that the <see cref="MetricLogger"/> can be validated successfully.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void MetricLogger_Validation()
         {
             MetricLogger logger = new MetricLogger
@@ -49,17 +46,17 @@ namespace GenFx.ComponentLibrary.Tests
         /// <summary>
         /// Tests that validation fails when no value is provided for <see cref="MetricLogger.TraceCategory"/>.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void MetricLogger_Validation_MissingTraceCategory()
         {
             MetricLogger logger = new MetricLogger();
-            AssertEx.Throws<ValidationException>(() => logger.Validate());
+            Assert.Throws<ValidationException>(() => logger.Validate());
         }
 
         /// <summary>
         /// Tests that the <see cref="MetricLogger.OnAlgorithmStarting"/> method works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void MetricLogger_AlgorithmStarting()
         {
             MetricLogger logger = new MetricLogger
@@ -67,19 +64,19 @@ namespace GenFx.ComponentLibrary.Tests
                 TraceCategory = "test"
             };
 
-            Assert.AreEqual(String.Empty, this.traceListener.Output.ToString());
+            Assert.Equal(String.Empty, this.traceListener.Output.ToString());
 
             PrivateObject accessor = new PrivateObject(logger);
             accessor.Invoke("OnAlgorithmStarting");
 
-            Assert.IsTrue(this.traceListener.Output.ToString().StartsWith(logger.TraceCategory));
-            Assert.IsTrue(this.traceListener.Output.ToString().Contains(Resources.MetricLogger_AlgorithmStarted));
+            Assert.StartsWith(logger.TraceCategory, this.traceListener.Output.ToString());
+            Assert.Contains(Resources.MetricLogger_AlgorithmStarted, this.traceListener.Output.ToString());
         }
 
         /// <summary>
         /// Tests that the <see cref="MetricLogger.OnAlgorithmCompleted"/> method works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void MetricLogger_AlgorithmCompleted()
         {
             MetricLogger logger = new MetricLogger
@@ -87,19 +84,19 @@ namespace GenFx.ComponentLibrary.Tests
                 TraceCategory = "test"
             };
 
-            Assert.AreEqual(String.Empty, this.traceListener.Output.ToString());
+            Assert.Equal(String.Empty, this.traceListener.Output.ToString());
 
             PrivateObject accessor = new PrivateObject(logger);
             accessor.Invoke("OnAlgorithmCompleted");
 
-            Assert.IsTrue(this.traceListener.Output.ToString().StartsWith(logger.TraceCategory));
-            Assert.IsTrue(this.traceListener.Output.ToString().Contains(Resources.MetricLogger_AlgorithmCompleted));
+            Assert.StartsWith(logger.TraceCategory, this.traceListener.Output.ToString());
+            Assert.Contains(Resources.MetricLogger_AlgorithmCompleted, this.traceListener.Output.ToString());
         }
 
         /// <summary>
         /// Tests that the <see cref="MetricLogger.OnFitnessEvaluated"/> method works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void MetricLogger_FitnessEvaluated()
         {
             MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm();
@@ -113,7 +110,7 @@ namespace GenFx.ComponentLibrary.Tests
             };
             logger.Initialize(algorithm);
 
-            Assert.AreEqual(String.Empty, this.traceListener.Output.ToString());
+            Assert.Equal(String.Empty, this.traceListener.Output.ToString());
             
             GeneticEnvironment environment = new GeneticEnvironment(algorithm);
             environment.Populations.Add(new MockPopulation { Index = 0 });
@@ -123,7 +120,7 @@ namespace GenFx.ComponentLibrary.Tests
             accessor.Invoke("OnFitnessEvaluated", environment, 0);
 
             string[] lines = this.traceListener.Output.ToString().Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
-            Assert.AreEqual(24, lines.Length);
+            Assert.Equal(24, lines.Length);
             this.VerifyMetricOutput(lines.Take(4).ToArray(), logger.TraceCategory, "Metric 1", "1:0", 0, 0);
             this.VerifyMetricOutput(lines.Skip(4).Take(4).ToArray(), logger.TraceCategory, "Metric 2", "2:0", 0, 0);
             this.VerifyMetricOutput(lines.Skip(8).Take(4).ToArray(), logger.TraceCategory, typeof(TestMetric3).FullName, "3:0", 0, 0);
@@ -135,21 +132,21 @@ namespace GenFx.ComponentLibrary.Tests
         /// <summary>
         /// Tests that an exception is thrown when passing a null environment to <see cref="MetricLogger.OnFitnessEvaluated"/>.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void MetricLogger_OnFitnessEvaluated_NullEnvironment()
         {
             MetricLogger logger = new MetricLogger();
             PrivateObject accessor = new PrivateObject(logger);
-            AssertEx.Throws<ArgumentNullException>(() => accessor.Invoke("OnFitnessEvaluated", null, 0));
+            Assert.Throws<ArgumentNullException>(() => accessor.Invoke("OnFitnessEvaluated", null, 0));
         }
 
         private void VerifyMetricOutput(string[] metricOutput, string traceCategory, string metricName, string metricValue, int populationIndex, int generationIndex)
         {
-            Assert.IsTrue(metricOutput[0].StartsWith(traceCategory));
-            Assert.IsTrue(metricOutput[0].Contains("Metric Name: " + metricName));
-            Assert.AreEqual("Metric Value: " + metricValue, metricOutput[1]);
-            Assert.AreEqual("Population Index: " + populationIndex, metricOutput[2]);
-            Assert.AreEqual("Generation Index: " + generationIndex, metricOutput[3]);
+            Assert.StartsWith(traceCategory, metricOutput[0]);
+            Assert.Contains("Metric Name: " + metricName, metricOutput[0]);
+            Assert.Equal("Metric Value: " + metricValue, metricOutput[1]);
+            Assert.Equal("Population Index: " + populationIndex, metricOutput[2]);
+            Assert.Equal("Generation Index: " + generationIndex, metricOutput[3]);
         }
 
         private class TestTraceListener : TraceListener

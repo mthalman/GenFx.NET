@@ -1,147 +1,18 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="14.0">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{5B7C3DF1-608D-4882-B44E-1C6DE3C54F4D}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>GenFx.Tests</RootNamespace>
-    <AssemblyName>GenFx.Tests</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
-    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
-    <ReferencePath>$(ProgramFiles)\Common Files\microsoft shared\VSTT\$(VisualStudioVersion)\UITestExtensionPackages</ReferencePath>
-    <IsCodedUITest>False</IsCodedUITest>
-    <TestProjectType>UnitTest</TestProjectType>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <IsPackable>false</IsPackable>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>../../build/GenFx.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Core">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System.Data" />
-    <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.Runtime.Serialization.Formatters.Soap" />
-    <Reference Include="System.Xml" />
-    <Reference Include="WindowsBase">
-      <RequiredTargetFramework>3.0</RequiredTargetFramework>
-    </Reference>
-  </ItemGroup>
-  <Choose>
-    <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
-      <ItemGroup>
-        <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
-      </ItemGroup>
-    </When>
-    <Otherwise>
-      <ItemGroup>
-        <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework" />
-      </ItemGroup>
-    </Otherwise>
-  </Choose>
-  <ItemGroup>
-    <Compile Include="CollectionExtensionsTest.cs" />
-    <Compile Include="ComparisonHelperTest.cs" />
-    <Compile Include="ComponentValidatorExtensionsTest.cs" />
-    <Compile Include="CustomExternalPropertyValidatorAttributeTest.cs" />
-    <Compile Include="CustomPropertyValidatorAttributeTest.cs" />
-    <Compile Include="CustomComponentValidatorAttributeTest.cs" />
-    <Compile Include="CustomExternalComponentValidatorAttributeTest.cs" />
-    <Compile Include="DefaultTerminatorTest.cs" />
-    <Compile Include="DoubleValidatorTest.cs" />
-    <Compile Include="EnumHelperTests.cs" />
-    <Compile Include="EnumValidatorTest.cs" />
-    <Compile Include="EnvironmentFitnessEvaluatedEventArgsTest.cs" />
-    <Compile Include="GeneticComponentExtensionsTest.cs" />
-    <Compile Include="GeneticComponentTest.cs" />
-    <Compile Include="GeneticEntityCollectionExtensionsTest.cs" />
-    <Compile Include="IntegerValidatorTest.cs" />
-    <Compile Include="PluginTest.cs" />
-    <Compile Include="PropertyValidatorExtensionsTest.cs" />
-    <Compile Include="RandomNumberServiceTest.cs" />
-    <Compile Include="RequiredComponentTypeValidatorTest.cs" />
-    <Compile Include="RequiredExternalValidatorAttributeTest.cs" />
-    <Compile Include="RequiredGeneticAlgorithmAttributeTest.cs" />
-    <Compile Include="RequiredGeneticAlgorithmValidatorTest.cs" />
-    <Compile Include="RequiredValidatorTest.cs" />
-    <Compile Include="MetricResultTest.cs" />
-    <Compile Include="StringExtensions.cs" />
-    <Compile Include="CrossoverOperatorTest.cs" />
-    <Compile Include="ElitismStrategyTest.cs" />
-    <Compile Include="ExternalValidatorAttributeHelperTest.cs" />
-    <Compile Include="GeneticEnvironmentTest.cs" />
-    <Compile Include="FitnessEvaluatorTest.cs" />
-    <Compile Include="FitnessScalingStrategyTest.cs" />
-    <Compile Include="GeneticAlgorithmTest.cs" />
-    <Compile Include="GeneticEntityCollectionTest.cs" />
-    <Compile Include="GeneticEntityTest.cs" />
-    <Compile Include="MutationOperatorTest.cs" />
-    <Compile Include="PopulationTest.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RandomUtilTest.cs" />
-    <Compile Include="RequiredComponentTypeAttributeTest.cs" />
-    <Compile Include="SelectionOperatorTest.cs" />
-    <Compile Include="SettingValidatorAttributeTest.cs" />
-    <Compile Include="MetricTest.cs" />
-    <Compile Include="StringUtilTest.cs" />
-    <Compile Include="TerminatorTest.cs" />
-    <Compile Include="ValidationExceptionTest.cs" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.3.0" />
+    <PackageReference Include="Moq" Version="4.10.1" />
+    <PackageReference Include="xunit" Version="2.4.1" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.1" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\GenFx\GenFx.csproj">
-      <Project>{919af5af-702b-4d89-a4a4-0c94cfaf8f95}</Project>
-      <Name>GenFx</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\TestCommon\TestCommon.csproj">
-      <Project>{0e55a8d0-81ad-46d0-a08c-635cfe14a8f8}</Project>
-      <Name>TestCommon</Name>
-    </ProjectReference>
+    <ProjectReference Include="..\GenFx\GenFx.csproj" />
+    <ProjectReference Include="..\TestCommon\TestCommon.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <BootstrapperPackage Include=".NETFramework,Version=v4.0">
-      <Visible>False</Visible>
-      <ProductName>Microsoft .NET Framework 4 %28x86 and x64%29</ProductName>
-      <Install>true</Install>
-    </BootstrapperPackage>
-    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
-      <Visible>False</Visible>
-      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
-      <Install>false</Install>
-    </BootstrapperPackage>
-    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
-      <Visible>False</Visible>
-      <ProductName>.NET Framework 3.5 SP1</ProductName>
-      <Install>false</Install>
-    </BootstrapperPackage>
-    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
-      <Visible>False</Visible>
-      <ProductName>Windows Installer 3.1</ProductName>
-      <Install>true</Install>
-    </BootstrapperPackage>
-  </ItemGroup>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />
 </Project>

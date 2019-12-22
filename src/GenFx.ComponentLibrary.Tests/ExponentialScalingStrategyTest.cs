@@ -1,10 +1,10 @@
-﻿using GenFx;
-using GenFx.ComponentLibrary.Populations;
+﻿using GenFx.ComponentLibrary.Populations;
 using GenFx.ComponentLibrary.Scaling;
+using System;
+using TestCommon;
 using TestCommon.Helpers;
 using TestCommon.Mocks;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
+using Xunit;
 
 namespace GenFx.ComponentLibrary.Tests
 {
@@ -12,23 +12,22 @@ namespace GenFx.ComponentLibrary.Tests
     /// This is a test class for GenFx.ComponentLibrary.Scaling.ExponentialScalingStrategy and is intended
     /// to contain all GenFx.ComponentLibrary.Scaling.ExponentialScalingStrategy Unit Tests
     /// </summary>
-    [TestClass()]
     public class ExponentialScalingStrategyTest
     {
         /// <summary>
         /// Tests that an exception is thrown when a null algorithm is passed.
         /// </summary>
-        [TestMethod()]
+        [Fact]
         public void ExponentialScalingStrategy_Ctor_NullAlgorithm()
         {
             ExponentialScalingStrategy strategy = new ExponentialScalingStrategy();
-            AssertEx.Throws<ArgumentNullException>(() => strategy.Initialize(null));
+            Assert.Throws<ArgumentNullException>(() => strategy.Initialize(null));
         }
 
         /// <summary>
         /// Tests that the Scale method works correctly.
         /// </summary>
-        [TestMethod()]
+        [Fact]
         public void ExponentialScalingStrategy_Scale()
         {
             GeneticAlgorithm algorithm = GetAlgorithm(2);
@@ -49,33 +48,35 @@ namespace GenFx.ComponentLibrary.Tests
             population.Entities.Add(entity2);
             target.Scale(population);
 
-            Assert.AreEqual((double)25, entity1.ScaledFitnessValue, "ScaledFitnessValue not set correctly.");
-            Assert.AreEqual((double)49, entity2.ScaledFitnessValue, "ScaledFitnessValue not set correctly.");
+            Assert.Equal((double)25, entity1.ScaledFitnessValue);
+            Assert.Equal((double)49, entity2.ScaledFitnessValue);
         }
 
         /// <summary>
         /// Tests that the object can be serialized and deserialized.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void ExponentialScalingStrategy_Serialization()
         {
-            ExponentialScalingStrategy strategy = new ExponentialScalingStrategy();
-            strategy.ScalingPower = 5;
+            ExponentialScalingStrategy strategy = new ExponentialScalingStrategy
+            {
+                ScalingPower = 5
+            };
 
             ExponentialScalingStrategy result = (ExponentialScalingStrategy)SerializationHelper.TestSerialization(strategy, new Type[0]);
 
-            Assert.AreEqual(5, result.ScalingPower);
+            Assert.Equal(5, result.ScalingPower);
         }
 
         /// <summary>
         /// Tests that an exception is thrown when passing a null population to <see cref="ExponentialScalingStrategy.UpdateScaledFitnessValues"/>.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void ExponentialScalingStrategy_UpdateScaledFitnessValues_NullPopulation()
         {
             ExponentialScalingStrategy strategy = new ExponentialScalingStrategy();
             PrivateObject accessor = new PrivateObject(strategy);
-            AssertEx.Throws<ArgumentNullException>(() => accessor.Invoke("UpdateScaledFitnessValues", (Population)null));
+            Assert.Throws<ArgumentNullException>(() => accessor.Invoke("UpdateScaledFitnessValues", (Population)null));
         }
 
         private static GeneticAlgorithm GetAlgorithm(double scalingPower)

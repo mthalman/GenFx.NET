@@ -1,73 +1,66 @@
-﻿using GenFx;
-using GenFx.Validation;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using GenFx.Validation;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TestCommon.Helpers;
+using Xunit;
 
 namespace GenFx.Tests
 {
     /// <summary>
     /// Contains unit tests for the <see cref="CustomPropertyValidatorAttribute"/> class.
     /// </summary>
-    [TestClass]
     public class CustomPropertyValidatorAttributeTest
     {
         /// <summary>
         /// Tests that the constructor initializes the state correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void CustomPropertyValidatorAttribute_Ctor_ParameterlessCtor()
         {
             CustomPropertyValidatorAttribute attrib = new CustomPropertyValidatorAttribute(typeof(CustomValidator));
-            Assert.AreEqual(typeof(CustomValidator), attrib.ValidatorType);
-            Assert.IsInstanceOfType(attrib.Validator, typeof(CustomValidator));
-            Assert.AreEqual(0, attrib.ValidatorConstructorArguments.Length);
+            Assert.Equal(typeof(CustomValidator), attrib.ValidatorType);
+            Assert.IsType<CustomValidator>(attrib.Validator);
+            Assert.Empty(attrib.ValidatorConstructorArguments);
         }
 
         /// <summary>
         /// Tests that the constructor initializes the state correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void CustomPropertyValidatorAttribute_Ctor_ParameterizedCtor()
         {
             CustomPropertyValidatorAttribute attrib =
                 new CustomPropertyValidatorAttribute(typeof(CustomValidator2), 1, "test");
-            Assert.AreEqual(typeof(CustomValidator2), attrib.ValidatorType);
-            Assert.IsInstanceOfType(attrib.Validator, typeof(CustomValidator2));
-            CollectionAssert.AreEqual(new object[] { 1, "test" }, attrib.ValidatorConstructorArguments);
+            Assert.Equal(typeof(CustomValidator2), attrib.ValidatorType);
+            Assert.IsType<CustomValidator2>(attrib.Validator);
+            Assert.Equal(new object[] { 1, "test" }, attrib.ValidatorConstructorArguments);
         }
 
         /// <summary>
         /// Tests that an exception is thrown when a null validator type is passed to the constructor.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void CustomPropertyValidatorAttribute_Ctor_NullValidatorType()
         {
-            AssertEx.Throws<ArgumentNullException>(() => new CustomPropertyValidatorAttribute(null));
-            AssertEx.Throws<ArgumentNullException>(() => new CustomPropertyValidatorAttribute(null, 1, 2));
+            Assert.Throws<ArgumentNullException>(() => new CustomPropertyValidatorAttribute(null));
+            Assert.Throws<ArgumentNullException>(() => new CustomPropertyValidatorAttribute(null, 1, 2));
         }
 
         /// <summary>
         /// Tests that an exception is thrown when an invalid validator type is passed to the constructor.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void CustomPropertyValidatorAttribute_Ctor_InvalidValidatorType()
         {
-            AssertEx.Throws<ArgumentException>(() => new CustomPropertyValidatorAttribute(typeof(int)));
+            Assert.Throws<ArgumentException>(() => new CustomPropertyValidatorAttribute(typeof(int)));
         }
 
         /// <summary>
         /// Tests that an exception is thrown approriately the validator constructor throws an exception.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void CustomPropertyValidatorAttribute_Validator_ExceptionOnValidatorCtor()
         {
             CustomPropertyValidatorAttribute attrib = new CustomPropertyValidatorAttribute(typeof(CustomValidator3));
-            AssertEx.Throws<FormatException>(() => { object x = attrib.Validator; });
+            Assert.Throws<FormatException>(() => { object x = attrib.Validator; });
         }
 
         private class CustomValidator : PropertyValidator

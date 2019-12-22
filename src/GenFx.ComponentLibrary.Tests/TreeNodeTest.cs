@@ -1,23 +1,23 @@
 ﻿using GenFx.ComponentLibrary.Trees;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Reflection;
 using System.Runtime.Serialization;
+using TestCommon;
 using TestCommon.Helpers;
 using TestCommon.Mocks;
+using Xunit;
 
 namespace GenFx.ComponentLibrary.Tests
 {
     /// <summary>
     /// Contains unit tests for the <see cref="TreeNode"/> class.
     ///</summary>
-    [TestClass]
     public class TreeNodeTest
     {
         /// <summary>
         /// Tests that the AppendChild method works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void TreeNode_AppendChild()
         {
             GeneticAlgorithm algorithm = GetAlgorithm();
@@ -28,36 +28,36 @@ namespace GenFx.ComponentLibrary.Tests
 
             TreeNode child = new TreeNode();
             node.AppendChild(child);
-            Assert.AreSame(child, node.ChildNodes[0], "Child not appended correctly.");
-            Assert.AreSame(node, child.ParentNode, "Parent not set correctly.");
-            Assert.AreSame(entity, child.Tree, "Tree not set correctly.");
+            Assert.Same(child, node.ChildNodes[0]);
+            Assert.Same(node, child.ParentNode);
+            Assert.Same(entity, child.Tree);
         }
 
         /// <summary>
         /// Tests an exception is thrown when passing a null node.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void TreeNode_AppendChild_NullNode()
         {
             TreeNode node = new TreeNode();
-            AssertEx.Throws<ArgumentNullException>(() => node.AppendChild(null));
+            Assert.Throws<ArgumentNullException>(() => node.AppendChild(null));
         }
 
         /// <summary>
         /// Tests an exception is thrown when passing a null node.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void TreeNode_AppendChildCore_NullNode()
         {
             TreeNode node = new TreeNode();
             PrivateObject accessor = new PrivateObject(node);
-            AssertEx.Throws<ArgumentNullException>(() => accessor.Invoke("AppendChildCore", (TreeNode)null));
+            Assert.Throws<ArgumentNullException>(() => accessor.Invoke("AppendChildCore", (TreeNode)null));
         }
 
         /// <summary>
         /// Tests that the InsertChild method works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void TreeNode_InsertChild()
         {
             GeneticAlgorithm algorithm = GetAlgorithm();
@@ -71,18 +71,18 @@ namespace GenFx.ComponentLibrary.Tests
             node.InsertChild(0, child1);
             node.InsertChild(0, child2);
 
-            Assert.AreSame(child2, node.ChildNodes[0], "Child not inserted correctly.");
-            Assert.AreSame(node, child2.ParentNode, "Parent not set correctly.");
-            Assert.AreSame(entity, child2.Tree, "Tree not set correctly.");
-            Assert.AreSame(child1, node.ChildNodes[1], "Child not inserted correctly.");
-            Assert.AreSame(node, child1.ParentNode, "Parent not set correctly.");
-            Assert.AreSame(entity, child1.Tree, "Tree not set correctly.");
+            Assert.Same(child2, node.ChildNodes[0]);
+            Assert.Same(node, child2.ParentNode);
+            Assert.Same(entity, child2.Tree);
+            Assert.Same(child1, node.ChildNodes[1]);
+            Assert.Same(node, child1.ParentNode);
+            Assert.Same(entity, child1.Tree);
         }
 
         /// <summary>
         /// Tests that an exception is thrown when a child is inserted with a parent not assigned to a tree.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void TreeNode_InsertChild_NoTree()
         {
             GeneticAlgorithm algorithm = GetAlgorithm();
@@ -91,34 +91,34 @@ namespace GenFx.ComponentLibrary.Tests
             TreeNode node = new TreeNode();
 
             TreeNode child1 = new TreeNode();
-            AssertEx.Throws<InvalidOperationException>(() => node.InsertChild(0, child1));
+            Assert.Throws<InvalidOperationException>(() => node.InsertChild(0, child1));
         }
 
         /// <summary>
         /// Tests an exception is thrown when passing a null node.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void TreeNode_InsertChild_NullNode()
         {
             TreeNode node = new TreeNode();
-            AssertEx.Throws<ArgumentNullException>(() => node.InsertChild(0, null));
+            Assert.Throws<ArgumentNullException>(() => node.InsertChild(0, null));
         }
 
         /// <summary>
         /// Tests an exception is thrown when passing a null node.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void TreeNode_InsertChildCore_NullNode()
         {
             TreeNode node = new TreeNode();
             PrivateObject accessor = new PrivateObject(node);
-            AssertEx.Throws<ArgumentNullException>(() => accessor.Invoke("InsertChildCore", BindingFlags.Instance | BindingFlags.NonPublic, 0, (TreeNode)null));
+            Assert.Throws<ArgumentNullException>(() => accessor.Invoke("InsertChildCore", 0, (TreeNode)null));
         }
 
         /// <summary>
         /// Tests that the Clone method works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void TreeNode_Clone()
         {
             GeneticAlgorithm algorithm = GetAlgorithm();
@@ -134,27 +134,27 @@ namespace GenFx.ComponentLibrary.Tests
             newEntity.SetRootNode(newParent);
             TreeNode clone = node.Clone(newEntity, newParent);
 
-            Assert.AreNotSame(node, clone, "Nodes should not be same instance.");
-            Assert.AreNotSame(node.ChildNodes[0], clone.ChildNodes[0], "Nodes should not be same instance.");
-            Assert.AreSame(newEntity, clone.Tree, "Tree not set correctly.");
-            Assert.AreSame(newParent, clone.ParentNode, "Parent node not set correctly.");
-            Assert.AreEqual(node.Value, clone.Value, "Value not set correctly.");
+            Assert.NotSame(node, clone);
+            Assert.NotSame(node.ChildNodes[0], clone.ChildNodes[0]);
+            Assert.Same(newEntity, clone.Tree);
+            Assert.Same(newParent, clone.ParentNode);
+            Assert.Equal(node.Value, clone.Value);
         }
 
         /// <summary>
         /// Tests an exception is thrown when passing a null tree.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void TreeNode_Clone_NullTree()
         {
             TreeNode node = new TreeNode();
-            AssertEx.Throws<ArgumentNullException>(() => node.Clone(null, new TreeNode()));
+            Assert.Throws<ArgumentNullException>(() => node.Clone(null, new TreeNode()));
         }
 
         /// <summary>
         /// Tests that the CopyTo method works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void TreeNode_CopyTo()
         {
             GeneticAlgorithm algorithm = GetAlgorithm();
@@ -171,62 +171,64 @@ namespace GenFx.ComponentLibrary.Tests
             TreeNode newNode = new TreeNode();
             node.CopyTo(newNode, newEntity, newParent);
 
-            Assert.AreSame(newEntity, newNode.Tree, "Tree not set correctly.");
-            Assert.AreSame(newParent, newNode.ParentNode, "ParentNode not set correctly.");
-            Assert.AreNotSame(node.ChildNodes[0], newNode.ChildNodes[0], "Nodes should not be same instance.");
-            Assert.AreEqual(node.Value, newNode.Value, "Value not set correctly.");
+            Assert.Same(newEntity, newNode.Tree);
+            Assert.Same(newParent, newNode.ParentNode);
+            Assert.NotSame(node.ChildNodes[0], newNode.ChildNodes[0]);
+            Assert.Equal(node.Value, newNode.Value);
         }
 
         /// <summary>
         /// Tests an exception is thrown when passing a null node.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void TreeNode_CopyTo_NullNode()
         {
             TreeNode node = new TreeNode();
-            AssertEx.Throws<ArgumentNullException>(() => node.CopyTo(null, new TestTreeEntity(), new TreeNode()));
+            Assert.Throws<ArgumentNullException>(() => node.CopyTo(null, new TestTreeEntity(), new TreeNode()));
         }
 
         /// <summary>
         /// Tests an exception is thrown when passing a null tree.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void TreeNode_CopyTo_NullTree()
         {
             TreeNode node = new TreeNode();
-            AssertEx.Throws<ArgumentNullException>(() => node.CopyTo(new TreeNode(), null, new TreeNode()));
+            Assert.Throws<ArgumentNullException>(() => node.CopyTo(new TreeNode(), null, new TreeNode()));
         }
 
         /// <summary>
         /// Tests that the object can be serialized and deserialized.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void TreeNode_Serialization()
         {
-            TreeNode node = new TreeNode();
-            node.Value = 3;
-            node.ParentNode = new TreeNode();
-            node.Tree = new TestTreeEntity();
+            TreeNode node = new TreeNode
+            {
+                Value = 3,
+                ParentNode = new TreeNode(),
+                Tree = new TestTreeEntity()
+            };
             node.ChildNodes.Add(new TreeNode());
 
             TreeNode result = (TreeNode)SerializationHelper.TestSerialization(node, new Type[] {
                 typeof(TestTreeEntity)
             });
 
-            Assert.AreEqual(node.Value, result.Value);
-            Assert.IsInstanceOfType(node.ParentNode, typeof(TreeNode));
-            Assert.IsInstanceOfType(node.Tree, typeof(TestTreeEntity));
-            Assert.IsInstanceOfType(node.ChildNodes[0], typeof(TreeNode));
+            Assert.Equal(node.Value, result.Value);
+            Assert.IsType<TreeNode>(node.ParentNode);
+            Assert.IsType<TestTreeEntity>(node.Tree);
+            Assert.IsType<TreeNode>(node.ChildNodes[0]);
         }
 
         /// <summary>
         /// Tests that an exception is thrown when trying to set <see cref="TreeNode.Value"/> to an invalid value.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void TreeNode_InvalidValue()
         {
             TreeNode node = new TreeNode();
-            AssertEx.Throws<ArgumentException>(() => node.Value = new TreeNodeTest());
+            Assert.Throws<ArgumentException>(() => node.Value = new TreeNodeTest());
         }
 
         private static GeneticAlgorithm GetAlgorithm()

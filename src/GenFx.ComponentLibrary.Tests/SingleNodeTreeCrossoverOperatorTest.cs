@@ -1,23 +1,19 @@
-﻿using GenFx;
-using GenFx.ComponentLibrary.Trees;
-using TestCommon.Mocks;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using GenFx.ComponentLibrary.Trees;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using TestCommon.Helpers;
+using TestCommon;
+using TestCommon.Mocks;
+using Xunit;
 
 namespace GenFx.ComponentLibrary.Tests
 {
     /// <summary>
     /// Contains unit tests for the <see cref="SingleNodeTreeCrossoverOperator"/> class.
     ///</summary>
-    [TestClass()]
-    public class SingleNodeTreeCrossoverOperatorTest
+    public class SingleNodeTreeCrossoverOperatorTest : IDisposable
     {
-        [TestCleanup]
-        public void Cleanup()
+        public void Dispose()
         {
             RandomNumberService.Instance = new RandomNumberService();
         }
@@ -25,7 +21,7 @@ namespace GenFx.ComponentLibrary.Tests
         /// <summary>
         /// Tests that the Crossover method works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void SingleNodeTreeCrossoverOperator_Crossover()
         {
             GeneticAlgorithm algorithm = new MockGeneticAlgorithm
@@ -64,32 +60,32 @@ namespace GenFx.ComponentLibrary.Tests
             FakeTreeNode rootNode1 = (FakeTreeNode)((TreeEntityBase)result[0]).RootNode;
             FakeTreeNode rootNode2 = (FakeTreeNode)((TreeEntityBase)result[1]).RootNode;
 
-            Assert.AreEqual(1, rootNode1.Value, "Wrong TreeNode.");
-            Assert.AreEqual(3, rootNode1.ChildNodes.Count, "Incorrect number of children.");
-            Assert.AreEqual(2, rootNode1.ChildNodes[0].Value, "Wrong TreeNode.");
-            Assert.AreEqual(7, rootNode1.ChildNodes[1].Value, "Wrong TreeNode.");
-            Assert.AreEqual(1, rootNode1.ChildNodes[1].ChildNodes.Count, "Incorrect number of children.");
-            Assert.AreEqual(8, rootNode1.ChildNodes[1].ChildNodes[0].Value, "Wrong TreeNode.");
-            Assert.AreEqual(1, rootNode1.ChildNodes[1].ChildNodes[0].ChildNodes.Count, "Incorrect number of children.");
-            Assert.AreEqual(9, rootNode1.ChildNodes[1].ChildNodes[0].ChildNodes[0].Value, "Wrong TreeNode.");
-            Assert.AreEqual(5, rootNode1.ChildNodes[2].Value, "Wrong TreeNode.");
+            Assert.Equal(1, rootNode1.Value);
+            Assert.Equal(3, rootNode1.ChildNodes.Count);
+            Assert.Equal(2, rootNode1.ChildNodes[0].Value);
+            Assert.Equal(7, rootNode1.ChildNodes[1].Value);
+            Assert.Single(rootNode1.ChildNodes[1].ChildNodes);
+            Assert.Equal(8, rootNode1.ChildNodes[1].ChildNodes[0].Value);
+            Assert.Single(rootNode1.ChildNodes[1].ChildNodes[0].ChildNodes);
+            Assert.Equal(9, rootNode1.ChildNodes[1].ChildNodes[0].ChildNodes[0].Value);
+            Assert.Equal(5, rootNode1.ChildNodes[2].Value);
 
-            Assert.AreEqual(6, rootNode2.Value, "Wrong TreeNode.");
-            Assert.AreEqual(1, rootNode2.ChildNodes.Count, "Incorrect number of children.");
-            Assert.AreEqual(3, rootNode2.ChildNodes[0].Value, "Wrong TreeNode.");
-            Assert.AreEqual(1, rootNode2.ChildNodes[0].ChildNodes.Count, "Incorrect number of children.");
-            Assert.AreEqual(4, rootNode2.ChildNodes[0].ChildNodes[0].Value, "Wrong TreeNode.");
+            Assert.Equal(6, rootNode2.Value);
+            Assert.Single(rootNode2.ChildNodes);
+            Assert.Equal(3, rootNode2.ChildNodes[0].Value);
+            Assert.Single(rootNode2.ChildNodes[0].ChildNodes);
+            Assert.Equal(4, rootNode2.ChildNodes[0].ChildNodes[0].Value);
         }
 
         /// <summary>
         /// Tests that an exception is thrown when passing null parents.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void SingleNodeTreeCrossoverOperator_GenerateCrossover_NullParents()
         {
             SingleNodeTreeCrossoverOperator op = new SingleNodeTreeCrossoverOperator();
             PrivateObject accessor = new PrivateObject(op);
-            AssertEx.Throws<ArgumentNullException>(() => accessor.Invoke("GenerateCrossover", (IList<GeneticEntity>)null));
+            Assert.Throws<ArgumentNullException>(() => accessor.Invoke("GenerateCrossover", (IList<GeneticEntity>)null));
         }
 
         private class TestRandomUtil : IRandomNumberService
@@ -102,13 +98,13 @@ namespace GenFx.ComponentLibrary.Tests
                 switch (this.callCount)
                 {
                     case 1:
-                        Assert.AreEqual(5, maxValue, "TreeSize is incorrect.");
+                        Assert.Equal(5, maxValue);
                         return 2;
                     case 2:
-                        Assert.AreEqual(4, maxValue, "TreeSize is incorrect.");
+                        Assert.Equal(4, maxValue);
                         return 1;
                     default:
-                        Assert.Fail("GetRandomValue should not be called this many times.");
+                        Assert.False(true, "GetRandomValue should not be called this many times.");
                         return 0;
                 }
             }

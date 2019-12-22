@@ -1,25 +1,18 @@
-﻿using GenFx;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TestCommon.Helpers;
+﻿using System;
 using TestCommon.Mocks;
+using Xunit;
 
 namespace GenFx.Tests
 {
     /// <summary>
     /// Contains unit tests for the <see cref="EnvironmentFitnessEvaluatedEventArgs"/> class.
     /// </summary>
-    [TestClass]
     public class EnvironmentFitnessEvaluatedEventArgsTest
     {
         /// <summary>
         /// Tests that the constructor initializes the state correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void EnvironmentFitnessEvaluatedEventArgs_Constructor()
         {
             GeneticEnvironment environment = new GeneticEnvironment(new MockGeneticAlgorithm());
@@ -27,29 +20,29 @@ namespace GenFx.Tests
             EnvironmentFitnessEvaluatedEventArgs args = new EnvironmentFitnessEvaluatedEventArgs(
                 environment, generationIndex);
 
-            Assert.AreSame(environment, args.Environment);
-            Assert.AreEqual(generationIndex, args.GenerationIndex);
+            Assert.Same(environment, args.Environment);
+            Assert.Equal(generationIndex, args.GenerationIndex);
         }
 
         /// <summary>
         /// Tests that an exception is thrown in an invalid generation index is passed.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void EnvironmentFitnessEvaluatedEventArgs_InvalidGenerationIndex()
         {
             GeneticEnvironment environment = new GeneticEnvironment(new MockGeneticAlgorithm());
             int generationIndex = -1;
-            AssertEx.Throws<ArgumentException>(() => new EnvironmentFitnessEvaluatedEventArgs(
+            Assert.Throws<ArgumentOutOfRangeException>(() => new EnvironmentFitnessEvaluatedEventArgs(
                 environment, generationIndex));
         }
 
         /// <summary>
         /// Tests that an exception is thrown in an invalid generation index is passed.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void EnvironmentFitnessEvaluatedEventArgs_NullEnvironment()
         {
-            AssertEx.Throws<ArgumentNullException>(() => new EnvironmentFitnessEvaluatedEventArgs(
+            Assert.Throws<ArgumentNullException>(() => new EnvironmentFitnessEvaluatedEventArgs(
                 null, 0));
         }
     }

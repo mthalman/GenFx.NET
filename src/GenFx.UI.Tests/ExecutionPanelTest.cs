@@ -1,44 +1,49 @@
 ﻿using GenFx.UI.Controls;
 using GenFx.UI.Tests.Helpers;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Xunit;
 
 namespace GenFx.UI.Tests
 {
     /// <summary>
     /// Contains unit tests for the <see cref="ExecutionPanel"/> class.
     /// </summary>
-    [TestClass]
     public class ExecutionPanelTest
     {
         /// <summary>
         /// Tests that the ctor initializes the state correctly.
         /// </summary>
-        [TestMethod]
+        [StaFact]
         public void ExecutionPanel_Ctor()
         {
             ExecutionPanel panel = new ExecutionPanel();
-            Assert.AreEqual(4, panel.CommandBindings.Count);
-            CollectionAssert.AreEquivalent(
+            Assert.Equal(4, panel.CommandBindings.Count);
+            Assert.Equal(
                 new RoutedCommand[]
                 {
                     ExecutionPanel.StartExecutionCommand,
                     ExecutionPanel.StepExecutionCommand,
                     ExecutionPanel.PauseExecutionCommand,
                     ExecutionPanel.StopExecutionCommand,
-                },
-                panel.CommandBindings.Cast<CommandBinding>().Select(c => c.Command).ToList());            
+                }
+                .OrderBy(c => c.Name),
+                panel.CommandBindings
+                    .Cast<CommandBinding>()
+                    .Select(c => c.Command)
+                    .Cast<RoutedCommand>()
+                    .OrderBy(c => c.Name)
+                    .ToList());            
         }
 
         /// <summary>
         /// Tests that the control responds correctly to the <see cref="ExecutionPanel.ExecutionContext"/> property being set.
         /// </summary>
-        [TestMethod]
+        [StaFact]
         public void ExecutionPanel_ExecutionContext()
         {
             ExecutionPanel panel = new ExecutionPanel();
@@ -47,21 +52,21 @@ namespace GenFx.UI.Tests
             context.ExecutionState = ExecutionState.Running;
             panel.ExecutionContext = context;
 
-            Assert.IsFalse(panel.CanStart);
-            Assert.IsTrue(panel.CanStop);
-            Assert.IsTrue(panel.CanPause);
+            Assert.False(panel.CanStart);
+            Assert.True(panel.CanStop);
+            Assert.True(panel.CanPause);
 
             // Verify an event handler was added to respond to the context changing its ExecutionState
             context.ExecutionState = ExecutionState.Idle;
-            Assert.IsTrue(panel.CanStart);
-            Assert.IsFalse(panel.CanStop);
-            Assert.IsFalse(panel.CanPause);
+            Assert.True(panel.CanStart);
+            Assert.False(panel.CanStop);
+            Assert.False(panel.CanPause);
         }
 
         /// <summary>
         /// Tests that the control responds correctly to the <see cref="ExecutionPanel.ExecutionContext"/> property being set.
         /// </summary>
-        [TestMethod]
+        [StaFact]
         public void ExecutionPanel_ExecutionContext_Overwrite()
         {
             ExecutionPanel panel = new ExecutionPanel();
@@ -85,38 +90,38 @@ namespace GenFx.UI.Tests
             
             panel.ExecutionContext = context2;
 
-            Assert.IsFalse(panel.CanStart);
-            Assert.IsTrue(panel.CanStop);
-            Assert.IsTrue(panel.CanPause);
+            Assert.False(panel.CanStart);
+            Assert.True(panel.CanStop);
+            Assert.True(panel.CanPause);
 
             // Verify the panel does not respond to the original context changing
             context.ExecutionState = ExecutionState.Idle;
-            Assert.IsFalse(panel.CanStart);
-            Assert.IsTrue(panel.CanStop);
-            Assert.IsTrue(panel.CanPause);
+            Assert.False(panel.CanStart);
+            Assert.True(panel.CanStop);
+            Assert.True(panel.CanPause);
 
             // Verify the panel does respond to the new context changing
             context2.ExecutionState = ExecutionState.Idle;
-            Assert.IsTrue(panel.CanStart);
-            Assert.IsFalse(panel.CanStop);
-            Assert.IsFalse(panel.CanPause);
+            Assert.True(panel.CanStart);
+            Assert.False(panel.CanStop);
+            Assert.False(panel.CanPause);
         }
 
         /// <summary>
         /// Tests that the <see cref="ExecutionPanel.StartExecutionCommand"/> works correctly.
         /// </summary>
-        [TestMethod]
+        [StaFact]
         public void ExecutionPanel_StartExecutionCommand_CanExecute_NoContext()
         {
             ExecutionPanel panel = new ExecutionPanel();
             bool result = ExecutionPanel.StartExecutionCommand.CanExecute(null, panel);
-            Assert.IsFalse(result);
+            Assert.False(result);
         }
 
         /// <summary>
         /// Tests that the <see cref="ExecutionPanel.StartExecutionCommand"/> works correctly.
         /// </summary>
-        [TestMethod]
+        [StaFact]
         public void ExecutionPanel_StartExecutionCommand_CanExecute_WithContext()
         {
             ExecutionPanel panel = new ExecutionPanel();
@@ -131,10 +136,10 @@ namespace GenFx.UI.Tests
                 {
                     case ExecutionState.Idle:
                     case ExecutionState.Paused:
-                        Assert.IsTrue(result);
+                        Assert.True(result);
                         break;
                     default:
-                        Assert.IsFalse(result);
+                        Assert.False(result);
                         break;
                 }
             }
@@ -143,7 +148,7 @@ namespace GenFx.UI.Tests
         /// <summary>
         /// Tests that the <see cref="ExecutionPanel.StartExecutionCommand"/> works correctly.
         /// </summary>
-        [TestMethod]
+        [StaFact]
         public void ExecutionPanel_StartExecutionCommand_Execute()
         {
             ExecutionPanel panel = new ExecutionPanel();
@@ -155,7 +160,7 @@ namespace GenFx.UI.Tests
             // Since the command kicks off an unawaitable Task, wait for just a second to let it finish.
             Thread.Sleep(50);
 
-            Assert.AreEqual(ExecutionState.Running, panel.ExecutionContext.ExecutionState);
+            Assert.Equal(ExecutionState.Running, panel.ExecutionContext.ExecutionState);
 
             // Trigger the algorithm to complete
             ((TestTerminator)panel.ExecutionContext.GeneticAlgorithm.Terminator).IsCompleteValue = true;
@@ -167,18 +172,18 @@ namespace GenFx.UI.Tests
         /// <summary>
         /// Tests that the <see cref="ExecutionPanel.StepExecutionCommand"/> works correctly.
         /// </summary>
-        [TestMethod]
+        [StaFact]
         public void ExecutionPanel_StepExecutionCommand_CanExecute_NoContext()
         {
             ExecutionPanel panel = new ExecutionPanel();
             bool result = ExecutionPanel.StepExecutionCommand.CanExecute(null, panel);
-            Assert.IsFalse(result);
+            Assert.False(result);
         }
 
         /// <summary>
         /// Tests that the <see cref="ExecutionPanel.StepExecutionCommand"/> works correctly.
         /// </summary>
-        [TestMethod]
+        [StaFact]
         public void ExecutionPanel_StepExecutionCommand_CanExecute_WithContext()
         {
             ExecutionPanel panel = new ExecutionPanel();
@@ -193,10 +198,10 @@ namespace GenFx.UI.Tests
                 {
                     case ExecutionState.Idle:
                     case ExecutionState.Paused:
-                        Assert.IsTrue(result);
+                        Assert.True(result);
                         break;
                     default:
-                        Assert.IsFalse(result);
+                        Assert.False(result);
                         break;
                 }
             }
@@ -205,7 +210,7 @@ namespace GenFx.UI.Tests
         /// <summary>
         /// Tests that the <see cref="ExecutionPanel.StepExecutionCommand"/> works correctly.
         /// </summary>
-        [TestMethod]
+        [StaFact]
         public void ExecutionPanel_StepExecutionCommand_Execute()
         {
             ExecutionPanel panel = new ExecutionPanel();
@@ -219,24 +224,24 @@ namespace GenFx.UI.Tests
             Thread.Sleep(50);
             DispatcherHelper.DoEvents();
 
-            Assert.AreEqual(ExecutionState.Paused, panel.ExecutionContext.ExecutionState);
+            Assert.Equal(ExecutionState.Paused, panel.ExecutionContext.ExecutionState);
         }
 
         /// <summary>
         /// Tests that the <see cref="ExecutionPanel.PauseExecutionCommand"/> works correctly.
         /// </summary>
-        [TestMethod]
+        [StaFact]
         public void ExecutionPanel_PauseExecutionCommand_CanExecute_NoContext()
         {
             ExecutionPanel panel = new ExecutionPanel();
             bool result = ExecutionPanel.PauseExecutionCommand.CanExecute(null, panel);
-            Assert.IsFalse(result);
+            Assert.False(result);
         }
 
         /// <summary>
         /// Tests that the <see cref="ExecutionPanel.PauseExecutionCommand"/> works correctly.
         /// </summary>
-        [TestMethod]
+        [StaFact]
         public void ExecutionPanel_PauseExecutionCommand_CanExecute_WithContext()
         {
             ExecutionPanel panel = new ExecutionPanel();
@@ -250,10 +255,10 @@ namespace GenFx.UI.Tests
                 switch (enumVal)
                 {
                     case ExecutionState.Running:
-                        Assert.IsTrue(result);
+                        Assert.True(result);
                         break;
                     default:
-                        Assert.IsFalse(result);
+                        Assert.False(result);
                         break;
                 }
             }
@@ -262,7 +267,7 @@ namespace GenFx.UI.Tests
         /// <summary>
         /// Tests that the <see cref="ExecutionPanel.PauseExecutionCommand"/> works correctly.
         /// </summary>
-        [TestMethod]
+        [StaFact]
         public void ExecutionPanel_PauseExecutionCommand_Execute()
         {
             ExecutionPanel panel = new ExecutionPanel();
@@ -272,24 +277,24 @@ namespace GenFx.UI.Tests
 
             ExecutionPanel.PauseExecutionCommand.Execute(null, panel);
 
-            Assert.AreEqual(ExecutionState.PausePending, panel.ExecutionContext.ExecutionState);
+            Assert.Equal(ExecutionState.PausePending, panel.ExecutionContext.ExecutionState);
         }
 
         /// <summary>
         /// Tests that the <see cref="ExecutionPanel.StopExecutionCommand"/> works correctly.
         /// </summary>
-        [TestMethod]
+        [StaFact]
         public void ExecutionPanel_StopExecutionCommand_CanExecute_NoContext()
         {
             ExecutionPanel panel = new ExecutionPanel();
             bool result = ExecutionPanel.StopExecutionCommand.CanExecute(null, panel);
-            Assert.IsFalse(result);
+            Assert.False(result);
         }
 
         /// <summary>
         /// Tests that the <see cref="ExecutionPanel.StopExecutionCommand"/> works correctly.
         /// </summary>
-        [TestMethod]
+        [StaFact]
         public void ExecutionPanel_StopExecutionCommand_CanExecute_WithContext()
         {
             ExecutionPanel panel = new ExecutionPanel();
@@ -304,10 +309,10 @@ namespace GenFx.UI.Tests
                 {
                     case ExecutionState.Running:
                     case ExecutionState.Paused:
-                        Assert.IsTrue(result);
+                        Assert.True(result);
                         break;
                     default:
-                        Assert.IsFalse(result);
+                        Assert.False(result);
                         break;
                 }
             }
@@ -316,7 +321,7 @@ namespace GenFx.UI.Tests
         /// <summary>
         /// Tests that the <see cref="ExecutionPanel.StopExecutionCommand"/> works correctly.
         /// </summary>
-        [TestMethod]
+        [StaFact]
         public void ExecutionPanel_StopExecutionCommand_Execute_FromRunning()
         {
             ExecutionPanel panel = new ExecutionPanel();
@@ -326,13 +331,13 @@ namespace GenFx.UI.Tests
 
             ExecutionPanel.StopExecutionCommand.Execute(null, panel);
 
-            Assert.AreEqual(ExecutionState.IdlePending, panel.ExecutionContext.ExecutionState);
+            Assert.Equal(ExecutionState.IdlePending, panel.ExecutionContext.ExecutionState);
         }
 
         /// <summary>
         /// Tests that the <see cref="ExecutionPanel.StopExecutionCommand"/> works correctly.
         /// </summary>
-        [TestMethod]
+        [StaFact]
         public void ExecutionPanel_StopExecutionCommand_Execute_FromPaused()
         {
             ExecutionPanel panel = new ExecutionPanel();
@@ -342,7 +347,7 @@ namespace GenFx.UI.Tests
 
             ExecutionPanel.StopExecutionCommand.Execute(null, panel);
 
-            Assert.AreEqual(ExecutionState.Idle, panel.ExecutionContext.ExecutionState);
+            Assert.Equal(ExecutionState.Idle, panel.ExecutionContext.ExecutionState);
         }
 
         private static GeneticAlgorithm CreateTestAlgorithm(bool runsInfinitely = false)

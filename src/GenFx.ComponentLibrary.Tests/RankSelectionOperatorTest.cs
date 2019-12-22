@@ -1,14 +1,12 @@
-﻿using GenFx;
-using GenFx.ComponentLibrary.Populations;
+﻿using GenFx.ComponentLibrary.Populations;
 using GenFx.ComponentLibrary.SelectionOperators;
-using TestCommon.Mocks;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using TestCommon.Helpers;
 using System.Reflection;
+using TestCommon;
+using TestCommon.Mocks;
+using Xunit;
 
 namespace GenFx.ComponentLibrary.Tests
 {
@@ -16,12 +14,9 @@ namespace GenFx.ComponentLibrary.Tests
     ///This is a test class for GenFx.ComponentLibrary.SelectionOperators.RankSelectionOperator and is intended
     ///to contain all GenFx.ComponentLibrary.SelectionOperators.RankSelectionOperator Unit Tests
     ///</summary>
-    [TestClass()]
-    public class RankSelectionOperatorTest
+    public class RankSelectionOperatorTest : IDisposable
     {
-
-        [TestCleanup]
-        public void Cleanup()
+        public void Dispose()
         {
             RandomNumberService.Instance = new RandomNumberService();
         }
@@ -29,7 +24,7 @@ namespace GenFx.ComponentLibrary.Tests
         /// <summary>
         /// Tests that the Select method works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void RankSelectionOperator_Select()
         {
             GeneticAlgorithm algorithm = GetAlgorithm();
@@ -59,46 +54,46 @@ namespace GenFx.ComponentLibrary.Tests
 
             randomUtil.Ratio = 0;
             IList<GeneticEntity> selectedEntities = op.SelectEntities(1, population).ToList();
-            Assert.AreSame(entity1, selectedEntities[0], "Incorrect entity seleceted.");
+            Assert.Same(entity1, selectedEntities[0]);
 
             randomUtil.Ratio = .099999;
             selectedEntities = op.SelectEntities(1, population);
-            Assert.AreSame(entity1, selectedEntities[0], "Incorrect entity seleceted.");
+            Assert.Same(entity1, selectedEntities[0]);
 
             randomUtil.Ratio = .1;
             selectedEntities = op.SelectEntities(1, population);
-            Assert.AreSame(entity3, selectedEntities[0], "Incorrect entity seleceted.");
+            Assert.Same(entity3, selectedEntities[0]);
 
             randomUtil.Ratio = .299999;
             selectedEntities = op.SelectEntities(1, population);
-            Assert.AreSame(entity3, selectedEntities[0], "Incorrect entity seleceted.");
+            Assert.Same(entity3, selectedEntities[0]);
 
             randomUtil.Ratio = .3;
             selectedEntities = op.SelectEntities(1, population);
-            Assert.AreSame(entity4, selectedEntities[0], "Incorrect entity seleceted.");
+            Assert.Same(entity4, selectedEntities[0]);
 
             randomUtil.Ratio = .599999;
             selectedEntities = op.SelectEntities(1, population);
-            Assert.AreSame(entity4, selectedEntities[0], "Incorrect entity seleceted.");
+            Assert.Same(entity4, selectedEntities[0]);
 
             randomUtil.Ratio = .6;
             selectedEntities = op.SelectEntities(1, population);
-            Assert.AreSame(entity2, selectedEntities[0], "Incorrect entity seleceted.");
+            Assert.Same(entity2, selectedEntities[0]);
 
             randomUtil.Ratio = 1;
             selectedEntities = op.SelectEntities(1, population);
-            Assert.AreSame(entity2, selectedEntities[0], "Incorrect entity seleceted.");
+            Assert.Same(entity2, selectedEntities[0]);
         }
 
         /// <summary>
         /// Tests that an exception is thrown when passing a null population to <see cref="RankSelectionOperator.SelectEntitiesFromPopulation"/>.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void RankSelectionOperator_SelectEntitiesFromPopulation_NullPopulation()
         {
             RankSelectionOperator op = new RankSelectionOperator();
             PrivateObject accessor = new PrivateObject(op);
-            AssertEx.Throws<ArgumentNullException>(() => accessor.Invoke("SelectEntitiesFromPopulation", BindingFlags.Instance | BindingFlags.NonPublic, (int)0, (Population)null));
+            Assert.Throws<ArgumentNullException>(() => accessor.Invoke("SelectEntitiesFromPopulation", (int)0, (Population)null));
         }
 
         private static GeneticAlgorithm GetAlgorithm()

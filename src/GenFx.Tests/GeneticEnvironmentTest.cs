@@ -1,11 +1,9 @@
-﻿using GenFx;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System;
 using System.Threading.Tasks;
+using TestCommon;
 using TestCommon.Helpers;
 using TestCommon.Mocks;
+using Xunit;
 
 namespace GenFx.Tests
 {
@@ -13,13 +11,12 @@ namespace GenFx.Tests
     /// This is a test class for GenFx.GeneticEnvironment and is intended
     /// to contain all GenFx.GeneticEnvironment Unit Tests
     ///</summary>
-    [TestClass()]
     public class GeneticEnvironmentTest
     {
         /// <summary>
         /// Tests that EvaluateFitness works correctly.
         /// </summary>
-        [TestMethod()]
+        [Fact]
         public async Task GeneticEnvironment_EvaluateFitness_Async()
         {
             GeneticAlgorithm algorithm = new MockGeneticAlgorithm
@@ -52,7 +49,7 @@ namespace GenFx.Tests
         /// <summary>
         /// Tests that Generate works correctly.
         /// </summary>
-        [TestMethod()]
+        [Fact]
         public async Task GeneticEnvironment_Initialize_Async()
         {
             int environmentSize = 2;
@@ -76,20 +73,20 @@ namespace GenFx.Tests
 
             await environment.InitializeAsync();
 
-            Assert.AreEqual(environmentSize, environment.Populations.Count, "Incorrect number of populations created.");
+            Assert.Equal(environmentSize, environment.Populations.Count);
 
             for (int i = 0; i < environmentSize; i++)
             {
-                Assert.AreEqual(i, environment.Populations[i].Index, "Population {0}: Index not set correctly.", i);
-                Assert.IsInstanceOfType(environment.Populations[i], typeof(MockPopulation), "Population {0}: Incorrect population type created.", i);
-                Assert.AreEqual(populationSize, environment.Populations[i].Entities.Count, "Population {0}: Incorrect number of genetic entities created.", i);
+                Assert.Equal(i, environment.Populations[i].Index);
+                Assert.IsType<MockPopulation>(environment.Populations[i]);
+                Assert.Equal(populationSize, environment.Populations[i].Entities.Count);
             }
         }
 
         /// <summary>
         /// Tests that the object can be serialized and deserialized.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void GeneticEnvironment_Serialization()
         {
             GeneticEnvironment environment = new GeneticEnvironment(new MockGeneticAlgorithm());
@@ -101,10 +98,10 @@ namespace GenFx.Tests
                 typeof(MockPopulation)
             });
 
-            Assert.IsInstanceOfType(result.Populations[0], typeof(MockPopulation));
+            Assert.IsType<MockPopulation>(result.Populations[0]);
 
             PrivateObject privObj = new PrivateObject(environment);
-            Assert.IsInstanceOfType(privObj.GetField("algorithm"), typeof(MockGeneticAlgorithm));
+            Assert.IsType<MockGeneticAlgorithm>(privObj.GetField("algorithm"));
         }
 
         private static MockPopulation GetPopulation(GeneticAlgorithm algorithm)
@@ -124,11 +121,11 @@ namespace GenFx.Tests
 
         private static void VerifyFitnessEvaluation(MockPopulation population)
         {
-            Assert.AreEqual("5", ((MockEntity)population.Entities[0]).Identifier, "Entity was not sorted correctly.");
-            Assert.AreEqual("2", ((MockEntity)population.Entities[1]).Identifier, "Entity was not sorted correctly.");
+            Assert.Equal("5", ((MockEntity)population.Entities[0]).Identifier);
+            Assert.Equal("2", ((MockEntity)population.Entities[1]).Identifier);
 
-            Assert.AreEqual((double)5, population.Entities[0].RawFitnessValue, "Fitness value was not evaluated correctly.");
-            Assert.AreEqual((double)2, population.Entities[1].RawFitnessValue, "Fitness value was not evaluated correctly.");
+            Assert.Equal((double)5, population.Entities[0].RawFitnessValue);
+            Assert.Equal((double)2, population.Entities[1].RawFitnessValue);
         }
     }
 }

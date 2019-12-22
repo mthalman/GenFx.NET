@@ -1,10 +1,10 @@
-﻿using GenFx;
-using GenFx.ComponentLibrary.Terminators;
+﻿using GenFx.ComponentLibrary.Terminators;
 using GenFx.Validation;
+using System;
+using TestCommon;
 using TestCommon.Helpers;
 using TestCommon.Mocks;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
+using Xunit;
 
 namespace GenFx.ComponentLibrary.Tests
 {
@@ -12,33 +12,32 @@ namespace GenFx.ComponentLibrary.Tests
     /// This is a test class for GenFx.ComponentLibrary.Terminators.GenerationalTerminator and is intended
     /// to contain all GenFx.ComponentLibrary.Terminators.GenerationalTerminator Unit Tests
     /// </summary>
-    [TestClass()]
     public class GenerationalTerminatorTest
     {
         /// <summary>
         /// Tests that an exception is thrown when an invalid value is used for a required setting.
         /// </summary>
-        [TestMethod()]
+        [Fact]
         public void GenerationalTerminator_Ctor_InvalidSetting1()
         {
             GenerationalTerminator config = new GenerationalTerminator();
-            AssertEx.Throws<ValidationException>(() => config.FinalGeneration = -1);
+            Assert.Throws<ValidationException>(() => config.FinalGeneration = -1);
         }
 
         /// <summary>
         /// Tests that an exception is thrown when an invalid value is used for a required setting.
         /// </summary>
-        [TestMethod()]
+        [Fact]
         public void GenerationalTerminator_Ctor_InvalidSetting2()
         {
             GenerationalTerminator config = new GenerationalTerminator();
-            AssertEx.Throws<ValidationException>(() => config.FinalGeneration = 0);
+            Assert.Throws<ValidationException>(() => config.FinalGeneration = 0);
         }
 
         /// <summary>
         /// Tests that the IsComplete method works correctly.
         /// </summary>
-        [TestMethod()]
+        [Fact]
         public void GenerationalTerminator_IsComplete()
         {
             int finalGeneration = 10;
@@ -46,17 +45,17 @@ namespace GenFx.ComponentLibrary.Tests
             PrivateObject accessor = new PrivateObject(algorithm, new PrivateType(typeof(GeneticAlgorithm)));
             GenerationalTerminator terminator = (GenerationalTerminator)algorithm.Terminator;
             terminator.Initialize(algorithm);
-            Assert.IsFalse(terminator.IsComplete(), "Should not be complete at generation 0.");
+            Assert.False(terminator.IsComplete(), "Should not be complete at generation 0.");
             accessor.SetField("currentGeneration", (int)accessor.GetField("currentGeneration") + 1);
-            Assert.IsFalse(terminator.IsComplete(), "Should not be complete at generation 1.");
+            Assert.False(terminator.IsComplete(), "Should not be complete at generation 1.");
             accessor.SetField("currentGeneration", finalGeneration);
-            Assert.IsTrue(terminator.IsComplete(), "Should be complete.");
+            Assert.True(terminator.IsComplete(), "Should be complete.");
         }
 
         /// <summary>
         /// Tests that the object can be serialized and deserialized.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void GenerationalTerminator_Serialization()
         {
             GenerationalTerminator terminator = new GenerationalTerminator();
@@ -64,7 +63,7 @@ namespace GenFx.ComponentLibrary.Tests
 
             GenerationalTerminator result = (GenerationalTerminator)SerializationHelper.TestSerialization(terminator, new Type[0]);
 
-            Assert.AreEqual(terminator.FinalGeneration, result.FinalGeneration);
+            Assert.Equal(terminator.FinalGeneration, result.FinalGeneration);
         }
 
         private static GeneticAlgorithm GetAlgorithm(int finalGeneration)

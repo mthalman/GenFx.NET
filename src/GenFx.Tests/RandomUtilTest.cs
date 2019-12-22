@@ -1,22 +1,13 @@
-﻿using GenFx;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Xunit;
 
 namespace GenFx.Tests
 {
-    /// <summary>
-    ///This is a test class for GenFx.GARandom and is intended
-    ///to contain all GenFx.GARandom Unit Tests
-    ///</summary>
-    [TestClass()]
     public class RandomUtilTest
     {
         /// <summary>
         /// Tests that the GetRandomValue method works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void RandomUtil_GetRandomValue()
         {
             int num1 = RandomNumberService.Instance.GetRandomValue(100);
@@ -28,18 +19,18 @@ namespace GenFx.Tests
                 num2 = RandomNumberService.Instance.GetRandomValue(100);
             }
 
-            Assert.AreNotEqual(num1, num2, "Numbers should probably be different.");
+            Assert.NotEqual(num1, num2);
         }
 
         /// <summary>
         /// Tests that the GetRandomRatio method works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void RandomUtil_GetRandomRatio()
         {
             double num1 = RandomNumberService.Instance.GetDouble();
             double num2 = RandomNumberService.Instance.GetDouble();
-            Assert.AreNotEqual(num1, num2, "Numbers should probably be different.");
+            Assert.NotEqual(num1, num2);
         }
     }
 

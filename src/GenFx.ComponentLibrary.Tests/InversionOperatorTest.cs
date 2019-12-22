@@ -1,20 +1,17 @@
-﻿using GenFx;
-using GenFx.ComponentLibrary.Lists;
-using TestCommon.Mocks;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using GenFx.ComponentLibrary.Lists;
 using System;
-using TestCommon.Helpers;
+using TestCommon;
+using TestCommon.Mocks;
+using Xunit;
 
 namespace GenFx.ComponentLibrary.Tests
 {
     /// <summary>
     /// Contains unit tests for the <see cref="InversionOperator"/> class.
     ///</summary>
-    [TestClass]
-    public class InversionOperatorTest
+    public class InversionOperatorTest : IDisposable
     {
-        [TestCleanup]
-        public void Cleanup()
+        public void Dispose()
         {
             RandomNumberService.Instance = new RandomNumberService();
         }
@@ -22,7 +19,7 @@ namespace GenFx.ComponentLibrary.Tests
         /// <summary>
         /// Tests that the Mutate method works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void InversionOperator_Mutate()
         {
             GeneticAlgorithm algorithm = new MockGeneticAlgorithm
@@ -58,15 +55,15 @@ namespace GenFx.ComponentLibrary.Tests
 
             GeneticEntity mutant = op.Mutate(entity);
 
-            Assert.AreEqual("1011", mutant.Representation, "Mutation not called correctly.");
-            Assert.AreEqual(0, mutant.Age, "Age should have been reset.");
+            Assert.Equal("1011", mutant.Representation);
+            Assert.Equal(0, mutant.Age);
         }
 
         /// <summary>
         /// Tests that the <see cref="InversionOperator.GenerateMutation"/> method works correctly
         /// when no mutation occurs.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void InversionOperator_GenerateMutation_NoMutation()
         {
             InversionOperator op = new InversionOperator
@@ -76,18 +73,18 @@ namespace GenFx.ComponentLibrary.Tests
 
             PrivateObject accessor = new PrivateObject(op);
             bool result = (bool)accessor.Invoke("GenerateMutation", new BinaryStringEntity());
-            Assert.IsFalse(result);
+            Assert.False(result);
         }
 
         /// <summary>
         /// Tests that an exception is thrown when a null entity is passed to <see cref="InversionOperator.GenerateMutation"/>.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void InversionOperator_GenerateMutation_NullEntity()
         {
             InversionOperator op = new InversionOperator();
             PrivateObject accessor = new PrivateObject(op);
-            AssertEx.Throws<ArgumentNullException>(() => accessor.Invoke("GenerateMutation", (GeneticEntity)null));
+            Assert.Throws<ArgumentNullException>(() => accessor.Invoke("GenerateMutation", (GeneticEntity)null));
         }
 
         private class FakeRandomUtil : IRandomNumberService

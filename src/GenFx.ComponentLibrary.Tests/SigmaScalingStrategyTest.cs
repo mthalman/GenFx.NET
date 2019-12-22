@@ -1,11 +1,11 @@
-﻿using GenFx;
-using GenFx.ComponentLibrary.Populations;
+﻿using GenFx.ComponentLibrary.Populations;
 using GenFx.ComponentLibrary.Scaling;
 using GenFx.Validation;
+using System;
+using TestCommon;
 using TestCommon.Helpers;
 using TestCommon.Mocks;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
+using Xunit;
 
 namespace GenFx.ComponentLibrary.Tests
 {
@@ -13,33 +13,32 @@ namespace GenFx.ComponentLibrary.Tests
     ///This is a test class for GenFx.ComponentLibrary.Scaling.SigmaScalingStrategy and is intended
     ///to contain all GenFx.ComponentLibrary.Scaling.SigmaScalingStrategy Unit Tests
     ///</summary>
-    [TestClass()]
     public class SigmaScalingStrategyTest
     {
         /// <summary>
         /// Tests that an exception is thrown when a null algorithm is passed.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void SigmaScalingStrategy_Ctor_NullAlgorithm()
         {
             SigmaScalingStrategy strategy = new SigmaScalingStrategy();
-            AssertEx.Throws<ArgumentNullException>(() => strategy.Initialize(null));
+            Assert.Throws<ArgumentNullException>(() => strategy.Initialize(null));
         }
 
         /// <summary>
         /// Tests that an exception is thrown when an invalid value is used for the SigmaScalingMultiplier setting.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void SigmaScalingStrategy_Ctor_InvalidSetting()
         {
             SigmaScalingStrategy config = new SigmaScalingStrategy();
-            AssertEx.Throws<ValidationException>(() => config.Multiplier = -2);
+            Assert.Throws<ValidationException>(() => config.Multiplier = -2);
         }
 
         /// <summary>
         /// Tests that the Scale method works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void SigmaScalingStrategy_Scale_Multiplier5()
         {
             GeneticAlgorithm algorithm = GetAlgorithm(5);
@@ -58,16 +57,16 @@ namespace GenFx.ComponentLibrary.Tests
 
             strategy.Scale(population);
 
-            Assert.AreEqual(33.17, Math.Round(population.Entities[0].ScaledFitnessValue, 2), "ScaledFitnessValue not calculated correctly.");
-            Assert.AreEqual(39.17, Math.Round(population.Entities[1].ScaledFitnessValue, 2), "ScaledFitnessValue not calculated correctly.");
-            Assert.AreEqual(49.17, Math.Round(population.Entities[2].ScaledFitnessValue, 2), "ScaledFitnessValue not calculated correctly.");
-            Assert.AreEqual(29.17, Math.Round(population.Entities[3].ScaledFitnessValue, 2), "ScaledFitnessValue not calculated correctly.");
+            Assert.Equal(33.17, Math.Round(population.Entities[0].ScaledFitnessValue, 2));
+            Assert.Equal(39.17, Math.Round(population.Entities[1].ScaledFitnessValue, 2));
+            Assert.Equal(49.17, Math.Round(population.Entities[2].ScaledFitnessValue, 2));
+            Assert.Equal(29.17, Math.Round(population.Entities[3].ScaledFitnessValue, 2));
         }
 
         /// <summary>
         /// Tests that the Scale method works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void SigmaScalingStrategy_Scale_Multiplier1()
         {
             GeneticAlgorithm algorithm = GetAlgorithm(5);
@@ -86,16 +85,16 @@ namespace GenFx.ComponentLibrary.Tests
 
             strategy.Scale(population);
 
-            Assert.AreEqual(3.03, Math.Round(population.Entities[0].ScaledFitnessValue, 2), "ScaledFitnessValue not calculated correctly.");
-            Assert.AreEqual(9.03, Math.Round(population.Entities[1].ScaledFitnessValue, 2), "ScaledFitnessValue not calculated correctly.");
-            Assert.AreEqual(19.03, Math.Round(population.Entities[2].ScaledFitnessValue, 2), "ScaledFitnessValue not calculated correctly.");
-            Assert.AreEqual(0, Math.Round(population.Entities[3].ScaledFitnessValue, 2), "ScaledFitnessValue not calculated correctly.");
+            Assert.Equal(3.03, Math.Round(population.Entities[0].ScaledFitnessValue, 2));
+            Assert.Equal(9.03, Math.Round(population.Entities[1].ScaledFitnessValue, 2));
+            Assert.Equal(19.03, Math.Round(population.Entities[2].ScaledFitnessValue, 2));
+            Assert.Equal(0, Math.Round(population.Entities[3].ScaledFitnessValue, 2));
         }
 
         /// <summary>
         /// Tests that an exception is thrown when an empty population is passed.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void SigmaScalingStrategy_Scale_EmptyPopulation()
         {
             GeneticAlgorithm algorithm = GetAlgorithm(10);
@@ -103,44 +102,46 @@ namespace GenFx.ComponentLibrary.Tests
             op.Initialize(algorithm);
             SimplePopulation population = new SimplePopulation();
             population.Initialize(algorithm);
-            AssertEx.Throws<ArgumentException>(() => op.Scale(population));
+            Assert.Throws<ArgumentException>(() => op.Scale(population));
         }
 
         /// <summary>
         /// Tests that an exception is thrown when a null population is passed.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void SigmaScalingStrategy_Scale_NullPopulation()
         {
             GeneticAlgorithm algorithm = GetAlgorithm(10);
             SigmaScalingStrategy op = new SigmaScalingStrategy();
             op.Initialize(algorithm);
-            AssertEx.Throws<ArgumentNullException>(() => op.Scale(null));
+            Assert.Throws<ArgumentNullException>(() => op.Scale(null));
         }
 
         /// <summary>
         /// Tests that the object can be serialized and deserialized.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void SigmaScalingStrategy_Serialization()
         {
-            SigmaScalingStrategy strategy = new SigmaScalingStrategy();
-            strategy.Multiplier = 11;
+            SigmaScalingStrategy strategy = new SigmaScalingStrategy
+            {
+                Multiplier = 11
+            };
 
             SigmaScalingStrategy result = (SigmaScalingStrategy)SerializationHelper.TestSerialization(strategy, new Type[0]);
 
-            Assert.AreEqual(strategy.Multiplier, result.Multiplier);
+            Assert.Equal(strategy.Multiplier, result.Multiplier);
         }
 
         /// <summary>
         /// Tests that an exception is thrown when passing a null population to <see cref="SigmaScalingStrategy.UpdateScaledFitnessValues"/>.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void SigmaScalingStrategy_UpdateScaledFitnessValues_NullPopulation()
         {
             SigmaScalingStrategy strategy = new SigmaScalingStrategy();
             PrivateObject accessor = new PrivateObject(strategy);
-            AssertEx.Throws<ArgumentNullException>(() => accessor.Invoke("UpdateScaledFitnessValues", (Population)null));
+            Assert.Throws<ArgumentNullException>(() => accessor.Invoke("UpdateScaledFitnessValues", (Population)null));
         }
 
         private void AddEntity(GeneticAlgorithm algorithm, double fitness, Population population)

@@ -1,21 +1,19 @@
 ﻿using GenFx.Validation;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Reflection;
-using TestCommon.Helpers;
+using Xunit;
 
 namespace GenFx.Tests
 {
     /// <summary>
     /// Contains unit tests for the <see cref="GeneticComponent"/> class.
     /// </summary>
-    [TestClass]
     public class GeneticComponentTest
     {
         /// <summary>
         /// Verifies that the <see cref="GeneticComponent.PropertyChanged"/> event is raised correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void GeneticComponent_OnPropertyChanged()
         {
             TestComponent component = new TestComponent();
@@ -26,41 +24,41 @@ namespace GenFx.Tests
             component.PropertyChanged += (sender, args) =>
             {
                 eventRaised = true;
-                Assert.AreEqual(propertyName, args.PropertyName);
+                Assert.Equal(propertyName, args.PropertyName);
             };
 
             component.TestOnPropertyChanged(propertyName);
 
-            Assert.IsTrue(eventRaised);
+            Assert.True(eventRaised);
         }
 
         /// <summary>
         /// Tests that an exception is thrown when a null or emtpty property name is passed to <see cref="GeneticComponent.OnPropertyChanged"/>.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void GeneticComponent_OnPropertyChanged_NullOrEmptyPropertyName()
         {
             TestComponent component = new TestComponent();
-            AssertEx.Throws<ArgumentException>(() => component.TestOnPropertyChanged(null));
-            AssertEx.Throws<ArgumentException>(() => component.TestOnPropertyChanged(String.Empty));
+            Assert.Throws<ArgumentException>(() => component.TestOnPropertyChanged(null));
+            Assert.Throws<ArgumentException>(() => component.TestOnPropertyChanged(String.Empty));
         }
 
         /// <summary>
         /// Verifies that the <see cref="GeneticComponent.CreateNew"/> method works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void GeneticComponent_CreateNew()
         {
             TestComponent component = new TestComponent();
             GeneticComponent component2 = component.CreateNew();
-            Assert.IsInstanceOfType(component2, typeof(TestComponent));
-            Assert.AreNotSame(component, component2);
+            Assert.IsType<TestComponent>(component2);
+            Assert.NotSame(component, component2);
         }
 
         /// <summary>
         /// Verifies that the <see cref="GeneticComponent.SetProperty"/> method works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void GeneticComponent_SetProperty()
         {
             TestComponent component = new TestComponent();
@@ -69,20 +67,20 @@ namespace GenFx.Tests
             component.PropertyChanged += (sender, args) =>
             {
                 eventRaised = true;
-                Assert.AreEqual(nameof(TestComponent.IntValue), args.PropertyName);
+                Assert.Equal(nameof(TestComponent.IntValue), args.PropertyName);
             };
 
             component.IntValue = 10;
-            Assert.IsTrue(eventRaised);
+            Assert.True(eventRaised);
 
             // Set the property to an invalid value to ensure validation is executed.
-            AssertEx.Throws<ValidationException>(() => component.IntValue = 11);
+            Assert.Throws<ValidationException>(() => component.IntValue = 11);
         }
 
         /// <summary>
         /// Verifies that the <see cref="GeneticComponent.ValidateProperty(object, string)"/> method works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void GeneticComponent_ValidateProperty_Name()
         {
             TestComponent component = new TestComponent();
@@ -91,37 +89,37 @@ namespace GenFx.Tests
             component.TestValidateProperty(1, nameof(component.IntValue));
 
             // is not valid
-            AssertEx.Throws<ValidationException>(() => component.TestValidateProperty(11, nameof(component.IntValue)));
+            Assert.Throws<ValidationException>(() => component.TestValidateProperty(11, nameof(component.IntValue)));
         }
 
         /// <summary>
         /// Verifies that an exception is thrown when passing a null or empty property name to
         /// <see cref="GeneticComponent.ValidateProperty(object, string)"/>.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void GeneticComponent_ValidateProperty_Name_NullOrEmptyPropertyName()
         {
             TestComponent component = new TestComponent();
-            AssertEx.Throws<ArgumentException>(() => component.TestValidateProperty(1, (string)null));
+            Assert.Throws<ArgumentException>(() => component.TestValidateProperty(1, (string)null));
 
-            AssertEx.Throws<ArgumentException>(() => component.TestValidateProperty(1, String.Empty));
+            Assert.Throws<ArgumentException>(() => component.TestValidateProperty(1, String.Empty));
         }
 
         /// <summary>
         /// Verifies that an exception is thrown when passing property name of a property that doesn't
         /// exist to <see cref="GeneticComponent.ValidateProperty(object, string)"/>.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void GeneticComponent_ValidateProperty_Name_NonExistentProperty()
         {
             TestComponent component = new TestComponent();
-            AssertEx.Throws<ArgumentException>(() => component.TestValidateProperty(1, "Nothing"));
+            Assert.Throws<ArgumentException>(() => component.TestValidateProperty(1, "Nothing"));
         }
 
         /// <summary>
         /// Verifies that the <see cref="GeneticComponent.ValidateProperty(object, PropertyInfo)"/> method works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void GeneticComponent_ValidateProperty_PropertyInfo()
         {
             TestComponent component = new TestComponent();
@@ -130,24 +128,24 @@ namespace GenFx.Tests
             component.TestValidateProperty(1, nameof(component.IntValue));
 
             // is not valid
-            AssertEx.Throws<ValidationException>(() => component.TestValidateProperty(11, component.GetType().GetProperty(nameof(component.IntValue))));
+            Assert.Throws<ValidationException>(() => component.TestValidateProperty(11, component.GetType().GetProperty(nameof(component.IntValue))));
         }
 
         /// <summary>
         /// Verifies that an exception is thrown when passing a null or empty property name to
         /// <see cref="GeneticComponent.ValidateProperty(object, PropertyInfo)"/>.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void GeneticComponent_ValidateProperty_PropertyInfo_NullOrEmptyPropertyName()
         {
             TestComponent component = new TestComponent();
-            AssertEx.Throws<ArgumentNullException>(() => component.TestValidateProperty(1, (PropertyInfo)null));
+            Assert.Throws<ArgumentNullException>(() => component.TestValidateProperty(1, (PropertyInfo)null));
         }
 
         /// <summary>
         /// Verifies that the <see cref="GeneticComponent.Validate"/> method works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void GeneticComponent_Validate()
         {
             TestComponent component = new TestComponent();
@@ -157,13 +155,13 @@ namespace GenFx.Tests
             component.Validate();
 
             component = new TestComponent();
-            AssertEx.Throws<ValidationException>(() => component.Validate());
+            Assert.Throws<ValidationException>(() => component.Validate());
 
             component = new TestComponent();
             component.IntValue = 5;
             component.IntValue2 = 1;
 
-            AssertEx.Throws<ValidationException>(() => component.Validate());
+            Assert.Throws<ValidationException>(() => component.Validate());
         }
 
         [CustomComponentValidator(typeof(TestComponentValidator))]

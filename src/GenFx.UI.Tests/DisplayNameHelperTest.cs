@@ -1,12 +1,11 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.ComponentModel;
+﻿using System.ComponentModel;
+using Xunit;
 
 namespace GenFx.UI.Tests
 {
     /// <summary>
     /// Contains unit tests for the <see cref="DisplayNameHelper"/> class.
     /// </summary>
-    [TestClass]
     public class DisplayNameHelperTest
     {
         private const string TestClassDisplayName = "my test class";
@@ -16,43 +15,43 @@ namespace GenFx.UI.Tests
         /// Tests that the <see cref="DisplayNameHelper.GetDisplayName"/> method returns the correct value
         /// when the object's type has a <see cref="DisplayNameAttribute"/>.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void DisplayNameHelper_GetDisplayName_DisplayNameAttribute()
         {
             string result = DisplayNameHelper.GetDisplayName(new TestClass());
-            Assert.AreEqual(TestClassDisplayName, result);
+            Assert.Equal(TestClassDisplayName, result);
         }
 
         /// <summary>
         /// Tests that the <see cref="DisplayNameHelper.GetDisplayName"/> method returns the correct value
         /// when the object's type overrides <see cref="object.ToString"/>.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void DisplayNameHelper_GetDisplayName_ToString()
         {
             string result = DisplayNameHelper.GetDisplayName(new TestClass2());
-            Assert.AreEqual(TestClass2DisplayName, result);
+            Assert.Equal(TestClass2DisplayName, result);
         }
 
         /// <summary>
         /// Tests that the <see cref="DisplayNameHelper.GetDisplayName"/> method returns the correct value
         /// when the object has no explicit definition of display name.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void DisplayNameHelper_GetDisplayName_Default()
         {
             string result = DisplayNameHelper.GetDisplayName(new TestClass3());
-            Assert.AreEqual(nameof(TestClass3), result);
+            Assert.Equal(nameof(TestClass3), result);
         }
 
         /// <summary>
         /// Tests that the <see cref="DisplayNameHelper.GetDisplayNameWithTypeInfo"/> method returns the correct value.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void DisplayNameHelper_GetDisplayNameWithTypeInfo()
         {
             string result = DisplayNameHelper.GetDisplayNameWithTypeInfo(new TestClass());
-            Assert.AreEqual(TestClassDisplayName + " [" + typeof(TestClass).FullName + "]", result);
+            Assert.Equal(TestClassDisplayName + " [" + typeof(TestClass).FullName + "]", result);
         }
 
         [DisplayName(TestClassDisplayName)]

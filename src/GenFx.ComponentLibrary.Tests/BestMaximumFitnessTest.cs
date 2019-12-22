@@ -1,24 +1,23 @@
 ﻿using GenFx.ComponentLibrary.Metrics;
-using GenFx.ComponentLibrary.Populations;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using TestCommon;
 using TestCommon.Helpers;
 using TestCommon.Mocks;
+using Xunit;
 
 namespace GenFx.ComponentLibrary.Tests
 {
     /// <summary>
     /// Contains unit tests for the <see cref="BestMaximumFitness"/> class.
     /// </summary>
-    [TestClass]
     public class BestMaximumFitnessTest
     {
         /// <summary>
         /// Tests that the correct value is returned from <see cref="BestMaximumFitness.GetResultValue"/>.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void BestMaximumFitness_GetResultValue()
         {
             MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm();
@@ -31,35 +30,39 @@ namespace GenFx.ComponentLibrary.Tests
             BestMaximumFitness target = new BestMaximumFitness();
             target.Initialize(algorithm);
 
-            MockPopulation population = new MockPopulation();
-            population.Index = 0;
+            MockPopulation population = new MockPopulation
+            {
+                Index = 0
+            };
             object result = target.GetResultValue(population);
-            Assert.AreEqual((double)5, result);
+            Assert.Equal((double)5, result);
 
             population1Results.Add(new MetricResult(1, 0, (double)6, maximumFitness));
 
             result = target.GetResultValue(population);
-            Assert.AreEqual((double)6, result);
+            Assert.Equal((double)6, result);
 
             ObservableCollection<MetricResult> population2Results = maximumFitness.GetResults(1);
             population2Results.Add(new MetricResult(0, 2, (double)10, maximumFitness));
 
-            MockPopulation population2 = new MockPopulation();
-            population2.Index = 1;
+            MockPopulation population2 = new MockPopulation
+            {
+                Index = 1
+            };
             result = target.GetResultValue(population2);
-            Assert.AreEqual((double)10, result);
+            Assert.Equal((double)10, result);
 
             population2Results.Add(new MetricResult(1, 1, (double)4, maximumFitness));
 
             result = target.GetResultValue(population2);
-            Assert.AreEqual((double)10, result);
+            Assert.Equal((double)10, result);
         }
 
         /// <summary>
         /// Tests that the correct value is returned from <see cref="BestMaximumFitness.GetResultValue"/> when every
         /// entity has a negative fitness value.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void BestMaximumFitness_GetResultValue_AllNegative()
         {
             MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm();
@@ -72,34 +75,38 @@ namespace GenFx.ComponentLibrary.Tests
             BestMaximumFitness target = new BestMaximumFitness();
             target.Initialize(algorithm);
 
-            MockPopulation population = new MockPopulation();
-            population.Index = 0;
+            MockPopulation population = new MockPopulation
+            {
+                Index = 0
+            };
             object result = target.GetResultValue(population);
-            Assert.AreEqual((double)-5, result);
+            Assert.Equal((double)-5, result);
 
             population1Results.Add(new MetricResult(1, 0, (double)-6, maximumFitness));
 
             result = target.GetResultValue(population);
-            Assert.AreEqual((double)-5, result);
+            Assert.Equal((double)-5, result);
 
             ObservableCollection<MetricResult> population2Results = maximumFitness.GetResults(1);
             population2Results.Add(new MetricResult(0, 2, (double)-10, maximumFitness));
 
-            MockPopulation population2 = new MockPopulation();
-            population2.Index = 1;
+            MockPopulation population2 = new MockPopulation
+            {
+                Index = 1
+            };
             result = target.GetResultValue(population2);
-            Assert.AreEqual((double)-10, result);
+            Assert.Equal((double)-10, result);
 
             population2Results.Add(new MetricResult(1, 1, (double)-4, maximumFitness));
 
             result = target.GetResultValue(population2);
-            Assert.AreEqual((double)-4, result);
+            Assert.Equal((double)-4, result);
         }
 
         /// <summary>
         /// Tests that an exception will be thrown when a null population1 is passed to <see cref="BestMaximumFitness.GetResultValue"/>.
         /// </summary>
-        [TestMethod()]
+        [Fact]
         public void BestMaximumFitness_GetResultValue_NullPopulation()
         {
             GeneticAlgorithm algorithm = new MockGeneticAlgorithm
@@ -114,13 +121,13 @@ namespace GenFx.ComponentLibrary.Tests
             BestMaximumFitness target = new BestMaximumFitness();
             target.Initialize(algorithm);
 
-            AssertEx.Throws<ArgumentNullException>(() => target.GetResultValue(null));
+            Assert.Throws<ArgumentNullException>(() => target.GetResultValue(null));
         }
 
         /// <summary>
         /// Tests that the component can be serialized and deserialized.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void BestMaximumFitness_Serialization()
         {
             BestMaximumFitness metric = new BestMaximumFitness();
@@ -132,7 +139,7 @@ namespace GenFx.ComponentLibrary.Tests
 
             PrivateObject resultPrivObj = new PrivateObject(result);
             Dictionary<int, double> resultBestMaxValues = (Dictionary<int, double>)resultPrivObj.GetField("bestMaxValues");
-            Assert.AreEqual(2.4, resultBestMaxValues[10]);
+            Assert.Equal(2.4, resultBestMaxValues[10]);
 
         }
     }

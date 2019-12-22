@@ -1,24 +1,23 @@
-﻿using GenFx;
-using GenFx.ComponentLibrary.Populations;
+﻿using GenFx.ComponentLibrary.Populations;
 using GenFx.ComponentLibrary.Terminators;
-using TestCommon.Helpers;
-using TestCommon.Mocks;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Threading.Tasks;
+using TestCommon;
+using TestCommon.Helpers;
+using TestCommon.Mocks;
+using Xunit;
 
 namespace GenFx.ComponentLibrary.Tests
 {
     /// <summary>
     /// Contains unit tests for the <see cref="FitnessTargetTerminator"/> class.
     ///</summary>
-    [TestClass()]
     public class FitnessTargetTerminatorTest
     {
         /// <summary>
         /// Tests that the <see cref="FitnessTargetTerminator.IsComplete"/> method works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public async Task FitnessTargetTerminator_IsComplete_ScaledFitness()
         {
             double fitnessTarget = 15;
@@ -29,7 +28,7 @@ namespace GenFx.ComponentLibrary.Tests
             terminator.Initialize(algorithm);
 
             // Check with no populations
-            Assert.IsFalse(terminator.IsComplete(), "No genetic entities have the fitness target.");
+            Assert.False(terminator.IsComplete(), "No genetic entities have the fitness target.");
 
             MockEntity entity = new MockEntity();
             entity.Initialize(algorithm);
@@ -39,16 +38,16 @@ namespace GenFx.ComponentLibrary.Tests
             algorithm.Environment.Populations.Add(population);
 
             // Check with a population with one entity
-            Assert.IsFalse(terminator.IsComplete(), "No genetic entities have the fitness target.");
+            Assert.False(terminator.IsComplete(), "No genetic entities have the fitness target.");
 
             entity.ScaledFitnessValue = 15;
-            Assert.IsTrue(terminator.IsComplete(), "A entity does have the fitness target.");
+            Assert.True(terminator.IsComplete(), "A entity does have the fitness target.");
         }
 
         /// <summary>
         /// Tests that the <see cref="FitnessTargetTerminator.IsComplete"/> method works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public async Task FitnessTargetTerminator_IsComplete_RawFitness()
         {
             double fitnessTarget = 15;
@@ -59,7 +58,7 @@ namespace GenFx.ComponentLibrary.Tests
             terminator.Initialize(algorithm);
 
             // Check with no populations
-            Assert.IsFalse(terminator.IsComplete(), "No genetic entities have the fitness target.");
+            Assert.False(terminator.IsComplete(), "No genetic entities have the fitness target.");
 
             MockEntity entity = new MockEntity();
             entity.Initialize(algorithm);
@@ -69,17 +68,17 @@ namespace GenFx.ComponentLibrary.Tests
             algorithm.Environment.Populations.Add(population);
 
             // Check with a population with one entity
-            Assert.IsFalse(terminator.IsComplete(), "No genetic entities have the fitness target.");
+            Assert.False(terminator.IsComplete(), "No genetic entities have the fitness target.");
 
             PrivateObject accessor = new PrivateObject(entity, new PrivateType(typeof(GeneticEntity)));
             accessor.SetField("rawFitnessValue", 15);
-            Assert.IsTrue(terminator.IsComplete(), "A entity does have the fitness target.");
+            Assert.True(terminator.IsComplete(), "A entity does have the fitness target.");
         }
 
         /// <summary>
         /// Tests that the object can be serialized and deserialized.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void FitnessTargetTerminator_Serialization()
         {
             FitnessTargetTerminator terminator = new FitnessTargetTerminator();
@@ -88,8 +87,8 @@ namespace GenFx.ComponentLibrary.Tests
 
             FitnessTargetTerminator result = (FitnessTargetTerminator)SerializationHelper.TestSerialization(terminator, new Type[0]);
 
-            Assert.AreEqual(terminator.FitnessTarget, result.FitnessTarget);
-            Assert.AreEqual(terminator.FitnessType, result.FitnessType);
+            Assert.Equal(terminator.FitnessTarget, result.FitnessTarget);
+            Assert.Equal(terminator.FitnessType, result.FitnessType);
         }
 
         private static GeneticAlgorithm GetAlgorithm(double fitnessTarget, FitnessType fitnessType)

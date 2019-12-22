@@ -1,19 +1,18 @@
 ﻿using GenFx.ComponentLibrary.Lists;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TestCommon.Mocks;
+using Xunit;
 
 namespace GenFx.ComponentLibrary.Tests
 {
     /// <summary>
     /// Contains unit tests for the <see cref="MultiPointCrossoverOperatorCrossoverPointValidator"/> class.
     /// </summary>
-    [TestClass]
     public class MultiPointCrossoverOperatorCrossoverPointValidatorTest
     {
         /// <summary>
         /// Tests that the <see cref="MultiPointCrossoverOperatorCrossoverPointValidator.IsValid"/> method works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void MultiPointCrossoverOperatorCrossoverPointValidator_IsValid()
         {
             TestIsValid(2, false, true);
@@ -39,16 +38,15 @@ namespace GenFx.ComponentLibrary.Tests
 
             MultiPointCrossoverOperatorCrossoverPointValidator validator =
                 new MultiPointCrossoverOperatorCrossoverPointValidator();
-            string errorMessage;
-            bool result = validator.IsValid(op, out errorMessage);
-            Assert.AreEqual(expectedIsValid, result);
+            bool result = validator.IsValid(op, out string errorMessage);
+            Assert.Equal(expectedIsValid, result);
             if (expectedIsValid)
             {
-                Assert.IsNull(errorMessage);
+                Assert.Null(errorMessage);
             }
             else
             {
-                Assert.IsNotNull(errorMessage);
+                Assert.NotNull(errorMessage);
             }
         }
     }

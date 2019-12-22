@@ -1,13 +1,11 @@
-﻿using GenFx;
-using GenFx.ComponentLibrary.Algorithms;
+﻿using GenFx.ComponentLibrary.Algorithms;
 using GenFx.ComponentLibrary.Populations;
+using System;
+using System.Threading.Tasks;
+using TestCommon;
 using TestCommon.Helpers;
 using TestCommon.Mocks;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
+using Xunit;
 
 namespace GenFx.ComponentLibrary.Tests
 {
@@ -15,13 +13,12 @@ namespace GenFx.ComponentLibrary.Tests
     /// This is a test class for GenFx.ComponentLibrary.Algorithms.MultiDemeGeneticAlgorithm and is intended
     /// to contain all GenFx.ComponentLibrary.Algorithms.MultiDemeGeneticAlgorithm Unit Tests
     /// </summary>
-    [TestClass()]
     public class MultiDemeGeneticAlgorithmTest
     {
         /// <summary>
         /// Tests that the CreateNextGeneration method works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public async Task MultiDemeGeneticAlgorithm_CreateNextGeneration_Async()
         {
             TestMultiDemeGeneticAlgorithm algorithm = new TestMultiDemeGeneticAlgorithm
@@ -52,14 +49,14 @@ namespace GenFx.ComponentLibrary.Tests
             int prevPopCount = population.Entities.Count;
             await (Task)accessor.Invoke("CreateNextGenerationAsync", population);
 
-            Assert.AreEqual(1, selectionOp.DoSelectCallCount, "Selection not called correctly.");
-            Assert.AreEqual(prevPopCount, population.Entities.Count, "New population not created correctly.");
+            Assert.Equal(1, selectionOp.DoSelectCallCount);
+            Assert.Equal(prevPopCount, population.Entities.Count);
         }
 
         /// <summary>
         /// Tests that the Migrate method works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public async Task MultiDemeGeneticAlgorithm_Migrate()
         {
             MultiDemeGeneticAlgorithm algorithm = new MultiDemeGeneticAlgorithm
@@ -102,26 +99,26 @@ namespace GenFx.ComponentLibrary.Tests
 
             algorithm.Migrate();
 
-            Assert.AreEqual((double)1, population1.Entities[0].ScaledFitnessValue, "Incorrect entity.");
-            Assert.AreEqual((double)2, population1.Entities[1].ScaledFitnessValue, "Incorrect entity.");
-            Assert.AreEqual((double)13, population1.Entities[2].ScaledFitnessValue, "Incorrect entity.");
-            Assert.AreEqual((double)12, population1.Entities[3].ScaledFitnessValue, "Incorrect entity.");
+            Assert.Equal((double)1, population1.Entities[0].ScaledFitnessValue);
+            Assert.Equal((double)2, population1.Entities[1].ScaledFitnessValue);
+            Assert.Equal((double)13, population1.Entities[2].ScaledFitnessValue);
+            Assert.Equal((double)12, population1.Entities[3].ScaledFitnessValue);
 
-            Assert.AreEqual((double)6, population2.Entities[0].ScaledFitnessValue, "Incorrect entity.");
-            Assert.AreEqual((double)3, population2.Entities[1].ScaledFitnessValue, "Incorrect entity.");
-            Assert.AreEqual((double)5, population2.Entities[2].ScaledFitnessValue, "Incorrect entity.");
-            Assert.AreEqual((double)4, population2.Entities[3].ScaledFitnessValue, "Incorrect entity.");
+            Assert.Equal((double)6, population2.Entities[0].ScaledFitnessValue);
+            Assert.Equal((double)3, population2.Entities[1].ScaledFitnessValue);
+            Assert.Equal((double)5, population2.Entities[2].ScaledFitnessValue);
+            Assert.Equal((double)4, population2.Entities[3].ScaledFitnessValue);
 
-            Assert.AreEqual((double)9, population3.Entities[0].ScaledFitnessValue, "Incorrect entity.");
-            Assert.AreEqual((double)10, population3.Entities[1].ScaledFitnessValue, "Incorrect entity.");
-            Assert.AreEqual((double)8, population3.Entities[2].ScaledFitnessValue, "Incorrect entity.");
-            Assert.AreEqual((double)7, population3.Entities[3].ScaledFitnessValue, "Incorrect entity.");
+            Assert.Equal((double)9, population3.Entities[0].ScaledFitnessValue);
+            Assert.Equal((double)10, population3.Entities[1].ScaledFitnessValue);
+            Assert.Equal((double)8, population3.Entities[2].ScaledFitnessValue);
+            Assert.Equal((double)7, population3.Entities[3].ScaledFitnessValue);
         }
 
         /// <summary>
         /// Tests that the object can be serialized and deserialized.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void MultiDemeGeneticAlgorithm_Serialization()
         {
             MultiDemeGeneticAlgorithm algorithm = new MultiDemeGeneticAlgorithm
@@ -132,8 +129,8 @@ namespace GenFx.ComponentLibrary.Tests
 
             MultiDemeGeneticAlgorithm result = (MultiDemeGeneticAlgorithm)SerializationHelper.TestSerialization(algorithm, new Type[0]);
 
-            Assert.AreEqual(algorithm.MigrantCount, result.MigrantCount);
-            Assert.AreEqual(algorithm.MigrateEachGeneration, result.MigrateEachGeneration);
+            Assert.Equal(algorithm.MigrantCount, result.MigrantCount);
+            Assert.Equal(algorithm.MigrateEachGeneration, result.MigrateEachGeneration);
         }
 
         private static SimplePopulation GetPopulation(GeneticAlgorithm algorithm)

@@ -1,20 +1,18 @@
 ﻿using GenFx.ComponentLibrary.Trees;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using TestCommon.Helpers;
+using Xunit;
 
 namespace GenFx.ComponentLibrary.Tests
 {
     /// <summary>
     /// Contains unit tests for the <see cref="TreeHelper"/> class.
     /// </summary>
-    [TestClass]
     public class TreeHelperTest
     {
         /// <summary>
         /// Tests that the <see cref="TreeHelper.ReplaceNodeInTree"/> method works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void TreeHelper_ReplaceNodeInTree()
         {
             TestTree tree1 = CreateTree1();
@@ -25,43 +23,43 @@ namespace GenFx.ComponentLibrary.Tests
 
             TreeHelper.ReplaceNodeInTree(movingNode, tree2, locationNode, locationParentNode);
 
-            Assert.AreEqual(3, locationParentNode.ChildNodes.Count);
-            Assert.IsFalse(locationParentNode.ChildNodes.Contains(locationNode));
-            Assert.AreSame(movingNode, locationParentNode.ChildNodes[2]);
-            Assert.AreEqual(1, movingNode.ChildNodes.Count);
+            Assert.Equal(3, locationParentNode.ChildNodes.Count);
+            Assert.DoesNotContain(locationNode, locationParentNode.ChildNodes);
+            Assert.Same(movingNode, locationParentNode.ChildNodes[2]);
+            Assert.Single(movingNode.ChildNodes);
         }
 
         /// <summary>
         /// Tests that an exception is thrown when passing a null moving node.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void TreeHelper_ReplaceNodeInTree_NullMovingNode()
         {
-            AssertEx.Throws<ArgumentNullException>(() => TreeHelper.ReplaceNodeInTree(null, new TestTree(), new TreeNode(), new TreeNode()));
+            Assert.Throws<ArgumentNullException>(() => TreeHelper.ReplaceNodeInTree(null, new TestTree(), new TreeNode(), new TreeNode()));
         }
 
         /// <summary>
         /// Tests that an exception is thrown when passing a null location tree.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void TreeHelper_ReplaceNodeInTree_NullLocationTree()
         {
-            AssertEx.Throws<ArgumentNullException>(() => TreeHelper.ReplaceNodeInTree(new TreeNode(), null, new TreeNode(), new TreeNode()));
+            Assert.Throws<ArgumentNullException>(() => TreeHelper.ReplaceNodeInTree(new TreeNode(), null, new TreeNode(), new TreeNode()));
         }
 
         /// <summary>
         /// Tests that an exception is thrown when passing a null location node.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void TreeHelper_ReplaceNodeInTree_NullLocationNode()
         {
-            AssertEx.Throws<ArgumentNullException>(() => TreeHelper.ReplaceNodeInTree(new TreeNode(), new TestTree(), null, new TreeNode()));
+            Assert.Throws<ArgumentNullException>(() => TreeHelper.ReplaceNodeInTree(new TreeNode(), new TestTree(), null, new TreeNode()));
         }
 
         /// <summary>
         /// Tests that the <see cref="TreeHelper.Swap"/> method works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void TreeHelper_Swap()
         {
             TestTree entity1 = new TestTree();
@@ -82,33 +80,33 @@ namespace GenFx.ComponentLibrary.Tests
 
             TreeHelper.Swap(entity1.RootNode, entity2.RootNode.ChildNodes[0]);
 
-            Assert.AreSame(childNode2, entity1.RootNode, "Nodes not swapped correctly.");
-            Assert.IsNull(childNode2.ParentNode, "ParentNode should be null.");
-            Assert.AreSame(entity1, childNode2.Tree, "Tree not set correctly.");
-            Assert.AreSame(entity1, grandChildNode2.Tree, "Tree not set correctly.");
+            Assert.Same(childNode2, entity1.RootNode);
+            Assert.Null(childNode2.ParentNode);
+            Assert.Same(entity1, childNode2.Tree);
+            Assert.Same(entity1, grandChildNode2.Tree);
 
-            Assert.AreSame(node2, entity2.RootNode, "RootNode should remain unchanged.");
-            Assert.AreSame(node1, entity2.RootNode.ChildNodes[0], "Nodes not swapped correctly.");
-            Assert.AreSame(node2, node1.ParentNode, "ParentNode should be net to the root node.");
-            Assert.AreSame(entity2, node1.Tree, "Tree not set correctly.");
-            Assert.AreSame(entity2, childNode1.Tree, "Tree not set correctly.");
-            Assert.AreSame(entity2, grandChildNode1.Tree, "Tree not set correctly.");
+            Assert.Same(node2, entity2.RootNode);
+            Assert.Same(node1, entity2.RootNode.ChildNodes[0]);
+            Assert.Same(node2, node1.ParentNode);
+            Assert.Same(entity2, node1.Tree);
+            Assert.Same(entity2, childNode1.Tree);
+            Assert.Same(entity2, grandChildNode1.Tree);
         }
 
         /// <summary>
         /// Tests that an exception is thrown when passing a null node.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void TreeHelper_Swap_NullNode()
         {
-            AssertEx.Throws<ArgumentNullException>(() => TreeHelper.Swap(null, new TreeNode()));
-            AssertEx.Throws<ArgumentNullException>(() => TreeHelper.Swap(new TreeNode(), null));
+            Assert.Throws<ArgumentNullException>(() => TreeHelper.Swap(null, new TreeNode()));
+            Assert.Throws<ArgumentNullException>(() => TreeHelper.Swap(new TreeNode(), null));
         }
 
         /// <summary>
         /// Tests that the <see cref="TreeHelper.SetTreeForChildNodes"/> method works correctly.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void TreeHelper_SetTreeForChildNodes()
         {
             TreeNode root = new TreeNode();
@@ -127,20 +125,20 @@ namespace GenFx.ComponentLibrary.Tests
 
             TreeHelper.SetTreeForChildNodes(root);
 
-            Assert.AreSame(tree, root.Tree);
-            Assert.AreSame(tree, node1.Tree);
-            Assert.AreSame(tree, node2.Tree);
-            Assert.AreSame(tree, node3.Tree);
-            Assert.AreSame(tree, node4.Tree);
+            Assert.Same(tree, root.Tree);
+            Assert.Same(tree, node1.Tree);
+            Assert.Same(tree, node2.Tree);
+            Assert.Same(tree, node3.Tree);
+            Assert.Same(tree, node4.Tree);
         }
 
         /// <summary>
         /// Tests that an exception is thrown when passing a null node.
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void TreeHelper_SetTreeForChildNodes_NullNode()
         {
-            AssertEx.Throws<ArgumentNullException>(() => TreeHelper.SetTreeForChildNodes(null));
+            Assert.Throws<ArgumentNullException>(() => TreeHelper.SetTreeForChildNodes(null));
         }
 
         private static TestTree CreateTree1()
