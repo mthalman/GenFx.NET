@@ -1,9 +1,9 @@
 ﻿using GenFx;
-using GenFx.ComponentLibrary.Algorithms;
-using GenFx.ComponentLibrary.Lists;
-using GenFx.ComponentLibrary.Populations;
-using GenFx.ComponentLibrary.SelectionOperators;
-using GenFx.ComponentLibrary.Terminators;
+using GenFx.Components.Algorithms;
+using GenFx.Components.Lists;
+using GenFx.Components.Populations;
+using GenFx.Components.SelectionOperators;
+using GenFx.Components.Terminators;
 using System;
 using System.Collections.Generic;
 using System.Linq;

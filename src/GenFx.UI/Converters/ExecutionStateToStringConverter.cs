@@ -1,5 +1,4 @@
-﻿using GenFx.UI.Properties;
-using System;
+﻿using System;
 using System.Globalization;
 using System.Windows.Data;
 
@@ -30,19 +29,19 @@ namespace GenFx.UI.Converters
             switch ((ExecutionState)value)
             {
                 case ExecutionState.Idle:
-                    displayValue = Properties.Resources.ExecutionState_Idle;
+                    displayValue = Resources.ExecutionState_Idle;
                     break;
                 case ExecutionState.IdlePending:
-                    displayValue = Properties.Resources.ExecutionState_IdlePending;
+                    displayValue = Resources.ExecutionState_IdlePending;
                     break;
                 case ExecutionState.Paused:
-                    displayValue = Properties.Resources.ExecutionState_Paused;
+                    displayValue = Resources.ExecutionState_Paused;
                     break;
                 case ExecutionState.PausePending:
-                    displayValue = Properties.Resources.ExecutionState_PausePending;
+                    displayValue = Resources.ExecutionState_PausePending;
                     break;
                 case ExecutionState.Running:
-                    displayValue = Properties.Resources.ExecutionState_Running;
+                    displayValue = Resources.ExecutionState_Running;
                     break;
                 default:
                     displayValue = null;

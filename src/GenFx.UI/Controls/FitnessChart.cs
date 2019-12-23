@@ -114,9 +114,9 @@ namespace GenFx.UI.Controls
             this.PlotModel = new PlotModel();
             this.categoryAxis = new CategoryAxis();
             this.categoryAxis.TickStyle = TickStyle.None;
-            this.categoryAxis.Title = Properties.Resources.FitnessChart_XAxisTitle;
+            this.categoryAxis.Title = UI.Resources.FitnessChart_XAxisTitle;
             this.PlotModel.Axes.Add(this.categoryAxis);
-            this.PlotModel.Axes.Add(new LinearAxis() { Title = Properties.Resources.FitnessChart_YAxisTitle });
+            this.PlotModel.Axes.Add(new LinearAxis() { Title = UI.Resources.FitnessChart_YAxisTitle });
 
             this.columnSeries = new ColumnSeries();
             this.columnSeries.TrackerFormatString = "{" + nameof(GeneticEntity.Representation) + "} : {2}";

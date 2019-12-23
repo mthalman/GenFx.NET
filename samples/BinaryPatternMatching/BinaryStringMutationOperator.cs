@@ -1,5 +1,5 @@
 ﻿using GenFx;
-using GenFx.ComponentLibrary.Lists;
+using GenFx.Components.Lists;
 using GenFx.Validation;
 
 namespace BinaryPatternMatching

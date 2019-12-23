@@ -1,6 +1,9 @@
 {
   "metadata": [
     {
+      "properties": {
+        "TargetFramework":  "netcoreapp3.1"
+      },
       "src": [
         {
           "files": [

@@ -104,7 +104,7 @@ namespace GenFx.UI.Controls
             this.PlotModel.Axes.Add(
                 new LinearAxis
                 {
-                    Title = Properties.Resources.MetricsChart_XAxisTitle,
+                    Title = UI.Resources.MetricsChart_XAxisTitle,
                     Position = AxisPosition.Bottom,
                     Minimum = 0,
                     MinorStep = 1,
@@ -114,7 +114,7 @@ namespace GenFx.UI.Controls
             this.PlotModel.Axes.Add(
                 new LinearAxis
                 {
-                    Title = Properties.Resources.MetricsChart_YAxisTitle,
+                    Title = UI.Resources.MetricsChart_YAxisTitle,
                     Position = AxisPosition.Left
                 });
         }

@@ -1,0 +1,7 @@
+<Project>
+  <PropertyGroup>
+    <FileVersion>0.1.0.0</FileVersion>
+    <AssemblyVersion>0.1.0.0</AssemblyVersion>
+    <Product>GenFx.NET</Product>
+  </PropertyGroup>
+</Project>
