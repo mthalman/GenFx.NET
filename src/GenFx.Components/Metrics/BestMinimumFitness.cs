@@ -15,7 +15,7 @@ namespace GenFx.Components.Metrics
     public class BestMinimumFitness : Metric
     {
         [DataMember]
-        private Dictionary<int, double?> bestMinValues = new Dictionary<int, double?>();
+        private readonly Dictionary<int, double?> bestMinValues = new Dictionary<int, double?>();
 
         /// <summary>
         /// Calculates to determine the lowest <see cref="GeneticEntity.ScaledFitnessValue"/> 
@@ -31,8 +31,7 @@ namespace GenFx.Components.Metrics
                 throw new ArgumentNullException(nameof(population));
             }
 
-            double? bestMin;
-            if (!this.bestMinValues.TryGetValue(population.Index, out bestMin))
+            if (!this.bestMinValues.TryGetValue(population.Index, out double? bestMin))
             {
                 bestMin = null;
                 this.bestMinValues.Add(population.Index, bestMin);

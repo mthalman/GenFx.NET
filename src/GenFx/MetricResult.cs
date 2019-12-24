@@ -10,16 +10,16 @@ namespace GenFx
     public class MetricResult
     {
         [DataMember]
-        private int generationIndex;
+        private readonly int generationIndex;
 
         [DataMember]
-        private object resultValue;
+        private readonly object resultValue;
 
         [DataMember]
-        private int populationIndex;
+        private readonly int populationIndex;
 
         [DataMember]
-        private Metric metric;
+        private readonly Metric metric;
 
         /// <summary>
         /// Gets the <see cref="Metric"/> to which this result belongs.
@@ -80,20 +80,10 @@ namespace GenFx
                 throw new ArgumentOutOfRangeException(nameof(populationIndex), populationIndex, Resources.ErrorMsg_InvalidPopulationIndex);
             }
 
-            if (resultValue == null)
-            {
-                throw new ArgumentNullException(nameof(resultValue));
-            }
-
-            if (metric == null)
-            {
-                throw new ArgumentNullException(nameof(metric));
-            }
-
             this.generationIndex = generationIndex;
             this.populationIndex = populationIndex;
-            this.resultValue = resultValue;
-            this.metric = metric;
+            this.resultValue = resultValue ?? throw new ArgumentNullException(nameof(resultValue));
+            this.metric = metric ?? throw new ArgumentNullException(nameof(metric));
         }
     }
 }

@@ -13,10 +13,10 @@ namespace GenFx.Components.Trees
     public sealed class TreeNodeCollection : IList<TreeNode>
     {
         [DataMember]
-        private List<TreeNode> nodes = new List<TreeNode>();
+        private readonly List<TreeNode> nodes = new List<TreeNode>();
 
         [DataMember]
-        private int? fixedSizeCount;
+        private readonly int? fixedSizeCount;
 
         /// <summary>
         /// Initializes a new instance of this class that has a fixed number of items.

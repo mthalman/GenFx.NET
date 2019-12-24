@@ -15,7 +15,7 @@ namespace GenFx.Components.Metrics
     public class BestMaximumFitness : Metric
     {
         [DataMember]
-        private Dictionary<int, double> bestMaxValues = new Dictionary<int, double>();
+        private readonly Dictionary<int, double> bestMaxValues = new Dictionary<int, double>();
         
         /// <summary>
         /// Calculates to determine the highest <see cref="GeneticEntity.ScaledFitnessValue"/> 
@@ -31,8 +31,7 @@ namespace GenFx.Components.Metrics
                 throw new ArgumentNullException(nameof(population));
             }
 
-            double bestMax;
-            if (!this.bestMaxValues.TryGetValue(population.Index, out bestMax))
+            if (!this.bestMaxValues.TryGetValue(population.Index, out double bestMax))
             {
                 bestMax = Double.MinValue;
                 this.bestMaxValues.Add(population.Index, bestMax);

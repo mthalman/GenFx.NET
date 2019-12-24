@@ -15,7 +15,7 @@ namespace GenFx.Components.Trees
     public class TreeNode
     {
         [DataMember]
-        private TreeNodeCollection childNodes;
+        private readonly TreeNodeCollection childNodes;
 
         [DataMember]
         private TreeNode parentNode;

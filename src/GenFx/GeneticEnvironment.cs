@@ -14,10 +14,10 @@ namespace GenFx
     public sealed class GeneticEnvironment
     {
         [DataMember]
-        private ObservableCollection<Population> populations = new ObservableCollection<Population>();
+        private readonly ObservableCollection<Population> populations = new ObservableCollection<Population>();
 
         [DataMember]
-        private GeneticAlgorithm algorithm;
+        private readonly GeneticAlgorithm algorithm;
 
         /// <summary>
         /// Gets the collection of <see cref="Population"/> objects contained by this <see cref="GeneticEnvironment"/>.

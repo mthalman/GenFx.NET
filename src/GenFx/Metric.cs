@@ -17,7 +17,7 @@ namespace GenFx
     public abstract class Metric : GeneticComponentWithAlgorithm
     {
         [DataMember]
-        private Dictionary<int, ObservableCollection<MetricResult>> populationResults = new Dictionary<int, ObservableCollection<MetricResult>>();
+        private readonly Dictionary<int, ObservableCollection<MetricResult>> populationResults = new Dictionary<int, ObservableCollection<MetricResult>>();
         
         /// <summary>
         /// Initializes the component to ensure its readiness for algorithm execution.
@@ -46,8 +46,7 @@ namespace GenFx
         /// </remarks>
         public ObservableCollection<MetricResult> GetResults(int populationIndex)
         {
-            ObservableCollection<MetricResult> results;
-            if (!this.populationResults.TryGetValue(populationIndex, out results))
+            if (!this.populationResults.TryGetValue(populationIndex, out ObservableCollection<MetricResult> results))
             {
                 results = new ObservableCollection<MetricResult>();
                 this.populationResults.Add(populationIndex, results);

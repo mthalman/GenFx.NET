@@ -23,7 +23,7 @@ namespace GenFx
         private const double CrossoverRateMax = 1;
 
         [DataMember]
-        private int requiredParentCount;
+        private readonly int requiredParentCount;
 
         [DataMember]
         private double crossoverRate = DefaultCrossoverRate;

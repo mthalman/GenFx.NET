@@ -8,7 +8,7 @@ namespace GenFx.UI
     /// </summary>
     internal class DefaultStopwatch : IStopwatch
     {
-        private Stopwatch stopwatch = new Stopwatch();
+        private readonly Stopwatch stopwatch = new Stopwatch();
 
         /// <summary>
         /// Gets the total elapsed time measured by the current instance.

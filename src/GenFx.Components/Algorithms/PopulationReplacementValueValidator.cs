@@ -38,8 +38,7 @@ namespace GenFx.Components.Algorithms
                 }
 
                 IntegerValidator intValidator = new IntegerValidator(0, maxValue);
-                string tempErrorMsg;
-                isValid = intValidator.IsValid(popReplacementVal.Value, propertyName, owner, out tempErrorMsg);
+                isValid = intValidator.IsValid(popReplacementVal.Value, propertyName, owner, out _);
             }
 
             if (!isValid)

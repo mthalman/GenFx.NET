@@ -23,7 +23,7 @@ namespace GenFx
         private const int DefaultPopulationSize = 1;
 
         [DataMember]
-        private ObservableCollection<GeneticEntity> geneticEntities = new ObservableCollection<GeneticEntity>();
+        private readonly ObservableCollection<GeneticEntity> geneticEntities = new ObservableCollection<GeneticEntity>();
 
         [DataMember]
         private int index;

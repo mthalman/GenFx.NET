@@ -89,33 +89,20 @@ namespace GenFx.Components.SelectionOperators
         /// </summary>
         private class EntityPercentageRange
         {
-            private double minValue;
-            private double maxValue;
-            private GeneticEntity entity;
-
             /// <summary>
             /// Gets the lower-bound percentage value in the range.
             /// </summary>
-            public double MinValue
-            {
-                get { return this.minValue; }
-            }
+            public double MinValue { get; }
 
             /// <summary>
             /// Gets the upper-bound percentage value in the range.
             /// </summary>
-            public double MaxValue
-            {
-                get { return this.maxValue; }
-            }
+            public double MaxValue { get; }
 
             /// <summary>
             /// Gets the <see cref="GeneticEntity"/> assigned to the range.
             /// </summary>
-            public GeneticEntity Entity
-            {
-                get { return this.entity; }
-            }
+            public GeneticEntity Entity { get; }
 
             /// <summary>
             /// Initializes a new instance of the <see cref="EntityPercentageRange"/> class.
@@ -125,9 +112,9 @@ namespace GenFx.Components.SelectionOperators
             /// <param name="maxValue">Upper-bound percentage value in the range.</param>
             public EntityPercentageRange(GeneticEntity entity, double minValue, double maxValue)
             {
-                this.entity = entity;
-                this.minValue = minValue;
-                this.maxValue = maxValue;
+                this.Entity = entity;
+                this.MinValue = minValue;
+                this.MaxValue = maxValue;
             }
         }
     }
@@ -139,26 +126,17 @@ namespace GenFx.Components.SelectionOperators
     /// <seealso cref="RouletteWheelSampler"/>
     public class WheelSlice
     {
-        private double size;
-        private GeneticEntity entity;
-
         /// <summary>
         /// Gets the <see cref="GeneticEntity"/> belonging to the wheel slice.
         /// </summary>
         /// <value>The <see cref="GeneticEntity"/> belonging to the wheel slice.</value>
-        public GeneticEntity Entity
-        {
-            get { return this.entity; }
-        }
+        public GeneticEntity Entity { get; }
 
         /// <summary>
         /// Gets the value indicating how large the slice is on the wheel.
         /// </summary>
         /// <value>The value indicating how large the slice is on the wheel.</value>
-        public double Size
-        {
-            get { return this.size; }
-        }
+        public double Size { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="WheelSlice"/> class.
@@ -169,18 +147,13 @@ namespace GenFx.Components.SelectionOperators
         /// <exception cref="ArgumentException"><paramref name="size"/> is less than.</exception>
         public WheelSlice(GeneticEntity entity, double size)
         {
-            if (entity == null)
-            {
-                throw new ArgumentNullException(nameof(entity));
-            }
-
             if (size < 0)
             {
                 throw new ArgumentException(Resources.ErrorMsg_InvalidWheelSliceSize, nameof(size));
             }
 
-            this.entity = entity;
-            this.size = size;
+            this.Entity = entity ?? throw new ArgumentNullException(nameof(entity));
+            this.Size = size;
         }
     }
 }

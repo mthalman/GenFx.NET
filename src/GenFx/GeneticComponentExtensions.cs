@@ -37,8 +37,7 @@ namespace GenFx
 
             component.CopyConfigurationStateTo(newComponent);
 
-            GeneticComponentWithAlgorithm newComponentWithAlg = newComponent as GeneticComponentWithAlgorithm;
-            if (newComponentWithAlg != null)
+            if (newComponent is GeneticComponentWithAlgorithm newComponentWithAlg)
             {
                 newComponentWithAlg.Initialize(((GeneticComponentWithAlgorithm)component).Algorithm);
             }

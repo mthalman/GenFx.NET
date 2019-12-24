@@ -30,7 +30,7 @@ namespace GenFx
             }
 
             FitnessValueComparer comparer = new FitnessValueComparer(sortBasis);
-            Func<GeneticEntity, GeneticEntity> keySelector = entity => entity;
+            GeneticEntity keySelector(GeneticEntity entity) => entity;
 
             if (evaluationMode == FitnessEvaluationMode.Maximize)
             {
@@ -47,7 +47,7 @@ namespace GenFx
         /// </summary>
         private class FitnessValueComparer : IComparer<GeneticEntity>
         {
-            private FitnessType sortBasis;
+            private readonly FitnessType sortBasis;
 
             /// <summary>
             /// Initializes a new instance of the <see cref="FitnessValueComparer"/> class.

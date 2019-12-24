@@ -77,15 +77,13 @@ namespace GenFx
                     return item1 == null ? -1 : 1;
                 }
 
-                IComparable item1Comparable = item1 as IComparable;
-                if (item1Comparable == null)
+                if (!(item1 is IComparable item1Comparable))
                 {
                     throw new InvalidOperationException(StringUtil.GetFormattedString(
                         Resources.ErrorMsg_ListItemNotComparable, item1));
                 }
 
-                IComparable item2Comparable = item2 as IComparable;
-                if (item2Comparable == null)
+                if (!(item2 is IComparable item2Comparable))
                 {
                     throw new InvalidOperationException(StringUtil.GetFormattedString(
                         Resources.ErrorMsg_ListItemNotComparable, item2));
@@ -123,14 +121,14 @@ namespace GenFx
         ///  </returns>
         public static int CompareObjects(IComparable obj1, IComparable obj2)
         {
-            if (Object.ReferenceEquals(obj1, null) || Object.ReferenceEquals(obj2, null))
+            if (obj1 is null || obj2 is null)
             {
-                if (Object.ReferenceEquals(obj1, null) && Object.ReferenceEquals(obj2, null))
+                if (obj1 is null && obj2 is null)
                 {
                     return 0;
                 }
 
-                return Object.ReferenceEquals(obj1, null) ? -1 : 1;
+                return obj1 is null ? -1 : 1;
             }
 
             return obj1.CompareTo(obj2);

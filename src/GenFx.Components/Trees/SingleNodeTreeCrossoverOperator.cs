@@ -53,9 +53,11 @@ namespace GenFx.Components.Trees
 
             TreeHelper.Swap(swapNode1, swapNode2);
 
-            List<GeneticEntity> geneticEntities = new List<GeneticEntity>();
-            geneticEntities.Add(tree1);
-            geneticEntities.Add(tree2);
+            List<GeneticEntity> geneticEntities = new List<GeneticEntity>
+            {
+                tree1,
+                tree2
+            };
 
             return geneticEntities;
         }

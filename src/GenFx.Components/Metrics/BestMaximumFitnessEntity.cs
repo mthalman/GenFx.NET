@@ -12,7 +12,7 @@ namespace GenFx.Components.Metrics
     public class BestMaximumFitnessEntity : Metric
     {
         [DataMember]
-        private Dictionary<int, GeneticEntity> bestEntities = new Dictionary<int, GeneticEntity>();
+        private readonly Dictionary<int, GeneticEntity> bestEntities = new Dictionary<int, GeneticEntity>();
         
         /// <summary>
         /// Calculates to determine the <see cref="GeneticEntity"/> object with the highest
@@ -29,8 +29,7 @@ namespace GenFx.Components.Metrics
             }
 
             int startIndex = 0;
-            GeneticEntity bestEntity;
-            if (!this.bestEntities.TryGetValue(population.Index, out bestEntity))
+            if (!this.bestEntities.TryGetValue(population.Index, out GeneticEntity bestEntity))
             {
                 if (population.Entities.Count > 0)
                 {

@@ -56,12 +56,7 @@ namespace GenFx.Components.Trees
         [SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate")]
         public void SetRootNode(TreeNode node)
         {
-            if (node == null)
-            {
-                throw new ArgumentNullException(nameof(node));
-            }
-
-            this.rootNode = node;
+            this.rootNode = node ?? throw new ArgumentNullException(nameof(node));
             this.rootNode.ParentNode = null;
             node.Tree = this;
             TreeHelper.SetTreeForChildNodes(node);
