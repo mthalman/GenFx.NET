@@ -10,13 +10,13 @@ namespace GenFx.Components.Algorithms
     /// </summary>
     /// <seealso cref="SteadyStateGeneticAlgorithm"/>
     [DataContract]
-    public struct PopulationReplacementValue
+    public struct PopulationReplacementValue : IEquatable<PopulationReplacementValue>
     {
         [DataMember]
-        private int replacementValue;
+        private readonly int replacementValue;
 
         [DataMember]
-        private ReplacementValueKind kind;
+        private readonly ReplacementValueKind kind;
 
         /// <summary>
         /// Gets the kind of value being used to indicate the number of <see cref="GeneticEntity"/> objects
@@ -47,7 +47,7 @@ namespace GenFx.Components.Algorithms
         {
             if (value < 0)
             {
-                throw new ArgumentOutOfRangeException("value", value, StringUtil.GetFormattedString(
+                throw new ArgumentOutOfRangeException(nameof(value), value, StringUtil.GetFormattedString(
                   Resources.ErrorMsg_PopulationReplacementValue_LessThanZero, value));
             }
             
@@ -73,15 +73,7 @@ namespace GenFx.Components.Algorithms
             }
 
             PopulationReplacementValue val = (PopulationReplacementValue)obj;
-
-            if (this.kind == val.kind && this.replacementValue == val.replacementValue)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return this.Equals(val);
         }
 
         /// <summary>
@@ -130,6 +122,18 @@ namespace GenFx.Components.Algorithms
         public static bool operator !=(PopulationReplacementValue value1, PopulationReplacementValue value2)
         {
             return !value1.Equals(value2);
+        }
+
+        public bool Equals(PopulationReplacementValue other)
+        {
+            if (this.kind == other.kind && this.replacementValue == other.replacementValue)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }

@@ -38,8 +38,10 @@ namespace GenFx.UI.Tests
         [StaFact]
         public void EnvironmentViewer_ExecutionStateProperty()
         {
-            EnvironmentViewer viewer = new EnvironmentViewer();
-            viewer.ExecutionState = ExecutionState.PausePending;
+            EnvironmentViewer viewer = new EnvironmentViewer
+            {
+                ExecutionState = ExecutionState.PausePending
+            };
             Assert.Equal(ExecutionState.PausePending, viewer.ExecutionState);
         }
     }

@@ -126,6 +126,11 @@ namespace GenFx.Components.Lists
         /// <exception cref="ArgumentNullException"><paramref name="entity"/> is null.</exception>
         public override void CopyTo(GeneticEntity entity)
         {
+            if (entity == null)
+            {
+                throw new ArgumentNullException(nameof(entity));
+            }
+
             this.EnsureEntityIsInitialized();
             base.CopyTo(entity);
 

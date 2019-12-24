@@ -120,9 +120,11 @@ namespace GenFx.Tests
         [Fact]
         public void GeneticEntity_Serialization()
         {
-            MockEntity entity = new MockEntity();
-            entity.Age = 33;
-            entity.ScaledFitnessValue = 2;
+            MockEntity entity = new MockEntity
+            {
+                Age = 33,
+                ScaledFitnessValue = 2
+            };
 
             PrivateObject privObj = new PrivateObject(entity, new PrivateType(typeof(GeneticEntity)));
             privObj.SetField("rawFitnessValue", 7);
@@ -265,7 +267,7 @@ namespace GenFx.Tests
 
         private class TestEntity : GeneticEntity
         {
-            private int compareToResult;
+            private readonly int compareToResult;
 
             public TestEntity(int compareToResult = 0)
             {

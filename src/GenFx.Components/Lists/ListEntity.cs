@@ -59,7 +59,7 @@ namespace GenFx.Components.Lists
                     {
                         for (int i = 0; i <= value - this.Length; i++)
                         {
-                            this.genes.Add(default(TItem));
+                            this.genes.Add(default);
                         }
                     }
                     else
@@ -108,7 +108,7 @@ namespace GenFx.Components.Lists
 
             for (int i = 0; i < initialCount; i++)
             {
-                this.genes.Add(default(TItem));
+                this.genes.Add(default);
             }
         }
 
@@ -119,6 +119,11 @@ namespace GenFx.Components.Lists
         /// <exception cref="ArgumentNullException"><paramref name="entity"/> is null.</exception>
         public override void CopyTo(GeneticEntity entity)
         {
+            if (entity == null)
+            {
+                throw new ArgumentNullException(nameof(entity));
+            }
+
             this.EnsureEntityIsInitialized();
             base.CopyTo(entity);
 

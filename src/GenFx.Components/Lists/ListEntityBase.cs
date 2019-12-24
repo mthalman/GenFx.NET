@@ -17,7 +17,9 @@ namespace GenFx.Components.Lists
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix")]
     [DataContract]
     [CustomComponentValidator(typeof(ListStartingLengthValidator))]
+#pragma warning disable CA1010 // Collections should implement generic interface
     public abstract class ListEntityBase : GeneticEntity, IList
+#pragma warning restore CA1010 // Collections should implement generic interface
     {
         private const int DefaultMaxLength = 20;
         private const int DefaultMinLength = 5;
@@ -74,7 +76,7 @@ namespace GenFx.Components.Lists
         /// Gets or sets the list element at the specified index.
         /// </summary>
         /// <param name="index">The zero-based index of the list element to get or set.</param>
-        object IList.this[int index]
+        public object this[int index]
         {
             get { return this.GetValue(index); }
             set { this.SetValue(index, value); }
@@ -99,16 +101,16 @@ namespace GenFx.Components.Lists
         /// </summary>
         public abstract int Length { get; set; }
 
-        int ICollection.Count { get { return this.Length; } }
+        public int Count { get { return this.Length; } }
 
         /// <summary>
         /// Gets a value indicating whether the list is read-only.
         /// </summary>
         public bool IsReadOnly { get { return false; } }
 
-        bool ICollection.IsSynchronized { get { return false; } }
+        public bool IsSynchronized { get { return false; } }
 
-        object ICollection.SyncRoot { get { return null; } }
+        public object SyncRoot { get { return null; } }
 
         /// <summary>
         /// Returns the initial length to use for the list.

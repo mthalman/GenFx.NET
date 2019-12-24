@@ -10,13 +10,13 @@ namespace GenFx.UI.ViewModels
         public static EnumViewModel FitnessSortByEntity = new EnumViewModel(FitnessSortOption.Entity, Resources.FitnessSortOption_Entity);
         public static EnumViewModel FitnessSortByFitness = new EnumViewModel(FitnessSortOption.Fitness, Resources.FitnessSortOption_Fitness);
 
-        private static IEnumerable<EnumViewModel> fitnessTypes = new EnumViewModel[]
+        private static readonly IEnumerable<EnumViewModel> fitnessTypes = new EnumViewModel[]
         {
             FitnessTypeScaled,
             FitnessTypeRaw
         };
 
-        private static IEnumerable<EnumViewModel> fitnessSortOptions = new EnumViewModel[]
+        private static readonly IEnumerable<EnumViewModel> fitnessSortOptions = new EnumViewModel[]
         {
             FitnessSortByEntity,
             FitnessSortByFitness

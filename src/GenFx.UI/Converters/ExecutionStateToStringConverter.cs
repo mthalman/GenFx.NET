@@ -24,8 +24,7 @@ namespace GenFx.UI.Converters
                 return null;
             }
 
-            string displayValue = null;
-
+            string displayValue;
             switch ((ExecutionState)value)
             {
                 case ExecutionState.Idle:

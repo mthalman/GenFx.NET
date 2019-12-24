@@ -88,43 +88,32 @@ namespace GenFx.Tests
             double max = 100;
             bool isMaxInclusive = true;
             DoubleValidator validator = new DoubleValidator(min, isMinInclusive, max, isMaxInclusive);
-
-            string temp;
-            bool isValid = validator.IsValid(49, "foo", null, out temp);
+            bool isValid = validator.IsValid(49, "foo", null, out _);
             Assert.False(isValid, "IsValid returned incorrect value.");
-
-            isValid = validator.IsValid(49.999, "foo", null, out temp);
+            isValid = validator.IsValid(49.999, "foo", null, out _);
             Assert.False(isValid, "IsValid returned incorrect value.");
-
-            isValid = validator.IsValid(50, "foo", null, out temp);
+            isValid = validator.IsValid(50, "foo", null, out _);
             Assert.True(isValid, "IsValid returned incorrect value.");
-
-            isValid = validator.IsValid(75, "foo", null, out temp);
+            isValid = validator.IsValid(75, "foo", null, out _);
             Assert.True(isValid, "IsValid returned incorrect value.");
-
-            isValid = validator.IsValid(100, "foo", null, out temp);
+            isValid = validator.IsValid(100, "foo", null, out _);
             Assert.True(isValid, "IsValid returned incorrect value.");
-
-            isValid = validator.IsValid(100.0000001, "foo", null, out temp);
+            isValid = validator.IsValid(100.0000001, "foo", null, out _);
             Assert.False(isValid, "IsValid returned incorrect value.");
-
-            isValid = validator.IsValid(101, "foo", null, out temp);
+            isValid = validator.IsValid(101, "foo", null, out _);
             Assert.False(isValid, "IsValid returned incorrect value.");
 
             PrivateObject accessor = new PrivateObject(validator);
             accessor.SetField("isMinValueInclusive", false);
-
-            isValid = validator.IsValid(50, "foo", null, out temp);
+            isValid = validator.IsValid(50, "foo", null, out _);
             Assert.False(isValid, "IsValid returned incorrect value.");
-
-            isValid = validator.IsValid(50.00001, "foo", null, out temp);
+            isValid = validator.IsValid(50.00001, "foo", null, out _);
             Assert.True(isValid, "IsValid returned incorrect value.");
 
             accessor.SetField("isMaxValueInclusive", false);
-            isValid = validator.IsValid(100, "foo", null, out temp);
+            isValid = validator.IsValid(100, "foo", null, out _);
             Assert.False(isValid, "IsValid returned incorrect value.");
-
-            isValid = validator.IsValid(99.99999, "foo", null, out temp);
+            isValid = validator.IsValid(99.99999, "foo", null, out _);
             Assert.True(isValid, "IsValid returned incorrect value.");
         }
 
@@ -150,9 +139,7 @@ namespace GenFx.Tests
         public void DoubleValidator_IsValid_WrongType()
         {
             DoubleValidator validator = new DoubleValidator(1, true, 10, true);
-
-            string errorMessage;
-            bool result = validator.IsValid("x", "Property", null, out errorMessage);
+            bool result = validator.IsValid("x", "Property", null, out _);
             Assert.False(result);
         }
 
@@ -163,10 +150,8 @@ namespace GenFx.Tests
         public void DoubleValidator_IsValid_EqualMinMax()
         {
             DoubleValidator validator = new DoubleValidator(1, true, 1, true);
-
-            string errorMessage;
-            bool result = validator.IsValid(2, "Property", null, out errorMessage);
+            bool result = validator.IsValid(2, "Property", null, out _);
             Assert.False(result);
         }
-        }
+    }
 }

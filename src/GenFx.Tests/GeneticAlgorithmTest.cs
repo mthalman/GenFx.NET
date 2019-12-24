@@ -1312,27 +1312,39 @@ namespace GenFx.Tests
             int environmentSize = 2;
             int populationSize = 100;
 
-            TestGeneticAlgorithm algorithm = new TestGeneticAlgorithm();
-            algorithm.MinimumEnvironmentSize = environmentSize;
+            TestGeneticAlgorithm algorithm = new TestGeneticAlgorithm
+            {
+                MinimumEnvironmentSize = environmentSize
+            };
 
-            MockPopulation popConfig = new MockPopulation();
-            popConfig.MinimumPopulationSize = populationSize;
+            MockPopulation popConfig = new MockPopulation
+            {
+                MinimumPopulationSize = populationSize
+            };
             algorithm.PopulationSeed = popConfig;
 
-            MockCrossoverOperator crossConfig = new MockCrossoverOperator();
-            crossConfig.CrossoverRate = .7;
+            MockCrossoverOperator crossConfig = new MockCrossoverOperator
+            {
+                CrossoverRate = .7
+            };
             algorithm.CrossoverOperator = crossConfig;
 
-            MockElitismStrategy eliteConfig = new MockElitismStrategy();
-            eliteConfig.ElitistRatio = .1;
+            MockElitismStrategy eliteConfig = new MockElitismStrategy
+            {
+                ElitistRatio = .1
+            };
             algorithm.ElitismStrategy = eliteConfig;
 
-            MockMutationOperator mutConfig = new MockMutationOperator();
-            mutConfig.MutationRate = .01;
+            MockMutationOperator mutConfig = new MockMutationOperator
+            {
+                MutationRate = .01
+            };
             algorithm.MutationOperator = mutConfig;
 
-            MockSelectionOperator selConfig = new MockSelectionOperator();
-            selConfig.SelectionBasedOnFitnessType = FitnessType.Scaled;
+            MockSelectionOperator selConfig = new MockSelectionOperator
+            {
+                SelectionBasedOnFitnessType = FitnessType.Scaled
+            };
             algorithm.SelectionOperator = selConfig;
 
             algorithm.FitnessEvaluator = new MockFitnessEvaluator();

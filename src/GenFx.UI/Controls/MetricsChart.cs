@@ -184,7 +184,7 @@ namespace GenFx.UI.Controls
 
             if (algorithm != null && population != null)
             {
-                IEnumerable<Metric> metrics = selectedMetrics != null ? selectedMetrics : algorithm.Metrics;
+                IEnumerable<Metric> metrics = selectedMetrics ?? algorithm.Metrics;
                 foreach (Metric metric in metrics)
                 {
                     LineSeries series = new LineSeries

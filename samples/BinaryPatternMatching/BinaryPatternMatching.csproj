@@ -7,7 +7,6 @@
   
   <ItemGroup>
     <ProjectReference Include="..\..\src\GenFx.Components\GenFx.Components.csproj" />
-    <ProjectReference Include="..\..\src\GenFx\GenFx.csproj" />
   </ItemGroup>
   
   <ItemGroup>

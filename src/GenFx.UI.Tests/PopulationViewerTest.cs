@@ -56,8 +56,10 @@ namespace GenFx.UI.Tests
         [StaFact]
         public void PopulationViewer_OnSelectedPopulationChanged_InitialPopulation()
         {
-            PopulationViewer viewer = new PopulationViewer();
-            viewer.ExecutionState = ExecutionState.Idle;
+            PopulationViewer viewer = new PopulationViewer
+            {
+                ExecutionState = ExecutionState.Idle
+            };
 
             TestPopulation population = new TestPopulation();
             population.Entities.Add(Mock.Of<GeneticEntity>());
@@ -73,10 +75,11 @@ namespace GenFx.UI.Tests
         [StaFact]
         public void PopulationViewer_OnSelectedPopulationChanged_NullPopulation()
         {
-            PopulationViewer viewer = new PopulationViewer();
-            viewer.ExecutionState =  ExecutionState.Idle;
-
-            viewer.Population = new TestPopulation();
+            PopulationViewer viewer = new PopulationViewer
+            {
+                ExecutionState = ExecutionState.Idle,
+                Population = new TestPopulation()
+            };
 
             TestPopulation population = new TestPopulation();
             population.Entities.Add(Mock.Of<GeneticEntity>());
@@ -91,8 +94,10 @@ namespace GenFx.UI.Tests
 
         private static void TestStateTransition(ExecutionState fromState, ExecutionState toState, bool expectEntitiesToUpdate)
         {
-            PopulationViewer viewer = new PopulationViewer();
-            viewer.ExecutionState = fromState;
+            PopulationViewer viewer = new PopulationViewer
+            {
+                ExecutionState = fromState
+            };
 
             TestPopulation population = new TestPopulation();
             population.Entities.Add(Mock.Of<GeneticEntity>());
@@ -114,8 +119,10 @@ namespace GenFx.UI.Tests
 
         private static void TestPopulationChange(ExecutionState state, bool expectEntitiesToUpdate)
         {
-            PopulationViewer viewer = new PopulationViewer();
-            viewer.ExecutionState = state;
+            PopulationViewer viewer = new PopulationViewer
+            {
+                ExecutionState = state
+            };
 
             TestPopulation population = new TestPopulation();
             population.Entities.Add(Mock.Of<GeneticEntity>());

@@ -81,7 +81,7 @@ namespace GenFx.Components.Trees
         {
             if (parentNode == null)
             {
-                throw new ArgumentNullException("parentNode");
+                throw new ArgumentNullException(nameof(parentNode));
             }
 
             for (int i = 0; i < parentNode.ChildNodes.Count; i++)

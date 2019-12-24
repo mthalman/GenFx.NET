@@ -28,8 +28,10 @@ namespace GenFx.UI.Tests
         [StaFact]
         public void PopulationSelector_OnEnvironmentChanged_NoPopulation()
         {
-            PopulationSelector selector = new PopulationSelector();
-            selector.Environment = new GeneticEnvironment(Mock.Of<GeneticAlgorithm>());
+            PopulationSelector selector = new PopulationSelector
+            {
+                Environment = new GeneticEnvironment(Mock.Of<GeneticAlgorithm>())
+            };
             Assert.Null(selector.SelectedPopulation);
         }
 

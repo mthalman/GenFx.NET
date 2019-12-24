@@ -9,7 +9,6 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\GenFx.Components\GenFx.Components.csproj" />
     <ProjectReference Include="..\..\src\GenFx.UI\GenFx.UI.csproj" />
-    <ProjectReference Include="..\..\src\GenFx\GenFx.csproj" />
   </ItemGroup>
   
 </Project>

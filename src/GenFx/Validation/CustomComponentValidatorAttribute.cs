@@ -38,7 +38,7 @@ namespace GenFx.Validation
         /// <exception cref="ArgumentNullException"><paramref name="validatorType"/> is null.</exception>
         /// <exception cref="ArgumentException"><paramref name="validatorType"/> does not derive from <see cref="ComponentValidator"/>.</exception>
         protected CustomComponentValidatorBaseAttribute(Type validatorType)
-            : this(validatorType, new object[0])
+            : this(validatorType, Array.Empty<object>())
         {
 
         }
@@ -56,12 +56,7 @@ namespace GenFx.Validation
         /// <exception cref="ArgumentException"><paramref name="validatorType"/> does not derive from <see cref="ComponentValidator"/>.</exception>
         protected CustomComponentValidatorBaseAttribute(Type validatorType, params object[] validatorConstructorArguments)
         {
-            if (validatorType == null)
-            {
-                throw new ArgumentNullException(nameof(validatorType));
-            }
-
-            this.ValidatorType = validatorType;
+            this.ValidatorType = validatorType ?? throw new ArgumentNullException(nameof(validatorType));
             this.ValidatorConstructorArguments = validatorConstructorArguments;
 
             if (!this.ValidatorType.IsSubclassOf(typeof(ComponentValidator)))
@@ -140,15 +135,10 @@ namespace GenFx.Validation
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
     public sealed class CustomExternalComponentValidatorAttribute : CustomComponentValidatorBaseAttribute, IExternalComponentValidatorAttribute
     {
-        private Type targetComponentType;
-        
         /// <summary>
         /// Gets the <see cref="Type"/> of the <see cref="GeneticComponent"/> to be validated.
         /// </summary>
-        public Type TargetComponentType
-        {
-            get { return this.targetComponentType; }
-        }
+        public Type TargetComponentType { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CustomExternalComponentValidatorAttribute"/> class.
@@ -161,7 +151,7 @@ namespace GenFx.Validation
         /// <exception cref="ArgumentException"><paramref name="targetComponentType"/> does not implement <see cref="GeneticComponent"/>.</exception>
         /// <exception cref="ArgumentException"><paramref name="validatorType"/> does not derive from <see cref="PropertyValidator"/>.</exception>
         public CustomExternalComponentValidatorAttribute(Type targetComponentType, Type validatorType)
-            : this(targetComponentType, validatorType, new object[0])
+            : this(targetComponentType, validatorType, Array.Empty<object>())
         {
         }
 
@@ -183,7 +173,7 @@ namespace GenFx.Validation
         {
             ExternalValidatorAttributeHelper.ValidateArguments(targetComponentType);
 
-            this.targetComponentType = targetComponentType;
+            this.TargetComponentType = targetComponentType;
         }
     }
 }

@@ -255,9 +255,11 @@ namespace GenFx.UI.Tests
             algorithm.Metrics.Add(metric1);
             algorithm.Metrics.Add(metric2);
 
-            MetricsChart chart = new MetricsChart();
-            chart.Algorithm = algorithm;
-            chart.Population = population;
+            MetricsChart chart = new MetricsChart
+            {
+                Algorithm = algorithm,
+                Population = population
+            };
 
             Assert.Single(chart.PlotModel.Series);
             Assert.Equal(metric2Results, (ICollection)((LineSeries)chart.PlotModel.Series[0]).ItemsSource);
@@ -282,9 +284,11 @@ namespace GenFx.UI.Tests
 
             algorithm.Metrics.Add(metric1);
 
-            MetricsChart chart = new MetricsChart();
-            chart.Algorithm = algorithm;
-            chart.Population = population;
+            MetricsChart chart = new MetricsChart
+            {
+                Algorithm = algorithm,
+                Population = population
+            };
 
             Assert.Single(chart.PlotModel.Series);
 
@@ -317,9 +321,11 @@ namespace GenFx.UI.Tests
 
             algorithm.Metrics.Add(metric1);
 
-            MetricsChart chart = new MetricsChart();
-            chart.Algorithm = algorithm;
-            chart.Population = population;
+            MetricsChart chart = new MetricsChart
+            {
+                Algorithm = algorithm,
+                Population = population
+            };
 
             Assert.Single(chart.PlotModel.Series);
 
@@ -362,9 +368,11 @@ namespace GenFx.UI.Tests
 
             algorithm.Metrics.Add(metric2);
 
-            MetricsChart chart = new MetricsChart();
-            chart.Algorithm = algorithm;
-            chart.Population = population;
+            MetricsChart chart = new MetricsChart
+            {
+                Algorithm = algorithm,
+                Population = population
+            };
 
             Assert.Equal(2, chart.PlotModel.Series.Count);
 
@@ -390,7 +398,7 @@ namespace GenFx.UI.Tests
             triggerRefresh(chart);
 
             // Verify the chart has been refreshed
-            Metric[] metrics = (chart.SelectedMetrics != null ? chart.SelectedMetrics : chart.Algorithm.Metrics).ToArray();
+            Metric[] metrics = (chart.SelectedMetrics ?? chart.Algorithm.Metrics).ToArray();
             Assert.Equal(metrics.Length, chart.PlotModel.Series.Count);
             for (int i = 0; i < metrics.Length; i++)
             {

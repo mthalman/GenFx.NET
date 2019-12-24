@@ -32,13 +32,13 @@ namespace GenFx.Tests
         public void CustomComponentValidatorAttribute_Ctor_ParameterizedCtor()
         {
             CustomExternalPropertyValidatorAttribute attrib =
-                new CustomExternalPropertyValidatorAttribute(typeof(CustomComponent), nameof(CustomComponent.MyProperty), typeof(CustomValidator2), 1, "test");
+                new CustomExternalPropertyValidatorAttribute(typeof(CustomComponent), nameof(CustomComponent.MyProperty), typeof(CustomValidator2), 1);
 
             Assert.Equal(nameof(CustomComponent.MyProperty), attrib.TargetPropertyName);
             Assert.Equal(typeof(CustomComponent), attrib.TargetComponentType);
             Assert.Equal(typeof(CustomValidator2), attrib.ValidatorType);
             Assert.IsType<CustomValidator2>(attrib.Validator);
-            Assert.Equal(new object[] { 1, "test" }, attrib.ValidatorConstructorArguments);
+            Assert.Equal(new object[] { 1 }, attrib.ValidatorConstructorArguments);
         }
 
         /// <summary>
@@ -125,10 +125,12 @@ namespace GenFx.Tests
 
         private class CustomValidator2 : PropertyValidator
         {
-            public CustomValidator2(int intVal, string strVal)
+            public CustomValidator2(int intVal)
             {
-
+                this.IntVal = intVal;
             }
+
+            public int IntVal { get; }
 
             public override bool IsValid(object value, string propertyName, object owner, out string errorMessage)
             {

@@ -297,5 +297,15 @@ namespace GenFx
         {
             return ComparisonHelper.CompareObjects(obj1, obj2) > 0;
         }
+
+        public static bool operator <=(GeneticEntity left, GeneticEntity right)
+        {
+            return left is null || left.CompareTo(right) <= 0;
+        }
+
+        public static bool operator >=(GeneticEntity left, GeneticEntity right)
+        {
+            return left is null ? right is null : left.CompareTo(right) >= 0;
+        }
     }
 }

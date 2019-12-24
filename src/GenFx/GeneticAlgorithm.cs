@@ -26,13 +26,13 @@ namespace GenFx
         private GeneticEnvironment environment;
 
         [DataMember]
-        private List<Metric> metrics = new List<Metric>();
+        private readonly List<Metric> metrics = new List<Metric>();
 
         [DataMember]
         private List<Metric> sortedMetrics = new List<Metric>();
 
         [DataMember]
-        private List<Plugin> plugins = new List<Plugin>();
+        private readonly List<Plugin> plugins = new List<Plugin>();
 
         [DataMember]
         private bool isInitialized;
@@ -556,8 +556,7 @@ namespace GenFx
         /// <returns>The <see cref="MetricNode"/> associated with <paramref name="metricType"/>.</returns>
         private static MetricNode CollectMetricTypeGraphs(Type metricType, List<MetricNode> roots, Dictionary<Type, MetricNode> collectedMetricTypes)
         {
-            MetricNode metricNode;
-            if (collectedMetricTypes.TryGetValue(metricType, out metricNode))
+            if (collectedMetricTypes.TryGetValue(metricType, out MetricNode metricNode))
             {
                 // We've encountered a type that we've processed already.  Ensure that this isn't
                 // the result of a cycle in the graph.
@@ -773,8 +772,7 @@ namespace GenFx
                 foreach (PropertyInfo propertyInfo in properties)
                 {
                     // Check that the property is valid using the validators described by external components.
-                    List<PropertyValidator> externalValidators;
-                    if (externalValidationMapping.TryGetValue(propertyInfo, out externalValidators))
+                    if (externalValidationMapping.TryGetValue(propertyInfo, out List<PropertyValidator> externalValidators))
                     {
                         object propValue = propertyInfo.GetValue(component, null);
                         foreach (PropertyValidator validator in externalValidators)
@@ -818,8 +816,7 @@ namespace GenFx
             foreach (IExternalConfigurationPropertyValidatorAttribute attrib in attribs)
             {
                 PropertyInfo prop = ExternalValidatorAttributeHelper.GetTargetPropertyInfo(attrib.TargetComponentType, attrib.TargetPropertyName);
-                List<PropertyValidator> validators;
-                if (!this.externalValidationMapping.TryGetValue(prop, out validators))
+                if (!this.externalValidationMapping.TryGetValue(prop, out List<PropertyValidator> validators))
                 {
                     validators = new List<PropertyValidator>();
                     this.externalValidationMapping.Add(prop, validators);

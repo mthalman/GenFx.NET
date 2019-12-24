@@ -21,11 +21,7 @@ namespace GenFx
         /// <param name="algorithm">The algorithm that is to use this component.</param>
         public virtual void Initialize(GeneticAlgorithm algorithm)
         {
-            if (algorithm == null)
-            {
-                throw new ArgumentNullException(nameof(algorithm));
-            }
-            this.Algorithm = algorithm;
+            this.Algorithm = algorithm ?? throw new ArgumentNullException(nameof(algorithm));
         }
     }
 }

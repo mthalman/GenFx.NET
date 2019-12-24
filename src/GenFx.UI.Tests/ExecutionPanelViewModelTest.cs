@@ -21,21 +21,22 @@ namespace GenFx.UI.Tests
         public void ExecutionPanelViewModel_CanStartExecution()
         {
             ExecutionContext context = new ExecutionContext(Mock.Of<GeneticAlgorithm>());
-            ExecutionPanelViewModel viewModel = new ExecutionPanelViewModel(context);
-
-            foreach (ExecutionState enumVal in Enum.GetValues(typeof(ExecutionState)))
+            using (ExecutionPanelViewModel viewModel = new ExecutionPanelViewModel(context))
             {
-                context.ExecutionState = enumVal;
-
-                switch (enumVal)
+                foreach (ExecutionState enumVal in Enum.GetValues(typeof(ExecutionState)))
                 {
-                    case ExecutionState.Idle:
-                    case ExecutionState.Paused:
-                        Assert.True(viewModel.CanStartExecution());
-                        break;
-                    default:
-                        Assert.False(viewModel.CanStartExecution());
-                        break;
+                    context.ExecutionState = enumVal;
+
+                    switch (enumVal)
+                    {
+                        case ExecutionState.Idle:
+                        case ExecutionState.Paused:
+                            Assert.True(viewModel.CanStartExecution());
+                            break;
+                        default:
+                            Assert.False(viewModel.CanStartExecution());
+                            break;
+                    }
                 }
             }
         }
@@ -47,21 +48,22 @@ namespace GenFx.UI.Tests
         public void ExecutionPanelViewModel_CanStopExecution()
         {
             ExecutionContext context = new ExecutionContext(Mock.Of<GeneticAlgorithm>());
-            ExecutionPanelViewModel viewModel = new ExecutionPanelViewModel(context);
-
-            foreach (ExecutionState enumVal in Enum.GetValues(typeof(ExecutionState)))
+            using (ExecutionPanelViewModel viewModel = new ExecutionPanelViewModel(context))
             {
-                context.ExecutionState = enumVal;
-
-                switch (enumVal)
+                foreach (ExecutionState enumVal in Enum.GetValues(typeof(ExecutionState)))
                 {
-                    case ExecutionState.Running:
-                    case ExecutionState.Paused:
-                        Assert.True(viewModel.CanStopExecution());
-                        break;
-                    default:
-                        Assert.False(viewModel.CanStopExecution());
-                        break;
+                    context.ExecutionState = enumVal;
+
+                    switch (enumVal)
+                    {
+                        case ExecutionState.Running:
+                        case ExecutionState.Paused:
+                            Assert.True(viewModel.CanStopExecution());
+                            break;
+                        default:
+                            Assert.False(viewModel.CanStopExecution());
+                            break;
+                    }
                 }
             }
         }
@@ -73,20 +75,21 @@ namespace GenFx.UI.Tests
         public void ExecutionPanelViewModel_CanPauseExecution()
         {
             ExecutionContext context = new ExecutionContext(Mock.Of<GeneticAlgorithm>());
-            ExecutionPanelViewModel viewModel = new ExecutionPanelViewModel(context);
-
-            foreach (ExecutionState enumVal in Enum.GetValues(typeof(ExecutionState)))
+            using (ExecutionPanelViewModel viewModel = new ExecutionPanelViewModel(context))
             {
-                context.ExecutionState = enumVal;
-
-                switch (enumVal)
+                foreach (ExecutionState enumVal in Enum.GetValues(typeof(ExecutionState)))
                 {
-                    case ExecutionState.Running:
-                        Assert.True(viewModel.CanPauseExecution());
-                        break;
-                    default:
-                        Assert.False(viewModel.CanPauseExecution());
-                        break;
+                    context.ExecutionState = enumVal;
+
+                    switch (enumVal)
+                    {
+                        case ExecutionState.Running:
+                            Assert.True(viewModel.CanPauseExecution());
+                            break;
+                        default:
+                            Assert.False(viewModel.CanPauseExecution());
+                            break;
+                    }
                 }
             }
         }
@@ -99,25 +102,29 @@ namespace GenFx.UI.Tests
         {
             GeneticAlgorithm algorithm = CreateTestAlgorithm(true);
 
-            ExecutionContext context = new ExecutionContext(algorithm);
-            context.ExecutionState = ExecutionState.Idle;
+            ExecutionContext context = new ExecutionContext(algorithm)
+            {
+                ExecutionState = ExecutionState.Idle
+            };
 
-            ExecutionPanelViewModel viewModel = new ExecutionPanelViewModel(context);
-            Task task = Task.Run(async () => await viewModel.StartExecutionAsync());
+            using (ExecutionPanelViewModel viewModel = new ExecutionPanelViewModel(context))
+            {
+                Task task = Task.Run(async () => await viewModel.StartExecutionAsync());
 
-            // Wait for the algorithm to begin execution
-            await Task.Delay(50);
+                // Wait for the algorithm to begin execution
+                await Task.Delay(50);
 
-            Assert.Equal(ExecutionState.Running, context.ExecutionState);
+                Assert.Equal(ExecutionState.Running, context.ExecutionState);
 
-            // Trigger the algorithm to complete
-            ((TestTerminator)algorithm.Terminator).IsCompleteValue = true;
+                // Trigger the algorithm to complete
+                ((TestTerminator)algorithm.Terminator).IsCompleteValue = true;
 
-            // Wait for the algorithm to finish
-            await Task.Delay(50);
+                // Wait for the algorithm to finish
+                await Task.Delay(50);
 
-            Assert.Equal(ExecutionState.Idle, context.ExecutionState);
-            Assert.True(task.IsCompleted);
+                Assert.Equal(ExecutionState.Idle, context.ExecutionState);
+                Assert.True(task.IsCompleted);
+            }
         }
 
         /// <summary>
@@ -128,17 +135,21 @@ namespace GenFx.UI.Tests
         {
             GeneticAlgorithm algorithm = CreateTestAlgorithm(true);
 
-            ExecutionContext context = new ExecutionContext(algorithm);
-            context.ExecutionState = ExecutionState.Idle;
+            ExecutionContext context = new ExecutionContext(algorithm)
+            {
+                ExecutionState = ExecutionState.Idle
+            };
 
-            ExecutionPanelViewModel viewModel = new ExecutionPanelViewModel(context);
-            Task task = Task.Run(async () => await viewModel.StepExecutionAsync());
+            using (ExecutionPanelViewModel viewModel = new ExecutionPanelViewModel(context))
+            {
+                Task task = Task.Run(async () => await viewModel.StepExecutionAsync());
 
-            // Wait for the algorithm to finish
-            await Task.Delay(50);
+                // Wait for the algorithm to finish
+                await Task.Delay(50);
 
-            Assert.Equal(ExecutionState.Paused, context.ExecutionState);
-            Assert.True(task.IsCompleted);
+                Assert.Equal(ExecutionState.Paused, context.ExecutionState);
+                Assert.True(task.IsCompleted);
+            }
         }
 
         /// <summary>
@@ -149,19 +160,23 @@ namespace GenFx.UI.Tests
         {
             GeneticAlgorithm algorithm = CreateTestAlgorithm(true);
 
-            ExecutionContext context = new ExecutionContext(algorithm);
-            context.ExecutionState = ExecutionState.Idle;
+            ExecutionContext context = new ExecutionContext(algorithm)
+            {
+                ExecutionState = ExecutionState.Idle
+            };
 
-            ExecutionPanelViewModel viewModel = new ExecutionPanelViewModel(context);
-            ((TestTerminator)algorithm.Terminator).IsCompleteValue = true;
+            using (ExecutionPanelViewModel viewModel = new ExecutionPanelViewModel(context))
+            {
+                ((TestTerminator)algorithm.Terminator).IsCompleteValue = true;
 
-            Task task = Task.Run(async () => await viewModel.StepExecutionAsync());
+                Task task = Task.Run(async () => await viewModel.StepExecutionAsync());
 
-            // Wait for the algorithm to finish
-            await Task.Delay(50);
+                // Wait for the algorithm to finish
+                await Task.Delay(50);
 
-            Assert.Equal(ExecutionState.Idle, context.ExecutionState);
-            Assert.True(task.IsCompleted);
+                Assert.Equal(ExecutionState.Idle, context.ExecutionState);
+                Assert.True(task.IsCompleted);
+            }
         }
 
         /// <summary>
@@ -172,42 +187,46 @@ namespace GenFx.UI.Tests
         {
             GeneticAlgorithm algorithm = CreateTestAlgorithm(true);
 
-            ExecutionContext context = new ExecutionContext(algorithm);
-            context.ExecutionState = ExecutionState.Idle;
+            ExecutionContext context = new ExecutionContext(algorithm)
+            {
+                ExecutionState = ExecutionState.Idle
+            };
 
-            ExecutionPanelViewModel viewModel = new ExecutionPanelViewModel(context);
-            Task task = Task.Run(async () => await viewModel.StartExecutionAsync());
+            using (ExecutionPanelViewModel viewModel = new ExecutionPanelViewModel(context))
+            {
+                Task task = Task.Run(async () => await viewModel.StartExecutionAsync());
 
-            // Wait for the algorithm to begin execution
-            await Task.Delay(50);
-            Assert.Equal(ExecutionState.Running, context.ExecutionState);
+                // Wait for the algorithm to begin execution
+                await Task.Delay(50);
+                Assert.Equal(ExecutionState.Running, context.ExecutionState);
 
-            GeneticEnvironment environment = algorithm.Environment;
+                GeneticEnvironment environment = algorithm.Environment;
 
-            context.ExecutionState = ExecutionState.PausePending;
+                context.ExecutionState = ExecutionState.PausePending;
 
-            // Wait for the algorithm to become paused
-            await Task.Delay(50);
-            Assert.Equal(ExecutionState.Paused, context.ExecutionState);
+                // Wait for the algorithm to become paused
+                await Task.Delay(50);
+                Assert.Equal(ExecutionState.Paused, context.ExecutionState);
 
-            // Resume execution
-            task = Task.Run(async () => await viewModel.StartExecutionAsync());
+                // Resume execution
+                task = Task.Run(async () => await viewModel.StartExecutionAsync());
 
-            // Wait for the algorithm to begin execution
-            await Task.Delay(50);
-            Assert.Equal(ExecutionState.Running, context.ExecutionState);
+                // Wait for the algorithm to begin execution
+                await Task.Delay(50);
+                Assert.Equal(ExecutionState.Running, context.ExecutionState);
 
-            // Verify InitializeAsync was not called
-            Assert.Same(environment, algorithm.Environment);
+                // Verify InitializeAsync was not called
+                Assert.Same(environment, algorithm.Environment);
 
-            // Trigger the algorithm to complete
-            ((TestTerminator)algorithm.Terminator).IsCompleteValue = true;
+                // Trigger the algorithm to complete
+                ((TestTerminator)algorithm.Terminator).IsCompleteValue = true;
 
-            // Wait for the algorithm to finish
-            await Task.Delay(50);
+                // Wait for the algorithm to finish
+                await Task.Delay(50);
 
-            Assert.Equal(ExecutionState.Idle, context.ExecutionState);
-            Assert.True(task.IsCompleted);
+                Assert.Equal(ExecutionState.Idle, context.ExecutionState);
+                Assert.True(task.IsCompleted);
+            }
         }
 
         /// <summary>
@@ -218,28 +237,32 @@ namespace GenFx.UI.Tests
         {
             GeneticAlgorithm algorithm = CreateTestAlgorithm(true);
 
-            ExecutionContext context = new ExecutionContext(algorithm);
-            context.ExecutionState = ExecutionState.Idle;
+            ExecutionContext context = new ExecutionContext(algorithm)
+            {
+                ExecutionState = ExecutionState.Idle
+            };
 
-            ExecutionPanelViewModel viewModel = new ExecutionPanelViewModel(context);
-            Task task = Task.Run(async () => await viewModel.StepExecutionAsync());
+            using (ExecutionPanelViewModel viewModel = new ExecutionPanelViewModel(context))
+            {
+                Task task = Task.Run(async () => await viewModel.StepExecutionAsync());
 
-            // Wait for the algorithm to finish execution
-            await Task.Delay(50);
-            Assert.Equal(ExecutionState.Paused, context.ExecutionState);
+                // Wait for the algorithm to finish execution
+                await Task.Delay(50);
+                Assert.Equal(ExecutionState.Paused, context.ExecutionState);
 
-            GeneticEnvironment environment = algorithm.Environment;
+                GeneticEnvironment environment = algorithm.Environment;
 
-            // Resume execution
-            task = Task.Run(async () => await viewModel.StepExecutionAsync());
+                // Resume execution
+                task = Task.Run(async () => await viewModel.StepExecutionAsync());
 
-            // Wait for the algorithm to begin finish
-            await Task.Delay(50);
-            Assert.Equal(ExecutionState.Paused, context.ExecutionState);
+                // Wait for the algorithm to begin finish
+                await Task.Delay(50);
+                Assert.Equal(ExecutionState.Paused, context.ExecutionState);
 
-            // Verify InitializeAsync was not called
-            Assert.Same(environment, algorithm.Environment);
-            Assert.True(task.IsCompleted);
+                // Verify InitializeAsync was not called
+                Assert.Same(environment, algorithm.Environment);
+                Assert.True(task.IsCompleted);
+            }
         }
 
         /// <summary>
@@ -250,31 +273,35 @@ namespace GenFx.UI.Tests
         {
             GeneticAlgorithm algorithm = CreateTestAlgorithm(true);
 
-            ExecutionContext context = new ExecutionContext(algorithm);
-            context.ExecutionState = ExecutionState.Idle;
+            ExecutionContext context = new ExecutionContext(algorithm)
+            {
+                ExecutionState = ExecutionState.Idle
+            };
 
-            ExecutionPanelViewModel viewModel = new ExecutionPanelViewModel(context);
-            Task task = Task.Run(async () => await viewModel.StepExecutionAsync());
+            using (ExecutionPanelViewModel viewModel = new ExecutionPanelViewModel(context))
+            {
+                Task task = Task.Run(async () => await viewModel.StepExecutionAsync());
 
-            // Wait for the algorithm to finish execution
-            await Task.Delay(50);
-            Assert.Equal(ExecutionState.Paused, context.ExecutionState);
+                // Wait for the algorithm to finish execution
+                await Task.Delay(50);
+                Assert.Equal(ExecutionState.Paused, context.ExecutionState);
 
-            GeneticEnvironment environment = algorithm.Environment;
+                GeneticEnvironment environment = algorithm.Environment;
 
-            // Trigger the algorithm to complete
-            ((TestTerminator)algorithm.Terminator).IsCompleteValue = true;
+                // Trigger the algorithm to complete
+                ((TestTerminator)algorithm.Terminator).IsCompleteValue = true;
 
-            // Resume execution
-            task = Task.Run(async () => await viewModel.StepExecutionAsync());
+                // Resume execution
+                task = Task.Run(async () => await viewModel.StepExecutionAsync());
 
-            // Wait for the algorithm to finish
-            await Task.Delay(50);
-            Assert.Equal(ExecutionState.Idle, context.ExecutionState);
+                // Wait for the algorithm to finish
+                await Task.Delay(50);
+                Assert.Equal(ExecutionState.Idle, context.ExecutionState);
 
-            // Verify InitializeAsync was not called
-            Assert.Same(environment, algorithm.Environment);
-            Assert.True(task.IsCompleted);
+                // Verify InitializeAsync was not called
+                Assert.Same(environment, algorithm.Environment);
+                Assert.True(task.IsCompleted);
+            }
         }
 
         /// <summary>
@@ -285,15 +312,18 @@ namespace GenFx.UI.Tests
         {
             GeneticAlgorithm algorithm = CreateTestAlgorithm(true);
 
-            ExecutionContext context = new ExecutionContext(algorithm);
-            context.ExecutionState = ExecutionState.Idle;
+            ExecutionContext context = new ExecutionContext(algorithm)
+            {
+                ExecutionState = ExecutionState.Idle
+            };
 
-            ExecutionPanelViewModel viewModel = new ExecutionPanelViewModel(context);
+            using (ExecutionPanelViewModel viewModel = new ExecutionPanelViewModel(context))
+            {
+                // Use a population that will cause a validation exception
+                algorithm.PopulationSeed = new TestPopulation2();
 
-            // Use a population that will cause a validation exception
-            algorithm.PopulationSeed = new TestPopulation2();
-
-            await Assert.ThrowsAsync<ValidationException>(() => viewModel.StartExecutionAsync());
+                await Assert.ThrowsAsync<ValidationException>(() => viewModel.StartExecutionAsync());
+            }
             Assert.IsType<ValidationException>(context.AlgorithmException);
         }
 
@@ -305,15 +335,18 @@ namespace GenFx.UI.Tests
         {
             GeneticAlgorithm algorithm = CreateTestAlgorithm(true);
 
-            ExecutionContext context = new ExecutionContext(algorithm);
-            context.ExecutionState = ExecutionState.Idle;
+            ExecutionContext context = new ExecutionContext(algorithm)
+            {
+                ExecutionState = ExecutionState.Idle
+            };
 
-            ExecutionPanelViewModel viewModel = new ExecutionPanelViewModel(context);
+            using (ExecutionPanelViewModel viewModel = new ExecutionPanelViewModel(context))
+            {
+                // Use a population that will cause a validation exception
+                algorithm.PopulationSeed = new TestPopulation2();
 
-            // Use a population that will cause a validation exception
-            algorithm.PopulationSeed = new TestPopulation2();
-
-            await Assert.ThrowsAsync<ValidationException>(() => viewModel.StepExecutionAsync());
+                await Assert.ThrowsAsync<ValidationException>(() => viewModel.StepExecutionAsync());
+            }
             Assert.IsType<ValidationException>(context.AlgorithmException);
         }
 
@@ -325,15 +358,18 @@ namespace GenFx.UI.Tests
         {
             GeneticAlgorithm algorithm = CreateTestAlgorithm(true);
 
-            ExecutionContext context = new ExecutionContext(algorithm);
-            context.ExecutionState = ExecutionState.Idle;
+            ExecutionContext context = new ExecutionContext(algorithm)
+            {
+                ExecutionState = ExecutionState.Idle
+            };
 
-            ExecutionPanelViewModel viewModel = new ExecutionPanelViewModel(context);
+            using (ExecutionPanelViewModel viewModel = new ExecutionPanelViewModel(context))
+            {
+                // Use a terminator that will cause an exception
+                algorithm.Terminator = new TestTerminator2();
 
-            // Use a terminator that will cause an exception
-            algorithm.Terminator = new TestTerminator2();
-
-            await Assert.ThrowsAsync<NotSupportedException>(() => viewModel.StartExecutionAsync());
+                await Assert.ThrowsAsync<NotSupportedException>(() => viewModel.StartExecutionAsync());
+            }
             Assert.IsType<NotSupportedException>(context.AlgorithmException);
         }
 
@@ -345,15 +381,18 @@ namespace GenFx.UI.Tests
         {
             GeneticAlgorithm algorithm = CreateTestAlgorithm(true);
 
-            ExecutionContext context = new ExecutionContext(algorithm);
-            context.ExecutionState = ExecutionState.Idle;
+            ExecutionContext context = new ExecutionContext(algorithm)
+            {
+                ExecutionState = ExecutionState.Idle
+            };
 
-            ExecutionPanelViewModel viewModel = new ExecutionPanelViewModel(context);
+            using (ExecutionPanelViewModel viewModel = new ExecutionPanelViewModel(context))
+            {
+                // Use a terminator that will cause an exception
+                algorithm.Terminator = new TestTerminator2();
 
-            // Use a terminator that will cause an exception
-            algorithm.Terminator = new TestTerminator2();
-
-            await Assert.ThrowsAsync<NotSupportedException>(() => viewModel.StepExecutionAsync());
+                await Assert.ThrowsAsync<NotSupportedException>(() => viewModel.StepExecutionAsync());
+            }
             Assert.IsType<NotSupportedException>(context.AlgorithmException);
         }
 
@@ -363,11 +402,15 @@ namespace GenFx.UI.Tests
         [Fact]
         public void ExecutionPanelViewModel_StopExecution_FromRunningState()
         {
-            ExecutionContext context = new ExecutionContext(Mock.Of<GeneticAlgorithm>());
-            context.ExecutionState = ExecutionState.Running;
+            ExecutionContext context = new ExecutionContext(Mock.Of<GeneticAlgorithm>())
+            {
+                ExecutionState = ExecutionState.Running
+            };
 
-            ExecutionPanelViewModel viewModel = new ExecutionPanelViewModel(context);
-            viewModel.StopExecution();
+            using (ExecutionPanelViewModel viewModel = new ExecutionPanelViewModel(context))
+            {
+                viewModel.StopExecution();
+            }
 
             Assert.Equal(ExecutionState.IdlePending, context.ExecutionState);
         }
@@ -378,11 +421,15 @@ namespace GenFx.UI.Tests
         [Fact]
         public void ExecutionPanelViewModel_StopExecution_FromPausedState()
         {
-            ExecutionContext context = new ExecutionContext(Mock.Of<GeneticAlgorithm>());
-            context.ExecutionState = ExecutionState.Paused;
+            ExecutionContext context = new ExecutionContext(Mock.Of<GeneticAlgorithm>())
+            {
+                ExecutionState = ExecutionState.Paused
+            };
 
-            ExecutionPanelViewModel viewModel = new ExecutionPanelViewModel(context);
-            viewModel.StopExecution();
+            using (ExecutionPanelViewModel viewModel = new ExecutionPanelViewModel(context))
+            {
+                viewModel.StopExecution();
+            }
 
             Assert.Equal(ExecutionState.Idle, context.ExecutionState);
         }
@@ -393,17 +440,20 @@ namespace GenFx.UI.Tests
         [Fact]
         public void ExecutionPanelViewModel_PauseExecution()
         {
-            ExecutionContext context = new ExecutionContext(Mock.Of<GeneticAlgorithm>());
-            context.ExecutionState = ExecutionState.Running;
-
-            ExecutionPanelViewModel viewModel = new ExecutionPanelViewModel(context);
-
-            foreach (ExecutionState enumVal in Enum.GetValues(typeof(ExecutionState)))
+            ExecutionContext context = new ExecutionContext(Mock.Of<GeneticAlgorithm>())
             {
-                context.ExecutionState = enumVal;
-                viewModel.PauseExecution();
+                ExecutionState = ExecutionState.Running
+            };
 
-                Assert.Equal(ExecutionState.PausePending, context.ExecutionState);
+            using (ExecutionPanelViewModel viewModel = new ExecutionPanelViewModel(context))
+            {
+                foreach (ExecutionState enumVal in Enum.GetValues(typeof(ExecutionState)))
+                {
+                    context.ExecutionState = enumVal;
+                    viewModel.PauseExecution();
+
+                    Assert.Equal(ExecutionState.PausePending, context.ExecutionState);
+                }
             }
         }
 
@@ -441,33 +491,35 @@ namespace GenFx.UI.Tests
         public async Task ExecutionPanelViewModel_AlgorithmCompleted()
         {
             GeneticAlgorithm algorithm = CreateTestAlgorithm();
-            
-            ExecutionContext context = new ExecutionContext(algorithm);
 
-            context.ExecutionState = ExecutionState.Idle;
-
-            ExecutionPanelViewModel viewModel = new ExecutionPanelViewModel(context);
-
-            int propertyChangedCallCount = 0;
-            context.PropertyChanged += (sender, args) =>
+            ExecutionContext context = new ExecutionContext(algorithm)
             {
-                propertyChangedCallCount++;
-                switch (propertyChangedCallCount)
-                {
-                    case 1:
-                        Assert.Equal(ExecutionState.Running, context.ExecutionState);
-                        break;
-                    case 2:
-                        Assert.Equal(ExecutionState.Idle, context.ExecutionState);
-                        break;
-                    default:
-                        break;
-                }
+                ExecutionState = ExecutionState.Idle
             };
 
-            await viewModel.StartExecutionAsync();
+            using (ExecutionPanelViewModel viewModel = new ExecutionPanelViewModel(context))
+            {
+                int propertyChangedCallCount = 0;
+                context.PropertyChanged += (sender, args) =>
+                {
+                    propertyChangedCallCount++;
+                    switch (propertyChangedCallCount)
+                    {
+                        case 1:
+                            Assert.Equal(ExecutionState.Running, context.ExecutionState);
+                            break;
+                        case 2:
+                            Assert.Equal(ExecutionState.Idle, context.ExecutionState);
+                            break;
+                        default:
+                            break;
+                    }
+                };
 
-            Assert.Equal(2, propertyChangedCallCount);
+                await viewModel.StartExecutionAsync();
+
+                Assert.Equal(2, propertyChangedCallCount);
+            }
         }
 
         /// <summary>
@@ -480,15 +532,16 @@ namespace GenFx.UI.Tests
 
             ExecutionContext context = new ExecutionContext(algorithm);
 
-            ExecutionPanelViewModel viewModel = new ExecutionPanelViewModel(context);
+            using (ExecutionPanelViewModel viewModel = new ExecutionPanelViewModel(context))
+            {
+                Task task = Task.Run(async () => await viewModel.StartExecutionAsync());
 
-            Task task = Task.Run(async () => await viewModel.StartExecutionAsync());
+                await Task.Delay(50); // Wait just a bit so the algorithm can start executing
+                context.ExecutionState = ExecutionState.IdlePending;
+                await Task.Delay(50); // Wait for the IdlePending to take effect on the executing algorithm.
 
-            await Task.Delay(50); // Wait just a bit so the algorithm can start executing
-            context.ExecutionState = ExecutionState.IdlePending;
-            await Task.Delay(50); // Wait for the IdlePending to take effect on the executing algorithm.
-
-            Assert.True(task.IsCompleted);
+                Assert.True(task.IsCompleted);
+            }
             Assert.Equal(ExecutionState.Idle, context.ExecutionState);
         }
 
@@ -502,33 +555,35 @@ namespace GenFx.UI.Tests
 
             ExecutionContext context = new ExecutionContext(algorithm);
 
-            ExecutionPanelViewModel viewModel = new ExecutionPanelViewModel(context);
+            using (ExecutionPanelViewModel viewModel = new ExecutionPanelViewModel(context))
+            {
+                Task task = Task.Run(async () => await viewModel.StartExecutionAsync());
 
-            Task task = Task.Run(async () => await viewModel.StartExecutionAsync());
+                await Task.Delay(50); // Wait just a bit so the algorithm can start executing
+                context.ExecutionState = ExecutionState.PausePending;
+                await Task.Delay(50); // Wait for the PausePending to take effect on the executing algorithm.
 
-            await Task.Delay(50); // Wait just a bit so the algorithm can start executing
-            context.ExecutionState = ExecutionState.PausePending;
-            await Task.Delay(50); // Wait for the PausePending to take effect on the executing algorithm.
+                PrivateObject algorithmAccessor = new PrivateObject(algorithm);
 
-            PrivateObject algorithmAccessor = new PrivateObject(algorithm);
-
-            Assert.True(task.IsCompleted);
+                Assert.True(task.IsCompleted);
+            }
             Assert.Equal(ExecutionState.Paused, context.ExecutionState);
         }
 
         private static GeneticAlgorithm CreateTestAlgorithm(bool runsInfinitely = false)
         {
-            TestAlgorithm algorithm = new TestAlgorithm();
-
-            algorithm.CrossoverOperator = new Mock<CrossoverOperator>(2).Object;
-            algorithm.FitnessEvaluator = Mock.Of<FitnessEvaluator>();
-            algorithm.GeneticEntitySeed = new TestEntity();
-            algorithm.PopulationSeed = new TestPopulation();
-            algorithm.SelectionOperator = Mock.Of<SelectionOperator>();
-            
-            algorithm.Terminator = new TestTerminator
+            TestAlgorithm algorithm = new TestAlgorithm
             {
-                IsCompleteValue = !runsInfinitely
+                CrossoverOperator = new Mock<CrossoverOperator>(2).Object,
+                FitnessEvaluator = Mock.Of<FitnessEvaluator>(),
+                GeneticEntitySeed = new TestEntity(),
+                PopulationSeed = new TestPopulation(),
+                SelectionOperator = Mock.Of<SelectionOperator>(),
+
+                Terminator = new TestTerminator
+                {
+                    IsCompleteValue = !runsInfinitely
+                }
             };
 
             return algorithm;

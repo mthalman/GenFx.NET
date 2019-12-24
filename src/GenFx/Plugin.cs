@@ -17,9 +17,11 @@ namespace GenFx
         {
             base.Initialize(algorithm);
 
+#pragma warning disable CA1062 // Validate arguments of public methods
             algorithm.FitnessEvaluated += Algorithm_FitnessEvaluated;
             algorithm.AlgorithmStarting += Algorithm_AlgorithmStarting;
             algorithm.AlgorithmCompleted += Algorithm_AlgorithmCompleted;
+#pragma warning restore CA1062 // Validate arguments of public methods
         }
 
         private void Algorithm_AlgorithmCompleted(object sender, EventArgs e)

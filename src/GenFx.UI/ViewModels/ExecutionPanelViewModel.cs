@@ -8,7 +8,7 @@ namespace GenFx.UI.ViewModels
     /// </summary>
     internal class ExecutionPanelViewModel : IDisposable
     {
-        private ExecutionContext context;
+        private readonly ExecutionContext context;
 
         /// <summary>
         /// Initializes a new instance of the class.
@@ -131,7 +131,7 @@ namespace GenFx.UI.ViewModels
                 catch (Exception e)
                 {
                     this.context.AlgorithmException = e;
-                    throw e;
+                    throw;
                 }
             }
 
@@ -144,7 +144,7 @@ namespace GenFx.UI.ViewModels
             catch (Exception e)
             {
                 this.context.AlgorithmException = e;
-                throw e;
+                throw;
             }
         }
 

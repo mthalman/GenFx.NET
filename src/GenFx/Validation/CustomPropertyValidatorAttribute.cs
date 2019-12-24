@@ -38,7 +38,7 @@ namespace GenFx.Validation
         /// <exception cref="ArgumentNullException"><paramref name="validatorType"/> is null.</exception>
         /// <exception cref="ArgumentException"><paramref name="validatorType"/> does not derive from <see cref="PropertyValidator"/>.</exception>
         protected CustomPropertyValidatorBaseAttribute(Type validatorType)
-            : this(validatorType, new object[0])
+            : this(validatorType, Array.Empty<object>())
         {
         }
 
@@ -135,24 +135,15 @@ namespace GenFx.Validation
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
     public sealed class CustomExternalPropertyValidatorAttribute : CustomPropertyValidatorBaseAttribute, IExternalConfigurationPropertyValidatorAttribute
     {
-        private string targetPropertyName;
-        private Type targetComponentType;
-
         /// <summary>
         /// Gets the name of the property of the component configuration type to be validated.
         /// </summary>
-        public string TargetPropertyName
-        {
-            get { return this.targetPropertyName; }
-        }
+        public string TargetPropertyName { get; }
 
         /// <summary>
         /// Gets the <see cref="Type"/> of the component configuration containing the property to be validated.
         /// </summary>
-        public Type TargetComponentType
-        {
-            get { return this.targetComponentType; }
-        }
+        public Type TargetComponentType { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CustomExternalPropertyValidatorAttribute"/> class.
@@ -168,7 +159,7 @@ namespace GenFx.Validation
         /// <exception cref="ArgumentException"><paramref name="targetPropertyName"/> does not exist on <paramref name="targetComponentType"/>.</exception>
         /// <exception cref="ArgumentException"><paramref name="validatorType"/> does not derive from <see cref="PropertyValidator"/>.</exception>
         public CustomExternalPropertyValidatorAttribute(Type targetComponentType, string targetPropertyName, Type validatorType)
-            : this(targetComponentType, targetPropertyName, validatorType, new object[0])
+            : this(targetComponentType, targetPropertyName, validatorType, Array.Empty<object>())
         {
         }
 
@@ -191,10 +182,12 @@ namespace GenFx.Validation
         public CustomExternalPropertyValidatorAttribute(Type targetComponentType, string targetPropertyName, Type validatorType, params object[] validatorConstructorArguments)
             : base(validatorType, validatorConstructorArguments)
         {
+#pragma warning disable CA1062 // Validate arguments of public methods
             ExternalValidatorAttributeHelper.ValidateArguments(targetComponentType, targetPropertyName);
+#pragma warning restore CA1062 // Validate arguments of public methods
 
-            this.targetComponentType = targetComponentType;
-            this.targetPropertyName = targetPropertyName;
+            this.TargetComponentType = targetComponentType;
+            this.TargetPropertyName = targetPropertyName;
         }
     }
 }

@@ -15,9 +15,9 @@ namespace GenFx.UI.Controls
     /// </summary>
     public class FitnessChart : Control
     {
-        private CategoryAxis categoryAxis;
-        private ColumnSeries columnSeries;
-        private IStopwatchFactory stopwatchFactory;
+        private readonly CategoryAxis categoryAxis;
+        private readonly ColumnSeries columnSeries;
+        private readonly IStopwatchFactory stopwatchFactory;
         private IStopwatch stopwatch;
 
         private static readonly TimeSpan chartDataRefreshRate = TimeSpan.FromSeconds(1);
@@ -112,14 +112,18 @@ namespace GenFx.UI.Controls
             this.stopwatchFactory = stopwatchFactory;
 
             this.PlotModel = new PlotModel();
-            this.categoryAxis = new CategoryAxis();
-            this.categoryAxis.TickStyle = TickStyle.None;
-            this.categoryAxis.Title = UI.Resources.FitnessChart_XAxisTitle;
+            this.categoryAxis = new CategoryAxis
+            {
+                TickStyle = TickStyle.None,
+                Title = UI.Resources.FitnessChart_XAxisTitle
+            };
             this.PlotModel.Axes.Add(this.categoryAxis);
             this.PlotModel.Axes.Add(new LinearAxis() { Title = UI.Resources.FitnessChart_YAxisTitle });
 
-            this.columnSeries = new ColumnSeries();
-            this.columnSeries.TrackerFormatString = "{" + nameof(GeneticEntity.Representation) + "} : {2}";
+            this.columnSeries = new ColumnSeries
+            {
+                TrackerFormatString = "{" + nameof(GeneticEntity.Representation) + "} : {2}"
+            };
             this.PlotModel.Series.Add(this.columnSeries);
         }
 

@@ -57,24 +57,15 @@ namespace GenFx.Validation
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
     public sealed class BooleanExternalValidatorAttribute : BooleanValidatorBaseAttribute, IExternalConfigurationPropertyValidatorAttribute
     {
-        private string targetPropertyName;
-        private Type targetComponentType;
-
         /// <summary>
         /// Gets the name of the property of the component configuration type to be validated.
         /// </summary>
-        public string TargetPropertyName
-        {
-            get { return this.targetPropertyName; }
-        }
+        public string TargetPropertyName { get; }
 
         /// <summary>
         /// Gets the <see cref="Type"/> of the component configuration containing the property to be validated.
         /// </summary>
-        public Type TargetComponentType
-        {
-            get { return this.targetComponentType; }
-        }
+        public Type TargetComponentType { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="IntegerExternalValidatorAttribute"/> class.
@@ -89,10 +80,12 @@ namespace GenFx.Validation
         public BooleanExternalValidatorAttribute(Type targetComponentType, string targetPropertyName, bool requiredValue)
             : base(requiredValue)
         {
+#pragma warning disable CA1062 // Validate arguments of public methods
             ExternalValidatorAttributeHelper.ValidateArguments(targetComponentType, targetPropertyName);
+#pragma warning restore CA1062 // Validate arguments of public methods
 
-            this.targetComponentType = targetComponentType;
-            this.targetPropertyName = targetPropertyName;
+            this.TargetComponentType = targetComponentType;
+            this.TargetPropertyName = targetPropertyName;
         }
     }
 }

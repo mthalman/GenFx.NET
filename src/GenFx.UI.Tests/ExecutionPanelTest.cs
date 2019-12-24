@@ -48,8 +48,10 @@ namespace GenFx.UI.Tests
         {
             ExecutionPanel panel = new ExecutionPanel();
 
-            ExecutionContext context = new ExecutionContext(Mock.Of<GeneticAlgorithm>());
-            context.ExecutionState = ExecutionState.Running;
+            ExecutionContext context = new ExecutionContext(Mock.Of<GeneticAlgorithm>())
+            {
+                ExecutionState = ExecutionState.Running
+            };
             panel.ExecutionContext = context;
 
             Assert.False(panel.CanStart);
@@ -85,9 +87,11 @@ namespace GenFx.UI.Tests
             Thread.Sleep(1000);
 
             Mock<GeneticAlgorithm> algorithmMock2 = new Mock<GeneticAlgorithm>();
-            ExecutionContext context2 = new ExecutionContext(algorithmMock2.Object);
-            context2.ExecutionState = ExecutionState.Running;
-            
+            ExecutionContext context2 = new ExecutionContext(algorithmMock2.Object)
+            {
+                ExecutionState = ExecutionState.Running
+            };
+
             panel.ExecutionContext = context2;
 
             Assert.False(panel.CanStart);
@@ -124,8 +128,10 @@ namespace GenFx.UI.Tests
         [StaFact]
         public void ExecutionPanel_StartExecutionCommand_CanExecute_WithContext()
         {
-            ExecutionPanel panel = new ExecutionPanel();
-            panel.ExecutionContext = new ExecutionContext(Mock.Of<GeneticAlgorithm>());
+            ExecutionPanel panel = new ExecutionPanel
+            {
+                ExecutionContext = new ExecutionContext(Mock.Of<GeneticAlgorithm>())
+            };
 
             foreach (ExecutionState enumVal in Enum.GetValues(typeof(ExecutionState)))
             {
@@ -151,8 +157,10 @@ namespace GenFx.UI.Tests
         [StaFact]
         public void ExecutionPanel_StartExecutionCommand_Execute()
         {
-            ExecutionPanel panel = new ExecutionPanel();
-            panel.ExecutionContext = new ExecutionContext(CreateTestAlgorithm(true));
+            ExecutionPanel panel = new ExecutionPanel
+            {
+                ExecutionContext = new ExecutionContext(CreateTestAlgorithm(true))
+            };
 
             ExecutionPanel.StartExecutionCommand.Execute(null, panel);
             DispatcherHelper.DoEvents();
@@ -186,8 +194,10 @@ namespace GenFx.UI.Tests
         [StaFact]
         public void ExecutionPanel_StepExecutionCommand_CanExecute_WithContext()
         {
-            ExecutionPanel panel = new ExecutionPanel();
-            panel.ExecutionContext = new ExecutionContext(Mock.Of<GeneticAlgorithm>());
+            ExecutionPanel panel = new ExecutionPanel
+            {
+                ExecutionContext = new ExecutionContext(Mock.Of<GeneticAlgorithm>())
+            };
 
             foreach (ExecutionState enumVal in Enum.GetValues(typeof(ExecutionState)))
             {
@@ -213,8 +223,10 @@ namespace GenFx.UI.Tests
         [StaFact]
         public void ExecutionPanel_StepExecutionCommand_Execute()
         {
-            ExecutionPanel panel = new ExecutionPanel();
-            panel.ExecutionContext = new ExecutionContext(CreateTestAlgorithm(true));
+            ExecutionPanel panel = new ExecutionPanel
+            {
+                ExecutionContext = new ExecutionContext(CreateTestAlgorithm(true))
+            };
 
             ExecutionPanel.StepExecutionCommand.Execute(null, panel);
             Thread.Sleep(50);
@@ -244,8 +256,10 @@ namespace GenFx.UI.Tests
         [StaFact]
         public void ExecutionPanel_PauseExecutionCommand_CanExecute_WithContext()
         {
-            ExecutionPanel panel = new ExecutionPanel();
-            panel.ExecutionContext = new ExecutionContext(Mock.Of<GeneticAlgorithm>());
+            ExecutionPanel panel = new ExecutionPanel
+            {
+                ExecutionContext = new ExecutionContext(Mock.Of<GeneticAlgorithm>())
+            };
 
             foreach (ExecutionState enumVal in Enum.GetValues(typeof(ExecutionState)))
             {
@@ -270,9 +284,10 @@ namespace GenFx.UI.Tests
         [StaFact]
         public void ExecutionPanel_PauseExecutionCommand_Execute()
         {
-            ExecutionPanel panel = new ExecutionPanel();
-                
-            panel.ExecutionContext = new ExecutionContext(Mock.Of<GeneticAlgorithm>());
+            ExecutionPanel panel = new ExecutionPanel
+            {
+                ExecutionContext = new ExecutionContext(Mock.Of<GeneticAlgorithm>())
+            };
             panel.ExecutionContext.ExecutionState = ExecutionState.Running;
 
             ExecutionPanel.PauseExecutionCommand.Execute(null, panel);
@@ -297,8 +312,10 @@ namespace GenFx.UI.Tests
         [StaFact]
         public void ExecutionPanel_StopExecutionCommand_CanExecute_WithContext()
         {
-            ExecutionPanel panel = new ExecutionPanel();
-            panel.ExecutionContext = new ExecutionContext(Mock.Of<GeneticAlgorithm>());
+            ExecutionPanel panel = new ExecutionPanel
+            {
+                ExecutionContext = new ExecutionContext(Mock.Of<GeneticAlgorithm>())
+            };
 
             foreach (ExecutionState enumVal in Enum.GetValues(typeof(ExecutionState)))
             {
@@ -324,9 +341,10 @@ namespace GenFx.UI.Tests
         [StaFact]
         public void ExecutionPanel_StopExecutionCommand_Execute_FromRunning()
         {
-            ExecutionPanel panel = new ExecutionPanel();
-
-            panel.ExecutionContext = new ExecutionContext(Mock.Of<GeneticAlgorithm>());
+            ExecutionPanel panel = new ExecutionPanel
+            {
+                ExecutionContext = new ExecutionContext(Mock.Of<GeneticAlgorithm>())
+            };
             panel.ExecutionContext.ExecutionState = ExecutionState.Running;
 
             ExecutionPanel.StopExecutionCommand.Execute(null, panel);
@@ -340,9 +358,10 @@ namespace GenFx.UI.Tests
         [StaFact]
         public void ExecutionPanel_StopExecutionCommand_Execute_FromPaused()
         {
-            ExecutionPanel panel = new ExecutionPanel();
-
-            panel.ExecutionContext = new ExecutionContext(Mock.Of<GeneticAlgorithm>());
+            ExecutionPanel panel = new ExecutionPanel
+            {
+                ExecutionContext = new ExecutionContext(Mock.Of<GeneticAlgorithm>())
+            };
             panel.ExecutionContext.ExecutionState = ExecutionState.Paused;
 
             ExecutionPanel.StopExecutionCommand.Execute(null, panel);
@@ -352,17 +371,18 @@ namespace GenFx.UI.Tests
 
         private static GeneticAlgorithm CreateTestAlgorithm(bool runsInfinitely = false)
         {
-            TestAlgorithm algorithm = new TestAlgorithm();
-
-            algorithm.CrossoverOperator = new Mock<CrossoverOperator>(2).Object;
-            algorithm.FitnessEvaluator = Mock.Of<FitnessEvaluator>();
-            algorithm.GeneticEntitySeed = new TestEntity();
-            algorithm.PopulationSeed = new TestPopulation();
-            algorithm.SelectionOperator = Mock.Of<SelectionOperator>();
-
-            algorithm.Terminator = new TestTerminator
+            TestAlgorithm algorithm = new TestAlgorithm
             {
-                IsCompleteValue = !runsInfinitely
+                CrossoverOperator = new Mock<CrossoverOperator>(2).Object,
+                FitnessEvaluator = Mock.Of<FitnessEvaluator>(),
+                GeneticEntitySeed = new TestEntity(),
+                PopulationSeed = new TestPopulation(),
+                SelectionOperator = Mock.Of<SelectionOperator>(),
+
+                Terminator = new TestTerminator
+                {
+                    IsCompleteValue = !runsInfinitely
+                }
             };
 
             return algorithm;

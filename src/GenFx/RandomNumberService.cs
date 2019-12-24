@@ -10,7 +10,7 @@ namespace GenFx
     {
         private static IRandomNumberService instance = new RandomNumberService();
 
-        private Random randomizer = new Random();
+        private readonly Random randomizer = new Random();
 
         /// <summary>
         /// Gets or sets the <see cref="IRandomNumberService"/> object used to produce random numbers.
@@ -25,12 +25,7 @@ namespace GenFx
             get { return instance; }
             set
             {
-                if (value == null)
-                {
-                    throw new ArgumentNullException(nameof(value));
-                }
-
-                instance = value;
+                instance = value ?? throw new ArgumentNullException(nameof(value));
             }
         }
 

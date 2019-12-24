@@ -23,7 +23,7 @@ namespace GenFx.Components.Lists
         /// Gets or sets the list element at the specified index.
         /// </summary>
         /// <param name="index">The zero-based index of the list element to get or set.</param>
-        public abstract TItem this[int index]
+        public new abstract TItem this[int index]
         {
             get;
             set;
@@ -53,8 +53,8 @@ namespace GenFx.Components.Lists
 
             if (value != null && !(value is TItem))
             {
-                throw new ArgumentException(nameof(value),
-                    StringUtil.GetFormattedString(Resources.ErrorMsg_ListEntityBase_InvalidItemType, value.GetType(), typeof(TItem)));
+                throw new ArgumentException(StringUtil.GetFormattedString(Resources.ErrorMsg_ListEntityBase_InvalidItemType, value.GetType(), typeof(TItem)),
+                    nameof(value));
             }
             this[index] = (TItem)value;
         }
