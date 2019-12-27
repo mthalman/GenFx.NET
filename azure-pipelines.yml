@@ -19,19 +19,22 @@ variables:
 
 steps:
 - task: NuGetToolInstaller@1
+  displayName: Install NuGet
 
 - task: NuGetCommand@2
+  displayName: Restore Solution
   inputs:
     restoreSolution: '$(solution)'
 
 - task: VSBuild@1
+  displayName: Build
   inputs:
     solution: '$(solution)'
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
 
 - task: VSTest@2
-displayName: Run Tests
+  displayName: Run Tests
   inputs:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
