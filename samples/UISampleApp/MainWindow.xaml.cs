@@ -5,7 +5,7 @@ using GenFx.Components.Metrics;
 using GenFx.Components.Populations;
 using GenFx.Components.SelectionOperators;
 using GenFx.Components.Terminators;
-using GenFx.UI;
+using GenFx.Wpf;
 using GenFx.Validation;
 using System.Collections.Generic;
 using System.Linq;

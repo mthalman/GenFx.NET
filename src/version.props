@@ -1,7 +1,11 @@
 <Project>
   <PropertyGroup>
+    <Authors>Matthew Thalman</Authors>
+    <NeutralLanguage>en-US</NeutralLanguage>
     <FileVersion>0.1.0.0</FileVersion>
     <AssemblyVersion>0.1.0.0</AssemblyVersion>
     <Product>GenFx.NET</Product>
+    <PackageTags>geneticalgorithm genfx</PackageTags>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 </Project>
