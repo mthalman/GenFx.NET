@@ -31,6 +31,14 @@ steps:
     configuration: '$(buildConfiguration)'
 
 - task: VSTest@2
+displayName: Run Tests
   inputs:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
+    testSelector: 'testAssemblies'
+    testAssemblyVer2: |
+      **\GenFx*Tests.dll
+      !**\*TestAdapter.dll
+      !**\obj\**
+    searchFolder: '$(System.DefaultWorkingDirectory)'
+    runSettingsFile: 'test.runsettings'
