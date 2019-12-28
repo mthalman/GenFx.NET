@@ -166,7 +166,7 @@ namespace GenFx.Wpf.Tests
             DispatcherHelper.DoEvents();
 
             // Since the command kicks off an unawaitable Task, wait for just a second to let it finish.
-            Thread.Sleep(50);
+            Thread.Sleep(100);
 
             Assert.Equal(ExecutionState.Running, panel.ExecutionContext.ExecutionState);
 
@@ -174,7 +174,7 @@ namespace GenFx.Wpf.Tests
             ((TestTerminator)panel.ExecutionContext.GeneticAlgorithm.Terminator).IsCompleteValue = true;
 
             // Wait for the algorithm to complete
-            Thread.Sleep(50);
+            Thread.Sleep(100);
         }
 
         /// <summary>
@@ -229,11 +229,11 @@ namespace GenFx.Wpf.Tests
             };
 
             ExecutionPanel.StepExecutionCommand.Execute(null, panel);
-            Thread.Sleep(50);
+            Thread.Sleep(100);
             DispatcherHelper.DoEvents();
 
             // Since the command kicks off an unawaitable Task, wait for just a second to let it finish.
-            Thread.Sleep(50);
+            Thread.Sleep(100);
             DispatcherHelper.DoEvents();
 
             Assert.Equal(ExecutionState.Paused, panel.ExecutionContext.ExecutionState);
