@@ -14,8 +14,6 @@ namespace GenFx.UI.Controls
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable")]
     public class ExecutionPanel : Control
     {
-        private ExecutionPanelViewModel viewModel;
-
         /// <summary>
         /// Gets the <see cref="DependencyProperty"/> associated with <see cref="ExecutionContext"/>.
         /// </summary>
@@ -148,6 +146,8 @@ namespace GenFx.UI.Controls
             }
         }
 
+        internal ExecutionPanelViewModel ViewModel { get; set; }
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline")]
         static ExecutionPanel()
         {
@@ -180,13 +180,13 @@ namespace GenFx.UI.Controls
             if (e.OldValue != null)
             {
                 ((ExecutionContext)e.OldValue).PropertyChanged -= panel.ExecutionContext_PropertyChanged;
-                panel.viewModel.Dispose();
+                panel.ViewModel.Dispose();
             }
 
             if (e.NewValue != null)
             {
                 ExecutionContext executionContext = (ExecutionContext)e.NewValue;
-                panel.viewModel = new ExecutionPanelViewModel(executionContext);
+                panel.ViewModel = new ExecutionPanelViewModel(executionContext);
                 executionContext.PropertyChanged += panel.ExecutionContext_PropertyChanged;
                 panel.UpdateCanExecuteProperties();
             }
@@ -214,9 +214,9 @@ namespace GenFx.UI.Controls
         /// </summary>
         private void UpdateCanExecuteProperties()
         {
-            this.CanStart = this.viewModel.CanStartExecution();
-            this.CanPause = this.viewModel.CanPauseExecution();
-            this.CanStop = this.viewModel.CanStopExecution();
+            this.CanStart = this.ViewModel.CanStartExecution();
+            this.CanPause = this.ViewModel.CanPauseExecution();
+            this.CanStop = this.ViewModel.CanStopExecution();
         }
 
         /// <summary>
@@ -227,13 +227,13 @@ namespace GenFx.UI.Controls
         private static void CanStartExecution(object sender, CanExecuteRoutedEventArgs e)
         {
             ExecutionPanel panel = (ExecutionPanel)sender;
-            if (panel.viewModel == null)
+            if (panel.ViewModel == null)
             {
                 e.CanExecute = false;
             }
             else
             {
-                e.CanExecute = panel.viewModel.CanStartExecution();
+                e.CanExecute = panel.ViewModel.CanStartExecution();
             }
         }
 
@@ -245,13 +245,13 @@ namespace GenFx.UI.Controls
         private static void CanPauseExecution(object sender, CanExecuteRoutedEventArgs e)
         {
             ExecutionPanel panel = (ExecutionPanel)sender;
-            if (panel.viewModel == null)
+            if (panel.ViewModel == null)
             {
                 e.CanExecute = false;
             }
             else
             {
-                e.CanExecute = panel.viewModel.CanPauseExecution();
+                e.CanExecute = panel.ViewModel.CanPauseExecution();
             }
         }
 
@@ -263,13 +263,13 @@ namespace GenFx.UI.Controls
         private static void CanStopExecution(object sender, CanExecuteRoutedEventArgs e)
         {
             ExecutionPanel panel = (ExecutionPanel)sender;
-            if (panel.viewModel == null)
+            if (panel.ViewModel == null)
             {
                 e.CanExecute = false;
             }
             else
             {
-                e.CanExecute = panel.viewModel.CanStopExecution();
+                e.CanExecute = panel.ViewModel.CanStopExecution();
             }
         }
 
@@ -280,7 +280,7 @@ namespace GenFx.UI.Controls
         /// <param name="e">The <see cref="CanExecuteRoutedEventArgs"/> associated with the event.</param>
         private static void OnStartExecution(object sender, ExecutedRoutedEventArgs e)
         {
-            Task.Run(((ExecutionPanel)sender).viewModel.StartExecutionAsync);
+            Task.Run(((ExecutionPanel)sender).ViewModel.StartExecutionAsync);
         }
 
         /// <summary>
@@ -290,7 +290,7 @@ namespace GenFx.UI.Controls
         /// <param name="e">The <see cref="CanExecuteRoutedEventArgs"/> associated with the event.</param>
         private static void OnStepExecution(object sender, ExecutedRoutedEventArgs e)
         {
-            Task.Run(((ExecutionPanel)sender).viewModel.StepExecutionAsync);
+            Task.Run(((ExecutionPanel)sender).ViewModel.StepExecutionAsync);
         }
 
         /// <summary>
@@ -300,7 +300,7 @@ namespace GenFx.UI.Controls
         /// <param name="e">The <see cref="CanExecuteRoutedEventArgs"/> associated with the event.</param>
         private static void OnStopExecution(object sender, ExecutedRoutedEventArgs e)
         {
-            ((ExecutionPanel)sender).viewModel.StopExecution();
+            ((ExecutionPanel)sender).ViewModel.StopExecution();
         }
 
         /// <summary>
@@ -310,7 +310,7 @@ namespace GenFx.UI.Controls
         /// <param name="e">The <see cref="CanExecuteRoutedEventArgs"/> associated with the event.</param>
         private static void OnPauseExecution(object sender, ExecutedRoutedEventArgs e)
         {
-            ((ExecutionPanel)sender).viewModel.PauseExecution();
+            ((ExecutionPanel)sender).ViewModel.PauseExecution();
         }
     }
 }
