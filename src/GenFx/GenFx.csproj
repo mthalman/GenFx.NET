@@ -4,14 +4,19 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>../../build/GenFx.snk</AssemblyOriginatorKeyFile>
+    <PackageId>GenFx.Core</PackageId>
+    <Version>0.2.0</Version>
+    <Description>GenFx.NET is a .NET-based genetic algorithm framework that makes designing and executing genetic algorithms easy.</Description>
   </PropertyGroup>
 
   <Import Project="..\version.props" />
 
   <ItemGroup>
+    <PackageReference Include="coverlet.msbuild" Version="2.7.0">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
     <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.9.8">
       <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
   </ItemGroup>
 

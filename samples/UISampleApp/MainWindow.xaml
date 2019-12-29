@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:UISampleApp"
-        xmlns:genfx="clr-namespace:GenFx.UI.Controls;assembly=GenFx.UI"
+        xmlns:genfx="clr-namespace:GenFx.Wpf.Controls;assembly=GenFx.Wpf"
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525">
     <DockPanel>
