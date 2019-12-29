@@ -1,10 +1,9 @@
+using GenFx;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
-using System.Text;
-using GenFx;
-using System.Threading.Tasks;
 using System.Runtime.Serialization;
+using System.Threading.Tasks;
 
 namespace TestCommon.Mocks
 {
@@ -13,7 +12,7 @@ namespace TestCommon.Mocks
     {
         protected override Task CreateNextGenerationAsync(Population population)
         {
-            throw new Exception("The method or operation is not implemented.");
+            return Task.CompletedTask;
         }
 
         public void RaiseGenerationCreatedEvent()

@@ -1,11 +1,17 @@
 ﻿using GenFx.UI.Controls;
 using GenFx.UI.Tests.Helpers;
 using Moq;
+using Polly;
 using System;
+using System.ComponentModel;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using System.Windows.Threading;
+using TestCommon;
+using TestCommon.Mocks;
 using Xunit;
 
 namespace GenFx.UI.Tests
@@ -77,14 +83,20 @@ namespace GenFx.UI.Tests
 
             ExecutionContext context = new ExecutionContext(algorithmMock.Object);
             panel.ExecutionContext = context;
-            
+
             // Start execution to force event handlers to be added in order to 
             // verify they are removed when replacing the ExecutionContext.
             ExecutionPanel.StartExecutionCommand.Execute(null, panel);
             DispatcherHelper.DoEvents();
 
-            // Since the command kicks off an unawaitable Task, wait for just a second to let it finish.
-            Thread.Sleep(1000);
+            Policy
+                .HandleResult<ExecutionState>(result => result == ExecutionState.Running)
+                .WaitAndRetry(5, retryAttempt =>
+                    TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)))
+                .Execute(() =>
+                {
+                    return panel.ExecutionContext.ExecutionState;
+                });
 
             Mock<GeneticAlgorithm> algorithmMock2 = new Mock<GeneticAlgorithm>();
             ExecutionContext context2 = new ExecutionContext(algorithmMock2.Object)
@@ -165,16 +177,17 @@ namespace GenFx.UI.Tests
             ExecutionPanel.StartExecutionCommand.Execute(null, panel);
             DispatcherHelper.DoEvents();
 
-            // Since the command kicks off an unawaitable Task, wait for just a second to let it finish.
-            Thread.Sleep(50);
-
-            Assert.Equal(ExecutionState.Running, panel.ExecutionContext.ExecutionState);
+            Policy
+                .HandleResult<ExecutionState>(result => result == ExecutionState.Running)
+                .WaitAndRetry(5, retryAttempt =>
+                    TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)))
+                .Execute(() =>
+                {
+                    return panel.ExecutionContext.ExecutionState;
+                });
 
             // Trigger the algorithm to complete
             ((TestTerminator)panel.ExecutionContext.GeneticAlgorithm.Terminator).IsCompleteValue = true;
-
-            // Wait for the algorithm to complete
-            Thread.Sleep(50);
         }
 
         /// <summary>
@@ -223,20 +236,27 @@ namespace GenFx.UI.Tests
         [StaFact]
         public void ExecutionPanel_StepExecutionCommand_Execute()
         {
-            ExecutionPanel panel = new ExecutionPanel
+            using SemaphoreSlim algorithmPausedSemaphore = new SemaphoreSlim(0);
+            Dispatcher.CurrentDispatcher.Invoke(async () =>
             {
-                ExecutionContext = new ExecutionContext(CreateTestAlgorithm(true))
-            };
+                ExecutionPanel panel = new ExecutionPanel
+                {
+                    ExecutionContext = new ExecutionContext(CreateTestAlgorithm(true))
+                };
 
-            ExecutionPanel.StepExecutionCommand.Execute(null, panel);
-            Thread.Sleep(50);
+                using var algorithmPausedObservable = Observable
+                    .FromEventPattern<PropertyChangedEventHandler, PropertyChangedEventArgs>(
+                        ev => panel.ExecutionContext.PropertyChanged += ev,
+                        ev => panel.ExecutionContext.PropertyChanged -= ev)
+                    .Where(eventPattern => ((ExecutionContext)eventPattern.Sender).ExecutionState == ExecutionState.Paused)
+                    .Subscribe(_ => algorithmPausedSemaphore.Release());
+
+                await panel.ViewModel.StepExecutionAsync();
+            });
+
             DispatcherHelper.DoEvents();
 
-            // Since the command kicks off an unawaitable Task, wait for just a second to let it finish.
-            Thread.Sleep(50);
-            DispatcherHelper.DoEvents();
-
-            Assert.Equal(ExecutionState.Paused, panel.ExecutionContext.ExecutionState);
+            Assert.True(algorithmPausedSemaphore.Wait(TimeSpan.FromSeconds(10)));
         }
 
         /// <summary>

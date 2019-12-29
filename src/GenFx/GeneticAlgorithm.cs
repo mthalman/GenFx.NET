@@ -676,7 +676,7 @@ namespace GenFx
         /// <returns>true if the genetic algorithm has completed its execution; otherwise, false.</returns>
         private async Task<bool> StepCoreAsync()
         {
-            if (this.currentGeneration == 1)
+            if (this.currentGeneration == 0)
             {
                 this.OnAlgorithmStarting();
             }
