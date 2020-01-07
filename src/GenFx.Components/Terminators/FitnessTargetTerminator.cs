@@ -50,7 +50,9 @@ namespace GenFx.Components.Terminators
         /// <returns>True if the genetic algorithm is to stop executing; otherwise, false.</returns>
         public override bool IsComplete()
         {
-            return this.Algorithm.Environment.Populations.SelectMany(p => p.Entities).Any(e => this.GetFitnessValue(e) == this.FitnessTarget);
+            return this.Algorithm?.Environment?.Populations
+                .SelectMany(p => p.Entities)
+                .Any(e => this.GetFitnessValue(e) == this.FitnessTarget) == true;
         }
 
         /// <summary>

@@ -64,7 +64,7 @@ namespace GenFx.Wpf.Controls
         /// <summary>
         /// Gets the <see cref="GeneticEntity"/> objects contained in <see cref="Population"/>.
         /// </summary>
-        public IEnumerable<GeneticEntity> SelectedPopulationEntities
+        public IEnumerable<GeneticEntity>? SelectedPopulationEntities
         {
             get
             {

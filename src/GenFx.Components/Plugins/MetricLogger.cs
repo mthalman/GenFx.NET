@@ -14,7 +14,7 @@ namespace GenFx.Components.Plugins
     public class MetricLogger : Plugin
     {
         [DataMember]
-        private string traceCategory;
+        private string traceCategory = String.Empty;
 
         /// <summary>
         /// Gets or sets the category to associate with the tracing information.
@@ -56,11 +56,16 @@ namespace GenFx.Components.Plugins
                 throw new ArgumentNullException(nameof(environment));
             }
 
+            if (this.Algorithm == null)
+            {
+                return;
+            }
+
             foreach (Population population in environment.Populations)
             {
                 foreach (Metric metric in this.Algorithm.Metrics)
                 {
-                    string metricVal = metric.GetResultValue(population).ToString();
+                    string? metricVal = metric.GetResultValue(population)?.ToString();
 
                     string metricName;
                     // TypeDescriptor will always provide a DisplayNameAttribute, even if one isn't declared on the type.
@@ -72,6 +77,11 @@ namespace GenFx.Components.Plugins
                     else
                     {
                         metricName = metric.ToString();
+                    }
+
+                    if (metricVal == null)
+                    {
+                        metricVal = "<null>";
                     }
 
                     this.WriteTrace(String.Format(CultureInfo.CurrentCulture, Resources.MetricLogger_StatTrace,

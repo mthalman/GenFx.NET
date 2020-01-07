@@ -61,6 +61,15 @@ namespace GenFx {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Component is not initialized..
+        /// </summary>
+        internal static string ComponentNotInitialized {
+            get {
+                return ResourceManager.GetString("ComponentNotInitialized", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Crossover Operator.
         /// </summary>
         internal static string CrossoverCommonName {

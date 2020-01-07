@@ -23,7 +23,7 @@ namespace GenFx
         private int currentGeneration;
 
         [DataMember]
-        private GeneticEnvironment environment;
+        private GeneticEnvironment? environment;
 
         [DataMember]
         private readonly List<Metric> metrics = new List<Metric>();
@@ -38,37 +38,38 @@ namespace GenFx
         private bool isInitialized;
 
         [DataMember]
-        private FitnessEvaluator fitnessEvaluator;
+        private FitnessEvaluator? fitnessEvaluator;
 
         [DataMember]
-        private Terminator terminator;
+        private Terminator terminator = new DefaultTerminator();
 
         [DataMember]
-        private FitnessScalingStrategy fitnessScalingStrategy;
+        private FitnessScalingStrategy? fitnessScalingStrategy;
 
         [DataMember]
-        private SelectionOperator selectionOperator;
+        private SelectionOperator? selectionOperator;
 
         [DataMember]
-        private MutationOperator mutationOperator;
+        private MutationOperator? mutationOperator;
 
         [DataMember]
-        private CrossoverOperator crossoverOperator;
+        private CrossoverOperator? crossoverOperator;
 
         [DataMember]
-        private ElitismStrategy elitismStrategy;
+        private ElitismStrategy? elitismStrategy;
 
         [DataMember]
-        private GeneticEntity geneticEntitySeed;
+        private GeneticEntity? geneticEntitySeed;
 
         [DataMember]
-        private Population populationSeed;
+        private Population? populationSeed;
 
         [DataMember]
         private int minimumEnvironmentSize = DefaultEnvironmentSize;
 
         // Mapping of component properties to Validator objects as described by external components
-        private Dictionary<PropertyInfo, List<PropertyValidator>> externalValidationMapping;
+        private Dictionary<PropertyInfo, List<PropertyValidator>> externalValidationMapping =
+            new Dictionary<PropertyInfo, List<PropertyValidator>>();
 
         /// <summary>
         /// Initializes a new instance of this class.
@@ -81,17 +82,17 @@ namespace GenFx
         /// <summary>
         /// Occurs when the fitness of an environment has been evaluated.
         /// </summary>
-        public event EventHandler<EnvironmentFitnessEvaluatedEventArgs> FitnessEvaluated;
+        public event EventHandler<EnvironmentFitnessEvaluatedEventArgs>? FitnessEvaluated;
 
         /// <summary>
         /// Occurs when a new generation has been created (but its fitness has not yet been evaluated).
         /// </summary>
-        public event EventHandler GenerationCreated;
+        public event EventHandler? GenerationCreated;
 
         /// <summary>
         /// Occurs when execution of the algorithm completes.
         /// </summary>
-        public event EventHandler AlgorithmCompleted;
+        public event EventHandler? AlgorithmCompleted;
 
         /// <summary>
         /// Occurs when the algorithm is about to begin execution.
@@ -100,7 +101,7 @@ namespace GenFx
         /// This event only occurs when the algorithm is first started after having been initialized.
         /// It does not occur when resuming execution after a pause.
         /// </remarks>
-        public event EventHandler AlgorithmStarting;
+        public event EventHandler? AlgorithmStarting;
 
         /// <summary>
         /// Gets or sets the minimum number of <see cref="Population"/> objects that are contained by the <see cref="GeneticEnvironment"/>.
@@ -123,7 +124,7 @@ namespace GenFx
         /// </summary>
         [ConfigurationProperty]
         [RequiredValidator]
-        public FitnessEvaluator FitnessEvaluator
+        public FitnessEvaluator? FitnessEvaluator
         {
             get { return this.fitnessEvaluator; }
             set { this.SetProperty(ref this.fitnessEvaluator, value); }
@@ -136,14 +137,22 @@ namespace GenFx
         public Terminator Terminator
         {
             get { return this.terminator; }
-            set { this.SetProperty(ref this.terminator, value); }
+            set
+            {
+                if (value is null)
+                {
+                    throw new ArgumentNullException(nameof(value));
+                }
+
+                this.SetProperty(ref this.terminator, value);
+            }
         }
 
         /// <summary>
         /// Gets the <see cref="GenFx.FitnessScalingStrategy"/> to be used by the algorithm.
         /// </summary>
         [ConfigurationProperty]
-        public FitnessScalingStrategy FitnessScalingStrategy
+        public FitnessScalingStrategy? FitnessScalingStrategy
         {
             get { return this.fitnessScalingStrategy; }
             set { this.SetProperty(ref this.fitnessScalingStrategy, value); }
@@ -154,7 +163,7 @@ namespace GenFx
         /// </summary>
         [ConfigurationProperty]
         [RequiredValidator]
-        public SelectionOperator SelectionOperator
+        public SelectionOperator? SelectionOperator
         {
             get { return this.selectionOperator; }
             set { this.SetProperty(ref this.selectionOperator, value); }
@@ -164,7 +173,7 @@ namespace GenFx
         /// Gets the <see cref="GenFx.MutationOperator"/> to be used by the algorithm.
         /// </summary>
         [ConfigurationProperty]
-        public MutationOperator MutationOperator
+        public MutationOperator? MutationOperator
         {
             get { return this.mutationOperator; }
             set { this.SetProperty(ref this.mutationOperator, value); }
@@ -174,7 +183,7 @@ namespace GenFx
         /// Gets the <see cref="GenFx.CrossoverOperator"/> to be used by the algorithm.
         /// </summary>
         [ConfigurationProperty]
-        public CrossoverOperator CrossoverOperator
+        public CrossoverOperator? CrossoverOperator
         {
             get { return this.crossoverOperator; }
             set { this.SetProperty(ref this.crossoverOperator, value); }
@@ -184,7 +193,7 @@ namespace GenFx
         /// Gets the <see cref="GenFx.ElitismStrategy"/> to be used by the algorithm.
         /// </summary>
         [ConfigurationProperty]
-        public ElitismStrategy ElitismStrategy
+        public ElitismStrategy? ElitismStrategy
         {
             get { return this.elitismStrategy; }
             set { this.SetProperty(ref this.elitismStrategy, value); }
@@ -199,7 +208,7 @@ namespace GenFx
         /// </remarks>
         [ConfigurationProperty]
         [RequiredValidator]
-        public GeneticEntity GeneticEntitySeed
+        public GeneticEntity? GeneticEntitySeed
         {
             get { return this.geneticEntitySeed; }
             set { this.SetProperty(ref this.geneticEntitySeed, value); }
@@ -214,7 +223,7 @@ namespace GenFx
         /// </remarks>
         [ConfigurationProperty]
         [RequiredValidator]
-        public Population PopulationSeed
+        public Population? PopulationSeed
         {
             get { return this.populationSeed; }
             set { this.SetProperty(ref this.populationSeed, value); }
@@ -241,7 +250,7 @@ namespace GenFx
         /// <summary>
         /// Gets the <see cref="GeneticEnvironment"/> being used by this object.
         /// </summary>
-        public GeneticEnvironment Environment
+        public GeneticEnvironment? Environment
         {
             get { return this.environment; }
             private set { this.SetProperty(ref this.environment, value); }
@@ -278,11 +287,6 @@ namespace GenFx
         {
             this.Environment = new GeneticEnvironment(this);
 
-            if (this.terminator == null)
-            {
-                this.terminator = new DefaultTerminator();
-            }
-
             this.CompileExternalValidatorMapping();
             this.Validate(this);
             
@@ -294,17 +298,25 @@ namespace GenFx
 
             this.SortMetrics();
 
-            this.environment.Populations.Clear();
+            this.Environment.Populations.Clear();
 
             this.CurrentGeneration = 0;
             
-            await this.environment.InitializeAsync();
-            this.OnGenerationCreated();
-            await this.environment.EvaluateFitnessAsync();
-            this.RaiseFitnessEvaluatedEvent();
+            await this.Environment.InitializeAsync();
             this.isInitialized = true;
+            this.OnGenerationCreated();
+            await this.Environment.EvaluateFitnessAsync();
+            this.RaiseFitnessEvaluatedEvent();
         }
-        
+
+        internal void AssertIsInitialized()
+        {
+            if (!this.IsInitialized)
+            {
+                throw new InvalidOperationException(Resources.ComponentNotInitialized);
+            }
+        }
+
         /// <summary>
         /// Executes the genetic algorithm.
         /// </summary>
@@ -362,7 +374,7 @@ namespace GenFx
         /// <returns>The selected <see cref="GeneticEntity"/> objects.</returns>
         protected IList<GeneticEntity> ApplySelection(int entityCount, Population currentPopulation)
         {
-            return this.SelectionOperator.SelectEntities(entityCount, currentPopulation);
+            return this.SelectionOperator?.SelectEntities(entityCount, currentPopulation) ?? Enumerable.Empty<GeneticEntity>().ToList();
         }
 
         /// <summary>
@@ -511,10 +523,10 @@ namespace GenFx
                 yield return terminator;
             }
             
-            yield return this.FitnessEvaluator;
-            yield return this.SelectionOperator;
-            yield return this.GeneticEntitySeed;
-            yield return this.PopulationSeed;
+            yield return this.FitnessEvaluator!;
+            yield return this.SelectionOperator!;
+            yield return this.GeneticEntitySeed!;
+            yield return this.PopulationSeed!;
         }
 
         /// <summary>
@@ -640,9 +652,9 @@ namespace GenFx
         /// <returns>True if the user has canceled continued execution of the genetic algorithm; otherwise, false.</returns>
         private bool RaiseFitnessEvaluatedEvent()
         {
-            this.CalculateStats(this.environment, this.currentGeneration);
+            this.CalculateStats(this.environment!, this.currentGeneration);
 
-            EnvironmentFitnessEvaluatedEventArgs e = new EnvironmentFitnessEvaluatedEventArgs(this.environment, this.currentGeneration);
+            EnvironmentFitnessEvaluatedEventArgs e = new EnvironmentFitnessEvaluatedEventArgs(this.environment!, this.currentGeneration);
             this.OnFitnessEvaluated(e);
             return e.Cancel;
         }
@@ -738,7 +750,7 @@ namespace GenFx
         {
             List<Task> createGenerationTasks = new List<Task>();
 
-            for (int i = 0; i < this.environment.Populations.Count; i++)
+            for (int i = 0; i < this.environment!.Populations.Count; i++)
             {
                 Population population = this.environment.Populations[i];
 
@@ -791,8 +803,6 @@ namespace GenFx
         /// </summary>
         private void CompileExternalValidatorMapping()
         {
-            this.externalValidationMapping = new Dictionary<PropertyInfo, List<PropertyValidator>>();
-
             foreach (GeneticComponent component in this.GetAllComponents())
             {
                 this.CompileExternalValidatorMapping(component);

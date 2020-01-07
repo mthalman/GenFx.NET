@@ -37,7 +37,7 @@ namespace GenFx.Validation
         /// <param name="owner">The object that owns the property being validated.</param>
         /// <param name="errorMessage">Error message that should be displayed if the property fails validation.</param>
         /// <returns>True if <paramref name="value"/> is valid; otherwise, false.</returns>
-        public override bool IsValid(object value, string propertyName, object owner, out string errorMessage)
+        public override bool IsValid(object? value, string propertyName, object owner, out string? errorMessage)
         {
             if (String.IsNullOrEmpty(propertyName))
             {

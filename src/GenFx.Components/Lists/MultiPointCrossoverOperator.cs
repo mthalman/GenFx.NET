@@ -137,8 +137,8 @@ namespace GenFx.Components.Lists
                     }
                 }
 
-                object entity1SourceVal = null;
-                object entity2SourceVal = null;
+                object? entity1SourceVal = null;
+                object? entity2SourceVal = null;
 
                 if (i < listEntity1.Length)
                 {
@@ -150,12 +150,12 @@ namespace GenFx.Components.Lists
                     entity2SourceVal = this.GetEntityValue(i, listEntity2, entity2Source, originalEntity2, originalEntity1);
                 }
                 
-                if (i < listEntity1.Length)
+                if (entity1SourceVal != null)
                 {
                     listEntity1.SetValue(i, entity1SourceVal);
                 }
                 
-                if (i < listEntity2.Length)
+                if (entity2SourceVal != null)
                 {
                     listEntity2.SetValue(i, entity2SourceVal);
                 }
@@ -174,11 +174,11 @@ namespace GenFx.Components.Lists
             return crossoverOffspring;
         }
 
-        private object GetEntityValue(int index, ListEntityBase entity, ListEntityBase sourceEntity, ListEntityBase originalEntity, ListEntityBase originalOtherEntity)
+        private object? GetEntityValue(int index, ListEntityBase entity, ListEntityBase sourceEntity, ListEntityBase originalEntity, ListEntityBase originalOtherEntity)
         {
-            object entitySourceVal = sourceEntity.GetValue(index);
+            object? entitySourceVal = sourceEntity.GetValue(index);
 
-            if (((ListEntityBase)this.Algorithm.GeneticEntitySeed).RequiresUniqueElementValues)
+            if (((ListEntityBase?)this.Algorithm?.GeneticEntitySeed)?.RequiresUniqueElementValues == true)
             {
                 while (ContainsValue(entity, entitySourceVal, index - 1))
                 {
@@ -197,7 +197,7 @@ namespace GenFx.Components.Lists
         /// <param name="value">Value to search for.</param>
         /// <param name="maxIndex">The max index to iterate to when searching for the value.</param>
         /// <returns>True if the value was found; otherwise, false.</returns>
-        private static bool ContainsValue(ListEntityBase entity, object value, int maxIndex)
+        private static bool ContainsValue(ListEntityBase entity, object? value, int maxIndex)
         {
             for (int i = 0; i <= maxIndex; i++)
             {

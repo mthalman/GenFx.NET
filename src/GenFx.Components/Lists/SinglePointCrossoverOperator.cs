@@ -63,7 +63,7 @@ namespace GenFx.Components.Lists
             // swap the elements of the lists starting at the crossover locus
             for (int i = crossoverLocus; i < maxLength; i++)
             {
-                object tempGeneValue = listEntity1.GetValue(i);
+                object? tempGeneValue = listEntity1.GetValue(i);
                 listEntity1.SetValue(i, listEntity2.GetValue(i));
                 listEntity2.SetValue(i, tempGeneValue);
             }

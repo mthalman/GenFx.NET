@@ -53,6 +53,8 @@ namespace GenFx.Components.Algorithms
                 throw new ArgumentNullException(nameof(population));
             }
 
+            this.AssertIsInitialized();
+
             int populationCount = population.Entities.Count;
             int replacementCount;
             if (this.PopulationReplacementValue.Kind == ReplacementValueKind.Percentage)
@@ -76,8 +78,8 @@ namespace GenFx.Components.Algorithms
             // Remove the weakest Entities from the population.
             ObservableCollection<GeneticEntity> workingGeneticEntities = new ObservableCollection<GeneticEntity>(population.Entities);
             GeneticEntity[] sortedEntities = workingGeneticEntities.GetEntitiesSortedByFitness(
-                this.SelectionOperator.SelectionBasedOnFitnessType,
-                this.FitnessEvaluator.EvaluationMode).ToArray();
+                this.SelectionOperator!.SelectionBasedOnFitnessType,
+                this.FitnessEvaluator!.EvaluationMode).ToArray();
 
             population.Entities.Clear();
             for (int i = sortedEntities.Length - 1; i >= sortedEntities.Length - populationCount; i--)

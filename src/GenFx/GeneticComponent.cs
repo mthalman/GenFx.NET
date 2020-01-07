@@ -38,7 +38,7 @@ namespace GenFx
         /// <typeparam name="T">Type of the property.</typeparam>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "0#")]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed")]
-        protected override void SetProperty<T>(ref T fieldValue, T newValue, [CallerMemberName] string propertyName = null)
+        protected override void SetProperty<T>(ref T fieldValue, T newValue, [CallerMemberName] string propertyName = "")
         {
             this.ValidateProperty(newValue, propertyName);
             base.SetProperty(ref fieldValue, newValue, propertyName);
@@ -76,7 +76,7 @@ namespace GenFx
         /// <exception cref="ArgumentException">Property not found on configuration type.</exception>
         /// <exception cref="ValidationException">Property was set to an invalid value.</exception>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed")]
-        protected void ValidateProperty(object value, [CallerMemberName] string propertyName = null)
+        protected void ValidateProperty(object? value, [CallerMemberName] string propertyName = "")
         {
             if (String.IsNullOrEmpty(propertyName))
             {
@@ -102,7 +102,7 @@ namespace GenFx
         /// <exception cref="ArgumentException">Property not found on configuration type.</exception>
         /// <exception cref="ValidationException">Property was set to an invalid value.</exception>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed")]
-        protected void ValidateProperty(object value, PropertyInfo propertyInfo)
+        protected void ValidateProperty(object? value, PropertyInfo propertyInfo)
         {
             if (propertyInfo == null)
             {

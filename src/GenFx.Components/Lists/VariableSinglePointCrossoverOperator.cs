@@ -52,8 +52,8 @@ namespace GenFx.Components.Lists
 
             IList<GeneticEntity> crossoverOffspring = new List<GeneticEntity>();
 
-            List<object> entity1Elements = GetEntityElements(listEntity1);
-            List<object> entity2Elements = GetEntityElements(listEntity2);
+            List<object?> entity1Elements = GetEntityElements(listEntity1);
+            List<object?> entity2Elements = GetEntityElements(listEntity2);
 
             ReplaceBits(listEntity1, entity2Elements, crossoverLocus1, crossoverLocus2);
             ReplaceBits(listEntity2, entity1Elements, crossoverLocus2, crossoverLocus1);
@@ -72,7 +72,7 @@ namespace GenFx.Components.Lists
         /// <param name="sourceElements">List of elements to replace with.</param>
         /// <param name="targetCrossoverLocus">Element position at which to begin replacement.</param>
         /// <param name="sourceCrossoverLocus">Element position of the source elements to begin copying from.</param>
-        private static void ReplaceBits(ListEntityBase entity, List<object> sourceElements, int targetCrossoverLocus, int sourceCrossoverLocus)
+        private static void ReplaceBits(ListEntityBase entity, List<object?> sourceElements, int targetCrossoverLocus, int sourceCrossoverLocus)
         {
             entity.Length = targetCrossoverLocus + sourceElements.Count - sourceCrossoverLocus;
             for (int sourceBitIndex = sourceCrossoverLocus, targetBitIndex = targetCrossoverLocus; sourceBitIndex < sourceElements.Count; sourceBitIndex++, targetBitIndex++)
@@ -86,9 +86,9 @@ namespace GenFx.Components.Lists
         /// </summary>
         /// <param name="entity"><see cref="ListEntityBase"/> whose bits are to be returned.</param>
         /// <returns>List of bits contained in <paramref name="entity"/>.</returns>
-        private static List<object> GetEntityElements(ListEntityBase entity)
+        private static List<object?> GetEntityElements(ListEntityBase entity)
         {
-            List<object> elements = new List<object>();
+            List<object?> elements = new List<object?>();
             for (int i = 0; i < entity.Length; i++)
             {
                 elements.Add(entity.GetValue(i));

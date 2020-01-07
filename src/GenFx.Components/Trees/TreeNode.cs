@@ -18,13 +18,13 @@ namespace GenFx.Components.Trees
         private readonly TreeNodeCollection childNodes;
 
         [DataMember]
-        private TreeNode parentNode;
+        private TreeNode? parentNode;
 
         [DataMember]
-        private TreeEntityBase tree;
+        private TreeEntityBase? tree;
 
         [DataMember]
-        private object nodeValue;
+        private object? nodeValue;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TreeNode"/> class.
@@ -47,7 +47,7 @@ namespace GenFx.Components.Trees
         /// Gets the parent of this node.
         /// </summary>
         /// <value>The parent of this node.  If the node is a root node, the parent is null.</value>
-        public TreeNode ParentNode
+        public TreeNode? ParentNode
         {
             get { return this.parentNode; }
             internal set { this.parentNode = value; }
@@ -57,7 +57,7 @@ namespace GenFx.Components.Trees
         /// Gets or sets the data value contained by this node.
         /// </summary>
         /// <value>The data value contained by this node.</value>
-        public object Value
+        public object? Value
         {
             get { return this.nodeValue; }
             set
@@ -84,8 +84,7 @@ namespace GenFx.Components.Trees
         /// Gets the <see cref="TreeEntityBase"/> containing this node.
         /// </summary>
         /// <value>The <see cref="TreeEntityBase"/> containing this node.</value>
-        /// <exception cref="ArgumentNullException">Value is null.</exception>
-        public TreeEntityBase Tree
+        public TreeEntityBase? Tree
         {
             get { return this.tree; }
             internal set { this.tree = value; }
@@ -148,12 +147,12 @@ namespace GenFx.Components.Trees
         /// <exception cref="InvalidOperationException">Tree has not been set.</exception>
         protected virtual void InsertChildCore(int index, TreeNode node)
         {
-            if (node == null)
+            if (node is null)
             {
                 throw new ArgumentNullException(nameof(node));
             }
 
-            if (this.tree == null)
+            if (this.tree is null)
             {
                 throw new InvalidOperationException(
                   StringUtil.GetFormattedString(Resources.ErrorMsg_InsertChildNodeWithoutTree));
@@ -187,9 +186,9 @@ namespace GenFx.Components.Trees
         /// </code>
         /// </remarks>
         /// <exception cref="ArgumentNullException"><paramref name="newTree"/> is null.</exception>
-        public virtual TreeNode Clone(TreeEntityBase newTree, TreeNode newParentNode)
+        public virtual TreeNode Clone(TreeEntityBase newTree, TreeNode? newParentNode)
         {
-            if (newTree == null)
+            if (newTree is null)
             {
                 throw new ArgumentNullException(nameof(newTree));
             }
@@ -218,21 +217,25 @@ namespace GenFx.Components.Trees
         /// </remarks>
         /// <exception cref="ArgumentNullException"><paramref name="node"/> is null.</exception>
         /// <exception cref="ArgumentNullException"><paramref name="newTree"/> is null.</exception>
-        public virtual void CopyTo(TreeNode node, TreeEntityBase newTree, TreeNode newParentNode)
+        public virtual void CopyTo(TreeNode node, TreeEntityBase newTree, TreeNode? newParentNode)
         {
-            if (node == null)
+            if (node is null)
             {
                 throw new ArgumentNullException(nameof(node));
             }
 
-            if (newTree == null)
+            if (newTree is null)
             {
                 throw new ArgumentNullException(nameof(newTree));
             }
 
             for (int i = 0; i < this.childNodes.Count; i++)
             {
-                node.ChildNodes.Add(this.childNodes[i].Clone(newTree, node));
+                TreeNode? child = childNodes[i];
+                if (child != null)
+                {
+                    node.ChildNodes.Add(child.Clone(newTree, node));
+                }
             }
 
             node.ParentNode = newParentNode;

@@ -46,7 +46,7 @@ namespace GenFx
         /// <exception cref="ArgumentNullException"><paramref name="entity"/> is null.</exception>
         public GeneticEntity Mutate(GeneticEntity entity)
         {
-            if (entity == null)
+            if (entity is null)
             {
                 throw new ArgumentNullException(nameof(entity));
             }

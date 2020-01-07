@@ -18,7 +18,7 @@ namespace GenFx.Wpf.Controls
         private readonly CategoryAxis categoryAxis;
         private readonly ColumnSeries columnSeries;
         private readonly IStopwatchFactory stopwatchFactory;
-        private IStopwatch stopwatch;
+        private IStopwatch? stopwatch;
 
         private static readonly TimeSpan chartDataRefreshRate = TimeSpan.FromSeconds(1);
 
@@ -158,14 +158,13 @@ namespace GenFx.Wpf.Controls
         {
             FitnessChart fitnessChart = (FitnessChart)obj;
 
-            if (e.OldValue != null)
+            if (e.OldValue is Population oldPopulation && oldPopulation.Algorithm != null)
             {
-                Population oldPopulation = (Population)e.OldValue;
                 oldPopulation.Algorithm.FitnessEvaluated -= fitnessChart.Algorithm_FitnessEvaluated;
                 oldPopulation.Algorithm.AlgorithmCompleted -= fitnessChart.Algorithm_AlgorithmCompleted;
             }
 
-            if (e.NewValue != null)
+            if (e.NewValue != null && fitnessChart.Population.Algorithm != null)
             {
                 fitnessChart.Population.Algorithm.FitnessEvaluated += fitnessChart.Algorithm_FitnessEvaluated;
                 fitnessChart.Population.Algorithm.AlgorithmCompleted += fitnessChart.Algorithm_AlgorithmCompleted;
@@ -191,7 +190,7 @@ namespace GenFx.Wpf.Controls
         /// </summary>
         /// <param name="sender">Sender of the event.</param>
         /// <param name="e">The<see cref="EventArgs"/> associated with the event.</param>
-        private void Algorithm_AlgorithmCompleted(object sender, EventArgs e)
+        private void Algorithm_AlgorithmCompleted(object? sender, EventArgs e)
         {
             this.Dispatcher.Invoke(() =>
             {
@@ -206,7 +205,7 @@ namespace GenFx.Wpf.Controls
         /// </summary>
         /// <param name="sender">Sender of the event.</param>
         /// <param name="e">The<see cref="EnvironmentFitnessEvaluatedEventArgs"/> associated with the event.</param>
-        private void Algorithm_FitnessEvaluated(object sender, EnvironmentFitnessEvaluatedEventArgs e)
+        private void Algorithm_FitnessEvaluated(object? sender, EnvironmentFitnessEvaluatedEventArgs e)
         {
             this.Dispatcher.Invoke(() =>
             {
@@ -244,12 +243,12 @@ namespace GenFx.Wpf.Controls
         {
             // Unless the data is being forced to refresh, skip the refresh if the 
             // specified time has not yet elapsed.
-            if (!forceRefresh && this.stopwatch.Elapsed < FitnessChart.chartDataRefreshRate)
+            if (!forceRefresh && this.stopwatch?.Elapsed < FitnessChart.chartDataRefreshRate)
             {
                 return;
             }
 
-            Population population = null;
+            Population? population = null;
             population = this.Population;
 
             this.categoryAxis.Labels.Clear();

@@ -22,18 +22,18 @@ namespace GenFx.Components.Trees
         /// <summary>
         /// Gets or sets the left child node of this <b>BinaryTreeNode{T}</b>.
         /// </summary>
-        public BinaryTreeNode<T> LeftChildNode
+        public BinaryTreeNode<T>? LeftChildNode
         {
-            get { return (BinaryTreeNode<T>)this.ChildNodes[0]; }
+            get { return (BinaryTreeNode<T>?)this.ChildNodes[0]; }
             set { this.ChildNodes[0] = value; }
         }
 
         /// <summary>
         /// Gets or sets the right child node of this <b>BinaryTreeNode{T}</b>.
         /// </summary>
-        public BinaryTreeNode<T> RightChildNode
+        public BinaryTreeNode<T>? RightChildNode
         {
-            get { return (BinaryTreeNode<T>)this.ChildNodes[1]; }
+            get { return (BinaryTreeNode<T>?)this.ChildNodes[1]; }
             set { this.ChildNodes[1] = value; }
         }
     }

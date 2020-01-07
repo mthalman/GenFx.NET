@@ -16,7 +16,7 @@ namespace GenFx.Components.Scaling
         private const double DefaultScalingDistanceCutoff = 1;
 
         [DataMember]
-        private double[] fitnessDistances;
+        private double[] fitnessDistances = Array.Empty<double>();
 
         [DataMember]
         private double scalingDistanceCutoff = DefaultScalingDistanceCutoff;

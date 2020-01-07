@@ -39,11 +39,23 @@ namespace GenFx.Components.Scaling
         /// </summary>
         /// <param name="population"><see cref="Population"/> containing the <see cref="GeneticEntity"/> objects.</param>
         /// <exception cref="ArgumentNullException"><paramref name="population"/> is null.</exception>
+        /// <exception cref="ArgumentException"><paramref name="population"/> does not have its raw mean value set.</exception>
+        /// <exception cref="ArgumentException"><paramref name="population"/> does not have its raw standard deviation value set.</exception>
         protected override void UpdateScaledFitnessValues(Population population)
         {
             if (population == null)
             {
                 throw new ArgumentNullException(nameof(population));
+            }
+
+            if (!population.RawMean.HasValue)
+            {
+                throw new ArgumentException(Resources.PopulationRawMeanNotSet, nameof(population));
+            }
+
+            if (!population.RawStandardDeviation.HasValue)
+            {
+                throw new ArgumentException(Resources.PopulationRawStandardDeviationNotSet, nameof(population));
             }
 
             foreach (GeneticEntity geneticEntity in population.Entities)

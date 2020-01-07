@@ -305,5 +305,32 @@ namespace GenFx.Components {
                 return ResourceManager.GetString("MetricLogger_StatTrace", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tree is not set on node..
+        /// </summary>
+        internal static string NodeTreeNotSet {
+            get {
+                return ResourceManager.GetString("NodeTreeNotSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Population does not have its raw mean value set..
+        /// </summary>
+        internal static string PopulationRawMeanNotSet {
+            get {
+                return ResourceManager.GetString("PopulationRawMeanNotSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Population does not have its raw standard deviation value set..
+        /// </summary>
+        internal static string PopulationRawStandardDeviationNotSet {
+            get {
+                return ResourceManager.GetString("PopulationRawStandardDeviationNotSet", resourceCulture);
+            }
+        }
     }
 }

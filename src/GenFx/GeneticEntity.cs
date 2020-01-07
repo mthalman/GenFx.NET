@@ -82,7 +82,10 @@ namespace GenFx
         /// </summary>
         public async Task EvaluateFitnessAsync()
         {
-            this.rawFitnessValue = this.scaledFitnessValue = await this.Algorithm.FitnessEvaluator.EvaluateFitnessAsync(this);
+            if (this.Algorithm?.FitnessEvaluator != null)
+            {
+                this.rawFitnessValue = this.scaledFitnessValue = await this.Algorithm.FitnessEvaluator.EvaluateFitnessAsync(this);
+            }
         }
 
         /// <summary>
@@ -139,6 +142,7 @@ namespace GenFx
             GeneticEntity clone = (GeneticEntity)this.CreateNew();
             clone.Algorithm = this.Algorithm;
             this.CopyTo(clone);
+            clone.IsInitialized = true;
             return clone;
         }
 
@@ -161,7 +165,7 @@ namespace GenFx
         /// <exception cref="ArgumentNullException"><paramref name="entity"/> is null.</exception>
         public virtual void CopyTo(GeneticEntity entity)
         {
-            if (entity == null)
+            if (entity is null)
             {
                 throw new ArgumentNullException(nameof(entity));
             }
@@ -204,8 +208,7 @@ namespace GenFx
                 return 1;
             }
 
-            GeneticEntity entity = obj as GeneticEntity;
-            if (entity == null)
+            if (!(obj is GeneticEntity entity))
             {
                 throw new ArgumentException(StringUtil.GetFormattedString(
                     Resources.ErrorMsg_ObjectIsWrongType, typeof(GeneticEntity)), nameof(obj));
@@ -226,8 +229,7 @@ namespace GenFx
                 return false;
             }
 
-            GeneticEntity entity = obj as GeneticEntity;
-            if (entity == null)
+            if (!(obj is GeneticEntity entity))
             {
                 return false;
             }

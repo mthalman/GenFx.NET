@@ -31,6 +31,11 @@ namespace GenFx.Validation
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
         protected override bool HasRequiredComponent(GeneticAlgorithm algorithmContext)
         {
+            if (algorithmContext is null)
+            {
+                throw new ArgumentNullException(nameof(algorithmContext));
+            }
+
             return algorithmContext.Metrics.Any(p => this.IsEquivalentType(p));
         }
     }

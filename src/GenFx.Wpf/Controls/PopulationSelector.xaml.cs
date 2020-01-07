@@ -68,7 +68,7 @@ namespace GenFx.Wpf.Controls
         /// <summary>
         /// Gets the currently selected <see cref="Population"/>.
         /// </summary>
-        public Population SelectedPopulation
+        public Population? SelectedPopulation
         {
             get
             {

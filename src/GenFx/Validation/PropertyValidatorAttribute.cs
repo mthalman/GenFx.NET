@@ -7,7 +7,7 @@ namespace GenFx.Validation
     /// </summary>
     public abstract class PropertyValidatorAttribute : Attribute
     {
-        private PropertyValidator validator;
+        private PropertyValidator? validator;
 
         /// <summary>
         /// Gets the validator used to verify the value of the property.

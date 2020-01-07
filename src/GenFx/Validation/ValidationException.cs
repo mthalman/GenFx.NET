@@ -30,7 +30,7 @@ namespace GenFx.Validation
         /// </summary>
         /// <param name="message">A message that describes the error.</param>
         /// <param name="innerException">The <see cref="Exception"/> that is the cause of the current exception.</param>
-        public ValidationException(string message, Exception innerException)
+        public ValidationException(string message, Exception? innerException)
             : base(message, innerException)
         {
         }

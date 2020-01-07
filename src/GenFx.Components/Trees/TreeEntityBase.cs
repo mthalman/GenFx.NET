@@ -18,13 +18,13 @@ namespace GenFx.Components.Trees
     public abstract class TreeEntityBase : GeneticEntity
     {
         [DataMember]
-        private TreeNode rootNode;
-        
+        private TreeNode? rootNode;
+
         /// <summary>
         /// Gets the <see cref="TreeNode"/> representing the root of the tree.
         /// </summary>
         /// <value>The <see cref="TreeNode"/> representing the root of the tree.</value>
-        public TreeNode RootNode
+        public TreeNode? RootNode
         {
             get { return this.rootNode; }
         }
@@ -36,14 +36,14 @@ namespace GenFx.Components.Trees
         /// <exception cref="ArgumentNullException"><paramref name="entity"/> is null.</exception>
         public override void CopyTo(GeneticEntity entity)
         {
-            if (entity == null)
+            if (entity is null)
             {
                 throw new ArgumentNullException(nameof(entity));
             }
 
             TreeEntityBase treeEntity = (TreeEntityBase)entity;
 
-            treeEntity.rootNode = this.rootNode.Clone(treeEntity, null);
+            treeEntity.rootNode = this.rootNode?.Clone(treeEntity, null);
 
             base.CopyTo(entity);
         }
@@ -75,13 +75,12 @@ namespace GenFx.Components.Trees
         ///  </returns>
         public override int CompareTo(GeneticEntity other)
         {
-            if (other == null)
+            if (other is null)
             {
                 return 1;
             }
 
-            TreeEntityBase treeEntityBase = other as TreeEntityBase;
-            if (treeEntityBase == null)
+            if (!(other is TreeEntityBase treeEntityBase))
             {
                 throw new ArgumentException(StringUtil.GetFormattedString(
                     Resources.ErrorMsg_ObjectIsWrongType, typeof(TreeEntityBase)), nameof(other));

@@ -8,7 +8,7 @@ namespace GenFx.Wpf
     public class ExecutionContext : ObservableObject
     {
         private ExecutionState executionState = ExecutionState.Idle;
-        private Exception algorithmException;
+        private Exception? algorithmException;
 
         /// <summary>
         /// Gets the <see cref="GenFx.GeneticAlgorithm"/> associated with this context.
@@ -35,7 +35,7 @@ namespace GenFx.Wpf
         /// <summary>
         /// Gets the exception that was thrown, if any, while attempting to execute the <see cref="GeneticAlgorithm"/>.
         /// </summary>
-        public Exception AlgorithmException
+        public Exception? AlgorithmException
         {
             get { return this.algorithmException; }
             internal set { this.SetProperty(ref this.algorithmException, value); }

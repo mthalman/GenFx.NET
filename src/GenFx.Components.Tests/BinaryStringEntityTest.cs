@@ -224,7 +224,8 @@ namespace GenFx.Components.Tests
             entity.IsFixedSize = true;
             entity.Initialize(new MockGeneticAlgorithm());
 
-            BinaryStringEntity result = (BinaryStringEntity)SerializationHelper.TestSerialization(entity, new Type[] { typeof(MockGeneticAlgorithm) });
+            BinaryStringEntity result = (BinaryStringEntity)SerializationHelper.TestSerialization(
+                entity, new Type[] { typeof(MockGeneticAlgorithm), typeof(DefaultTerminator) });
 
             for (int i = 0; i < 3; i++)
             {

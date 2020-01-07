@@ -24,10 +24,10 @@ namespace GenFx.Validation
                 throw new ArgumentNullException(nameof(component));
             }
 
-            string errorMessage;
+            string? errorMessage;
             if (!validator.IsValid(component, out errorMessage))
             {
-                throw new ValidationException(errorMessage);
+                throw new ValidationException(errorMessage!);
             }
         }
     }

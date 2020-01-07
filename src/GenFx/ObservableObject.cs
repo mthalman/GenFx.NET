@@ -14,7 +14,7 @@ namespace GenFx
         /// <summary>
         /// Occurs when a property value changes.
         /// </summary>
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
 
         /// <summary>
         /// Sets the state of a property.
@@ -25,7 +25,7 @@ namespace GenFx
         /// <typeparam name="T">Type of the property.</typeparam>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "0#")]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed")]
-        protected virtual void SetProperty<T>(ref T fieldValue, T newValue, [CallerMemberName] string propertyName = null)
+        protected virtual void SetProperty<T>(ref T fieldValue, T newValue, [CallerMemberName] string propertyName = "")
         {
             if (!Object.Equals(fieldValue, newValue))
             {
@@ -40,7 +40,7 @@ namespace GenFx
         /// <param name="propertyName">The name of the property.</param>
         /// <exception cref="ArgumentException"><paramref name="propertyName"/> is null or empty.</exception>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed")]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = "")
         {
             if (String.IsNullOrEmpty(propertyName))
             {

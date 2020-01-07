@@ -17,7 +17,7 @@ namespace GenFx.Components.Lists
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix")]
     [DataContract]
     public abstract class ListEntityBase<TItem> : ListEntityBase, IList<TItem>
-        where TItem : IComparable
+        where TItem : IComparable?
     {
         /// <summary>
         /// Gets or sets the list element at the specified index.
@@ -34,7 +34,7 @@ namespace GenFx.Components.Lists
         /// </summary>
         /// <param name="index">The zero-based index of the list element to get.</param>
         /// <returns>The list element at the specified index.</returns>
-        public sealed override object GetValue(int index)
+        public sealed override object? GetValue(int index)
         {
             return this[index];
         }
@@ -44,9 +44,9 @@ namespace GenFx.Components.Lists
         /// </summary>
         /// <param name="index">The zero-based index of the list element to set.</param>
         /// <param name="value">The value to set at the index.</param>
-        public sealed override void SetValue(int index, object value)
+        public sealed override void SetValue(int index, object? value)
         {
-            if (value == null && default(TItem) != null)
+            if (value == null && (Nullable.GetUnderlyingType(typeof(TItem)) != null || typeof(TItem).IsValueType))
             {
                 throw new ArgumentNullException(nameof(value));
             }
@@ -56,7 +56,9 @@ namespace GenFx.Components.Lists
                 throw new ArgumentException(StringUtil.GetFormattedString(Resources.ErrorMsg_ListEntityBase_InvalidItemType, value.GetType(), typeof(TItem)),
                     nameof(value));
             }
+#pragma warning disable CS8601 // Possible null reference assignment.
             this[index] = (TItem)value;
+#pragma warning restore CS8601 // Possible null reference assignment.
         }
         
         int ICollection<TItem>.Count { get { return this.Length; } }
@@ -139,13 +141,12 @@ namespace GenFx.Components.Lists
         ///  </returns>
         public override int CompareTo(GeneticEntity other)
         {
-            if (other == null)
+            if (other is null)
             {
                 return 1;
             }
 
-            ListEntityBase<TItem> listEntityBase = other as ListEntityBase<TItem>;
-            if (listEntityBase == null)
+            if (!(other is ListEntityBase<TItem> listEntityBase))
             {
                 throw new ArgumentException(StringUtil.GetFormattedString(
                     Resources.ErrorMsg_ObjectIsWrongType, typeof(ListEntityBase<TItem>)), nameof(other));

@@ -23,7 +23,7 @@ namespace GenFx
         ///  * Greater than zero: <paramref name="list1"/> is greater than <paramref name="list2"/>.
         ///  </returns>
         public static int CompareLists<T>(IList<T> list1, IList<T> list2)
-            where T : IComparable
+            where T : IComparable?
         {
             for (int i = 0; i < Math.Min(list1.Count, list2.Count); i++)
             {
@@ -119,7 +119,7 @@ namespace GenFx
         ///  * Zero: <paramref name="obj1"/> is equal to <paramref name="obj2"/>.
         ///  * Greater than zero: <paramref name="obj1"/> is greater than <paramref name="obj2"/>.
         ///  </returns>
-        public static int CompareObjects(IComparable obj1, IComparable obj2)
+        public static int CompareObjects(IComparable? obj1, IComparable? obj2)
         {
             if (obj1 is null || obj2 is null)
             {

@@ -8,7 +8,7 @@ namespace GenFx.Validation
     [AttributeUsage(AttributeTargets.Class, Inherited = true)]
     public abstract class ComponentValidatorAttribute : Attribute
     {
-        private ComponentValidator validator;
+        private ComponentValidator? validator;
 
         /// <summary>
         /// Gets the validator used to verify the value of the property.

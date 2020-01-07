@@ -60,7 +60,7 @@ namespace GenFx
 
             for (int i = 0; i < this.algorithm.MinimumEnvironmentSize; i++)
             {
-                Population newPopulation = (Population)this.algorithm.PopulationSeed.CreateNewAndInitialize();
+                Population newPopulation = (Population)this.algorithm!.PopulationSeed!.CreateNewAndInitialize();
                 newPopulation.Index = i;
                 this.populations.Add(newPopulation);
 
