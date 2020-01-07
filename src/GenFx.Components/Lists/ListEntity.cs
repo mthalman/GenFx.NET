@@ -43,7 +43,6 @@ namespace GenFx.Components.Lists
         {
             get
             {
-                this.AssertIsInitialized();
                 return this.genes.Count;
             }
             set
@@ -86,7 +85,6 @@ namespace GenFx.Components.Lists
         {
             get
             {
-                this.AssertIsInitialized();
                 return this.genes[index];
             }
             set

@@ -242,9 +242,7 @@ namespace GenFx.Components.Tests
         public void BinaryStringEntity_Uninitialized()
         {
             BinaryStringEntity entity = new BinaryStringEntity();
-            Assert.Throws<InvalidOperationException>(() => { object x = entity[0]; });
             Assert.Throws<InvalidOperationException>(() => { entity[0] = true; });
-            Assert.Throws<InvalidOperationException>(() => { int x = entity.Length; });
             Assert.Throws<InvalidOperationException>(() =>
             {
                 BinaryStringEntity entity2 = new BinaryStringEntity();
