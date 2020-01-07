@@ -54,16 +54,15 @@ namespace GenFx.Validation
         /// <param name="errorMessage">Error message that should be displayed if the component fails validation.</param>
         /// <returns>True if <paramref name="component"/> is valid; otherwise, false.</returns>
         [SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "3#")]
-        public override sealed bool IsValid(GeneticComponent component, out string errorMessage)
+        public override sealed bool IsValid(GeneticComponent component, out string? errorMessage)
         {
             if (component == null)
             {
                 throw new ArgumentNullException(nameof(component));
             }
 
-            GeneticAlgorithm algorithmContext;
-            GeneticComponentWithAlgorithm componentWithAlg = component as GeneticComponentWithAlgorithm;
-            if (componentWithAlg != null)
+            GeneticAlgorithm? algorithmContext;
+            if (component is GeneticComponentWithAlgorithm componentWithAlg)
             {
                 algorithmContext = componentWithAlg.Algorithm;
             }
@@ -72,7 +71,7 @@ namespace GenFx.Validation
                 algorithmContext = component as GeneticAlgorithm;
             }
 
-            if (algorithmContext == null)
+            if (algorithmContext is null)
             {
                 throw new ArgumentException(
                     StringUtil.GetFormattedString(Resources.ErrorMsg_RequiredComponentValidator_NoAlgorithm,
@@ -104,7 +103,7 @@ namespace GenFx.Validation
         /// </summary>
         /// <param name="configuredComponent"><see cref="GeneticComponent"/> to check.</param>
         /// <returns>true if the specified component has an equivalent type to the required component type; otherwise, false.</returns>
-        protected bool IsEquivalentType(GeneticComponent configuredComponent)
+        protected bool IsEquivalentType(GeneticComponent? configuredComponent)
         {
             if (configuredComponent == null)
             {

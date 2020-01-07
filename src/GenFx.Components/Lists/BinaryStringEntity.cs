@@ -14,7 +14,7 @@ namespace GenFx.Components.Lists
     public class BinaryStringEntity : ListEntityBase<bool>
     {
         [DataMember]
-        private BitArray genes;
+        private BitArray genes = new BitArray(0);
 
         [DataMember]
         private bool isFixedSize;
@@ -54,7 +54,6 @@ namespace GenFx.Components.Lists
         {
             get
             {
-                this.EnsureEntityIsInitialized();
                 return this.genes.Count;
             }
             set
@@ -89,12 +88,11 @@ namespace GenFx.Components.Lists
         {
             get
             {
-                this.EnsureEntityIsInitialized();
                 return this.genes[index];
             }
             set
             {
-                this.EnsureEntityIsInitialized();
+                this.AssertIsInitialized();
                 this.genes[index] = value;
                 this.UpdateStringRepresentation();
             }
@@ -126,12 +124,12 @@ namespace GenFx.Components.Lists
         /// <exception cref="ArgumentNullException"><paramref name="entity"/> is null.</exception>
         public override void CopyTo(GeneticEntity entity)
         {
-            if (entity == null)
+            if (entity is null)
             {
                 throw new ArgumentNullException(nameof(entity));
             }
 
-            this.EnsureEntityIsInitialized();
+            this.AssertIsInitialized();
             base.CopyTo(entity);
 
             BinaryStringEntity binStrEntity = (BinaryStringEntity)entity;
@@ -153,14 +151,6 @@ namespace GenFx.Components.Lists
             }
 
             return builder.ToString();
-        }
-
-        private void EnsureEntityIsInitialized()
-        {
-            if (this.genes == null)
-            {
-                throw new InvalidOperationException(Resources.ErrorMsg_EntityNotInitialized);
-            }
         }
     }
 }

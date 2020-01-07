@@ -35,9 +35,11 @@ namespace GenFx.Components.SelectionOperators
                 throw new ArgumentNullException(nameof(population));
             }
 
+            this.AssertIsInitialized();
+
             GeneticEntity[] sortedEntities = population.Entities.GetEntitiesSortedByFitness(
                 this.SelectionBasedOnFitnessType,
-                this.Algorithm.FitnessEvaluator.EvaluationMode).ToArray();
+                this.Algorithm!.FitnessEvaluator!.EvaluationMode).ToArray();
 
             List<WheelSlice> wheelSlices = new List<WheelSlice>(sortedEntities.Length);
             for (int i = 0; i < sortedEntities.Length; i++)

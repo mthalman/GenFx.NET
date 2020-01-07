@@ -95,7 +95,8 @@ namespace GenFx.Tests
             GeneticEnvironment result = (GeneticEnvironment)SerializationHelper.TestSerialization(environment, new Type[]
             {
                 typeof(MockGeneticAlgorithm),
-                typeof(MockPopulation)
+                typeof(MockPopulation),
+                typeof(DefaultTerminator)
             });
 
             Assert.IsType<MockPopulation>(result.Populations[0]);

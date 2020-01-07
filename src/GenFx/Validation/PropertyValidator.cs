@@ -23,6 +23,6 @@ namespace GenFx.Validation
         /// <param name="errorMessage">Error message that should be displayed if the property fails validation.</param>
         /// <returns>True if <paramref name="value"/> is valid; otherwise, false.</returns>
         [SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "3#")]
-        public abstract bool IsValid(object value, string propertyName, object owner, out string errorMessage);
+        public abstract bool IsValid(object? value, string propertyName, object owner, out string? errorMessage);
     }
 }

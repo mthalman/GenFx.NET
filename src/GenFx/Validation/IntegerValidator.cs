@@ -52,7 +52,7 @@ namespace GenFx.Validation
         /// <returns>true if <paramref name="value"/> is valid; otherwise, false.</returns>
         /// <exception cref="ArgumentException"><paramref name="propertyName"/> is null or empty.</exception>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
-        public override bool IsValid(object value, string propertyName, object owner, out string errorMessage)
+        public override bool IsValid(object? value, string propertyName, object owner, out string? errorMessage)
         {
             if (String.IsNullOrEmpty(propertyName))
             {

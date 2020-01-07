@@ -87,14 +87,16 @@ namespace GenFx
                 throw new ArgumentNullException(nameof(population));
             }
 
+            this.AssertIsInitialized();
+
             int elitistCount = Convert.ToInt32(Math.Round(this.ElitistRatio * population.Entities.Count));
 
             List<GeneticEntity> geneticEntities = new List<GeneticEntity>();
             if (elitistCount > 0)
             {
                 GeneticEntity[] sorted = population.Entities.GetEntitiesSortedByFitness(
-                    this.Algorithm.SelectionOperator.SelectionBasedOnFitnessType,
-                    this.Algorithm.FitnessEvaluator.EvaluationMode).ToArray();
+                    this.Algorithm!.SelectionOperator!.SelectionBasedOnFitnessType,
+                    this.Algorithm!.FitnessEvaluator!.EvaluationMode).ToArray();
 
                 for (int i = sorted.Length - elitistCount; i < sorted.Length; i++)
                 {

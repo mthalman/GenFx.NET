@@ -258,4 +258,7 @@ Actual type: '{2}'</value>
   <data name="ErrorMsg_ObjectIsWrongType" xml:space="preserve">
     <value>Object must be of type '{0}'.</value>
   </data>
+  <data name="ComponentNotInitialized" xml:space="preserve">
+    <value>Component is not initialized.</value>
+  </data>
 </root>

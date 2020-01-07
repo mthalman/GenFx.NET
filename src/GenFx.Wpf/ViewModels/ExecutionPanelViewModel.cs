@@ -153,7 +153,7 @@ namespace GenFx.Wpf.ViewModels
         /// </summary>
         /// <param name="sender">Sender of the event.</param>
         /// <param name="e">The <see cref="EventArgs"/> associated with the event.</param>
-        private void GeneticAlgorithm_AlgorithmCompleted(object sender, EventArgs e)
+        private void GeneticAlgorithm_AlgorithmCompleted(object? sender, EventArgs e)
         {
             this.context.ExecutionState = ExecutionState.Idle;
             this.UnsubscribeFromAlgorithmEvents();
@@ -164,7 +164,7 @@ namespace GenFx.Wpf.ViewModels
         /// </summary>
         /// <param name="sender">Sender of the event.</param>
         /// <param name="e">The <see cref="EnvironmentFitnessEvaluatedEventArgs"/> associated with the event.</param>
-        private void GeneticAlgorithm_FitnessEvaluated(object sender, EnvironmentFitnessEvaluatedEventArgs e)
+        private void GeneticAlgorithm_FitnessEvaluated(object? sender, EnvironmentFitnessEvaluatedEventArgs e)
         {
             if (this.context.ExecutionState == ExecutionState.PausePending ||
                 this.context.ExecutionState == ExecutionState.IdlePending)

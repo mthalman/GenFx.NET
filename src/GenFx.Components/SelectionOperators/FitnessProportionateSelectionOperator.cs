@@ -27,7 +27,9 @@ namespace GenFx.Components.SelectionOperators
                 throw new ArgumentNullException(nameof(population));
             }
 
-            FitnessEvaluationMode evaluationMode = this.Algorithm.FitnessEvaluator.EvaluationMode;
+            this.AssertIsInitialized();
+
+            FitnessEvaluationMode evaluationMode = this.Algorithm!.FitnessEvaluator!.EvaluationMode;
 
             List<TemporaryWheelSlice> tempSlices = new List<TemporaryWheelSlice>();
 
@@ -43,10 +45,10 @@ namespace GenFx.Components.SelectionOperators
                 for (int i = 0; i < entities.Length; i++)
                 {
                     tempSlices.Add(
-                        new TemporaryWheelSlice {
-                            Entity = entities[i],
-                            Size = entities[descendingIndex].GetFitnessValue(this.SelectionBasedOnFitnessType)
-                        });
+                        new TemporaryWheelSlice(
+                            entities[i],
+                            entities[descendingIndex].GetFitnessValue(this.SelectionBasedOnFitnessType)
+                        ));
                     descendingIndex--;
                 }
             }
@@ -56,10 +58,10 @@ namespace GenFx.Components.SelectionOperators
                 foreach (GeneticEntity entity in population.Entities)
                 {
                     tempSlices.Add(
-                        new TemporaryWheelSlice {
-                            Entity = entity,
-                            Size = entity.GetFitnessValue(this.SelectionBasedOnFitnessType)
-                        });
+                        new TemporaryWheelSlice(
+                            entity,
+                            entity.GetFitnessValue(this.SelectionBasedOnFitnessType)
+                        ));
                 }
             }
 
@@ -88,7 +90,13 @@ namespace GenFx.Components.SelectionOperators
 
         private class TemporaryWheelSlice
         {
-            public GeneticEntity Entity { get; set; }
+            public TemporaryWheelSlice(GeneticEntity entity, double size)
+            {
+                this.Entity = entity;
+                this.Size = size;
+            }
+
+            public GeneticEntity Entity { get; }
             public double Size { get; set; }
         }
     }

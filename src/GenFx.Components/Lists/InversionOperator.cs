@@ -23,7 +23,7 @@ namespace GenFx.Components.Lists
         /// <exception cref="ArgumentNullException"><paramref name="entity"/> is null.</exception>
         protected override bool GenerateMutation(GeneticEntity entity)
         {
-            if (entity == null)
+            if (entity is null)
             {
                 throw new ArgumentNullException(nameof(entity));
             }
@@ -38,7 +38,7 @@ namespace GenFx.Components.Lists
                     secondPosition = RandomNumberService.Instance.GetRandomValue(listEntity.Length - 1);
                 } while (secondPosition == firstPosition);
 
-                object firstValue = listEntity.GetValue(firstPosition);
+                object? firstValue = listEntity.GetValue(firstPosition);
                 listEntity.SetValue(firstPosition, listEntity.GetValue(secondPosition));
                 listEntity.SetValue(secondPosition, firstValue);
                 return true;

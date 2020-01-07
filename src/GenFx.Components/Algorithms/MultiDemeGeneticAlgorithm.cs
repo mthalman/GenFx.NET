@@ -91,15 +91,17 @@ namespace GenFx.Components.Algorithms
         /// </summary>
         protected virtual void OnMigrate()
         {
-            IList<Population> populations = this.Environment.Populations;
+            this.AssertIsInitialized();
+
+            IList<Population> populations = this.Environment!.Populations;
 
             // Build a list of migrant genetic entities from the first population
             List<GeneticEntity> migrantGeneticEntities = new List<GeneticEntity>(this.MigrantCount);
             for (int i = 0; i < this.MigrantCount; i++)
             {
                 GeneticEntity[] sortedEntities = populations[0].Entities.GetEntitiesSortedByFitness(
-                    this.SelectionOperator.SelectionBasedOnFitnessType,
-                    this.FitnessEvaluator.EvaluationMode).ToArray();
+                    this.SelectionOperator!.SelectionBasedOnFitnessType,
+                    this.FitnessEvaluator!.EvaluationMode).ToArray();
                 migrantGeneticEntities.Add(sortedEntities[sortedEntities.Length - i - 1]);
             }
 
@@ -108,8 +110,8 @@ namespace GenFx.Components.Algorithms
             {
                 Population population = populations[populationIndex];
                 List<GeneticEntity> sortedEntities = population.Entities.GetEntitiesSortedByFitness(
-                    this.SelectionOperator.SelectionBasedOnFitnessType,
-                    this.FitnessEvaluator.EvaluationMode).ToList();
+                    this.SelectionOperator!.SelectionBasedOnFitnessType,
+                    this.FitnessEvaluator!.EvaluationMode).ToList();
 
                 for (int entityIndex = 0; entityIndex < this.MigrantCount; entityIndex++)
                 {
@@ -129,8 +131,8 @@ namespace GenFx.Components.Algorithms
 
             Population firstPopulation = populations[0];
             List<GeneticEntity> firstPopulationSortedEntities = firstPopulation.Entities.GetEntitiesSortedByFitness(
-                this.SelectionOperator.SelectionBasedOnFitnessType,
-                this.FitnessEvaluator.EvaluationMode).ToList();
+                this.SelectionOperator!.SelectionBasedOnFitnessType,
+                this.FitnessEvaluator!.EvaluationMode).ToList();
 
             // Use the migrants from the last population and migrate them to the first population.
             for (int entityIndex = 0; entityIndex < this.MigrantCount; entityIndex++)

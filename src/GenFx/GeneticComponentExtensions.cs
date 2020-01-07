@@ -39,7 +39,8 @@ namespace GenFx
 
             if (newComponent is GeneticComponentWithAlgorithm newComponentWithAlg)
             {
-                newComponentWithAlg.Initialize(((GeneticComponentWithAlgorithm)component).Algorithm);
+                ((GeneticComponentWithAlgorithm)component).AssertIsInitialized();
+                newComponentWithAlg.Initialize(((GeneticComponentWithAlgorithm)component).Algorithm!);
             }
 
             return newComponent;

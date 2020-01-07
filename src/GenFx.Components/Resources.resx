@@ -201,4 +201,13 @@ Metric Value: {1}
 Population Index: {2}
 Generation Index: {3}</value>
   </data>
+  <data name="NodeTreeNotSet" xml:space="preserve">
+    <value>Tree is not set on node.</value>
+  </data>
+  <data name="PopulationRawMeanNotSet" xml:space="preserve">
+    <value>Population does not have its raw mean value set.</value>
+  </data>
+  <data name="PopulationRawStandardDeviationNotSet" xml:space="preserve">
+    <value>Population does not have its raw standard deviation value set.</value>
+  </data>
 </root>

@@ -31,13 +31,15 @@ namespace GenFx.Components.Metrics
                 throw new ArgumentNullException(nameof(population));
             }
 
+            this.AssertIsInitialized();
+
             if (!this.bestMaxValues.TryGetValue(population.Index, out double bestMax))
             {
                 bestMax = Double.MinValue;
                 this.bestMaxValues.Add(population.Index, bestMax);
             }
 
-            MaximumFitness maxFitness = this.Algorithm.Metrics.OfType<MaximumFitness>().First();
+            MaximumFitness maxFitness = this.Algorithm!.Metrics.OfType<MaximumFitness>().First();
             double populationMax = (double)maxFitness.GetResults(population.Index).Last().ResultValue;
 
             if (bestMax < populationMax)

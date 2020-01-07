@@ -29,7 +29,7 @@ namespace GenFx
 
             populationResults.Clear();
 
-            for (int i = 0; i < this.Algorithm.MinimumEnvironmentSize; i++)
+            for (int i = 0; i < this.Algorithm!.MinimumEnvironmentSize; i++)
             {
                 this.populationResults.Add(i, new ObservableCollection<MetricResult>());
             }
@@ -62,6 +62,6 @@ namespace GenFx
         /// <remarks>
         /// This method is called once for each generation.
         /// </remarks>
-        public abstract object GetResultValue(Population population);
+        public abstract object? GetResultValue(Population population);
     }
 }

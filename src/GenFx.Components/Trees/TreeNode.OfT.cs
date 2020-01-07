@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace GenFx.Components.Trees
 {
@@ -30,9 +31,12 @@ namespace GenFx.Components.Trees
         /// Gets or sets the data value contained by this node.
         /// </summary>
         /// <value>The data value contained by this node.</value>
+        [MaybeNull]
         public new T Value
         {
+#pragma warning disable CS8601 // Possible null reference assignment.
             get { return (T)base.Value; }
+#pragma warning restore CS8601 // Possible null reference assignment.
             set { base.Value = value; }
         }
 
@@ -58,9 +62,9 @@ namespace GenFx.Components.Trees
         /// </code>
         /// </remarks>
         /// <exception cref="ArgumentNullException"><paramref name="newTree"/> is null.</exception>
-        public override TreeNode Clone(TreeEntityBase newTree, TreeNode newParentNode)
+        public override TreeNode Clone(TreeEntityBase newTree, TreeNode? newParentNode)
         {
-            if (newTree == null)
+            if (newTree is null)
             {
                 throw new ArgumentNullException(nameof(newTree));
             }

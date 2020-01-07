@@ -18,15 +18,17 @@ namespace GenFx.Components.Metrics
         /// <param name="population"><see cref="Population"/> from which to derive the metric.</param>
         /// <returns>Largest value of <see cref="GeneticEntity.ScaledFitnessValue"/> found.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="population"/> is null.</exception>
-        public override object GetResultValue(Population population)
+        public override object? GetResultValue(Population population)
         {
             if (population == null)
             {
                 throw new ArgumentNullException(nameof(population));
             }
 
+            this.AssertIsInitialized();
+
             // If there's no fitness scaling, just use the raw max value.
-            if (this.Algorithm.FitnessScalingStrategy == null)
+            if (this.Algorithm!.FitnessScalingStrategy == null)
             {
                 return population.RawMax;
             }

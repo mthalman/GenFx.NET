@@ -17,6 +17,8 @@ namespace GenFx.Components.Trees
         /// <exception cref="ArgumentNullException"><paramref name="node1"/> is null.</exception>
         /// <exception cref="ArgumentNullException"><paramref name="node2"/> is null.</exception>
         /// <exception cref="ArgumentException"><paramref name="node1"/> is not contained by this tree.</exception>
+        /// <exception cref="ArgumentException"><paramref name="node1"/> does not have a tree assigned.</exception>
+        /// <exception cref="ArgumentException"><paramref name="node2"/> does not have a tree assigned.</exception>
         public static void Swap(TreeNode node1, TreeNode node2)
         {
             if (node1 == null)
@@ -28,10 +30,20 @@ namespace GenFx.Components.Trees
                 throw new ArgumentNullException(nameof(node2));
             }
 
-            TreeNode node2ParentNode = node2.ParentNode;
-            TreeEntityBase node2Tree = node2.Tree;
-            TreeNode node1ParentNode = node1.ParentNode;
-            TreeEntityBase node1Tree = node1.Tree;
+            TreeNode? node2ParentNode = node2.ParentNode;
+            TreeEntityBase? node2Tree = node2.Tree;
+            TreeNode? node1ParentNode = node1.ParentNode;
+            TreeEntityBase? node1Tree = node1.Tree;
+
+            if (node1Tree is null)
+            {
+                throw new ArgumentException(Resources.NodeTreeNotSet, nameof(node1));
+            }
+
+            if (node2Tree is null)
+            {
+                throw new ArgumentException(Resources.NodeTreeNotSet, nameof(node2));
+            }
 
             TreeHelper.ReplaceNodeInTree(node1, node2Tree, node2, node2ParentNode);
             TreeHelper.ReplaceNodeInTree(node2, node1Tree, node1, node1ParentNode);
@@ -44,24 +56,24 @@ namespace GenFx.Components.Trees
         /// <param name="locationNodeTree"><see cref="TreeEntityBase"/> containing the <paramref name="locationNode"/>.</param>
         /// <param name="locationNode"><see cref="TreeNode"/> where <paramref name="movingNode"/> should be moved to.</param>
         /// <param name="locationParentNode"><see cref="TreeNode"/> of the parent of <paramref name="locationNode"/>.</param>
-        public static void ReplaceNodeInTree(TreeNode movingNode, TreeEntityBase locationNodeTree, TreeNode locationNode, TreeNode locationParentNode)
+        public static void ReplaceNodeInTree(TreeNode movingNode, TreeEntityBase locationNodeTree, TreeNode locationNode, TreeNode? locationParentNode)
         {
-            if (movingNode == null)
+            if (movingNode is null)
             {
                 throw new ArgumentNullException(nameof(movingNode));
             }
 
-            if (locationNodeTree == null)
+            if (locationNodeTree is null)
             {
                 throw new ArgumentNullException(nameof(locationNodeTree));
             }
 
-            if (locationNode == null)
+            if (locationNode is null)
             {
                 throw new ArgumentNullException(nameof(locationNode));
             }
 
-            if (locationParentNode == null)
+            if (locationParentNode is null)
             {
                 locationNodeTree.SetRootNode(movingNode);
             }
@@ -86,9 +98,12 @@ namespace GenFx.Components.Trees
 
             for (int i = 0; i < parentNode.ChildNodes.Count; i++)
             {
-                TreeNode childNode = parentNode.ChildNodes[i];
-                childNode.Tree = parentNode.Tree;
-                SetTreeForChildNodes(childNode);
+                TreeNode? childNode = parentNode.ChildNodes[i];
+                if (childNode != null)
+                {
+                    childNode.Tree = parentNode.Tree;
+                    SetTreeForChildNodes(childNode);
+                }
             }
         }
     }

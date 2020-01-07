@@ -14,7 +14,7 @@ namespace GenFx.Components.Lists
         /// <param name="component"><see cref="GeneticComponent"/> to be validated.</param>
         /// <param name="errorMessage">Error message that should be displayed if the component fails validation.</param>
         /// <returns>True if <paramref name="component"/> is valid; otherwise, false.</returns>
-        public override bool IsValid(GeneticComponent component, out string errorMessage)
+        public override bool IsValid(GeneticComponent component, out string? errorMessage)
         {
             errorMessage = null;
 

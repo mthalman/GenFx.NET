@@ -14,9 +14,9 @@ namespace GenFx.Components.Trees
         /// Gets the <see cref="TreeNode"/> representing the root of the tree.
         /// </summary>
         /// <value>The <see cref="TreeNode"/> representing the root of the tree.</value>
-        public new TNode RootNode
+        public new TNode? RootNode
         {
-            get { return (TNode)base.RootNode; }
+            get { return (TNode?)base.RootNode; }
         }
     }
 }

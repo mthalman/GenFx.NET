@@ -29,6 +29,11 @@ namespace GenFx.Validation
         /// <returns>true if the genetic algorithm is configured with the required component; otherwise, false.</returns>
         protected override bool HasRequiredComponent(GeneticAlgorithm algorithmContext)
         {
+            if (algorithmContext is null)
+            {
+                throw new ArgumentNullException(nameof(algorithmContext));
+            }
+
             return this.IsEquivalentType(algorithmContext);
         }
     }

@@ -68,7 +68,7 @@ namespace GenFx
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="populationIndex"/> is less than zero.</exception>
         /// <exception cref="ArgumentNullException"><paramref name="resultValue"/> is null.</exception>
         /// <exception cref="ArgumentNullException"><paramref name="metric"/> is null.</exception>
-        public MetricResult(int generationIndex, int populationIndex, object resultValue, Metric metric)
+        public MetricResult(int generationIndex, int populationIndex, object? resultValue, Metric metric)
         {
             if (generationIndex < 0)
             {

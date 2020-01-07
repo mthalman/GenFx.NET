@@ -127,7 +127,8 @@ namespace GenFx.Components.Tests
                 MigrateEachGeneration = 3
             };
 
-            MultiDemeGeneticAlgorithm result = (MultiDemeGeneticAlgorithm)SerializationHelper.TestSerialization(algorithm, new Type[0]);
+            MultiDemeGeneticAlgorithm result = (MultiDemeGeneticAlgorithm)SerializationHelper.TestSerialization(
+                algorithm, new Type[] { typeof(DefaultTerminator) });
 
             Assert.Equal(algorithm.MigrantCount, result.MigrantCount);
             Assert.Equal(algorithm.MigrateEachGeneration, result.MigrateEachGeneration);

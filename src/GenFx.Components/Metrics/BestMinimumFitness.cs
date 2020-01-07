@@ -31,13 +31,15 @@ namespace GenFx.Components.Metrics
                 throw new ArgumentNullException(nameof(population));
             }
 
+            this.AssertIsInitialized();
+
             if (!this.bestMinValues.TryGetValue(population.Index, out double? bestMin))
             {
                 bestMin = null;
                 this.bestMinValues.Add(population.Index, bestMin);
             }
 
-            MinimumFitness minFitness = this.Algorithm.Metrics.OfType<MinimumFitness>().First();
+            MinimumFitness minFitness = this.Algorithm!.Metrics.OfType<MinimumFitness>().First();
             double populationMin = (double)minFitness.GetResults(population.Index).Last().ResultValue;
 
             if (!bestMin.HasValue || bestMin > populationMin)

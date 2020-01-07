@@ -14,7 +14,7 @@ namespace GenFx.Components.Trees
         /// <returns>The number of nodes contained in the tree.</returns>
         public static int GetSize(this TreeEntityBase treeEntity)
         {
-            if (treeEntity == null)
+            if (treeEntity is null)
             {
                 throw new ArgumentNullException(nameof(treeEntity));
             }
@@ -25,9 +25,9 @@ namespace GenFx.Components.Trees
         /// <summary>
         /// Returns the number of nodes contained in the subtree of the given <paramref name="node"/>.
         /// </summary>
-        private static int GetSubtreeSize(TreeNode node)
+        private static int GetSubtreeSize(TreeNode? node)
         {
-            if (node == null)
+            if (node is null)
             {
                 return 0;
             }
@@ -53,7 +53,7 @@ namespace GenFx.Components.Trees
         /// </returns>
         public static IEnumerable<TreeNode> GetPrefixTree(this TreeEntityBase treeEntity)
         {
-            if (treeEntity == null)
+            if (treeEntity is null)
             {
                 throw new ArgumentNullException(nameof(treeEntity));
             }
@@ -70,14 +70,17 @@ namespace GenFx.Components.Trees
         /// An enumerable collection of <see cref="TreeNode"/> objects containing the nodes
         /// of the tree sorted in prefix order.
         /// </returns>
-        private static IEnumerable<TreeNode> GetPrefixTree(TreeNode node)
+        private static IEnumerable<TreeNode> GetPrefixTree(TreeNode? node)
         {
-            yield return node;
-            foreach (TreeNode childNode in node.ChildNodes)
+            if (node != null)
             {
-                foreach (TreeNode subChildNode in TreeEntityExtensions.GetPrefixTree(childNode))
+                yield return node;
+                foreach (TreeNode childNode in node.ChildNodes)
                 {
-                    yield return subChildNode;
+                    foreach (TreeNode subChildNode in TreeEntityExtensions.GetPrefixTree(childNode))
+                    {
+                        yield return subChildNode;
+                    }
                 }
             }
         }
@@ -91,7 +94,7 @@ namespace GenFx.Components.Trees
         /// of the tree sorted in prefix order.</returns>
         public static IEnumerable<TreeNode> GetPostfixTree(this TreeEntityBase treeEntity)
         {
-            if (treeEntity == null)
+            if (treeEntity is null)
             {
                 throw new ArgumentNullException(nameof(treeEntity));
             }
@@ -106,16 +109,19 @@ namespace GenFx.Components.Trees
         /// <param name="node"><see cref="TreeNode"/> to start at.</param>
         /// <returns>An enumerable collection of <see cref="TreeNode"/> objects containing the nodes
         /// of the tree sorted in prefix order.</returns>
-        private static IEnumerable<TreeNode> GetPostfixTree(TreeNode node)
+        private static IEnumerable<TreeNode> GetPostfixTree(TreeNode? node)
         {
-            foreach (TreeNode childNode in node.ChildNodes)
+            if (node != null)
             {
-                foreach (TreeNode subChildNode in TreeEntityExtensions.GetPostfixTree(childNode))
+                foreach (TreeNode childNode in node.ChildNodes)
                 {
-                    yield return subChildNode;
+                    foreach (TreeNode subChildNode in TreeEntityExtensions.GetPostfixTree(childNode))
+                    {
+                        yield return subChildNode;
+                    }
                 }
+                yield return node;
             }
-            yield return node;
         }
     }
 }

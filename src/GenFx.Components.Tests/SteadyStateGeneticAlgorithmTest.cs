@@ -70,6 +70,8 @@ namespace GenFx.Components.Tests
             algorithm.FitnessEvaluator = new MockFitnessEvaluator();
             algorithm.FitnessEvaluator.Initialize(algorithm);
 
+            await algorithm.InitializeAsync();
+
             PrivateObject ssAccessor = new PrivateObject(algorithm);
             SimplePopulation population = GetPopulation(algorithm, 3);
 
@@ -117,6 +119,8 @@ namespace GenFx.Components.Tests
             algorithm.FitnessEvaluator = new MockFitnessEvaluator();
             algorithm.FitnessEvaluator.Initialize(algorithm);
 
+            await algorithm.InitializeAsync();
+
             PrivateObject ssAccessor = new PrivateObject(algorithm);
             SimplePopulation population = GetPopulation(algorithm, 10);
 
@@ -151,7 +155,8 @@ namespace GenFx.Components.Tests
                 PopulationReplacementValue = new PopulationReplacementValue(3, ReplacementValueKind.Percentage)
             };
 
-            SteadyStateGeneticAlgorithm result = (SteadyStateGeneticAlgorithm)SerializationHelper.TestSerialization(algorithm, new Type[0]);
+            SteadyStateGeneticAlgorithm result = (SteadyStateGeneticAlgorithm)SerializationHelper.TestSerialization(
+                algorithm, new Type[] { typeof(DefaultTerminator) });
 
             Assert.Equal(algorithm.PopulationReplacementValue.Kind, result.PopulationReplacementValue.Kind);
             Assert.Equal(algorithm.PopulationReplacementValue.Value, result.PopulationReplacementValue.Value);

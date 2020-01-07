@@ -33,7 +33,7 @@ namespace GenFx.Components.Terminators
         /// <returns>true if the genetic algorithm is to stop executing; otherwise, false.</returns>
         public override bool IsComplete()
         {
-            return (this.Algorithm.CurrentGeneration == this.FinalGeneration);
+            return (this.Algorithm?.CurrentGeneration == this.FinalGeneration);
         }
     }
 }

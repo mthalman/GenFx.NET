@@ -19,7 +19,7 @@ namespace GenFx.Components.Lists
         private bool isFixedSize;
 
         [DataMember]
-        private List<TItem> genes;
+        private List<TItem> genes = new List<TItem>();
 
         /// <summary>
         /// Gets or sets a value indicating whether the list is a fixed size.
@@ -43,7 +43,6 @@ namespace GenFx.Components.Lists
         {
             get
             {
-                this.EnsureEntityIsInitialized();
                 return this.genes.Count;
             }
             set
@@ -59,7 +58,9 @@ namespace GenFx.Components.Lists
                     {
                         for (int i = 0; i <= value - this.Length; i++)
                         {
+#pragma warning disable CS8653 // A default expression introduces a null value for a type parameter.
                             this.genes.Add(default);
+#pragma warning restore CS8653 // A default expression introduces a null value for a type parameter.
                         }
                     }
                     else
@@ -84,12 +85,11 @@ namespace GenFx.Components.Lists
         {
             get
             {
-                this.EnsureEntityIsInitialized();
                 return this.genes[index];
             }
             set
             {
-                this.EnsureEntityIsInitialized();
+                this.AssertIsInitialized();
                 this.genes[index] = value;
                 this.UpdateStringRepresentation();
             }
@@ -108,7 +108,9 @@ namespace GenFx.Components.Lists
 
             for (int i = 0; i < initialCount; i++)
             {
+#pragma warning disable CS8653 // A default expression introduces a null value for a type parameter.
                 this.genes.Add(default);
+#pragma warning restore CS8653 // A default expression introduces a null value for a type parameter.
             }
         }
 
@@ -119,12 +121,12 @@ namespace GenFx.Components.Lists
         /// <exception cref="ArgumentNullException"><paramref name="entity"/> is null.</exception>
         public override void CopyTo(GeneticEntity entity)
         {
-            if (entity == null)
+            if (entity is null)
             {
                 throw new ArgumentNullException(nameof(entity));
             }
 
-            this.EnsureEntityIsInitialized();
+            this.AssertIsInitialized();
             base.CopyTo(entity);
 
             ListEntity<TItem> listEntity = (ListEntity<TItem>)entity;
@@ -132,14 +134,6 @@ namespace GenFx.Components.Lists
             this.genes.CopyTo(values);
             listEntity.genes = values.ToList();
             listEntity.UpdateStringRepresentation();
-        }
-        
-        private void EnsureEntityIsInitialized()
-        {
-            if (this.genes == null)
-            {
-                throw new InvalidOperationException(Resources.ErrorMsg_EntityNotInitialized);
-            }
         }
     }
 }

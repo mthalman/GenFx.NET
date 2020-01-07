@@ -1,5 +1,6 @@
 ﻿using GenFx.Components.Lists;
 using System;
+using System.Threading.Tasks;
 using TestCommon;
 using TestCommon.Mocks;
 using Xunit;
@@ -15,13 +16,13 @@ namespace GenFx.Components.Tests
         /// Tests that the Mutate method works correctly.
         /// </summary>
         [Fact]
-        public void UniformBitMutationOperator_Mutate()
+        public async Task UniformBitMutationOperator_Mutate()
         {
             MockGeneticAlgorithm algorithm = new MockGeneticAlgorithm
             {
                 PopulationSeed = new MockPopulation(),
                 SelectionOperator = new MockSelectionOperator(),
-                FitnessEvaluator = new MockFitnessEvaluator(),
+                FitnessEvaluator = new MockFitnessEvaluator2(),
                 GeneticEntitySeed = new BinaryStringEntity
                 {
                     MinimumStartingLength = 4,
@@ -32,6 +33,7 @@ namespace GenFx.Components.Tests
                     MutationRate = 1
                 }
             };
+            await algorithm.InitializeAsync();
             UniformBitMutationOperator op = new UniformBitMutationOperator { MutationRate = 1 };
             op.Initialize(algorithm);
             BinaryStringEntity entity = new BinaryStringEntity { MinimumStartingLength = 4, MaximumStartingLength = 4 };

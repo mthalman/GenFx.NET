@@ -224,7 +224,8 @@ namespace GenFx.Components.Tests
             entity.IsFixedSize = true;
             entity.Initialize(new MockGeneticAlgorithm());
 
-            BinaryStringEntity result = (BinaryStringEntity)SerializationHelper.TestSerialization(entity, new Type[] { typeof(MockGeneticAlgorithm) });
+            BinaryStringEntity result = (BinaryStringEntity)SerializationHelper.TestSerialization(
+                entity, new Type[] { typeof(MockGeneticAlgorithm), typeof(DefaultTerminator) });
 
             for (int i = 0; i < 3; i++)
             {
@@ -241,9 +242,7 @@ namespace GenFx.Components.Tests
         public void BinaryStringEntity_Uninitialized()
         {
             BinaryStringEntity entity = new BinaryStringEntity();
-            Assert.Throws<InvalidOperationException>(() => { object x = entity[0]; });
             Assert.Throws<InvalidOperationException>(() => { entity[0] = true; });
-            Assert.Throws<InvalidOperationException>(() => { int x = entity.Length; });
             Assert.Throws<InvalidOperationException>(() =>
             {
                 BinaryStringEntity entity2 = new BinaryStringEntity();

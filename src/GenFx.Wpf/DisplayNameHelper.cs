@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.Linq;
 
 namespace GenFx.Wpf
@@ -23,10 +24,10 @@ namespace GenFx.Wpf
                 return attrib.DisplayName;
             }
 
-            string toString = obj.ToString();
+            string? toString = obj.ToString();
             if (toString != obj.GetType().FullName)
             {
-                return toString;
+                return toString ?? String.Empty;
             }
 
             return obj.GetType().Name;
@@ -40,7 +41,7 @@ namespace GenFx.Wpf
         public static string GetDisplayNameWithTypeInfo(object obj)
         {
             return StringUtil.GetFormattedString("{0} [{1}]",
-                DisplayNameHelper.GetDisplayName(obj), obj.GetType().FullName);
+                DisplayNameHelper.GetDisplayName(obj), obj.GetType().FullName ?? String.Empty);
         }
     }
 }

@@ -146,7 +146,7 @@ namespace GenFx.Wpf.Controls
             }
         }
 
-        internal ExecutionPanelViewModel ViewModel { get; set; }
+        internal ExecutionPanelViewModel? ViewModel { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline")]
         static ExecutionPanel()
@@ -180,7 +180,7 @@ namespace GenFx.Wpf.Controls
             if (e.OldValue != null)
             {
                 ((ExecutionContext)e.OldValue).PropertyChanged -= panel.ExecutionContext_PropertyChanged;
-                panel.ViewModel.Dispose();
+                panel.ViewModel?.Dispose();
             }
 
             if (e.NewValue != null)
@@ -214,9 +214,9 @@ namespace GenFx.Wpf.Controls
         /// </summary>
         private void UpdateCanExecuteProperties()
         {
-            this.CanStart = this.ViewModel.CanStartExecution();
-            this.CanPause = this.ViewModel.CanPauseExecution();
-            this.CanStop = this.ViewModel.CanStopExecution();
+            this.CanStart = this.ViewModel?.CanStartExecution() == true;
+            this.CanPause = this.ViewModel?.CanPauseExecution() == true;
+            this.CanStop = this.ViewModel?.CanStopExecution() == true;
         }
 
         /// <summary>
@@ -280,7 +280,11 @@ namespace GenFx.Wpf.Controls
         /// <param name="e">The <see cref="CanExecuteRoutedEventArgs"/> associated with the event.</param>
         private static void OnStartExecution(object sender, ExecutedRoutedEventArgs e)
         {
-            Task.Run(((ExecutionPanel)sender).ViewModel.StartExecutionAsync);
+            var viewModel = ((ExecutionPanel)sender).ViewModel;
+            if (viewModel != null)
+            {
+                Task.Run(viewModel.StartExecutionAsync);
+            }
         }
 
         /// <summary>
@@ -290,7 +294,11 @@ namespace GenFx.Wpf.Controls
         /// <param name="e">The <see cref="CanExecuteRoutedEventArgs"/> associated with the event.</param>
         private static void OnStepExecution(object sender, ExecutedRoutedEventArgs e)
         {
-            Task.Run(((ExecutionPanel)sender).ViewModel.StepExecutionAsync);
+            var viewModel = ((ExecutionPanel)sender).ViewModel;
+            if (viewModel != null)
+            {
+                Task.Run(viewModel.StepExecutionAsync);
+            }
         }
 
         /// <summary>
@@ -300,7 +308,11 @@ namespace GenFx.Wpf.Controls
         /// <param name="e">The <see cref="CanExecuteRoutedEventArgs"/> associated with the event.</param>
         private static void OnStopExecution(object sender, ExecutedRoutedEventArgs e)
         {
-            ((ExecutionPanel)sender).ViewModel.StopExecution();
+            var viewModel = ((ExecutionPanel)sender).ViewModel;
+            if (viewModel != null)
+            {
+                Task.Run(viewModel.StopExecution);
+            }
         }
 
         /// <summary>
@@ -310,7 +322,11 @@ namespace GenFx.Wpf.Controls
         /// <param name="e">The <see cref="CanExecuteRoutedEventArgs"/> associated with the event.</param>
         private static void OnPauseExecution(object sender, ExecutedRoutedEventArgs e)
         {
-            ((ExecutionPanel)sender).ViewModel.PauseExecution();
+            var viewModel = ((ExecutionPanel)sender).ViewModel;
+            if (viewModel != null)
+            {
+                Task.Run(viewModel.PauseExecution);
+            }
         }
     }
 }

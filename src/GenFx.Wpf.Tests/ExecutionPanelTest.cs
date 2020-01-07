@@ -309,8 +309,7 @@ namespace GenFx.Wpf.Tests
                 ExecutionContext = new ExecutionContext(Mock.Of<GeneticAlgorithm>())
             };
             panel.ExecutionContext.ExecutionState = ExecutionState.Running;
-
-            ExecutionPanel.PauseExecutionCommand.Execute(null, panel);
+            panel.ViewModel.PauseExecution();
 
             Assert.Equal(ExecutionState.PausePending, panel.ExecutionContext.ExecutionState);
         }
@@ -366,8 +365,7 @@ namespace GenFx.Wpf.Tests
                 ExecutionContext = new ExecutionContext(Mock.Of<GeneticAlgorithm>())
             };
             panel.ExecutionContext.ExecutionState = ExecutionState.Running;
-
-            ExecutionPanel.StopExecutionCommand.Execute(null, panel);
+            panel.ViewModel.StopExecution();
 
             Assert.Equal(ExecutionState.IdlePending, panel.ExecutionContext.ExecutionState);
         }
@@ -383,8 +381,7 @@ namespace GenFx.Wpf.Tests
                 ExecutionContext = new ExecutionContext(Mock.Of<GeneticAlgorithm>())
             };
             panel.ExecutionContext.ExecutionState = ExecutionState.Paused;
-
-            ExecutionPanel.StopExecutionCommand.Execute(null, panel);
+            panel.ViewModel.StopExecution();
 
             Assert.Equal(ExecutionState.Idle, panel.ExecutionContext.ExecutionState);
         }

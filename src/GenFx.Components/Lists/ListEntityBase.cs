@@ -25,7 +25,7 @@ namespace GenFx.Components.Lists
         private const int DefaultMinLength = 5;
 
         [DataMember]
-        private string representation;
+        private string representation = String.Empty;
 
         [DataMember]
         private int minimumStartingLength = DefaultMinLength;
@@ -76,7 +76,7 @@ namespace GenFx.Components.Lists
         /// Gets or sets the list element at the specified index.
         /// </summary>
         /// <param name="index">The zero-based index of the list element to get or set.</param>
-        public object this[int index]
+        public object? this[int index]
         {
             get { return this.GetValue(index); }
             set { this.SetValue(index, value); }
@@ -87,14 +87,14 @@ namespace GenFx.Components.Lists
         /// </summary>
         /// <param name="index">The zero-based index of the list element to get.</param>
         /// <returns>The list element at the specified index.</returns>
-        public abstract object GetValue(int index);
+        public abstract object? GetValue(int index);
 
         /// <summary>
         /// Sets the list element at the specified index.
         /// </summary>
         /// <param name="index">The zero-based index of the list element to set.</param>
         /// <param name="value">The value to set at the index.</param>
-        public abstract void SetValue(int index, object value);
+        public abstract void SetValue(int index, object? value);
         
         /// <summary>
         /// When overriden by a derived class, gets or sets the length of the list.
@@ -110,7 +110,7 @@ namespace GenFx.Components.Lists
 
         public bool IsSynchronized { get { return false; } }
 
-        public object SyncRoot { get { return null; } }
+        public object? SyncRoot { get { return null; } }
 
         /// <summary>
         /// Returns the initial length to use for the list.
@@ -132,7 +132,7 @@ namespace GenFx.Components.Lists
         /// </summary>
         /// <param name="value">Value to add.</param>
         /// <returns>Index position where the value was added.</returns>
-        public int Add(object value)
+        public int Add(object? value)
         {
             if (IsFixedSize)
             {
@@ -205,7 +205,7 @@ namespace GenFx.Components.Lists
         /// </summary>
         /// <param name="value">The value to locate in the list.</param>
         /// <returns>The index of the item if it exists; otherwise, returns -1.</returns>
-        public int IndexOf(object value)
+        public int IndexOf(object? value)
         {
             for (int i = 0; i < this.Length; i++)
             {
@@ -297,13 +297,12 @@ namespace GenFx.Components.Lists
         ///  </returns>
         public override int CompareTo(GeneticEntity other)
         {
-            if (other == null)
+            if (other is null)
             {
                 return 1;
             }
 
-            ListEntityBase listEntityBase = other as ListEntityBase;
-            if (listEntityBase == null)
+            if (!(other is ListEntityBase listEntityBase))
             {
                 throw new ArgumentException(StringUtil.GetFormattedString(
                     Resources.ErrorMsg_ObjectIsWrongType, typeof(ListEntityBase)), nameof(other));

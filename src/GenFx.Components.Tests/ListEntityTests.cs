@@ -113,8 +113,6 @@ namespace GenFx.Components.Tests
         public void ListEntity_Uninitialized()
         {
             TestListEntity<int> entity = new TestListEntity<int>();
-            Assert.Throws<InvalidOperationException>(() => { object x = entity.Length; });
-            Assert.Throws<InvalidOperationException>(() => { object x = entity[0]; });
             Assert.Throws<InvalidOperationException>(() => { entity[0] = 1; });
             Assert.Throws<InvalidOperationException>(() =>
             {

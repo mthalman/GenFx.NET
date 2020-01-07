@@ -170,9 +170,9 @@ namespace GenFx.Wpf.Controls
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
         private void RefreshAllSeries()
         {
-            GeneticAlgorithm algorithm = null;
-            Population population = null;
-            IEnumerable<Metric> selectedMetrics = null;
+            GeneticAlgorithm? algorithm = null;
+            Population? population = null;
+            IEnumerable<Metric>? selectedMetrics = null;
             this.Dispatcher.Invoke(() =>
             {
                 algorithm = this.Algorithm;
@@ -229,7 +229,7 @@ namespace GenFx.Wpf.Controls
         /// </summary>
         /// <param name="sender">Sender of the event.</param>
         /// <param name="e">The<see cref="EnvironmentFitnessEvaluatedEventArgs"/> associated with the event.</param>
-        private void Algorithm_FitnessEvaluated(object sender, EnvironmentFitnessEvaluatedEventArgs e)
+        private void Algorithm_FitnessEvaluated(object? sender, EnvironmentFitnessEvaluatedEventArgs e)
         {
             if (e.GenerationIndex == 0)
             {

@@ -148,8 +148,9 @@ namespace GenFx
         /// </summary>
         public virtual async Task EvaluateFitnessAsync()
         {
+            this.AssertIsInitialized();
             double rawSum = 0;
-
+            
             List<Task> fitnessEvalTasks = new List<Task>();
             foreach (GeneticEntity entity in this.geneticEntities)
             {
@@ -160,7 +161,7 @@ namespace GenFx
             await Task.WhenAll(fitnessEvalTasks);
 
             // There's no need to perform these calculations if there aren't any metrics or a fitness scaling strategy.
-            if (this.Algorithm.Metrics.Any() || this.Algorithm.FitnessScalingStrategy != null)
+            if (this.Algorithm!.Metrics.Any() || this.Algorithm.FitnessScalingStrategy != null)
             {
                 for (int i = 0; i < this.geneticEntities.Count; i++)
                 {
@@ -209,9 +210,10 @@ namespace GenFx
         /// </remarks>
         protected virtual Task InitializeCoreAsync()
         {
-            for (int i = 0; i < this.Algorithm.PopulationSeed.MinimumPopulationSize; i++)
+            this.AssertIsInitialized();
+            for (int i = 0; i < this.Algorithm!.PopulationSeed!.MinimumPopulationSize; i++)
             {
-                GeneticEntity entity = (GeneticEntity)this.Algorithm.GeneticEntitySeed.CreateNewAndInitialize();
+                GeneticEntity entity = (GeneticEntity)this.Algorithm.GeneticEntitySeed!.CreateNewAndInitialize();
                 this.geneticEntities.Add(entity);
             }
 

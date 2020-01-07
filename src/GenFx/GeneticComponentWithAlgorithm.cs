@@ -13,7 +13,9 @@ namespace GenFx
         /// Gets the <see cref="GeneticAlgorithm"/>.
         /// </summary>
         [DataMember]
-        public GeneticAlgorithm Algorithm { get; internal set; }
+        public GeneticAlgorithm? Algorithm { get; internal set; }
+
+        public bool IsInitialized { get; protected set; }
 
         /// <summary>
         /// Initializes the component to ensure its readiness for algorithm execution.
@@ -22,6 +24,15 @@ namespace GenFx
         public virtual void Initialize(GeneticAlgorithm algorithm)
         {
             this.Algorithm = algorithm ?? throw new ArgumentNullException(nameof(algorithm));
+            this.IsInitialized = true;
+        }
+
+        internal void AssertIsInitialized()
+        {
+            if (!this.IsInitialized)
+            {
+                throw new InvalidOperationException(Resources.ComponentNotInitialized);
+            }
         }
     }
 }

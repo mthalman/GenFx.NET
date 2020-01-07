@@ -10,10 +10,10 @@ namespace GenFx.Components.Trees
     /// </summary>
     /// <remarks><b>TreeNodeCollection</b> supports iteration and indexed access.</remarks>
     [DataContract]
-    public sealed class TreeNodeCollection : IList<TreeNode>
+    public sealed class TreeNodeCollection : IList<TreeNode?>
     {
         [DataMember]
-        private readonly List<TreeNode> nodes = new List<TreeNode>();
+        private readonly List<TreeNode?> nodes = new List<TreeNode?>();
 
         [DataMember]
         private readonly int? fixedSizeCount;
@@ -44,7 +44,7 @@ namespace GenFx.Components.Trees
         /// </summary>
         /// <param name="index">The zero-based index of the node to get or set.</param>
         /// <returns>The node at the specified index.</returns>
-        public TreeNode this[int index]
+        public TreeNode? this[int index]
         {
             get { return this.nodes[index]; }
             set { this.nodes[index] = value; }
@@ -70,7 +70,7 @@ namespace GenFx.Components.Trees
         /// Adds a node to the collection.
         /// </summary>
         /// <param name="item">The object to add to the collection.</param>
-        public void Add(TreeNode item)
+        public void Add(TreeNode? item)
         {
             this.EnsureNotFixedSize();
             this.nodes.Add(item);
@@ -90,7 +90,7 @@ namespace GenFx.Components.Trees
         /// </summary>
         /// <param name="item">The node to locate in the colletion.</param>
         /// <returns>true if item is found in the collection; otherwise false.</returns>
-        public bool Contains(TreeNode item)
+        public bool Contains(TreeNode? item)
         {
             return this.nodes.Contains(item);
         }
@@ -102,7 +102,7 @@ namespace GenFx.Components.Trees
         /// The one-dimensional array that is the destination of the elements copied
         /// from the collection. The array must have zero-based indexing.</param>
         /// <param name="arrayIndex">The zero-based index in the array at which copying begins.</param>
-        public void CopyTo(TreeNode[] array, int arrayIndex)
+        public void CopyTo(TreeNode?[] array, int arrayIndex)
         {
             this.nodes.CopyTo(array, arrayIndex);
         }
@@ -121,7 +121,7 @@ namespace GenFx.Components.Trees
         /// </summary>
         /// <param name="item">The node to locate in the collection.</param>
         /// <returns>The index of node if found in the list; otherwise, -1.</returns>
-        public int IndexOf(TreeNode item)
+        public int IndexOf(TreeNode? item)
         {
             return this.nodes.IndexOf(item);
         }
@@ -131,7 +131,7 @@ namespace GenFx.Components.Trees
         /// </summary>
         /// <param name="index">The zero-based index at which the node should be inserted.</param>
         /// <param name="item">The node to insert into the collection.</param>
-        public void Insert(int index, TreeNode item)
+        public void Insert(int index, TreeNode? item)
         {
             this.EnsureNotFixedSize();
             this.nodes.Insert(index, item);
@@ -142,7 +142,7 @@ namespace GenFx.Components.Trees
         /// </summary>
         /// <param name="item">The node to remove from the collection.</param>
         /// <returns>true if the item was found and removed; otherwise, false.</returns>
-        public bool Remove(TreeNode item)
+        public bool Remove(TreeNode? item)
         {
             this.EnsureNotFixedSize();
             return this.nodes.Remove(item);

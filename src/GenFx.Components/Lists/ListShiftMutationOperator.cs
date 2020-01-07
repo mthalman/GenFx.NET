@@ -20,7 +20,7 @@ namespace GenFx.Components.Lists
         /// <exception cref="ArgumentNullException"><paramref name="entity"/> is null.</exception>
         protected override bool GenerateMutation(GeneticEntity entity)
         {
-            if (entity == null)
+            if (entity is null)
             {
                 throw new ArgumentNullException(nameof(entity));
             }
@@ -37,10 +37,10 @@ namespace GenFx.Components.Lists
 
                 if (firstPosition < secondPosition)
                 {
-                    object currentMovingValue = listEntity.GetValue(firstPosition);
+                    object? currentMovingValue = listEntity.GetValue(firstPosition);
                     for (int i = firstPosition + 1; i <= secondPosition; i++)
                     {
-                        object savedValue = listEntity.GetValue(i);
+                        object? savedValue = listEntity.GetValue(i);
                         listEntity.SetValue(i, currentMovingValue);
                         currentMovingValue = savedValue;
                     }
@@ -49,11 +49,11 @@ namespace GenFx.Components.Lists
                 }
                 else
                 {
-                    object currentMovingValue = listEntity.GetValue(firstPosition);
+                    object? currentMovingValue = listEntity.GetValue(firstPosition);
 
                     for (int i = firstPosition - 1; i >= secondPosition; i--)
                     {
-                        object savedValue = listEntity.GetValue(i);
+                        object? savedValue = listEntity.GetValue(i);
                         listEntity.SetValue(i, currentMovingValue);
                         currentMovingValue = savedValue;
                     }

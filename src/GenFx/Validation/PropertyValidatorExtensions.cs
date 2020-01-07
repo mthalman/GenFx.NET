@@ -14,17 +14,17 @@ namespace GenFx.Validation
         /// <param name="propertyName">Name of the property being validated.</param>
         /// <param name="value">Property value to check.</param>
         /// <param name="owner">The object that owns the property being validated.</param>
-        public static void EnsureIsValid(this PropertyValidator validator, string propertyName, object value, object owner)
+        public static void EnsureIsValid(this PropertyValidator validator, string propertyName, object? value, object owner)
         {
             if (validator == null)
             {
                 throw new ArgumentNullException(nameof(validator));
             }
 
-            string errorMessage;
+            string? errorMessage;
             if (!validator.IsValid(value, propertyName, owner, out errorMessage))
             {
-                throw new ValidationException(errorMessage);
+                throw new ValidationException(errorMessage!);
             }
         }
     }
