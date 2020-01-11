@@ -10,7 +10,7 @@ namespace GenFx.Components.Trees
     [DataContract]
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1005:AvoidExcessiveParametersOnGenericTypes")]
     public abstract class BinaryTreeEntity<TValue> : TreeEntity<BinaryTreeNode<TValue>>
-        where TValue : IComparable
+        where TValue : IComparable?
     {
     }
 }

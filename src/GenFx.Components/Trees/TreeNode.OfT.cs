@@ -8,7 +8,7 @@ namespace GenFx.Components.Trees
     /// </summary>
     /// <typeparam name="T">Type of value contained by the node.</typeparam>
     public class TreeNode<T> : TreeNode
-        where T : IComparable
+        where T : IComparable?
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="TreeNode{T}"/> class.
@@ -31,7 +31,6 @@ namespace GenFx.Components.Trees
         /// Gets or sets the data value contained by this node.
         /// </summary>
         /// <value>The data value contained by this node.</value>
-        [MaybeNull]
         public new T Value
         {
 #pragma warning disable CS8601 // Possible null reference assignment.

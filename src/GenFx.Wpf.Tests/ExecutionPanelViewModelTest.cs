@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using TestCommon;
 using TestCommon.Helpers;
 using Xunit;
+using Polly;
 
 namespace GenFx.Wpf.Tests
 {
@@ -98,7 +99,7 @@ namespace GenFx.Wpf.Tests
         /// Tests that the <see cref="ExecutionPanelViewModel.StartExecutionAsync"/> method works correctly.
         /// </summary>
         [Fact]
-        public async Task ExecutionPanelViewModel_StartExecutionAsync_FromIdle()
+        public void ExecutionPanelViewModel_StartExecutionAsync_FromIdle()
         {
             GeneticAlgorithm algorithm = CreateTestAlgorithm(true);
 
@@ -110,19 +111,11 @@ namespace GenFx.Wpf.Tests
             using (ExecutionPanelViewModel viewModel = new ExecutionPanelViewModel(context))
             {
                 Task task = Task.Run(async () => await viewModel.StartExecutionAsync());
-
-                // Wait for the algorithm to begin execution
-                await Task.Delay(50);
-
-                Assert.Equal(ExecutionState.Running, context.ExecutionState);
+                TestHelper.WaitForResult(ExecutionState.Running, () => context.ExecutionState);
 
                 // Trigger the algorithm to complete
                 ((TestTerminator)algorithm.Terminator).IsCompleteValue = true;
-
-                // Wait for the algorithm to finish
-                await Task.Delay(50);
-
-                Assert.Equal(ExecutionState.Idle, context.ExecutionState);
+                TestHelper.WaitForResult(ExecutionState.Idle, () => context.ExecutionState);
                 Assert.True(task.IsCompleted);
             }
         }
@@ -131,7 +124,7 @@ namespace GenFx.Wpf.Tests
         /// Tests that the <see cref="ExecutionPanelViewModel.StepExecutionAsync"/> method works correctly.
         /// </summary>
         [Fact]
-        public async Task ExecutionPanelViewModel_StepExecutionAsync_FromIdle()
+        public void ExecutionPanelViewModel_StepExecutionAsync_FromIdle()
         {
             GeneticAlgorithm algorithm = CreateTestAlgorithm(true);
 
@@ -144,10 +137,7 @@ namespace GenFx.Wpf.Tests
             {
                 Task task = Task.Run(async () => await viewModel.StepExecutionAsync());
 
-                // Wait for the algorithm to finish
-                await Task.Delay(50);
-
-                Assert.Equal(ExecutionState.Paused, context.ExecutionState);
+                TestHelper.WaitForResult(ExecutionState.Paused, () => context.ExecutionState);
                 Assert.True(task.IsCompleted);
             }
         }
@@ -156,7 +146,7 @@ namespace GenFx.Wpf.Tests
         /// Tests that the <see cref="ExecutionPanelViewModel.StepExecutionAsync"/> method works correctly.
         /// </summary>
         [Fact]
-        public async Task ExecutionPanelViewModel_StepExecutionAsync_FromIdle_ToCompletion()
+        public void ExecutionPanelViewModel_StepExecutionAsync_FromIdle_ToCompletion()
         {
             GeneticAlgorithm algorithm = CreateTestAlgorithm(true);
 
@@ -165,25 +155,26 @@ namespace GenFx.Wpf.Tests
                 ExecutionState = ExecutionState.Idle
             };
 
-            using (ExecutionPanelViewModel viewModel = new ExecutionPanelViewModel(context))
-            {
-                ((TestTerminator)algorithm.Terminator).IsCompleteValue = true;
+            using ExecutionPanelViewModel viewModel = new ExecutionPanelViewModel(context);
+            ((TestTerminator)algorithm.Terminator).IsCompleteValue = true;
 
-                Task task = Task.Run(async () => await viewModel.StepExecutionAsync());
+            Task task = null;
+            TestHelper.WaitForPropertyChanged(context,
+                new[]
+                {
+                    new Tuple<string, object>(nameof(context.ExecutionState), ExecutionState.Running),
+                    new Tuple<string, object>(nameof(context.ExecutionState), ExecutionState.Idle)
+                },
+                () => task = Task.Run(async () => await viewModel.StepExecutionAsync()));
 
-                // Wait for the algorithm to finish
-                await Task.Delay(50);
-
-                Assert.Equal(ExecutionState.Idle, context.ExecutionState);
-                Assert.True(task.IsCompleted);
-            }
+            Assert.True(task.IsCompleted);
         }
 
         /// <summary>
         /// Tests that the <see cref="ExecutionPanelViewModel.StartExecutionAsync"/> method works correctly.
         /// </summary>
         [Fact]
-        public async Task ExecutionPanelViewModel_StartExecutionAsync_FromPaused()
+        public void ExecutionPanelViewModel_StartExecutionAsync_FromPaused()
         {
             GeneticAlgorithm algorithm = CreateTestAlgorithm(true);
 
@@ -197,23 +188,20 @@ namespace GenFx.Wpf.Tests
                 Task task = Task.Run(async () => await viewModel.StartExecutionAsync());
 
                 // Wait for the algorithm to begin execution
-                await Task.Delay(50);
-                Assert.Equal(ExecutionState.Running, context.ExecutionState);
+                TestHelper.WaitForResult(ExecutionState.Running, () => context.ExecutionState);
 
                 GeneticEnvironment environment = algorithm.Environment;
 
                 context.ExecutionState = ExecutionState.PausePending;
 
                 // Wait for the algorithm to become paused
-                await Task.Delay(50);
-                Assert.Equal(ExecutionState.Paused, context.ExecutionState);
+                TestHelper.WaitForResult(ExecutionState.Paused, () => context.ExecutionState);
 
                 // Resume execution
                 task = Task.Run(async () => await viewModel.StartExecutionAsync());
 
                 // Wait for the algorithm to begin execution
-                await Task.Delay(50);
-                Assert.Equal(ExecutionState.Running, context.ExecutionState);
+                TestHelper.WaitForResult(ExecutionState.Running, () => context.ExecutionState);
 
                 // Verify InitializeAsync was not called
                 Assert.Same(environment, algorithm.Environment);
@@ -222,9 +210,7 @@ namespace GenFx.Wpf.Tests
                 ((TestTerminator)algorithm.Terminator).IsCompleteValue = true;
 
                 // Wait for the algorithm to finish
-                await Task.Delay(50);
-
-                Assert.Equal(ExecutionState.Idle, context.ExecutionState);
+                TestHelper.WaitForResult(ExecutionState.Idle, () => context.ExecutionState);
                 Assert.True(task.IsCompleted);
             }
         }
@@ -233,7 +219,7 @@ namespace GenFx.Wpf.Tests
         /// Tests that the <see cref="ExecutionPanelViewModel.StepExecutionAsync"/> method works correctly.
         /// </summary>
         [Fact]
-        public async Task ExecutionPanelViewModel_StepExecutionAsync_FromPaused()
+        public void ExecutionPanelViewModel_StepExecutionAsync_FromPaused()
         {
             GeneticAlgorithm algorithm = CreateTestAlgorithm(true);
 
@@ -247,17 +233,17 @@ namespace GenFx.Wpf.Tests
                 Task task = Task.Run(async () => await viewModel.StepExecutionAsync());
 
                 // Wait for the algorithm to finish execution
-                await Task.Delay(50);
-                Assert.Equal(ExecutionState.Paused, context.ExecutionState);
+                TestHelper.WaitForResult(ExecutionState.Paused, () => context.ExecutionState);
 
                 GeneticEnvironment environment = algorithm.Environment;
 
-                // Resume execution
-                task = Task.Run(async () => await viewModel.StepExecutionAsync());
-
-                // Wait for the algorithm to begin finish
-                await Task.Delay(50);
-                Assert.Equal(ExecutionState.Paused, context.ExecutionState);
+                TestHelper.WaitForPropertyChanged(context,
+                    new[]
+                    {
+                        new Tuple<string, object>(nameof(context.ExecutionState), ExecutionState.Running),
+                        new Tuple<string, object>(nameof(context.ExecutionState), ExecutionState.Paused)
+                    },
+                    () => task = Task.Run(async () => await viewModel.StepExecutionAsync()));
 
                 // Verify InitializeAsync was not called
                 Assert.Same(environment, algorithm.Environment);
@@ -269,7 +255,7 @@ namespace GenFx.Wpf.Tests
         /// Tests that the <see cref="ExecutionPanelViewModel.StepExecutionAsync"/> method works correctly.
         /// </summary>
         [Fact]
-        public async Task ExecutionPanelViewModel_StepExecutionAsync_FromPaused_ToCompletion()
+        public void ExecutionPanelViewModel_StepExecutionAsync_FromPaused_ToCompletion()
         {
             GeneticAlgorithm algorithm = CreateTestAlgorithm(true);
 
@@ -283,8 +269,7 @@ namespace GenFx.Wpf.Tests
                 Task task = Task.Run(async () => await viewModel.StepExecutionAsync());
 
                 // Wait for the algorithm to finish execution
-                await Task.Delay(50);
-                Assert.Equal(ExecutionState.Paused, context.ExecutionState);
+                TestHelper.WaitForResult(ExecutionState.Paused, () => context.ExecutionState);
 
                 GeneticEnvironment environment = algorithm.Environment;
 
@@ -295,8 +280,7 @@ namespace GenFx.Wpf.Tests
                 task = Task.Run(async () => await viewModel.StepExecutionAsync());
 
                 // Wait for the algorithm to finish
-                await Task.Delay(50);
-                Assert.Equal(ExecutionState.Idle, context.ExecutionState);
+                TestHelper.WaitForResult(ExecutionState.Idle, () => context.ExecutionState);
 
                 // Verify InitializeAsync was not called
                 Assert.Same(environment, algorithm.Environment);
@@ -526,7 +510,7 @@ namespace GenFx.Wpf.Tests
         /// Tests that the correct action is taken when the <see cref="GeneticAlgorithm.FitnessEvaluated"/> event is raised.
         /// </summary>
         [Fact]
-        public async Task ExecutionPanelViewModel_FitnessEvaluated_IdlePending()
+        public void ExecutionPanelViewModel_FitnessEvaluated_IdlePending()
         {
             GeneticAlgorithm algorithm = CreateTestAlgorithm(true);
 
@@ -536,11 +520,9 @@ namespace GenFx.Wpf.Tests
             {
                 Task task = Task.Run(async () => await viewModel.StartExecutionAsync());
 
-                await Task.Delay(50); // Wait just a bit so the algorithm can start executing
+                TestHelper.WaitForResult(ExecutionState.Running, () => context.ExecutionState);
                 context.ExecutionState = ExecutionState.IdlePending;
-                await Task.Delay(50); // Wait for the IdlePending to take effect on the executing algorithm.
-
-                Assert.True(task.IsCompleted);
+                TestHelper.WaitForResult(true, () => task.IsCompleted);
             }
             Assert.Equal(ExecutionState.Idle, context.ExecutionState);
         }
@@ -549,7 +531,7 @@ namespace GenFx.Wpf.Tests
         /// Tests that the correct action is taken when the <see cref="GeneticAlgorithm.FitnessEvaluated"/> event is raised.
         /// </summary>
         [Fact]
-        public async Task ExecutionPanelViewModel_FitnessEvaluated_PausePending()
+        public void ExecutionPanelViewModel_FitnessEvaluated_PausePending()
         {
             GeneticAlgorithm algorithm = CreateTestAlgorithm(true);
 
@@ -559,11 +541,9 @@ namespace GenFx.Wpf.Tests
             {
                 Task task = Task.Run(async () => await viewModel.StartExecutionAsync());
 
-                await Task.Delay(50); // Wait just a bit so the algorithm can start executing
+                TestHelper.WaitForResult(ExecutionState.Running, () => context.ExecutionState);
                 context.ExecutionState = ExecutionState.PausePending;
-                await Task.Delay(50); // Wait for the PausePending to take effect on the executing algorithm.
-
-                PrivateObject algorithmAccessor = new PrivateObject(algorithm);
+                TestHelper.WaitForResult(true, () => task.IsCompleted);
 
                 Assert.True(task.IsCompleted);
             }
