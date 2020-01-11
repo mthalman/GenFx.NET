@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Threading;
 using TestCommon;
+using TestCommon.Helpers;
 using TestCommon.Mocks;
 using Xunit;
 
@@ -79,9 +80,9 @@ namespace GenFx.Wpf.Tests
         {
             ExecutionPanel panel = new ExecutionPanel();
 
-            Mock<GeneticAlgorithm> algorithmMock = new Mock<GeneticAlgorithm>();
+            GeneticAlgorithm algorithm = CreateTestAlgorithm(runsInfinitely: true);
 
-            ExecutionContext context = new ExecutionContext(algorithmMock.Object);
+            ExecutionContext context = new ExecutionContext(algorithm);
             panel.ExecutionContext = context;
 
             // Start execution to force event handlers to be added in order to 
@@ -89,14 +90,7 @@ namespace GenFx.Wpf.Tests
             ExecutionPanel.StartExecutionCommand.Execute(null, panel);
             DispatcherHelper.DoEvents();
 
-            Policy
-                .HandleResult<ExecutionState>(result => result == ExecutionState.Running)
-                .WaitAndRetry(5, retryAttempt =>
-                    TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)))
-                .Execute(() =>
-                {
-                    return panel.ExecutionContext.ExecutionState;
-                });
+            TestHelper.WaitForResult(ExecutionState.Running, () => panel.ExecutionContext.ExecutionState);
 
             Mock<GeneticAlgorithm> algorithmMock2 = new Mock<GeneticAlgorithm>();
             ExecutionContext context2 = new ExecutionContext(algorithmMock2.Object)
@@ -177,14 +171,7 @@ namespace GenFx.Wpf.Tests
             ExecutionPanel.StartExecutionCommand.Execute(null, panel);
             DispatcherHelper.DoEvents();
 
-            Policy
-                .HandleResult<ExecutionState>(result => result == ExecutionState.Running)
-                .WaitAndRetry(5, retryAttempt =>
-                    TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)))
-                .Execute(() =>
-                {
-                    return panel.ExecutionContext.ExecutionState;
-                });
+            TestHelper.WaitForResult(ExecutionState.Running, () => panel.ExecutionContext.ExecutionState);
 
             // Trigger the algorithm to complete
             ((TestTerminator)panel.ExecutionContext.GeneticAlgorithm.Terminator).IsCompleteValue = true;
