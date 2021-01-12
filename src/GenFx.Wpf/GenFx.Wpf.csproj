@@ -3,8 +3,6 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <OutputType>library</OutputType>
-    <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>../../build/GenFx.snk</AssemblyOriginatorKeyFile>
     <UseWPF>true</UseWPF>
     <PackageId>GenFx.Wpf</PackageId>
     <Version>0.2.0</Version>
