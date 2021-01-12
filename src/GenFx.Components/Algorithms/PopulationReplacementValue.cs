@@ -83,7 +83,7 @@ namespace GenFx.Components.Algorithms
         public override int GetHashCode()
         {
             string combinedVal = this.replacementValue.ToString(CultureInfo.InvariantCulture) + Enum.GetName(typeof(ReplacementValueKind), this.kind);
-            return combinedVal.GetHashCode(StringComparison.InvariantCulture);
+            return combinedVal.GetHashCode();
         }
 
         /// <summary>
