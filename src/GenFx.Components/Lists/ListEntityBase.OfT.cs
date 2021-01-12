@@ -146,7 +146,7 @@ namespace GenFx.Components.Lists
                 return 1;
             }
 
-            if (!(other is ListEntityBase<TItem> listEntityBase))
+            if (other is not ListEntityBase<TItem> listEntityBase)
             {
                 throw new ArgumentException(StringUtil.GetFormattedString(
                     Resources.ErrorMsg_ObjectIsWrongType, typeof(ListEntityBase<TItem>)), nameof(other));

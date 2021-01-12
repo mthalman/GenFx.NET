@@ -19,7 +19,6 @@ namespace GenFx.Components.Algorithms
     /// </para>
     /// </remarks>
     [DataContract]
-    [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Multi")]
     public class MultiDemeGeneticAlgorithm : SimpleGeneticAlgorithm
     {
         private const int DefaultMigrantCount = 0;

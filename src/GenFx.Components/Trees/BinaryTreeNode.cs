@@ -9,7 +9,7 @@ namespace GenFx.Components.Trees
     /// <typeparam name="T">Type of value contained by the node.</typeparam>
     [DataContract]
     public class BinaryTreeNode<T> : TreeNode<T>
-        where T : IComparable?
+        where T : IComparable
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="BinaryTreeNode{T}"/> class.

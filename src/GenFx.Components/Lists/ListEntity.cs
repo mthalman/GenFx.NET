@@ -12,14 +12,14 @@ namespace GenFx.Components.Lists
     /// <typeparam name="TItem">Type of the values contained in the list.</typeparam>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix")]
     [DataContract]
-    public abstract class ListEntity<TItem> : ListEntityBase<TItem>
-        where TItem : IComparable?
+    public abstract class ListEntity<TItem> : ListEntityBase<TItem?>
+        where TItem : IComparable
     {
         [DataMember]
         private bool isFixedSize;
 
         [DataMember]
-        private List<TItem> genes = new List<TItem>();
+        private List<TItem?> genes = new List<TItem?>();
 
         /// <summary>
         /// Gets or sets a value indicating whether the list is a fixed size.
@@ -81,7 +81,7 @@ namespace GenFx.Components.Lists
         /// Gets or sets the list element at the specified index.
         /// </summary>
         /// <param name="index">The zero-based index of the list element to get or set.</param>
-        public override TItem this[int index]
+        public override TItem? this[int index]
         {
             get
             {
@@ -104,7 +104,7 @@ namespace GenFx.Components.Lists
             base.Initialize(algorithm);
 
             int initialCount = this.GetInitialLength();
-            this.genes = new List<TItem>(initialCount);
+            this.genes = new List<TItem?>(initialCount);
 
             for (int i = 0; i < initialCount; i++)
             {
@@ -130,7 +130,7 @@ namespace GenFx.Components.Lists
             base.CopyTo(entity);
 
             ListEntity<TItem> listEntity = (ListEntity<TItem>)entity;
-            TItem[] values = new TItem[this.genes.Count];
+            TItem?[] values = new TItem[this.genes.Count];
             this.genes.CopyTo(values);
             listEntity.genes = values.ToList();
             listEntity.UpdateStringRepresentation();
